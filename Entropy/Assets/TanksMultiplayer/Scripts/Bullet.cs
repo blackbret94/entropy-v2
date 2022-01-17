@@ -247,16 +247,6 @@ namespace TanksMP
 
         private bool HasHitProtectedOwner(Player target)
         {
-            Debug.Log("Hit player, checking to see if protected");
-            if (target.gameObject == owner)
-            {
-                Debug.Log("Target is owner!");
-            }
-
-            if (OwnerIsProtected)
-            {
-                Debug.Log("Owner is protected");
-            }
             return target.gameObject == owner && OwnerIsProtected;
         }
     }

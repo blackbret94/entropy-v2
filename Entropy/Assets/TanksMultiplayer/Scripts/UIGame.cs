@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
+using Vashta.Entropy.UI;
 
 namespace TanksMP
 {
@@ -60,6 +61,9 @@ namespace TanksMP
         /// UI window gameobject activated on game end, offering sharing and restart buttons.
         /// </summary>
         public GameObject gameOverMenu;
+
+        public FireButton fireButton;
+        public PowerupIcon powerupIcon;
 
 
         //initialize variables
@@ -147,6 +151,7 @@ namespace TanksMP
             //hide joystick controls while displaying death text
             #if UNITY_EDITOR || (!UNITY_STANDALONE && !UNITY_WEBGL)
                 ToggleControls(false);
+                powerupIcon.SetActive(false);
             #endif
             
             //show killer name and colorize the name converting its team color to an HTML RGB hex value for UI markup
@@ -188,6 +193,7 @@ namespace TanksMP
             //hide joystick controls while displaying game end text
             #if UNITY_EDITOR || (!UNITY_STANDALONE && !UNITY_WEBGL)
                 ToggleControls(false);
+                powerupIcon.SetActive(false);
             #endif
             
             //show winning team and colorize it by converting the team color to an HTML RGB hex value for UI markup

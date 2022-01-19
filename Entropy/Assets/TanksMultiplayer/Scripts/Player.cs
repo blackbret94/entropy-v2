@@ -7,9 +7,9 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
-using Photon.Realtime;
+using UnityEngine.EventSystems;
 using Vashta.Entropy.Character;
-using Vashta.Entropy.SaveLoad;
+using Vashta.Entropy.UI;
 
 namespace TanksMP
 {
@@ -109,6 +109,9 @@ namespace TanksMP
 
         //timestamp when next shot should happen
         private float nextFire;
+
+        public float TimeToNextFire => nextFire - Time.time;
+        public float FractionFireReady => Mathf.Min(1-(TimeToNextFire / fireRate), 1);
         
         //reference to this rigidbody
         #pragma warning disable 0649
@@ -166,7 +169,10 @@ namespace TanksMP
             GameManager.GetInstance().ui.controls[1].onDragBegin += ShootBegin;
             GameManager.GetInstance().ui.controls[1].onDrag += RotateTurret;
             GameManager.GetInstance().ui.controls[1].onDrag += Shoot;
+            GameManager.GetInstance().ui.controls[1].onDrag += Shoot;
             #endif
+
+            GameManager.GetInstance().ui.fireButton.Player = this;
         }
 
         private void ColorizePlayerForTeam()
@@ -258,7 +264,7 @@ namespace TanksMP
             RotateTurret(new Vector2(hitPos.x, hitPos.z));
 
             //shoot bullet on left mouse click
-            if (Input.GetButton("Fire1"))
+            if (Input.GetButton("Fire1") && !EventSystem.current.IsPointerOverGameObject())
                 Shoot();
 
 			//replicate input to mobile controls for illustration purposes

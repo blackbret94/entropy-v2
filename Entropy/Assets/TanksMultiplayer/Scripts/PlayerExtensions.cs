@@ -271,6 +271,9 @@ namespace TanksMP
                 hash.Add(bullet, (byte)index);
 
             player.SetCustomProperties(hash);
+            
+            if(player.IsLocal)
+                GameManager.GetInstance().ui.powerupIcon.SetPowerup(index, value);
         }
 
         /// <summary>

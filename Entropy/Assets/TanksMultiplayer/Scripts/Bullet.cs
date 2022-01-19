@@ -84,7 +84,7 @@ namespace TanksMP
         [HideInInspector]
         public GameObject owner;
         private float _timeCreated;
-        private const float OwnerProtectionTime = 2.0f;
+        private const float OwnerProtectionTime = 0.33f;
 
         private bool OwnerIsProtected => Time.time - _timeCreated < OwnerProtectionTime;
 

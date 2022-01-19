@@ -6,6 +6,8 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using Vashta.Entropy.Character;
+using Vashta.Entropy.SaveLoad;
 
 namespace TanksMP
 {
@@ -79,6 +81,7 @@ namespace TanksMP
             if (!PlayerPrefs.HasKey(PrefsKeys.playMusic)) PlayerPrefs.SetString(PrefsKeys.playMusic, "true");
             if (!PlayerPrefs.HasKey(PrefsKeys.appVolume)) PlayerPrefs.SetFloat(PrefsKeys.appVolume, 1f);
             if (!PlayerPrefs.HasKey(PrefsKeys.activeTank)) PlayerPrefs.SetString(PrefsKeys.activeTank, Encryptor.Encrypt("0"));
+            if (!PlayerPrefs.HasKey(Vashta.Entropy.SaveLoad.PrefsKeys.characterAppearance)) PlayerPrefs.SetString(Vashta.Entropy.SaveLoad.PrefsKeys.characterAppearance, CharacterAppearanceSaveLoad.DefaultAppearanceStringEncrypted());
 
             PlayerPrefs.Save();
 

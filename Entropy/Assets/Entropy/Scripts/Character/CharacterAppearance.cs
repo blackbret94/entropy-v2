@@ -29,7 +29,7 @@ namespace Vashta.Entropy.Character
 
         public void Start()
         {
-            if(SaveLoad)
+            if(SaveLoad && (Player != null && Player.IsLocal))
                 LoadAppearance();
         }
 

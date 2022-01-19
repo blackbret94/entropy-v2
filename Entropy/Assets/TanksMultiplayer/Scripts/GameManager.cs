@@ -33,6 +33,11 @@ namespace TanksMP
         public GameMode gameMode = GameMode.TDM;
 
         /// <summary>
+        /// Does this game mode use teams?
+        /// </summary>
+        public bool UsesTeams => gameMode != GameMode.FFA;
+
+        /// <summary>
         /// Reference to the UI script displaying game stats.
         /// </summary>
         public UIGame ui;
@@ -56,6 +61,8 @@ namespace TanksMP
         /// Enable or disable friendly fire. This is verified in the Bullet script on collision.
         /// </summary>
         public bool friendlyFire = false;
+
+        private int lastSpawnIndex = -1;
 
 
         //initialize variables
@@ -120,6 +127,11 @@ namespace TanksMP
         /// </summary>
         public Vector3 GetSpawnPosition(int teamIndex)
         {
+            return UsesTeams ? GetSpawnTeams(teamIndex) : GetSpawnFFA();
+        }
+
+        private Vector3 GetSpawnTeams(int teamIndex)
+        {
             //init variables
             Vector3 pos = teams[teamIndex].spawn.position;
             BoxCollider col = teams[teamIndex].spawn.GetComponent<BoxCollider>();
@@ -145,7 +157,18 @@ namespace TanksMP
             return pos;
         }
 
+        private Vector3 GetSpawnFFA()
+        {
+            int counter = 10;
+            int spawnIndex;
+            do
+            {
+                spawnIndex = Random.Range(0, teams.Length);
+            } while (lastSpawnIndex == spawnIndex && counter-- > 0);
 
+            return GetSpawnTeams(spawnIndex);
+        }
+        
         //implements what to do when an ad view completes
         #if UNITY_ADS
         void HandleAdResult(ShowResult result)
@@ -180,7 +203,7 @@ namespace TanksMP
             switch(gameMode)
             {
                 //in TDM, we only grant points for killing
-                case GameMode.TDM:
+                case GameMode.TDM: case GameMode.FFA:
                     switch(scoreType)
                     {
                         case ScoreType.Kill:
@@ -204,7 +227,11 @@ namespace TanksMP
                 break;
             }
         }
-        
+
+        public void RemoveScore(ScoreType scoreType, int teamIndex)
+        {
+            PhotonNetwork.CurrentRoom.AddScore(teamIndex, -1);
+        }
 
         /// <summary>
         /// Returns whether a team reached the maximum game score.
@@ -249,11 +276,12 @@ namespace TanksMP
             if (other != localPlayer)
             {
                 killedByName = other.GetView().GetName();
-                //increase local death counter for this game
-                ui.killCounter[1].text = (int.Parse(ui.killCounter[1].text) + 1).ToString();
-                ui.killCounter[1].GetComponent<Animator>().Play("Animation");
             }
 
+            //increase local death counter for this game
+            ui.killCounter[1].text = (int.Parse(ui.killCounter[1].text) + 1).ToString();
+            ui.killCounter[1].GetComponent<Animator>().Play("Animation");
+            
             //calculate if we should show a video ad
             #if UNITY_ADS
             if (!skipAd && UnityAdsManager.ShowAd())
@@ -375,6 +403,11 @@ namespace TanksMP
         /// <summary>
         /// Capture The Flag
         /// </summary>
-        CTF
+        CTF,
+        
+        /// <summary>
+        /// Free For All
+        /// </summary>
+        FFA
     }
 }

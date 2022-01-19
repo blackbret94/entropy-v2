@@ -1,4 +1,5 @@
 using System;
+using TanksMP;
 using UnityEngine;
 
 namespace Vashta.Entropy.Character
@@ -27,12 +28,23 @@ namespace Vashta.Entropy.Character
             CartId = cartId;
         }
 
-        public string ToJson()
+        public string Encrypt()
+        {
+            return Encryptor.Encrypt(ToJson());
+        }
+
+        public static CharacterAppearanceSerializable Decrypt(string encrypted)
+        {
+            string decrypted = Encryptor.Decrypt(encrypted);
+            return FromJson(decrypted);
+        }
+        
+        private string ToJson()
         {
             return JsonUtility.ToJson(this);
         }
 
-        public static CharacterAppearanceSerializable FromJson(string json)
+        private static CharacterAppearanceSerializable FromJson(string json)
         {
             return JsonUtility.FromJson<CharacterAppearanceSerializable>(json);
         }

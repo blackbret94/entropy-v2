@@ -3,10 +3,13 @@
  * 	You shall not license, sublicense, sell, resell, transfer, assign, distribute or
  * 	otherwise make available to any third party the Service or the Content. */
 
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using Vashta.Entropy.Character;
+using Vashta.Entropy.SaveLoad;
 
 namespace TanksMP
 {
@@ -14,7 +17,7 @@ namespace TanksMP
     /// Networked player class implementing movement control and shooting.
     /// Contains both server and client logic in an authoritative approach.
     /// </summary> 
-    public class Player : MonoBehaviourPunCallbacks, IPunObservable
+    public class Player : MonoBehaviourPunCallbacks, IPunObservable, IPunInstantiateMagicCallback
     {
         /// <summary>
         /// UI Text displaying the player name.
@@ -111,6 +114,8 @@ namespace TanksMP
         #pragma warning disable 0649
 		private Rigidbody rb;
 		#pragma warning restore 0649
+        
+        public bool IsLocal => GameManager.GetInstance().localPlayer == this;
 
 
         //initialize server values for this player
@@ -130,11 +135,9 @@ namespace TanksMP
         /// Initialize camera and input for this local client.
         /// </summary>
         void Start()
-        {           
-			//get corresponding team and colorize renderers in team color
-            Team team = GameManager.GetInstance().teams[GetView().GetTeam()];
-            for(int i = 0; i < renderers.Length; i++)
-                renderers[i].material = team.material;
+        {
+            if (GameManager.GetInstance().UsesTeams)
+                ColorizePlayerForTeam();
 
             //set name in label
             label.text = GetView().GetName();
@@ -164,6 +167,14 @@ namespace TanksMP
             GameManager.GetInstance().ui.controls[1].onDrag += RotateTurret;
             GameManager.GetInstance().ui.controls[1].onDrag += Shoot;
             #endif
+        }
+
+        private void ColorizePlayerForTeam()
+        {
+            //get corresponding team and colorize renderers in team color
+            Team team = GameManager.GetInstance().teams[GetView().GetTeam()];
+            for (int i = 0; i < renderers.Length; i++)
+                renderers[i].material = team.material;
         }
 
 
@@ -430,6 +441,8 @@ namespace TanksMP
                 int otherTeam = other.GetView().GetTeam();
                 if(GetView().GetTeam() != otherTeam)
                     GameManager.GetInstance().AddScore(ScoreType.Kill, otherTeam);
+                else
+                    GameManager.GetInstance().RemoveScore(ScoreType.Kill, otherTeam);
 
                 //the maximum score has been reached now
                 if(GameManager.GetInstance().IsGameOver())
@@ -494,7 +507,7 @@ namespace TanksMP
                     GameManager.GetInstance().ui.killCounter[0].GetComponent<Animator>().Play("Animation");
                 }
 
-                if (explosionFX)
+                if (explosionFX && GameManager.GetInstance().UsesTeams)
                 {
                     //spawn death particles locally using pooling and colorize them in the player's team color
                     GameObject particle = PoolManager.Spawn(explosionFX, transform.position, transform.rotation);
@@ -573,6 +586,25 @@ namespace TanksMP
         {
             //display game over window
             GameManager.GetInstance().DisplayGameOver(teamIndex);
+        }
+
+        public void OnPhotonInstantiate(PhotonMessageInfo info)
+        {
+            CharacterAppearanceSerializable characterAppearanceSerializable = null;
+            
+            try
+            {
+                characterAppearanceSerializable = CharacterAppearanceSerializable.Decrypt(
+                        (string)info.Sender.CustomProperties[Vashta.Entropy.SaveLoad.PrefsKeys.characterAppearance]);
+            }
+            catch (Exception e)
+            {
+                characterAppearanceSerializable = new CharacterAppearanceSerializable();
+                Debug.LogWarning("Warning!  Could not load character from Custom Properties. " + e);
+            }
+
+            CharacterAppearance characterAppearance = GetComponentInChildren<CharacterAppearance>();
+            characterAppearance.LoadFromSerialized(characterAppearanceSerializable);
         }
     }
 }

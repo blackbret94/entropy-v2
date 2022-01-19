@@ -1,3 +1,4 @@
+using Photon.Pun;
 using UnityEngine;
 using Vashta.Entropy.Character;
 
@@ -5,17 +6,36 @@ namespace Vashta.Entropy.SaveLoad
 {
     public class CharacterAppearanceSaveLoad: MonoBehaviour
     {
-        public const string PlayerPrefsKey = "CharacterAppearance";
-        
         public void Save(CharacterAppearanceSerializable serializable)
         {
-            PlayerPrefs.SetString(PlayerPrefsKey, serializable.ToJson());
+            string encrypted = serializable.Encrypt();
+            
+            PlayerPrefs.SetString(PrefsKeys.characterAppearance, encrypted);
+            SetAppearanceAsCustomProperty(encrypted);
         }
 
         public CharacterAppearanceSerializable Load()
         {
-            string appearanceJson = PlayerPrefs.GetString(PlayerPrefsKey, new CharacterAppearanceSerializable().ToJson());
-            return CharacterAppearanceSerializable.FromJson(appearanceJson);
+            string appearance = PlayerPrefs.GetString(PrefsKeys.characterAppearance, DefaultAppearanceStringEncrypted());
+            return CharacterAppearanceSerializable.Decrypt(appearance);
+        }
+
+        public static string DefaultAppearanceStringEncrypted()
+        {
+            return new CharacterAppearanceSerializable().Encrypt();
+        }
+
+
+        public static void SetCurrentAppearanceAsCustomProperty()
+        {
+            SetAppearanceAsCustomProperty(PlayerPrefs.GetString(PrefsKeys.characterAppearance, DefaultAppearanceStringEncrypted()));
+        }
+        
+        private static void SetAppearanceAsCustomProperty(string encrypted)
+        {
+            ExitGames.Client.Photon.Hashtable setPlayerAppearance = new ExitGames.Client.Photon.Hashtable();
+            setPlayerAppearance.Add(PrefsKeys.characterAppearance, encrypted);
+            PhotonNetwork.LocalPlayer.SetCustomProperties(setPlayerAppearance); 
         }
     }
 }

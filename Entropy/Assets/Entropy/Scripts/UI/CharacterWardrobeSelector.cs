@@ -34,6 +34,10 @@ namespace Vashta.Entropy.UI
                 case WardrobeCategory.SKIN:
                     UpdateText(new CharacterWardrobeSelectorData(CharacterAppearance.Skin.SkinId, PlayerCharacterWardrobe.GetBodyTypeById(CharacterAppearance.Body.BodyTypeId).SkinOptions.Count));
                     break;
+                
+                case WardrobeCategory.CART:
+                    UpdateText(new CharacterWardrobeSelectorData(CharacterAppearance.Cart.CartId, PlayerCharacterWardrobe.Carts.Count));
+                    break;
             }
         }
         
@@ -52,6 +56,10 @@ namespace Vashta.Entropy.UI
                 case WardrobeCategory.SKIN:
                     UpdateText(CharacterAppearance.NextSkin());
                     break;
+                
+                case WardrobeCategory.CART:
+                    UpdateText(CharacterAppearance.NextCart());
+                    break;
             }
         }
 
@@ -69,6 +77,10 @@ namespace Vashta.Entropy.UI
                 
                 case WardrobeCategory.SKIN:
                     UpdateText(CharacterAppearance.PrevSkin());
+                    break;
+                
+                case WardrobeCategory.CART:
+                    UpdateText(CharacterAppearance.PrevCart());
                     break;
             }
         }

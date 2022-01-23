@@ -21,6 +21,7 @@ namespace Vashta.Entropy.Character
         {
             RandomizeHat();
             RandomizeBody();
+            RandomizeCart();
             CharacterAppearance.ApplyOutfit();
             
             if(PanelToRefresh)
@@ -43,7 +44,8 @@ namespace Vashta.Entropy.Character
 
         private void RandomizeCart()
         {
-            
+            Cart cart = PlayerCharacterWardrobe.GetRandomCart();
+            CharacterAppearance.Cart = cart;
         }
 
         private void RandomizeTurret()

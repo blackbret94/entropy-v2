@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Photon.Pun;
+using Vashta.Entropy.Character;
 
 namespace TanksMP
 {          
@@ -61,10 +62,9 @@ namespace TanksMP
             agent.Warp(targetPoint);
 
             Team team = GameManager.GetInstance().teams[GetView().GetTeam()];
-            for(int i = 0; i < renderers.Length; i++)
-                renderers[i].material = team.material;
-            
-			//set name in label
+            CharacterAppearance.Team = team;
+
+            //set name in label
             label.text = myName = "Bot" + System.String.Format("{0:0000}", Random.Range(1, 9999));
             //call hooks manually to update
             OnHealthChange(GetView().GetHealth());

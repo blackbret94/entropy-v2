@@ -1,6 +1,7 @@
 using System;
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.Character.Prop;
 using Vashta.Entropy.SaveLoad;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.UI;
@@ -13,7 +14,7 @@ namespace Vashta.Entropy.Character
         public Player Player;
         public PlayerCharacterWardrobe PlayerCharacterWardrobe;
         public CharacterAppearanceSaveLoad SaveLoad;
-        
+
         [Header("Nodes")] 
         public Transform HatNode;
         public Transform CatBodyNode;
@@ -26,10 +27,17 @@ namespace Vashta.Entropy.Character
         public Skin Skin;
         public Cart Cart;
         public GameObject Turret;
+        public Material DefaultTeamMaterial;
+
+        [HideInInspector] public Team Team;
 
         public void Start()
         {
-            if(SaveLoad && (Player != null && Player.IsLocal))
+            if(Player == null)
+                // Wardrobe
+                LoadAppearance();
+            else if(SaveLoad && (Player != null && Player.IsLocal))
+                // Gameplay, local player vs. other players
                 LoadAppearance();
         }
 
@@ -56,7 +64,7 @@ namespace Vashta.Entropy.Character
             ReplaceHat();
             ReplaceCatBody();
             ReplaceCatFur();
-            //ReplaceCart();
+            ReplaceCart();
             //ReplaceTurret();
         }
 
@@ -137,9 +145,33 @@ namespace Vashta.Entropy.Character
             return new CharacterWardrobeSelectorData(id, count);
         }
 
+        public CharacterWardrobeSelectorData NextCart()
+        {
+            int id = Cart.CartId;
+            int count = PlayerCharacterWardrobe.Carts.Count;
+
+            id = ++id > count ? 1 : id;
+            Cart = PlayerCharacterWardrobe.GetCartById(id);
+            ReplaceCart();
+
+            return new CharacterWardrobeSelectorData(id, count); 
+        }
+
+        public CharacterWardrobeSelectorData PrevCart()
+        {
+            int id = Cart.CartId;
+            int count = PlayerCharacterWardrobe.Carts.Count;
+
+            id = --id < 1 ? count : 1;
+            Cart = PlayerCharacterWardrobe.GetCartById(id);
+            ReplaceCart();
+            
+            return new CharacterWardrobeSelectorData(id, count);
+        }
+
         public CharacterAppearanceSerializable Serialize()
         {
-            return new CharacterAppearanceSerializable(Hat.HatId, Body.BodyTypeId, Skin.SkinId, 1);
+            return new CharacterAppearanceSerializable(Hat.HatId, Body.BodyTypeId, Skin.SkinId, Cart.CartId);
         }
 
         public void LoadFromSerialized(CharacterAppearanceSerializable characterAppearanceSerializable)
@@ -147,6 +179,7 @@ namespace Vashta.Entropy.Character
             Hat = PlayerCharacterWardrobe.GetHatById(characterAppearanceSerializable.HatId);
             Body = PlayerCharacterWardrobe.GetBodyTypeById(characterAppearanceSerializable.BodyId);
             Skin = PlayerCharacterWardrobe.GetSkinById(characterAppearanceSerializable.BodyId, characterAppearanceSerializable.SkinId);
+            Cart = PlayerCharacterWardrobe.GetCartById(characterAppearanceSerializable.CartId);
             ApplyOutfit();
         }
 
@@ -154,7 +187,7 @@ namespace Vashta.Entropy.Character
 
         private void UpdatePlayerTurret()
         {
-            Player.turret = TurretNode.GetChild(0).transform;
+            // Player.turret = TurretNode.GetChild(0).transform;
         }
 
         private void ReplaceHat()
@@ -178,7 +211,22 @@ namespace Vashta.Entropy.Character
         private void ReplaceCart()
         {
             DestroyAllChildren(CartNode.transform);
-            Instantiate(Cart.CartObject, CartNode);
+            GameObject cart = Instantiate(Cart.CartObject, CartNode);
+            CartProp cartProp = cart.GetComponentInChildren<CartProp>();
+
+            if (cartProp == null)
+            {
+                Debug.LogError("Cart is missing a 'CartProp' component");
+                return;
+            }
+
+            Material material;
+            if (Team.material != null)
+                material = Team.material;
+            else
+                material = DefaultTeamMaterial;
+            
+            cartProp.ColorizeForTeam(material);
         }
 
         private void ReplaceTurret()

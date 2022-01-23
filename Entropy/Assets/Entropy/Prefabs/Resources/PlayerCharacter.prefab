@@ -82,7 +82,7 @@ MonoBehaviour:
   maxHealth: 10
   turretRotation: 0
   fireRate: 0.75
-  moveSpeed: 8
+  moveSpeed: 7
   healthSlider: {fileID: 4738908579127511574}
   shieldSlider: {fileID: 4203007450868377382}
   shotClip: {fileID: 8300000, guid: 9d685be7bcccd974bb6312c9965ff4e5, type: 3}
@@ -96,10 +96,7 @@ MonoBehaviour:
   - {fileID: 1000010310479910, guid: 39507aaad9e78494f81bea135cb37a24, type: 3}
   - {fileID: 1000010310479910, guid: b1dee7e96a2dde84daab24234aeb2dd3, type: 3}
   - {fileID: 1000010310479910, guid: 73a8dce5258b4ab45980cb442e56b5c6, type: 3}
-  renderers:
-  - {fileID: 8991949203426232185}
-  - {fileID: 2381928352039102021}
-  - {fileID: 5031486578032489445}
+  CharacterAppearance: {fileID: 2386344821364946175}
   killedBy: {fileID: 0}
   camFollow: {fileID: 0}
 --- !u!114 &114000013996810128
@@ -224,6 +221,11 @@ PrefabInstance:
       objectReference: {fileID: 1491550347126630223}
     - target: {fileID: 1935677702118942807, guid: a2dcc27db5fce2c4ba3640cb41010f8e,
         type: 3}
+      propertyPath: DefaultTeamMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: c97449f961d124745bc2d7c5972ddd91, type: 2}
+    - target: {fileID: 1935677702118942807, guid: a2dcc27db5fce2c4ba3640cb41010f8e,
+        type: 3}
       propertyPath: PlayerCharacterWardrobe
       value: 
       objectReference: {fileID: 11400000, guid: 8cadd9cf34379be4b85114337eaa4b65,
@@ -252,12 +254,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e552c82779da47a8b85de2db5179fdbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!23 &2381928352039102021 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 1931859877073107693, guid: a2dcc27db5fce2c4ba3640cb41010f8e,
-    type: 3}
-  m_PrefabInstance: {fileID: 4305748445454228648}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2386344821364946175 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1935677702118942807, guid: a2dcc27db5fce2c4ba3640cb41010f8e,
@@ -341,21 +337,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!23 &5031486578032489445 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 9084456471625264973, guid: a2dcc27db5fce2c4ba3640cb41010f8e,
-    type: 3}
-  m_PrefabInstance: {fileID: 4305748445454228648}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6046886275116361424 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7506317927336098424, guid: a2dcc27db5fce2c4ba3640cb41010f8e,
-    type: 3}
-  m_PrefabInstance: {fileID: 4305748445454228648}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &8991949203426232185 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 5118557912283651025, guid: a2dcc27db5fce2c4ba3640cb41010f8e,
     type: 3}
   m_PrefabInstance: {fileID: 4305748445454228648}
   m_PrefabAsset: {fileID: 0}

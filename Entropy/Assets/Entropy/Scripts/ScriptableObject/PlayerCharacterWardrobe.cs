@@ -58,6 +58,16 @@ namespace Vashta.Entropy.ScriptableObject
             return Carts[Random.Range(0, Carts.Count)];
         }
 
+        public Cart GetCartById(int id)
+        {
+            int index = GetIndexFromId(id);
+            
+            if (index >= Carts.Count)
+                return Carts[0];
+
+            return Carts[index];
+        }
+
         public Turret GetRandomTurret()
         {
             return Turrets[Random.Range(0, Turrets.Count)];

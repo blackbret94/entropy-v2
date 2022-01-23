@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using UnityEngine.EventSystems;
 using Vashta.Entropy.Character;
+using Vashta.Entropy.Character.Prop;
 using Vashta.Entropy.UI;
 
 namespace TanksMP
@@ -91,9 +92,9 @@ namespace TanksMP
         public GameObject[] bullets;
 
         /// <summary>
-        /// MeshRenderers that should be highlighted in team color.
+        /// Character appearance reference, stores information about the model.
         /// </summary>
-        public MeshRenderer[] renderers;
+        public CharacterAppearance CharacterAppearance;
 
         /// <summary>
         /// Last player gameobject that killed this one.
@@ -179,8 +180,7 @@ namespace TanksMP
         {
             //get corresponding team and colorize renderers in team color
             Team team = GameManager.GetInstance().teams[GetView().GetTeam()];
-            for (int i = 0; i < renderers.Length; i++)
-                renderers[i].material = team.material;
+            CharacterAppearance.Team = team;
         }
 
 

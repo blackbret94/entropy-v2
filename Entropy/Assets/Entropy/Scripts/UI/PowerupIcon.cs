@@ -33,12 +33,8 @@ namespace Vashta.Entropy.UI
 
         public void SetAmmo(int ammoAmount)
         {
-            Debug.Log("Ammo set to " + ammoAmount);
-            
             for (int i = 0; i < AmmoIcons.Length; i++)
-            {
                 AmmoIcons[i].SetActive(i < ammoAmount);
-            }
             
             if(ammoAmount == 0)
                 gameObject.SetActive(false);

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 114000010978345236}
   - component: {fileID: 195000012828890094}
   - component: {fileID: 114000010316270970}
+  - component: {fileID: 8235421522774285370}
   m_Layer: 8
   m_Name: BotCharacter
   m_TagString: Untagged
@@ -52,7 +53,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 3
+  m_CollisionDetection: 1
 --- !u!65 &65000014268382324
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -64,7 +65,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.2, y: 1.3, z: 1.5}
+  m_Size: {x: 1.5, y: 1.3, z: 2.5}
   m_Center: {x: 0, y: 0.65, z: 0}
 --- !u!114 &114000010978345236
 MonoBehaviour:
@@ -115,7 +116,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1000013172141970}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.75
+  m_Radius: 1.5
   m_Speed: 3.5
   m_Acceleration: 100
   avoidancePriority: 50
@@ -127,7 +128,7 @@ NavMeshAgent:
   m_Height: 1.25
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 0
+  m_ObstacleAvoidanceType: 2
 --- !u!114 &114000010316270970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,6 +152,24 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: -1
   isRuntimeInstantiated: 0
+--- !u!114 &8235421522774285370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000013172141970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d28ac23d18d54947a04026d40008e244, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 114000010978345236}
+  damageAmtOnCollision: 6
+  armor: 2
+  collisionFx: {fileID: 1000011513120438, guid: 89ac73a2c6d7fd04ba1250607c343f31,
+    type: 3}
+  collisionClip: {fileID: 0}
 --- !u!1001 &7525539332511739208
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -247,7 +266,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6521669694688102332, guid: a2dcc27db5fce2c4ba3640cb41010f8e, type: 3}
+    - {fileID: 6811612107670966526, guid: a2dcc27db5fce2c4ba3640cb41010f8e, type: 3}
+    - {fileID: 4830380600517878378, guid: a2dcc27db5fce2c4ba3640cb41010f8e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: a2dcc27db5fce2c4ba3640cb41010f8e, type: 3}
 --- !u!4 &25854212224325424 stripped
 Transform:

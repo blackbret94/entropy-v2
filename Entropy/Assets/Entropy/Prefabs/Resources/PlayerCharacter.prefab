@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 114000011901014096}
   - component: {fileID: 114000013996810128}
   - component: {fileID: 114000013810182620}
+  - component: {fileID: 4797552529484202075}
   m_Layer: 8
   m_Name: PlayerCharacter
   m_TagString: Untagged
@@ -139,6 +140,24 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 0
+--- !u!114 &4797552529484202075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d28ac23d18d54947a04026d40008e244, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 114000011901014096}
+  damageAmtOnCollision: 6
+  armor: 2
+  collisionFx: {fileID: 1000011513120438, guid: 89ac73a2c6d7fd04ba1250607c343f31,
+    type: 3}
+  collisionClip: {fileID: 0}
 --- !u!1001 &4305748445454228648
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -240,7 +259,9 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4830380600517878378, guid: a2dcc27db5fce2c4ba3640cb41010f8e, type: 3}
+    - {fileID: 6521669694688102332, guid: a2dcc27db5fce2c4ba3640cb41010f8e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: a2dcc27db5fce2c4ba3640cb41010f8e, type: 3}
 --- !u!114 &1491550347126630223 stripped
 MonoBehaviour:

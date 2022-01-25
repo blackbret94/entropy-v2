@@ -414,6 +414,32 @@ namespace TanksMP
             shieldSlider.value = value;
         }
 
+        /// <summary>
+        /// Server only: calculate damage to be taken by the Player,
+        /// triggers score increase and respawn workflow on death.
+        /// </summary>
+        public void TakeDamage(int damage, Player other)
+        {
+            int health = GetView().GetHealth();
+            int shield = GetView().GetShield();
+
+            //reduce shield on hit
+            if (shield > 0)
+            {
+                GetView().DecreaseShield(1);
+                return;
+            }
+
+            health -= damage;
+            
+            if (health <= 0)
+                // killed the player
+                PlayerDeath(other);
+            else
+                //we didn't die, set health to new value
+                GetView().SetHealth(health);
+        }
+
 
         /// <summary>
         /// Server only: calculate damage to be taken by the Player,
@@ -435,56 +461,60 @@ namespace TanksMP
             //substract health by damage
             //locally for now, to only have one update later on
             health -= bullet.damage;
-
-            //bullet killed the player
+            
             if (health <= 0)
-            {
-                //the game is already over so don't do anything
-                if(GameManager.GetInstance().IsGameOver()) return;
-
-                //get killer and increase score for that enemy team
-                Player other = bullet.owner.GetComponent<Player>();
-                int otherTeam = other.GetView().GetTeam();
-                if(GetView().GetTeam() != otherTeam)
-                    GameManager.GetInstance().AddScore(ScoreType.Kill, otherTeam);
-                else
-                    GameManager.GetInstance().RemoveScore(ScoreType.Kill, otherTeam);
-
-                //the maximum score has been reached now
-                if(GameManager.GetInstance().IsGameOver())
-                {
-                    //close room for joining players
-                    PhotonNetwork.CurrentRoom.IsOpen = false;
-                    //tell all clients the winning team
-                    this.photonView.RPC("RpcGameOver", RpcTarget.All, (byte)otherTeam);
-                    return;
-                }
-
-                //the game is not over yet, reset runtime values
-                //also tell all clients to despawn this player
-                GetView().SetHealth(maxHealth);
-                GetView().SetBullet(0);
-
-                //clean up collectibles on this player by letting them drop down
-                Collectible[] collectibles = GetComponentsInChildren<Collectible>(true);
-                for (int i = 0; i < collectibles.Length; i++)
-                {
-                    PhotonNetwork.RemoveRPCs(collectibles[i].spawner.photonView);
-                    collectibles[i].spawner.photonView.RPC("Drop", RpcTarget.AllBuffered, transform.position);
-                }
-
-                //tell the dead player who killed him (owner of the bullet)
-                short senderId = 0;
-                if (bullet.owner != null)
-                    senderId = (short)bullet.owner.GetComponent<PhotonView>().ViewID;
-
-                this.photonView.RPC("RpcRespawn", RpcTarget.All, senderId);
-            }
+                //bullet killed the player
+                PlayerDeath(bullet.owner.GetComponent<Player>());
             else
-            {
                 //we didn't die, set health to new value
                 GetView().SetHealth(health);
+        }
+
+        /// <summary>
+        /// Server-only.  Handles player death
+        /// </summary>
+        /// <param name="other"></param>
+        private void PlayerDeath(Player other)
+        {
+            //the game is already over so don't do anything
+            if(GameManager.GetInstance().IsGameOver()) return;
+
+            //get killer and increase score for that enemy team
+            int otherTeam = other.GetView().GetTeam();
+            if(GetView().GetTeam() != otherTeam)
+                GameManager.GetInstance().AddScore(ScoreType.Kill, otherTeam);
+            else
+                GameManager.GetInstance().RemoveScore(ScoreType.Kill, otherTeam);
+
+            //the maximum score has been reached now
+            if(GameManager.GetInstance().IsGameOver())
+            {
+                //close room for joining players
+                PhotonNetwork.CurrentRoom.IsOpen = false;
+                //tell all clients the winning team
+                this.photonView.RPC("RpcGameOver", RpcTarget.All, (byte)otherTeam);
+                return;
             }
+
+            //the game is not over yet, reset runtime values
+            //also tell all clients to despawn this player
+            GetView().SetHealth(maxHealth);
+            GetView().SetBullet(0);
+
+            //clean up collectibles on this player by letting them drop down
+            Collectible[] collectibles = GetComponentsInChildren<Collectible>(true);
+            for (int i = 0; i < collectibles.Length; i++)
+            {
+                PhotonNetwork.RemoveRPCs(collectibles[i].spawner.photonView);
+                collectibles[i].spawner.photonView.RPC("Drop", RpcTarget.AllBuffered, transform.position);
+            }
+
+            //tell the dead player who killed him (owner of the bullet)
+            short senderId = 0;
+            if (other != null)
+                senderId = (short)other.GetComponent<PhotonView>().ViewID;
+
+            this.photonView.RPC("RpcRespawn", RpcTarget.All, senderId);
         }
 
 

@@ -4,14 +4,12 @@
  * 	otherwise make available to any third party the Service or the Content. */
 
 using System;
+using Entropy.Scripts.Player;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using UnityEngine.EventSystems;
 using Vashta.Entropy.Character;
-using Vashta.Entropy.Character.Prop;
-using Vashta.Entropy.UI;
-
 namespace TanksMP
 {
     /// <summary>
@@ -120,7 +118,9 @@ namespace TanksMP
 		#pragma warning restore 0649
         
         public bool IsLocal => GameManager.GetInstance().localPlayer == this;
-
+        public ClassDefinition defaultClassDefinition;
+        public ClassList classList;
+        public ClassDefinition classDefinition { get; private set; }
 
         //initialize server values for this player
         void Awake()
@@ -128,7 +128,14 @@ namespace TanksMP
             //only let the master do initialization
             if(!PhotonNetwork.IsMasterClient)
                 return;
+
+            classDefinition = defaultClassDefinition ? defaultClassDefinition : classList.RandomClass();
             
+            SetClass(classDefinition);
+        }
+
+        private void SetMaxHealth()
+        {
             //set players current health value after joining
             GetView().SetHealth(maxHealth);
         }
@@ -641,6 +648,21 @@ namespace TanksMP
 
             CharacterAppearance characterAppearance = GetComponentInChildren<CharacterAppearance>();
             characterAppearance.LoadFromSerialized(characterAppearanceSerializable);
+        }
+
+        public void SetClass(ClassDefinition newClassDefinition)
+        {
+            classDefinition = newClassDefinition;
+            PlayerCollisionHandler playerCollisionHandler = GetComponent<PlayerCollisionHandler>();
+
+            if (!playerCollisionHandler)
+            {
+                Debug.LogError("Player is missing a collision handler!  Can not apply class.");
+                return;
+            }
+            
+            ClassApplier.ApplyClass(this, playerCollisionHandler, newClassDefinition);
+            SetMaxHealth();
         }
     }
 }

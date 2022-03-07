@@ -3,6 +3,7 @@
  * 	You shall not license, sublicense, sell, resell, transfer, assign, distribute or
  * 	otherwise make available to any third party the Service or the Content. */
 
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -74,7 +75,7 @@ namespace TanksMP
         void Start()
         {
             //set initial values for all settings
-            if (!PlayerPrefs.HasKey(PrefsKeys.playerName)) PlayerPrefs.SetString(PrefsKeys.playerName, "User" + System.String.Format("{0:0000}", Random.Range(1, 9999)));
+            if (!PlayerPrefs.HasKey(PrefsKeys.playerName)) PlayerPrefs.SetString(PrefsKeys.playerName, String.Empty);
             if (!PlayerPrefs.HasKey(PrefsKeys.networkMode)) PlayerPrefs.SetInt(PrefsKeys.networkMode, 0);
             if (!PlayerPrefs.HasKey(PrefsKeys.gameMode)) PlayerPrefs.SetInt(PrefsKeys.gameMode, 0);
             if (!PlayerPrefs.HasKey(PrefsKeys.serverAddress)) PlayerPrefs.SetString(PrefsKeys.serverAddress, "127.0.0.1");
@@ -182,6 +183,7 @@ namespace TanksMP
         /// </summary>
         public void OpenSettings()
         {
+            nameField.text = PlayerPrefs.GetString(PrefsKeys.playerName);
             //settingsOpened++;
         }
 

@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Photon.Pun;
 using Vashta.Entropy.Character;
+using Vashta.Entropy.UI;
 
 namespace TanksMP
 {          
@@ -68,7 +69,8 @@ namespace TanksMP
             CharacterAppearance.Team = team;
 
             //set name in label
-            label.text = myName = "Bot" + System.String.Format("{0:0000}", Random.Range(1, 9999));
+            CatNameGenerator catNameGenerator = new CatNameGenerator();
+            label.text = myName = catNameGenerator.GetRandomName();
             //call hooks manually to update
             OnHealthChange(GetView().GetHealth());
             OnShieldChange(GetView().GetShield());

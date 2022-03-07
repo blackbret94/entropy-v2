@@ -56,6 +56,11 @@ namespace TanksMP
         /// </summary>
         public CharacterAppearanceSaveLoad CharacterAppearanceSaveLoad;
 
+        /// <summary>
+        /// Handles saving/loading character class
+        /// </summary>
+        private CharacterClassSaveLoad CharacterClassSaveLoad;
+
         //initialize network view
         void Awake()
         {
@@ -322,6 +327,7 @@ namespace TanksMP
 		void AddPlayer()
 		{
             CharacterAppearanceSaveLoad.SetCurrentAppearanceAsCustomProperty();
+            CharacterClassSaveLoad.SetCurrentClassAsCustomProperty();
             
             //get our selected player prefab index
             int prefabId = 0; // int.Parse(Encryptor.Decrypt(PlayerPrefs.GetString(PrefsKeys.activeTank)));

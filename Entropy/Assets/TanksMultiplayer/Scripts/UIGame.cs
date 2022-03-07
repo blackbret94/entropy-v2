@@ -41,17 +41,9 @@ namespace TanksMP
         /// Mobile crosshair aiming indicator for local player.
         /// </summary>
         public GameObject aimIndicator;
-
-        /// <summary>
-        /// UI text for indicating player death and who killed this player.
-        /// </summary>
-        public Text deathText;
-
-        /// <summary>
-        /// UI text displaying the time in seconds left until player respawn.
-        /// </summary>
-        public Text spawnDelayText;
-
+        
+        public DeathPanel DeathPanel;
+        
         /// <summary>
         /// UI text for indicating game end and which team has won the round.
         /// </summary>
@@ -154,18 +146,12 @@ namespace TanksMP
                 powerupIcon.SetActive(false);
             #endif
             
-            //show killer name and colorize the name converting its team color to an HTML RGB hex value for UI markup
-            deathText.text = "KILLED BY\n<color=#" + ColorUtility.ToHtmlStringRGB(team.material.color) + ">" + playerName + "</color>";
+            DeathPanel.Set(playerName, team);
         }
         
-        
-        /// <summary>
-        /// Set respawn delay value displayed to the absolute time value received.
-        /// The remaining time value is calculated in a coroutine by GameManager.
-        /// </summary>
         public void SetSpawnDelay(float time)
         {                
-            spawnDelayText.text = Mathf.Ceil(time) + "";
+            DeathPanel.SetSpawnDelay(time);
         }
         
         
@@ -180,8 +166,7 @@ namespace TanksMP
             #endif
             
             //clear text component values
-            deathText.text = string.Empty;
-            spawnDelayText.text = string.Empty;
+            DeathPanel.Clear();
         }
 
 

@@ -33,6 +33,9 @@ namespace TanksMP
         /// </summary>
         public float range = 6f;
 
+        [Range(0f, 5f)]
+        public float accuracyError = 0f;
+        
         //list of enemy players that are in range of this bot
         private List<GameObject> inRange = new List<GameObject>();
 
@@ -47,8 +50,8 @@ namespace TanksMP
 
         //toggle for update logic
         private bool isDead = false;
-        
-        
+
+
         //called before SyncVar updates
         void Start()
         {           
@@ -189,11 +192,18 @@ namespace TanksMP
 
                         //find shot direction and shoot there
                         Vector3 shotDir = lookPos - transform.position;
-                        Shoot(new Vector2(shotDir.x, shotDir.z));
+                        Vector3 shotDirError = new Vector2(shotDir.x + CalculateAccuracyError(),
+                            shotDir.z + CalculateAccuracyError());
+                        Shoot(shotDirError);
                         break;
                     }
                 }
             }
+        }
+
+        private float CalculateAccuracyError()
+        {
+            return Random.Range(-accuracyError, accuracyError);
         }
 
         

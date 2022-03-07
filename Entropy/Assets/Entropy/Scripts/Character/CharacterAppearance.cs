@@ -43,14 +43,14 @@ namespace Vashta.Entropy.Character
 
         public void LoadAppearance()
         {
-            CharacterAppearanceSerializable serializable = SaveLoad.Load();
-            LoadFromSerialized(serializable);
+            CharacterAppearanceSerializable appearanceSerializable = SaveLoad.Load();
+            LoadFromSerialized(appearanceSerializable);
         }
 
         public void SaveAppearance()
         {
-            CharacterAppearanceSerializable serializable = Serialize();
-            SaveLoad.Save(serializable);
+            CharacterAppearanceSerializable appearanceSerializable = Serialize();
+            SaveLoad.Save(appearanceSerializable);
         }
 
         public void ApplyOutfit()

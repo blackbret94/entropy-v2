@@ -10,6 +10,8 @@ using UnityEngine.UI;
 using Photon.Pun;
 using UnityEngine.EventSystems;
 using Vashta.Entropy.Character;
+using Vashta.Entropy.SaveLoad;
+
 namespace TanksMP
 {
     /// <summary>
@@ -55,6 +57,11 @@ namespace TanksMP
         public Slider shieldSlider;
 
         /// <summary>
+        /// Icon next to the slider displaying the player class
+        /// </summary>
+        public Image classIcon;
+        
+        /// <summary>
         /// Clip to play when a shot has been fired.
         /// </summary>
         public AudioClip shotClip;
@@ -95,6 +102,11 @@ namespace TanksMP
         public CharacterAppearance CharacterAppearance;
 
         /// <summary>
+        /// Character class save/load
+        /// </summary>
+        public CharacterClassSaveLoad CharacterClassSaveLoad;
+
+        /// <summary>
         /// Last player gameobject that killed this one.
         /// </summary>
         [HideInInspector]
@@ -111,6 +123,8 @@ namespace TanksMP
 
         public float TimeToNextFire => nextFire - Time.time;
         public float FractionFireReady => Mathf.Min(1-(TimeToNextFire / fireRate), 1);
+
+        public bool LoadClass;
         
         //reference to this rigidbody
         #pragma warning disable 0649
@@ -129,9 +143,15 @@ namespace TanksMP
             if(!PhotonNetwork.IsMasterClient)
                 return;
 
-            classDefinition = defaultClassDefinition ? defaultClassDefinition : classList.RandomClass();
-            
-            SetClass(classDefinition);
+            if (LoadClass)
+            {
+                int classId = CharacterClassSaveLoad.Load().ClassId;
+                classDefinition = classList.GetClassById(classId);
+            }
+            else
+                classDefinition = defaultClassDefinition ? defaultClassDefinition : classList.RandomClass();
+
+            ApplyClass();
         }
 
         private void SetMaxHealth()
@@ -560,6 +580,9 @@ namespace TanksMP
 
                 //play sound clip on player death
                 if (explosionClip) AudioManager.Play3D(explosionClip, transform.position);
+                
+                // apply class
+                ApplyClass();
             }
 
             if (PhotonNetwork.IsMasterClient)
@@ -653,6 +676,10 @@ namespace TanksMP
         public void SetClass(ClassDefinition newClassDefinition)
         {
             classDefinition = newClassDefinition;
+        }
+        
+        private void ApplyClass()
+        {
             PlayerCollisionHandler playerCollisionHandler = GetComponent<PlayerCollisionHandler>();
 
             if (!playerCollisionHandler)
@@ -661,7 +688,7 @@ namespace TanksMP
                 return;
             }
             
-            ClassApplier.ApplyClass(this, playerCollisionHandler, newClassDefinition);
+            ClassApplier.ApplyClass(this, playerCollisionHandler, classDefinition);
             SetMaxHealth();
         }
     }

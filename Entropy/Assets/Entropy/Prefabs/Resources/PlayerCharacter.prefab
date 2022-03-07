@@ -86,6 +86,7 @@ MonoBehaviour:
   moveSpeed: 7
   healthSlider: {fileID: 4738908579127511574}
   shieldSlider: {fileID: 4203007450868377382}
+  classIcon: {fileID: 4011357851466573602}
   shotClip: {fileID: 8300000, guid: 9d685be7bcccd974bb6312c9965ff4e5, type: 3}
   explosionClip: {fileID: 8300000, guid: a27cf15a13b4c284c91fe441c44acd3b, type: 3}
   shotFX: {fileID: 1000011513120438, guid: f70d27f5cf28c8941bbfd6febd74797f, type: 3}
@@ -98,8 +99,13 @@ MonoBehaviour:
   - {fileID: 1000010310479910, guid: b1dee7e96a2dde84daab24234aeb2dd3, type: 3}
   - {fileID: 1000010310479910, guid: 73a8dce5258b4ab45980cb442e56b5c6, type: 3}
   CharacterAppearance: {fileID: 2386344821364946175}
+  CharacterClassSaveLoad: {fileID: 0}
   killedBy: {fileID: 0}
   camFollow: {fileID: 0}
+  LoadClass: 0
+  defaultClassDefinition: {fileID: 11400000, guid: 74fed74e4e8ccee43a4a18a91ca80171,
+    type: 2}
+  classList: {fileID: 11400000, guid: 7d8bbf25c3319e2428b905b7f07fbe8b, type: 2}
 --- !u!114 &114000013996810128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -285,6 +291,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 845cb420ef2abc748b81bafc1a14a978, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4011357851466573602 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 894566867494960010, guid: a2dcc27db5fce2c4ba3640cb41010f8e,
+    type: 3}
+  m_PrefabInstance: {fileID: 4305748445454228648}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &4203007450868377382 stripped

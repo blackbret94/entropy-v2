@@ -116,8 +116,19 @@ namespace TanksMP
             NetworkManagerCustom.StartMatch((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode));
             StartCoroutine(HandleTimeout());
         }
-
-
+        
+        public void PlayMultiplayer()
+        {
+            PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Online);
+            Play();
+        }
+        
+        public void PlayVsAI()
+        {
+            PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Offline);
+            Play();
+        }
+        
         //coroutine that waits 10 seconds before cancelling joining a match
         IEnumerator HandleTimeout()
         {
@@ -224,7 +235,7 @@ namespace TanksMP
         public void CloseSettings()
         {
             PlayerPrefs.SetString(PrefsKeys.playerName, nameField.text);
-            PlayerPrefs.SetInt(PrefsKeys.networkMode, networkDrop.value);
+            //PlayerPrefs.SetInt(PrefsKeys.networkMode, networkDrop.value);
             PlayerPrefs.SetString(PrefsKeys.serverAddress, serverField.text);
             PlayerPrefs.SetString(PrefsKeys.playMusic, musicToggle.isOn.ToString());
             PlayerPrefs.SetFloat(PrefsKeys.appVolume, volumeSlider.value);

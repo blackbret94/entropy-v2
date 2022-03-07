@@ -12,5 +12,7 @@ namespace Entropy.Scripts.Player
         public float moveSpeed = 8f;
         public int damageAmtOnCollision = 5;
         public int armor = 2;
+        public Sprite classIcon;
+        public Color color;
     }
 }

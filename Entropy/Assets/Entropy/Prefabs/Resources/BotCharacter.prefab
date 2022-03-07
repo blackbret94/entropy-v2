@@ -86,6 +86,7 @@ MonoBehaviour:
   moveSpeed: 7
   healthSlider: {fileID: 1329403557217614838}
   shieldSlider: {fileID: 7630527414258276038}
+  classIcon: {fileID: 7213137080330311362}
   shotClip: {fileID: 8300000, guid: 9d685be7bcccd974bb6312c9965ff4e5, type: 3}
   explosionClip: {fileID: 8300000, guid: a27cf15a13b4c284c91fe441c44acd3b, type: 3}
   shotFX: {fileID: 1000011513120438, guid: f70d27f5cf28c8941bbfd6febd74797f, type: 3}
@@ -98,8 +99,12 @@ MonoBehaviour:
   - {fileID: 1000010310479910, guid: b1dee7e96a2dde84daab24234aeb2dd3, type: 3}
   - {fileID: 1000010310479910, guid: 73a8dce5258b4ab45980cb442e56b5c6, type: 3}
   CharacterAppearance: {fileID: 8263259499388077343}
+  CharacterClassSaveLoad: {fileID: 0}
   killedBy: {fileID: 0}
   camFollow: {fileID: 0}
+  LoadClass: 0
+  defaultClassDefinition: {fileID: 0}
+  classList: {fileID: 11400000, guid: 7d8bbf25c3319e2428b905b7f07fbe8b, type: 2}
   myName: 
   teamIndex: 0
   health: 0
@@ -107,6 +112,7 @@ MonoBehaviour:
   ammo: 0
   currentBullet: 0
   range: 6
+  accuracyError: 2.5
 --- !u!195 &195000012828890094
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -287,6 +293,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7213137080330311362 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 894566867494960010, guid: a2dcc27db5fce2c4ba3640cb41010f8e,
+    type: 3}
+  m_PrefabInstance: {fileID: 7525539332511739208}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &7525539332511247552 stripped

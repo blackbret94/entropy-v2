@@ -6,9 +6,9 @@ namespace Vashta.Entropy.SaveLoad
 {
     public class CharacterAppearanceSaveLoad: MonoBehaviour
     {
-        public void Save(CharacterAppearanceSerializable serializable)
+        public void Save(CharacterAppearanceSerializable appearanceSerializable)
         {
-            string encrypted = serializable.Encrypt();
+            string encrypted = appearanceSerializable.Encrypt();
             
             PlayerPrefs.SetString(PrefsKeys.characterAppearance, encrypted);
             SetAppearanceAsCustomProperty(encrypted);

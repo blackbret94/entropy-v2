@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Vashta.Entropy.ScriptableObject
 {
     [CreateAssetMenu(fileName = "BodyType", menuName = "Entropy/BodyType", order = 1)]
-    public class BodyType: UnityEngine.ScriptableObject
+    public class BodyType: ScriptableWardrobeItem
     {
         public int BodyTypeId;
         public string BodyTypeName;

@@ -32,7 +32,7 @@ namespace Vashta.Entropy.UI
                     break;
                 
                 case WardrobeCategory.SKIN:
-                    UpdateText(new CharacterWardrobeSelectorData(CharacterAppearance.Skin.SkinId, PlayerCharacterWardrobe.GetBodyTypeById(CharacterAppearance.Body.BodyTypeId).SkinOptions.Count));
+                    UpdateText(new CharacterWardrobeSelectorData(CharacterAppearance.Skin.SkinId, PlayerCharacterWardrobe.GetBodyTypeById(CharacterAppearance.Body.Id).SkinOptions.Count));
                     break;
                 
                 case WardrobeCategory.CART:

@@ -57,6 +57,7 @@ namespace TanksMP
         public FireButton fireButton;
         public PowerupIcon powerupIcon;
 
+        public CoinsEarnedPopup coinsEarnedPopup;
 
         //initialize variables
         void Start()

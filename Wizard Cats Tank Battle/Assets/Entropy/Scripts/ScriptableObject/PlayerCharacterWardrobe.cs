@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Vashta.Entropy.ScriptableObject
@@ -11,19 +12,59 @@ namespace Vashta.Entropy.ScriptableObject
         public List<Cart> Carts;
         public List<Turret> Turrets;
 
+        private Dictionary<string, Hat> _indexedHats;
+        private Dictionary<string, BodyType> _indexedBodyTypes;
+        private Dictionary<string, Cart> _indexedCarts;
+        private Dictionary<string, Turret> _indexedTurrets;
+
+        private bool _hasInit = false;
+
+        private void Awake()
+        {
+            Init();
+        }
+
+        private void Init()
+        {
+            if (_hasInit)
+                return;
+            
+            IndexWardrobe();
+
+            _hasInit = true;
+        }
+
+        private void IndexWardrobe()
+        {
+            _indexedHats = new Dictionary<string, Hat>();
+            foreach (var hat in Hats)
+                _indexedHats[hat.Id] = hat;
+            
+            _indexedBodyTypes = new Dictionary<string, BodyType>();
+            foreach (var bt in BodyTypes)
+                _indexedBodyTypes[bt.Id] = bt;
+            
+            _indexedCarts = new Dictionary<string, Cart>();
+            foreach (var cart in Carts)
+                _indexedCarts[cart.Id] = cart;
+            
+            _indexedTurrets = new Dictionary<string, Turret>();
+            foreach (var turret in Turrets)
+                _indexedTurrets[turret.Id] = turret;
+        }
+
         public Hat GetRandomHat()
         {
             return Hats[Random.Range(0, Hats.Count)];
         }
 
-        public Hat GetHatById(int id)
+        public Hat GetHatById(string id)
         {
-            int index = GetIndexFromId(id);
-            
-            if (index >= Hats.Count)
-                return Hats[0];
+            Init();
+            if (_indexedHats.ContainsKey(id))
+                return _indexedHats[id];
 
-            return Hats[index];
+            return Hats[0];
         }
 
         public BodyType GetRandomBodyType()
@@ -31,21 +72,21 @@ namespace Vashta.Entropy.ScriptableObject
             return BodyTypes[Random.Range(0, BodyTypes.Count)];
         }
 
-        public BodyType GetBodyTypeById(int id)
+        public BodyType GetBodyTypeById(string id)
         {
-            int index = GetIndexFromId(id);
-            
-            if (index >= BodyTypes.Count)
-                return BodyTypes[0];
+            Init();
+            if (_indexedBodyTypes.ContainsKey(id))
+                return _indexedBodyTypes[id];
 
-            return BodyTypes[index];
+            return BodyTypes[0];
         }
 
-        public Skin GetSkinById(int bodyTypeId, int skinId)
+        public Skin GetSkinById(string bodyTypeId, int skinId)
         {
-            int skinIndex = GetIndexFromId(skinId);
-
+            Init();
             BodyType body = GetBodyTypeById(bodyTypeId);
+            // LEFT OFF HERE
+            int skinIndex = skinId + 1;
 
             if (skinIndex >= body.SkinOptions.Count)
                 return body.SkinOptions[0];
@@ -58,29 +99,18 @@ namespace Vashta.Entropy.ScriptableObject
             return Carts[Random.Range(0, Carts.Count)];
         }
 
-        public Cart GetCartById(int id)
+        public Cart GetCartById(string id)
         {
-            int index = GetIndexFromId(id);
-            
-            if (index >= Carts.Count)
-                return Carts[0];
+            Init();
+            if (_indexedBodyTypes.ContainsKey(id))
+                return _indexedCarts[id];
 
-            return Carts[index];
+            return Carts[0];
         }
 
         public Turret GetRandomTurret()
         {
             return Turrets[Random.Range(0, Turrets.Count)];
-        }
-
-        private int GetIndexFromId(int id)
-        {
-            return id - 1;
-        }
-
-        private int GetIdFromIndex(int index)
-        {
-            return index + 1;
         }
     }
 }

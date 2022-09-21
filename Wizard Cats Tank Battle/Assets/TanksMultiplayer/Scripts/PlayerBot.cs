@@ -5,6 +5,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Entropy.Scripts.Player;
 using UnityEngine;
 using UnityEngine.AI;
 using Photon.Pun;
@@ -53,11 +54,15 @@ namespace TanksMP
 
         //toggle for update logic
         private bool isDead = false;
+        
+        private PlayerCurrencyRewarder _playerCurrencyRewarder;
 
 
         //called before SyncVar updates
         void Start()
-        {           
+        {
+            _playerCurrencyRewarder = new PlayerCurrencyRewarder();
+            
             //get components and set camera target
             camFollow = Camera.main.GetComponent<FollowTarget>();
             agent = GetComponent<NavMeshAgent>();
@@ -242,6 +247,9 @@ namespace TanksMP
                 Text[] killCounter = GameManager.GetInstance().ui.killCounter;
                 killCounter[0].text = GetView().GetKills().ToString();
                 killCounter[0].GetComponent<Animator>().Play("Animation");
+                
+                int coinsRewarded = _playerCurrencyRewarder.RewardForKill();
+                GameManager.GetInstance().ui.coinsEarnedPopup.PlayAnimation(coinsRewarded);
                 // GameManager.GetInstance().ui.killCounter[0].text = (int.Parse(GameManager.GetInstance().ui.killCounter[0].text) + 1).ToString();
                 // GameManager.GetInstance().ui.killCounter[0].GetComponent<Animator>().Play("Animation");
             }

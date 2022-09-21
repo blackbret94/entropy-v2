@@ -20,7 +20,7 @@ namespace Vashta.Entropy.ScriptableObject
                 return;
             
             _dictionary = new Dictionary<int, Powerup>();
-        
+         
             foreach (Powerup powerup in Directory)
                 _dictionary.Add(powerup.PowerupId,powerup);
         }

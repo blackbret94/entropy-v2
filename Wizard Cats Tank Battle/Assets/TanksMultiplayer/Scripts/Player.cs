@@ -130,6 +130,8 @@ namespace TanksMP
         public float FractionFireReady => Mathf.Min(1-(TimeToNextFire / fireRate), 1);
 
         public bool LoadClass;
+
+        private PlayerCurrencyRewarder _playerCurrencyRewarder;
         
         //reference to this rigidbody
         #pragma warning disable 0649
@@ -182,6 +184,8 @@ namespace TanksMP
             //call hooks manually to update
             OnHealthChange(GetView().GetHealth());
             OnShieldChange(GetView().GetShield());
+
+            _playerCurrencyRewarder = new PlayerCurrencyRewarder();
 
             //called only for this client 
             if (!photonView.IsMine)
@@ -582,6 +586,9 @@ namespace TanksMP
                     Text[] killCounter = GameManager.GetInstance().ui.killCounter;
                     killCounter[0].text = GetView().GetKills().ToString();
                     killCounter[0].GetComponent<Animator>().Play("Animation");
+                    
+                    int coinsRewarded = _playerCurrencyRewarder.RewardForKill();
+                    GameManager.GetInstance().ui.coinsEarnedPopup.PlayAnimation(coinsRewarded);
                     // GameManager.GetInstance().ui.killCounter[0].text = (int.Parse(GameManager.GetInstance().ui.killCounter[0].text) + 1).ToString();
                     // GameManager.GetInstance().ui.killCounter[0].GetComponent<Animator>().Play("Animation");
                 }

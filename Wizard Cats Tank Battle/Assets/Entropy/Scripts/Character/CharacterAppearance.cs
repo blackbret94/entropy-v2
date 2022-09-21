@@ -1,4 +1,5 @@
 using System;
+using Entropy.Scripts.Player.Inventory;
 using TanksMP;
 using UnityEngine;
 using Vashta.Entropy.Character.Prop;
@@ -13,6 +14,7 @@ namespace Vashta.Entropy.Character
         [Header("Dependencies")] 
         public Player Player;
         public PlayerCharacterWardrobe PlayerCharacterWardrobe;
+        public PlayerInventory PlayerInventory;
         public CharacterAppearanceSaveLoad SaveLoad;
 
         [Header("Nodes")] 
@@ -30,13 +32,21 @@ namespace Vashta.Entropy.Character
         public Material DefaultTeamMaterial;
 
         [HideInInspector] public Team Team;
+        
+        // Inventory Indexes
+        private int
+            _hatIndex = 0,
+            _bodyIndex = 0,
+            _skinIndex = 0,
+            _cartIndex = 0,
+            _turretIndex = 0;
 
         public void Start()
         {
-            if(Player == null)
+            // if(Player == null)
                 // Wardrobe
-                LoadAppearance();
-            else if(SaveLoad && (Player != null && Player.IsLocal))
+                //LoadAppearance();
+            if(SaveLoad && (Player != null && Player.IsLocal))
                 // Gameplay, local player vs. other players
                 LoadAppearance();
         }
@@ -73,100 +83,100 @@ namespace Vashta.Entropy.Character
             //UpdatePlayerTurret();
         }
 
+        // NEED TO CHECK
         public CharacterWardrobeSelectorData NextHat()
         {
-            int id = Hat.HatId;
-            int hatCount = PlayerCharacterWardrobe.Hats.Count;
-
-            id = ++id > hatCount ? 1 : id;
-            Hat = PlayerCharacterWardrobe.GetHatById(id);
+            int hatCount = PlayerInventory.Hats.Count;
+            
+            _hatIndex = ++_hatIndex >= hatCount ? 0 : _hatIndex;
+            Hat = PlayerInventory.GetHatByIndex(_hatIndex);
             ReplaceHat();
 
-            return new CharacterWardrobeSelectorData(id, hatCount);
+            return new CharacterWardrobeSelectorData(_hatIndex+1, hatCount);
         }
 
+        // NEED TO CHECK
         public CharacterWardrobeSelectorData PrevHat()
         {
-            int id = Hat.HatId;
             int hatCount = PlayerCharacterWardrobe.Hats.Count;
 
-            id = --id < 1 ? hatCount : 1;
-            Hat = PlayerCharacterWardrobe.GetHatById(id);
+            _hatIndex = --_hatIndex < 0 ? hatCount-1 : _hatIndex;
+            Hat = PlayerInventory.GetHatByIndex(_hatIndex);
             ReplaceHat();
             
-            return new CharacterWardrobeSelectorData(id, hatCount);
+            return new CharacterWardrobeSelectorData(_hatIndex+1, hatCount);
         }
 
+        // NEED TO UPDATE
         public CharacterWardrobeSelectorData NextBodyType()
         {
-            int id = Body.BodyTypeId;
             int count = PlayerCharacterWardrobe.BodyTypes.Count;
 
-            id = ++id > count ? 1 : id;
-            Body = PlayerCharacterWardrobe.GetBodyTypeById(id);
+            _bodyIndex = ++_bodyIndex >= count ? 0 : _bodyIndex;
+            Body = PlayerInventory.GetBodyTypeByIndex(_bodyIndex);
             ReplaceCatBody();
             
-            return new CharacterWardrobeSelectorData(id, count);
+            return new CharacterWardrobeSelectorData(_bodyIndex+1, count);
         }
 
+        // NEED TO UPDATE
         public CharacterWardrobeSelectorData PrevBodyType()
         {
-            int id = Body.BodyTypeId;
             int count = PlayerCharacterWardrobe.BodyTypes.Count;
 
-            id = --id < 1 ? count : 1;
-            Body = PlayerCharacterWardrobe.GetBodyTypeById(id);
+            _bodyIndex = --_bodyIndex < 0 ? count-1 : _bodyIndex;
+            Body = PlayerInventory.GetBodyTypeByIndex(_bodyIndex);
             ReplaceCatBody();
             
-            return new CharacterWardrobeSelectorData(id, count);
+            return new CharacterWardrobeSelectorData(_bodyIndex+1, count);
         }
 
+        // NEED TO UPDATE
         public CharacterWardrobeSelectorData NextSkin()
         {
-            int id = Skin.SkinId;
-            int count = PlayerCharacterWardrobe.GetBodyTypeById(Body.BodyTypeId).SkinOptions.Count;
+            int count = PlayerCharacterWardrobe.GetBodyTypeById(Body.Id).SkinOptions.Count;
 
-            id = ++id > count ? 1 : id;
-            Skin = PlayerCharacterWardrobe.GetSkinById(Body.BodyTypeId, id);
+            _skinIndex = ++_skinIndex >= count ? 0 : _skinIndex;
+            Skin = PlayerInventory.GetSkinByIndex(_bodyIndex, _skinIndex);
             ReplaceCatFur();
             
-            return new CharacterWardrobeSelectorData(id, count);
+            return new CharacterWardrobeSelectorData(_skinIndex+1, count);
         }
 
+        // NEED TO UPDATE
         public CharacterWardrobeSelectorData PrevSkin()
         {
-            int id = Skin.SkinId;
-            int count = PlayerCharacterWardrobe.GetBodyTypeById(Body.BodyTypeId).SkinOptions.Count;
+            int count = PlayerCharacterWardrobe.GetBodyTypeById(Body.Id).SkinOptions.Count;
 
-            id = --id < 1 ? count : id;
-            Skin = PlayerCharacterWardrobe.GetSkinById(Body.BodyTypeId, id);
+            _skinIndex = --_skinIndex <= 0 ? count-1 : _skinIndex;
+            Skin = PlayerInventory.GetSkinByIndex(Body.BodyTypeId, _skinIndex);
             ReplaceCatFur();
             
-            return new CharacterWardrobeSelectorData(id, count);
+            return new CharacterWardrobeSelectorData(_skinIndex+1, count);
         }
 
+        // NEED TO UPDATE
         public CharacterWardrobeSelectorData NextCart()
         {
-            int id = Cart.CartId;
             int count = PlayerCharacterWardrobe.Carts.Count;
 
-            id = ++id > count ? 1 : id;
-            Cart = PlayerCharacterWardrobe.GetCartById(id);
+            _cartIndex = ++_cartIndex >= count ? 0 : _cartIndex;
+            Cart = PlayerInventory.GetCartByIndex(_cartIndex);
             ReplaceCart();
 
-            return new CharacterWardrobeSelectorData(id, count); 
+            return new CharacterWardrobeSelectorData(_cartIndex+1, count); 
         }
 
+        // NEED TO UPDATE
         public CharacterWardrobeSelectorData PrevCart()
         {
-            int id = Cart.CartId;
             int count = PlayerCharacterWardrobe.Carts.Count;
 
-            id = --id < 1 ? count : 1;
-            Cart = PlayerCharacterWardrobe.GetCartById(id);
+            _cartIndex = --_cartIndex <= 0 ? count-1 : _cartIndex;
+            Cart = PlayerInventory.GetCartByIndex(_cartIndex);
             ReplaceCart();
             
-            return new CharacterWardrobeSelectorData(id, count);
+            return new CharacterWardrobeSelectorData(_cartIndex+1, count);
         }
 
         public CharacterAppearanceSerializable Serialize()
@@ -176,10 +186,22 @@ namespace Vashta.Entropy.Character
 
         public void LoadFromSerialized(CharacterAppearanceSerializable characterAppearanceSerializable)
         {
-            Hat = PlayerCharacterWardrobe.GetHatById(characterAppearanceSerializable.HatId);
-            Body = PlayerCharacterWardrobe.GetBodyTypeById(characterAppearanceSerializable.BodyId);
-            Skin = PlayerCharacterWardrobe.GetSkinById(characterAppearanceSerializable.BodyId, characterAppearanceSerializable.SkinId);
-            Cart = PlayerCharacterWardrobe.GetCartById(characterAppearanceSerializable.CartId);
+            string hatId = characterAppearanceSerializable.HatId.ToString();
+            Hat = PlayerCharacterWardrobe.GetHatById(hatId);
+            _hatIndex = PlayerInventory.GetHatIndexById(hatId);
+
+            string bodyId = characterAppearanceSerializable.BodyId.ToString();
+            Body = PlayerCharacterWardrobe.GetBodyTypeById(bodyId);
+            _bodyIndex = PlayerInventory.GetBodyTypeIndexById(bodyId);
+
+            string skinId = characterAppearanceSerializable.SkinId.ToString();
+            Skin = PlayerCharacterWardrobe.GetSkinById(bodyId, characterAppearanceSerializable.SkinId);
+            _skinIndex = PlayerInventory.GetSkinIndexById(_bodyIndex, skinId);
+
+            string cartId = characterAppearanceSerializable.CartId.ToString();
+            Cart = PlayerCharacterWardrobe.GetCartById(cartId);
+            _cartIndex = PlayerInventory.GetCartIndexById(cartId);
+
             ApplyOutfit();
         }
 

@@ -7,6 +7,7 @@ namespace Vashta.Entropy.SceneNavigation
     {
         private const string WardrobeSceneName = "CharacterEditor";
         private const string MainMenuSceneName = "Intro";
+        private const string ItemStoreSceneName = "Store";
         
         public void GoToMainMenu()
         {
@@ -16,6 +17,11 @@ namespace Vashta.Entropy.SceneNavigation
         public void GoToWardrobe()
         {
             SceneManager.LoadScene(WardrobeSceneName);
+        }
+
+        public void GoToItemStore()
+        {
+            SceneManager.LoadScene(ItemStoreSceneName);
         }
     }
 }

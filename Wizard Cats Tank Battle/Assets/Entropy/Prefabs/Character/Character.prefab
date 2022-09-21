@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 488270}
   - component: {fileID: 1935677702118942807}
+  - component: {fileID: 313163783948142982}
   - component: {fileID: 3418823957936782311}
   m_Layer: 8
   m_Name: Character
@@ -37,7 +38,7 @@ Transform:
   - {fileID: 9074372605845466181}
   - {fileID: 5893426156761361635}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1935677702118942807
 MonoBehaviour:
@@ -53,6 +54,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
   PlayerCharacterWardrobe: {fileID: 0}
+  PlayerInventory: {fileID: 313163783948142982}
   SaveLoad: {fileID: 3418823957936782311}
   HatNode: {fileID: 670231124676030857}
   CatBodyNode: {fileID: 5893426156761361597}
@@ -68,6 +70,23 @@ MonoBehaviour:
     name: 
     material: {fileID: 0}
     spawn: {fileID: 0}
+--- !u!114 &313163783948142982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c4719bd058c4921ba67c69114b22215, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Hats: []
+  BodyTypes: []
+  Carts: []
+  Turrets: []
+  PlayerCharacterWardrobe: {fileID: 0}
 --- !u!114 &3418823957936782311
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,6 +221,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -376,6 +396,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -435,6 +456,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -1399,6 +1421,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 491912}
     m_Modifications:
     - target: {fileID: -4216859302048453862, guid: 236ad75e38a95a44bb731bbb4b5c0215,
@@ -1477,6 +1500,11 @@ PrefabInstance:
       value: WK_weapon_staff_C
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -4216859302048453862, guid: 236ad75e38a95a44bb731bbb4b5c0215,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2866295049403301616}
   m_SourcePrefab: {fileID: 100100000, guid: 236ad75e38a95a44bb731bbb4b5c0215, type: 3}
 --- !u!4 &5729833365089423456 stripped
 Transform:
@@ -1489,6 +1517,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 488270}
     m_Modifications:
     - target: {fileID: 8680998626113834828, guid: 752be8834d04cb74eb1d2f085d0cf6a0,
@@ -1552,6 +1581,7 @@ PrefabInstance:
       value: Toon_Cat_Simple_c5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 752be8834d04cb74eb1d2f085d0cf6a0, type: 3}
 --- !u!4 &670231124676030857 stripped
 Transform:
@@ -1576,6 +1606,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 488270}
     m_Modifications:
     - target: {fileID: 4671427876631551103, guid: 69354083670aae34a9031e3bf9dacb9c,
@@ -1654,6 +1685,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 69354083670aae34a9031e3bf9dacb9c, type: 3}
 --- !u!4 &2459494599204773315 stripped
 Transform:
@@ -1672,6 +1704,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 224000011828502108}
     m_Modifications:
     - target: {fileID: 971267658256397436, guid: add72ba367b0242b0a2a34bd643a15c2,
@@ -1805,6 +1838,7 @@ PrefabInstance:
       value: Slider_EdgeDecoType_00_Demo
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: add72ba367b0242b0a2a34bd643a15c2, type: 3}
 --- !u!224 &8791848199838963391 stripped
 RectTransform:

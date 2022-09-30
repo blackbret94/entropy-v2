@@ -21,7 +21,7 @@ namespace Entropy.Scripts.Player.Inventory
             Init();
         }
 
-        private void Init()
+        public void Init()
         {
             if (_hasInit)
                 return;

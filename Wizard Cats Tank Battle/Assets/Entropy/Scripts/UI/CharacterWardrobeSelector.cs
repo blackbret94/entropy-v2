@@ -1,13 +1,12 @@
+using Entropy.Scripts.Player.Inventory;
 using TMPro;
-using UnityEngine;
 using Vashta.Entropy.Character;
-using Vashta.Entropy.ScriptableObject;
 
 namespace Vashta.Entropy.UI
 {
     public class CharacterWardrobeSelector: GamePanel
     {
-        public PlayerCharacterWardrobe PlayerCharacterWardrobe;
+        public PlayerInventory PlayerInventory;
         public CharacterAppearance CharacterAppearance;
         public WardrobeCategory WardrobeCategory;
         public TextMeshProUGUI SelectorText;
@@ -20,23 +19,24 @@ namespace Vashta.Entropy.UI
         public override void Refresh()
         {
             base.Refresh();
+            PlayerInventory.Load();
             
             switch (WardrobeCategory)
             {
                 case WardrobeCategory.HAT:
-                    UpdateText(new CharacterWardrobeSelectorData(CharacterAppearance.Hat.HatId, PlayerCharacterWardrobe.Hats.Count));
+                    UpdateText(new CharacterWardrobeSelectorData(CharacterAppearance.HatIndex+1, PlayerInventory.Hats.Count));
                     break;
                 
                 case WardrobeCategory.BODY_TYPE:
-                    UpdateText(new CharacterWardrobeSelectorData(CharacterAppearance.Body.BodyTypeId, PlayerCharacterWardrobe.BodyTypes.Count));
+                    UpdateText(new CharacterWardrobeSelectorData(CharacterAppearance.BodyIndex+1, PlayerInventory.BodyTypes.Count));
                     break;
                 
                 case WardrobeCategory.SKIN:
-                    UpdateText(new CharacterWardrobeSelectorData(CharacterAppearance.Skin.SkinId, PlayerCharacterWardrobe.GetBodyTypeById(CharacterAppearance.Body.Id).SkinOptions.Count));
+                    UpdateText(new CharacterWardrobeSelectorData(CharacterAppearance.SkinIndex+1, PlayerInventory.GetBodyTypeByIndex(CharacterAppearance.BodyIndex).SkinOptions.Count));
                     break;
                 
                 case WardrobeCategory.CART:
-                    UpdateText(new CharacterWardrobeSelectorData(CharacterAppearance.Cart.CartId, PlayerCharacterWardrobe.Carts.Count));
+                    UpdateText(new CharacterWardrobeSelectorData(CharacterAppearance.CartIndex+1, PlayerInventory.Carts.Count));
                     break;
             }
         }

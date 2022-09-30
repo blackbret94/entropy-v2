@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Vashta.Entropy.ScriptableObject
@@ -14,28 +13,27 @@ namespace Vashta.Entropy.ScriptableObject
 
         private Dictionary<string, Hat> _indexedHats;
         private Dictionary<string, BodyType> _indexedBodyTypes;
+        private Dictionary<string, Skin> _indexedSkins; // This will need to be updated if unique body type+skin combos are ever added
         private Dictionary<string, Cart> _indexedCarts;
         private Dictionary<string, Turret> _indexedTurrets;
-
-        private bool _hasInit = false;
 
         private void Awake()
         {
             Init();
         }
 
+        // The issue here is that this is a scriptable object
         private void Init()
         {
-            if (_hasInit)
+            if (_indexedHats != null)
                 return;
-            
-            IndexWardrobe();
 
-            _hasInit = true;
+            IndexWardrobe();
         }
 
         private void IndexWardrobe()
         {
+            Debug.Log("Indexing wardrobe");
             _indexedHats = new Dictionary<string, Hat>();
             foreach (var hat in Hats)
                 _indexedHats[hat.Id] = hat;
@@ -43,6 +41,12 @@ namespace Vashta.Entropy.ScriptableObject
             _indexedBodyTypes = new Dictionary<string, BodyType>();
             foreach (var bt in BodyTypes)
                 _indexedBodyTypes[bt.Id] = bt;
+
+            _indexedSkins = new Dictionary<string, Skin>();
+            foreach (var skin in BodyTypes[0].SkinOptions)
+            {
+                _indexedSkins[skin.Id] = skin;
+            }
             
             _indexedCarts = new Dictionary<string, Cart>();
             foreach (var cart in Carts)
@@ -81,17 +85,15 @@ namespace Vashta.Entropy.ScriptableObject
             return BodyTypes[0];
         }
 
-        public Skin GetSkinById(string bodyTypeId, int skinId)
+        // Will need to be updated if we ever add unique mesh + skin combos
+        public Skin GetSkinById(string skinId)
         {
             Init();
-            BodyType body = GetBodyTypeById(bodyTypeId);
-            // LEFT OFF HERE
-            int skinIndex = skinId + 1;
 
-            if (skinIndex >= body.SkinOptions.Count)
-                return body.SkinOptions[0];
+            if (_indexedSkins.ContainsKey(skinId))
+                return _indexedSkins[skinId];
 
-            return body.SkinOptions[skinIndex];
+            return BodyTypes[0].SkinOptions[0];
         }
 
         public Cart GetRandomCart()
@@ -102,9 +104,10 @@ namespace Vashta.Entropy.ScriptableObject
         public Cart GetCartById(string id)
         {
             Init();
-            if (_indexedBodyTypes.ContainsKey(id))
+            if (_indexedCarts.ContainsKey(id))
                 return _indexedCarts[id];
 
+            Debug.Log("Could not find cart with ID: " + id);
             return Carts[0];
         }
 

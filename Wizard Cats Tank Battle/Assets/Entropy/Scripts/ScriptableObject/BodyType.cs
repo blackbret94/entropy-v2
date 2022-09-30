@@ -6,7 +6,6 @@ namespace Vashta.Entropy.ScriptableObject
     [CreateAssetMenu(fileName = "BodyType", menuName = "Entropy/BodyType", order = 1)]
     public class BodyType: ScriptableWardrobeItem
     {
-        public int BodyTypeId;
         public string BodyTypeName;
         public Mesh BodyMesh;
         public List<Skin> SkinOptions;

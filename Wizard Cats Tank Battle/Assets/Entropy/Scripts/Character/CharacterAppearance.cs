@@ -1,4 +1,3 @@
-using System;
 using Entropy.Scripts.Player.Inventory;
 using TanksMP;
 using UnityEngine;
@@ -41,12 +40,18 @@ namespace Vashta.Entropy.Character
             _cartIndex = 0,
             _turretIndex = 0;
 
+        public int HatIndex => _hatIndex;
+        public int BodyIndex => _bodyIndex;
+        public int SkinIndex => _skinIndex;
+        public int CartIndex => _cartIndex;
+        public int TurretIndex => _turretIndex;
+
         public void Start()
         {
-            // if(Player == null)
+            if(Player == null)
                 // Wardrobe
-                //LoadAppearance();
-            if(SaveLoad && (Player != null && Player.IsLocal))
+                LoadAppearance();
+            else if(SaveLoad && (Player != null && Player.IsLocal))
                 // Gameplay, local player vs. other players
                 LoadAppearance();
         }
@@ -82,8 +87,7 @@ namespace Vashta.Entropy.Character
         {
             //UpdatePlayerTurret();
         }
-
-        // NEED TO CHECK
+        
         public CharacterWardrobeSelectorData NextHat()
         {
             int hatCount = PlayerInventory.Hats.Count;
@@ -94,8 +98,7 @@ namespace Vashta.Entropy.Character
 
             return new CharacterWardrobeSelectorData(_hatIndex+1, hatCount);
         }
-
-        // NEED TO CHECK
+        
         public CharacterWardrobeSelectorData PrevHat()
         {
             int hatCount = PlayerCharacterWardrobe.Hats.Count;
@@ -110,7 +113,7 @@ namespace Vashta.Entropy.Character
         // NEED TO UPDATE
         public CharacterWardrobeSelectorData NextBodyType()
         {
-            int count = PlayerCharacterWardrobe.BodyTypes.Count;
+            int count = PlayerInventory.BodyTypes.Count;
 
             _bodyIndex = ++_bodyIndex >= count ? 0 : _bodyIndex;
             Body = PlayerInventory.GetBodyTypeByIndex(_bodyIndex);
@@ -122,7 +125,7 @@ namespace Vashta.Entropy.Character
         // NEED TO UPDATE
         public CharacterWardrobeSelectorData PrevBodyType()
         {
-            int count = PlayerCharacterWardrobe.BodyTypes.Count;
+            int count = PlayerInventory.BodyTypes.Count;
 
             _bodyIndex = --_bodyIndex < 0 ? count-1 : _bodyIndex;
             Body = PlayerInventory.GetBodyTypeByIndex(_bodyIndex);
@@ -134,7 +137,7 @@ namespace Vashta.Entropy.Character
         // NEED TO UPDATE
         public CharacterWardrobeSelectorData NextSkin()
         {
-            int count = PlayerCharacterWardrobe.GetBodyTypeById(Body.Id).SkinOptions.Count;
+            int count = PlayerInventory.GetBodyTypeByIndex(_bodyIndex).SkinOptions.Count;
 
             _skinIndex = ++_skinIndex >= count ? 0 : _skinIndex;
             Skin = PlayerInventory.GetSkinByIndex(_bodyIndex, _skinIndex);
@@ -146,19 +149,18 @@ namespace Vashta.Entropy.Character
         // NEED TO UPDATE
         public CharacterWardrobeSelectorData PrevSkin()
         {
-            int count = PlayerCharacterWardrobe.GetBodyTypeById(Body.Id).SkinOptions.Count;
+            int count = PlayerInventory.GetBodyTypeByIndex(_bodyIndex).SkinOptions.Count;
 
             _skinIndex = --_skinIndex <= 0 ? count-1 : _skinIndex;
-            Skin = PlayerInventory.GetSkinByIndex(Body.BodyTypeId, _skinIndex);
+            Skin = PlayerInventory.GetSkinByIndex(_bodyIndex, _skinIndex);
             ReplaceCatFur();
             
             return new CharacterWardrobeSelectorData(_skinIndex+1, count);
         }
 
-        // NEED TO UPDATE
         public CharacterWardrobeSelectorData NextCart()
         {
-            int count = PlayerCharacterWardrobe.Carts.Count;
+            int count = PlayerInventory.Carts.Count;
 
             _cartIndex = ++_cartIndex >= count ? 0 : _cartIndex;
             Cart = PlayerInventory.GetCartByIndex(_cartIndex);
@@ -167,10 +169,9 @@ namespace Vashta.Entropy.Character
             return new CharacterWardrobeSelectorData(_cartIndex+1, count); 
         }
 
-        // NEED TO UPDATE
         public CharacterWardrobeSelectorData PrevCart()
         {
-            int count = PlayerCharacterWardrobe.Carts.Count;
+            int count = PlayerInventory.Carts.Count;
 
             _cartIndex = --_cartIndex <= 0 ? count-1 : _cartIndex;
             Cart = PlayerInventory.GetCartByIndex(_cartIndex);
@@ -181,24 +182,27 @@ namespace Vashta.Entropy.Character
 
         public CharacterAppearanceSerializable Serialize()
         {
-            return new CharacterAppearanceSerializable(Hat.HatId, Body.BodyTypeId, Skin.SkinId, Cart.CartId);
+            return new CharacterAppearanceSerializable(Hat.Id, Body.Id, Skin.Id, Cart.Id);
         }
 
         public void LoadFromSerialized(CharacterAppearanceSerializable characterAppearanceSerializable)
         {
-            string hatId = characterAppearanceSerializable.HatId.ToString();
+            PlayerInventory.Init();
+            PlayerInventory.Load();
+            
+            string hatId = characterAppearanceSerializable.HatId;
             Hat = PlayerCharacterWardrobe.GetHatById(hatId);
             _hatIndex = PlayerInventory.GetHatIndexById(hatId);
 
-            string bodyId = characterAppearanceSerializable.BodyId.ToString();
+            string bodyId = characterAppearanceSerializable.BodyId;
             Body = PlayerCharacterWardrobe.GetBodyTypeById(bodyId);
             _bodyIndex = PlayerInventory.GetBodyTypeIndexById(bodyId);
 
-            string skinId = characterAppearanceSerializable.SkinId.ToString();
-            Skin = PlayerCharacterWardrobe.GetSkinById(bodyId, characterAppearanceSerializable.SkinId);
+            string skinId = characterAppearanceSerializable.SkinId;
+            Skin = PlayerCharacterWardrobe.GetSkinById(characterAppearanceSerializable.SkinId);
             _skinIndex = PlayerInventory.GetSkinIndexById(_bodyIndex, skinId);
 
-            string cartId = characterAppearanceSerializable.CartId.ToString();
+            string cartId = characterAppearanceSerializable.CartId;
             Cart = PlayerCharacterWardrobe.GetCartById(cartId);
             _cartIndex = PlayerInventory.GetCartIndexById(cartId);
 

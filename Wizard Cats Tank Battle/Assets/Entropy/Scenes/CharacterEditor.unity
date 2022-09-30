@@ -788,7 +788,7 @@ PrefabInstance:
         type: 3}
       propertyPath: SaveLoad
       value: 
-      objectReference: {fileID: 647560841}
+      objectReference: {fileID: 647560843}
     - target: {fileID: 1935677702118942807, guid: a2dcc27db5fce2c4ba3640cb41010f8e,
         type: 3}
       propertyPath: PlayerCharacterWardrobe
@@ -1220,11 +1220,23 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 2, z: 3}
   m_Center: {x: 0, y: 0.75, z: 0}
---- !u!114 &647560841
+--- !u!114 &647560842 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 313163783948142982, guid: a2dcc27db5fce2c4ba3640cb41010f8e,
+    type: 3}
+  m_PrefabInstance: {fileID: 364952249}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 647560838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c4719bd058c4921ba67c69114b22215, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &647560843 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3418823957936782311, guid: a2dcc27db5fce2c4ba3640cb41010f8e,
+    type: 3}
+  m_PrefabInstance: {fileID: 364952249}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 647560838}
   m_Enabled: 1
@@ -1699,6 +1711,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4101906195579497206, guid: 882423f84efdb6e4aa751a8094af1c66,
         type: 3}
+      propertyPath: PlayerInventory
+      value: 
+      objectReference: {fileID: 647560842}
+    - target: {fileID: 4101906195579497206, guid: 882423f84efdb6e4aa751a8094af1c66,
+        type: 3}
       propertyPath: WardrobeCategory
       value: 1
       objectReference: {fileID: 0}
@@ -1959,6 +1976,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4101906195579497206, guid: 882423f84efdb6e4aa751a8094af1c66,
+        type: 3}
+      propertyPath: PlayerInventory
+      value: 
+      objectReference: {fileID: 647560842}
     - target: {fileID: 4101906195579497206, guid: 882423f84efdb6e4aa751a8094af1c66,
         type: 3}
       propertyPath: WardrobeCategory
@@ -2361,6 +2383,77 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c1c2b969d294a87b2d3579e93fb4d39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &1416328635
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 2
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1183891432516161402, guid: 3f1cc016ed673dd439ecf84422bd5551,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1183891432516161402, guid: 3f1cc016ed673dd439ecf84422bd5551,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1183891432516161402, guid: 3f1cc016ed673dd439ecf84422bd5551,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1183891432516161402, guid: 3f1cc016ed673dd439ecf84422bd5551,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1183891432516161402, guid: 3f1cc016ed673dd439ecf84422bd5551,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1183891432516161402, guid: 3f1cc016ed673dd439ecf84422bd5551,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1183891432516161402, guid: 3f1cc016ed673dd439ecf84422bd5551,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1183891432516161402, guid: 3f1cc016ed673dd439ecf84422bd5551,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1183891432516161402, guid: 3f1cc016ed673dd439ecf84422bd5551,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1183891432516161402, guid: 3f1cc016ed673dd439ecf84422bd5551,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1183891432516161402, guid: 3f1cc016ed673dd439ecf84422bd5551,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1183891432516161403, guid: 3f1cc016ed673dd439ecf84422bd5551,
+        type: 3}
+      propertyPath: m_Name
+      value: Encryptor
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_AddedGameObjects: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3f1cc016ed673dd439ecf84422bd5551, type: 3}
 --- !u!1 &1438202716
 GameObject:
   m_ObjectHideFlags: 0
@@ -3147,6 +3240,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4101906195579497206, guid: 882423f84efdb6e4aa751a8094af1c66,
         type: 3}
+      propertyPath: PlayerInventory
+      value: 
+      objectReference: {fileID: 647560842}
+    - target: {fileID: 4101906195579497206, guid: 882423f84efdb6e4aa751a8094af1c66,
+        type: 3}
       propertyPath: WardrobeCategory
       value: 2
       objectReference: {fileID: 0}
@@ -3419,6 +3517,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4101906195579497206, guid: 882423f84efdb6e4aa751a8094af1c66,
+        type: 3}
+      propertyPath: PlayerInventory
+      value: 
+      objectReference: {fileID: 647560842}
     - target: {fileID: 4101906195579497206, guid: 882423f84efdb6e4aa751a8094af1c66,
         type: 3}
       propertyPath: CharacterAppearance

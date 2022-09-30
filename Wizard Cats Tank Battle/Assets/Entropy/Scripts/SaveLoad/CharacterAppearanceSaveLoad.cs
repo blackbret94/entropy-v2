@@ -9,6 +9,7 @@ namespace Vashta.Entropy.SaveLoad
         public void Save(CharacterAppearanceSerializable appearanceSerializable)
         {
             string encrypted = appearanceSerializable.Encrypt();
+            Debug.Log("Saved string: " + encrypted);
             
             PlayerPrefs.SetString(PrefsKeys.characterAppearance, encrypted);
             SetAppearanceAsCustomProperty(encrypted);
@@ -17,6 +18,7 @@ namespace Vashta.Entropy.SaveLoad
         public CharacterAppearanceSerializable Load()
         {
             string appearance = PlayerPrefs.GetString(PrefsKeys.characterAppearance, DefaultAppearanceStringEncrypted());
+            Debug.Log("Appearance: " + appearance);
             return CharacterAppearanceSerializable.Decrypt(appearance);
         }
 

@@ -23,32 +23,44 @@ namespace Entropy.Scripts.Player.Inventory
         public void Load(PlayerInventory playerInventory)
         {
             playerInventory.Hats = LoadHats();
-            // playerInventory.Carts = LoadCart();
-            // playerInventory.BodyTypes = LoadBody();
+            playerInventory.Carts = LoadCart();
+            playerInventory.BodyTypes = LoadBody();
             // playerInventory.Turrets = LoadTurret();
         }
 
         public void Save(PlayerInventory playerInventory)
         {
             SaveHats(playerInventory.Hats);
-            // SaveBody(playerInventory.BodyTypes);
-            // SaveCart(playerInventory.Carts);
+            SaveBody(playerInventory.BodyTypes);
+            SaveCart(playerInventory.Carts);
             // SaveTurret(playerInventory.Turrets);
         }
 
+        private List<string> GetOwnedObjectsList(string key)
+        {
+            string ownedObjectIdsString = PlayerPrefs.GetString(key);
+            List<string> ownedObjectIds =JsonConvert.DeserializeObject<List<string>>(ownedObjectIdsString);
+
+            if (ownedObjectIds == null)
+                ownedObjectIds = new List<string>();
+
+            return ownedObjectIds;
+        }
+        
         private List<Hat> LoadHats()
         {
             List<Hat> ownedObjects = new List<Hat>();
             
             // read from playerprefs
-            string ownedObjectIdsString = PlayerPrefs.GetString(HatKey);
-            List<string> ownedObjectIds =JsonConvert.DeserializeObject<List<string>>(ownedObjectIdsString);
+            List<string> ownedObjectIds = GetOwnedObjectsList(HatKey);
 
             // iterate over options, adding ones that are owned or start free
             foreach (Hat item in _playerCharacterWardrobe.Hats)
             {
-                if (ownedObjectIds != null && (item.AvailAtStart || ownedObjectIds.Contains(item.Id)))
+                if ((item.AvailAtStart || ownedObjectIds.Contains(item.Id)))
+                {
                     ownedObjects.Add(item);
+                }
             }
             
             return ownedObjects;
@@ -64,7 +76,7 @@ namespace Entropy.Scripts.Player.Inventory
             List<BodyType> ownedObjects = new List<BodyType>();
             
             // read from playerprefs
-            List<string> ownedObjectIds = new List<string>();
+            List<string> ownedObjectIds = GetOwnedObjectsList(BodyKey);
             
             // iterate over options, adding ones that are owned or start free
             foreach (BodyType item in _playerCharacterWardrobe.BodyTypes)
@@ -86,7 +98,7 @@ namespace Entropy.Scripts.Player.Inventory
             List<Cart> ownedObjects = new List<Cart>();
             
             // read from playerprefs
-            List<string> ownedObjectIds = new List<string>();
+            List<string> ownedObjectIds = GetOwnedObjectsList(CartKey);
             
             // iterate over options, adding ones that are owned or start free
             foreach (Cart item in _playerCharacterWardrobe.Carts)
@@ -108,7 +120,7 @@ namespace Entropy.Scripts.Player.Inventory
             List<Turret> ownedObjects = new List<Turret>();
             
             // read from playerprefs
-            List<string> ownedObjectIds = new List<string>();
+            List<string> ownedObjectIds = GetOwnedObjectsList(TurretsKey);
             
             // iterate over options, adding ones that are owned or start free
             foreach (Turret item in _playerCharacterWardrobe.Turrets)

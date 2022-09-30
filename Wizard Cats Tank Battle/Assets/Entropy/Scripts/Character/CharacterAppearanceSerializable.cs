@@ -7,20 +7,20 @@ namespace Vashta.Entropy.Character
     [Serializable]
     public class CharacterAppearanceSerializable
     {
-        public int HatId;
-        public int BodyId;
-        public int SkinId;
-        public int CartId;
+        public string HatId;
+        public string BodyId;
+        public string SkinId;
+        public string CartId;
 
         public CharacterAppearanceSerializable()
         {
-            HatId = 1;
-            BodyId = 1;
-            SkinId = 1;
-            CartId = 1;
+            HatId = "1";
+            BodyId = "1";
+            SkinId = "1";
+            CartId = "1";
         }
         
-        public CharacterAppearanceSerializable(int hatId, int bodyId, int skinId, int cartId)
+        public CharacterAppearanceSerializable(string hatId, string bodyId, string skinId, string cartId)
         {
             HatId = hatId;
             BodyId = bodyId;

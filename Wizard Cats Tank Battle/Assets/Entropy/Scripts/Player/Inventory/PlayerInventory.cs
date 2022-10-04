@@ -48,6 +48,22 @@ namespace Entropy.Scripts.Player.Inventory
             return Hats[Random.Range(0, Hats.Count)];
         }
 
+        public void AddHat(Hat hat){
+            Hats.Add(hat);
+            Save();
+    }
+
+        public bool OwnsHatById(string id)
+        {
+            foreach (var hat in Hats)
+            {
+                if (hat.Id == id)
+                    return true;
+            }
+
+            return false;
+        }
+        
         public int GetHatIndexById(string id)
         {
             for (int i = 0; i < Hats.Count; i++)

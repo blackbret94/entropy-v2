@@ -28,7 +28,7 @@ namespace Entropy.Scripts.Currency
         public bool QueryPurchase(int cost)
         {
             int currencyVal = GetCurrency();
-            return cost >= currencyVal;
+            return cost <= currencyVal;
         }
     }
 }

@@ -6,6 +6,5 @@ namespace Vashta.Entropy.ScriptableObject
     public class Hat: ScriptableWardrobeItem
     {
         public string HatName;
-        public GameObject HatObject;
     }
 }

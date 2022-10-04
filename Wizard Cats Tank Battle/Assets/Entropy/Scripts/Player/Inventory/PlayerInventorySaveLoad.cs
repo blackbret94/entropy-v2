@@ -31,8 +31,8 @@ namespace Entropy.Scripts.Player.Inventory
         public void Save(PlayerInventory playerInventory)
         {
             SaveHats(playerInventory.Hats);
-            SaveBody(playerInventory.BodyTypes);
-            SaveCart(playerInventory.Carts);
+            // SaveBody(playerInventory.BodyTypes);
+            // SaveCart(playerInventory.Carts);
             // SaveTurret(playerInventory.Turrets);
         }
 
@@ -68,7 +68,13 @@ namespace Entropy.Scripts.Player.Inventory
 
         private void SaveHats(List<Hat> hats)
         {
-            PlayerPrefs.SetString(HatKey, JsonConvert.SerializeObject(hats));
+            List<string> hatIds = new List<string>();
+            foreach (var hat in hats)
+            {
+                hatIds.Add(hat.Id);
+            }
+            
+            PlayerPrefs.SetString(HatKey, JsonConvert.SerializeObject(hatIds));
         }
 
         private List<BodyType> LoadBody()

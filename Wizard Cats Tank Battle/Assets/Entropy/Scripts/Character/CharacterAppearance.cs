@@ -219,7 +219,7 @@ namespace Vashta.Entropy.Character
         private void ReplaceHat()
         {
             DestroyAllChildren(HatNode.transform);
-            Instantiate(Hat.HatObject, HatNode);
+            Instantiate(Hat.ItemObject, HatNode);
         }
 
         private void ReplaceCatBody()

@@ -11,6 +11,8 @@ namespace Vashta.Entropy.Character
         public string BodyId;
         public string SkinId;
         public string CartId;
+        public string TurretId;
+        public string MeowId;
 
         public CharacterAppearanceSerializable()
         {
@@ -18,14 +20,18 @@ namespace Vashta.Entropy.Character
             BodyId = "1";
             SkinId = "1";
             CartId = "1";
+            TurretId = "1";
+            MeowId = "1";
         }
         
-        public CharacterAppearanceSerializable(string hatId, string bodyId, string skinId, string cartId)
+        public CharacterAppearanceSerializable(string hatId, string bodyId, string skinId, string cartId, string turretId, string meowId)
         {
             HatId = hatId;
             BodyId = bodyId;
             SkinId = skinId;
             CartId = cartId;
+            TurretId = turretId;
+            MeowId = meowId;
         }
 
         public string Encrypt()

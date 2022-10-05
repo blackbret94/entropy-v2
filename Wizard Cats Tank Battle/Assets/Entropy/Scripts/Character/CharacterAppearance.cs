@@ -27,7 +27,8 @@ namespace Vashta.Entropy.Character
         public BodyType Body;
         public Skin Skin;
         public Cart Cart;
-        public GameObject Turret;
+        public Turret Turret;
+        public Meow Meow;
         public Material DefaultTeamMaterial;
 
         [HideInInspector] public Team Team;
@@ -38,14 +39,17 @@ namespace Vashta.Entropy.Character
             _bodyIndex = 0,
             _skinIndex = 0,
             _cartIndex = 0,
-            _turretIndex = 0;
+            _turretIndex = 0,
+            _meowIndex = 0;
 
         public int HatIndex => _hatIndex;
         public int BodyIndex => _bodyIndex;
         public int SkinIndex => _skinIndex;
         public int CartIndex => _cartIndex;
         public int TurretIndex => _turretIndex;
-
+        public int MeowIndex => _meowIndex;
+        public AudioClip MeowSound => Meow.AudioClip;
+        
         public void Start()
         {
             if(Player == null)
@@ -80,7 +84,7 @@ namespace Vashta.Entropy.Character
             ReplaceCatBody();
             ReplaceCatFur();
             ReplaceCart();
-            //ReplaceTurret();
+            ReplaceTurret();
         }
 
         private void UpdatePlayer()
@@ -180,9 +184,51 @@ namespace Vashta.Entropy.Character
             return new CharacterWardrobeSelectorData(_cartIndex+1, count);
         }
 
+        public CharacterWardrobeSelectorData NextTurret()
+        {
+            int count = PlayerInventory.Turrets.Count;
+
+            _turretIndex = ++_turretIndex >= count ? 0 : _turretIndex;
+            Turret = PlayerInventory.GetTurretByIndex(_turretIndex);
+            ReplaceTurret();
+
+            return new CharacterWardrobeSelectorData(_turretIndex+1, count); 
+        }
+
+        public CharacterWardrobeSelectorData PrevTurret()
+        {
+            int count = PlayerInventory.Turrets.Count;
+
+            _turretIndex = --_turretIndex <= 0 ? count-1 : _turretIndex;
+            Turret = PlayerInventory.GetTurretByIndex(_turretIndex);
+            ReplaceTurret();
+            
+            return new CharacterWardrobeSelectorData(_turretIndex+1, count);
+        }
+
+        public CharacterWardrobeSelectorData NextMeow()
+        {
+            int count = PlayerInventory.Meows.Count;
+            
+            _meowIndex = ++_meowIndex >= count ? 0 : _meowIndex;
+            Meow = PlayerInventory.GetMeowByIndex(_meowIndex);
+
+            return new CharacterWardrobeSelectorData(_meowIndex+1, count); 
+        }
+        
+        public CharacterWardrobeSelectorData PrevMeow()
+        {
+            int count = PlayerInventory.Meows.Count;
+
+            _meowIndex = --_meowIndex <= 0 ? count-1 : _meowIndex;
+            Meow = PlayerInventory.GetMeowByIndex(_meowIndex);
+            
+            return new CharacterWardrobeSelectorData(_meowIndex+1, count);
+        }
+        
         public CharacterAppearanceSerializable Serialize()
         {
-            return new CharacterAppearanceSerializable(Hat.Id, Body.Id, Skin.Id, Cart.Id);
+            return new CharacterAppearanceSerializable(Hat.Id, Body.Id, Skin.Id, Cart.Id, Turret.Id, Meow.Id);
         }
 
         public void LoadFromSerialized(CharacterAppearanceSerializable characterAppearanceSerializable)
@@ -206,15 +252,18 @@ namespace Vashta.Entropy.Character
             Cart = PlayerCharacterWardrobe.GetCartById(cartId);
             _cartIndex = PlayerInventory.GetCartIndexById(cartId);
 
+            string turretId = characterAppearanceSerializable.TurretId;
+            Turret = PlayerCharacterWardrobe.GetTurretById(turretId);
+            _turretIndex = PlayerInventory.GetTurretIndexById(turretId);
+
+            string meowId = characterAppearanceSerializable.MeowId;
+            Meow = PlayerCharacterWardrobe.GetMeowById(meowId);
+            _meowIndex = PlayerInventory.GetMeowIndexById(meowId);
+
             ApplyOutfit();
         }
 
         /****************************/
-
-        private void UpdatePlayerTurret()
-        {
-            // Player.turret = TurretNode.GetChild(0).transform;
-        }
 
         private void ReplaceHat()
         {
@@ -257,8 +306,8 @@ namespace Vashta.Entropy.Character
 
         private void ReplaceTurret()
         {
-            DestroyAllChildren(Turret.transform);
-            Instantiate(Turret, TurretNode);
+            DestroyAllChildren(TurretNode.transform);
+            Instantiate(Turret.ItemObject, TurretNode);
         }
 
         private void DestroyAllChildren(Transform parent)

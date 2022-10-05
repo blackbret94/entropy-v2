@@ -10,10 +10,11 @@ namespace Entropy.Scripts.Player.Inventory
         private PlayerCharacterWardrobe _playerCharacterWardrobe;
 
         private const string
-            HatKey = "inventoryHats",
+            HatKey = "inventoryHat",
             CartKey = "inventoryCart",
             BodyKey = "inventoryBody",
-            TurretsKey = "inventoryTurrets";
+            TurretsKey = "inventoryTurret",
+            MeowsKey = "inventoryMeow";
 
         public PlayerInventorySaveLoad(PlayerCharacterWardrobe playerCharacterWardrobe)
         {
@@ -25,7 +26,8 @@ namespace Entropy.Scripts.Player.Inventory
             playerInventory.Hats = LoadHats();
             playerInventory.Carts = LoadCart();
             playerInventory.BodyTypes = LoadBody();
-            // playerInventory.Turrets = LoadTurret();
+            playerInventory.Turrets = LoadTurret();
+            playerInventory.Meows = LoadMeows();
         }
 
         public void Save(PlayerInventory playerInventory)
@@ -34,6 +36,7 @@ namespace Entropy.Scripts.Player.Inventory
             // SaveBody(playerInventory.BodyTypes);
             // SaveCart(playerInventory.Carts);
             // SaveTurret(playerInventory.Turrets);
+            // SaveMeows(playerInventory.Meows);
         }
 
         private List<string> GetOwnedObjectsList(string key)
@@ -139,6 +142,28 @@ namespace Entropy.Scripts.Player.Inventory
         }
 
         private void SaveTurret(List<Turret> turrets)
+        {
+            
+        }
+        
+        private List<Meow> LoadMeows()
+        {
+            List<Meow> ownedObjects = new List<Meow>();
+            
+            // read from playerprefs
+            List<string> ownedObjectIds = GetOwnedObjectsList(MeowsKey);
+            
+            // iterate over options, adding ones that are owned or start free
+            foreach (Meow item in _playerCharacterWardrobe.Meows)
+            {
+                if (item.AvailAtStart || ownedObjectIds.Contains(item.Id))
+                    ownedObjects.Add(item);
+            }
+            
+            return ownedObjects;
+        }
+
+        private void SaveMeows(List<Meow> meows)
         {
             
         }

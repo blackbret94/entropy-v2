@@ -7,5 +7,6 @@ namespace Vashta.Entropy.ScriptableObject
         public int Cost = 0;
         public bool AvailAtStart = false;
         public GameObject ItemObject;
+        public string ItemName;
     }
 }

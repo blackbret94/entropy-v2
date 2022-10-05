@@ -38,6 +38,14 @@ namespace Vashta.Entropy.UI
                 case WardrobeCategory.CART:
                     UpdateText(new CharacterWardrobeSelectorData(CharacterAppearance.CartIndex+1, PlayerInventory.Carts.Count));
                     break;
+                
+                case WardrobeCategory.MEOW:
+                    UpdateText(new CharacterWardrobeSelectorData(CharacterAppearance.MeowIndex+1, PlayerInventory.Meows.Count));
+                    break;
+                
+                case WardrobeCategory.TURRET:
+                    UpdateText(new CharacterWardrobeSelectorData(CharacterAppearance.TurretIndex+1, PlayerInventory.Turrets.Count));
+                    break;
             }
         }
         
@@ -60,6 +68,14 @@ namespace Vashta.Entropy.UI
                 case WardrobeCategory.CART:
                     UpdateText(CharacterAppearance.NextCart());
                     break;
+                
+                case WardrobeCategory.MEOW:
+                    UpdateText(CharacterAppearance.NextMeow());
+                    break;
+                
+                case WardrobeCategory.TURRET:
+                    UpdateText(CharacterAppearance.NextTurret());
+                    break;
             }
         }
 
@@ -81,6 +97,14 @@ namespace Vashta.Entropy.UI
                 
                 case WardrobeCategory.CART:
                     UpdateText(CharacterAppearance.PrevCart());
+                    break;
+                
+                case WardrobeCategory.MEOW:
+                    UpdateText(CharacterAppearance.PrevMeow());
+                    break;
+                
+                case WardrobeCategory.TURRET:
+                    UpdateText(CharacterAppearance.PrevTurret());
                     break;
             }
         }

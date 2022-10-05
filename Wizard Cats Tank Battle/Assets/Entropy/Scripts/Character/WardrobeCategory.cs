@@ -6,6 +6,7 @@ namespace Vashta.Entropy.Character
         BODY_TYPE,
         SKIN,
         CART,
-        MEOW
+        MEOW,
+        TURRET
     }
 }

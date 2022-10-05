@@ -10,12 +10,14 @@ namespace Vashta.Entropy.ScriptableObject
         public List<BodyType> BodyTypes;
         public List<Cart> Carts;
         public List<Turret> Turrets;
+        public List<Meow> Meows;
 
         private Dictionary<string, Hat> _indexedHats;
         private Dictionary<string, BodyType> _indexedBodyTypes;
         private Dictionary<string, Skin> _indexedSkins; // This will need to be updated if unique body type+skin combos are ever added
         private Dictionary<string, Cart> _indexedCarts;
         private Dictionary<string, Turret> _indexedTurrets;
+        private Dictionary<string, Meow> _indexedMeows;
 
         private void Awake()
         {
@@ -55,6 +57,10 @@ namespace Vashta.Entropy.ScriptableObject
             _indexedTurrets = new Dictionary<string, Turret>();
             foreach (var turret in Turrets)
                 _indexedTurrets[turret.Id] = turret;
+
+            _indexedMeows = new Dictionary<string, Meow>();
+            foreach (var meow in Meows)
+                _indexedMeows[meow.Id] = meow;
         }
 
         public Hat GetRandomHat()
@@ -114,6 +120,31 @@ namespace Vashta.Entropy.ScriptableObject
         public Turret GetRandomTurret()
         {
             return Turrets[Random.Range(0, Turrets.Count)];
+        }
+
+        public Turret GetTurretById(string id)
+        {
+            Init();
+            if (_indexedTurrets.ContainsKey(id))
+                return _indexedTurrets[id];
+            
+            Debug.Log("Could not find turret with ID: " + id);
+            return Turrets[0];
+        }
+
+        public Meow GetRandomMeow()
+        {
+            return Meows[Random.Range(0, Meows.Count)];
+        }
+
+        public Meow GetMeowById(string id)
+        {
+            Init();
+            if (_indexedMeows.ContainsKey(id))
+                return _indexedMeows[id];
+            
+            Debug.Log("Could not find Meow with ID: " + id);
+            return Meows[0];
         }
     }
 }

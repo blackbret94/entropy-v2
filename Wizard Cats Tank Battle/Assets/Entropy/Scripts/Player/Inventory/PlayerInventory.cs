@@ -10,6 +10,7 @@ namespace Entropy.Scripts.Player.Inventory
         public List<BodyType> BodyTypes;
         public List<Cart> Carts;
         public List<Turret> Turrets;
+        public List<Meow> Meows;
         public PlayerCharacterWardrobe PlayerCharacterWardrobe;
 
         private PlayerInventorySaveLoad _playerInventorySaveLoad;
@@ -166,6 +167,53 @@ namespace Entropy.Scripts.Player.Inventory
         public Turret GetRandomTurret()
         {
             return Turrets[Random.Range(0, Turrets.Count)];
+        }
+
+        public Turret GetTurretByIndex(int index)
+        {
+            if (index >= Turrets.Count)
+                return Turrets[0];
+
+            return Turrets[index];
+        }
+
+        public int GetTurretIndexById(string id)
+        {
+            for (int i = 0; i < Turrets.Count; i++)
+            {
+                Turret turret = Turrets[i];
+                if (turret.Id == id)
+                    return i;
+            }
+            
+            Debug.Log("Could not find turret with ID: " + id);
+            return 0;
+        }
+
+        public Meow GetRandomMeow()
+        {
+            return Meows[Random.Range(0, Meows.Count)];
+        }
+
+        public Meow GetMeowByIndex(int index)
+        {
+            if (index >= Meows.Count)
+                return Meows[0];
+
+            return Meows[index];
+        }
+
+        public int GetMeowIndexById(string id)
+        {
+            for (int i = 0; i < Meows.Count; i++)
+            {
+                Meow meow = Meows[i];
+                if (meow.Id == id)
+                    return i;
+            }
+            
+            Debug.Log("Could not find meow with ID: " + id);
+            return 0;
         }
     }
 }

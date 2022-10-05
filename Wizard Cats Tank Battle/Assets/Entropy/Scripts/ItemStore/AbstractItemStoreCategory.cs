@@ -103,7 +103,10 @@ namespace Entropy.Scripts.ItemStore
 
         public int GetCostOfActiveItem()
         {
-            return _activeItemList[_itemIndex].Cost;
+            if(_itemIndex < _activeItemList.Count)
+                return _activeItemList[_itemIndex].Cost;
+
+            return 0;
         }
     }
 }

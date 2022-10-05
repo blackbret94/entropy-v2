@@ -1,3 +1,4 @@
+using Entropy.Scripts.Audio;
 using Entropy.Scripts.Player.Inventory;
 using TanksMP;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace Vashta.Entropy.Character
         public PlayerCharacterWardrobe PlayerCharacterWardrobe;
         public PlayerInventory PlayerInventory;
         public CharacterAppearanceSaveLoad SaveLoad;
+        public SfxController SfxController;
 
         [Header("Nodes")] 
         public Transform HatNode;
@@ -48,16 +50,35 @@ namespace Vashta.Entropy.Character
         public int CartIndex => _cartIndex;
         public int TurretIndex => _turretIndex;
         public int MeowIndex => _meowIndex;
-        public AudioClip MeowSound => Meow.AudioClip;
         
         public void Start()
         {
+            InitSfxController();
+            
             if(Player == null)
                 // Wardrobe
                 LoadAppearance();
             else if(SaveLoad && (Player != null && Player.IsLocal))
                 // Gameplay, local player vs. other players
                 LoadAppearance();
+        }
+
+        public void RefreshIndexes()
+        {
+            _hatIndex = PlayerInventory.GetHatIndexById(Hat.Id);
+            _bodyIndex = PlayerInventory.GetBodyTypeIndexById(Body.Id);
+            _skinIndex = PlayerInventory.GetSkinIndexById(_bodyIndex, Skin.Id);
+            _cartIndex = PlayerInventory.GetCartIndexById(Cart.Id);
+            _turretIndex = PlayerInventory.GetTurretIndexById(Turret.Id);
+            _meowIndex = PlayerInventory.GetMeowIndexById(Meow.Id);
+        }
+
+        private void InitSfxController()
+        {
+            if (SfxController == null)
+            {
+                SfxController = Camera.main.gameObject.GetComponentInChildren<SfxController>();
+            }
         }
 
         public void LoadAppearance()
@@ -75,7 +96,6 @@ namespace Vashta.Entropy.Character
         public void ApplyOutfit()
         {
             ReplaceMeshes();
-            UpdatePlayer();
         }
 
         private void ReplaceMeshes()
@@ -87,11 +107,6 @@ namespace Vashta.Entropy.Character
             ReplaceTurret();
         }
 
-        private void UpdatePlayer()
-        {
-            //UpdatePlayerTurret();
-        }
-        
         public CharacterWardrobeSelectorData NextHat()
         {
             int hatCount = PlayerInventory.Hats.Count;
@@ -125,8 +140,7 @@ namespace Vashta.Entropy.Character
             
             return new CharacterWardrobeSelectorData(_bodyIndex+1, count);
         }
-
-        // NEED TO UPDATE
+        
         public CharacterWardrobeSelectorData PrevBodyType()
         {
             int count = PlayerInventory.BodyTypes.Count;
@@ -155,7 +169,7 @@ namespace Vashta.Entropy.Character
         {
             int count = PlayerInventory.GetBodyTypeByIndex(_bodyIndex).SkinOptions.Count;
 
-            _skinIndex = --_skinIndex <= 0 ? count-1 : _skinIndex;
+            _skinIndex = --_skinIndex < 0 ? count-1 : _skinIndex;
             Skin = PlayerInventory.GetSkinByIndex(_bodyIndex, _skinIndex);
             ReplaceCatFur();
             
@@ -177,7 +191,7 @@ namespace Vashta.Entropy.Character
         {
             int count = PlayerInventory.Carts.Count;
 
-            _cartIndex = --_cartIndex <= 0 ? count-1 : _cartIndex;
+            _cartIndex = --_cartIndex < 0 ? count-1 : _cartIndex;
             Cart = PlayerInventory.GetCartByIndex(_cartIndex);
             ReplaceCart();
             
@@ -199,7 +213,7 @@ namespace Vashta.Entropy.Character
         {
             int count = PlayerInventory.Turrets.Count;
 
-            _turretIndex = --_turretIndex <= 0 ? count-1 : _turretIndex;
+            _turretIndex = --_turretIndex < 0 ? count-1 : _turretIndex;
             Turret = PlayerInventory.GetTurretByIndex(_turretIndex);
             ReplaceTurret();
             
@@ -220,7 +234,7 @@ namespace Vashta.Entropy.Character
         {
             int count = PlayerInventory.Meows.Count;
 
-            _meowIndex = --_meowIndex <= 0 ? count-1 : _meowIndex;
+            _meowIndex = --_meowIndex < 0 ? count-1 : _meowIndex;
             Meow = PlayerInventory.GetMeowByIndex(_meowIndex);
             
             return new CharacterWardrobeSelectorData(_meowIndex+1, count);
@@ -316,6 +330,13 @@ namespace Vashta.Entropy.Character
             {
                 GameObject.Destroy(child.gameObject);
             }
+        }
+
+        public void PlayMeow()
+        {
+            Debug.Log("Meowing!");
+            
+            SfxController.PlaySound(Meow.AudioClip);
         }
     }
 }

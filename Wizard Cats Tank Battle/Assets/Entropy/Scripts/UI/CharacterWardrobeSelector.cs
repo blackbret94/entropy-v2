@@ -1,3 +1,4 @@
+using Entropy.Scripts.Audio;
 using Entropy.Scripts.Player.Inventory;
 using TMPro;
 using Vashta.Entropy.Character;
@@ -20,6 +21,7 @@ namespace Vashta.Entropy.UI
         {
             base.Refresh();
             PlayerInventory.Load();
+            CharacterAppearance.RefreshIndexes();
             
             switch (WardrobeCategory)
             {

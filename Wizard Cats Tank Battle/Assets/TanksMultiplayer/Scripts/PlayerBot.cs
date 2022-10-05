@@ -243,6 +243,9 @@ namespace TanksMP
             //yes, that's my kill: increase local kill counter
             if (killedBy == GameManager.GetInstance().localPlayer.gameObject)
             {
+                // play kill sound
+                // CharacterAppearance.PlayMeow();
+                
                 GetView().IncrementKills();
                 Text[] killCounter = GameManager.GetInstance().ui.killCounter;
                 killCounter[0].text = GetView().GetKills().ToString();
@@ -263,8 +266,19 @@ namespace TanksMP
             }
 				
 			//play sound clip on player death
-            if(explosionClip) AudioManager.Play3D(explosionClip, transform.position);
-
+            // if(explosionClip) AudioManager.Play3D(explosionClip, transform.position);
+            if (killedBy != null)
+            {
+                Player player = killedBy.GetComponent<Player>();
+                
+                if (player != null)
+                {
+                    AudioManager.Play3D(player.CharacterAppearance.Meow.AudioClip, transform.position);
+                }
+            }
+            // AudioManager.Play3D(CharacterAppearance.Meow.AudioClip, transform.position);
+            // CharacterAppearance.PlayMeow();
+            
             //toggle visibility for all rendering parts (off)
             ToggleComponents(false);
             //wait global respawn delay until reactivation

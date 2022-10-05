@@ -14,43 +14,72 @@ namespace Vashta.Entropy.Character
         private void Start()
         {
             if (RandomizeOnLoad)
-                Randomize();
+                Randomize(false);
         }
 
-        public void Randomize()
+        public void Randomize(bool useInventory)
         {
-            RandomizeHat();
-            RandomizeBody();
-            RandomizeCart();
+            RandomizeHat(useInventory);
+            RandomizeBody(useInventory);
+            RandomizeCart(useInventory);
+            RandomizeTurret(useInventory);
+            RandomizeMeow(useInventory);
             CharacterAppearance.ApplyOutfit();
             
             if(PanelToRefresh)
                 PanelToRefresh.Refresh();
         }
 
-        private void RandomizeHat()
+        private void RandomizeHat(bool useInventory)
         {
-            CharacterAppearance.Hat = PlayerCharacterWardrobe.GetRandomHat();
+            if (useInventory)
+                CharacterAppearance.Hat = CharacterAppearance.PlayerInventory.GetRandomHat();
+            else
+                CharacterAppearance.Hat = PlayerCharacterWardrobe.GetRandomHat();
         }
 
-        private void RandomizeBody()
+        private void RandomizeBody(bool useInventory)
         {
-            BodyType bodyType = PlayerCharacterWardrobe.GetRandomBodyType();
-            Skin skin = bodyType.GetRandomSkin();
-
+            BodyType bodyType;
+            Skin skin;
+            
+            if (useInventory)
+            {
+                bodyType = CharacterAppearance.PlayerInventory.GetRandomBodyType();
+                skin = bodyType.GetRandomSkin();
+            }
+            else
+            {
+                bodyType = PlayerCharacterWardrobe.GetRandomBodyType();
+                skin = bodyType.GetRandomSkin();
+            }
+            
             CharacterAppearance.Body = bodyType;
             CharacterAppearance.Skin = skin;
         }
 
-        private void RandomizeCart()
+        private void RandomizeCart(bool useInventory)
         {
-            Cart cart = PlayerCharacterWardrobe.GetRandomCart();
-            CharacterAppearance.Cart = cart;
+            if(useInventory)
+                CharacterAppearance.Cart = CharacterAppearance.PlayerInventory.GetRandomCart();
+            else
+                CharacterAppearance.Cart = PlayerCharacterWardrobe.GetRandomCart();
         }
 
-        private void RandomizeTurret()
+        private void RandomizeTurret(bool useInventory)
         {
-            
+            if(useInventory)
+                CharacterAppearance.Turret = CharacterAppearance.PlayerInventory.GetRandomTurret();
+            else
+                CharacterAppearance.Turret = PlayerCharacterWardrobe.GetRandomTurret();
+        }
+
+        private void RandomizeMeow(bool useInventory)
+        {
+            if(useInventory)
+                CharacterAppearance.Meow = CharacterAppearance.PlayerInventory.GetRandomMeow();
+            else
+                CharacterAppearance.Meow = PlayerCharacterWardrobe.GetRandomMeow();
         }
     }
 }

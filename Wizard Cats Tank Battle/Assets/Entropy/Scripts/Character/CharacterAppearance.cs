@@ -248,7 +248,6 @@ namespace Vashta.Entropy.Character
         public void LoadFromSerialized(CharacterAppearanceSerializable characterAppearanceSerializable)
         {
             PlayerInventory.Init();
-            PlayerInventory.Load();
             
             string hatId = characterAppearanceSerializable.HatId;
             Hat = PlayerCharacterWardrobe.GetHatById(hatId);

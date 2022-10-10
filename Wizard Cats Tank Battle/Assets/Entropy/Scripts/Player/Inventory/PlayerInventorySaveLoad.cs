@@ -34,8 +34,8 @@ namespace Entropy.Scripts.Player.Inventory
         {
             SaveHats(playerInventory.Hats);
             // SaveBody(playerInventory.BodyTypes);
-            // SaveCart(playerInventory.Carts);
-            // SaveTurret(playerInventory.Turrets);
+            SaveCart(playerInventory.Carts);
+            SaveTurret(playerInventory.Turrets);
             // SaveMeows(playerInventory.Meows);
         }
 
@@ -121,7 +121,13 @@ namespace Entropy.Scripts.Player.Inventory
 
         private void SaveCart(List<Cart> carts)
         {
+            List<string> ids = new List<string>();
+            foreach (var cart in carts)
+            {
+                ids.Add(cart.Id);
+            }
             
+            PlayerPrefs.SetString(CartKey, JsonConvert.SerializeObject(ids));
         }
 
         private List<Turret> LoadTurret()
@@ -143,7 +149,13 @@ namespace Entropy.Scripts.Player.Inventory
 
         private void SaveTurret(List<Turret> turrets)
         {
+            List<string> ids = new List<string>();
+            foreach (var turret in turrets)
+            {
+                ids.Add(turret.Id);
+            }
             
+            PlayerPrefs.SetString(TurretsKey, JsonConvert.SerializeObject(ids));
         }
         
         private List<Meow> LoadMeows()

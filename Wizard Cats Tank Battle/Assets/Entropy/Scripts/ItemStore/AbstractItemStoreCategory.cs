@@ -24,8 +24,8 @@ namespace Entropy.Scripts.ItemStore
 
         private void Init()
         {
+            PlayerInventory.Init();
             IndexItems();
-            // SetItem();
         }
 
         protected ScriptableWardrobeItem ActiveItem()
@@ -89,10 +89,13 @@ namespace Entropy.Scripts.ItemStore
                 _currencyTransaction.ModifyCurrency(-cost);
                 Purchase();
 
+                Init();
+                
                 if (_itemIndex >= _activeItemList.Count)
                     _itemIndex = 0;
                 
-                Init();
+                SetItem();
+
                 return true;
             }
             else
@@ -107,7 +110,7 @@ namespace Entropy.Scripts.ItemStore
 
         public int GetCostOfActiveItem()
         {
-            if(_itemIndex < _activeItemList.Count)
+            if(_itemIndex < _activeItemList.Count && _activeItemList.Count > 0)
                 return _activeItemList[_itemIndex].Cost;
 
             return 0;

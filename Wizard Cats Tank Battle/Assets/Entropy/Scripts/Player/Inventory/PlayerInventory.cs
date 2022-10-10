@@ -28,13 +28,13 @@ namespace Entropy.Scripts.Player.Inventory
                 return;
 
             _playerInventorySaveLoad = new PlayerInventorySaveLoad(PlayerCharacterWardrobe);
-
+            Load();
+            
             _hasInit = true;
         }
 
-        public void Load()
+        private void Load()
         {
-            Init();
             _playerInventorySaveLoad.Load(this);
         }
 

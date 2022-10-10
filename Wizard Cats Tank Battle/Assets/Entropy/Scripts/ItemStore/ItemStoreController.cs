@@ -73,7 +73,12 @@ namespace Entropy.Scripts.ItemStore
 
         private void SetPriceText()
         {
-            PurchaseText.text = "Buy " + _activeCategory.GetCostOfActiveItem();
+            int cost = _activeCategory.GetCostOfActiveItem();
+
+            if (cost > 0)
+                PurchaseText.text = "Buy " + cost;
+            else
+                PurchaseText.text = "Purchased";
         }
     }
 }

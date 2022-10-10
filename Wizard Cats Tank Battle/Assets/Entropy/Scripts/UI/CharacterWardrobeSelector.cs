@@ -20,7 +20,7 @@ namespace Vashta.Entropy.UI
         public override void Refresh()
         {
             base.Refresh();
-            PlayerInventory.Load();
+            PlayerInventory.Init();
             CharacterAppearance.RefreshIndexes();
             
             switch (WardrobeCategory)

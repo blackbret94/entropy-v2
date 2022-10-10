@@ -6,6 +6,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Photon.Pun;
+using Vashta.Entropy.ScriptableObject;
 
 namespace TanksMP
 {
@@ -45,16 +46,10 @@ namespace TanksMP
         /// </summary>
         public float explosionRange = 1;
 
-        /// <summary>
-        /// Clip to play when a player gets hit.
-        /// </summary>
-        public AudioClip hitClip;
-
-        /// <summary>
-        /// Clip to play when this projectile gets despawned.
-        /// </summary>
-        public AudioClip explosionClip;
-
+        public ScriptableAudioClipList HitSfx;
+        public ScriptableAudioClipList CastSfx;
+        public ScriptableAudioClipList BounceSfx;
+        
         /// <summary>
         /// Object to spawn when a player gets hit.
         /// </summary>
@@ -106,9 +101,21 @@ namespace TanksMP
         //On Host, add automatic despawn coroutine
         void OnSpawn()
         {
-            //for bouncing bullets, save current position only on first spawn (turret position)
+            // Check if it is the initial path or if it has bounced
             if (bounce == maxBounce)
-                lastBouncePos = transform.position;
+            {
+                Vector3 pos = transform.position;
+                
+                //for bouncing bullets, save current position only on first spawn (turret position)
+                lastBouncePos = pos;
+                
+                //play cast sound
+                AudioManager.Play3D(CastSfx.GetRandomClip(), pos);
+            }
+            else
+            {
+                if(BounceSfx) AudioManager.Play3D(BounceSfx.GetRandomClip(), transform.position);
+            }
 
             myRigidbody.velocity = speed * transform.forward;
             PoolManager.Despawn(gameObject, despawnDelay);
@@ -135,7 +142,8 @@ namespace TanksMP
                 
                 //create clips and particles on hit
                 if (hitFX) PoolManager.Spawn(hitFX, transform.position, Quaternion.identity);
-                if (hitClip) AudioManager.Play3D(hitClip, transform.position);
+                
+                AudioManager.Play3D(HitSfx.GetRandomClip(), transform.position);
             }
             else if (bounce > 0 || bounceInf)
             {
@@ -167,7 +175,7 @@ namespace TanksMP
                     OnSpawn();
 
                     //play clip at the collided position
-                    if (hitClip) AudioManager.Play3D(hitClip, transform.position);
+                    AudioManager.Play3D(HitSfx.GetRandomClip(), transform.position);
                     //exit execution until next collision
                     return;
                 }
@@ -224,7 +232,7 @@ namespace TanksMP
         {
             //create clips and particles on despawn
             if (explosionFX) PoolManager.Spawn(explosionFX, transform.position, transform.rotation);
-            if (explosionClip) AudioManager.Play3D(explosionClip, transform.position);
+            // if (explosionClip) AudioManager.Play3D(explosionClip, transform.position);
 
             //reset modified variables to the initial state
             myRigidbody.velocity = Vector3.zero;

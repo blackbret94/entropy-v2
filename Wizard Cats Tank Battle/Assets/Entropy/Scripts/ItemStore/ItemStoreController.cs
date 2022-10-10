@@ -9,9 +9,9 @@ namespace Entropy.Scripts.ItemStore
         private AbstractItemStoreCategory _activeCategory;
 
         public TextMeshProUGUI PurchaseText;
-        public HatItemStoreCategory
-            HatItemStoreCategory;
-
+        public HatItemStoreCategory HatItemStoreCategory;
+        public TankItemStoreCategory TankItemStoreCategory;
+        public WandItemStoreCategory WandItemStoreCategory;
         public PlayerGoldPanel PlayerGoldPanel;
 
         private void Start()
@@ -26,10 +26,30 @@ namespace Entropy.Scripts.ItemStore
 
         public void SetCategoryHats()
         {
-            _activeCategory = HatItemStoreCategory;
-            SetPriceText();
+            SetCategory(HatItemStoreCategory);
         }
 
+        public void SetCategoryTanks()
+        {
+            SetCategory(TankItemStoreCategory);
+        }
+
+        public void SetCategoryTurrets()
+        {
+            SetCategory(WandItemStoreCategory);
+        }
+
+        private void SetCategory(AbstractItemStoreCategory category)
+        {
+            if(_activeCategory)
+                _activeCategory.Hide();
+            
+            _activeCategory = category;
+            _activeCategory.Show();
+            _activeCategory.SetItem();
+            SetPriceText();
+        }
+        
         public void NextItem()
         {
             _activeCategory.NextItem();

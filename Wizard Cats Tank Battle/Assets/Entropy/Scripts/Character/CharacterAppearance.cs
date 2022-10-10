@@ -300,7 +300,7 @@ namespace Vashta.Entropy.Character
         private void ReplaceCart()
         {
             DestroyAllChildren(CartNode.transform);
-            GameObject cart = Instantiate(Cart.CartObject, CartNode);
+            GameObject cart = Instantiate(Cart.ItemObject, CartNode);
             CartProp cartProp = cart.GetComponentInChildren<CartProp>();
 
             if (cartProp == null)

@@ -16,7 +16,7 @@ namespace Entropy.Scripts.ItemStore
         protected List<ScriptableWardrobeItem> _activeItemList;
         protected CurrencyTransaction _currencyTransaction;
         
-        private void Start()
+        private void Awake()
         {
             _currencyTransaction = new CurrencyTransaction();
             Init();
@@ -25,7 +25,7 @@ namespace Entropy.Scripts.ItemStore
         private void Init()
         {
             IndexItems();
-            SetItem();
+            // SetItem();
         }
 
         protected ScriptableWardrobeItem ActiveItem()
@@ -63,14 +63,18 @@ namespace Entropy.Scripts.ItemStore
             SetItem();
         }
 
-        private void SetItem()
+        public void SetItem()
         {
             foreach (Transform child in ObjectRoot.transform)
             {
                 Destroy(child.gameObject);
             }
 
-            Instantiate(_activeItemList[_itemIndex].ItemObject, ObjectRoot.transform);
+            
+            if(_activeItemList.Count > 0)
+                Instantiate(_activeItemList[_itemIndex].ItemObject, ObjectRoot.transform);
+            else
+                Debug.Log("Attempted to create an item in an empty category!");
         }
         
         public bool AttemptPurchaseItem()

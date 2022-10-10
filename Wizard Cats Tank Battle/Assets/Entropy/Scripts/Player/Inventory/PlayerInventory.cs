@@ -52,7 +52,7 @@ namespace Entropy.Scripts.Player.Inventory
         public void AddHat(Hat hat){
             Hats.Add(hat);
             Save();
-    }
+        }
 
         public bool OwnsHatById(string id)
         {
@@ -163,6 +163,22 @@ namespace Entropy.Scripts.Player.Inventory
 
             return Carts[index];
         }
+        
+        public bool OwnsCartById(string id)
+        {
+            foreach (var hat in Carts)
+            {
+                if (hat.Id == id)
+                    return true;
+            }
+
+            return false;
+        }
+        
+        public void AddCart(Cart cart){
+            Carts.Add(cart);
+            Save();
+        }
 
         public Turret GetRandomTurret()
         {
@@ -190,6 +206,22 @@ namespace Entropy.Scripts.Player.Inventory
             return 0;
         }
 
+        public bool OwnsTurretById(string id)
+        {
+            foreach (var turret in Turrets)
+            {
+                if (turret.Id == id)
+                    return true;
+            }
+
+            return false;
+        }
+        
+        public void AddTurret(Turret turret){
+            Turrets.Add(turret);
+            Save();
+        }
+        
         public Meow GetRandomMeow()
         {
             return Meows[Random.Range(0, Meows.Count)];

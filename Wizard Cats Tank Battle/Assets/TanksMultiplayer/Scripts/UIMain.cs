@@ -89,7 +89,7 @@ namespace TanksMP
             //read the selections and set them in the corresponding UI elements
             nameField.text = PlayerPrefs.GetString(PrefsKeys.playerName);
             networkDrop.value = PlayerPrefs.GetInt(PrefsKeys.networkMode);
-            gameModeDrop.value = PlayerPrefs.GetInt(PrefsKeys.gameMode);
+            // gameModeDrop.value = PlayerPrefs.GetInt(PrefsKeys.gameMode);
             serverField.text = PlayerPrefs.GetString(PrefsKeys.serverAddress);
             musicToggle.isOn = bool.Parse(PlayerPrefs.GetString(PrefsKeys.playMusic));
             volumeSlider.value = PlayerPrefs.GetFloat(PrefsKeys.appVolume);

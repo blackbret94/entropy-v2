@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Entropy.Scripts.Audio;
 using Entropy.Scripts.Currency;
 using Entropy.Scripts.Player.Inventory;
 using UnityEngine;
@@ -11,7 +12,8 @@ namespace Entropy.Scripts.ItemStore
         public PlayerCharacterWardrobe Wardrobe;
         public PlayerInventory PlayerInventory;
         public GameObject ObjectRoot;
-
+        public SfxController SfxController;
+        
         protected int _itemIndex = 0;
         protected List<ScriptableWardrobeItem> _activeItemList;
         protected CurrencyTransaction _currencyTransaction;
@@ -88,6 +90,7 @@ namespace Entropy.Scripts.ItemStore
                 // buy
                 _currencyTransaction.ModifyCurrency(-cost);
                 Purchase();
+                SfxController.PlayPurchase();
 
                 Init();
                 

@@ -120,7 +120,7 @@ namespace Vashta.Entropy.Character
         
         public CharacterWardrobeSelectorData PrevHat()
         {
-            int hatCount = PlayerCharacterWardrobe.Hats.Count;
+            int hatCount = PlayerInventory.Hats.Count;
 
             _hatIndex = --_hatIndex < 0 ? hatCount-1 : _hatIndex;
             Hat = PlayerInventory.GetHatByIndex(_hatIndex);

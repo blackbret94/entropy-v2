@@ -4,6 +4,7 @@
  * 	otherwise make available to any third party the Service or the Content. */
 
 using System;
+using Entropy.Scripts.Audio;
 using Entropy.Scripts.Player;
 using UnityEngine;
 using UnityEngine.UI;
@@ -131,7 +132,7 @@ namespace TanksMP
 
         public bool LoadClass;
 
-        private PlayerCurrencyRewarder _playerCurrencyRewarder;
+        protected PlayerCurrencyRewarder _playerCurrencyRewarder;
         
         //reference to this rigidbody
         #pragma warning disable 0649
@@ -580,7 +581,8 @@ namespace TanksMP
 
                 //detect whether the current user was responsible for the kill, but not for suicide
                 //yes, that's my kill: increase local kill counter
-                if (this != GameManager.GetInstance().localPlayer && killedBy == GameManager.GetInstance().localPlayer.gameObject)
+                Player localPlayer = GameManager.GetInstance().localPlayer;
+                if (this != localPlayer && killedBy == GameManager.GetInstance().localPlayer.gameObject)
                 {
                     // play kill sound
                     // CharacterAppearance.PlayMeow();
@@ -589,9 +591,9 @@ namespace TanksMP
                     Text[] killCounter = GameManager.GetInstance().ui.killCounter;
                     killCounter[0].text = GetView().GetKills().ToString();
                     killCounter[0].GetComponent<Animator>().Play("Animation");
-                    
-                    int coinsRewarded = _playerCurrencyRewarder.RewardForKill();
-                    GameManager.GetInstance().ui.coinsEarnedPopup.PlayAnimation(coinsRewarded);
+
+                    RewardCoins();
+
                     // GameManager.GetInstance().ui.killCounter[0].text = (int.Parse(GameManager.GetInstance().ui.killCounter[0].text) + 1).ToString();
                     // GameManager.GetInstance().ui.killCounter[0].GetComponent<Animator>().Play("Animation");
                 }
@@ -648,6 +650,26 @@ namespace TanksMP
                 GameManager.GetInstance().DisplayDeath();
                 
                 
+            }
+        }
+
+        protected void RewardCoins()
+        {
+            // reward coins if the player is on a different team
+            if(killedBy != null && killedBy.GetComponent<Player>().GetView().GetTeam() != GetView().GetTeam()){
+                int coinsRewarded = _playerCurrencyRewarder.RewardForKill();
+                GameManager.GetInstance().ui.coinsEarnedPopup.PlayAnimation(coinsRewarded);
+                        
+                // play coin reward sound
+                GameManager.GetInstance().ui.SfxController.PlayCoinEarnedSound();
+            }
+            else
+            {
+                // play sound for killing teammate
+                GameManager.GetInstance().ui.SfxController.PlayTeammateKilledSound();
+                        
+                // Tell player they killed a teammate
+                GameManager.GetInstance().ui.teammateKilledPopup.PlayAnimation();
             }
         }
 

@@ -3,6 +3,7 @@
  * 	You shall not license, sublicense, sell, resell, transfer, assign, distribute or
  * 	otherwise make available to any third party the Service or the Content. */
 
+using Entropy.Scripts.Audio;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -58,6 +59,9 @@ namespace TanksMP
         public PowerupIcon powerupIcon;
 
         public CoinsEarnedPopup coinsEarnedPopup;
+        public TeammateKilledPopup teammateKilledPopup;
+
+        public SfxController SfxController;
 
         //initialize variables
         void Start()

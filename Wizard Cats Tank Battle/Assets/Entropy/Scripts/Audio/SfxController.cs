@@ -7,7 +7,9 @@ namespace Entropy.Scripts.Audio
         public AudioClip
             BasicButtonClick,
             DramaticButtonClick,
-            Purchase;
+            Purchase,
+            CoinEarned,
+            TeammateKilled;
         
         public AudioSource Source;
 
@@ -29,6 +31,16 @@ namespace Entropy.Scripts.Audio
         public void PlayPurchase()
         {
             PlaySound(Purchase);
+        }
+
+        public void PlayCoinEarnedSound()
+        {
+            PlaySound(CoinEarned);
+        }
+
+        public void PlayTeammateKilledSound()
+        {
+            PlaySound(TeammateKilled);
         }
     }
 }

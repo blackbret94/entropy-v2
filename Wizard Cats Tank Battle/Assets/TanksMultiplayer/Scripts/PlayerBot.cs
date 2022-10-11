@@ -54,8 +54,6 @@ namespace TanksMP
 
         //toggle for update logic
         private bool isDead = false;
-        
-        private PlayerCurrencyRewarder _playerCurrencyRewarder;
 
 
         //called before SyncVar updates
@@ -251,8 +249,8 @@ namespace TanksMP
                 killCounter[0].text = GetView().GetKills().ToString();
                 killCounter[0].GetComponent<Animator>().Play("Animation");
                 
-                int coinsRewarded = _playerCurrencyRewarder.RewardForKill();
-                GameManager.GetInstance().ui.coinsEarnedPopup.PlayAnimation(coinsRewarded);
+                RewardCoins();
+                
                 // GameManager.GetInstance().ui.killCounter[0].text = (int.Parse(GameManager.GetInstance().ui.killCounter[0].text) + 1).ToString();
                 // GameManager.GetInstance().ui.killCounter[0].GetComponent<Animator>().Play("Animation");
             }

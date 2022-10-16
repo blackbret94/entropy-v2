@@ -3,6 +3,7 @@ using Entropy.Scripts.Audio;
 using Entropy.Scripts.Currency;
 using Entropy.Scripts.Player.Inventory;
 using UnityEngine;
+using Vashta.Entropy.Character;
 using Vashta.Entropy.ScriptableObject;
 
 namespace Entropy.Scripts.ItemStore
@@ -18,14 +19,19 @@ namespace Entropy.Scripts.ItemStore
         protected List<ScriptableWardrobeItem> _activeItemList;
         protected CurrencyTransaction _currencyTransaction;
         
+        public WardrobeCategory Category = WardrobeCategory.HAT;
+        
         private void Awake()
         {
             _currencyTransaction = new CurrencyTransaction();
             Init();
         }
 
+        protected abstract void InitCategory();
+
         private void Init()
         {
+            InitCategory();
             PlayerInventory.Init();
             IndexItems();
         }

@@ -13,6 +13,7 @@ namespace Entropy.Scripts.ItemStore
         public TankItemStoreCategory TankItemStoreCategory;
         public WandItemStoreCategory WandItemStoreCategory;
         public PlayerGoldPanel PlayerGoldPanel;
+        public ItemCollectedCounterPanel ItemCollectedCounterPanel;
 
         private void Start()
         {
@@ -47,6 +48,7 @@ namespace Entropy.Scripts.ItemStore
             _activeCategory = category;
             _activeCategory.Show();
             _activeCategory.SetItem();
+            ItemCollectedCounterPanel.UpdatePanel(category.Category);
             SetPriceText();
         }
         

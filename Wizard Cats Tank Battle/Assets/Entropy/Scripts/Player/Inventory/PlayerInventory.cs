@@ -1,6 +1,9 @@
+using System;
 using UnityEngine;
 using System.Collections.Generic;
+using Vashta.Entropy.Character;
 using Vashta.Entropy.ScriptableObject;
+using Random = UnityEngine.Random;
 
 namespace Entropy.Scripts.Player.Inventory
 {
@@ -246,6 +249,27 @@ namespace Entropy.Scripts.Player.Inventory
             
             Debug.Log("Could not find meow with ID: " + id);
             return 0;
+        }
+
+        public int GetItemCountByCategory(WardrobeCategory category)
+        {
+            switch (category)
+            {
+                case WardrobeCategory.HAT:
+                    return Hats.Count;
+                case WardrobeCategory.BODY_TYPE:
+                    return BodyTypes.Count;
+                case WardrobeCategory.SKIN:
+                    return BodyTypes[0].SkinOptions.Count;
+                case WardrobeCategory.CART:
+                    return Carts.Count;
+                case WardrobeCategory.MEOW:
+                    return Meows.Count;
+                case WardrobeCategory.TURRET:
+                    return Turrets.Count;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(category), category, null);
+            }
         }
     }
 }

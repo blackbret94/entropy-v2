@@ -2,6 +2,7 @@ using Vashta.Entropy.Character;
 
 namespace Vashta.Entropy.UI
 {
+    // Is this even used?
     public class CharacterWardrobePanel
     {
         public CharacterAppearance CharacterAppearance;
@@ -19,7 +20,6 @@ namespace Vashta.Entropy.UI
         public void SaveAndReturnToMainMenu()
         {
             SaveOutfit();
-            ReturnToMainMenu();
         }
     }
 }

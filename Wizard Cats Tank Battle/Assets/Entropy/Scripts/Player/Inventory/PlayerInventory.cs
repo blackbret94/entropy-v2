@@ -25,15 +25,20 @@ namespace Entropy.Scripts.Player.Inventory
             Init();
         }
 
-        public void Init()
+        public void Init(bool forceRefresh = false)
         {
-            if (_hasInit)
+            if (_hasInit && !forceRefresh)
                 return;
 
             _playerInventorySaveLoad = new PlayerInventorySaveLoad(PlayerCharacterWardrobe);
             Load();
             
             _hasInit = true;
+        }
+
+        public void ForceRefresh()
+        {
+            Init(true);
         }
 
         private void Load()

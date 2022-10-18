@@ -323,7 +323,7 @@ namespace StylizedWaterShader
 
 #if UNITY_5_5_OR_NEWER
 #if UNITY_2019_3_OR_NEWER
-            usingSinglePassRendering = (PlayerSettings.stereoRenderingPath == StereoRenderingPath.SinglePass && UnityEngine.XR.XRSettings.enabled) ? true : false;
+            usingSinglePassRendering = false;//(PlayerSettings.stereoRenderingPath == StereoRenderingPath.SinglePass && UnityEngine.XR.XRSettings.enabled) ? true : false;
 #else
             usingSinglePassRendering = (PlayerSettings.stereoRenderingPath == StereoRenderingPath.SinglePass && PlayerSettings.virtualRealitySupported) ? true : false;
 #endif

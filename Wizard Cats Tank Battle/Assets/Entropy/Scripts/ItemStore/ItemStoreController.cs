@@ -70,6 +70,7 @@ namespace Entropy.Scripts.ItemStore
             {
                 PlayerGoldPanel.Refresh();
                 SetPriceText();
+                ItemCollectedCounterPanel.UpdatePanel(_activeCategory.Category);
             }
         }
 

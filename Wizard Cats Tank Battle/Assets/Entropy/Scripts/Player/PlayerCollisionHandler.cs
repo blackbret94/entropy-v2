@@ -44,8 +44,12 @@ namespace Entropy.Scripts.Player
             if (colPlayer == null)
                 return;
 
-
+            // ignore active collisions
             if (_playersActivelyCollided.Contains(colPlayer))
+                return;
+
+            // ignore team mates
+            if (player.GetView().GetTeam() == colPlayer.player.GetView().GetTeam())
                 return;
             
             _playersActivelyCollided.Add(colPlayer);

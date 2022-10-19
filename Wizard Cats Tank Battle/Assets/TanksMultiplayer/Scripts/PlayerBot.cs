@@ -76,6 +76,8 @@ namespace TanksMP
             //set name in label
             CatNameGenerator catNameGenerator = new CatNameGenerator();
             label.text = myName = catNameGenerator.GetRandomName();
+            label.color = team.material.color;
+            
             //call hooks manually to update
             OnHealthChange(GetView().GetHealth());
             OnShieldChange(GetView().GetShield());

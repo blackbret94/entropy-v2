@@ -182,6 +182,7 @@ namespace TanksMP
 
             //set name in label
             label.text = GetView().GetName();
+            
             //call hooks manually to update
             OnHealthChange(GetView().GetHealth());
             OnShieldChange(GetView().GetShield());
@@ -210,7 +211,6 @@ namespace TanksMP
             // GameManager.GetInstance().ui.controls[1].onDragBegin += ShootBegin;
             // GameManager.GetInstance().ui.controls[1].onDrag += RotateTurret;
             // GameManager.GetInstance().ui.controls[1].onDrag += Shoot;
-            // GameManager.GetInstance().ui.controls[1].onDrag += Shoot;
             #endif
 
             GameManager.GetInstance().ui.fireButton.Player = this;
@@ -221,6 +221,8 @@ namespace TanksMP
             //get corresponding team and colorize renderers in team color
             Team team = GameManager.GetInstance().teams[GetView().GetTeam()];
             CharacterAppearance.Team = team;
+
+            label.color = team.material.color;
         }
 
 
@@ -491,6 +493,10 @@ namespace TanksMP
         /// </summary>
         public void TakeDamage(Bullet bullet)
         {
+            // ignore damage to team mates
+            if (GetView().GetTeam() == bullet.owner.GetComponent<Player>().GetView().GetTeam())
+                return;
+            
             //store network variables temporary
             int health = GetView().GetHealth();
             int shield = GetView().GetShield();

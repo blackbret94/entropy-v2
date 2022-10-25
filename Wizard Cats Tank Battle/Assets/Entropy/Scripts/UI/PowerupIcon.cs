@@ -10,6 +10,11 @@ namespace Vashta.Entropy.UI
         public Image Icon;
         public GameObject[] AmmoIcons;
 
+        private void Start()
+        {
+            gameObject.SetActive(false);
+        }
+
         public void SetPowerup(int bulletId, int ammo)
         {
             if (bulletId > 0)

@@ -197,7 +197,7 @@ namespace TanksMP
                         Vector3 lookPos = inRange[i].transform.position;
                         gameObject.transform.LookAt(lookPos);
                         gameObject.transform.eulerAngles = new Vector3(0, turret.eulerAngles.y, 0);
-                        // turretRotation = (short)turret.eulerAngles.y;
+                        turretRotation = (short)turret.eulerAngles.y;
 
                         //find shot direction and shoot there
                         Vector3 shotDir = lookPos - transform.position;

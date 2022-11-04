@@ -35,6 +35,7 @@ namespace Entropy.Scripts.Player
         private void Start()
         {
             _playersActivelyCollided = new List<PlayerCollisionHandler>();
+            player.PlayerCollisionHandler = this;
         }
 
         private void OnCollisionEnter(Collision col)

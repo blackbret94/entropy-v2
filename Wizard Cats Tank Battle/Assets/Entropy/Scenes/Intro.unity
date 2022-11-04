@@ -455,6 +455,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 141297610}
   m_CullTransparentMesh: 0
+--- !u!95 &170158211 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 6193327956334587455, guid: fed2c17501cd6db438e04890e257e2ff,
+    type: 3}
+  m_PrefabInstance: {fileID: 558410425}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &231560430 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3439106677852619823, guid: 7c6437329e78c6d4eaffd5e09ce8d508,
@@ -1741,7 +1747,7 @@ PrefabInstance:
     - target: {fileID: 1920803510149383994, guid: fed2c17501cd6db438e04890e257e2ff,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1134.9127
+      value: 1135
       objectReference: {fileID: 0}
     - target: {fileID: 1920803510149383994, guid: fed2c17501cd6db438e04890e257e2ff,
         type: 3}
@@ -1771,7 +1777,7 @@ PrefabInstance:
     - target: {fileID: 1920803510954927562, guid: fed2c17501cd6db438e04890e257e2ff,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 989.9127
+      value: 990
       objectReference: {fileID: 0}
     - target: {fileID: 1920803510954927562, guid: fed2c17501cd6db438e04890e257e2ff,
         type: 3}
@@ -2327,6 +2333,56 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8054550224914086667, guid: fed2c17501cd6db438e04890e257e2ff,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.233
+      objectReference: {fileID: 0}
+    - target: {fileID: 8054550224914086667, guid: fed2c17501cd6db438e04890e257e2ff,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.311
+      objectReference: {fileID: 0}
+    - target: {fileID: 8054550224914086667, guid: fed2c17501cd6db438e04890e257e2ff,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.303
+      objectReference: {fileID: 0}
+    - target: {fileID: 8054550224914086667, guid: fed2c17501cd6db438e04890e257e2ff,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.66920495
+      objectReference: {fileID: 0}
+    - target: {fileID: 8054550224914086667, guid: fed2c17501cd6db438e04890e257e2ff,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.04001342
+      objectReference: {fileID: 0}
+    - target: {fileID: 8054550224914086667, guid: fed2c17501cd6db438e04890e257e2ff,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.019893168
+      objectReference: {fileID: 0}
+    - target: {fileID: 8054550224914086667, guid: fed2c17501cd6db438e04890e257e2ff,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.74173313
+      objectReference: {fileID: 0}
+    - target: {fileID: 8054550224914086667, guid: fed2c17501cd6db438e04890e257e2ff,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 4.765
+      objectReference: {fileID: 0}
+    - target: {fileID: 8054550224914086667, guid: fed2c17501cd6db438e04890e257e2ff,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -1.882
+      objectReference: {fileID: 0}
+    - target: {fileID: 8054550224914086667, guid: fed2c17501cd6db438e04890e257e2ff,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -95.964
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 27635015382328550, guid: fed2c17501cd6db438e04890e257e2ff, type: 3}
@@ -3461,6 +3517,27 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 558410425}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &794982966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794982964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 406adf4728c34f06b7c5ff25dab488ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Animator: {fileID: 170158211}
+  AttackBaseName: Attack
+  AttackAnimationCount: 3
+  DieBaseName: Die
+  DieAnimationCount: 3
+  TakeDamageBaseName: Hit
+  TakeDamageAnimationCount: 4
+  IdleBaseName: Idle
+  StartIdle: 1
 --- !u!1001 &798326665
 PrefabInstance:
   m_ObjectHideFlags: 0

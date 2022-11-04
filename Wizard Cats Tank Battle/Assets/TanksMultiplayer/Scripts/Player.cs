@@ -112,6 +112,8 @@ namespace TanksMP
         /// </summary>
         public float handicapModifier = 1f;
 
+        public PlayerAnimator PlayerAnimator;
+
         /// <summary>
         /// Last player gameobject that killed this one.
         /// </summary>
@@ -123,6 +125,8 @@ namespace TanksMP
         /// </summary>
         [HideInInspector]
         public FollowTarget camFollow;
+
+        public PlayerCollisionHandler PlayerCollisionHandler;
 
         //timestamp when next shot should happen
         private float nextFire;
@@ -207,10 +211,10 @@ namespace TanksMP
             GameManager.GetInstance().ui.controls[0].onDrag += Move;
             GameManager.GetInstance().ui.controls[0].onDragEnd += MoveEnd;
 
-            GameManager.GetInstance().ui.controls[1].onClick += Shoot;
-            // GameManager.GetInstance().ui.controls[1].onDragBegin += ShootBegin;
-            // GameManager.GetInstance().ui.controls[1].onDrag += RotateTurret;
-            // GameManager.GetInstance().ui.controls[1].onDrag += Shoot;
+            // GameManager.GetInstance().ui.controls[1].onClick += Shoot;
+            GameManager.GetInstance().ui.controls[1].onDragBegin += ShootBegin;
+            GameManager.GetInstance().ui.controls[1].onDrag += RotateTurret;
+            GameManager.GetInstance().ui.controls[1].onDrag += Shoot;
             #endif
 
             GameManager.GetInstance().ui.fireButton.Player = this;
@@ -387,14 +391,21 @@ namespace TanksMP
                 short[] pos = new short[] { (short)(shotPos.position.x * 10), (short)(shotPos.position.z * 10)};
                 //send shot request with origin to server
                 // Debug.Log(turretRotation);
-                // this.photonView.RPC("CmdShoot", RpcTarget.AllViaServer, pos, turretRotation);
-                short dir = (short)gameObject.transform.eulerAngles.y;
+                this.photonView.RPC("CmdShoot", RpcTarget.AllViaServer, pos, turretRotation);
+                // short dir = (short)gameObject.transform.eulerAngles.y;
                 // Debug.Log(dir);
-                this.photonView.RPC("CmdShoot", RpcTarget.AllViaServer, pos, dir);
+                // this.photonView.RPC("CmdShoot", RpcTarget.AllViaServer, pos, dir);
             }
         }
-        
-        
+
+        //called on the server first but forwarded to all clients
+        [PunRPC]
+        protected void CmdTakeDamage()
+        {
+            // animate
+            PlayerAnimator.TakeDamage();
+        }
+
         //called on the server first but forwarded to all clients
         [PunRPC]
         protected void CmdShoot(short[] position, short angle)
@@ -412,6 +423,9 @@ namespace TanksMP
             Bullet bullet = obj.GetComponent<Bullet>();
             bullet.SpawnNewBullet();
             bullet.owner = gameObject;
+            
+            // animate
+            PlayerAnimator.Attack();
 
             //check for current ammunition
             //let the server decrease special ammunition, if present
@@ -482,10 +496,12 @@ namespace TanksMP
                 // killed the player
                 PlayerDeath(other);
             else
+            {
                 //we didn't die, set health to new value
                 GetView().SetHealth(health);
+                this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer);
+            }
         }
-
 
         /// <summary>
         /// Server only: calculate damage to be taken by the Player,
@@ -516,8 +532,11 @@ namespace TanksMP
                 //bullet killed the player
                 PlayerDeath(bullet.owner.GetComponent<Player>());
             else
+            {
                 //we didn't die, set health to new value
                 GetView().SetHealth(health);
+                this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer);
+            }
         }
 
         /// <summary>

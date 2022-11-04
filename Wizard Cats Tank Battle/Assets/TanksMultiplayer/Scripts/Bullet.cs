@@ -223,6 +223,7 @@ namespace TanksMP
                     continue;
 
                 target.TakeDamage(this);
+                // target.PlayerAnimator.TakeDamage();
             }
         }
 

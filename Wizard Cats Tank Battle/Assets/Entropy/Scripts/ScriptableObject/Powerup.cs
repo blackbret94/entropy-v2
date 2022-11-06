@@ -9,5 +9,6 @@ namespace Vashta.Entropy.ScriptableObject
         public string PowerupName;
         public Sprite Icon;
         public Color Color;
+        public float MaxValue;
     }
 }

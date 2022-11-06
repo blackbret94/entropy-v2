@@ -12,9 +12,10 @@ namespace Entropy.Scripts.Player
 
         private Vector3 _lastMovement;
         private Vector3 _lastRotation;
-
+        
         private const float MinDistance = .001f;
         private const float RefreshS = .01f;
+        private const float MinTimeToAutoRotateS = 1f;
 
         private void Start()
         {

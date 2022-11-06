@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 4797552529484202075}
   - component: {fileID: 6748233522558695934}
   - component: {fileID: 2179171765462643800}
+  - component: {fileID: 1190446245337516690}
   m_Layer: 8
   m_Name: PlayerCharacter
   m_TagString: Untagged
@@ -107,6 +108,7 @@ MonoBehaviour:
   killedBy: {fileID: 0}
   camFollow: {fileID: 0}
   PlayerCollisionHandler: {fileID: 4797552529484202075}
+  PlayerMovementAudioAnimationController: {fileID: 2179171765462643800}
   LoadClass: 0
   defaultClassDefinition: {fileID: 11400000, guid: 74fed74e4e8ccee43a4a18a91ca80171,
     type: 2}
@@ -205,6 +207,20 @@ MonoBehaviour:
   MovementParticleSystem: {fileID: 5975489179680629870}
   RotationParticleSystem: {fileID: 6155029138164516800}
   TurretTransform: {fileID: 4305748445454020582}
+--- !u!114 &1190446245337516690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1ecc5148c0c410593165d78b2b279b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 114000011901014096}
+  RefreshRateS: 0.1
 --- !u!1 &272297766007400104
 GameObject:
   m_ObjectHideFlags: 0

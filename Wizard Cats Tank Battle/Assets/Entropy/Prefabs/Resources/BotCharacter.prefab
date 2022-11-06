@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 8235421522774285370}
   - component: {fileID: 5495641328353098090}
   - component: {fileID: 6717418802421992118}
+  - component: {fileID: 3715464417992353068}
   m_Layer: 8
   m_Name: BotCharacter
   m_TagString: Untagged
@@ -106,7 +107,8 @@ MonoBehaviour:
   PlayerAnimator: {fileID: 5495641328353098090}
   killedBy: {fileID: 0}
   camFollow: {fileID: 0}
-  PlayerCollisionHandler: {fileID: 0}
+  PlayerCollisionHandler: {fileID: 8235421522774285370}
+  PlayerMovementAudioAnimationController: {fileID: 6717418802421992118}
   LoadClass: 0
   defaultClassDefinition: {fileID: 0}
   classList: {fileID: 11400000, guid: 7d8bbf25c3319e2428b905b7f07fbe8b, type: 2}
@@ -118,6 +120,8 @@ MonoBehaviour:
   currentBullet: 0
   kills: 0
   deaths: 0
+  buffSeconds: 0
+  buffIndex: 0
   range: 4
   accuracyError: 3.05
 --- !u!195 &195000012828890094
@@ -219,6 +223,20 @@ MonoBehaviour:
   MovementParticleSystem: {fileID: 203098445237064349}
   RotationParticleSystem: {fileID: 9058291441980455828}
   TurretTransform: {fileID: 7525539332511292934}
+--- !u!114 &3715464417992353068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000013172141970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1ecc5148c0c410593165d78b2b279b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 114000010978345236}
+  RefreshRateS: 0.1
 --- !u!1 &1121958601680566371
 GameObject:
   m_ObjectHideFlags: 0

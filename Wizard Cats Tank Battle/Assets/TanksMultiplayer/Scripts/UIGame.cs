@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
+using UnityEngine.Serialization;
 using Vashta.Entropy.UI;
 
 namespace TanksMP
@@ -56,7 +57,8 @@ namespace TanksMP
         public GameObject gameOverMenu;
 
         public FireButton fireButton;
-        public PowerupIcon powerupIcon;
+        [FormerlySerializedAs("powerupIcon")] public PowerupIcon bulletIcon;
+        public BuffIcon buffIcon;
 
         public CoinsEarnedPopup coinsEarnedPopup;
         public TeammateKilledPopup teammateKilledPopup;
@@ -148,7 +150,8 @@ namespace TanksMP
             //hide joystick controls while displaying death text
             #if UNITY_EDITOR || (!UNITY_STANDALONE && !UNITY_WEBGL)
                 ToggleControls(false);
-                powerupIcon.SetActive(false);
+                bulletIcon.SetActive(false);
+                buffIcon.SetActive(false);
             #endif
             
             DeathPanel.Set(playerName, team);
@@ -183,7 +186,8 @@ namespace TanksMP
             //hide joystick controls while displaying game end text
             #if UNITY_EDITOR || (!UNITY_STANDALONE && !UNITY_WEBGL)
                 ToggleControls(false);
-                powerupIcon.SetActive(false);
+                bulletIcon.SetActive(false);
+                buffIcon.SetActive(false);
             #endif
             
             //show winning team and colorize it by converting the team color to an HTML RGB hex value for UI markup

@@ -127,6 +127,7 @@ namespace TanksMP
         public FollowTarget camFollow;
 
         public PlayerCollisionHandler PlayerCollisionHandler;
+        public PlayerMovementAudioAnimationController PlayerMovementAudioAnimationController;
 
         //timestamp when next shot should happen
         private float nextFire;
@@ -148,6 +149,8 @@ namespace TanksMP
         public ClassList classList;
         public ClassDefinition classDefinition { get; private set; }
 
+        private Vector3 _lastMousePos;
+        
         //initialize server values for this player
         void Awake()
         {
@@ -308,6 +311,8 @@ namespace TanksMP
 
             //rotate turret to look at the mouse direction
             RotateTurret(new Vector2(hitPos.x, hitPos.z));
+            
+            
 
             //shoot bullet on left mouse click
             if (Input.GetButton("Fire1") && !EventSystem.current.IsPointerOverGameObject())
@@ -569,6 +574,7 @@ namespace TanksMP
             //also tell all clients to despawn this player
             GetView().SetHealth(maxHealth);
             GetView().SetBullet(0);
+            GetView().SetBuff(0);
 
             //clean up collectibles on this player by letting them drop down
             Collectible[] collectibles = GetComponentsInChildren<Collectible>(true);

@@ -494,7 +494,6 @@ namespace TanksMP
         public static void DecBuffSeconds(this Photon.Realtime.Player player, float delta)
         {
             float newBuffValue = player.GetBuffSeconds() - delta;
-            Debug.Log("Buff seconds: " + newBuffValue);
             
             Hashtable hash = new Hashtable();
             hash.Add(buffSeconds, (byte)newBuffValue);

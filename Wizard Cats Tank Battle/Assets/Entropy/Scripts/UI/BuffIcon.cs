@@ -9,7 +9,7 @@ namespace Vashta.Entropy.UI
         public PowerupDirectory BuffDirectory;
         public Image Icon;
         public Slider BuffTimeSlider;
-        private float _maxSeconds = 30f;
+        private float _maxSeconds = 30f; // fix the source of this
 
         private void Start()
         {

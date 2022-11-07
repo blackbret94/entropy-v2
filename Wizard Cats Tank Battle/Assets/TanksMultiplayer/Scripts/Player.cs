@@ -113,6 +113,7 @@ namespace TanksMP
         public float handicapModifier = 1f;
 
         public PlayerAnimator PlayerAnimator;
+        public PlayerBuffController PlayerBuffController;
 
         /// <summary>
         /// Last player gameobject that killed this one.
@@ -345,7 +346,7 @@ namespace TanksMP
                                      * Quaternion.Euler(0, camFollow.camTransform.eulerAngles.y, 0);
 
             //create movement vector based on current rotation and speed
-            Vector3 movementDir = transform.forward * moveSpeed * Time.deltaTime;
+            Vector3 movementDir = transform.forward * ((moveSpeed + PlayerBuffController.GetSpeedBonus()) * Time.deltaTime);
             //apply vector to rigidbody position
             rb.MovePosition(rb.position + movementDir);
         }

@@ -10,6 +10,8 @@ namespace Entropy.Scripts.Player
         public float RefreshRateS;
 
         private float msLastRun;
+
+        private const float SPEED_BOOST = 2f; // TODO: Move this into buff
         
         private void Start()
         {
@@ -41,6 +43,20 @@ namespace Entropy.Scripts.Player
                 return;
 
             player.GetView().DecBuffSeconds(Time.time - msLastRun);
+        }
+
+        public float GetSpeedBonus()
+        {
+            int buffIndex = player.GetView().GetBuffIndex();
+            if (buffIndex != 1) // TODO: Remove the hardcoded index
+                return 0;
+            
+            float startingBuffSeconds = player.GetView().GetBuffSeconds();
+            
+            if (startingBuffSeconds <= -.001)
+                return 0;
+
+            return SPEED_BOOST;
         }
     }
 }

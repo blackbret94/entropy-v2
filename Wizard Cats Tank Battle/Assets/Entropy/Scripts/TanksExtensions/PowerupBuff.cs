@@ -1,20 +1,13 @@
 using TanksMP;
 using UnityEngine.Serialization;
+using Vashta.Entropy.ScriptableObject;
 
 namespace Vashta.Entropy.TanksExtensions
 {
     // Based on PowerupBullet.  May be smart to unify the common code at a later point
     public class PowerupBuff : Collectible
     {
-        /// <summary>
-        /// Number of seconds buff lasts
-        /// </summary>
-        public float buffSeconds = 60;
-
-        /// <summary>
-        /// Index of the powerup, on the Player script, that should be assigned
-        /// </summary>
-        public int buffIndex = 1;
+        public Powerup Powerup;
 
         /// <summary>
         /// Overrides the default behavior with a custom implementation.
@@ -30,11 +23,11 @@ namespace Vashta.Entropy.TanksExtensions
             
             //do not consume buff if the player owns the new buff already
             //and the timer is at the maximum amount available
-            if (value >= buffSeconds && currentIndex == buffIndex)
+            if (value >= Powerup.MaxValue && currentIndex == Powerup.PowerupId)
                 return false;
 
             //otherwise assign new bullet and refill ammo
-            p.GetView().SetBuff(buffSeconds, buffIndex);
+            p.GetView().SetBuff(Powerup.MaxValue, Powerup.PowerupId);
 
             //return successful collection
             return true;

@@ -10,5 +10,7 @@ namespace Vashta.Entropy.ScriptableObject
         public Sprite Icon;
         public Color Color;
         public float MaxValue;
+        public string DisplayText;
+        public AudioClip PickupSound;
     }
 }

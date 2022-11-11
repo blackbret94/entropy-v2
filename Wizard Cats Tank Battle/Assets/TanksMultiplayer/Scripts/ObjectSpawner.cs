@@ -5,6 +5,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using Photon.Pun;
 
 namespace TanksMP
@@ -19,6 +20,8 @@ namespace TanksMP
         /// Prefab to sync the instantiation for over the network.
         /// </summary>
 		public GameObject prefab;
+
+        public List<GameObject> prefabList;
 
         /// <summary>
         /// Checkbox whether the object should be respawned after being despawned.
@@ -166,7 +169,7 @@ namespace TanksMP
             if (obj != null)
                 return;
 
-			obj = PoolManager.Spawn(prefab, transform.position, transform.rotation);
+			obj = PoolManager.Spawn(GetGameObjectToSpawn(), transform.position, transform.rotation);
             //set the reference on the instantiated object for cross-referencing
             Collectible colItem = obj.GetComponent<Collectible>();
             if(colItem != null)
@@ -178,6 +181,15 @@ namespace TanksMP
                 else colType = CollectionType.Use;
             }
 		}
+
+        private GameObject GetGameObjectToSpawn()
+        {
+            if (prefabList.Count == 0)
+                return prefab;
+
+            int index = Random.Range(0, prefabList.Count);
+            return prefabList[index];
+        }
 
 
         /// <summary>

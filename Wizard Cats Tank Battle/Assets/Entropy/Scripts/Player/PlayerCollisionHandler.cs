@@ -53,6 +53,10 @@ namespace Entropy.Scripts.Player
             if (player.GetView().GetTeam() == colPlayer.player.GetView().GetTeam())
                 return;
             
+            // ignore players that have spike buffs
+            if (player.PlayerBuffController.GetSpikeDamageModifier() > 0)
+                return;
+            
             _playersActivelyCollided.Add(colPlayer);
             PlayCollisionFx(col.contacts[0].point);
 
@@ -82,18 +86,18 @@ namespace Entropy.Scripts.Player
 
             TanksMP.Player otherPlayer = colPlayer.GetComponent<TanksMP.Player>();
 
-            player.TakeDamage(CalculateDamage(colPlayer), otherPlayer);
+            player.TakeDamage(CalculateDamage(colPlayer, otherPlayer), otherPlayer);
         }
 
-        private int CalculateDamage(PlayerCollisionHandler colPlayer)
+        private int CalculateDamage(PlayerCollisionHandler colPlayer, TanksMP.Player otherPlayer)
         {
             if (!colPlayer)
             {
                 Debug.LogError("Player is missing a PlayerCollisionHandler!");
                 return 0;
             }
-            
-            int damage = damageAmtOnCollision;
+
+            int damage = damageAmtOnCollision + otherPlayer.PlayerBuffController.GetSpikeDamageModifier();
             int otherArmor = colPlayer.armor;
 
             return Mathf.Max(0, damage - otherArmor);

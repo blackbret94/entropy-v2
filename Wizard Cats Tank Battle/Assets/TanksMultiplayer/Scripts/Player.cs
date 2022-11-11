@@ -386,11 +386,13 @@ namespace TanksMP
         //along with the shot request to the server to absolutely ensure a synced shot position
         protected void Shoot(Vector2 direction = default(Vector2))
         {
+            float fireRateMod = fireRate * PlayerBuffController.GetRapidFireBonus();
+            
             //if shot delay is over  
             if (Time.time > nextFire)
             {
                 //set next shot timestamp
-                nextFire = Time.time + fireRate;
+                nextFire = Time.time + fireRateMod;
                 
                 //send current client position and turret rotation along to sync the shot position
                 //also we are sending it as a short array (only x,z - skip y) to save additional bandwidth
@@ -575,7 +577,7 @@ namespace TanksMP
             //also tell all clients to despawn this player
             GetView().SetHealth(maxHealth);
             GetView().SetBullet(0);
-            GetView().SetBuff(0);
+            GetView().SetBuff(0,0);
 
             //clean up collectibles on this player by letting them drop down
             Collectible[] collectibles = GetComponentsInChildren<Collectible>(true);

@@ -63,6 +63,8 @@ namespace TanksMP
         public CoinsEarnedPopup coinsEarnedPopup;
         public TeammateKilledPopup teammateKilledPopup;
 
+        public PowerUpPanel PowerUpPanel;
+
         public SfxController SfxController;
 
         //initialize variables

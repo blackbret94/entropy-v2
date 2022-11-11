@@ -139,7 +139,13 @@ namespace TanksMP
                 {
                     return;
                 }
-                
+
+                if (player.PlayerBuffController.IsReflective())
+                {
+                    BounceOffReflectivePlayer(player);
+                    return;
+                }
+
                 //create clips and particles on hit
                 if (hitFX) PoolManager.Spawn(hitFX, transform.position, Quaternion.identity);
                 
@@ -224,6 +230,43 @@ namespace TanksMP
 
                 target.TakeDamage(this);
                 // target.PlayerAnimator.TakeDamage();
+            }
+        }
+
+        private void BounceOffReflectivePlayer(Player player)
+        {
+            //a player was not hit but something else, and we still have some bounces left
+            //create a ray that points in the direction this bullet is currently flying to
+            Ray ray = new Ray(lastBouncePos - transform.forward * 0.5f, transform.forward);
+            RaycastHit hit;
+
+            //perform spherecast in the flying direction, on the default layer
+            if (Physics.SphereCast(ray, sphereCol.radius, out hit, Mathf.Infinity, 1 << 0))
+            {
+                //ignore multiple collisions i.e. inside colliders
+                if (Vector3.Distance(transform.position, lastBouncePos) < 0.05f)
+                {
+                    return;
+                }
+
+                owner = player.gameObject;
+
+                //cache latest collision point
+                lastBouncePos = hit.point;
+                //substract bouncing count by one
+                // bounce--;
+
+                //something was hit in the direction this projectile is flying to
+                //get new reflected (bounced off) direction of the colliding object
+                Vector3 dir = Vector3.Reflect(ray.direction, hit.normal);
+                //rotate bullet to face the new direction
+                transform.rotation = Quaternion.LookRotation(dir);
+                //reassign velocity with the new direction in mind
+                OnSpawn();
+
+                //play clip at the collided position
+                AudioManager.Play3D(HitSfx.GetRandomClip(), transform.position);
+                //exit execution until next collision
             }
         }
 

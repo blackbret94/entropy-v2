@@ -8,6 +8,7 @@ namespace Vashta.Entropy.UI
     {
         public PowerupDirectory BuffDirectory;
         public Image Icon;
+        public Image SliderBgd;
         public Slider BuffTimeSlider;
         private float _maxSeconds = 30f; // fix the source of this
 
@@ -23,14 +24,13 @@ namespace Vashta.Entropy.UI
                 gameObject.SetActive(false);
                 return;
             }
-                
-            
+
             if (buffId > 0)
             {
                 gameObject.SetActive(true);
                 Powerup powerup = BuffDirectory[buffId];
                 Icon.sprite = powerup.Icon;
-                Icon.color = powerup.Color;
+                SliderBgd.color = powerup.Color;
                 _maxSeconds = powerup.MaxValue;
             }
 

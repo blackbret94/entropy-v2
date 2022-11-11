@@ -1,5 +1,4 @@
 using TanksMP;
-using UnityEngine.Serialization;
 using Vashta.Entropy.ScriptableObject;
 
 namespace Vashta.Entropy.TanksExtensions
@@ -26,8 +25,11 @@ namespace Vashta.Entropy.TanksExtensions
             if (value >= Powerup.MaxValue && currentIndex == Powerup.PowerupId)
                 return false;
 
-            //otherwise assign new bullet and refill ammo
+            //otherwise assign new buff
             p.GetView().SetBuff(Powerup.MaxValue, Powerup.PowerupId);
+            
+            // show UI message
+            GameManager.GetInstance().ui.PowerUpPanel.SetText(Powerup.DisplayText,Powerup.DisplaySubtext, Powerup.Color);
 
             //return successful collection
             return true;

@@ -3,6 +3,8 @@
  * 	You shall not license, sublicense, sell, resell, transfer, assign, distribute or
  * 	otherwise make available to any third party the Service or the Content. */
 
+using Vashta.Entropy.ScriptableObject;
+
 namespace TanksMP
 {
     /// <summary>
@@ -10,6 +12,8 @@ namespace TanksMP
     /// </summary>
 	public class PowerupBullet : Collectible
     {
+        public Powerup Powerup;
+        
         /// <summary>
         /// Amount of shots before returning to the default bullet.
         /// </summary>
@@ -40,6 +44,9 @@ namespace TanksMP
 
             //otherwise assign new bullet and refill ammo
             p.GetView().SetAmmo(amount, bulletIndex);
+            
+            // show UI message
+            GameManager.GetInstance().ui.PowerUpPanel.SetText(Powerup.DisplayText,Powerup.DisplaySubtext, Powerup.Color);
 
             //return successful collection
             return true;

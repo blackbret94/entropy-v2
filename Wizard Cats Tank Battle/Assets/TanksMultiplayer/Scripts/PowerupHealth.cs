@@ -4,6 +4,7 @@
  * 	otherwise make available to any third party the Service or the Content. */
 
 using UnityEngine;
+using Vashta.Entropy.ScriptableObject;
 
 namespace TanksMP
 {
@@ -12,6 +13,8 @@ namespace TanksMP
     /// </summary>
 	public class PowerupHealth : Collectible
     {
+        public Powerup Powerup;
+        
         /// <summary>
         /// Overrides the default behavior with a custom implementation.
         /// Check for the current health and adds additional health.
@@ -28,6 +31,9 @@ namespace TanksMP
                 return false;
 
             p.GetView().SetHealth(p.maxHealth);
+            
+            // show UI message
+            GameManager.GetInstance().ui.PowerUpPanel.SetText(Powerup.DisplayText,Powerup.DisplaySubtext, Powerup.Color);
 
             //return successful collection
             return true;

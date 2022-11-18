@@ -3,6 +3,8 @@
  * 	You shall not license, sublicense, sell, resell, transfer, assign, distribute or
  * 	otherwise make available to any third party the Service or the Content. */
 
+using Vashta.Entropy.ScriptableObject;
+
 namespace TanksMP
 {
     /// <summary>
@@ -10,6 +12,8 @@ namespace TanksMP
     /// </summary>
 	public class PowerupShield : Collectible
     {
+        public Powerup Powerup;
+        
         /// <summary>
         /// Overrides the default behavior with a custom implementation.
         /// Check for the current shield and adds additional shield points.
@@ -37,6 +41,9 @@ namespace TanksMP
             {
                 p.GetView().SetHealth(p.maxHealth);
             }
+            
+            // show UI message
+            GameManager.GetInstance().ui.PowerUpPanel.SetText(Powerup.DisplayText,Powerup.DisplaySubtext, Powerup.Color);
 
             //return successful collection
             return true;

@@ -5,6 +5,7 @@
 
 using Photon.Pun;
 using UnityEngine;
+using Vashta.Entropy.Character;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace TanksMP
@@ -488,10 +489,10 @@ namespace TanksMP
                 }
             }
 
-            player.Owner.DecBuffSeconds(delta);
+            player.Owner.DecBuffSeconds(player, delta);
         }
 
-        public static void DecBuffSeconds(this Photon.Realtime.Player player, float delta)
+        private static void DecBuffSeconds(this Photon.Realtime.Player player, PhotonView playerPhotonView, float delta)
         {
             float newBuffValue = player.GetBuffSeconds() - delta;
             
@@ -501,7 +502,7 @@ namespace TanksMP
             player.SetCustomProperties(hash);
             
             if(newBuffValue <= 0f)
-                player.SetBuff(0, 0);
+                player.SetBuff(playerPhotonView, 0, 0);
             
             if(player.IsLocal)
                 GameManager.GetInstance().ui.buffIcon.SetSeconds(newBuffValue);
@@ -552,22 +553,30 @@ namespace TanksMP
                 }
             }
 
-            player.Owner.SetBuff(value, index);
+            player.Owner.SetBuff(player, value, index);
         }
 
         /// <summary>
         /// Online: synchronizes the buff seconds of the player for all players via properties.
         /// Provides an optional index parameter for setting a new buff and timer together.
         /// </summary>
-        public static void SetBuff(this Photon.Realtime.Player player, float value, int index = -1)
+        public static void SetBuff(this Photon.Realtime.Player player, PhotonView playerPhotonView, float value, int index = -1)
         {
             Hashtable hash = new Hashtable();
             hash.Add(buffSeconds, (byte)value);
             if (index >= 0)
+            {
                 hash.Add(buffIndex, (byte)index);
+                
+                // update visuals
+                PlayerBuffVisualizer visualizer = playerPhotonView.GetComponent<PlayerBuffVisualizer>();
+                if(visualizer != null)
+                    visualizer.ToggleVisualizerById(index, value > 0);
+            }
 
             player.SetCustomProperties(hash);
             
+            // update UI
             if(player.IsLocal)
                 GameManager.GetInstance().ui.buffIcon.SetPowerup(index, value);
         }

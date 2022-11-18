@@ -13,12 +13,6 @@ namespace TanksMP
 	public class PowerupHealth : Collectible
     {
         /// <summary>
-        /// Amount of health points to add per consumption.
-        /// </summary>
-        public int amount = 5;
-
-
-        /// <summary>
         /// Overrides the default behavior with a custom implementation.
         /// Check for the current health and adds additional health.
         /// </summary>
@@ -33,14 +27,7 @@ namespace TanksMP
             if (value == p.maxHealth)
                 return false;
 
-            //get current health value and add amount to it
-            value += amount;
-
-            //we have to clamp the health to the maximum, so that
-            //we don't go over the maximum by accident. Then assign
-            //the new health value back to the player
-            value = Mathf.Clamp(value, value, p.maxHealth);
-            p.GetView().SetHealth(value);
+            p.GetView().SetHealth(p.maxHealth);
 
             //return successful collection
             return true;

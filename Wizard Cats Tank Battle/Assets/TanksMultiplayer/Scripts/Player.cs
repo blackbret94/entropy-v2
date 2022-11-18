@@ -31,6 +31,8 @@ namespace TanksMP
         /// </summary>
         public int maxHealth = 10;
 
+        public int maxShield = 5;
+
         /// <summary>
         /// Current turret rotation and shooting direction.
         /// </summary>
@@ -139,7 +141,7 @@ namespace TanksMP
         public bool LoadClass;
 
         protected PlayerCurrencyRewarder _playerCurrencyRewarder;
-        
+
         //reference to this rigidbody
         #pragma warning disable 0649
 		private Rigidbody rb;
@@ -479,7 +481,8 @@ namespace TanksMP
         //(the actual value updates via player properties)
         protected void OnShieldChange(int value)
         {
-            shieldSlider.value = value;
+            Debug.Log("Shield level: " + value);
+            shieldSlider.value = (float)value / maxShield;
         }
 
         /// <summary>

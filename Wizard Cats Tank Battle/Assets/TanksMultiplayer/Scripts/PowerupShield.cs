@@ -11,16 +11,10 @@ namespace TanksMP
 	public class PowerupShield : Collectible
     {
         /// <summary>
-        /// Amount of shield points to add per consumption.
-        /// </summary>
-        public int amount = 3;
-
-
-        /// <summary>
         /// Overrides the default behavior with a custom implementation.
         /// Check for the current shield and adds additional shield points.
         /// </summary>
-		public override bool Apply(Player p)
+        public override bool Apply(Player p)
         {
             if (p == null)
                 return false;
@@ -28,12 +22,21 @@ namespace TanksMP
             int value = p.GetView().GetShield();
 
             //don't add shield if it is at the maximum already
-            if (value == amount)
+            if (value == p.maxShield)
                 return false;
 
             //assign absolute shield points to player
             //we can't go over the maximum thus no need to check it here
-            p.GetView().SetShield(amount);
+            p.GetView().SetShield(p.maxShield);
+
+            // add health
+            value = p.GetView().GetHealth();
+
+            //don't add health if it is at the maximum already
+            if (value != p.maxHealth)
+            {
+                p.GetView().SetHealth(p.maxHealth);
+            }
 
             //return successful collection
             return true;

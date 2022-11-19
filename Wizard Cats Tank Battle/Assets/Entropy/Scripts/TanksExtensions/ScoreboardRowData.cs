@@ -11,13 +11,15 @@ namespace Vashta.Entropy.TanksExtensions
         public int Deaths { get; }
         public Team Team { get; }
         public Material Material => Team.material;
+        public bool IsLocalPlayer { get; }
 
-        public ScoreboardRowData(Player player, Team team)
+        public ScoreboardRowData(Player player, Team team, bool isLocalPlayer)
         {
             Name = player.NickName;
             Kills = player.GetKills();
             Deaths = player.GetDeaths();
             Team = team;
+            IsLocalPlayer = isLocalPlayer;
         }
 
         public ScoreboardRowData(PlayerBot bot, Team team)
@@ -26,6 +28,7 @@ namespace Vashta.Entropy.TanksExtensions
             Kills = bot.kills;
             Deaths = bot.deaths;
             Team = team;
+            IsLocalPlayer = false;
         }
 
         public string FormatAsString()

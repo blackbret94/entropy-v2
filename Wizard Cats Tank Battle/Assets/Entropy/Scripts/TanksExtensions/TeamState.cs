@@ -35,7 +35,7 @@ namespace Vashta.Entropy.TanksExtensions
                 Player player = kvp.Value;
                 if (player.GetTeam() == TeamId)
                 {
-                    ScoreboardRowData row = new ScoreboardRowData(player, Team);
+                    ScoreboardRowData row = new ScoreboardRowData(player, Team, player.IsLocal);
                     data.Add(row);
                     Debug.Log("Adding row: " + row.FormatAsString());
                 }

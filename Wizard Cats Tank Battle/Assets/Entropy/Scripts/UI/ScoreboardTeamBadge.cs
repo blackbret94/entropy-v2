@@ -1,4 +1,5 @@
 using TMPro;
+using UnityEngine.UI;
 using Vashta.Entropy.TanksExtensions;
 
 namespace Vashta.Entropy.UI
@@ -8,7 +9,7 @@ namespace Vashta.Entropy.UI
         public TextMeshProUGUI PlayerNamesText;
         public TextMeshProUGUI ScoreText;
         public TextMeshProUGUI DeathsText;
-        
+
         private TeamState _teamState;
 
         public void Setup(ScoreboardRowData row)
@@ -17,6 +18,8 @@ namespace Vashta.Entropy.UI
             PlayerNamesText.text = row.Name;
             ScoreText.text = row.Kills.ToString();
             DeathsText.text = row.Deaths.ToString();
+
+            GetComponent<Image>().enabled = row.IsLocalPlayer;
         }
     }
 }

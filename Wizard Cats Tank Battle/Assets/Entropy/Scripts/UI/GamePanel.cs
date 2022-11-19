@@ -14,6 +14,14 @@ namespace Vashta.Entropy.UI
                 panel.Refresh();
             }
         }
+
+        public virtual void TogglePanel()
+        {
+            if(gameObject.activeSelf)
+                ClosePanel();
+            else
+                OpenPanel();
+        }
         
         public virtual void SetActive(bool b)
         {

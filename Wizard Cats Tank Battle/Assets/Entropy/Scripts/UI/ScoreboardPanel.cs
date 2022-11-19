@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -15,22 +14,44 @@ namespace Vashta.Entropy.UI
             Inflate();
         }
 
-        public void Inflate()
+        public override void OpenPanel()
         {
-            List<TeamState> teamStates = GetTeamStatesSortedByScore();
+            base.OpenPanel();
+            Refresh();
+        }
 
-            if(teamStates.Count > TeamPanel.Count)
-                Debug.LogWarning($"There are more teams ({teamStates.Count}) than panels ({TeamPanel.Count})");
+        public override void Refresh()
+        {
+            base.Refresh();
+            
+            Inflate();
+        }
+
+        // note that "team" badges are a legacy name, these are rows for individual players now.
+        private void Inflate()
+        {
+            List<ScoreboardRowData> rows = new List<ScoreboardRowData>();
+            List<TeamState> teamStates = TeamUtility.GetTeamStates();
+
+            foreach (TeamState teamState in teamStates)
+            {
+                rows = rows.Concat(teamState.PlayerRows).ToList();
+            }
+
+            rows = rows.OrderByDescending(row => row.Kills).ToList();
+
+            if(rows.Count > TeamPanel.Count)
+                Debug.LogWarning($"There are more rows ({teamStates.Count}) than panels ({TeamPanel.Count})");
             
             for (int i = 0; i < TeamPanel.Count; i++)
             {
                 ScoreboardTeamBadge teamBadgePanel = TeamPanel[i];
 
-                if (i < teamStates.Count)
+                if (i < rows.Count)
                 {
-                    TeamState teamState = teamStates[i];
+                    ScoreboardRowData data = rows[i];
 
-                    teamBadgePanel.Setup(teamState);
+                    teamBadgePanel.Setup(data);
                     teamBadgePanel.SetActive(true);
                 }
                 else
@@ -38,12 +59,6 @@ namespace Vashta.Entropy.UI
                     teamBadgePanel.SetActive(false);
                 }
             }
-        }
-
-        private List<TeamState> GetTeamStatesSortedByScore()
-        {
-            List<TeamState> teamStates = TeamUtility.GetTeamStates();
-            return teamStates.OrderByDescending(ts=>ts.Score).ToList();
         }
     }
 }

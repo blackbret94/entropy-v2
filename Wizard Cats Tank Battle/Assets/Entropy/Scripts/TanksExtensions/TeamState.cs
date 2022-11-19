@@ -13,7 +13,7 @@ namespace Vashta.Entropy.TanksExtensions
             Team = team;
             Score = score;
             TeamId = teamId;
-            PlayerNames = GetPlayers();
+            PlayerRows = GetPlayerRows();
         }
 
         public string Name => Team.name;
@@ -22,21 +22,38 @@ namespace Vashta.Entropy.TanksExtensions
         public Team Team { get; }
         public int Score { get; }
         public int TeamId { get; }
-        public List<string> PlayerNames { get; }
-        
-        private List<string> GetPlayers()
+        public List<ScoreboardRowData> PlayerRows { get; }
+
+        private List<ScoreboardRowData> GetPlayerRows()
         {
-            List<string> listOfPlayers = new List<string>();
-            
+            List<ScoreboardRowData> data = new List<ScoreboardRowData>();
+
+            // players
             Dictionary<int, Player> players = PhotonNetwork.CurrentRoom.Players;
             foreach (KeyValuePair<int, Player> kvp in players)
             {
                 Player player = kvp.Value;
-                if(player.GetTeam() == TeamId)
-                    listOfPlayers.Add(player.NickName);
+                if (player.GetTeam() == TeamId)
+                {
+                    ScoreboardRowData row = new ScoreboardRowData(player, Team);
+                    data.Add(row);
+                    Debug.Log("Adding row: " + row.FormatAsString());
+                }
             }
-
-            return listOfPlayers;
+            
+            // bots
+            List<PlayerBot> bots = GameManager.GetInstance().GetBotList();
+            foreach (PlayerBot bot in bots)
+            {
+                if (bot.teamIndex == TeamId)
+                {
+                    ScoreboardRowData row = new ScoreboardRowData(bot, Team);
+                    data.Add(row);
+                    Debug.Log("Adding row: " + row.FormatAsString());
+                }
+            }
+            
+            return data;
         }
     }
 }

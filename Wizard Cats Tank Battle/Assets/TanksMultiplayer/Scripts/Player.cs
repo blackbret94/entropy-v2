@@ -481,7 +481,6 @@ namespace TanksMP
         //(the actual value updates via player properties)
         protected void OnShieldChange(int value)
         {
-            Debug.Log("Shield level: " + value);
             shieldSlider.value = (float)value / maxShield;
         }
 
@@ -556,6 +555,8 @@ namespace TanksMP
         /// <param name="other"></param>
         private void PlayerDeath(Player other)
         {
+            GetView().IncrementDeaths();
+
             //the game is already over so don't do anything
             if(GameManager.GetInstance().IsGameOver()) return;
 
@@ -615,24 +616,22 @@ namespace TanksMP
                 //find original sender game object (killedBy)
                 PhotonView senderView = senderId > 0 ? PhotonView.Find(senderId) : null;
                 if (senderView != null && senderView.gameObject != null) killedBy = senderView.gameObject;
+                
+                Player killedByPlayer = killedBy.GetComponent<Player>();
+
+                if (killedByPlayer != null)
+                    killedByPlayer.GetView().IncrementKills();
 
                 //detect whether the current user was responsible for the kill, but not for suicide
                 //yes, that's my kill: increase local kill counter
                 Player localPlayer = GameManager.GetInstance().localPlayer;
                 if (this != localPlayer && killedBy == GameManager.GetInstance().localPlayer.gameObject)
                 {
-                    // play kill sound
-                    // CharacterAppearance.PlayMeow();
-                    
-                    GetView().IncrementKills();
                     Text[] killCounter = GameManager.GetInstance().ui.killCounter;
                     killCounter[0].text = GetView().GetKills().ToString();
                     killCounter[0].GetComponent<Animator>().Play("Animation");
 
                     RewardCoins();
-
-                    // GameManager.GetInstance().ui.killCounter[0].text = (int.Parse(GameManager.GetInstance().ui.killCounter[0].text) + 1).ToString();
-                    // GameManager.GetInstance().ui.killCounter[0].GetComponent<Animator>().Play("Animation");
                 }
 
                 if (explosionFX && GameManager.GetInstance().UsesTeams)

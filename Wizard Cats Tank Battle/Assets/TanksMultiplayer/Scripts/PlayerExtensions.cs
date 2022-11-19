@@ -394,12 +394,7 @@ namespace TanksMP
         {
             SetKills(player, GetKills(player) + value);
         }
-        
-        public static void IncrementKills(this Photon.Realtime.Player player, int value = 1)
-        {
-            SetKills(player, GetKills(player) + value);
-        }
-        
+
         public static int GetDeaths(this PhotonView player)
         {
             if (PhotonNetwork.OfflineMode == true)
@@ -440,11 +435,6 @@ namespace TanksMP
         }
 
         public static void IncrementDeaths(this PhotonView player, int value = 1)
-        {
-            SetDeaths(player, GetDeaths(player) + value);
-        }
-        
-        public static void IncrementDeaths(this Photon.Realtime.Player player, int value = 1)
         {
             SetDeaths(player, GetDeaths(player) + value);
         }

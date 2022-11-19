@@ -83,6 +83,9 @@ namespace TanksMP
             //call hooks manually to update
             OnHealthChange(GetView().GetHealth());
             OnShieldChange(GetView().GetShield());
+            
+            // add to player bot list
+            GameManager.GetInstance().AddBot(this);
 
             //start enemy detection routine
             StartCoroutine(DetectPlayers());
@@ -240,23 +243,23 @@ namespace TanksMP
             //find original sender game object (killedBy)
             PhotonView senderView = senderId > 0 ? PhotonView.Find(senderId) : null;
             if (senderView != null && senderView.gameObject != null) killedBy = senderView.gameObject;
+            
+            Player killedByPlayer = killedBy.GetComponent<Player>();
+
+            if (killedByPlayer != null)
+                killedByPlayer.GetView().IncrementKills();
 
             //detect whether the current user was responsible for the kill
             //yes, that's my kill: increase local kill counter
-            if (killedBy == GameManager.GetInstance().localPlayer.gameObject)
+            if (killedBy == GameManager.GetInstance().localPlayer.gameObject) // This might be a problem if it is run on EVERY device
             {
-                // play kill sound
-                // CharacterAppearance.PlayMeow();
                 
-                GetView().IncrementKills();
+                
                 Text[] killCounter = GameManager.GetInstance().ui.killCounter;
                 killCounter[0].text = GetView().GetKills().ToString();
                 killCounter[0].GetComponent<Animator>().Play("Animation");
                 
                 RewardCoins();
-                
-                // GameManager.GetInstance().ui.killCounter[0].text = (int.Parse(GameManager.GetInstance().ui.killCounter[0].text) + 1).ToString();
-                // GameManager.GetInstance().ui.killCounter[0].GetComponent<Animator>().Play("Animation");
             }
 
             if (explosionFX)

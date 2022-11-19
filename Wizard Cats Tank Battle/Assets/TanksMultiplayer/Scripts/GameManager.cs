@@ -4,6 +4,7 @@
  * 	otherwise make available to any third party the Service or the Content. */
 
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
@@ -65,19 +66,21 @@ namespace TanksMP
 
         private int lastSpawnIndex = -1;
 
+        private List<PlayerBot> _botList;
+
 
         //initialize variables
         void Awake()
         {
             instance = this;
+            _botList = new List<PlayerBot>();
 
             //if Unity Ads is enabled, hook up its result callback
-            #if UNITY_ADS
+#if UNITY_ADS
                 UnityAdsManager.adResultEvent += HandleAdResult;
-            #endif
+#endif
         }
-
-
+        
         /// <summary>
         /// Returns a reference to this script instance.
         /// </summary>
@@ -85,8 +88,22 @@ namespace TanksMP
         {
             return instance;
         }
-        
-        
+
+        public void AddBot(PlayerBot bot)
+        {
+            _botList.Add(bot);
+        }
+
+        public void ClearBots()
+        {
+            _botList.Clear();
+        }
+
+        public List<PlayerBot> GetBotList()
+        {
+            return _botList;
+        }
+
         /// <summary>
         /// Global check whether this client is the match master or not.
         /// </summary>
@@ -279,15 +296,9 @@ namespace TanksMP
                 killedByName = other.GetView().GetName();
             }
 
-            //increase local death counter for this game
-            localPlayer.GetView().IncrementDeaths();
-            
             Text[] killCounter = ui.killCounter;
             killCounter[1].text = localPlayer.GetView().GetDeaths().ToString();
             killCounter[1].GetComponent<Animator>().Play("Animation");
-            
-            // ui.killCounter[1].text = (int.Parse(ui.killCounter[1].text) + 1).ToString();
-            // ui.killCounter[1].GetComponent<Animator>().Play("Animation");
             
             //calculate if we should show a video ad
             #if UNITY_ADS

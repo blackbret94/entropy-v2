@@ -33,7 +33,8 @@ namespace TanksMP
             p.GetView().SetHealth(p.maxHealth);
             
             // show UI message
-            GameManager.GetInstance().ui.PowerUpPanel.SetText(Powerup.DisplayText,Powerup.DisplaySubtext, Powerup.Color);
+            if(p.IsLocal)
+                GameManager.GetInstance().ui.PowerUpPanel.SetText(Powerup.DisplayText,Powerup.DisplaySubtext, Powerup.Color);
 
             //return successful collection
             return true;

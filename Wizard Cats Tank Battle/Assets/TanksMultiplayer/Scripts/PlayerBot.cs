@@ -41,6 +41,8 @@ namespace TanksMP
 
         [Range(0f, 10f)]
         public float accuracyError = 0f;
+
+        public CatNameGenerator CatNameGenerator;
         
         //list of enemy players that are in range of this bot
         private List<GameObject> inRange = new List<GameObject>();
@@ -76,8 +78,7 @@ namespace TanksMP
             CharacterAppearance.Team = team;
 
             //set name in label
-            CatNameGenerator catNameGenerator = new CatNameGenerator();
-            label.text = myName = catNameGenerator.GetRandomName();
+            label.text = myName = CatNameGenerator.GetRandomName();
             label.color = team.material.color;
             
             //call hooks manually to update

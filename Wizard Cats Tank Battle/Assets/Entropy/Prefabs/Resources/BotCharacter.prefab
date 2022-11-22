@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 6717418802421992118}
   - component: {fileID: 3715464417992353068}
   - component: {fileID: 7238568278388413226}
+  - component: {fileID: 6047864367303748726}
   m_Layer: 8
   m_Name: BotCharacter
   m_TagString: Untagged
@@ -125,8 +126,9 @@ MonoBehaviour:
   deaths: 0
   buffSeconds: 0
   buffIndex: 0
-  range: 4
+  range: 6
   accuracyError: 3.05
+  CatNameGenerator: {fileID: 6047864367303748726}
 --- !u!195 &195000012828890094
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -256,6 +258,20 @@ MonoBehaviour:
   RapidFireBuffVisualizer: {fileID: 3005859715567014639}
   SpikeDamageBuffVisualizer: {fileID: 5772764937745812560}
   ReflectionBuffVisualizer: {fileID: 4991919122030557007}
+--- !u!114 &6047864367303748726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000013172141970}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 615591dcad9d4035a81c5bbe8f4b772c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CatNameList: {fileID: 11400000, guid: 30c179925a308d949b38e995f48c338a, type: 2}
+  RealNamePercent: 80
 --- !u!1 &738750829709176018
 GameObject:
   m_ObjectHideFlags: 0

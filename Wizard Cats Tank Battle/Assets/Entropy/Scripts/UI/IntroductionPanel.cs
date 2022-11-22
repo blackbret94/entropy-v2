@@ -12,6 +12,8 @@ namespace Vashta.Entropy.UI
 		/// </summary>
 		public InputField nameField;
 
+        public CatNameGenerator CatNameGenerator;
+
         private void Start()
         {
             if (PlayerHasName())
@@ -34,8 +36,7 @@ namespace Vashta.Entropy.UI
 
         private void InitNameField()
         {
-            CatNameGenerator catNameGenerator = new CatNameGenerator();
-            nameField.text = catNameGenerator.GetRandomName();
+            nameField.text = CatNameGenerator.GetRandomName();
         }
 
         public void SaveChanges()

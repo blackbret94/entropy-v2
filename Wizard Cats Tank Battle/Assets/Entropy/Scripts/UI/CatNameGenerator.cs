@@ -1,9 +1,13 @@
 using UnityEngine;
+using Vashta.Entropy.ScriptableObject;
 
 namespace Vashta.Entropy.UI
 {
-    public class CatNameGenerator
+    public class CatNameGenerator: MonoBehaviour
     {
+        public CatNameList CatNameList;
+        public float RealNamePercent = 80;
+        
         private static readonly string[] wizardType =
         {
             "Fire", "Water", "Earth", "Wind", "Chrono", "Necro"
@@ -17,7 +21,16 @@ namespace Vashta.Entropy.UI
 
         public string GetRandomName()
         {
-            return GetRandomWizardType() + "-" + GetRandomCatType();
+            float r = Random.Range(0f, 100f);
+
+            if (r < RealNamePercent)
+            {
+                return CatNameList.GetRandomName();
+            }
+            else
+            {
+                return GetRandomWizardType() + "-" + GetRandomCatType();
+            }
         }
 
         private string GetRandomWizardType()

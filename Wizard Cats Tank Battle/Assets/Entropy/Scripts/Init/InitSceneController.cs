@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Jacovone.AssetBundleMagic;
+using TMPro;
 using UnityEngine;
 using Vashta.Entropy.SceneNavigation;
 using Vashta.Entropy.UI;
@@ -11,12 +12,15 @@ namespace Vashta.Entropy.Scripts.Init
         public SceneNavigator SceneNavigator;
         public InitProgressDisplay InitProgressDisplay;
         public List<string> BundlesToDownload;
+        public TextMeshProUGUI errorText;
         
         private AssetBundleMagic.Progress p = null;
         private bool _isComplete = false;
 
         private void Start()
         {
+            errorText.gameObject.SetActive(false);
+            
             AssetBundleMagic.DownloadVersions (delegate(string versions) {
                 Debug.Log ("Received versions:\n" + versions);
                 
@@ -62,8 +66,9 @@ namespace Vashta.Entropy.Scripts.Init
 
                 },
                 delegate(string error) {
-                    // errorText.enabled = true;
-                    // errorText.text = "Error: " + error;
+                    errorText.gameObject.SetActive(true);
+                    errorText.enabled = true;
+                    errorText.text = "Error: " + error;
                     Debug.LogError (error);
                 }
             );

@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 using UnityEngine.Serialization;
+using Vashta.Entropy.SceneNavigation;
 using Vashta.Entropy.UI;
 
 namespace TanksMP
@@ -66,6 +67,8 @@ namespace TanksMP
         public PowerUpPanel PowerUpPanel;
 
         public SfxController SfxController;
+
+        public SceneNavigator SceneNavigator;
 
         //initialize variables
         void Start()
@@ -247,7 +250,7 @@ namespace TanksMP
         /// </summary>
         public override void OnLeftRoom()
         {
-            SceneManager.LoadScene(NetworkManagerCustom.GetInstance().offlineSceneIndex);
+            SceneNavigator.GoToMainMenu();
         }
     }
 }

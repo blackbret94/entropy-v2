@@ -28,13 +28,13 @@ namespace TanksMP
         /// <summary>
         /// Scene index that gets loaded when disconnecting from a game.
         /// </summary>
-        public int offlineSceneIndex = 0;
+        public int offlineSceneIndex = 1;
 
         /// <summary>
         /// Scene index that gets loaded after a connection has been established.
         /// Will get overridden by random matching scene, when using GameMode filtering.
         /// </summary>
-        public int onlineSceneIndex = 1;
+        public int onlineSceneIndex = 2;
 
         /// <summary>
         /// Maximum amount of players per room.

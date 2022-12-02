@@ -3029,6 +3029,7 @@ namespace Photon.Realtime
                     break;
 
                 case StatusCode.Disconnect:
+                    Debug.Log("Disconnecting");
                     // disconnect due to connection exception is handled below (don't connect to GS or master in that case)
                     this.friendListRequested = null;
 
@@ -3038,6 +3039,7 @@ namespace Photon.Realtime
 
                     if (this.Server == ServerConnection.GameServer && wasInRoom)
                     {
+                        Debug.Log("Leaving room");
                         this.MatchMakingCallbackTargets.OnLeftRoom();
                     }
 

@@ -9,6 +9,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using Vashta.Entropy.Character;
 using Vashta.Entropy.SaveLoad;
+using Vashta.Entropy.TanksExtensions;
+using Vashta.Entropy.UI;
 
 namespace TanksMP
 {
@@ -17,6 +19,8 @@ namespace TanksMP
     /// </summary>
     public class UIMain : MonoBehaviour
     {
+        public CatNameGenerator CatNameGenerator;
+        
         /// <summary>
         /// Window object for loading screen between connecting and scene switch.
         /// </summary>
@@ -69,13 +73,16 @@ namespace TanksMP
         //how many times the settings have been opened
         //private int settingsOpened = 0;
 
+        private PlayerNameVerification _playerNameVerification;
 
         //initialize player selection in Settings window
         //if this is the first time launching the game, set initial values
         void Start()
         {
+            _playerNameVerification = new PlayerNameVerification(CatNameGenerator);
+            
             //set initial values for all settings
-            if (!PlayerPrefs.HasKey(PrefsKeys.playerName)) PlayerPrefs.SetString(PrefsKeys.playerName, String.Empty);
+            if (!PlayerPrefs.HasKey(PrefsKeys.playerName)) PlayerPrefs.SetString(PrefsKeys.playerName, CatNameGenerator.GetRandomName());
             if (!PlayerPrefs.HasKey(PrefsKeys.networkMode)) PlayerPrefs.SetInt(PrefsKeys.networkMode, 0);
             if (!PlayerPrefs.HasKey(PrefsKeys.gameMode)) PlayerPrefs.SetInt(PrefsKeys.gameMode, 0);
             if (!PlayerPrefs.HasKey(PrefsKeys.serverAddress)) PlayerPrefs.SetString(PrefsKeys.serverAddress, "127.0.0.1");
@@ -85,6 +92,7 @@ namespace TanksMP
             if (!PlayerPrefs.HasKey(Vashta.Entropy.SaveLoad.PrefsKeys.characterAppearance)) PlayerPrefs.SetString(Vashta.Entropy.SaveLoad.PrefsKeys.characterAppearance, CharacterAppearanceSaveLoad.DefaultAppearanceStringEncrypted());
 
             PlayerPrefs.Save();
+            _playerNameVerification.VerifyName();
 
             //read the selections and set them in the corresponding UI elements
             nameField.text = PlayerPrefs.GetString(PrefsKeys.playerName);
@@ -242,6 +250,8 @@ namespace TanksMP
             PlayerPrefs.SetString(PrefsKeys.playMusic, musicToggle.isOn.ToString());
             PlayerPrefs.SetFloat(PrefsKeys.appVolume, volumeSlider.value);
             PlayerPrefs.Save();
+            
+            _playerNameVerification.VerifyName();
         }
 
 		

@@ -7,6 +7,12 @@ using UnityEngine;
 
 namespace TanksMP
 {
+    public enum CameraTypes
+    {
+        normal,
+        death
+    }
+    
     /// <summary>
     /// Camera script for following the player or a different target transform.
     /// Extended with ability to hide certain layers (e.g. UI) while in "follow mode".
@@ -28,11 +34,16 @@ namespace TanksMP
         /// The clamped distance in the x-z plane to the target.
         /// </summary>
         public float distance = 10.0f;
+
+        public float distanceDeathCam = 8.0f;
         
         /// <summary>
         /// The clamped height the camera should be above the target.
         /// </summary>
         public float height = 5.0f;
+
+        public float heightDeathCam = 3.0f;
+        public CameraTypes camMode = 0;
 
         /// <summary>
         /// Reference to the Camera component.
@@ -61,9 +72,18 @@ namespace TanksMP
             //Remark: parenting the AudioListener to the player doesn't work, because
             //it gets disabled on death and therefore stops playing sounds completely
             Transform listener = GetComponentInChildren<AudioListener>().transform;
-            listener.position = transform.position + transform.forward * distance;
+            listener.position = transform.position + transform.forward * getDistance();
         }
 
+        public void SetNormalCam()
+        {
+            camMode = CameraTypes.normal;
+        }
+
+        public void SetDeathCam()
+        {
+            camMode = CameraTypes.death;
+        }
 
         //position the camera in every frame
         void LateUpdate()
@@ -78,15 +98,15 @@ namespace TanksMP
             //set the position of the camera on the x-z plane to:
             //distance units behind the target, height units above the target
             Vector3 pos = target.position;
-            pos -= currentRotation * Vector3.forward * Mathf.Abs(distance);
-            pos.y = target.position.y + Mathf.Abs(height);
+            pos -= currentRotation * Vector3.forward * Mathf.Abs(getDistance());
+            pos.y = target.position.y + Mathf.Abs(getHeight());
             transform.position = pos;
 
             //look at the target
             transform.LookAt(target);
 
             //clamp distance
-            transform.position = target.position - (transform.forward * Mathf.Abs(distance));
+            transform.position = target.position - (transform.forward * Mathf.Abs(getDistance()));
         }
         
         
@@ -97,6 +117,26 @@ namespace TanksMP
         {
             if(shouldHide) cam.cullingMask &= ~respawnMask;
             else cam.cullingMask |= respawnMask;
+        }
+
+        private float getDistance()
+        {
+            if (camMode == 0)
+                return distance;
+            if (camMode == CameraTypes.death)
+                return distanceDeathCam;
+
+            return distance;
+        }
+
+        private float getHeight()
+        {
+            if (camMode == 0)
+                return height;
+            if (camMode == CameraTypes.death)
+                return heightDeathCam;
+
+            return height;
         }
     }
 }

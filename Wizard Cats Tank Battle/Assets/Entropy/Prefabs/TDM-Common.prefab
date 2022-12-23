@@ -1041,8 +1041,11 @@ MonoBehaviour:
   respawnMask:
     serializedVersion: 2
     m_Bits: 512
-  distance: 10
-  height: 10
+  distance: 15
+  distanceDeathCam: 10
+  height: 30
+  heightDeathCam: 8
+  camMode: 0
   cam: {fileID: 0}
   camTransform: {fileID: 0}
 --- !u!114 &1934922644525356947
@@ -3793,7 +3796,7 @@ Transform:
   - {fileID: 137415512926020287}
   - {fileID: 137415513564420610}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1026932930606317342
 GameObject:
@@ -7047,7 +7050,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.88044566}
   m_AnchorMax: {x: 0.20300001, y: 0.88044566}
-  m_AnchoredPosition: {x: -19.000214, y: -104}
+  m_AnchoredPosition: {x: -19.000183, y: -104}
   m_SizeDelta: {x: -38, y: 471}
   m_Pivot: {x: 0.5, y: 0.9999999}
 --- !u!1 &8088441713222308443

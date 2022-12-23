@@ -679,7 +679,11 @@ namespace TanksMP
             else
             {
                 //local player was killed, set camera to follow the killer
-                if (killedBy != null) camFollow.target = killedBy.transform;
+                if (killedBy != null)
+                {
+                    camFollow.target = killedBy.transform;
+                    camFollow.SetDeathCam();
+                }
                 //hide input controls and other HUD elements
                 camFollow.HideMask(true);
                 //display respawn window (only for local player)
@@ -728,6 +732,7 @@ namespace TanksMP
         {
             //start following the local player again
             camFollow.target = turret;
+            camFollow.SetNormalCam();
             camFollow.HideMask(false);
 
             //get team area and reposition it there

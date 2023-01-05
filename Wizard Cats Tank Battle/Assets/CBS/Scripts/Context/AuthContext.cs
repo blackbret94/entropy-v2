@@ -28,8 +28,8 @@ namespace CBS.Context
         private void Init()
         {
             // show background
-            var backgroundPrefab = AuthUIData.Background;
-            UIView.ShowWindow(backgroundPrefab);
+            // var backgroundPrefab = AuthUIData.Background;
+            // UIView.ShowWindow(backgroundPrefab);
             // check auto login
             var autoLogin = AuthData.AutoLogin;
             if (autoLogin)

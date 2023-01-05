@@ -50,7 +50,7 @@ namespace Vashta.Entropy.Scripts.Init
             if (i >= maxBundleIndex)
             {
                 // go to next scene
-                SceneNavigator.GoToMainMenuAsync();
+                SceneNavigator.GoToLogin();
                 _isComplete = true;
                 return;
             }

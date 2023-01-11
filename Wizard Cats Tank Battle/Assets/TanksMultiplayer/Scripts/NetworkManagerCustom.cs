@@ -12,6 +12,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using Vashta.Entropy.Character;
 using Vashta.Entropy.SaveLoad;
+using Vashta.Entropy.Scripts.CBSIntegration;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace TanksMP
@@ -98,7 +99,7 @@ namespace TanksMP
         public static void StartMatch(NetworkMode mode)
         {
             PhotonNetwork.AutomaticallySyncScene = true;
-            PhotonNetwork.NickName = PlayerPrefs.GetString(PrefsKeys.playerName);
+            PhotonNetwork.NickName = CBSIntegrator.Instance.ProfileState.CachedDisplayName;
 
             switch (mode)
             {
@@ -146,7 +147,7 @@ namespace TanksMP
         public override void OnConnectedToMaster()
         {
             //set my own name and try joining a game
-            PhotonNetwork.NickName = PlayerPrefs.GetString(PrefsKeys.playerName);
+            PhotonNetwork.NickName = CBSIntegrator.Instance.ProfileState.CachedDisplayName;
 
             //use this to define per-mode matchmaking selections instead of joining random rooms (also see OnPhotonRandomJoinFailed() method)
             //https://doc.photonengine.com/en-us/realtime/current/reference/matchmaking-and-lobby#not_so_random_matchmaking

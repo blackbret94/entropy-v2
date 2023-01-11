@@ -82,7 +82,7 @@ namespace TanksMP
             _playerNameVerification = new PlayerNameVerification(CatNameGenerator);
             
             //set initial values for all settings
-            if (!PlayerPrefs.HasKey(PrefsKeys.playerName)) PlayerPrefs.SetString(PrefsKeys.playerName, CatNameGenerator.GetRandomName());
+            // if (!PlayerPrefs.HasKey(PrefsKeys.playerName)) PlayerPrefs.SetString(PrefsKeys.playerName, CatNameGenerator.GetRandomName());
             if (!PlayerPrefs.HasKey(PrefsKeys.networkMode)) PlayerPrefs.SetInt(PrefsKeys.networkMode, 0);
             if (!PlayerPrefs.HasKey(PrefsKeys.gameMode)) PlayerPrefs.SetInt(PrefsKeys.gameMode, 0);
             if (!PlayerPrefs.HasKey(PrefsKeys.serverAddress)) PlayerPrefs.SetString(PrefsKeys.serverAddress, "127.0.0.1");
@@ -95,7 +95,7 @@ namespace TanksMP
             _playerNameVerification.VerifyName();
 
             //read the selections and set them in the corresponding UI elements
-            nameField.text = PlayerPrefs.GetString(PrefsKeys.playerName);
+            // nameField.text = PlayerPrefs.GetString(PrefsKeys.playerName);
             networkDrop.value = PlayerPrefs.GetInt(PrefsKeys.networkMode);
             // gameModeDrop.value = PlayerPrefs.GetInt(PrefsKeys.gameMode);
             serverField.text = PlayerPrefs.GetString(PrefsKeys.serverAddress);
@@ -191,7 +191,7 @@ namespace TanksMP
         /// </summary>
         public void OpenSettings()
         {
-            nameField.text = PlayerPrefs.GetString(PrefsKeys.playerName);
+            // nameField.text = PlayerPrefs.GetString(PrefsKeys.playerName);
             //settingsOpened++;
         }
 
@@ -244,7 +244,7 @@ namespace TanksMP
         /// </summary>
         public void CloseSettings()
         {
-            PlayerPrefs.SetString(PrefsKeys.playerName, nameField.text);
+            // PlayerPrefs.SetString(PrefsKeys.playerName, nameField.text);
             //PlayerPrefs.SetInt(PrefsKeys.networkMode, networkDrop.value);
             PlayerPrefs.SetString(PrefsKeys.serverAddress, serverField.text);
             PlayerPrefs.SetString(PrefsKeys.playMusic, musicToggle.isOn.ToString());

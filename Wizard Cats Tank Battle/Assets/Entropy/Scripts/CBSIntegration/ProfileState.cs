@@ -6,10 +6,15 @@ namespace Vashta.Entropy.Scripts.CBSIntegration
     public class ProfileState : MonoBehaviour
     {
         private IProfile ProfileModule { get; set; }
-        
+        public string CachedDisplayName { get; private set; }
+
         void Start()
         {
             ProfileModule = CBSModule.Get<CBSProfile>();
+            CachedDisplayName = "";
+            ProfileModule.OnAcountInfoGetted += OnAccountInfoGetted;
+            ProfileModule.OnDisplayNameUpdated += OnDisplayNameUpdated;
+            Debug.Log("Resetting display name");
         }
 
         public void GetActiveUser()
@@ -46,8 +51,18 @@ namespace Vashta.Entropy.Scripts.CBSIntegration
         {
             if (result.IsSuccess)
             {
+                CachedDisplayName = result.DisplayName;
                 Debug.Log("Display name = " + result.DisplayName);
                 Debug.Log("Avatar URL = " + result.AvatarUrl);
+            }
+        }
+        
+        private void OnDisplayNameUpdated(CBSUpdateDisplayNameResult result)
+        {
+            if (result.IsSuccess)
+            {
+                CachedDisplayName = result.DisplayName;
+                Debug.Log("User has successfully updated their nickname");
             }
         }
     }

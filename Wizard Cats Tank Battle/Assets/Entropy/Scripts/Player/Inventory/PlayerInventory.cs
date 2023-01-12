@@ -36,6 +36,13 @@ namespace Entropy.Scripts.Player.Inventory
             _hasInit = true;
         }
 
+        public void ClearPurchasable()
+        {
+            Hats.Clear();
+            Carts.Clear();
+            Turrets.Clear();
+        }
+
         public void ForceRefresh()
         {
             Init(true);
@@ -60,6 +67,15 @@ namespace Entropy.Scripts.Player.Inventory
         public void AddHat(Hat hat){
             Hats.Add(hat);
             Save();
+        }
+
+        public void AddHatById(string id)
+        {
+            Hat hat = PlayerCharacterWardrobe.GetHatById(id);
+            if (hat != null)
+            {
+                AddHat(hat);
+            }
         }
 
         public bool OwnsHatById(string id)
@@ -187,6 +203,15 @@ namespace Entropy.Scripts.Player.Inventory
             Carts.Add(cart);
             Save();
         }
+        
+        public void AddCartById(string id)
+        {
+            Cart cart = PlayerCharacterWardrobe.GetCartById(id);
+            if (cart != null)
+            {
+                AddCart(cart);
+            }
+        }
 
         public Turret GetRandomTurret()
         {
@@ -228,6 +253,15 @@ namespace Entropy.Scripts.Player.Inventory
         public void AddTurret(Turret turret){
             Turrets.Add(turret);
             Save();
+        }
+        
+        public void AddTurretById(string id)
+        {
+            Turret turret = PlayerCharacterWardrobe.GetTurretById(id);
+            if (turret != null)
+            {
+                AddTurret(turret);
+            }
         }
         
         public Meow GetRandomMeow()

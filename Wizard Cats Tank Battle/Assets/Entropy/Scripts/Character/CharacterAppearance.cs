@@ -16,6 +16,7 @@ namespace Vashta.Entropy.Character
         public PlayerCharacterWardrobe PlayerCharacterWardrobe;
         public PlayerInventory PlayerInventory;
         public CharacterAppearanceSaveLoad SaveLoad;
+        public InventorySyncer InventorySyncer;
         public SfxController SfxController;
 
         [Header("Nodes")] 
@@ -90,7 +91,8 @@ namespace Vashta.Entropy.Character
         public void SaveAppearance()
         {
             CharacterAppearanceSerializable appearanceSerializable = Serialize();
-            SaveLoad.Save(appearanceSerializable);
+            InventorySyncer.SaveAppearance(Hat.Id, Cart.Id, Turret.Id, Body.Id, Skin.Id, Meow.Id);
+            SaveLoad.Save(appearanceSerializable); // Deprecate this
         }
 
         public void ApplyOutfit()
@@ -258,7 +260,7 @@ namespace Vashta.Entropy.Character
             _bodyIndex = PlayerInventory.GetBodyTypeIndexById(bodyId);
 
             string skinId = characterAppearanceSerializable.SkinId;
-            Skin = PlayerCharacterWardrobe.GetSkinById(characterAppearanceSerializable.SkinId);
+            Skin = PlayerCharacterWardrobe.GetSkinById(skinId);
             _skinIndex = PlayerInventory.GetSkinIndexById(_bodyIndex, skinId);
 
             string cartId = characterAppearanceSerializable.CartId;
@@ -273,6 +275,29 @@ namespace Vashta.Entropy.Character
             Meow = PlayerCharacterWardrobe.GetMeowById(meowId);
             _meowIndex = PlayerInventory.GetMeowIndexById(meowId);
 
+            ApplyOutfit();
+        }
+
+        public void SetOutfit(string hatId, string cartId, string wandId, string bodyId, string skinId, string meowId)
+        {
+            Hat = PlayerCharacterWardrobe.GetHatById(hatId);
+            _hatIndex = PlayerInventory.GetHatIndexById(hatId);
+            
+            Cart = PlayerCharacterWardrobe.GetCartById(cartId);
+            _cartIndex = PlayerInventory.GetCartIndexById(cartId);
+            
+            Turret = PlayerCharacterWardrobe.GetTurretById(wandId);
+            _turretIndex = PlayerInventory.GetTurretIndexById(wandId);
+            
+            Body = PlayerCharacterWardrobe.GetBodyTypeById(bodyId);
+            _bodyIndex = PlayerInventory.GetBodyTypeIndexById(bodyId);
+
+            Skin = PlayerCharacterWardrobe.GetSkinById(skinId);
+            _skinIndex = PlayerInventory.GetSkinIndexById(_bodyIndex, skinId);
+            
+            Meow = PlayerCharacterWardrobe.GetMeowById(meowId);
+            _meowIndex = PlayerInventory.GetMeowIndexById(meowId);
+            
             ApplyOutfit();
         }
 

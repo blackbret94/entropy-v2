@@ -77,7 +77,9 @@ namespace Vashta.Entropy.ScriptableObject
             if (_indexedHats.ContainsKey(id))
                 return _indexedHats[id];
 
-            return Hats[0];
+            Debug.LogError("Could not find Hat with ID: " + id);
+            return null;
+            //return Hats[0];
         }
 
         public BodyType GetRandomBodyType()
@@ -117,7 +119,8 @@ namespace Vashta.Entropy.ScriptableObject
                 return _indexedCarts[id];
 
             Debug.Log("Could not find cart with ID: " + id);
-            return Carts[0];
+            return null;
+            // return Carts[0];
         }
 
         public Turret GetRandomTurret()
@@ -132,7 +135,8 @@ namespace Vashta.Entropy.ScriptableObject
                 return _indexedTurrets[id];
             
             Debug.Log("Could not find turret with ID: " + id);
-            return Turrets[0];
+            return null;
+            // return Turrets[0];
         }
 
         public Meow GetRandomMeow()

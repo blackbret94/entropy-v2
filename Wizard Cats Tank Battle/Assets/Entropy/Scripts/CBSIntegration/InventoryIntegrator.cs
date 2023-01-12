@@ -3,6 +3,8 @@ using UnityEngine;
 
 namespace Vashta.Entropy.Scripts.CBSIntegration
 {
+    // This class was written before I understood the API, and now better serves as a model in a lot of places.  Lots of
+    // functionality should be removed/moved to different classes.
     public class InventoryIntegrator : MonoBehaviour
     {
         private ICBSInventory InventoryModule { get; set; }

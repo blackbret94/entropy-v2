@@ -1,4 +1,3 @@
-using System;
 using CBS;
 using UnityEngine;
 
@@ -6,7 +5,6 @@ namespace Entropy.Scripts.Currency
 {
     public class CurrencyTransaction
     {
-        private string prefsKey = "currency";
         private ICurrency CBSCurrency { get; set; }
         private const string CURRENCY_CODE = "CC";
         private int _lastCurrency = 0;
@@ -15,11 +13,8 @@ namespace Entropy.Scripts.Currency
         {
             CBSCurrency = CBSModule.Get<CBSCurrency>();
             CBSCurrency.OnCurrencyUpdated += OnCurrencyUpdated;
-        }
-        
-        public int GetCurrency()
-        {
-            return _lastCurrency;
+            
+            RefreshCurrency();
         }
 
         public void ModifyCurrency(int delta)

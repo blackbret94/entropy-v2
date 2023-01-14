@@ -22,7 +22,6 @@ namespace Entropy.Scripts.ItemStore
                 // add ones that aren't owned
                 if (!cart.AvailAtStart && !PlayerInventory.OwnsCartById(cart.Id))
                 {
-                    Debug.Log("Adding cart with ID: " + cart.Id);
                     _activeItemList.Add(cart);
                 }
             }

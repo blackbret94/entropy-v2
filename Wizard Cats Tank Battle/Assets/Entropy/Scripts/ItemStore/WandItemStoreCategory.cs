@@ -22,12 +22,7 @@ namespace Entropy.Scripts.ItemStore
                 // add ones that aren't owned
                 if (!turret.AvailAtStart && !PlayerInventory.OwnsTurretById(turret.Id))
                 {
-                    Debug.Log("Adding turret with ID: " + turret.Id);
                     _activeItemList.Add(turret);
-                }
-                else
-                {
-                    Debug.Log("Turret is owned with ID: " + turret.Id);
                 }
             }
         }

@@ -22,7 +22,6 @@ namespace Entropy.Scripts.ItemStore
                 // add ones that aren't owned
                 if (!hat.AvailAtStart && !PlayerInventory.OwnsHatById(hat.Id))
                 {
-                    Debug.Log("Adding hat with ID: " + hat.Id);
                     _activeItemList.Add(hat);
                 }
             }

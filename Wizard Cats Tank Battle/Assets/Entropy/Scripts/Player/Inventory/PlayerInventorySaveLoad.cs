@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CBS;
 using UnityEngine;
 using Vashta.Entropy.ScriptableObject;
 using Newtonsoft.Json;
@@ -8,7 +9,9 @@ namespace Entropy.Scripts.Player.Inventory
     public class PlayerInventorySaveLoad
     {
         private PlayerCharacterWardrobe _playerCharacterWardrobe;
+        private PlayerInventory _playerInventory;
 
+        private IProfile ProfileModule { get; set; }
         private const string
             HatKey = "inventoryHat",
             CartKey = "inventoryCart",
@@ -16,57 +19,80 @@ namespace Entropy.Scripts.Player.Inventory
             TurretsKey = "inventoryTurret",
             MeowsKey = "inventoryMeow";
 
-        public PlayerInventorySaveLoad(PlayerCharacterWardrobe playerCharacterWardrobe)
+        private bool _hatIsLoaded,
+            _cartIsLoaded,
+            _bodyIsLoaded,
+            _turretIsLoaded,
+            _meowIsLoaded;
+
+        public PlayerInventorySaveLoad(PlayerCharacterWardrobe playerCharacterWardrobe, PlayerInventory playerInventory)
         {
             _playerCharacterWardrobe = playerCharacterWardrobe;
+            _playerInventory = playerInventory;
+            ProfileModule = CBSModule.Get<CBSProfile>();
         }
 
-        public void Load(PlayerInventory playerInventory)
+        public bool IsLoaded()
         {
-            playerInventory.Hats = LoadHats();
-            playerInventory.Carts = LoadCart();
-            playerInventory.BodyTypes = LoadBody();
-            playerInventory.Turrets = LoadTurret();
-            playerInventory.Meows = LoadMeows();
+            return _hatIsLoaded && _cartIsLoaded && _bodyIsLoaded && _turretIsLoaded && _meowIsLoaded;
         }
 
-        public void Save(PlayerInventory playerInventory)
+        public void Load()
         {
-            SaveHats(playerInventory.Hats);
-            // SaveBody(playerInventory.BodyTypes);
-            SaveCart(playerInventory.Carts);
-            SaveTurret(playerInventory.Turrets);
-            // SaveMeows(playerInventory.Meows);
+            ProfileModule.GetProfileData(HatKey, OnGetLoadHats);
+            ProfileModule.GetProfileData(CartKey, OnGetLoadCarts);
+            ProfileModule.GetProfileData(BodyKey, OnGetLoadBodies);
+            ProfileModule.GetProfileData(TurretsKey, OnGetLoadTurrets);
+            ProfileModule.GetProfileData(MeowsKey, OnGetLoadMeows);
         }
 
-        private List<string> GetOwnedObjectsList(string key)
+        public void Save()
         {
-            string ownedObjectIdsString = PlayerPrefs.GetString(key);
-            List<string> ownedObjectIds =JsonConvert.DeserializeObject<List<string>>(ownedObjectIdsString);
+            SaveHats(_playerInventory.Hats);
+            SaveCart(_playerInventory.Carts);
+            SaveTurret(_playerInventory.Turrets);
+        }
 
-            if (ownedObjectIds == null)
-                ownedObjectIds = new List<string>();
+        private List<string> DeserializeInventoryResults(CBSGetProfileDataResult result, string key)
+        {
+            List<string> ownedObjectIds = new List<string>();
+                
+            if(result.Data.ContainsKey(key))
+            {
+                string ids = result.Data[key];
+                    
+                ownedObjectIds =JsonConvert.DeserializeObject<List<string>>(ids);
+
+                if (ownedObjectIds == null)
+                    ownedObjectIds = new List<string>();
+            }
 
             return ownedObjectIds;
         }
         
-        private List<Hat> LoadHats()
+        private void OnGetLoadHats(CBSGetProfileDataResult result)
         {
-            List<Hat> ownedObjects = new List<Hat>();
-            
-            // read from playerprefs
-            List<string> ownedObjectIds = GetOwnedObjectsList(HatKey);
-
-            // iterate over options, adding ones that are owned or start free
-            foreach (Hat item in _playerCharacterWardrobe.Hats)
+            if (result.IsSuccess)
             {
-                if ((item.AvailAtStart || ownedObjectIds.Contains(item.Id)))
+                List<string> ownedObjectIds = DeserializeInventoryResults(result, HatKey);
+                
+                List<Hat> ownedObjects = new List<Hat>();
+                
+                foreach (Hat item in _playerCharacterWardrobe.Hats)
                 {
-                    ownedObjects.Add(item);
+                    if ((item.AvailAtStart || ownedObjectIds.Contains(item.Id)))
+                    {
+                        ownedObjects.Add(item);
+                    }
                 }
+                
+                _playerInventory.Hats = ownedObjects;
+                _hatIsLoaded = true;
             }
-            
-            return ownedObjects;
+            else
+            {
+                Debug.LogError("Error loading hats: " + result.Error.Message);
+            }
         }
 
         private void SaveHats(List<Hat> hats)
@@ -77,46 +103,69 @@ namespace Entropy.Scripts.Player.Inventory
                 hatIds.Add(hat.Id);
             }
             
-            PlayerPrefs.SetString(HatKey, JsonConvert.SerializeObject(hatIds));
+            ProfileModule.SaveProfileData(HatKey, JsonConvert.SerializeObject(hatIds), OnSaveData);
         }
-
-        private List<BodyType> LoadBody()
+        
+        private void OnSaveData(CBSSaveProfileDataResult result)
         {
-            List<BodyType> ownedObjects = new List<BodyType>();
-            
-            // read from playerprefs
-            List<string> ownedObjectIds = GetOwnedObjectsList(BodyKey);
-            
-            // iterate over options, adding ones that are owned or start free
-            foreach (BodyType item in _playerCharacterWardrobe.BodyTypes)
+            if (result.IsSuccess)
             {
-                if (item.AvailAtStart || ownedObjectIds.Contains(item.Id))
-                    ownedObjects.Add(item);
+                Debug.Log("User data saved successfully");
             }
-            
-            return ownedObjects;
-        }
-
-        private void SaveBody(List<BodyType> bodies)
-        {
-            
-        }
-
-        private List<Cart> LoadCart()
-        {
-            List<Cart> ownedObjects = new List<Cart>();
-            
-            // read from playerprefs
-            List<string> ownedObjectIds = GetOwnedObjectsList(CartKey);
-            
-            // iterate over options, adding ones that are owned or start free
-            foreach (Cart item in _playerCharacterWardrobe.Carts)
+            else
             {
-                if (item.AvailAtStart || ownedObjectIds.Contains(item.Id))
-                    ownedObjects.Add(item);
+                Debug.Log("Error saving user data: " + result.Error.Message);
             }
-            
-            return ownedObjects;
+        }
+        
+        private void OnGetLoadBodies(CBSGetProfileDataResult result)
+        {
+            if (result.IsSuccess)
+            {
+                List<string> ownedObjectIds = DeserializeInventoryResults(result, BodyKey);
+                
+                List<BodyType> ownedObjects = new List<BodyType>();
+                
+                foreach (BodyType item in _playerCharacterWardrobe.BodyTypes)
+                {
+                    if ((item.AvailAtStart || ownedObjectIds.Contains(item.Id)))
+                    {
+                        ownedObjects.Add(item);
+                    }
+                }
+                
+                _playerInventory.BodyTypes = ownedObjects;
+                _bodyIsLoaded = true;
+            }
+            else
+            {
+                Debug.LogError("Error loading BodyTypes: " + result.Error.Message);
+            }
+        }
+
+        private void OnGetLoadCarts(CBSGetProfileDataResult result)
+        {
+            if (result.IsSuccess)
+            {
+                List<string> ownedObjectIds = DeserializeInventoryResults(result, CartKey);
+                
+                List<Cart> ownedObjects = new List<Cart>();
+                
+                foreach (Cart item in _playerCharacterWardrobe.Carts)
+                {
+                    if ((item.AvailAtStart || ownedObjectIds.Contains(item.Id)))
+                    {
+                        ownedObjects.Add(item);
+                    }
+                }
+                
+                _playerInventory.Carts = ownedObjects;
+                _cartIsLoaded = true;
+            }
+            else
+            {
+                Debug.LogError("Error loading Carts: " + result.Error.Message);
+            }
         }
 
         private void SaveCart(List<Cart> carts)
@@ -127,26 +176,34 @@ namespace Entropy.Scripts.Player.Inventory
                 ids.Add(cart.Id);
             }
             
-            PlayerPrefs.SetString(CartKey, JsonConvert.SerializeObject(ids));
+            ProfileModule.SaveProfileData(CartKey, JsonConvert.SerializeObject(ids), OnSaveData);
         }
 
-        private List<Turret> LoadTurret()
+        private void OnGetLoadTurrets(CBSGetProfileDataResult result)
         {
-            List<Turret> ownedObjects = new List<Turret>();
-            
-            // read from playerprefs
-            List<string> ownedObjectIds = GetOwnedObjectsList(TurretsKey);
-            
-            // iterate over options, adding ones that are owned or start free
-            foreach (Turret item in _playerCharacterWardrobe.Turrets)
+            if (result.IsSuccess)
             {
-                if (item.AvailAtStart || ownedObjectIds.Contains(item.Id))
-                    ownedObjects.Add(item);
+                List<string> ownedObjectIds = DeserializeInventoryResults(result, TurretsKey);
+                
+                List<Turret> ownedObjects = new List<Turret>();
+                
+                foreach (Turret item in _playerCharacterWardrobe.Turrets)
+                {
+                    if ((item.AvailAtStart || ownedObjectIds.Contains(item.Id)))
+                    {
+                        ownedObjects.Add(item);
+                    }
+                }
+                
+                _playerInventory.Turrets = ownedObjects;
+                _turretIsLoaded = true;
             }
-            
-            return ownedObjects;
+            else
+            {
+                Debug.LogError("Error loading turrets: " + result.Error.Message);
+            }
         }
-
+        
         private void SaveTurret(List<Turret> turrets)
         {
             List<string> ids = new List<string>();
@@ -155,29 +212,32 @@ namespace Entropy.Scripts.Player.Inventory
                 ids.Add(turret.Id);
             }
             
-            PlayerPrefs.SetString(TurretsKey, JsonConvert.SerializeObject(ids));
+            ProfileModule.SaveProfileData(TurretsKey, JsonConvert.SerializeObject(ids), OnSaveData);
         }
         
-        private List<Meow> LoadMeows()
+        private void OnGetLoadMeows(CBSGetProfileDataResult result)
         {
-            List<Meow> ownedObjects = new List<Meow>();
-            
-            // read from playerprefs
-            List<string> ownedObjectIds = GetOwnedObjectsList(MeowsKey);
-            
-            // iterate over options, adding ones that are owned or start free
-            foreach (Meow item in _playerCharacterWardrobe.Meows)
+            if (result.IsSuccess)
             {
-                if (item.AvailAtStart || ownedObjectIds.Contains(item.Id))
-                    ownedObjects.Add(item);
+                List<string> ownedObjectIds = DeserializeInventoryResults(result, MeowsKey);
+                
+                List<Meow> ownedObjects = new List<Meow>();
+                
+                foreach (Meow item in _playerCharacterWardrobe.Meows)
+                {
+                    if ((item.AvailAtStart || ownedObjectIds.Contains(item.Id)))
+                    {
+                        ownedObjects.Add(item);
+                    }
+                }
+                
+                _playerInventory.Meows = ownedObjects;
+                _meowIsLoaded = true;
             }
-            
-            return ownedObjects;
-        }
-
-        private void SaveMeows(List<Meow> meows)
-        {
-            
+            else
+            {
+                Debug.LogError("Error loading meows: " + result.Error.Message);
+            }
         }
     }
 }

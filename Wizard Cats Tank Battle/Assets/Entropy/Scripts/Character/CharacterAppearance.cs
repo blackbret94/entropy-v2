@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using Entropy.Scripts.Audio;
 using Entropy.Scripts.Player.Inventory;
 using TanksMP;
@@ -16,7 +18,6 @@ namespace Vashta.Entropy.Character
         public PlayerCharacterWardrobe PlayerCharacterWardrobe;
         public PlayerInventory PlayerInventory;
         public CharacterAppearanceSaveLoad SaveLoad;
-        public InventorySyncer InventorySyncer;
         public SfxController SfxController;
 
         [Header("Nodes")] 
@@ -55,13 +56,29 @@ namespace Vashta.Entropy.Character
         public void Start()
         {
             InitSfxController();
+
+            if (SaveLoad == null)
+                return;
             
-            if(Player == null)
+            if (Player == null)
                 // Wardrobe
-                LoadAppearance();
-            else if(SaveLoad && (Player != null && Player.IsLocal))
+                StartCoroutine(LoadAppearanceWhenInventoryIsLoaded());
+            else if (SaveLoad && (Player != null && Player.IsLocal))
                 // Gameplay, local player vs. other players
-                LoadAppearance();
+                StartCoroutine(LoadAppearanceWhenInventoryIsLoaded());
+        }
+
+        private IEnumerator LoadAppearanceWhenInventoryIsLoaded()
+        {
+            while (PlayerInventory.PlayerInventorySaveLoad == null)
+                yield return null;
+
+            PlayerInventorySaveLoad playerInventorySaveLoad = PlayerInventory.PlayerInventorySaveLoad;
+
+            while (!playerInventorySaveLoad.IsLoaded())
+                yield return null;
+            
+            SaveLoad.Load();
         }
 
         public void RefreshIndexes()
@@ -81,18 +98,16 @@ namespace Vashta.Entropy.Character
                 SfxController = Camera.main.gameObject.GetComponentInChildren<SfxController>();
             }
         }
-
-        public void LoadAppearance()
+        
+        public void LoadAppearanceCallback(CharacterAppearanceSerializable appearance)
         {
-            CharacterAppearanceSerializable appearanceSerializable = SaveLoad.Load();
-            LoadFromSerialized(appearanceSerializable);
+            LoadFromSerialized(appearance);
         }
 
         public void SaveAppearance()
         {
             CharacterAppearanceSerializable appearanceSerializable = Serialize();
-            InventorySyncer.SaveAppearance(Hat.Id, Cart.Id, Turret.Id, Body.Id, Skin.Id, Meow.Id);
-            SaveLoad.Save(appearanceSerializable); // Deprecate this
+            SaveLoad.Save(appearanceSerializable);
         }
 
         public void ApplyOutfit()
@@ -253,51 +268,33 @@ namespace Vashta.Entropy.Character
             
             string hatId = characterAppearanceSerializable.HatId;
             Hat = PlayerCharacterWardrobe.GetHatById(hatId);
-            _hatIndex = PlayerInventory.GetHatIndexById(hatId);
 
             string bodyId = characterAppearanceSerializable.BodyId;
             Body = PlayerCharacterWardrobe.GetBodyTypeById(bodyId);
-            _bodyIndex = PlayerInventory.GetBodyTypeIndexById(bodyId);
 
             string skinId = characterAppearanceSerializable.SkinId;
             Skin = PlayerCharacterWardrobe.GetSkinById(skinId);
-            _skinIndex = PlayerInventory.GetSkinIndexById(_bodyIndex, skinId);
 
             string cartId = characterAppearanceSerializable.CartId;
             Cart = PlayerCharacterWardrobe.GetCartById(cartId);
-            _cartIndex = PlayerInventory.GetCartIndexById(cartId);
 
             string turretId = characterAppearanceSerializable.TurretId;
             Turret = PlayerCharacterWardrobe.GetTurretById(turretId);
-            _turretIndex = PlayerInventory.GetTurretIndexById(turretId);
 
             string meowId = characterAppearanceSerializable.MeowId;
             Meow = PlayerCharacterWardrobe.GetMeowById(meowId);
-            _meowIndex = PlayerInventory.GetMeowIndexById(meowId);
 
-            ApplyOutfit();
-        }
+            try
+            {
+                _hatIndex = PlayerInventory.GetHatIndexById(hatId);
+                _bodyIndex = PlayerInventory.GetBodyTypeIndexById(bodyId);
+                _skinIndex = PlayerInventory.GetSkinIndexById(_bodyIndex, skinId);
+                _cartIndex = PlayerInventory.GetCartIndexById(cartId);
+                _turretIndex = PlayerInventory.GetTurretIndexById(turretId);
+                _meowIndex = PlayerInventory.GetMeowIndexById(meowId);
+            }
+            catch (Exception e) {}
 
-        public void SetOutfit(string hatId, string cartId, string wandId, string bodyId, string skinId, string meowId)
-        {
-            Hat = PlayerCharacterWardrobe.GetHatById(hatId);
-            _hatIndex = PlayerInventory.GetHatIndexById(hatId);
-            
-            Cart = PlayerCharacterWardrobe.GetCartById(cartId);
-            _cartIndex = PlayerInventory.GetCartIndexById(cartId);
-            
-            Turret = PlayerCharacterWardrobe.GetTurretById(wandId);
-            _turretIndex = PlayerInventory.GetTurretIndexById(wandId);
-            
-            Body = PlayerCharacterWardrobe.GetBodyTypeById(bodyId);
-            _bodyIndex = PlayerInventory.GetBodyTypeIndexById(bodyId);
-
-            Skin = PlayerCharacterWardrobe.GetSkinById(skinId);
-            _skinIndex = PlayerInventory.GetSkinIndexById(_bodyIndex, skinId);
-            
-            Meow = PlayerCharacterWardrobe.GetMeowById(meowId);
-            _meowIndex = PlayerInventory.GetMeowIndexById(meowId);
-            
             ApplyOutfit();
         }
 

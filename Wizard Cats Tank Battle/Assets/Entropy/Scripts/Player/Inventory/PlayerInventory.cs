@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
 using Vashta.Entropy.Character;
@@ -16,7 +17,9 @@ namespace Entropy.Scripts.Player.Inventory
         public List<Meow> Meows;
         public PlayerCharacterWardrobe PlayerCharacterWardrobe;
 
-        private PlayerInventorySaveLoad _playerInventorySaveLoad;
+        public bool ShouldLoadInventory;
+
+        public PlayerInventorySaveLoad PlayerInventorySaveLoad { get; private set; }
 
         private bool _hasInit;
 
@@ -30,17 +33,13 @@ namespace Entropy.Scripts.Player.Inventory
             if (_hasInit && !forceRefresh)
                 return;
 
-            _playerInventorySaveLoad = new PlayerInventorySaveLoad(PlayerCharacterWardrobe);
-            Load();
-            
-            _hasInit = true;
-        }
+            if (ShouldLoadInventory)
+            {
+                PlayerInventorySaveLoad = new PlayerInventorySaveLoad(PlayerCharacterWardrobe, this);
+                Load();
+            }
 
-        public void ClearPurchasable()
-        {
-            Hats.Clear();
-            Carts.Clear();
-            Turrets.Clear();
+            _hasInit = true;
         }
 
         public void ForceRefresh()
@@ -50,13 +49,13 @@ namespace Entropy.Scripts.Player.Inventory
 
         private void Load()
         {
-            _playerInventorySaveLoad.Load(this);
+            PlayerInventorySaveLoad.Load();
         }
 
         public void Save()
         {
             Init();
-            _playerInventorySaveLoad.Save(this);
+            PlayerInventorySaveLoad.Save();
         }
 
         public Hat GetRandomHat()

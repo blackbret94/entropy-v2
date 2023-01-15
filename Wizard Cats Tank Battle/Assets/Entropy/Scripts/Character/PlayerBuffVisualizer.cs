@@ -6,13 +6,29 @@ namespace Vashta.Entropy.Character
     public class PlayerBuffVisualizer : MonoBehaviour
     {
         public GameObject SpeedBoostBuffVisualizer;
+        public GameObject SpeedBoostPrefab;
+        
         public GameObject RapidFireBuffVisualizer;
+        public GameObject RapidFirePrefab;
+        
         public GameObject SpikeDamageBuffVisualizer;
+        public GameObject SpikeDamagePrefab;
+        
         public GameObject ReflectionBuffVisualizer;
+        public GameObject ReflectionBuffPrefab;
 
         private void Start()
         {
+            Spawn();
             ToggleAll(false);
+        }
+
+        private void Spawn()
+        {
+            GameObject.Instantiate(SpeedBoostPrefab, SpeedBoostBuffVisualizer.transform);
+            GameObject.Instantiate(RapidFirePrefab, RapidFireBuffVisualizer.transform);
+            GameObject.Instantiate(SpikeDamagePrefab, SpikeDamageBuffVisualizer.transform);
+            GameObject.Instantiate(ReflectionBuffPrefab, ReflectionBuffVisualizer.transform);
         }
 
         private void ToggleAll(bool enable)

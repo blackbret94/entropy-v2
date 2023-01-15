@@ -63,7 +63,7 @@ namespace TanksMP
         //called before SyncVar updates
         void Start()
         {
-            _playerCurrencyRewarder = new PlayerCurrencyRewarder();
+            _playerCurrencyRewarder = new PlayerCurrencyRewarder(false);
             
             //get components and set camera target
             camFollow = Camera.main.GetComponent<FollowTarget>();

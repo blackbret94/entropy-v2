@@ -10,9 +10,9 @@ namespace Entropy.Scripts.Player
         private const int MATCH_BONUS = 50;
         private const int FIRST_PLACE_BONUS = 100;
         
-        public PlayerCurrencyRewarder()
+        public PlayerCurrencyRewarder(bool refreshCurrency = true)
         {
-            _currencyTransaction = new CurrencyTransaction();
+            _currencyTransaction = new CurrencyTransaction(refreshCurrency);
         }
 
         public int RewardForKill()

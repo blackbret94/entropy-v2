@@ -9,12 +9,13 @@ namespace Entropy.Scripts.Currency
         private const string CURRENCY_CODE = "CC";
         private int _lastCurrency = 0;
 
-        public CurrencyTransaction()
+        public CurrencyTransaction(bool refreshCurrency = true)
         {
             CBSCurrency = CBSModule.Get<CBSCurrency>();
             CBSCurrency.OnCurrencyUpdated += OnCurrencyUpdated;
             
-            RefreshCurrency();
+            if(refreshCurrency)
+                RefreshCurrency();
         }
 
         public void ModifyCurrency(int delta)

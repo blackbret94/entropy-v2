@@ -73,7 +73,7 @@ namespace CBS.Context
                 {
                     LoginForm.OnLogined -= OnLoginComplete;
                 }
-                SceneManager.LoadScene(LobbyScene);
+                SceneManager.LoadSceneAsync(LobbyScene);
             }
         }
     }

@@ -76,10 +76,12 @@ namespace TanksMP
 
             Team team = GameManager.GetInstance().teams[GetView().GetTeam()];
             CharacterAppearance.Team = team;
+            CharacterAppearance.ColorizeCart();
 
             //set name in label
             label.text = myName = CatNameGenerator.GetRandomName();
             label.color = team.material.color;
+           
             
             //call hooks manually to update
             OnHealthChange(GetView().GetHealth());

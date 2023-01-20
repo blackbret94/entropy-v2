@@ -321,21 +321,33 @@ namespace Vashta.Entropy.Character
         private void ReplaceCart()
         {
             DestroyAllChildren(CartNode.transform);
-            GameObject cart = Instantiate(Cart.ItemObject, CartNode);
-            CartProp cartProp = cart.GetComponentInChildren<CartProp>();
+            Instantiate(Cart.ItemObject, CartNode);
+            ColorizeCart();
+        }
+
+        public void ColorizeCart()
+        {
+            CartProp cartProp = CartNode.GetComponentInChildren<CartProp>();
 
             if (cartProp == null)
             {
                 Debug.LogError("Cart is missing a 'CartProp' component");
                 return;
             }
-
+            
             Material material;
             if (Team.material != null)
+            {
+                Debug.Log("Team name: " + Team.name);
                 material = Team.material;
+                Debug.Log("Setting team material: " + Team.material.color);
+            }
             else
+            {
                 material = DefaultTeamMaterial;
-            
+                Debug.Log("Using default team material");
+            }
+
             cartProp.ColorizeForTeam(material);
         }
 

@@ -231,7 +231,8 @@ namespace TanksMP
             //get corresponding team and colorize renderers in team color
             Team team = GameManager.GetInstance().teams[GetView().GetTeam()];
             CharacterAppearance.Team = team;
-
+            CharacterAppearance.ColorizeCart();
+            
             label.color = team.material.color;
         }
 

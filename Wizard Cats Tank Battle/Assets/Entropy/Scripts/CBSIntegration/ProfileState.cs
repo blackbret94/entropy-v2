@@ -14,7 +14,6 @@ namespace Vashta.Entropy.Scripts.CBSIntegration
             CachedDisplayName = "";
             ProfileModule.OnAcountInfoGetted += OnAccountInfoGetted;
             ProfileModule.OnDisplayNameUpdated += OnDisplayNameUpdated;
-            Debug.Log("Resetting display name");
         }
 
         public void GetActiveUser()

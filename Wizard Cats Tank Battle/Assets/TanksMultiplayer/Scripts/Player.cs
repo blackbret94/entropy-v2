@@ -217,8 +217,8 @@ namespace TanksMP
             GameManager.GetInstance().ui.controls[0].onDrag += Move;
             GameManager.GetInstance().ui.controls[0].onDragEnd += MoveEnd;
 
-            // GameManager.GetInstance().ui.controls[1].onClick += Shoot;
-            GameManager.GetInstance().ui.controls[1].onDragBegin += ShootBegin;
+            GameManager.GetInstance().ui.controls[1].onClick += Shoot;
+            // GameManager.GetInstance().ui.controls[1].onDragBegin += ShootBegin;
             GameManager.GetInstance().ui.controls[1].onDrag += RotateTurret;
             GameManager.GetInstance().ui.controls[1].onDrag += Shoot;
             #endif
@@ -380,7 +380,7 @@ namespace TanksMP
         //on shot drag start set small delay for first shot
         void ShootBegin()
         {
-            nextFire = Time.time + 0.25f;
+            nextFire = Time.time + 0.1f;
         }
 
 
@@ -403,9 +403,6 @@ namespace TanksMP
                 //send shot request with origin to server
                 // Debug.Log(turretRotation);
                 this.photonView.RPC("CmdShoot", RpcTarget.AllViaServer, pos, turretRotation);
-                // short dir = (short)gameObject.transform.eulerAngles.y;
-                // Debug.Log(dir);
-                // this.photonView.RPC("CmdShoot", RpcTarget.AllViaServer, pos, dir);
             }
         }
 

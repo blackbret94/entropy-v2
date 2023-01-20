@@ -8,8 +8,6 @@ namespace Vashta.Entropy.Character.Prop
         
         public void ColorizeForTeam(Material material)
         {
-            Debug.Log("Colorizing cart with materials: " + material.color);
-            
             for (int i = 0; i < TeamColorMeshes.Length; i++)
                 TeamColorMeshes[i].material = material;
         }

@@ -321,13 +321,18 @@ namespace Vashta.Entropy.Character
         private void ReplaceCart()
         {
             DestroyAllChildren(CartNode.transform);
-            Instantiate(Cart.ItemObject, CartNode);
-            ColorizeCart();
+            GameObject cart = Instantiate(Cart.ItemObject, CartNode);
+            ColorizeCart(cart);
         }
 
-        public void ColorizeCart()
+        public void ColorizeCart(GameObject cart = null)
         {
-            CartProp cartProp = CartNode.GetComponentInChildren<CartProp>();
+            CartProp cartProp;
+
+            if (cart != null)
+                cartProp = cart.GetComponentInChildren<CartProp>();
+            else
+                cartProp = CartNode.GetComponentInChildren<CartProp>();
 
             if (cartProp == null)
             {
@@ -338,14 +343,11 @@ namespace Vashta.Entropy.Character
             Material material;
             if (Team.material != null)
             {
-                Debug.Log("Team name: " + Team.name);
                 material = Team.material;
-                Debug.Log("Setting team material: " + Team.material.color);
             }
             else
             {
                 material = DefaultTeamMaterial;
-                Debug.Log("Using default team material");
             }
 
             cartProp.ColorizeForTeam(material);

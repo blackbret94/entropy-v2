@@ -361,6 +361,7 @@ MonoBehaviour:
   serverField: {fileID: 632891843}
   musicToggle: {fileID: 1287931403}
   volumeSlider: {fileID: 1218799830}
+  IntroductionPanel: {fileID: 263119294}
 --- !u!4 &96511439
 Transform:
   m_ObjectHideFlags: 0
@@ -493,6 +494,26 @@ PrefabInstance:
       propertyPath: CatNameGenerator
       value: 
       objectReference: {fileID: 1105116849}
+    - target: {fileID: 8384553879869235571, guid: 48ce5cfcdaf156c4bb96c5ad108b8590,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.89411765
+      objectReference: {fileID: 0}
+    - target: {fileID: 8384553879869235571, guid: 48ce5cfcdaf156c4bb96c5ad108b8590,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8384553879869235571, guid: 48ce5cfcdaf156c4bb96c5ad108b8590,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8384553879869235571, guid: 48ce5cfcdaf156c4bb96c5ad108b8590,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8384553879869235572, guid: 48ce5cfcdaf156c4bb96c5ad108b8590,
         type: 3}
       propertyPath: m_Pivot.x
@@ -506,7 +527,7 @@ PrefabInstance:
     - target: {fileID: 8384553879869235572, guid: 48ce5cfcdaf156c4bb96c5ad108b8590,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 8384553879869235572, guid: 48ce5cfcdaf156c4bb96c5ad108b8590,
         type: 3}
@@ -561,17 +582,17 @@ PrefabInstance:
     - target: {fileID: 8384553879869235572, guid: 48ce5cfcdaf156c4bb96c5ad108b8590,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8384553879869235572, guid: 48ce5cfcdaf156c4bb96c5ad108b8590,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8384553879869235572, guid: 48ce5cfcdaf156c4bb96c5ad108b8590,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8384553879869235572, guid: 48ce5cfcdaf156c4bb96c5ad108b8590,
         type: 3}
@@ -617,6 +638,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 263119292}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &263119294 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 918921500128956502, guid: 48ce5cfcdaf156c4bb96c5ad108b8590,
+    type: 3}
+  m_PrefabInstance: {fileID: 263119292}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb8eed2a525f41eebbcfb1854d7fe1d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &268658549 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4101906195579497206, guid: 882423f84efdb6e4aa751a8094af1c66,
@@ -2044,7 +2077,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1280, y: 720}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 1
+  m_MatchWidthOrHeight: 0.513
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96

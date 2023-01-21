@@ -67,6 +67,8 @@ namespace TanksMP
         /// </summary>
         public Slider volumeSlider;
 
+        public IntroductionPanel IntroductionPanel;
+
         //how many times the shop has been opened
         //private int shopOpened = 0;
 
@@ -109,6 +111,8 @@ namespace TanksMP
             //listen to network connection and IAP billing errors
             NetworkManagerCustom.connectionFailedEvent += OnConnectionError;
             UnityIAPManager.purchaseFailedEvent += OnBillingError;
+            
+            IntroductionPanel.Init();
         }
 
 

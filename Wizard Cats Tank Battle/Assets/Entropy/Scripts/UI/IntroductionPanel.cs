@@ -18,10 +18,8 @@ namespace Vashta.Entropy.UI
         
         private IProfile ProfileModule { get; set; }
 
-        private void Awake()
+        public void Init()
         {
-            ClosePanel();
-
             ProfileModule = CBSModule.Get<CBSProfile>();
             ProfileModule.GetAccountInfo(OnAccountInfoGetted);
         }
@@ -45,6 +43,7 @@ namespace Vashta.Entropy.UI
                 username = CatNameGenerator.GetRandomName();
                     
             ProfileModule.UpdateUserName(username);
+            ClosePanel();
         }
     }
 }

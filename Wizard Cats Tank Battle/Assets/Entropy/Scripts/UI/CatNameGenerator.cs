@@ -16,7 +16,7 @@ namespace Vashta.Entropy.UI
         private static readonly string[] catType =
         {
             "Calico", "Tortie", "Tabby", "Persian", "Maine Coon", "Siamese", "Himalayan", "Longhair", "Shorthair",
-            "Sphynx", "Kitty", "Cat", "Pussy"
+            "Sphynx", "Kitty", "Cat"
         };
 
         public string GetRandomName()

@@ -1,7 +1,9 @@
 using System;
+using CBS;
 using UnityEngine;
 using UnityEngine.UI;
 using Vashta.Entropy.SaveLoad;
+using WebSocketSharp;
 
 namespace Vashta.Entropy.UI
 {
@@ -13,36 +15,36 @@ namespace Vashta.Entropy.UI
 		public InputField nameField;
 
         public CatNameGenerator CatNameGenerator;
+        
+        private IProfile ProfileModule { get; set; }
 
-        private void Start()
+        private void Awake()
         {
-            if (PlayerHasName())
+            ClosePanel();
+
+            ProfileModule = CBSModule.Get<CBSProfile>();
+            ProfileModule.GetAccountInfo(OnAccountInfoGetted);
+        }
+        
+        private void OnAccountInfoGetted(CBSGetAccountInfoResult result)
+        {
+            if (result.IsSuccess)
             {
-                ClosePanel();
-                return;
+                if (result.DisplayName.IsNullOrEmpty())
+                {
+                    OpenPanel();
+                    nameField.text = CatNameGenerator.GetRandomName();
+                }
             }
-            
-            InitNameField();
-        }
-
-        private bool PlayerHasName()
-        {
-            string defaultString = String.Empty;
-            string name = PlayerPrefs.GetString(PrefsKeys.playerName, defaultString);
-            Debug.Log("Name: " + name);
-
-            return name != defaultString && name != "";
-        }
-
-        private void InitNameField()
-        {
-            nameField.text = CatNameGenerator.GetRandomName();
         }
 
         public void SaveChanges()
         {
-            PlayerPrefs.SetString(PrefsKeys.playerName, nameField.text);
-            PlayerPrefs.Save();
+            string username = nameField.text;
+            if (username.IsNullOrEmpty())
+                username = CatNameGenerator.GetRandomName();
+                    
+            ProfileModule.UpdateUserName(username);
         }
     }
 }

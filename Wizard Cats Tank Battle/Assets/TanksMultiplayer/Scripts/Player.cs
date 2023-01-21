@@ -471,7 +471,7 @@ namespace TanksMP
         //(the actual value updates via player properties)
         protected void OnHealthChange(int value)
         {
-            healthSlider.value = (float)value / maxHealth;
+            healthSlider.value = Mathf.Max(0,(float)value / maxHealth);
         }
 
 
@@ -479,7 +479,11 @@ namespace TanksMP
         //(the actual value updates via player properties)
         protected void OnShieldChange(int value)
         {
-            shieldSlider.value = (float)value / maxShield;
+            float val = Mathf.Max(0, (float)value / maxShield);
+            
+            shieldSlider.value = val;
+            shieldSlider.gameObject.SetActive(val > .001f);
+
         }
 
         /// <summary>

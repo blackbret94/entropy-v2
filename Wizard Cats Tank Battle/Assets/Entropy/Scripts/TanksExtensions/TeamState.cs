@@ -37,7 +37,6 @@ namespace Vashta.Entropy.TanksExtensions
                 {
                     ScoreboardRowData row = new ScoreboardRowData(player, Team, player.IsLocal);
                     data.Add(row);
-                    Debug.Log("Adding row: " + row.FormatAsString());
                 }
             }
             
@@ -49,7 +48,6 @@ namespace Vashta.Entropy.TanksExtensions
                 {
                     ScoreboardRowData row = new ScoreboardRowData(bot, Team);
                     data.Add(row);
-                    Debug.Log("Adding row: " + row.FormatAsString());
                 }
             }
             

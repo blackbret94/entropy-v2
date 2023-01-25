@@ -794,6 +794,15 @@ namespace TanksMP
             
             ClassApplier.ApplyClass(this, playerCollisionHandler, classDefinition, handicapModifier);
             SetMaxHealth();
+            ReplaceClassMissile();
+        }
+
+        private void ReplaceClassMissile()
+        {
+            if (classDefinition.Missile == null)
+                return;
+
+            bullets[0] = classDefinition.Missile;
         }
     }
 }

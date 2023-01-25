@@ -5,6 +5,7 @@
 
 using UnityEngine;
 using System.Collections.Generic;
+using Entropy.Scripts.Player;
 using Photon.Pun;
 using Vashta.Entropy.ScriptableObject;
 
@@ -72,6 +73,7 @@ namespace TanksMP
         //the current bullet position on collision, calculating the bounce off the previous
         //bullet position improves the result for high speed bullets which could skip colliders
         private Vector3 lastBouncePos;
+        public ClassDefinition ClassDefinition { set; get; }
 
         /// <summary>
         /// Player gameobject that spawned this projectile.

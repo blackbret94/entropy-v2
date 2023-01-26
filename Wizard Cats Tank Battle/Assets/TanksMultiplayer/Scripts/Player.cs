@@ -749,23 +749,12 @@ namespace TanksMP
         protected void RewardCoins()
         {
             // reward coins if the player is on a different team
-            if(killedBy != null && killedBy.GetComponent<Player>().GetView().GetTeam() != GetView().GetTeam()){
-                int coinsRewarded = _playerCurrencyRewarder.RewardForKill();
-                GameManager.GetInstance().ui.coinsEarnedPopup.PlayAnimation(coinsRewarded);
-                        
-                // play coin reward sound
-                GameManager.GetInstance().ui.SfxController.PlayCoinEarnedSound();
-            }
-            else
-            {
-                // play sound for killing teammate
-                GameManager.GetInstance().ui.SfxController.PlayTeammateKilledSound();
-                        
-                // Tell player they killed a teammate
-                GameManager.GetInstance().ui.teammateKilledPopup.PlayAnimation();
-            }
-        }
+            int coinsRewarded = _playerCurrencyRewarder.RewardForKill();
+            OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.CoinReward, "+"+coinsRewarded);
 
+            // play coin reward sound
+            GameManager.GetInstance().ui.SfxController.PlayCoinEarnedSound();
+        }
 
         /// <summary>
         /// Command telling the server and all others that this client is ready for respawn.

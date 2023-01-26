@@ -60,8 +60,7 @@ namespace TanksMP
         public FireButton fireButton;
         [FormerlySerializedAs("powerupIcon")] public PowerupIcon bulletIcon;
         public BuffIcon buffIcon;
-
-        public CoinsEarnedPopup coinsEarnedPopup;
+        
         public TeammateKilledPopup teammateKilledPopup;
 
         public PowerUpPanel PowerUpPanel;

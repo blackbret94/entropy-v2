@@ -15,5 +15,6 @@ namespace EckTechGames.FloatingCombatText
 		Hit = 2,
 		CriticalHit = 3,
 		Heal = 4,
+		CoinReward = 5
 	}
 }

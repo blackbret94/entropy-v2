@@ -61,6 +61,8 @@ namespace TanksMP
         /// </summary>
         public GameObject explosionFX;
 
+        public GameObject deathFx;
+
         public bool bounceInf;
 
         //reference to rigidbody component

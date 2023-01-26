@@ -228,14 +228,14 @@ namespace TanksMP
         /// Override of the base method to handle bot respawn separately.
         /// </summary>
         [PunRPC]
-        protected override void RpcRespawn(short senderId)
+        protected override void RpcRespawn(short senderId, Bullet killingBlowBullet)
         {
-            StartCoroutine(Respawn(senderId));
+            StartCoroutine(Respawn(senderId, killingBlowBullet));
         }
         
         
         //the actual respawn routine
-        IEnumerator Respawn(short senderId)
+        IEnumerator Respawn(short senderId, Bullet killingBlowBullet)
         {   
             //stop AI updates
             isDead = true;
@@ -265,12 +265,11 @@ namespace TanksMP
                 RewardCoins();
             }
 
-            if (explosionFX)
+            if (defaultDeathFx)
             {
-			     //spawn death particles locally using pooling and colorize them in the player's team color
-                 GameObject particle = PoolManager.Spawn(explosionFX, transform.position, transform.rotation);
-                 ParticleColor pColor = particle.GetComponent<ParticleColor>();
-                 if(pColor) pColor.SetColor(GameManager.GetInstance().teams[GetView().GetTeam()].material.color);
+			     //spawn death particles 
+                 GameObject explosion = killingBlowBullet != null ? killingBlowBullet.deathFx : defaultDeathFx;
+                 PoolManager.Spawn(explosion, transform.position, transform.rotation);
             }
 				
 			//play sound clip on player death

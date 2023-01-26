@@ -12,6 +12,7 @@ using Photon.Pun;
 using UnityEngine.EventSystems;
 using Vashta.Entropy.Character;
 using Vashta.Entropy.SaveLoad;
+using EckTechGames.FloatingCombatText;
 
 namespace TanksMP
 {
@@ -85,7 +86,7 @@ namespace TanksMP
         /// <summary>
         /// Object to spawn on player death.
         /// </summary>
-        public GameObject explosionFX;
+        public GameObject defaultDeathFx;
 
         /// <summary>
         /// Turret to rotate with look direction.
@@ -420,8 +421,24 @@ namespace TanksMP
 
         //called on the server first but forwarded to all clients
         [PunRPC]
-        protected void CmdTakeDamage()
+        protected void CmdTakeDamage(int damage, bool attackerIsCounter=false, bool attackerIsSame=false)
         {
+            // Show damage
+
+            if (attackerIsCounter)
+            {
+                OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.CriticalHit,
+                        damage);
+            }
+            else if (attackerIsSame)
+            {
+                OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.Miss, damage);
+            }
+            else
+            {
+                OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.Hit, damage);
+            }
+            
             // animate
             PlayerAnimator.TakeDamage();
         }
@@ -519,12 +536,12 @@ namespace TanksMP
             
             if (health <= 0)
                 // killed the player
-                PlayerDeath(other);
+                PlayerDeath(other, null);
             else
             {
                 //we didn't die, set health to new value
                 GetView().SetHealth(health);
-                this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer);
+                this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer, damage, false, false);
             }
         }
 
@@ -551,20 +568,22 @@ namespace TanksMP
 
             //substract health by damage
             //locally for now, to only have one update later on
-            health -= CalculateDamageTaken(bullet);
+            int damage = CalculateDamageTaken(bullet, out bool attackerIsCounter, out bool attackerIsSame);
+            
+            health -= damage;
             
             if (health <= 0)
                 //bullet killed the player
-                PlayerDeath(bullet.owner.GetComponent<Player>());
+                PlayerDeath(bullet.owner.GetComponent<Player>(), bullet);
             else
             {
                 //we didn't die, set health to new value
                 GetView().SetHealth(health);
-                this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer);
+                this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer, damage, attackerIsCounter, attackerIsSame);
             }
         }
 
-        private int CalculateDamageTaken(Bullet bullet)
+        private int CalculateDamageTaken(Bullet bullet, out bool attackerIsCounter, out bool attackerIsSame)
         {
             float baseDamage = bullet.damage;
 
@@ -573,8 +592,8 @@ namespace TanksMP
                 Debug.LogWarning("Warning! No class definition assigned to bullet");
             }
 
-            bool attackerIsCounter = bullet.ClassDefinition.IsCounter(classDefinition.classId);
-            bool attackerIsSame = bullet.ClassDefinition.classId == classDefinition.classId;
+            attackerIsCounter = bullet.ClassDefinition.IsCounter(classDefinition.classId);
+            attackerIsSame = bullet.ClassDefinition.classId == classDefinition.classId;
 
             if (attackerIsCounter)
             {
@@ -585,7 +604,7 @@ namespace TanksMP
             {
                 baseDamage *= sameClassDamageMod;
             }
-
+            
             return Mathf.RoundToInt(baseDamage);
         }
 
@@ -593,7 +612,7 @@ namespace TanksMP
         /// Server-only.  Handles player death
         /// </summary>
         /// <param name="other"></param>
-        private void PlayerDeath(Player other)
+        private void PlayerDeath(Player other, Bullet killingBlow)
         {
             GetView().IncrementDeaths();
 
@@ -636,14 +655,14 @@ namespace TanksMP
             if (other != null)
                 senderId = (short)other.GetComponent<PhotonView>().ViewID;
 
-            this.photonView.RPC("RpcRespawn", RpcTarget.All, senderId);
+            this.photonView.RPC("RpcRespawn", RpcTarget.All, senderId, killingBlow);
         }
 
 
         //called on all clients on both player death and respawn
         //only difference is that on respawn, the client sends the request
         [PunRPC]
-        protected virtual void RpcRespawn(short senderId)
+        protected virtual void RpcRespawn(short senderId, Bullet killingBlowBullet)
         {
             //toggle visibility for player gameobject (on/off)
             gameObject.SetActive(!gameObject.activeInHierarchy);
@@ -673,17 +692,12 @@ namespace TanksMP
 
                     RewardCoins();
                 }
-
-                if (explosionFX && GameManager.GetInstance().UsesTeams)
-                {
-                    //spawn death particles locally using pooling and colorize them in the player's team color
-                    GameObject particle = PoolManager.Spawn(explosionFX, transform.position, transform.rotation);
-                    ParticleColor pColor = particle.GetComponent<ParticleColor>();
-                    if (pColor) pColor.SetColor(GameManager.GetInstance().teams[GetView().GetTeam()].material.color);
-                }
+                
+                //spawn death particles
+                GameObject explosion = killingBlowBullet != null ? killingBlowBullet.deathFx : defaultDeathFx;
+                PoolManager.Spawn(explosion, transform.position, transform.rotation);
 
                 //play sound clip on player death
-                // if (explosionClip) AudioManager.Play3D(explosionClip, transform.position);
                 // play killer's death cry
                 if (killedBy != null)
                 {
@@ -759,7 +773,7 @@ namespace TanksMP
         /// </summary>
         public void CmdRespawn()
         {
-            this.photonView.RPC("RpcRespawn", RpcTarget.AllViaServer, (short)0);
+            this.photonView.RPC("RpcRespawn", RpcTarget.AllViaServer, (short)0, null);
         }
 
 

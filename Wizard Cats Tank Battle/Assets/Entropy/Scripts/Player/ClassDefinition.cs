@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,8 +29,16 @@ namespace Entropy.Scripts.Player
 
         private Dictionary<int,ClassDefinition> counterClassIdList;
 
-        private void Start()
+        private void Awake()
         {
+            Init();
+        }
+
+        private void Init()
+        {
+            if (counterClassIdList != null)
+                return;
+            
             counterClassIdList = new Dictionary<int, ClassDefinition>();
 
             foreach (var classCounter in classCounters)
@@ -40,6 +49,8 @@ namespace Entropy.Scripts.Player
 
         public bool IsCounter(int classId)
         {
+            Init();
+            
             return counterClassIdList.ContainsKey(classId);
         }
     }

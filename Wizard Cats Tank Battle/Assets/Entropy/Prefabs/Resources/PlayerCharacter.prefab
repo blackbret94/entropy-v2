@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 2179171765462643800}
   - component: {fileID: 1190446245337516690}
   - component: {fileID: 3496482192131595967}
+  - component: {fileID: 3777584067234603204}
   m_Layer: 8
   m_Name: PlayerCharacter
   m_TagString: Untagged
@@ -86,6 +87,8 @@ MonoBehaviour:
   label: {fileID: 4203007501589506220}
   maxHealth: 10
   maxShield: 5
+  counterDamageMod: 1.5
+  sameClassDamageMod: 0.6
   turretRotation: 0
   fireRate: 0.75
   moveSpeed: 7
@@ -104,7 +107,7 @@ MonoBehaviour:
   - {fileID: 1000010310479910, guid: b1dee7e96a2dde84daab24234aeb2dd3, type: 3}
   - {fileID: 1000010310479910, guid: 73a8dce5258b4ab45980cb442e56b5c6, type: 3}
   CharacterAppearance: {fileID: 2386344821364946175}
-  CharacterClassSaveLoad: {fileID: 0}
+  CharacterClassSaveLoad: {fileID: 3777584067234603204}
   handicapModifier: 1
   PlayerAnimator: {fileID: 6748233522558695934}
   PlayerBuffController: {fileID: 1190446245337516690}
@@ -112,7 +115,7 @@ MonoBehaviour:
   camFollow: {fileID: 0}
   PlayerCollisionHandler: {fileID: 4797552529484202075}
   PlayerMovementAudioAnimationController: {fileID: 2179171765462643800}
-  LoadClass: 0
+  LoadClass: 1
   defaultClassDefinition: {fileID: 11400000, guid: 74fed74e4e8ccee43a4a18a91ca80171,
     type: 2}
   classList: {fileID: 11400000, guid: 7d8bbf25c3319e2428b905b7f07fbe8b, type: 2}
@@ -248,6 +251,18 @@ MonoBehaviour:
   ReflectionBuffVisualizer: {fileID: 5879897684802046585}
   ReflectionBuffPrefab: {fileID: 8584445625121260826, guid: 0b692e2a01f290b459e4703c11034c37,
     type: 3}
+--- !u!114 &3777584067234603204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e0d1a17f9f34215a4cc6456b5aa1635, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &272297766007400104
 GameObject:
   m_ObjectHideFlags: 0

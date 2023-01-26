@@ -1,5 +1,8 @@
+using System;
+using CBS;
 using ExitGames.Client.Photon;
 using Photon.Pun;
+using TanksMP;
 using UnityEngine;
 using Vashta.Entropy.Character;
 
@@ -7,18 +10,52 @@ namespace Vashta.Entropy.SaveLoad
 {
     public class CharacterClassSaveLoad : MonoBehaviour
     {
-        public void Save(CharacterClassSerializable characterClassSerializable)
+        private IProfile ProfileModule { get; set; }
+        private bool _hasInit;
+
+        private Player _player;
+        private const string key = "classId";
+        
+        private void Init()
         {
-            string encrypted = characterClassSerializable.Encrypt();
+            if (_hasInit)
+                return;
             
-            PlayerPrefs.SetString(PrefsKeys.characterClass, encrypted);
-            SetCurrentClassAsCustomProperty(encrypted);;
+            ProfileModule = CBSModule.Get<CBSProfile>();
+            _player = GetComponent<Player>();
+
+            _hasInit = true;
+        }
+        
+        public void Save(int classId)
+        {
+            Init();
+            ProfileModule.SaveProfileData(key, classId.ToString(), OnSaveData);
+        }
+        
+        private void OnSaveData(CBSSaveProfileDataResult result)
+        {
+            if (result.IsSuccess)
+            {
+                // Debug.Log("Successfully updated class ID");
+            }
         }
 
-        public CharacterClassSerializable Load()
+        public void Load()
         {
-            string characterClass = PlayerPrefs.GetString(PrefsKeys.characterClass, DefaultClassByStringEncrypted());
-            return CharacterClassSerializable.Decrypt(characterClass);
+            Init();
+            ProfileModule.GetProfileData(key, OnGetData);
+        }
+        
+        private void OnGetData(CBSGetProfileDataResult result)
+        {
+            if (result.IsSuccess)
+            {
+                Int32.TryParse(result.Data[key], out int classId);
+                
+                // update player
+                _player.LoadClassCallback(classId, true);
+            }
         }
 
         public static string DefaultClassByStringEncrypted()

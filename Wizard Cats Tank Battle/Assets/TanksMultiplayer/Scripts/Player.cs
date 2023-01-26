@@ -33,6 +33,9 @@ namespace TanksMP
 
         public int maxShield = 5;
 
+        public float counterDamageMod = 1.50f;
+        public float sameClassDamageMod = .60f;
+
         /// <summary>
         /// Current turret rotation and shooting direction.
         /// </summary>
@@ -163,15 +166,24 @@ namespace TanksMP
 
             if (LoadClass)
             {
-                int classId = CharacterClassSaveLoad.Load().ClassId;
-                classDefinition = classList.GetClassById(classId);
+                CharacterClassSaveLoad.Load();
             }
             else
+            {
                 classDefinition = defaultClassDefinition ? defaultClassDefinition : classList.RandomClass();
+                ApplyClass();
+            }
 
-            ApplyClass();
             GetView().SetKills(0);
             GetView().SetDeaths(0);
+        }
+
+        public void LoadClassCallback(int classId, bool forceRefresh)
+        {
+            classDefinition = classList.GetClassById(classId);
+            
+            if(forceRefresh)
+                ApplyClass();
         }
 
         private void SetMaxHealth()
@@ -431,6 +443,7 @@ namespace TanksMP
             Bullet bullet = obj.GetComponent<Bullet>();
             bullet.SpawnNewBullet();
             bullet.owner = gameObject;
+            bullet.ClassDefinition = classDefinition;
             
             // animate
             PlayerAnimator.Attack();
@@ -538,7 +551,7 @@ namespace TanksMP
 
             //substract health by damage
             //locally for now, to only have one update later on
-            health -= bullet.damage;
+            health -= CalculateDamageTaken(bullet);
             
             if (health <= 0)
                 //bullet killed the player
@@ -549,6 +562,31 @@ namespace TanksMP
                 GetView().SetHealth(health);
                 this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer);
             }
+        }
+
+        private int CalculateDamageTaken(Bullet bullet)
+        {
+            float baseDamage = bullet.damage;
+
+            if (bullet.ClassDefinition == null)
+            {
+                Debug.LogWarning("Warning! No class definition assigned to bullet");
+            }
+
+            bool attackerIsCounter = bullet.ClassDefinition.IsCounter(classDefinition.classId);
+            bool attackerIsSame = bullet.ClassDefinition.classId == classDefinition.classId;
+
+            if (attackerIsCounter)
+            {
+                baseDamage *= counterDamageMod;
+            }
+
+            if (attackerIsSame)
+            {
+                baseDamage *= sameClassDamageMod;
+            }
+
+            return Mathf.RoundToInt(baseDamage);
         }
 
         /// <summary>
@@ -656,10 +694,6 @@ namespace TanksMP
                         AudioManager.Play3D(player.CharacterAppearance.Meow.AudioClip, transform.position);
                     }
                 }
-                
-                
-                // apply class
-                ApplyClass();
             }
 
             if (PhotonNetwork.IsMasterClient)
@@ -677,7 +711,12 @@ namespace TanksMP
 
             //local player got respawned so reset states
             if (isActive == true)
+            {
                 ResetPosition();
+                
+                // apply class
+                ApplyClass();
+            }
             else
             {
                 //local player was killed, set camera to follow the killer
@@ -690,8 +729,6 @@ namespace TanksMP
                 camFollow.HideMask(true);
                 //display respawn window (only for local player)
                 GameManager.GetInstance().DisplayDeath();
-                
-                
             }
         }
 
@@ -780,6 +817,11 @@ namespace TanksMP
         public void SetClass(ClassDefinition newClassDefinition)
         {
             classDefinition = newClassDefinition;
+            
+            if(!PhotonNetwork.IsMasterClient)
+                return;
+            
+            CharacterClassSaveLoad.Save(newClassDefinition.classId);
         }
         
         private void ApplyClass()

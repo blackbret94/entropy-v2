@@ -538,7 +538,13 @@ namespace TanksMP
                 {
                     bot.buffSeconds = value;
                     if (index >= 0)
+                    {
                         bot.buffIndex = index;
+                        PlayerBuffVisualizer visualizer = bot.GetComponent<PlayerBuffVisualizer>();
+                        if(visualizer != null)
+                            visualizer.ToggleVisualizerById(index, value > 0);
+                    }
+
                     return;
                 }
             }

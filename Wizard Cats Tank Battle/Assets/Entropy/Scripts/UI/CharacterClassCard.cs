@@ -9,9 +9,9 @@ namespace Vashta.Entropy.UI
 {
     public class CharacterClassCard : MonoBehaviour
     {
-        public ClassDefinition ClassDefinition;
-        public Image ClassIcon;
-        public TextMeshProUGUI TitleText;
+        public ClassDefinition ClassDefinition; // Deprecated
+        public Image ClassIcon; // Deprecated
+        public TextMeshProUGUI TitleText; // Deprecated
         public Slider HealthSlider;
         public Slider FireRateSlider;
         public Slider SpeedSlider;
@@ -26,6 +26,9 @@ namespace Vashta.Entropy.UI
 
         public void Start()
         {
+            if (ClassDefinition == null)
+                return;
+            
             ClassIcon.sprite = ClassDefinition.classIcon;
             TitleText.text = ClassDefinition.className;
             SetSlider(HealthSlider, ClassDefinition.maxHealth, healthRange.Item1, healthRange.Item2);
@@ -33,6 +36,14 @@ namespace Vashta.Entropy.UI
             SetSlider(SpeedSlider, ClassDefinition.moveSpeed, moveSpeedRange.Item1, moveSpeedRange.Item2);
             SetSlider(DamageOnCollisionSlider, ClassDefinition.damageAmtOnCollision, damageOnCollisionRange.Item1, damageOnCollisionRange.Item2);
             SetSlider(ArmorSlider, ClassDefinition.armor, armorRange.Item1, armorRange.Item2);
+        }
+        
+        public void SetClassForCard(ClassDefinition classDefinition){
+            SetSlider(HealthSlider, classDefinition.maxHealth, healthRange.Item1, healthRange.Item2);
+            SetSlider(FireRateSlider, fireRateRange.Item2-classDefinition.fireRate, fireRateRange.Item1, fireRateRange.Item2);
+            SetSlider(SpeedSlider, classDefinition.moveSpeed, moveSpeedRange.Item1, moveSpeedRange.Item2);
+            SetSlider(DamageOnCollisionSlider, classDefinition.damageAmtOnCollision, damageOnCollisionRange.Item1, damageOnCollisionRange.Item2);
+            SetSlider(ArmorSlider, classDefinition.armor, armorRange.Item1, armorRange.Item2);
         }
 
         private void SetSlider(Slider slider, float value, float min, float max)

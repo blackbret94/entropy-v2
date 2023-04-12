@@ -10,6 +10,7 @@ namespace Entropy.Scripts.Player
         public int classId = 0;
         public string className = "DEFAULT";
         public string description;
+        public string role;
         [Range(0f,22f)]
         public int maxHealth = 10;
         [Range(0.2f, 1.2f)]
@@ -21,9 +22,16 @@ namespace Entropy.Scripts.Player
         [Range(0f, 7f)]
         public int armor = 2;
         public Sprite classIcon;
+        public Sprite classPortrait;
         public Color color;
         public GameObject Missile;
+        public Color colorPrimary;
+        public Color colorSecondary;
+        public Color colorTertiary;
+
+        public ClassList classList;
         
+
         // The class does extra damage to these classes
         public List<ClassDefinition> classCounters;
 
@@ -52,6 +60,19 @@ namespace Entropy.Scripts.Player
             Init();
             
             return counterClassIdList.ContainsKey(classId);
+        }
+
+        public List<ClassDefinition> GetClassesCounteredBy()
+        {
+            List<ClassDefinition> counteredBy = new();
+
+            foreach (var classDefinition in classList.Classes)
+            {
+                if(classDefinition.IsCounter(classId))
+                    counteredBy.Add(classDefinition);
+            }
+
+            return counteredBy;
         }
     }
 }

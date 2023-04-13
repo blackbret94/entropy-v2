@@ -1,10 +1,19 @@
 using System.Collections.Generic;
+using TanksMP;
 
 namespace Vashta.Entropy.UI.ClassSelectionPanel
 {
     public class ClassSelectionPanel : GamePanel
     {
-        public List<ClassSelectionTeamCheckbox> checkboxes;
-        public int ActiveSelection = ClassSelectionTeamCheckbox.AUTO_ASSIGN_INDEX;
+        public ClassSelectionSelector ClassSelectionSelector;
+        public ClassSelectionTeamSelector ClassSelectionTeamSelector;
+
+        public void ApplyChanges()
+        {
+            Player player = GameManager.GetInstance().localPlayer;
+            player.SetClass(ClassSelectionSelector.SelectedClassDefinition());
+            
+            ClosePanel();
+        }
     }
 }

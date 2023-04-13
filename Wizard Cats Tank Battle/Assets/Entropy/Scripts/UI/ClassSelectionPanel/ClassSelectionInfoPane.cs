@@ -45,7 +45,7 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
             AttributeSliders.SetClassForCard(definition);
             
             // Role
-            ClassRole.text = definition.role;
+            ClassRole.text = "Role: " + definition.role;
 
             // TODO: Change colors
         }

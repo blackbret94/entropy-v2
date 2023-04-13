@@ -680,7 +680,7 @@ MonoBehaviour:
   TeamScoreText: {fileID: 137415512871520920}
   TextAnimator: {fileID: 137415512871520922}
   TeamSizeSlider: {fileID: 137415512096982612}
-  TeamIndex: 1
+  TeamIndex: 0
 --- !u!1 &137415512159185134
 GameObject:
   m_ObjectHideFlags: 0
@@ -1543,7 +1543,7 @@ MonoBehaviour:
   TeamScoreText: {fileID: 137415513416372365}
   TextAnimator: {fileID: 137415513416372367}
   TeamSizeSlider: {fileID: 137415512602584974}
-  TeamIndex: 2
+  TeamIndex: 1
 --- !u!1 &137415512789767681
 GameObject:
   m_ObjectHideFlags: 0
@@ -1759,7 +1759,7 @@ MonoBehaviour:
   TeamScoreText: {fileID: 137415511595346981}
   TextAnimator: {fileID: 137415511595346983}
   TeamSizeSlider: {fileID: 137415512832802483}
-  TeamIndex: 3
+  TeamIndex: 2
 --- !u!1 &137415512871520926
 GameObject:
   m_ObjectHideFlags: 0
@@ -1945,7 +1945,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 0
   m_TargetGraphic: {fileID: 137415512884758765}
-  m_FillRect: {fileID: 0}
+  m_FillRect: {fileID: 2749439674216864624}
   m_HandleRect: {fileID: 0}
   m_Direction: 0
   m_MinValue: 0
@@ -2009,7 +2009,7 @@ MonoBehaviour:
   TeamScoreText: {fileID: 137415511736988723}
   TextAnimator: {fileID: 137415511736988685}
   TeamSizeSlider: {fileID: 137415512884758767}
-  TeamIndex: 4
+  TeamIndex: 3
 --- !u!1 &137415512926020286
 GameObject:
   m_ObjectHideFlags: 0
@@ -2731,16 +2731,6 @@ MonoBehaviour:
   controls:
   - {fileID: 35238014270612054}
   - {fileID: 35238016202236005}
-  teamSize:
-  - {fileID: 137415512096982612}
-  - {fileID: 137415512602584974}
-  - {fileID: 137415512832802483}
-  - {fileID: 137415512884758767}
-  teamScore:
-  - {fileID: 137415512871520920}
-  - {fileID: 137415513416372365}
-  - {fileID: 137415511595346981}
-  - {fileID: 137415511736988723}
   killCounter:
   - {fileID: 137415513621848237}
   - {fileID: 137415513485584926}
@@ -10914,12 +10904,12 @@ PrefabInstance:
     - target: {fileID: 2868734136419266308, guid: fe6f421e1765443858d192179a5b71fd,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.352
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2868734136419266308, guid: fe6f421e1765443858d192179a5b71fd,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2868734136419266309, guid: fe6f421e1765443858d192179a5b71fd,
         type: 3}
@@ -10945,6 +10935,12 @@ PrefabInstance:
     - {fileID: 2868734136203056630, guid: fe6f421e1765443858d192179a5b71fd, type: 3}
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: fe6f421e1765443858d192179a5b71fd, type: 3}
+--- !u!224 &2749439674216864624 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2868734136419266308, guid: fe6f421e1765443858d192179a5b71fd,
+    type: 3}
+  m_PrefabInstance: {fileID: 137415513641940084}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &2749439674503848321 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2868734136203056629, guid: fe6f421e1765443858d192179a5b71fd,

@@ -12,8 +12,16 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
         {
             Player player = GameManager.GetInstance().localPlayer;
             player.SetClass(ClassSelectionSelector.SelectedClassDefinition());
+            player.PreferredTeamIndex = ClassSelectionTeamSelector.SelectedTeamIndex();
             
             ClosePanel();
+        }
+
+        public void RespawnPlayer()
+        {
+            ApplyChanges();
+            
+            GameManager.GetInstance().RespawnLocalPlayer();
         }
     }
 }

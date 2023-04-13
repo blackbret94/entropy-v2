@@ -77,6 +77,7 @@ namespace TanksMP
         /// </summary>
         public static void SetTeam(this PhotonView player, int teamIndex)
         {
+            Debug.Log("Setting team index: " + teamIndex);
             if (PhotonNetwork.OfflineMode == true)
             {
                 PlayerBot bot = player.GetComponent<PlayerBot>();

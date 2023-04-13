@@ -22,7 +22,7 @@ namespace Vashta.Entropy.UI.TeamScore
         {
             for (int i = 0; i < scores.Length; i++)
             {
-                int teamIndex = i + 1;
+                int teamIndex = i;
                 
                 foreach (var scoreUnit in Scores)
                 {
@@ -36,7 +36,7 @@ namespace Vashta.Entropy.UI.TeamScore
         {
             for (int i = 0; i < sizes.Length; i++)
             {
-                int teamIndex = i + 1;
+                int teamIndex = i;
 
                 foreach (var scoreUnit in Scores)
                 {

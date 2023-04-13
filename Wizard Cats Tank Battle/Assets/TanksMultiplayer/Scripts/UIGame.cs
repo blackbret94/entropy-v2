@@ -26,16 +26,6 @@ namespace TanksMP
         public UIJoystick[] controls;
 
         /// <summary>
-        /// UI sliders displaying team fill for each team using absolute values.
-        /// </summary>
-        public Slider[] teamSize;
-
-        /// <summary>
-        /// UI texts displaying kill scores for each team.
-        /// </summary>
-        public Text[] teamScore;
-
-        /// <summary>
         /// UI texts displaying kill scores for this local player.
         /// [0] = Kill Count, [1] = Death Count
         /// </summary>
@@ -111,35 +101,18 @@ namespace TanksMP
         /// </summary>
         public void OnTeamSizeChanged(int[] size)
         {
-   //          //loop over sliders values and assign it
-			// for(int i = 0; i < size.Length; i++)
-   //          	teamSize[i].value = size[i];
-            
             TeamScoreController.GetInstance().UpdateTeamSizes(size);
         }
-
-
+        
         /// <summary>
         /// This is an implementation for changes to the team score,
         /// updating the text values (updates UI display of team scores).
         /// </summary>
         public void OnTeamScoreChanged(int[] score)
         {
-   //          //loop over texts
-			// for(int i = 0; i < score.Length; i++)
-   //          {
-   //              //detect if the score has been increased, then add fancy animation
-   //              if(score[i] > int.Parse(teamScore[i].text))
-   //                  teamScore[i].GetComponent<Animator>().Play("Animation");
-   //
-   //              //assign score value to text
-   //              teamScore[i].text = score[i].ToString();
-   //          }
-            
             TeamScoreController.GetInstance().UpdateScores(score);
         }
-
-
+        
         /// <summary>
         /// Enables or disables visibility of joystick controls.
         /// </summary>

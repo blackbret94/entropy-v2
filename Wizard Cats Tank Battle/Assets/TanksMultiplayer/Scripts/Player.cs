@@ -156,6 +156,8 @@ namespace TanksMP
         public ClassList classList;
         public ClassDefinition classDefinition { get; private set; }
 
+        public int PreferredTeamIndex = -1; // -1 indicates random
+
         private Vector3 _lastMousePos;
         
         //initialize server values for this player
@@ -247,6 +249,15 @@ namespace TanksMP
             CharacterAppearance.ColorizeCart();
             
             label.color = team.material.color;
+        }
+
+        private void AttemptToChangeTeams()
+        {
+            if (PreferredTeamIndex == -1 || PreferredTeamIndex == GetView().GetTeam() || !GameManager.GetInstance().TeamHasVacancy(PreferredTeamIndex))
+                return;
+            
+            GetView().SetTeam(PreferredTeamIndex);
+            ColorizePlayerForTeam();
         }
 
 
@@ -695,7 +706,8 @@ namespace TanksMP
                 
                 //spawn death particles
                 GameObject explosion = killingBlowBullet != null ? killingBlowBullet.deathFx : defaultDeathFx;
-                PoolManager.Spawn(explosion, transform.position, transform.rotation);
+                if(explosion != null)
+                    PoolManager.Spawn(explosion, transform.position, transform.rotation);
 
                 //play sound clip on player death
                 // play killer's death cry
@@ -703,7 +715,7 @@ namespace TanksMP
                 {
                     Player player = killedBy.GetComponent<Player>();
                 
-                    if (player != null)
+                    if (player != null && player != this)
                     {
                         AudioManager.Play3D(player.CharacterAppearance.Meow.AudioClip, transform.position);
                     }
@@ -712,6 +724,9 @@ namespace TanksMP
 
             if (PhotonNetwork.IsMasterClient)
             {
+                // Check if the player is trying to change teams
+                AttemptToChangeTeams();
+                
                 //send player back to the team area, this will get overwritten by the exact position from the client itself later on
                 //we just do this to avoid players "popping up" from the position they died and then teleporting to the team area instantly
                 //this is manipulating the internal PhotonTransformView cache to update the networkPosition variable

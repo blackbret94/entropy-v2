@@ -139,6 +139,16 @@ namespace TanksMP
             return teamNo;
         }
 
+        public bool TeamHasVacancy(int teamIndex)
+        {
+            // int teamNo = teamIndex - 1;
+            int maxTeamSize = 3; // This should NOT be hardcoded here
+            
+            int[] size = PhotonNetwork.CurrentRoom.GetSize();
+
+            return size[teamIndex] < maxTeamSize;
+        }
+        
 
         /// <summary>
         /// Returns a random spawn position within the team's spawn area.
@@ -349,6 +359,10 @@ namespace TanksMP
             StartCoroutine(DisplayGameOver());
         }
 
+        public void RespawnLocalPlayer()
+        {
+            localPlayer.TakeDamage(localPlayer.maxHealth*100, localPlayer);
+        }
 
         //displays game over window after short delay
         IEnumerator DisplayGameOver()

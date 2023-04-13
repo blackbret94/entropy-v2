@@ -11,6 +11,7 @@ using Photon.Pun;
 using UnityEngine.Serialization;
 using Vashta.Entropy.SceneNavigation;
 using Vashta.Entropy.UI;
+using Vashta.Entropy.UI.TeamScore;
 
 namespace TanksMP
 {
@@ -110,9 +111,11 @@ namespace TanksMP
         /// </summary>
         public void OnTeamSizeChanged(int[] size)
         {
-            //loop over sliders values and assign it
-			for(int i = 0; i < size.Length; i++)
-            	teamSize[i].value = size[i];
+   //          //loop over sliders values and assign it
+			// for(int i = 0; i < size.Length; i++)
+   //          	teamSize[i].value = size[i];
+            
+            TeamScoreController.GetInstance().UpdateTeamSizes(size);
         }
 
 
@@ -122,16 +125,18 @@ namespace TanksMP
         /// </summary>
         public void OnTeamScoreChanged(int[] score)
         {
-            //loop over texts
-			for(int i = 0; i < score.Length; i++)
-            {
-                //detect if the score has been increased, then add fancy animation
-                if(score[i] > int.Parse(teamScore[i].text))
-                    teamScore[i].GetComponent<Animator>().Play("Animation");
-
-                //assign score value to text
-                teamScore[i].text = score[i].ToString();
-            }
+   //          //loop over texts
+			// for(int i = 0; i < score.Length; i++)
+   //          {
+   //              //detect if the score has been increased, then add fancy animation
+   //              if(score[i] > int.Parse(teamScore[i].text))
+   //                  teamScore[i].GetComponent<Animator>().Play("Animation");
+   //
+   //              //assign score value to text
+   //              teamScore[i].text = score[i].ToString();
+   //          }
+            
+            TeamScoreController.GetInstance().UpdateScores(score);
         }
 
 

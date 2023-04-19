@@ -13,6 +13,7 @@ using UnityEngine.EventSystems;
 using Vashta.Entropy.Character;
 using Vashta.Entropy.SaveLoad;
 using EckTechGames.FloatingCombatText;
+using Vashta.Entropy.UI.ClassSelectionPanel;
 
 namespace TanksMP
 {
@@ -635,7 +636,10 @@ namespace TanksMP
             if(GetView().GetTeam() != otherTeam)
                 GameManager.GetInstance().AddScore(ScoreType.Kill, otherTeam);
             else
-                GameManager.GetInstance().RemoveScore(ScoreType.Kill, otherTeam);
+            {
+                if(!ClassSelectionPanel.Instance.CountdownIsActive())
+                    GameManager.GetInstance().RemoveScore(ScoreType.Kill, otherTeam);
+            }
 
             //the maximum score has been reached now
             if(GameManager.GetInstance().IsGameOver())
@@ -661,7 +665,7 @@ namespace TanksMP
                 collectibles[i].spawner.photonView.RPC("Drop", RpcTarget.AllBuffered, transform.position);
             }
 
-            //tell the dead player who killed him (owner of the bullet)
+            //tell the dead player who killed them (owner of the bullet)
             short senderId = 0;
             if (other != null)
                 senderId = (short)other.GetComponent<PhotonView>().ViewID;

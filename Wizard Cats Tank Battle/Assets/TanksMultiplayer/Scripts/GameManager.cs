@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
+using Vashta.Entropy.UI.ClassSelectionPanel;
 #if UNITY_ADS
 using UnityEngine.Advertisements;
 #endif
@@ -294,31 +295,35 @@ namespace TanksMP
         /// </summary>
         public void DisplayDeath(bool skipAd = false)
         {
-            //get the player component that killed us
-            Player other = localPlayer;
-            string killedByName = "YOURSELF";
-            if(localPlayer.killedBy != null)
-                other = localPlayer.killedBy.GetComponent<Player>();
-
-            //suicide or regular kill?
-            if (other != localPlayer)
+            if (!ClassSelectionPanel.Instance.CountdownIsActive())
             {
-                killedByName = other.GetView().GetName();
-            }
+                //get the player component that killed us
+                Player other = localPlayer;
+                string killedByName = "YOURSELF";
+                if (localPlayer.killedBy != null)
+                    other = localPlayer.killedBy.GetComponent<Player>();
 
-            Text[] killCounter = ui.killCounter;
-            killCounter[1].text = localPlayer.GetView().GetDeaths().ToString();
-            killCounter[1].GetComponent<Animator>().Play("Animation");
-            
-            //calculate if we should show a video ad
-            #if UNITY_ADS
+                //suicide or regular kill?
+                if (other != localPlayer)
+                {
+                    killedByName = other.GetView().GetName();
+                }
+
+                Text[] killCounter = ui.killCounter;
+                killCounter[1].text = localPlayer.GetView().GetDeaths().ToString();
+                killCounter[1].GetComponent<Animator>().Play("Animation");
+
+                //calculate if we should show a video ad
+#if UNITY_ADS
             if (!skipAd && UnityAdsManager.ShowAd())
                 return;
-            #endif
+#endif
 
-            //when no ad is being shown, set the death text
-            //and start waiting for the respawn delay immediately
-            ui.SetDeathText(killedByName, teams[other.GetView().GetTeam()]);
+                //when no ad is being shown, set the death text
+                //and start waiting for the respawn delay immediately
+                ui.SetDeathText(killedByName, teams[other.GetView().GetTeam()]);
+            }
+
             StartCoroutine(SpawnRoutine());
         }
 
@@ -327,8 +332,12 @@ namespace TanksMP
         IEnumerator SpawnRoutine()
         {
             //calculate point in time for respawn
-            float targetTime = Time.time + respawnTime;
-
+            float targetTime = 0f;
+            if (!ClassSelectionPanel.Instance.CountdownIsActive())
+            {
+                targetTime = Time.time + respawnTime;
+            }
+            
             //wait for the respawn to be over,
             //while waiting update the respawn countdown
             while (targetTime - Time.time > 0)

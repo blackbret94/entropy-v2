@@ -17,6 +17,7 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
         public GameObject CountdownSelectionButton;
         
         private float _counterEndTime;
+        private CanvasGroup _canvasGroup;
 
         private static ClassSelectionPanel _instance;
 
@@ -25,6 +26,8 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
         private void Start()
         {
             _instance = this;
+            _canvasGroup = GetComponent<CanvasGroup>();
+            _canvasGroup.alpha = 1;
             
             ShowCountdownButtons();
             _counterEndTime = Time.time + TimerLength;

@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Photon.Pun;
 using UnityEngine.UI;
+using Vashta.Entropy.SaveLoad;
 using Vashta.Entropy.UI;
 
 namespace TanksMP
@@ -144,16 +145,19 @@ namespace TanksMP
                 //if the point found is a valid target point, set it and continue
                 if (NavMesh.SamplePosition(randomPoint, out hit, 2f, NavMesh.AllAreas)) 
                 {
-                    result = hit.position;
-                    break;
+                    // Check for collision with PathfindingZone
+                    if (!PathfindingZone.PointIsInRestrictedZone(randomPoint, teamIndex))
+                    {
+                        result = hit.position;
+                        break;
+                    }
                 }
             }
             
             //set the target point as the new destination
             agent.SetDestination(result);
         }
-        
-        
+
         void FixedUpdate()
         {
             //don't execute anything if the game is over already,

@@ -132,6 +132,11 @@ namespace TanksMP
         {
             //cache corresponding gameobject that was hit
             GameObject obj = col.gameObject;
+            Collide(obj);
+        }
+
+        public void Collide(GameObject obj)
+        {
             //try to get a player component out of the collided gameobject
             Player player = obj.GetComponent<Player>();
 

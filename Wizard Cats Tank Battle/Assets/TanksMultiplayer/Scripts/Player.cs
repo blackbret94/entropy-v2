@@ -632,23 +632,31 @@ namespace TanksMP
             if(GameManager.GetInstance().IsGameOver()) return;
 
             //get killer and increase score for that enemy team
-            int otherTeam = other.GetView().GetTeam();
-            if(GetView().GetTeam() != otherTeam)
-                GameManager.GetInstance().AddScore(ScoreType.Kill, otherTeam);
+            if (other != null)
+            {
+                int otherTeam = other.GetView().GetTeam();
+                if (GetView().GetTeam() != otherTeam)
+                    GameManager.GetInstance().AddScore(ScoreType.Kill, otherTeam);
+                else
+                {
+                    if (!ClassSelectionPanel.Instance.CountdownIsActive())
+                        GameManager.GetInstance().RemoveScore(ScoreType.Kill, otherTeam);
+                }
+
+                //the maximum score has been reached now
+                if (GameManager.GetInstance().IsGameOver())
+                {
+                    //close room for joining players
+                    PhotonNetwork.CurrentRoom.IsOpen = false;
+                    //tell all clients the winning team
+                    this.photonView.RPC("RpcGameOver", RpcTarget.All, (byte)otherTeam);
+                    return;
+                }
+            }
             else
             {
-                if(!ClassSelectionPanel.Instance.CountdownIsActive())
-                    GameManager.GetInstance().RemoveScore(ScoreType.Kill, otherTeam);
-            }
-
-            //the maximum score has been reached now
-            if(GameManager.GetInstance().IsGameOver())
-            {
-                //close room for joining players
-                PhotonNetwork.CurrentRoom.IsOpen = false;
-                //tell all clients the winning team
-                this.photonView.RPC("RpcGameOver", RpcTarget.All, (byte)otherTeam);
-                return;
+                // Killed by environment
+                GameManager.GetInstance().RemoveScore(ScoreType.Kill, GetView().GetTeam());
             }
 
             //the game is not over yet, reset runtime values

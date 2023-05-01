@@ -1,4 +1,5 @@
 using UnityEngine;
+using Vashta.Entropy.StatusEffects;
 
 namespace Vashta.Entropy.ScriptableObject
 {
@@ -12,5 +13,6 @@ namespace Vashta.Entropy.ScriptableObject
         public float MaxValue;
         public string DisplayText;
         public string DisplaySubtext;
+        public StatusEffectData StatusEffect;
     }
 }

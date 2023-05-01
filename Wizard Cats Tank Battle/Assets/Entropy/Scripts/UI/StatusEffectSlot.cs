@@ -12,7 +12,7 @@ namespace Vashta.Entropy.UI
         public void SetStatusEffect(StatusEffect statusEffect)
         {
             _statusEffect = statusEffect;
-            Image.sprite = statusEffect.GetIcon();
+            Image.sprite = statusEffect.Icon();
         }
     }
 }

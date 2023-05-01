@@ -17,6 +17,18 @@ namespace Vashta.Entropy.TanksExtensions
             if (p == null)
                 return false;
 
+            if (Powerup.StatusEffect != null)
+            {
+                return ApplyStatusEffect(p);
+            }
+            else
+            {
+                return ApplyPowerup(p);
+            }
+        }
+
+        private bool ApplyPowerup(Player p)
+        {
             float value = p.GetView().GetBuffSeconds();
             int currentIndex = p.GetView().GetBuffIndex();
             
@@ -33,6 +45,13 @@ namespace Vashta.Entropy.TanksExtensions
                 GameManager.GetInstance().ui.PowerUpPanel.SetText(Powerup.DisplayText,Powerup.DisplaySubtext, Powerup.Color);
 
             //return successful collection
+            return true;
+        }
+
+        private bool ApplyStatusEffect(Player p)
+        {
+            p.StatusEffectController.AddStatusEffect(Powerup.StatusEffect.Id, p);
+
             return true;
         }
     }

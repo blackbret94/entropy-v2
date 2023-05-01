@@ -18,7 +18,7 @@ namespace Vashta.Entropy.StatusEffects
             SetExpiration();
         }
 
-        public Player GetOriginPlayer()
+        public Player OriginPlayer()
         {
             return _originPlayer;
         }
@@ -28,7 +28,7 @@ namespace Vashta.Entropy.StatusEffects
             _expiration = Time.time + StatusEffectData().TTL;
         }
         
-        public float GetExpirationTime()
+        public float ExpirationTime()
         {
             return _expiration;
         }
@@ -37,46 +37,76 @@ namespace Vashta.Entropy.StatusEffects
         {
             return Time.time > _expiration;
         }
-        public string GetId()
+        public string Id()
         {
             return StatusEffectData().Id;
         }
         
-        public string GetTitle()
+        public string Title()
         {
             return StatusEffectData().Title;
         }
 
-        public string GetDescription()
+        public string Description()
         {
             return StatusEffectData().Description;
         }
 
-        public float GetMovementSpeedModifier()
+        public float MovementSpeedModifier()
         {
             return StatusEffectData().MovementSpeedModifier;
         }
 
-        public float GetDamageOutputModifier()
+        public float MovementSpeedMultiplier()
         {
-            return StatusEffectData().DamageOutputModifier;
+            return StatusEffectData().MovementSpeedMultiplier;
         }
 
-        public float GetDefenseModifier()
+        public float DamageOutputMultiplier()
+        {
+            return StatusEffectData().DamageOutputMultiplier;
+        }
+
+        public float DefenseModifier()
         {
             return StatusEffectData().DefenseModifier;
         }
 
-        public float GetHealthPerSecond()
+        public float HealthPerSecond()
         {
             return StatusEffectData().HealthPerSecond;
         }
 
-        public Sprite GetIcon()
+        public Sprite Icon()
         {
             return StatusEffectData().EffectIcon;
         }
 
+        public Color Color()
+        {
+            return StatusEffectData().Color;
+        }
+
+        public int PowerupId()
+        {
+            return StatusEffectData().PowerupId;
+        }
+
+        public float AttackRateMultiplier()
+        {
+            return StatusEffectData().AttackRateMultiplier;
+        }
+
+        public float SpikeDamageModifier()
+        {
+            return StatusEffectData().SpikeDamageModifier;
+        }
+
+        public bool IsReflective()
+        {
+            return StatusEffectData().IsReflective;
+        }
+        
         private StatusEffectData StatusEffectData()
         {
             return _statusEffectController.StatusEffectDirectory[_id];

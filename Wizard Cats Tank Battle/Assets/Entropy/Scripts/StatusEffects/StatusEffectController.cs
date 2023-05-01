@@ -1,19 +1,27 @@
 using System.Collections.Generic;
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.Character;
 
 namespace Vashta.Entropy.StatusEffects
 {
     public class StatusEffectController : MonoBehaviour
     {
         public StatusEffectDirectory StatusEffectDirectory;
+        private Player _player;
+        private PlayerStatusEffectVisualizer _visualizer;
         
         private List<StatusEffect> _statusEffects = new();
+        private SortedSet<string> _indexedIds = new();
         private bool _dirtyFlag;
-        private float _movementSpeedModifierCached = 1;
-        private float _damageOutputModifierCached = 1;
-        private float _defenseModifierCached = 1;
-        private float _healthPerSecondCached = 0;
+        private float _movementSpeedModifierCached = 0f;
+        private float _movementSpeedMultiplierCached = 1f;
+        private float _damageOutputModifierCached = 1f;
+        private float _defenseModifierCached = 1f;
+        private float _healthPerSecondCached = 0f;
+        private float _attackRateModifierCached = 1f;
+        private float _spikeDamageModifierCached = 0f;
+        private bool _isReflectiveCached = false;
 
         private const float _refreshRateS = .5f;
         private float _lastRefresh = 0;
@@ -22,22 +30,34 @@ namespace Vashta.Entropy.StatusEffects
         public List<StatusEffect> StatusEffects => _statusEffects;
 
         public float MovementSpeedModifier => _movementSpeedModifierCached;
+        public float MovementSpeedMultiplier => _movementSpeedMultiplierCached;
         public float DamageOutputModifier => _damageOutputModifierCached;
         public float DefenseModifier => _defenseModifierCached; // TODO: Implement Defense
         public float HealthPerSecond => _healthPerSecondCached;
+        public float AttackRateModifier => _attackRateModifierCached;
+        public float SpikeDamageModifier => _spikeDamageModifierCached;
+        public bool IsReflective => _isReflectiveCached;
         public Player LastDotAppliedBy => _lastDotAppliedBy;
 
+        private void Awake()
+        {
+            _player = GetComponent<Player>();
+            _visualizer = GetComponent<PlayerStatusEffectVisualizer>();
+        }
+        
         public void AddStatusEffect(string statusEffectId, Player owner)
         {
             StatusEffect statusEffect = new StatusEffect(this, statusEffectId, owner);
+
+            if(_player.IsLocal)
+                GameManager.GetInstance().ui.PowerUpPanel.SetText(statusEffect.Title(),statusEffect.Description(), statusEffect.Color());
             
-            Debug.Log("Adding status effect: " + statusEffect.GetTitle());
-            
-            StatusEffect existingEffect = StatusEffectAlreadyExists(statusEffect.GetId());
+            StatusEffect existingEffect = StatusEffectAlreadyExists(statusEffect.Id());
 
             if (existingEffect == null)
             {
                 _statusEffects.Add(statusEffect);
+                _indexedIds.Add(statusEffect.Id());
                 _dirtyFlag = true;
             }
             else
@@ -49,6 +69,7 @@ namespace Vashta.Entropy.StatusEffects
         public void ClearStatusEffects()
         {
             _statusEffects.Clear();
+            _indexedIds.Clear();
         }
 
         private void Update()
@@ -70,34 +91,46 @@ namespace Vashta.Entropy.StatusEffects
             foreach (StatusEffect statusEffect in statusEffects)
             {
                 if (statusEffect.HasExpired())
-                {
-                    _statusEffects.Remove(statusEffect);
-                    Debug.Log("Removing status effect: " + statusEffect.GetTitle());
-                    _dirtyFlag = true;
-                }
+                    RemoveStatusEffect(statusEffect);
             }
+        }
+
+        private void RemoveStatusEffect(StatusEffect statusEffect)
+        {
+            _statusEffects.Remove(statusEffect);
+            _indexedIds.Remove(statusEffect.Id());
+            _dirtyFlag = true;
         }
 
         private void RefreshCache()
         {
-            _movementSpeedModifierCached = 1;
+            _movementSpeedModifierCached = 0;
+            _movementSpeedMultiplierCached = 1f;
             _damageOutputModifierCached = 1;
             _defenseModifierCached = 1;
             _healthPerSecondCached = 0f;
+            _attackRateModifierCached = 1f;
+            _spikeDamageModifierCached = 0f;
+            _isReflectiveCached = false;
 
             foreach (var statusEffect in _statusEffects)
             {
-                _movementSpeedModifierCached *= statusEffect.GetMovementSpeedModifier();
-                _damageOutputModifierCached *= statusEffect.GetDamageOutputModifier();
-                _defenseModifierCached *= statusEffect.GetDefenseModifier();
-                _healthPerSecondCached *= statusEffect.GetHealthPerSecond();
+                _movementSpeedModifierCached += statusEffect.MovementSpeedModifier();
+                _movementSpeedMultiplierCached *= statusEffect.MovementSpeedMultiplier();
+                _damageOutputModifierCached *= statusEffect.DamageOutputMultiplier();
+                _defenseModifierCached *= statusEffect.DefenseModifier();
+                _healthPerSecondCached += statusEffect.HealthPerSecond();
+                _attackRateModifierCached *= statusEffect.AttackRateMultiplier();
+                _spikeDamageModifierCached += statusEffect.SpikeDamageModifier();
 
-                if (statusEffect.GetHealthPerSecond() < 0)
-                {
-                    _lastDotAppliedBy = statusEffect.GetOriginPlayer();
-                }
+                if (statusEffect.HealthPerSecond() < 0)
+                    _lastDotAppliedBy = statusEffect.OriginPlayer();
+
+                if (statusEffect.IsReflective())
+                    _isReflectiveCached = true;
             }
 
+            _visualizer.Refresh(_indexedIds);
             _dirtyFlag = false;
         }
 
@@ -105,7 +138,7 @@ namespace Vashta.Entropy.StatusEffects
         {
             foreach (var statusEffect in _statusEffects)
             {
-                if (statusEffect.GetId() == id)
+                if (statusEffect.Id() == id)
                     return statusEffect;
             }
 

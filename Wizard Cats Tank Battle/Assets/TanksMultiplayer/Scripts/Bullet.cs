@@ -158,7 +158,7 @@ namespace TanksMP
                     return;
                 }
 
-                if (player.PlayerBuffController.IsReflective())
+                if (player.StatusEffectController.IsReflective)
                 {
                     BounceOffReflectivePlayer(player);
                     return;

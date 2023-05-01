@@ -122,7 +122,6 @@ namespace TanksMP
         public float handicapModifier = 1f;
 
         public PlayerAnimator PlayerAnimator;
-        public PlayerBuffController PlayerBuffController;
 
         /// <summary>
         /// Last player gameobject that killed this one.
@@ -405,7 +404,7 @@ namespace TanksMP
                                      * Quaternion.Euler(0, camFollow.camTransform.eulerAngles.y, 0);
 
             //create movement vector based on current rotation and speed
-            Vector3 movementDir = transform.forward * ((moveSpeed + PlayerBuffController.GetSpeedBonus()) * _statusEffectController.MovementSpeedModifier * Time.deltaTime);
+            Vector3 movementDir = transform.forward * ((moveSpeed +  _statusEffectController.MovementSpeedModifier) * _statusEffectController.MovementSpeedMultiplier * Time.deltaTime);
             //apply vector to rigidbody position
             rb.MovePosition(rb.position + movementDir);
         }
@@ -445,7 +444,7 @@ namespace TanksMP
         //along with the shot request to the server to absolutely ensure a synced shot position
         protected void Shoot(Vector2 direction = default(Vector2))
         {
-            float fireRateMod = fireRate * PlayerBuffController.GetRapidFireBonus();
+            float fireRateMod = fireRate * _statusEffectController.AttackRateModifier;
             
             //if shot delay is over  
             if (Time.time > nextFire)

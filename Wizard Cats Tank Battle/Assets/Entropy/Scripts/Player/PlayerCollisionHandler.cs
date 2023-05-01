@@ -54,7 +54,7 @@ namespace Entropy.Scripts.Player
                 return;
             
             // ignore players that have spike buffs
-            if (player.PlayerBuffController.GetSpikeDamageModifier() > 0)
+            if (player.StatusEffectController.SpikeDamageModifier > 0)
                 return;
             
             _playersActivelyCollided.Add(colPlayer);
@@ -97,7 +97,7 @@ namespace Entropy.Scripts.Player
                 return 0;
             }
 
-            int damage = damageAmtOnCollision + otherPlayer.PlayerBuffController.GetSpikeDamageModifier();
+            int damage = damageAmtOnCollision + Mathf.RoundToInt(otherPlayer.StatusEffectController.SpikeDamageModifier);
             int otherArmor = colPlayer.armor;
 
             return Mathf.Max(0, damage - otherArmor);

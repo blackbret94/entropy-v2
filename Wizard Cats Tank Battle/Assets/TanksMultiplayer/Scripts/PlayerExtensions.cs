@@ -541,9 +541,6 @@ namespace TanksMP
                     if (index >= 0)
                     {
                         bot.buffIndex = index;
-                        PlayerBuffVisualizer visualizer = bot.GetComponent<PlayerBuffVisualizer>();
-                        if(visualizer != null)
-                            visualizer.ToggleVisualizerById(index, value > 0);
                     }
 
                     return;
@@ -564,11 +561,6 @@ namespace TanksMP
             if (index >= 0)
             {
                 hash.Add(buffIndex, (byte)index);
-                
-                // update visuals
-                PlayerBuffVisualizer visualizer = playerPhotonView.GetComponent<PlayerBuffVisualizer>();
-                if(visualizer != null)
-                    visualizer.ToggleVisualizerById(index, value > 0);
             }
 
             player.SetCustomProperties(hash);

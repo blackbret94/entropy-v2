@@ -13,6 +13,7 @@ using UnityEngine.EventSystems;
 using Vashta.Entropy.Character;
 using Vashta.Entropy.SaveLoad;
 using EckTechGames.FloatingCombatText;
+using Vashta.Entropy.StatusEffects;
 using Vashta.Entropy.UI.ClassSelectionPanel;
 
 namespace TanksMP
@@ -20,7 +21,8 @@ namespace TanksMP
     /// <summary>
     /// Networked player class implementing movement control and shooting.
     /// Contains both server and client logic in an authoritative approach.
-    /// </summary> 
+    /// </summary>
+    [RequireComponent(typeof(StatusEffectController))]
     public class Player : MonoBehaviourPunCallbacks, IPunObservable, IPunInstantiateMagicCallback
     {
         /// <summary>
@@ -136,6 +138,7 @@ namespace TanksMP
 
         public PlayerCollisionHandler PlayerCollisionHandler;
         public PlayerMovementAudioAnimationController PlayerMovementAudioAnimationController;
+        private StatusEffectController _statusEffectController;
 
         //timestamp when next shot should happen
         private float nextFire;
@@ -157,9 +160,14 @@ namespace TanksMP
         public ClassList classList;
         public ClassDefinition classDefinition { get; private set; }
 
+        public StatusEffectController StatusEffectController => _statusEffectController;
+
         public int PreferredTeamIndex = -1; // -1 indicates random
 
         private Vector3 _lastMousePos;
+
+        private float _lastSecondUpdate;
+        private float _secondUpdateTime = 1f;
         
         //initialize server values for this player
         void Awake()
@@ -177,6 +185,9 @@ namespace TanksMP
                 classDefinition = defaultClassDefinition ? defaultClassDefinition : classList.RandomClass();
                 ApplyClass();
             }
+
+            _statusEffectController = GetComponent<StatusEffectController>();
+            _lastSecondUpdate = Time.time + 2f;
 
             GetView().SetKills(0);
             GetView().SetDeaths(0);
@@ -241,7 +252,7 @@ namespace TanksMP
 
             GameManager.GetInstance().ui.fireButton.Player = this;
         }
-
+        
         private void ColorizePlayerForTeam()
         {
             //get corresponding team and colorize renderers in team color
@@ -293,6 +304,26 @@ namespace TanksMP
             }
         }
 
+        
+        // This needs to be on a second timer
+        private void Update()
+        {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                if (Time.time < _lastSecondUpdate + _secondUpdateTime)
+                    return;
+                
+                int health = GetView().GetHealth();
+
+                health += (int)_statusEffectController.HealthPerSecond;
+            
+                if (health <= 0)
+                    // killed the player
+                    PlayerDeath(_statusEffectController.LastDotAppliedBy, null);
+
+                _lastSecondUpdate = Time.time;
+            }
+        }
 
         //continously check for input on desktop platforms
         #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL
@@ -374,7 +405,7 @@ namespace TanksMP
                                      * Quaternion.Euler(0, camFollow.camTransform.eulerAngles.y, 0);
 
             //create movement vector based on current rotation and speed
-            Vector3 movementDir = transform.forward * ((moveSpeed + PlayerBuffController.GetSpeedBonus()) * Time.deltaTime);
+            Vector3 movementDir = transform.forward * ((moveSpeed + PlayerBuffController.GetSpeedBonus()) * _statusEffectController.MovementSpeedModifier * Time.deltaTime);
             //apply vector to rigidbody position
             rb.MovePosition(rb.position + movementDir);
         }
@@ -473,6 +504,7 @@ namespace TanksMP
             bullet.SpawnNewBullet();
             bullet.owner = gameObject;
             bullet.ClassDefinition = classDefinition;
+            bullet.damage = Mathf.CeilToInt(bullet.damage * _statusEffectController.DamageOutputModifier);
             
             // animate
             PlayerAnimator.Attack();
@@ -695,6 +727,8 @@ namespace TanksMP
             //the player has been killed
             if (!isActive)
             {
+                _statusEffectController.ClearStatusEffects();
+                
                 //find original sender game object (killedBy)
                 PhotonView senderView = senderId > 0 ? PhotonView.Find(senderId) : null;
                 if (senderView != null && senderView.gameObject != null) killedBy = senderView.gameObject;
@@ -875,6 +909,11 @@ namespace TanksMP
                 return;
 
             bullets[0] = classDefinition.Missile;
+        }
+
+        public void ApplyStatusEffect(string statusEffectId, Player owner)
+        {
+            _statusEffectController.AddStatusEffect(statusEffectId, owner);
         }
     }
 }

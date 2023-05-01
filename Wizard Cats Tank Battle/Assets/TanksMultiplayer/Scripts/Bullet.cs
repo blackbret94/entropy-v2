@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Entropy.Scripts.Player;
 using Photon.Pun;
 using Vashta.Entropy.ScriptableObject;
+using Vashta.Entropy.StatusEffects;
 
 namespace TanksMP
 {
@@ -64,6 +65,14 @@ namespace TanksMP
         public GameObject deathFx;
 
         public bool bounceInf;
+
+        [Header("Class Mechanics")] // Eventually this will be broken out into specific skills
+        public StatusEffectData StatusEffectOnEnemy;
+        [Range(0,1)]
+        public float StatusEffectOnEnemyChance;
+        public StatusEffectData StatusEffectOnAlly;
+        [Range(0,1)]
+        public float StatusEffectOnAllyChance;
 
         //reference to rigidbody component
         private Rigidbody myRigidbody;
@@ -237,11 +246,27 @@ namespace TanksMP
                 if (HasHitProtectedOwner(target) || target.gameObject == null)
                     continue;
 
+                if (IsFriendlyFire(player, target))
+                    AttemptApplyEffectAlly(player, target);
+                else
+                    AttemptApplyEffectEnemy(player, target);
+
                 target.TakeDamage(this);
-                // target.PlayerAnimator.TakeDamage();
             }
         }
 
+        private void AttemptApplyEffectAlly(Player player, Player target)
+        {
+            if(Random.Range(0f, 1f) < StatusEffectOnAllyChance)
+                target.ApplyStatusEffect(StatusEffectOnAlly.Id, player);
+        }
+
+        private void AttemptApplyEffectEnemy(Player player, Player target)
+        {
+            if(Random.Range(0f, 1f) < StatusEffectOnEnemyChance)
+                target.ApplyStatusEffect(StatusEffectOnEnemy.Id, player);
+        }
+        
         private void BounceOffReflectivePlayer(Player player)
         {
             //a player was not hit but something else, and we still have some bounces left
@@ -300,9 +325,9 @@ namespace TanksMP
             if (target.gameObject == owner || target.gameObject == null) return true;
             
             //perform the actual friendly fire check on both team indices and see if they match
-            if (!GameManager.GetInstance().friendlyFire && origin.GetView().GetTeam() == target.GetView().GetTeam()) return true;
-
-            //friendly fire is off, this bullet should do damage
+            // if (!GameManager.GetInstance().friendlyFire && origin.GetView().GetTeam() == target.GetView().GetTeam()) return true;
+            if (origin.GetView().GetTeam() == target.GetView().GetTeam()) return true;
+            
             return false;
         }
 

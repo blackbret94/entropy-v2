@@ -36,7 +36,6 @@ namespace Vashta.Entropy.SaveLoad
 
                 if (zone.Collider.bounds.Contains(pos))
                 {
-                    Debug.Log("NavMesh point rejected! Team: " + teamIndex + " Zone team: " + zone.AllowedTeamIndex + " Point: " + pos);
                     return true;
                 }
             }

@@ -50,7 +50,6 @@ namespace TanksMP
 
         public FireButton fireButton;
         [FormerlySerializedAs("powerupIcon")] public PowerupIcon bulletIcon;
-        public BuffIcon buffIcon;
         
         public TeammateKilledPopup teammateKilledPopup;
 
@@ -133,7 +132,6 @@ namespace TanksMP
             #if UNITY_EDITOR || (!UNITY_STANDALONE && !UNITY_WEBGL)
                 ToggleControls(false);
                 bulletIcon.SetActive(false);
-                buffIcon.SetActive(false);
             #endif
             
             DeathPanel.Set(playerName, team);
@@ -169,7 +167,6 @@ namespace TanksMP
             #if UNITY_EDITOR || (!UNITY_STANDALONE && !UNITY_WEBGL)
                 ToggleControls(false);
                 bulletIcon.SetActive(false);
-                buffIcon.SetActive(false);
             #endif
             
             //show winning team and colorize it by converting the team color to an HTML RGB hex value for UI markup

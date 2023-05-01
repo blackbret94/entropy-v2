@@ -495,8 +495,8 @@ namespace TanksMP
             if(newBuffValue <= 0f)
                 player.SetBuff(playerPhotonView, 0, 0);
             
-            if(player.IsLocal)
-                GameManager.GetInstance().ui.buffIcon.SetSeconds(newBuffValue);
+            // if(player.IsLocal)
+            //     GameManager.GetInstance().ui.buffIcon.SetSeconds(newBuffValue);
         }
         
         /// <summary>
@@ -566,8 +566,8 @@ namespace TanksMP
             player.SetCustomProperties(hash);
             
             // update UI
-            if(player.IsLocal)
-                GameManager.GetInstance().ui.buffIcon.SetPowerup(index, value);
+            // if(player.IsLocal)
+            //     GameManager.GetInstance().ui.buffIcon.SetPowerup(index, value);
         }
 
         /// <summary>

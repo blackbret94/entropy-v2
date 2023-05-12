@@ -18,7 +18,7 @@ namespace Vashta.Entropy.StatusEffects
         private float _movementSpeedModifierCached = 0f;
         private float _movementSpeedMultiplierCached = 1f;
         private float _damageOutputModifierCached = 1f;
-        private float _defenseModifierCached = 1f;
+        private float _damageTakenModifierCached = 1f;
         private float _healthPerSecondCached = 0f;
         private float _attackRateModifierCached = 1f;
         private float _spikeDamageModifierCached = 0f;
@@ -33,7 +33,7 @@ namespace Vashta.Entropy.StatusEffects
         public float MovementSpeedModifier => _movementSpeedModifierCached;
         public float MovementSpeedMultiplier => _movementSpeedMultiplierCached;
         public float DamageOutputModifier => _damageOutputModifierCached;
-        public float DefenseModifier => _defenseModifierCached; // TODO: Implement Defense
+        public float DamageTakenModifier => _damageTakenModifierCached;
         public float HealthPerSecond => _healthPerSecondCached;
         public float AttackRateModifier => _attackRateModifierCached;
         public float SpikeDamageModifier => _spikeDamageModifierCached;
@@ -128,7 +128,7 @@ namespace Vashta.Entropy.StatusEffects
             _movementSpeedModifierCached = 0;
             _movementSpeedMultiplierCached = 1f;
             _damageOutputModifierCached = 1;
-            _defenseModifierCached = 1;
+            _damageTakenModifierCached = 0;
             _healthPerSecondCached = 0f;
             _attackRateModifierCached = 1f;
             _spikeDamageModifierCached = 0f;
@@ -139,7 +139,7 @@ namespace Vashta.Entropy.StatusEffects
                 _movementSpeedModifierCached += statusEffect.MovementSpeedModifier();
                 _movementSpeedMultiplierCached *= statusEffect.MovementSpeedMultiplier();
                 _damageOutputModifierCached *= statusEffect.DamageOutputMultiplier();
-                _defenseModifierCached *= statusEffect.DefenseModifier();
+                _damageTakenModifierCached += statusEffect.DamageTakenModifier();
                 _healthPerSecondCached += statusEffect.HealthPerSecond();
                 _attackRateModifierCached *= statusEffect.AttackRateMultiplier();
                 _spikeDamageModifierCached += statusEffect.SpikeDamageModifier();

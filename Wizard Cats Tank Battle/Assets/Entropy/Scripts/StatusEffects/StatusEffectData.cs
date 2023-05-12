@@ -27,8 +27,8 @@ namespace Vashta.Entropy.StatusEffects
         public float AttackRateMultiplier = 1f;
         [Tooltip("Sums")]
         public float SpikeDamageModifier = 0f;
-        [Tooltip("Sums")]
-        public float DefenseModifier = 0f;
+        [FormerlySerializedAs("DefenseModifier")] [Tooltip("Sums")]
+        public float DamageTakenModifier = 0f;
         [Tooltip("Sums")]
         public float HealthPerSecond = 0f;
         [Tooltip("Toggles reflective bubble")]

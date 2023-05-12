@@ -67,9 +67,9 @@ namespace Vashta.Entropy.StatusEffects
             return StatusEffectData().DamageOutputMultiplier;
         }
 
-        public float DefenseModifier()
+        public float DamageTakenModifier()
         {
-            return StatusEffectData().DefenseModifier;
+            return StatusEffectData().DamageTakenModifier;
         }
 
         public float HealthPerSecond()

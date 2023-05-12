@@ -654,8 +654,9 @@ namespace TanksMP
 
         private int CalculateDamageTaken(Bullet bullet, out bool attackerIsCounter, out bool attackerIsSame)
         {
-            float baseDamage = bullet.damage;
+            float calculatedDamage = bullet.damage;
 
+            // Check class modifiers
             if (bullet.ClassDefinition == null)
             {
                 Debug.LogWarning("Warning! No class definition assigned to bullet");
@@ -666,15 +667,19 @@ namespace TanksMP
 
             if (attackerIsCounter)
             {
-                baseDamage *= counterDamageMod;
+                calculatedDamage *= counterDamageMod;
             }
 
             if (attackerIsSame)
             {
-                baseDamage *= sameClassDamageMod;
+                calculatedDamage *= sameClassDamageMod;
             }
             
-            return Mathf.RoundToInt(baseDamage);
+            // Check defense modifier
+            calculatedDamage += StatusEffectController.DamageTakenModifier;
+            
+            // don't allow healing
+            return Mathf.Max(0, Mathf.RoundToInt(calculatedDamage));
         }
 
         /// <summary>

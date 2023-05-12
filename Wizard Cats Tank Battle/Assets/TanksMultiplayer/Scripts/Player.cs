@@ -115,11 +115,6 @@ namespace TanksMP
         public CharacterAppearance CharacterAppearance;
 
         /// <summary>
-        /// Character class save/load
-        /// </summary>
-        public CharacterClassSaveLoad CharacterClassSaveLoad;
-
-        /// <summary>
         /// Alters some stats to make the player more or less powerful.  Higher means more power.
         /// </summary>
         public float handicapModifier = 1f;
@@ -160,7 +155,7 @@ namespace TanksMP
         public bool IsLocal => GameManager.GetInstance().localPlayer == this;
         public ClassDefinition defaultClassDefinition;
         public ClassList classList;
-        public ClassDefinition classDefinition { get; private set; }
+        // public ClassDefinition classDefinition { get; private set; }
 
         public int PreferredTeamIndex = -1; // -1 indicates random
 
@@ -180,20 +175,14 @@ namespace TanksMP
         {
             _playersByViewId.Add(GetId(), this);
             
+            ClassDefinition classDefinition = defaultClassDefinition ? defaultClassDefinition : classList.RandomClass();
+            photonView.SetClassId(classDefinition.classId);
+            ApplyClass();
+            
             //only let the master do initialization
             if(!PhotonNetwork.IsMasterClient)
                 return;
-
-            if (LoadClass)
-            {
-                CharacterClassSaveLoad.Load();
-            }
-            else
-            {
-                classDefinition = defaultClassDefinition ? defaultClassDefinition : classList.RandomClass();
-                ApplyClass();
-            }
-
+            
             _lastSecondUpdate = Time.time + 2f;
             photonView.SetJoinTime(Time.time);
 
@@ -203,7 +192,7 @@ namespace TanksMP
 
         public void LoadClassCallback(int classId, bool forceRefresh)
         {
-            classDefinition = classList.GetClassById(classId);
+            photonView.SetClassId(classId);
             
             if(forceRefresh)
                 ApplyClass();
@@ -538,7 +527,8 @@ namespace TanksMP
             Bullet bullet = obj.GetComponent<Bullet>();
             bullet.SpawnNewBullet();
             bullet.owner = gameObject;
-            bullet.ClassDefinition = classDefinition;
+            Debug.Log("Setting bullet classId" + photonView.GetClassId());
+            bullet.ClassDefinition = classList[photonView.GetClassId()];
             bullet.damage = Mathf.CeilToInt(bullet.damage * StatusEffectController.DamageOutputModifier);
             
             // animate
@@ -671,8 +661,8 @@ namespace TanksMP
                 Debug.LogWarning("Warning! No class definition assigned to bullet");
             }
 
-            attackerIsCounter = bullet.ClassDefinition.IsCounter(classDefinition.classId);
-            attackerIsSame = bullet.ClassDefinition.classId == classDefinition.classId;
+            attackerIsCounter = bullet.ClassDefinition.IsCounter(photonView.GetClassId());
+            attackerIsSame = bullet.ClassDefinition.classId == photonView.GetClassId();
 
             if (attackerIsCounter)
             {
@@ -832,6 +822,12 @@ namespace TanksMP
                                                                                                                  Vector3.zero, Quaternion.identity }), new PhotonMessageInfo());
             }
 
+            if (isActive)
+            {
+                // apply class
+                ApplyClass();
+            }
+
             //further changes only affect the local client
             if (!photonView.IsMine)
                 return;
@@ -840,9 +836,6 @@ namespace TanksMP
             if (isActive == true)
             {
                 ResetPosition();
-                
-                // apply class
-                ApplyClass();
             }
             else
             {
@@ -932,21 +925,10 @@ namespace TanksMP
 
         public void SetClass(ClassDefinition newClassDefinition, bool respawnPlayer)
         {
-            photonView.RPC("RpcSetClass", RpcTarget.All, newClassDefinition.classId, respawnPlayer);
-        }
+            photonView.SetClassId(newClassDefinition.classId);
 
-        // Called on all clients when a player sets their class
-        [PunRPC]
-        protected void RpcSetClass(int classId, bool applyNow)
-        {
-            classDefinition = classList.GetClassById(classId);
-
-            // Should only save selection for local player
-            if(IsLocal)
-                CharacterClassSaveLoad.Save(classDefinition.classId);
-            
             // Respawn if apply now
-            if(applyNow)
+            if(respawnPlayer)
                 TakeDamage(maxHealth*100, this);
         }
         
@@ -959,7 +941,8 @@ namespace TanksMP
                 Debug.LogError("Player is missing a collision handler!  Can not apply class.");
                 return;
             }
-            
+
+            ClassDefinition classDefinition = classList[photonView.GetClassId()];
             ClassApplier.ApplyClass(this, playerCollisionHandler, classDefinition, handicapModifier);
             SetMaxHealth();
             ReplaceClassMissile();
@@ -967,6 +950,8 @@ namespace TanksMP
 
         private void ReplaceClassMissile()
         {
+            ClassDefinition classDefinition = classList[photonView.GetClassId()];
+            
             if (classDefinition.Missile == null)
                 return;
 

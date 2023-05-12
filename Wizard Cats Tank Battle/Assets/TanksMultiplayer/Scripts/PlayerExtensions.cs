@@ -25,6 +25,7 @@ namespace TanksMP
         public const string kills = "kills";
         public const string deaths = "deaths";
         public const string joinTime = "joinTime";
+        public const string classId = "classId";
 
         /// <summary>
         /// Returns the networked player nick name.
@@ -439,6 +440,7 @@ namespace TanksMP
             SetDeaths(player, GetDeaths(player) + value);
         }
 
+        // Join Time
         public static float GetJoinTime(this Photon.Realtime.Player player)
         {
             return System.Convert.ToSingle(player.CustomProperties[joinTime]);
@@ -477,6 +479,50 @@ namespace TanksMP
         {
             player.SetCustomProperties(new Hashtable() { { joinTime, (byte)value } });
         }
+        
+        // Class ID
+        public static int GetClassId(this Photon.Realtime.Player player)
+        {            
+            Debug.Log("Getting class ID: " + System.Convert.ToInt32(player.CustomProperties[classId]));
+
+            return System.Convert.ToInt32(player.CustomProperties[classId]);
+        }
+
+        public static int GetClassId(this PhotonView player)
+        {
+            if (PhotonNetwork.OfflineMode == true)
+            {
+                PlayerBot bot = player.GetComponent<PlayerBot>();
+                if (bot != null)
+                {
+                    return bot.classId;
+                }
+            }
+
+            return player.Owner.GetClassId();
+        }
+        
+        public static void SetClassId(this PhotonView player, int value)
+        {
+            Debug.Log("Setting class ID: " + value);
+            
+            if (PhotonNetwork.OfflineMode == true)
+            {
+                PlayerBot bot = player.GetComponent<PlayerBot>();
+                if (bot != null)
+                {
+                    bot.classId = value;
+                    return;
+                }
+            }
+
+            player.Owner.SetClassId(value);
+        }
+
+        public static void SetClassId(this Photon.Realtime.Player player, int value)
+        {
+            player.SetCustomProperties(new Hashtable() { { classId, (byte)value } });
+        }
 
         /// <summary>
         /// Offline: clears all properties of a PlayerBot locally.
@@ -493,6 +539,7 @@ namespace TanksMP
                     bot.health = 0;
                     bot.shield = 0;
                     bot.joinTime = 0;
+                    bot.classId = 0;
                     return;
                 }
             }
@@ -508,7 +555,8 @@ namespace TanksMP
             player.SetCustomProperties(new Hashtable() { { PlayerExtensions.bullet, (byte)0 },
                                                          { PlayerExtensions.health, (byte)0 },
                                                          { PlayerExtensions.shield, (byte)0 },
-                                                         {PlayerExtensions.joinTime, (byte)0 }
+                                                         {PlayerExtensions.joinTime, (byte)0 },
+                                                         {PlayerExtensions.classId, (byte)0 }
             });
         }
     }

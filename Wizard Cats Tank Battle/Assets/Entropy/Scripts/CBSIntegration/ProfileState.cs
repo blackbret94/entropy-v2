@@ -51,8 +51,8 @@ namespace Vashta.Entropy.Scripts.CBSIntegration
             if (result.IsSuccess)
             {
                 CachedDisplayName = result.DisplayName;
-                Debug.Log("Display name = " + result.DisplayName);
-                Debug.Log("Avatar URL = " + result.AvatarUrl);
+                // Debug.Log("Display name = " + result.DisplayName);
+                // Debug.Log("Avatar URL = " + result.AvatarUrl);
             }
         }
         

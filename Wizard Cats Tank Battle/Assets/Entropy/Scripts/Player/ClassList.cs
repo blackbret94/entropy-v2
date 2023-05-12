@@ -7,30 +7,36 @@ namespace Entropy.Scripts.Player
     public class ClassList: ScriptableObject
     {
         public List<ClassDefinition> Classes;
+        private Dictionary<int, ClassDefinition> _dictionary;
 
+        private void OnEnable()
+        {
+            CreateDictionaryIfDoesNotExist();
+        }
+        
+        private void CreateDictionaryIfDoesNotExist()
+        {
+            if (_dictionary != null) 
+                return;
+
+            _dictionary = new Dictionary<int, ClassDefinition>();
+         
+            foreach (ClassDefinition classDefinition in Classes)
+                _dictionary.Add(classDefinition.classId,classDefinition);
+        }
+        
         public ClassDefinition RandomClass()
         {
             return Classes[Random.Range(0, Classes.Count)];
         }
-
-        public ClassDefinition GetClassById(int id)
-        {
-            int index = GetIndexFromId(id);
-
-            if (index >= Classes.Count)
-                return Classes[0];
-
-            return Classes[index];
-        }
         
-        private int GetIndexFromId(int id)
+        public ClassDefinition this[int key]
         {
-            return id - 1;
-        }
-
-        private int GetIdFromIndex(int index)
-        {
-            return index + 1;
+            get
+            {
+                CreateDictionaryIfDoesNotExist();
+                return _dictionary.ContainsKey(key) ? _dictionary[key] : null;
+            }
         }
     }
 }

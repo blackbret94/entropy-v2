@@ -63,7 +63,7 @@ namespace Vashta.Entropy.SaveLoad
                     data = DefaultAppearanceStringEncrypted();
                 }
                 
-                Debug.Log("User outfit data = "+ data);
+                // Debug.Log("User outfit data = "+ data);
                 if (string.IsNullOrEmpty(data))
                 {
                     data = DefaultAppearanceStringEncrypted();

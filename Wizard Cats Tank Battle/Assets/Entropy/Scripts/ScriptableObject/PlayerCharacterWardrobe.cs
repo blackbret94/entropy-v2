@@ -38,7 +38,7 @@ namespace Vashta.Entropy.ScriptableObject
 
         private void IndexWardrobe()
         {
-            Debug.Log("Indexing wardrobe");
+            // Debug.Log("Indexing wardrobe");
             _indexedHats = new Dictionary<string, Hat>();
             foreach (var hat in Hats)
                 _indexedHats[hat.Id] = hat;

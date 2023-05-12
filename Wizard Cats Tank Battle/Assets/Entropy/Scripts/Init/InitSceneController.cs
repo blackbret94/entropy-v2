@@ -22,7 +22,7 @@ namespace Vashta.Entropy.Scripts.Init
             errorText.gameObject.SetActive(false);
             
             AssetBundleMagic.DownloadVersions (delegate(string versions) {
-                Debug.Log ("Received versions:\n" + versions);
+                // Debug.Log ("Received versions:\n" + versions);
                 
                 LoadBundles();
             }, delegate(string error) {
@@ -62,7 +62,7 @@ namespace Vashta.Entropy.Scripts.Init
             p = AssetBundleMagic.DownloadBundle (
                 bundleName,
                 delegate(AssetBundle ab) {
-                    Debug.Log("Bundle finished downloading! " + bundleName);
+                    // Debug.Log("Bundle finished downloading! " + bundleName);
                     LoadBundleByIndex(i+1, maxBundleIndex);
 
                 },

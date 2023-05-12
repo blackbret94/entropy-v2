@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Photon.Pun;
 using TanksMP;
 using UnityEngine;
 using Vashta.Entropy.Character;
@@ -45,8 +46,28 @@ namespace Vashta.Entropy.StatusEffects
             _visualizer = GetComponent<PlayerStatusEffectVisualizer>();
         }
         
+        /// <summary>
+        /// Server only, call RPC on all clients
+        /// </summary>
+        /// <param name="statusEffectId"></param>
+        /// <param name="owner"></param>
         public void AddStatusEffect(string statusEffectId, Player owner)
         {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                _player.photonView.RPC("RPCAddStatusEffect", RpcTarget.All, statusEffectId, owner?owner.GetId():null);
+            }
+        }
+        
+        /// <summary>
+        /// Called on all clients to add status effect
+        /// </summary>
+        /// <param name="statusEffectId"></param>
+        /// <param name="playerId"></param>
+        [PunRPC]
+        public void RPCAddStatusEffect(string statusEffectId, int playerId)
+        {
+            Player owner = Player.GetPlayerById(playerId);
             StatusEffect statusEffect = new StatusEffect(this, statusEffectId, owner);
 
             if(_player.IsLocal)

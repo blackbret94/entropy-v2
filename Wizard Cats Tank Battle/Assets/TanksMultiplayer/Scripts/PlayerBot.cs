@@ -226,21 +226,21 @@ namespace TanksMP
         {
             return Random.Range(-accuracyError, accuracyError);
         }
-
         
         /// <summary>
         /// Override of the base method to handle bot respawn separately.
         /// </summary>
         [PunRPC]
-        protected override void RpcRespawn(short senderId, Bullet killingBlowBullet)
+        protected override void RpcRespawn(short senderId, int killingBlowBulletId)
         {
-            StartCoroutine(Respawn(senderId, killingBlowBullet));
+            StartCoroutine(Respawn(senderId, killingBlowBulletId));
         }
-        
-        
+
         //the actual respawn routine
-        IEnumerator Respawn(short senderId, Bullet killingBlowBullet)
+        IEnumerator Respawn(short senderId, int killingBlowBulletId)
         {   
+            Bullet killingBlowBullet = BulletDictionary[killingBlowBulletId];
+            
             //stop AI updates
             isDead = true;
             inRange.Clear();

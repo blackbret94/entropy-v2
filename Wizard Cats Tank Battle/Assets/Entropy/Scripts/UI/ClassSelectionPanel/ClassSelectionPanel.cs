@@ -64,10 +64,10 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
             ApplyButton.SetActive(true);
         }
 
-        public void ApplyChanges()
+        public void ApplyChanges(bool respawnPlayer = false)
         {
             Player player = GameManager.GetInstance().localPlayer;
-            player.SetClass(ClassSelectionSelector.SelectedClassDefinition());
+            player.SetClass(ClassSelectionSelector.SelectedClassDefinition(), respawnPlayer);
             player.PreferredTeamIndex = ClassSelectionTeamSelector.SelectedTeamIndex();
             
             ClosePanel();
@@ -75,9 +75,7 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
 
         public void RespawnPlayer()
         {
-            ApplyChanges();
-            
-            GameManager.GetInstance().RespawnLocalPlayer();
+            ApplyChanges(true);
         }
 
         public bool CountdownIsActive()

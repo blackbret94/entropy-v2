@@ -29,17 +29,31 @@ namespace Entropy.Scripts.Player
         /// Audio to play on collision
         /// </summary>
         public AudioClip collisionClip;
+
+        private bool _hasInit = false;
         
         private List<PlayerCollisionHandler> _playersActivelyCollided;
 
         private void Start()
         {
+            Init();
+        }
+
+        private void Init()
+        {
+            if (_hasInit)
+                return;
+            
             _playersActivelyCollided = new List<PlayerCollisionHandler>();
             player.PlayerCollisionHandler = this;
+
+            _hasInit = true;
         }
 
         private void OnCollisionEnter(Collision col)
         {
+            Init();
+            
             PlayerCollisionHandler colPlayer = GetPlayerFromCollision(col);
 
             if (colPlayer == null)
@@ -65,6 +79,8 @@ namespace Entropy.Scripts.Player
 
         private void OnCollisionExit(Collision col)
         {
+            Init();
+            
             PlayerCollisionHandler colPlayer = GetPlayerFromCollision(col);
 
             if (colPlayer == null)

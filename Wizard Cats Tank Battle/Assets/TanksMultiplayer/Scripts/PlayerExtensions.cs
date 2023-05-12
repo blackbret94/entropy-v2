@@ -440,6 +440,8 @@ namespace TanksMP
             SetDeaths(player, GetDeaths(player) + value);
         }
 
+        
+        // DEPRICATED
         public static float GetBuffSeconds(this PhotonView player)
         {
             if (PhotonNetwork.OfflineMode == true)
@@ -455,6 +457,7 @@ namespace TanksMP
         }
 
         /// <summary>
+        /// DEPRICATED
         /// Online: returns the networked buffseconds value of the player out of properties.
         /// </summary>
         public static float GetBuffSeconds(this Photon.Realtime.Player player)
@@ -483,6 +486,7 @@ namespace TanksMP
             player.Owner.DecBuffSeconds(player, delta);
         }
 
+        // DEPRICATED
         private static void DecBuffSeconds(this Photon.Realtime.Player player, PhotonView playerPhotonView, float delta)
         {
             float newBuffValue = player.GetBuffSeconds() - delta;
@@ -500,6 +504,7 @@ namespace TanksMP
         }
         
         /// <summary>
+        /// DEPRICATED
         /// Offline: returns the buff index of a bot stored in PlayerBot.
         /// Fallback to online mode for the master or in case offline mode was turned off.
         /// </summary>
@@ -518,6 +523,7 @@ namespace TanksMP
         }
 
         /// <summary>
+        /// DEPRICATED
         /// Online: returns the networked buff index of the player out of properties.
         /// </summary>
         public static int GetBuffIndex(this Photon.Realtime.Player player)
@@ -526,6 +532,7 @@ namespace TanksMP
         }
         
         /// <summary>
+        /// DEPRICATED
         /// Offline: synchronizes the buff seconds of a PlayerBot locally.
         /// Provides an optional index parameter for setting a new buff and timer together.
         /// Fallback to online mode for the master or in case offline mode was turned off.
@@ -551,6 +558,7 @@ namespace TanksMP
         }
 
         /// <summary>
+        /// DEPRECIATED
         /// Online: synchronizes the buff seconds of the player for all players via properties.
         /// Provides an optional index parameter for setting a new buff and timer together.
         /// </summary>

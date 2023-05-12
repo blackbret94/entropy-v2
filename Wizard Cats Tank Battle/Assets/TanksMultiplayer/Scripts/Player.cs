@@ -4,6 +4,8 @@
  * 	otherwise make available to any third party the Service or the Content. */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Entropy.Scripts.Audio;
 using Entropy.Scripts.Player;
 using UnityEngine;
@@ -13,6 +15,7 @@ using UnityEngine.EventSystems;
 using Vashta.Entropy.Character;
 using Vashta.Entropy.SaveLoad;
 using EckTechGames.FloatingCombatText;
+using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.StatusEffects;
 using Vashta.Entropy.UI.ClassSelectionPanel;
 
@@ -137,7 +140,7 @@ namespace TanksMP
 
         public PlayerCollisionHandler PlayerCollisionHandler;
         public PlayerMovementAudioAnimationController PlayerMovementAudioAnimationController;
-        private StatusEffectController _statusEffectController;
+        public StatusEffectController StatusEffectController;
 
         //timestamp when next shot should happen
         private float nextFire;
@@ -159,18 +162,23 @@ namespace TanksMP
         public ClassList classList;
         public ClassDefinition classDefinition { get; private set; }
 
-        public StatusEffectController StatusEffectController => _statusEffectController;
-
         public int PreferredTeamIndex = -1; // -1 indicates random
 
         private Vector3 _lastMousePos;
 
         private float _lastSecondUpdate;
         private float _secondUpdateTime = 1f;
-        
+
+        private static Dictionary<int, Player> _playersByViewId = new ();
+
+        public BulletDictionary BulletDictionary;
+
         //initialize server values for this player
         void Awake()
         {
+            _playersByViewId.Add(GetId(), this);
+            Debug.Log("Adding player with ID: " + GetId());
+            
             //only let the master do initialization
             if(!PhotonNetwork.IsMasterClient)
                 return;
@@ -185,7 +193,6 @@ namespace TanksMP
                 ApplyClass();
             }
 
-            _statusEffectController = GetComponent<StatusEffectController>();
             _lastSecondUpdate = Time.time + 2f;
 
             GetView().SetKills(0);
@@ -206,6 +213,33 @@ namespace TanksMP
             GetView().SetHealth(maxHealth);
         }
 
+        /// <summary>
+        /// Get the ID of this player
+        /// </summary>
+        /// <returns></returns>
+        public int GetId()
+        {
+            // Need to verify this is the right way to do it
+            return photonView.ViewID;
+        }
+
+        private void OnDestroy()
+        {
+            _playersByViewId.Remove(GetId());
+        }
+
+        /// <summary>
+        /// Attempt to get a player from an ID.  Returns null if player does not exist
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static Player GetPlayerById(int id)
+        {
+            if (_playersByViewId.ContainsKey(id))
+                return _playersByViewId[id];
+
+            return null;
+        }
 
         /// <summary>
         /// Initialize synced values on every client.
@@ -314,11 +348,11 @@ namespace TanksMP
                 
                 int health = GetView().GetHealth();
 
-                health += (int)_statusEffectController.HealthPerSecond;
+                health += (int)StatusEffectController.HealthPerSecond;
             
                 if (health <= 0)
                     // killed the player
-                    PlayerDeath(_statusEffectController.LastDotAppliedBy, null);
+                    PlayerDeath(StatusEffectController.LastDotAppliedBy, null);
 
                 _lastSecondUpdate = Time.time;
             }
@@ -404,7 +438,7 @@ namespace TanksMP
                                      * Quaternion.Euler(0, camFollow.camTransform.eulerAngles.y, 0);
 
             //create movement vector based on current rotation and speed
-            Vector3 movementDir = transform.forward * ((moveSpeed +  _statusEffectController.MovementSpeedModifier) * _statusEffectController.MovementSpeedMultiplier * Time.deltaTime);
+            Vector3 movementDir = transform.forward * ((moveSpeed +  StatusEffectController.MovementSpeedModifier) * StatusEffectController.MovementSpeedMultiplier * Time.deltaTime);
             //apply vector to rigidbody position
             rb.MovePosition(rb.position + movementDir);
         }
@@ -444,7 +478,7 @@ namespace TanksMP
         //along with the shot request to the server to absolutely ensure a synced shot position
         protected void Shoot(Vector2 direction = default(Vector2))
         {
-            float fireRateMod = fireRate * _statusEffectController.AttackRateModifier;
+            float fireRateMod = fireRate * StatusEffectController.AttackRateModifier;
             
             //if shot delay is over  
             if (Time.time > nextFire)
@@ -503,7 +537,7 @@ namespace TanksMP
             bullet.SpawnNewBullet();
             bullet.owner = gameObject;
             bullet.ClassDefinition = classDefinition;
-            bullet.damage = Mathf.CeilToInt(bullet.damage * _statusEffectController.DamageOutputModifier);
+            bullet.damage = Mathf.CeilToInt(bullet.damage * StatusEffectController.DamageOutputModifier);
             
             // animate
             PlayerAnimator.Attack();
@@ -709,15 +743,18 @@ namespace TanksMP
             if (other != null)
                 senderId = (short)other.GetComponent<PhotonView>().ViewID;
 
-            this.photonView.RPC("RpcRespawn", RpcTarget.All, senderId, killingBlow);
+            this.photonView.RPC("RpcRespawn", RpcTarget.All, senderId, killingBlow?killingBlow.GetId():0);
         }
 
 
         //called on all clients on both player death and respawn
         //only difference is that on respawn, the client sends the request
         [PunRPC]
-        protected virtual void RpcRespawn(short senderId, Bullet killingBlowBullet)
+        protected virtual void RpcRespawn(short senderId, int bulletId)
         {
+            
+            Bullet killingBlowBullet = BulletDictionary[bulletId];
+            
             //toggle visibility for player gameobject (on/off)
             gameObject.SetActive(!gameObject.activeInHierarchy);
             bool isActive = gameObject.activeInHierarchy;
@@ -726,16 +763,19 @@ namespace TanksMP
             //the player has been killed
             if (!isActive)
             {
-                _statusEffectController.ClearStatusEffects();
+                StatusEffectController.ClearStatusEffects();
                 
                 //find original sender game object (killedBy)
                 PhotonView senderView = senderId > 0 ? PhotonView.Find(senderId) : null;
                 if (senderView != null && senderView.gameObject != null) killedBy = senderView.gameObject;
-                
-                Player killedByPlayer = killedBy.GetComponent<Player>();
 
-                if (killedByPlayer != null)
-                    killedByPlayer.GetView().IncrementKills();
+                if (killedBy != null)
+                {
+                    Player killedByPlayer = killedBy.GetComponent<Player>();
+
+                    if (killedByPlayer != null)
+                        killedByPlayer.GetView().IncrementKills();
+                }
 
                 //detect whether the current user was responsible for the kill, but not for suicide
                 //yes, that's my kill: increase local kill counter
@@ -877,14 +917,24 @@ namespace TanksMP
             characterAppearance.LoadFromSerialized(characterAppearanceSerializable);
         }
 
-        public void SetClass(ClassDefinition newClassDefinition)
+        public void SetClass(ClassDefinition newClassDefinition, bool respawnPlayer)
         {
-            classDefinition = newClassDefinition;
+            photonView.RPC("RpcSetClass", RpcTarget.All, newClassDefinition.classId, respawnPlayer);
+        }
+
+        // Called on all clients when a player sets their class
+        [PunRPC]
+        protected void RpcSetClass(int classId, bool applyNow)
+        {
+            classDefinition = classList.GetClassById(classId);
+
+            // Should only save selection for local player
+            if(IsLocal)
+                CharacterClassSaveLoad.Save(classDefinition.classId);
             
-            if(!PhotonNetwork.IsMasterClient)
-                return;
-            
-            CharacterClassSaveLoad.Save(newClassDefinition.classId);
+            // Respawn if apply now
+            if(applyNow)
+                TakeDamage(maxHealth*100, this);
         }
         
         private void ApplyClass()
@@ -910,9 +960,20 @@ namespace TanksMP
             bullets[0] = classDefinition.Missile;
         }
 
-        public void ApplyStatusEffect(string statusEffectId, Player owner)
+        public void ApplyStatusEffect(string statusEffectId, int ownerId)
         {
-            _statusEffectController.AddStatusEffect(statusEffectId, owner);
+            // if (!PhotonNetwork.IsMasterClient)
+                // return;
+
+            Player owner = GetPlayerById(ownerId);
+
+            if (owner == null)
+            {
+                Debug.Log("Player is null!");
+                return;
+            }
+
+            StatusEffectController.AddStatusEffect(statusEffectId, owner);
         }
     }
 }

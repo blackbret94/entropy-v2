@@ -3,12 +3,14 @@
  * 	You shall not license, sublicense, sell, resell, transfer, assign, distribute or
  * 	otherwise make available to any third party the Service or the Content. */
 
+using System;
 using UnityEngine;
 using System.Collections.Generic;
 using Entropy.Scripts.Player;
 using Photon.Pun;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.StatusEffects;
+using Random = UnityEngine.Random;
 
 namespace TanksMP
 {
@@ -17,6 +19,9 @@ namespace TanksMP
     /// </summary>
     public class Bullet : MonoBehaviourPun
     {
+        // Eventually break this out into a scriptable object
+        public int bulletId = 0;
+        
         /// <summary>
         /// Projectile travel speed in units.
         /// </summary>
@@ -92,10 +97,10 @@ namespace TanksMP
         [HideInInspector]
         public GameObject owner;
         private float _timeCreated;
+        private string _lastUUID = "";
         private const float OwnerProtectionTime = 0.33f;
 
         private bool OwnerIsProtected => Time.time - _timeCreated < OwnerProtectionTime;
-
 
         //get component references
         void Awake()
@@ -103,6 +108,11 @@ namespace TanksMP
             myRigidbody = GetComponent<Rigidbody>();
             sphereCol = GetComponent<SphereCollider>();
             maxBounce = bounce;
+        }
+
+        public int GetId()
+        {
+            return bulletId;
         }
 
         public void SpawnNewBullet()
@@ -259,15 +269,13 @@ namespace TanksMP
         private void AttemptApplyEffectAlly(Player player, Player target)
         {
             if(Random.Range(0f, 1f) < StatusEffectOnAllyChance)
-                target.ApplyStatusEffect(StatusEffectOnAlly.Id, player);
+                target.ApplyStatusEffect(StatusEffectOnAlly.Id, player.GetId());
         }
 
         private void AttemptApplyEffectEnemy(Player player, Player target)
         {
-            Debug.Log("Applying effect to enemy");
-            
             if(Random.Range(0f, 1f) < StatusEffectOnEnemyChance)
-                target.ApplyStatusEffect(StatusEffectOnEnemy.Id, player);
+                target.ApplyStatusEffect(StatusEffectOnEnemy.Id, player.GetId());
         }
         
         private void BounceOffReflectivePlayer(Player player)

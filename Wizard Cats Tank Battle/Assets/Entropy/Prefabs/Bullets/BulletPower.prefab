@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 54000013431412088}
   - component: {fileID: 114000014051134244}
   - component: {fileID: 114000014109254046}
+  - component: {fileID: 8679526969836669606}
   m_Layer: 10
   m_Name: BulletPower
   m_TagString: Untagged
@@ -130,6 +131,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cd273be5de0c024da7ef86707f5d826, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletDictionary: {fileID: 11400000, guid: cb820bff8f12bf24e85b73b2e02f11ae, type: 2}
+  bulletId: 3
   speed: 18
   damage: 5
   despawnDelay: 60
@@ -144,6 +147,10 @@ MonoBehaviour:
     type: 3}
   deathFx: {fileID: 1000010321467122, guid: 0e7cc58b84350174d86594375300513b, type: 3}
   bounceInf: 0
+  StatusEffectOnEnemy: {fileID: 0}
+  StatusEffectOnEnemyChance: 0
+  StatusEffectOnAlly: {fileID: 0}
+  StatusEffectOnAllyChance: 0
   owner: {fileID: 0}
 --- !u!114 &114000014109254046
 MonoBehaviour:
@@ -160,14 +167,30 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 0
+  Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 0
   ObservedComponents:
-  - {fileID: 0}
+  - {fileID: 8679526969836669606}
   sceneViewId: 0
   InstantiationId: -1
   isRuntimeInstantiated: 0
+--- !u!114 &8679526969836669606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000010310479910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 0
+  m_SynchronizeRotation: 0
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &1000010476581430
 GameObject:
   m_ObjectHideFlags: 0

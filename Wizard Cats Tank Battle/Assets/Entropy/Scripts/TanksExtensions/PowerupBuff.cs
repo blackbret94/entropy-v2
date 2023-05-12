@@ -1,5 +1,7 @@
 using TanksMP;
+using UnityEngine;
 using Vashta.Entropy.ScriptableObject;
+using Vashta.Entropy.StatusEffects;
 
 namespace Vashta.Entropy.TanksExtensions
 {
@@ -7,6 +9,7 @@ namespace Vashta.Entropy.TanksExtensions
     public class PowerupBuff : Collectible
     {
         public Powerup Powerup;
+        public StatusEffectData StatusEffectData;
 
         /// <summary>
         /// Overrides the default behavior with a custom implementation.
@@ -17,7 +20,7 @@ namespace Vashta.Entropy.TanksExtensions
             if (p == null)
                 return false;
 
-            if (Powerup.StatusEffect != null)
+            if (StatusEffectData != null)
             {
                 return ApplyStatusEffect(p);
             }
@@ -29,6 +32,7 @@ namespace Vashta.Entropy.TanksExtensions
 
         private bool ApplyPowerup(Player p)
         {
+            Debug.Log("Applying powerup");
             float value = p.GetView().GetBuffSeconds();
             int currentIndex = p.GetView().GetBuffIndex();
             
@@ -50,7 +54,8 @@ namespace Vashta.Entropy.TanksExtensions
 
         private bool ApplyStatusEffect(Player p)
         {
-            p.StatusEffectController.AddStatusEffect(Powerup.StatusEffect.Id, p);
+            Debug.Log("Applying status effect: " + StatusEffectData.Id);
+            p.StatusEffectController.AddStatusEffect(StatusEffectData.Id, p);
 
             return true;
         }

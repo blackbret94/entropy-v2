@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 135000011308072078}
   - component: {fileID: 54000013431412088}
   - component: {fileID: 114000011421702680}
+  - component: {fileID: -8878624295809849018}
   m_Layer: 10
   m_Name: Earth Missile
   m_TagString: Untagged
@@ -51,6 +52,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cd273be5de0c024da7ef86707f5d826, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletId: 4
   speed: 13
   damage: 6
   despawnDelay: 60
@@ -67,7 +69,7 @@ MonoBehaviour:
   bounceInf: 0
   StatusEffectOnEnemy: {fileID: 11400000, guid: a6f5bec76cf6a26489130e7aff37e011,
     type: 2}
-  StatusEffectOnEnemyChance: 1
+  StatusEffectOnEnemyChance: 0.5
   StatusEffectOnAlly: {fileID: 11400000, guid: fcadc9c530a937d4f95f060f6838cb29, type: 2}
   StatusEffectOnAllyChance: 1
   owner: {fileID: 0}
@@ -162,17 +164,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 0
+  ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 0
+  Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 0
   ObservedComponents:
-  - {fileID: 0}
+  - {fileID: -8878624295809849018}
   sceneViewId: 0
   InstantiationId: -1
   isRuntimeInstantiated: 0
+--- !u!114 &-8878624295809849018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000010310479910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 0
+  m_SynchronizeRotation: 0
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &1000013784038190
 GameObject:
   m_ObjectHideFlags: 0

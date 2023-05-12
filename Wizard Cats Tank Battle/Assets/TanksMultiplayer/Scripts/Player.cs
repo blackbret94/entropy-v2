@@ -169,6 +169,8 @@ namespace TanksMP
         private float _lastSecondUpdate;
         private float _secondUpdateTime = 1f;
 
+        private float _initTime;
+
         private static Dictionary<int, Player> _playersByViewId = new ();
 
         public BulletDictionary BulletDictionary;
@@ -177,7 +179,6 @@ namespace TanksMP
         void Awake()
         {
             _playersByViewId.Add(GetId(), this);
-            Debug.Log("Adding player with ID: " + GetId());
             
             //only let the master do initialization
             if(!PhotonNetwork.IsMasterClient)
@@ -194,6 +195,7 @@ namespace TanksMP
             }
 
             _lastSecondUpdate = Time.time + 2f;
+            photonView.SetJoinTime(Time.time);
 
             GetView().SetKills(0);
             GetView().SetDeaths(0);
@@ -704,7 +706,7 @@ namespace TanksMP
                     GameManager.GetInstance().AddScore(ScoreType.Kill, otherTeam);
                 else
                 {
-                    if (!ClassSelectionPanel.Instance.CountdownIsActive())
+                    if (!PlayerCanRespawnFreely())
                         GameManager.GetInstance().RemoveScore(ScoreType.Kill, otherTeam);
                 }
 
@@ -728,7 +730,6 @@ namespace TanksMP
             //also tell all clients to despawn this player
             GetView().SetHealth(maxHealth);
             GetView().SetBullet(0);
-            GetView().SetBuff(0,0);
 
             //clean up collectibles on this player by letting them drop down
             Collectible[] collectibles = GetComponentsInChildren<Collectible>(true);
@@ -744,6 +745,18 @@ namespace TanksMP
                 senderId = (short)other.GetComponent<PhotonView>().ViewID;
 
             this.photonView.RPC("RpcRespawn", RpcTarget.All, senderId, killingBlow?killingBlow.GetId():0);
+        }
+
+        private bool PlayerCanRespawnFreely()
+        {
+            float countdownMax = ClassSelectionPanel.Instance.TimerLength;
+
+            if (Time.time <= photonView.GetJoinTime() + countdownMax)
+            {
+                return true;
+            }
+            
+            return false;
         }
 
 
@@ -962,9 +975,6 @@ namespace TanksMP
 
         public void ApplyStatusEffect(string statusEffectId, int ownerId)
         {
-            // if (!PhotonNetwork.IsMasterClient)
-                // return;
-
             Player owner = GetPlayerById(ownerId);
 
             if (owner == null)

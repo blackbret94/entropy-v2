@@ -24,8 +24,7 @@ namespace TanksMP
         public const string bullet = "bullet";
         public const string kills = "kills";
         public const string deaths = "deaths";
-        public const string buffIndex = "buffIndex";
-        public const string buffSeconds = "buffSeconds";
+        public const string joinTime = "joinTime";
 
         /// <summary>
         /// Returns the networked player nick name.
@@ -440,142 +439,43 @@ namespace TanksMP
             SetDeaths(player, GetDeaths(player) + value);
         }
 
-        
-        // DEPRICATED
-        public static float GetBuffSeconds(this PhotonView player)
+        public static float GetJoinTime(this Photon.Realtime.Player player)
+        {
+            return System.Convert.ToSingle(player.CustomProperties[joinTime]);
+        }
+
+        public static float GetJoinTime(this PhotonView player)
         {
             if (PhotonNetwork.OfflineMode == true)
             {
                 PlayerBot bot = player.GetComponent<PlayerBot>();
                 if (bot != null)
                 {
-                    return bot.buffSeconds;
+                    return bot.joinTime;
                 }
             }
 
-            return player.Owner.GetBuffSeconds();
+            return player.Owner.GetJoinTime();
         }
-
-        /// <summary>
-        /// DEPRICATED
-        /// Online: returns the networked buffseconds value of the player out of properties.
-        /// </summary>
-        public static float GetBuffSeconds(this Photon.Realtime.Player player)
-        {
-            return System.Convert.ToInt32(player.CustomProperties[buffSeconds]);
-        }
-
-        public static void DecBuffSeconds(this PhotonView player, float delta)
+        
+        public static void SetJoinTime(this PhotonView player, float value)
         {
             if (PhotonNetwork.OfflineMode == true)
             {
                 PlayerBot bot = player.GetComponent<PlayerBot>();
                 if (bot != null)
                 {
-                    bot.buffSeconds -= delta;
-
-                    if (bot.buffSeconds <= 0)
-                    {
-                        player.SetBuff(0, 0);
-                    }
-
+                    bot.joinTime = value;
                     return;
                 }
             }
 
-            player.Owner.DecBuffSeconds(player, delta);
+            player.Owner.SetJoinTime(value);
         }
 
-        // DEPRICATED
-        private static void DecBuffSeconds(this Photon.Realtime.Player player, PhotonView playerPhotonView, float delta)
+        public static void SetJoinTime(this Photon.Realtime.Player player, float value)
         {
-            float newBuffValue = player.GetBuffSeconds() - delta;
-            
-            Hashtable hash = new Hashtable();
-            hash.Add(buffSeconds, (byte)newBuffValue);
-
-            player.SetCustomProperties(hash);
-            
-            if(newBuffValue <= 0f)
-                player.SetBuff(playerPhotonView, 0, 0);
-            
-            // if(player.IsLocal)
-            //     GameManager.GetInstance().ui.buffIcon.SetSeconds(newBuffValue);
-        }
-        
-        /// <summary>
-        /// DEPRICATED
-        /// Offline: returns the buff index of a bot stored in PlayerBot.
-        /// Fallback to online mode for the master or in case offline mode was turned off.
-        /// </summary>
-        public static int GetBuffIndex(this PhotonView player)
-        {
-            if (PhotonNetwork.OfflineMode == true)
-            {
-                PlayerBot bot = player.GetComponent<PlayerBot>();
-                if (bot != null)
-                {
-                    return bot.buffIndex;
-                }
-            }
-
-            return player.Owner.GetBuffIndex();
-        }
-
-        /// <summary>
-        /// DEPRICATED
-        /// Online: returns the networked buff index of the player out of properties.
-        /// </summary>
-        public static int GetBuffIndex(this Photon.Realtime.Player player)
-        {
-            return System.Convert.ToInt32(player.CustomProperties[buffIndex]);
-        }
-        
-        /// <summary>
-        /// DEPRICATED
-        /// Offline: synchronizes the buff seconds of a PlayerBot locally.
-        /// Provides an optional index parameter for setting a new buff and timer together.
-        /// Fallback to online mode for the master or in case offline mode was turned off.
-        /// </summary>
-        public static void SetBuff(this PhotonView player, float value, int index = -1)
-        {
-            if (PhotonNetwork.OfflineMode == true)
-            {
-                PlayerBot bot = player.GetComponent<PlayerBot>();
-                if (bot != null)
-                {
-                    bot.buffSeconds = value;
-                    if (index >= 0)
-                    {
-                        bot.buffIndex = index;
-                    }
-
-                    return;
-                }
-            }
-
-            player.Owner.SetBuff(player, value, index);
-        }
-
-        /// <summary>
-        /// DEPRECIATED
-        /// Online: synchronizes the buff seconds of the player for all players via properties.
-        /// Provides an optional index parameter for setting a new buff and timer together.
-        /// </summary>
-        public static void SetBuff(this Photon.Realtime.Player player, PhotonView playerPhotonView, float value, int index = -1)
-        {
-            Hashtable hash = new Hashtable();
-            hash.Add(buffSeconds, (byte)value);
-            if (index >= 0)
-            {
-                hash.Add(buffIndex, (byte)index);
-            }
-
-            player.SetCustomProperties(hash);
-            
-            // update UI
-            // if(player.IsLocal)
-            //     GameManager.GetInstance().ui.buffIcon.SetPowerup(index, value);
+            player.SetCustomProperties(new Hashtable() { { joinTime, (byte)value } });
         }
 
         /// <summary>
@@ -592,7 +492,7 @@ namespace TanksMP
                     bot.currentBullet = 0;
                     bot.health = 0;
                     bot.shield = 0;
-                    bot.buffIndex = 0;
+                    bot.joinTime = 0;
                     return;
                 }
             }
@@ -608,7 +508,7 @@ namespace TanksMP
             player.SetCustomProperties(new Hashtable() { { PlayerExtensions.bullet, (byte)0 },
                                                          { PlayerExtensions.health, (byte)0 },
                                                          { PlayerExtensions.shield, (byte)0 },
-                                                         {PlayerExtensions.buffIndex, (byte)0 }
+                                                         {PlayerExtensions.joinTime, (byte)0 }
             });
         }
     }

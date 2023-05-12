@@ -32,8 +32,7 @@ namespace TanksMP
         [HideInInspector] public int currentBullet;
         [HideInInspector] public int kills;
         [HideInInspector] public int deaths;
-        [HideInInspector] public float buffSeconds;
-        [HideInInspector] public int buffIndex;
+        [HideInInspector] public float joinTime;
         
         /// <summary>
         /// Radius in units for detecting other players.

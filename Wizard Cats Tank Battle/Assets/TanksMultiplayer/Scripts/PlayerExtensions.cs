@@ -482,9 +482,7 @@ namespace TanksMP
         
         // Class ID
         public static int GetClassId(this Photon.Realtime.Player player)
-        {            
-            Debug.Log("Getting class ID: " + System.Convert.ToInt32(player.CustomProperties[classId]));
-
+        {
             return System.Convert.ToInt32(player.CustomProperties[classId]);
         }
 
@@ -504,8 +502,6 @@ namespace TanksMP
         
         public static void SetClassId(this PhotonView player, int value)
         {
-            Debug.Log("Setting class ID: " + value);
-            
             if (PhotonNetwork.OfflineMode == true)
             {
                 PlayerBot bot = player.GetComponent<PlayerBot>();

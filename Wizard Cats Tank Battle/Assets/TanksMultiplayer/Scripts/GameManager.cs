@@ -65,6 +65,8 @@ namespace TanksMP
         /// </summary>
         public bool friendlyFire = false;
 
+        public List<GameObject> BotTargetList;
+
         private int lastSpawnIndex = -1;
 
         private List<PlayerBot> _botList;

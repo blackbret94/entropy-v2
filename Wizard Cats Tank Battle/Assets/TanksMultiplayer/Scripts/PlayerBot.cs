@@ -139,7 +139,8 @@ namespace TanksMP
             {
                 //find a point in the movement radius
                 Vector3 randomPoint = center + (Vector3)Random.insideUnitCircle * range;
-                randomPoint.y = 0;
+                randomPoint.y = transform.position.y;
+                //randomPoint.y = 0;
                 NavMeshHit hit;
 
                 //if the point found is a valid target point, set it and continue
@@ -183,10 +184,13 @@ namespace TanksMP
                 //if this bot reached the the random point on the navigation mesh,
                 //then calculate another random point on the navmesh on continue moving around
                 //with no other players in range, the AI wanders from team spawn to team spawn
+                // EXPERIMENTAL UPDATE to seek out specific spots instead
                 if(Vector3.Distance(transform.position, targetPoint) < agent.stoppingDistance)
                 {
-                    int teamCount = GameManager.GetInstance().teams.Length;
-                    RandomPoint(GameManager.GetInstance().teams[Random.Range(0, teamCount)].spawn.position, range, out targetPoint);
+                    List<GameObject> possibleTargets = GameManager.GetInstance().BotTargetList;
+                    RandomPoint(possibleTargets[Random.Range(0, possibleTargets.Count)].transform.position, range, out targetPoint);
+                    // int teamCount = GameManager.GetInstance().teams.Length;
+                    // RandomPoint(GameManager.GetInstance().teams[Random.Range(0, teamCount)].spawn.position, range, out targetPoint);
                 }
             }
             else

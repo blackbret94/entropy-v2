@@ -527,7 +527,6 @@ namespace TanksMP
             Bullet bullet = obj.GetComponent<Bullet>();
             bullet.SpawnNewBullet();
             bullet.owner = gameObject;
-            Debug.Log("Setting bullet classId" + photonView.GetClassId());
             bullet.ClassDefinition = classList[photonView.GetClassId()];
             bullet.damage = Mathf.CeilToInt(bullet.damage * StatusEffectController.DamageOutputModifier);
             

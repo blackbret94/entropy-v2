@@ -5,6 +5,7 @@ using Entropy.Scripts.Player.Inventory;
 using UnityEngine;
 using Vashta.Entropy.Character;
 using Vashta.Entropy.ScriptableObject;
+using Vashta.Entropy.UI;
 
 namespace Entropy.Scripts.ItemStore
 {
@@ -94,7 +95,7 @@ namespace Entropy.Scripts.ItemStore
                 Debug.Log("Purchasing " + ActiveItem().Id);
                 
                 // buy
-                _currencyTransaction.ModifyCurrency(-cost);
+                _currencyTransaction.DecreaseCurrency(cost);
                 Purchase();
                 SfxController.PlayPurchase();
 

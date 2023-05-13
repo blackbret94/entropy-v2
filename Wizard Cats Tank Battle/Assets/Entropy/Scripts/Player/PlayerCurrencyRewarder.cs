@@ -35,7 +35,7 @@ namespace Entropy.Scripts.Player
         
         private void Reward(int value)
         {
-            _currencyTransaction.ModifyCurrency(value);
+            _currencyTransaction.AddCurrency(value);
         }
     }
 }

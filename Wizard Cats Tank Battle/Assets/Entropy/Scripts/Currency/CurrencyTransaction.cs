@@ -18,10 +18,15 @@ namespace Entropy.Scripts.Currency
                 RefreshCurrency();
         }
 
-        public void ModifyCurrency(int delta)
+        public void AddCurrency(int delta)
         {
-            Debug.Log("Attempting to update currency");
+            Debug.Log("Attempting to update currency with delta: " + delta);
             CBSCurrency.AddUserCurrency(delta, CURRENCY_CODE, OnUpdateCurrency);
+        }
+
+        public void DecreaseCurrency(int value)
+        {
+            CBSCurrency.DecreaseUserCurrency(value, CURRENCY_CODE, OnUpdateCurrency);
         }
 
         public bool QueryPurchase(int cost)

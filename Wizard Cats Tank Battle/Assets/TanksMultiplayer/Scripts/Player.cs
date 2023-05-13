@@ -334,19 +334,29 @@ namespace TanksMP
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                if (Time.time < _lastSecondUpdate + _secondUpdateTime)
-                    return;
-                
-                int health = GetView().GetHealth();
-
-                health += (int)StatusEffectController.HealthPerSecond;
-            
-                if (health <= 0)
-                    // killed the player
-                    PlayerDeath(StatusEffectController.LastDotAppliedBy, null);
-
-                _lastSecondUpdate = Time.time;
+                if (Time.time >= _lastSecondUpdate + _secondUpdateTime)
+                    SlowUpdate();
             }
+        }
+
+        private void SlowUpdate()
+        {
+            int health = GetView().GetHealth();
+
+            int healthPerSecond = (int)StatusEffectController.HealthPerSecond;
+            
+            health += healthPerSecond;
+            GetView().SetHealth(health);
+
+            bool shouldShowTextAndAnimation = healthPerSecond < 0 || health < maxHealth;
+            if(shouldShowTextAndAnimation)
+                this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer, -healthPerSecond, false, false);
+            
+            if (health <= 0)
+                // killed the player
+                PlayerDeath(StatusEffectController.LastDotAppliedBy, null);
+
+            _lastSecondUpdate = Time.time;
         }
 
         //continously check for input on desktop platforms
@@ -490,24 +500,36 @@ namespace TanksMP
         [PunRPC]
         protected void CmdTakeDamage(int damage, bool attackerIsCounter=false, bool attackerIsSame=false)
         {
+            if (damage == 0)
+                return;
+            
             // Show damage
-
-            if (attackerIsCounter)
+            if (damage > 0)
             {
-                OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.CriticalHit,
+                if (attackerIsCounter)
+                {
+                    OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.CriticalHit,
                         damage);
-            }
-            else if (attackerIsSame)
-            {
-                OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.Miss, damage);
+                }
+                else if (attackerIsSame)
+                {
+                    OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.Miss, damage);
+                }
+                else
+                {
+                    OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.Hit, damage);
+                }
             }
             else
             {
-                OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.Hit, damage);
+                OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.Heal, Mathf.Abs(damage));
             }
-            
+
             // animate
-            PlayerAnimator.TakeDamage();
+            if (damage > 0)
+                PlayerAnimator.TakeDamage();
+            else
+                PlayerAnimator.Heal();
         }
 
         //called on the server first but forwarded to all clients

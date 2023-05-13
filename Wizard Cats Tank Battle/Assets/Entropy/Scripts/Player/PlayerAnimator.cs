@@ -11,6 +11,7 @@ namespace Entropy.Scripts.Player
         public string DieBaseName = "Die";
         public int DieAnimationCount = 3;
         public string TakeDamageBaseName = "Hit";
+        public string HealName = "Heal";
         public int TakeDamageAnimationCount = 4;
         public string IdleBaseName = "Idle";
         public bool StartIdle = false;
@@ -34,6 +35,11 @@ namespace Entropy.Scripts.Player
         public void TakeDamage()
         {
             Animator.SetTrigger(ChooseAnimation(TakeDamageBaseName, TakeDamageAnimationCount));
+        }
+
+        public void Heal()
+        {
+            Animator.SetTrigger(HealName);
         }
 
         public void Idle()

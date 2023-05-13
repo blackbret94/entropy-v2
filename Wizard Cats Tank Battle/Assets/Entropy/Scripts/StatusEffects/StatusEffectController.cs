@@ -123,7 +123,7 @@ namespace Vashta.Entropy.StatusEffects
             _dirtyFlag = true;
         }
 
-        private void RefreshCache()
+        public void RefreshCache()
         {
             _movementSpeedModifierCached = 0;
             _movementSpeedMultiplierCached = 1f;

@@ -848,9 +848,11 @@ namespace TanksMP
                                                                                                                  Vector3.zero, Quaternion.identity }), new PhotonMessageInfo());
             }
 
+            // Player is alive
             if (isActive)
             {
                 // apply class
+                StatusEffectController.RefreshCache();
                 ApplyClass();
             }
 

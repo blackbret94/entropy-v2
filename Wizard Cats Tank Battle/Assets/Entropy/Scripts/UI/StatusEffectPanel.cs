@@ -17,10 +17,10 @@ namespace Vashta.Entropy.UI
         {
             _lastRefreshTime = Time.time + 1f;
             
-            foreach (var block in StatusEffectBlocks)
-            {
-                block.ClosePanel();
-            }
+            // foreach (var block in StatusEffectBlocks)
+            // {
+            //     block.ClosePanel();
+            // }
         }
         
         private void Update()
@@ -38,22 +38,42 @@ namespace Vashta.Entropy.UI
         private void RefreshStatusEffects()
         {
             List<StatusEffect> statusEffects = Player.StatusEffectController.StatusEffects;
-            for (int i = 0; i < StatusEffectBlocks.Count; i++)
-            {
-                StatusEffectSlot slot = StatusEffectBlocks[i];
+            int iconIndex = 0;
 
-                if (i < statusEffects.Count)
+            foreach (var statusEffect in statusEffects)
+            {
+                StatusEffectSlot slot = StatusEffectBlocks[iconIndex];
+
+                if (slot.GetStatusEffect() == statusEffect)
                 {
-                    StatusEffect statusEffect = statusEffects[i];
-                    
-                    slot.OpenPanel();
-                    slot.SetStatusEffect(statusEffect);
+                    // consider blinking or fading out
+                    // slot.UpdateAnimation();
                 }
                 else
                 {
-                    slot.ClosePanel();
+                    Debug.Log("Adding a status effect");
+                    slot.SetStatusEffect(statusEffect);
                 }
+
+                iconIndex++;
             }
+            
+            // for (int i = 0; i < StatusEffectBlocks.Count; i++)
+            // {
+            //     StatusEffectSlot slot = StatusEffectBlocks[i];
+            //
+            //     if (i < statusEffects.Count)
+            //     {
+            //         StatusEffect statusEffect = statusEffects[i];
+            //         
+            //         slot.OpenPanel();
+            //         slot.SetStatusEffect(statusEffect);
+            //     }
+            //     else
+            //     {
+            //         slot.ClosePanel();
+            //     }
+            // }
         }
     }
 }

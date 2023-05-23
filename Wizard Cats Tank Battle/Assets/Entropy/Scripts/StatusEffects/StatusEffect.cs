@@ -37,6 +37,12 @@ namespace Vashta.Entropy.StatusEffects
         {
             return Time.time > _expiration;
         }
+
+        public float GetTimeLeft()
+        {
+            return _expiration - Time.time;
+        }
+        
         public string Id()
         {
             return StatusEffectData().Id;

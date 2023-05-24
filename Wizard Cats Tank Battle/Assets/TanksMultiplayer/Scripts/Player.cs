@@ -169,6 +169,11 @@ namespace TanksMP
         private static Dictionary<int, Player> _playersByViewId = new ();
 
         public BulletDictionary BulletDictionary;
+        
+        // Lag compensation
+        private Vector3 networkVelocity;
+        private Vector3 networkPosition;
+        private Vector3 lastVelocity;
 
         //initialize server values for this player
         void Awake()
@@ -250,6 +255,9 @@ namespace TanksMP
 
             _playerCurrencyRewarder = new PlayerCurrencyRewarder();
 
+            //get components and set camera target
+            rb = GetComponent<Rigidbody>();
+            
             //called only for this client 
             if (!photonView.IsMine)
                 return;
@@ -257,8 +265,6 @@ namespace TanksMP
 			//set a global reference to the local player
             GameManager.GetInstance().localPlayer = this;
 
-			//get components and set camera target
-            rb = GetComponent<Rigidbody>();
             camFollow = Camera.main.GetComponent<FollowTarget>();
             camFollow.target = turret;
 
@@ -319,12 +325,23 @@ namespace TanksMP
             {             
                 //here we send the turret rotation angle to other clients
                 stream.SendNext(turretRotation);
+                
+                // lag compensation
+                stream.SendNext(rb.position);
+                stream.SendNext(lastVelocity);
             }
             else
             {   
                 //here we receive the turret rotation angle from others and apply it
                 this.turretRotation = (short)stream.ReceiveNext();
                 OnTurretRotation();
+                
+                // lag compensation
+                networkPosition = (Vector3)stream.ReceiveNext();
+                networkVelocity = (Vector3)stream.ReceiveNext();
+                
+                float lag = Mathf.Abs((float) (PhotonNetwork.Time - info.timestamp));
+                networkPosition += (networkVelocity * lag);
             }
         }
 
@@ -368,6 +385,10 @@ namespace TanksMP
             {
                 //keep turret rotation updated for all clients
                 OnTurretRotation();
+                
+                // lag compensation
+                rb.position = Vector3.MoveTowards(rb.position, networkPosition, Time.fixedDeltaTime);
+
                 return;
             }
 
@@ -380,6 +401,7 @@ namespace TanksMP
             {
                 moveDir.x = 0;
                 moveDir.y = 0;
+                networkVelocity = Vector3.zero;
             }
             else
             {
@@ -439,9 +461,12 @@ namespace TanksMP
                                      * Quaternion.Euler(0, camFollow.camTransform.eulerAngles.y, 0);
 
             //create movement vector based on current rotation and speed
-            Vector3 movementDir = transform.forward * ((moveSpeed +  StatusEffectController.MovementSpeedModifier) * StatusEffectController.MovementSpeedMultiplier * Time.deltaTime);
+            Vector3 movementDir = transform.forward * ((moveSpeed + StatusEffectController.MovementSpeedModifier) *
+                                                       StatusEffectController.MovementSpeedMultiplier);
+            // Debug.Log("MovementDir: " + movementDir);
+            lastVelocity = movementDir;
             //apply vector to rigidbody position
-            rb.MovePosition(rb.position + movementDir);
+            rb.MovePosition(rb.position + movementDir*Time.deltaTime);
         }
 
 
@@ -451,6 +476,7 @@ namespace TanksMP
             //reset rigidbody physics values
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
+            lastVelocity = Vector3.zero;
         }
 
 

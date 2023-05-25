@@ -51,7 +51,6 @@ namespace Vashta.Entropy.UI
                 }
                 else
                 {
-                    Debug.Log("Adding a status effect");
                     slot.SetStatusEffect(statusEffect);
                 }
 

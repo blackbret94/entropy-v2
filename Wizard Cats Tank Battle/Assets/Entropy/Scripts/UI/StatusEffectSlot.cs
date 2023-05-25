@@ -55,11 +55,9 @@ namespace Vashta.Entropy.UI
 
             if (timeLeft < FadeOutThreshold)
             {
-                Debug.Log("Closing status effect");
                 Close();
             } else if (timeLeft < BlinkThreshold)
             {
-                Debug.Log("Setting status effect to blink");
                 Animator.SetBool(BlinkBool, true);
             }
         }

@@ -158,6 +158,16 @@ namespace TanksMP
             //set the target point as the new destination
             agent.SetDestination(result);
         }
+        
+        protected override void SlowUpdate()
+        {
+            base.SlowUpdate();
+            
+            // adjust speed
+            float speed = ((moveSpeed + StatusEffectController.MovementSpeedModifier) *
+                           StatusEffectController.MovementSpeedMultiplier);
+            agent.speed = speed;
+        }
 
         void FixedUpdate()
         {

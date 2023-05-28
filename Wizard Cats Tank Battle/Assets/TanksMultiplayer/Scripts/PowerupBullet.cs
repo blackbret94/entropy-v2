@@ -47,7 +47,7 @@ namespace TanksMP
             
             // show UI message
             if(p.IsLocal)
-                GameManager.GetInstance().ui.PowerUpPanel.SetText(Powerup.DisplayText,Powerup.DisplaySubtext, Powerup.Color);
+                GameManager.GetInstance().ui.PowerUpPanel.SetText(Powerup.DisplayText,Powerup.DisplaySubtext, Powerup.Color, Powerup.Icon);
 
             //return successful collection
             return true;

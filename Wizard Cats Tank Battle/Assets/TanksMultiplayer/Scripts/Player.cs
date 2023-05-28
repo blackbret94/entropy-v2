@@ -356,7 +356,7 @@ namespace TanksMP
             }
         }
 
-        private void SlowUpdate()
+        protected virtual void SlowUpdate()
         {
             int health = GetView().GetHealth();
 

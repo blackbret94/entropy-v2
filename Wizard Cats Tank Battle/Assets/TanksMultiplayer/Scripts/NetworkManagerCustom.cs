@@ -57,6 +57,9 @@ namespace TanksMP
         /// </summary>
         public CharacterAppearanceSaveLoad CharacterAppearanceSaveLoad;
 
+        // If null, uses best region
+        public string FixedRegion = "us";
+
         //initialize network view
         void Awake()
         {
@@ -75,8 +78,18 @@ namespace TanksMP
             //this is to avoid having the same ID in a scene
             PhotonView view = gameObject.AddComponent<PhotonView>();
             view.ViewID = 999;
+            
+            SetRegion();
         }
 
+        /// <summary>
+        /// Used to force a region.  If NullOrEmpty() use best region.
+        /// Eventually control via a menu
+        /// </summary>
+        private void SetRegion()
+        {
+            PhotonNetwork.PhotonServerSettings.AppSettings.FixedRegion = FixedRegion;
+        }
 
         /// <summary>
         /// Returns a reference to this script instance.
@@ -85,8 +98,7 @@ namespace TanksMP
         {
             return instance;
         }
-
-
+        
         /// <summary>
         /// Starts initializing and connecting to a game. Depends on the selected network mode.
         /// Sets the current player name prior to connecting to the servers.

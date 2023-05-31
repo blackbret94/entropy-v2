@@ -16,11 +16,6 @@ namespace Vashta.Entropy.UI
         private void Awake()
         {
             _lastRefreshTime = Time.time + 1f;
-            
-            // foreach (var block in StatusEffectBlocks)
-            // {
-            //     block.ClosePanel();
-            // }
         }
         
         private void Update()
@@ -56,23 +51,6 @@ namespace Vashta.Entropy.UI
 
                 iconIndex++;
             }
-            
-            // for (int i = 0; i < StatusEffectBlocks.Count; i++)
-            // {
-            //     StatusEffectSlot slot = StatusEffectBlocks[i];
-            //
-            //     if (i < statusEffects.Count)
-            //     {
-            //         StatusEffect statusEffect = statusEffects[i];
-            //         
-            //         slot.OpenPanel();
-            //         slot.SetStatusEffect(statusEffect);
-            //     }
-            //     else
-            //     {
-            //         slot.ClosePanel();
-            //     }
-            // }
         }
     }
 }

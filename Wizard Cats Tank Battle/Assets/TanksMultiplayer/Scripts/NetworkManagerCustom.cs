@@ -335,10 +335,9 @@ namespace TanksMP
 		void AddPlayer()
 		{
             CharacterAppearanceSaveLoad.SetCurrentAppearanceAsCustomProperty();
-            // CharacterClassSaveLoad.SetCurrentClassAsCustomProperty();
-            
+
             //get our selected player prefab index
-            int prefabId = 0; // int.Parse(Encryptor.Decrypt(PlayerPrefs.GetString(PrefsKeys.activeTank)));
+            int prefabId = 0;
             
             //get the spawn position where our player prefab should be instantiated at, depending on the team assigned
             //if we cannot get a position, spawn it in the center of that team area - otherwise use the calculated position
@@ -348,9 +347,7 @@ namespace TanksMP
                 PhotonNetwork.Instantiate(playerPrefabs[prefabId].name, startPos.position, startPos.rotation, 0);
 			else 
                 PhotonNetwork.Instantiate(playerPrefabs[prefabId].name, Vector3.zero, Quaternion.identity, 0);
-
-            //CharacterAppearance appearance = playerPrefab.GetComponentInChildren<CharacterAppearance>();
-            //appearance.LoadAppearance();
+            
         }
 
 

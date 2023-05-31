@@ -195,14 +195,6 @@ namespace TanksMP
             GetView().SetDeaths(0);
         }
 
-        public void LoadClassCallback(int classId, bool forceRefresh)
-        {
-            photonView.SetClassId(classId);
-            
-            if(forceRefresh)
-                ApplyClass();
-        }
-
         private void SetMaxHealth()
         {
             //set players current health value after joining
@@ -274,7 +266,7 @@ namespace TanksMP
             GameManager.GetInstance().ui.controls[0].onDrag += Move;
             GameManager.GetInstance().ui.controls[0].onDragEnd += MoveEnd;
 
-            GameManager.GetInstance().ui.controls[1].onClick += Shoot;
+            // GameManager.GetInstance().ui.controls[1].onClick += Shoot;
             // GameManager.GetInstance().ui.controls[1].onDragBegin += ShootBegin;
             GameManager.GetInstance().ui.controls[1].onDrag += RotateTurret;
             GameManager.GetInstance().ui.controls[1].onDrag += Shoot;

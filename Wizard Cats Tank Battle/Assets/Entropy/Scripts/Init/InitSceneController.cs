@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using Jacovone.AssetBundleMagic;
 using TMPro;
@@ -13,9 +15,12 @@ namespace Vashta.Entropy.Scripts.Init
         public InitProgressDisplay InitProgressDisplay;
         public List<string> BundlesToDownload;
         public TextMeshProUGUI errorText;
+        public GameObject ConnectionErrorPanel;
         
         private AssetBundleMagic.Progress p = null;
         private bool _isComplete = false;
+
+        private string _testUrl = "www.google.com";
 
         private void Start()
         {
@@ -27,7 +32,10 @@ namespace Vashta.Entropy.Scripts.Init
                 LoadBundles();
             }, delegate(string error) {
                 Debug.LogError (error);
+                ConnectionErrorPanel.SetActive(true);
             });
+
+            StartCoroutine(CheckInternetConnection());
         }
         
         public void ClearCache ()
@@ -88,5 +96,14 @@ namespace Vashta.Entropy.Scripts.Init
             }
         }
 
+        private IEnumerator CheckInternetConnection(){
+            WWW www = new WWW(_testUrl);
+            yield return www;
+            if (www.error != null) {
+                ConnectionErrorPanel.SetActive(true);
+            } else {
+                ConnectionErrorPanel.SetActive(false);
+            }
+        } 
     }
 }

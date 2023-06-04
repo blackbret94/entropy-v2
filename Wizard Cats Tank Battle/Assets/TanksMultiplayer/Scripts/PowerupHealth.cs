@@ -23,13 +23,7 @@ namespace TanksMP
         {
             if (p == null)
                 return false;
-
-            int value = p.GetView().GetHealth();
-
-            //don't add health if it is at the maximum already
-            if (value == p.maxHealth)
-                return false;
-
+            
             p.GetView().SetHealth(p.maxHealth);
             
             // show UI message

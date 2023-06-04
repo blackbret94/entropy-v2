@@ -34,14 +34,6 @@ namespace TanksMP
             if (p == null)
                 return false;
 
-            int value = p.GetView().GetAmmo();
-            int index = p.GetView().GetBullet();
-
-            //do not consume powerup if the player owns the new bullet already
-            //and the ammunition is at the maximum amount available
-            if (value == amount && index == bulletIndex)
-                return false;
-
             //otherwise assign new bullet and refill ammo
             p.GetView().SetAmmo(amount, bulletIndex);
             

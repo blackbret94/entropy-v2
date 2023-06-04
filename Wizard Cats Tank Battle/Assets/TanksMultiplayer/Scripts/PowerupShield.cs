@@ -23,25 +23,10 @@ namespace TanksMP
             if (p == null)
                 return false;
 
-            int value = p.GetView().GetShield();
-
-            //don't add shield if it is at the maximum already
-            if (value == p.maxShield)
-                return false;
-
             //assign absolute shield points to player
-            //we can't go over the maximum thus no need to check it here
             p.GetView().SetShield(p.maxShield);
+            p.GetView().SetHealth(p.maxHealth);
 
-            // add health
-            value = p.GetView().GetHealth();
-
-            //don't add health if it is at the maximum already
-            if (value != p.maxHealth)
-            {
-                p.GetView().SetHealth(p.maxHealth);
-            }
-            
             // show UI message
             if(p.IsLocal)
                 GameManager.GetInstance().ui.PowerUpPanel.SetText(Powerup.DisplayText,Powerup.DisplaySubtext, Powerup.Color, Powerup.Icon);

@@ -27,33 +27,7 @@ namespace Vashta.Entropy.TanksExtensions
 
             Debug.LogError("Could not apply a status effect, was missing statusEffectData");
             return false;
-            // else
-            // {
-            //     return ApplyPowerup(p);
-            // }
         }
-
-        // private bool ApplyPowerup(Player p)
-        // {
-        //     Debug.Log("Applying powerup");
-        //     float value = p.GetView().GetBuffSeconds();
-        //     int currentIndex = p.GetView().GetBuffIndex();
-        //     
-        //     //do not consume buff if the player owns the new buff already
-        //     //and the timer is at the maximum amount available
-        //     if (value >= Powerup.MaxValue && currentIndex == Powerup.PowerupId)
-        //         return false;
-        //
-        //     //otherwise assign new buff
-        //     p.GetView().SetBuff(Powerup.MaxValue, Powerup.PowerupId);
-        //     
-        //     // show UI message
-        //     if(p.IsLocal)
-        //         GameManager.GetInstance().ui.PowerUpPanel.SetText(Powerup.DisplayText,Powerup.DisplaySubtext, Powerup.Color);
-        //
-        //     //return successful collection
-        //     return true;
-        // }
 
         private bool ApplyStatusEffect(Player p)
         {

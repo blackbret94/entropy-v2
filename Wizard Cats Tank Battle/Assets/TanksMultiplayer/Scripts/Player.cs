@@ -341,7 +341,9 @@ namespace TanksMP
                 networkVelocity = (Vector3)stream.ReceiveNext();
                 
                 float lag = Mathf.Abs((float) (PhotonNetwork.Time - info.timestamp));
-                networkPosition += (networkVelocity * lag);
+
+                float lagMultiplier = 2f;
+                networkPosition += (networkVelocity * lag * lagMultiplier);
                 lastTransformUpdate = Time.time;
             }
         }
@@ -385,8 +387,10 @@ namespace TanksMP
             if (!photonView.IsMine)
             {
                 // lag compensation
+                // movement
                 rb.position = Vector3.MoveTowards(rb.position, networkPosition, Time.fixedDeltaTime);
 
+                // rotation
                 short targetRotation = networkTurretRotation;
 
                 float diff = Mathf.Abs(turretRotation - targetRotation); 

@@ -174,6 +174,10 @@ namespace TanksMP
         private Vector3 networkVelocity;
         private Vector3 networkPosition;
         private Vector3 lastVelocity;
+
+        private short networkTurretRotation;
+        private float lastTransformUpdate;
+        private const float _maxTransformLerp = .15f; 
         
 
         //initialize server values for this player
@@ -194,6 +198,8 @@ namespace TanksMP
 
             GetView().SetKills(0);
             GetView().SetDeaths(0);
+            
+            lastTransformUpdate = Time.time;
         }
 
         private void SetMaxHealth()
@@ -326,7 +332,8 @@ namespace TanksMP
             else
             {   
                 //here we receive the turret rotation angle from others and apply it
-                this.turretRotation = (short)stream.ReceiveNext();
+                networkTurretRotation = (short)stream.ReceiveNext();
+                // this.turretRotation = (short)stream.ReceiveNext();
                 OnTurretRotation();
                 
                 // lag compensation
@@ -335,6 +342,7 @@ namespace TanksMP
                 
                 float lag = Mathf.Abs((float) (PhotonNetwork.Time - info.timestamp));
                 networkPosition += (networkVelocity * lag);
+                lastTransformUpdate = Time.time;
             }
         }
 
@@ -376,11 +384,39 @@ namespace TanksMP
 			//skip further calls for remote clients    
             if (!photonView.IsMine)
             {
-                //keep turret rotation updated for all clients
-                OnTurretRotation();
-                
                 // lag compensation
                 rb.position = Vector3.MoveTowards(rb.position, networkPosition, Time.fixedDeltaTime);
+
+                short targetRotation = networkTurretRotation;
+
+                float diff = Mathf.Abs(turretRotation - targetRotation); 
+                
+                if (diff > 1f)
+                {
+                    // normalize direction
+                    if (turretRotation < 90 && targetRotation > 270)
+                        targetRotation -= 360;
+
+                    if (turretRotation > 270 && targetRotation < 90)
+                    {
+                        targetRotation += 360;
+                    }
+                    
+                    // rotate
+                    float maxLerpTime = _maxTransformLerp * Mathf.Ceil(diff / 90);
+                    
+                    float time = (Time.time - lastTransformUpdate) / maxLerpTime;
+                    turretRotation = (short)(Mathf.RoundToInt(Mathf.Lerp(turretRotation, targetRotation, time)));
+
+                    if (turretRotation > targetRotation)
+                        turretRotation = targetRotation;
+                }
+                else
+                {
+                    turretRotation = networkTurretRotation;
+                }
+
+                OnTurretRotation();
 
                 return;
             }

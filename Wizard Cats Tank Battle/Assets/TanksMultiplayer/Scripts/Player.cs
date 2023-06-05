@@ -174,6 +174,7 @@ namespace TanksMP
         private Vector3 networkVelocity;
         private Vector3 networkPosition;
         private Vector3 lastVelocity;
+        
 
         //initialize server values for this player
         void Awake()

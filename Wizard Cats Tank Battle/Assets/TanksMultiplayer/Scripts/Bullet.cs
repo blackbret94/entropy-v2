@@ -250,19 +250,22 @@ namespace TanksMP
             }
 
             //apply bullet damage to the collided players
-            Player origin = owner.GetComponent<Player>();
-            for (int i = 0; i < targets.Count; i++)
+            if (owner != null)
             {
-                Player target = targets[i];
-                if (HasHitProtectedOwner(target) || target.gameObject == null)
-                    continue;
+                Player origin = owner.GetComponent<Player>();
+                for (int i = 0; i < targets.Count; i++)
+                {
+                    Player target = targets[i];
+                    if (HasHitProtectedOwner(target) || target.gameObject == null)
+                        continue;
 
-                if (IsFriendlyFire(origin, target))
-                    AttemptApplyEffectAlly(origin, target);
-                else
-                    AttemptApplyEffectEnemy(origin, target);
+                    if (IsFriendlyFire(origin, target))
+                        AttemptApplyEffectAlly(origin, target);
+                    else
+                        AttemptApplyEffectEnemy(origin, target);
 
-                target.TakeDamage(this);
+                    target.TakeDamage(this);
+                }
             }
         }
 

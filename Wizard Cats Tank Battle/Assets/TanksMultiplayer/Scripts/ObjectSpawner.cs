@@ -48,6 +48,7 @@ namespace TanksMP
 
         //time value when the next respawn should happen measured in game time
         private float nextSpawn;
+        private int lastInflatedObjectIndex = 0;
 
 
         //when entering the game scene for the first time as a master client,
@@ -72,7 +73,7 @@ namespace TanksMP
             //to the joining player so the object gets enabled/instantiated on that client too
             if (obj != null && obj.activeInHierarchy)
             {
-                this.photonView.RPC("Instantiate", player);
+                this.photonView.RPC("Instantiate", player, lastInflatedObjectIndex);
             }
 
             //defining cases in which the SetRespawn method should be called instead
@@ -153,7 +154,7 @@ namespace TanksMP
                 else
                 {
                     //instantiate a new copy on all clients
-                    this.photonView.RPC("Instantiate", RpcTarget.All);
+                    SpawnObject();
                 }
             }
         }
@@ -163,13 +164,21 @@ namespace TanksMP
         /// Instantiates the object in the scene using PoolManager functionality.
         /// </summary>
         [PunRPC]
-		public void Instantiate()
+		public void Instantiate(int index)
 		{
             //sanity check in case there already is an object active
             if (obj != null)
                 return;
 
-			obj = PoolManager.Spawn(GetGameObjectToSpawn(), transform.position, transform.rotation);
+            lastInflatedObjectIndex = index;
+
+            if (lastInflatedObjectIndex >= prefabList.Count)
+            {
+                lastInflatedObjectIndex = 0;
+                Debug.LogError("Tried to instantiate object with index larger than the size of PrefabList: " + lastInflatedObjectIndex);
+            }
+            GameObject prefab = prefabList[lastInflatedObjectIndex];
+			obj = PoolManager.Spawn(prefab, transform.position, transform.rotation);
             //set the reference on the instantiated object for cross-referencing
             Collectible colItem = obj.GetComponent<Collectible>();
             if(colItem != null)
@@ -182,14 +191,28 @@ namespace TanksMP
             }
 		}
 
-        private GameObject GetGameObjectToSpawn()
+        /// <summary>
+        /// Server only, chooses an index then sends it to all clients
+        /// </summary>
+        private void SpawnObject()
         {
-            if (prefabList.Count == 0)
-                return prefab;
-
-            int index = Random.Range(0, prefabList.Count);
-            return prefabList[index];
+            if (!PhotonNetwork.IsMasterClient)
+                return;
+            
+            lastInflatedObjectIndex = Random.Range(0, prefabList.Count);
+            Debug.Log("Index: " + lastInflatedObjectIndex);
+            
+            this.photonView.RPC("Instantiate", RpcTarget.All, lastInflatedObjectIndex);
         }
+
+        // private GameObject GetGameObjectToSpawn()
+        // {
+        //     if (prefabList.Count == 0)
+        //         return prefab;
+        //
+        //     int index = Random.Range(0, prefabList.Count);
+        //     return prefabList[index];
+        // }
 
 
         /// <summary>
@@ -201,7 +224,7 @@ namespace TanksMP
             //in case this method call is received over the network earlier than the
             //spawner instantiation, here we make sure to catch up and instantiate it directly
             if (obj == null)
-                Instantiate();
+                SpawnObject();
 
             //get target view transform to parent to
             PhotonView view = PhotonView.Find(viewId);
@@ -231,7 +254,7 @@ namespace TanksMP
             //in case this method call is received over the network earlier than the
             //spawner instantiation, here we make sure to catch up and instantiate it directly
             if (obj == null)
-                Instantiate();
+                SpawnObject();
 
             //re-parent object to this spawner
             obj.transform.parent = PoolManager.GetPool(obj).transform;

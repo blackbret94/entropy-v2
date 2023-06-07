@@ -1,6 +1,5 @@
 using TanksMP;
 using UnityEngine;
-using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.StatusEffects;
 
 namespace Vashta.Entropy.TanksExtensions
@@ -8,7 +7,6 @@ namespace Vashta.Entropy.TanksExtensions
     // Based on PowerupBullet.  May be smart to unify the common code at a later point
     public class PowerupBuff : Collectible
     {
-        public Powerup Powerup;
         public StatusEffectData StatusEffectData;
 
         /// <summary>

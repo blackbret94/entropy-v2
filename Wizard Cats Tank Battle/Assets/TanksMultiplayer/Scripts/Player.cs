@@ -195,7 +195,6 @@ namespace TanksMP
             ApplyClass();
             
             StartCoroutine(RefreshHudCoroutine());
-
             
             //only let the master do initialization
             if(!PhotonNetwork.IsMasterClient)
@@ -396,7 +395,6 @@ namespace TanksMP
             {
                 // Check if the player is trying to change teams
                 float timeToSpawn = Time.time- (lastDeathTime + GameManager.GetInstance().respawnTime);
-                Debug.Log("Time to spawn: " + timeToSpawn);
                 if(!gameObject.activeInHierarchy && timeToSpawn > 1f)
                     AttemptToChangeTeams();
                 

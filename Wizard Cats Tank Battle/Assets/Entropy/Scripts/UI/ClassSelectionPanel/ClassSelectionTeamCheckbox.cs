@@ -11,8 +11,6 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
         public Image SelectedFrame;
         public bool StartSelected = false;
 
-        public const int AUTO_ASSIGN_INDEX = -1;
-
         private void Start()
         {
             Toggle(StartSelected);

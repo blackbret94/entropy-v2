@@ -4,6 +4,7 @@
  * 	otherwise make available to any third party the Service or the Content. */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Entropy.Scripts.Audio;
@@ -18,6 +19,7 @@ using EckTechGames.FloatingCombatText;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.StatusEffects;
 using Vashta.Entropy.UI.ClassSelectionPanel;
+using Vashta.Entropy.UI.TeamScore;
 
 namespace TanksMP
 {
@@ -157,8 +159,6 @@ namespace TanksMP
         public ClassList classList;
         // public ClassDefinition classDefinition { get; private set; }
 
-        public int PreferredTeamIndex = -1; // -1 indicates random
-
         private Vector3 _lastMousePos;
 
         private float _lastSecondUpdate;
@@ -179,6 +179,11 @@ namespace TanksMP
         private float lastTransformUpdate;
         private const float _maxTransformLerp = .15f; 
         
+        // Spawn timer
+        [HideInInspector]
+        public float lastDeathTime = 0f;
+
+        public bool IsAlive => gameObject.activeInHierarchy;
 
         //initialize server values for this player
         void Awake()
@@ -188,6 +193,9 @@ namespace TanksMP
             ClassDefinition classDefinition = defaultClassDefinition ? defaultClassDefinition : classList.RandomClass();
             photonView.SetClassId(classDefinition.classId);
             ApplyClass();
+            
+            StartCoroutine(RefreshHudCoroutine());
+
             
             //only let the master do initialization
             if(!PhotonNetwork.IsMasterClient)
@@ -202,10 +210,17 @@ namespace TanksMP
             lastTransformUpdate = Time.time;
         }
 
+        private IEnumerator RefreshHudCoroutine()
+        {
+            yield return new WaitForSeconds(.1f);
+            RefreshSlider();
+        }
+
         private void SetMaxHealth()
         {
             //set players current health value after joining
             GetView().SetHealth(maxHealth);
+            OnHealthChange(maxHealth);
         }
 
         /// <summary>
@@ -280,6 +295,15 @@ namespace TanksMP
             #endif
 
             GameManager.GetInstance().ui.fireButton.Player = this;
+            
+            // refresh slider to fix render issues
+            RefreshSlider();
+        }
+
+        private void RefreshSlider()
+        {
+            healthSlider.gameObject.SetActive(false);
+            healthSlider.gameObject.SetActive(true);
         }
         
         private void ColorizePlayerForTeam()
@@ -292,16 +316,32 @@ namespace TanksMP
             label.color = team.material.color;
         }
 
+        /// <summary>
+        /// Server only
+        /// </summary>
         private void AttemptToChangeTeams()
         {
-            if (PreferredTeamIndex == -1 || PreferredTeamIndex == GetView().GetTeam() || !GameManager.GetInstance().TeamHasVacancy(PreferredTeamIndex))
-                return;
+            Debug.Log("Attempting to change teams");
             
-            GetView().SetTeam(PreferredTeamIndex);
-            ColorizePlayerForTeam();
+            int preferredTeamIndex = GetView().GetPreferredTeamIndex();
+            
+            Debug.Log("Preferred team index: " + preferredTeamIndex + " current team: " + GetView().GetTeam());
+            if (preferredTeamIndex == PlayerExtensions.RANDOM_TEAM_INDEX || preferredTeamIndex == GetView().GetTeam() || !GameManager.GetInstance().TeamHasVacancy(preferredTeamIndex))
+                return;
+
+            PhotonNetwork.CurrentRoom.AddSize(GetView().GetTeam(), -1);
+            GetView().SetTeam(preferredTeamIndex);
+            PhotonNetwork.CurrentRoom.AddSize(GetView().GetTeam(), 1);
+            
+            this.photonView.RPC("RpcChangeTeams", RpcTarget.All);
         }
 
-
+        [PunRPC]
+        protected void RpcChangeTeams()
+        {
+            ColorizePlayerForTeam();
+        }
+        
         /// <summary>
         /// This method gets called whenever player properties have been changed on the network.
         /// </summary>
@@ -354,6 +394,13 @@ namespace TanksMP
         {
             if (PhotonNetwork.IsMasterClient)
             {
+                // Check if the player is trying to change teams
+                float timeToSpawn = Time.time- (lastDeathTime + GameManager.GetInstance().respawnTime);
+                Debug.Log("Time to spawn: " + timeToSpawn);
+                if(!gameObject.activeInHierarchy && timeToSpawn > 1f)
+                    AttemptToChangeTeams();
+                
+                // Execute slow update
                 if (Time.time >= _lastSecondUpdate + _secondUpdateTime)
                     SlowUpdate();
             }
@@ -763,12 +810,39 @@ namespace TanksMP
         }
 
         /// <summary>
+        /// Commands the server to kill this player
+        /// </summary>
+        public void CmdKillPlayer()
+        {
+            if (!IsAlive)
+                return;
+            
+            this.photonView.RPC("RpcKillPlayer", RpcTarget.MasterClient);
+        }
+
+        /// <summary>
+        /// Server only, force the death of hte player
+        /// </summary>
+        [PunRPC]
+        protected void RpcKillPlayer()
+        {
+            AttemptToChangeTeams();
+            
+            // PlayerDeath
+            PlayerDeath(this, null);
+        }
+
+        /// <summary>
         /// Server-only.  Handles player death
         /// </summary>
         /// <param name="other"></param>
         private void PlayerDeath(Player other, Bullet killingBlow)
         {
-            GetView().IncrementDeaths();
+            bool canRespawnFreely = PlayerCanRespawnFreely();
+            lastDeathTime = Time.time;
+            
+            if(!canRespawnFreely)
+                GetView().IncrementDeaths();
 
             //the game is already over so don't do anything
             if(GameManager.GetInstance().IsGameOver()) return;
@@ -781,8 +855,10 @@ namespace TanksMP
                     GameManager.GetInstance().AddScore(ScoreType.Kill, otherTeam);
                 else
                 {
-                    if (!PlayerCanRespawnFreely())
+                    if (!canRespawnFreely)
+                    {
                         GameManager.GetInstance().RemoveScore(ScoreType.Kill, otherTeam);
+                    }
                 }
 
                 //the maximum score has been reached now
@@ -825,6 +901,8 @@ namespace TanksMP
         private bool PlayerCanRespawnFreely()
         {
             float countdownMax = ClassSelectionPanel.Instance.TimerLength;
+            
+            Debug.Log("Time: " + Time.time + " Join time: " + photonView.GetJoinTime() + " Countdown: " + countdownMax);
 
             if (Time.time <= photonView.GetJoinTime() + countdownMax)
             {
@@ -897,9 +975,6 @@ namespace TanksMP
 
             if (PhotonNetwork.IsMasterClient)
             {
-                // Check if the player is trying to change teams
-                AttemptToChangeTeams();
-                
                 //send player back to the team area, this will get overwritten by the exact position from the client itself later on
                 //we just do this to avoid players "popping up" from the position they died and then teleporting to the team area instantly
                 //this is manipulating the internal PhotonTransformView cache to update the networkPosition variable
@@ -913,6 +988,7 @@ namespace TanksMP
                 // apply class
                 StatusEffectController.RefreshCache();
                 ApplyClass();
+                ColorizePlayerForTeam();
             }
 
             //further changes only affect the local client
@@ -957,8 +1033,7 @@ namespace TanksMP
         {
             this.photonView.RPC("RpcRespawn", RpcTarget.AllViaServer, (short)0, null);
         }
-
-
+        
         /// <summary>
         /// Repositions in team area and resets camera & input variables.
         /// This should only be called for the local player.
@@ -1010,13 +1085,15 @@ namespace TanksMP
             characterAppearance.LoadFromSerialized(characterAppearanceSerializable);
         }
 
-        public void SetClass(ClassDefinition newClassDefinition, bool respawnPlayer)
+        public void SetClass(ClassDefinition newClassDefinition, bool respawnPlayer, bool applyInstantly)
         {
             photonView.SetClassId(newClassDefinition.classId);
-
-            // Respawn if apply now
+            
+            if(applyInstantly)
+                ApplyClass();
+            
             if(respawnPlayer)
-                TakeDamage(maxHealth*100, this);
+                CmdKillPlayer();
         }
         
         private void ApplyClass()

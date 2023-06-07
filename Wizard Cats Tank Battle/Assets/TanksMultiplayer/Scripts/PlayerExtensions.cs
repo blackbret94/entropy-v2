@@ -26,6 +26,9 @@ namespace TanksMP
         public const string deaths = "deaths";
         public const string joinTime = "joinTime";
         public const string classId = "classId";
+        public const string preferredTeam = "preferredTeam"; // for changing teams
+
+        public const int RANDOM_TEAM_INDEX = 100;
 
         /// <summary>
         /// Returns the networked player nick name.
@@ -89,6 +92,7 @@ namespace TanksMP
             }
 
             player.Owner.SetTeam(teamIndex);
+            player.Owner.SetPreferredTeamIndex(teamIndex);
         }
 
         /// <summary>
@@ -519,6 +523,45 @@ namespace TanksMP
         {
             player.SetCustomProperties(new Hashtable() { { classId, (byte)value } });
         }
+        
+        // Preferred Team Index
+        public static int GetPreferredTeamIndex(this Photon.Realtime.Player player)
+        {
+            return System.Convert.ToInt32(player.CustomProperties[preferredTeam]);
+        }
+
+        public static int GetPreferredTeamIndex(this PhotonView player)
+        {
+            if (PhotonNetwork.OfflineMode == true)
+            {
+                PlayerBot bot = player.GetComponent<PlayerBot>();
+                if (bot != null)
+                {
+                    return bot.teamIndex;
+                }
+            }
+
+            return player.Owner.GetPreferredTeamIndex();
+        }
+        
+        public static void SetPreferredTeamIndex(this PhotonView player, int value)
+        {
+            if (PhotonNetwork.OfflineMode == true)
+            {
+                PlayerBot bot = player.GetComponent<PlayerBot>();
+                if (bot != null)
+                {
+                    return;
+                }
+            }
+
+            player.Owner.SetPreferredTeamIndex(value);
+        }
+
+        public static void SetPreferredTeamIndex(this Photon.Realtime.Player player, int value)
+        {
+            player.SetCustomProperties(new Hashtable() { { preferredTeam, (byte)value } });
+        }
 
         /// <summary>
         /// Offline: clears all properties of a PlayerBot locally.
@@ -552,7 +595,8 @@ namespace TanksMP
                                                          { PlayerExtensions.health, (byte)0 },
                                                          { PlayerExtensions.shield, (byte)0 },
                                                          {PlayerExtensions.joinTime, (byte)0 },
-                                                         {PlayerExtensions.classId, (byte)0 }
+                                                         {PlayerExtensions.classId, (byte)0 },
+                                                         {PlayerExtensions.preferredTeam, (byte) RANDOM_TEAM_INDEX}
             });
         }
     }

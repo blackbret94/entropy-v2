@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using TanksMP;
 using TMPro;
 using UnityEngine;
@@ -8,6 +10,7 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
     {
         public ClassSelectionSelector ClassSelectionSelector;
         public ClassSelectionTeamSelector ClassSelectionTeamSelector;
+        public List<ClassSelectionTeamCheckbox> CheckboxList;
 
         public float TimerLength = 30f;
         public TextMeshProUGUI Counter;
@@ -31,6 +34,33 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
             
             ShowCountdownButtons();
             _counterEndTime = Time.time + TimerLength;
+
+            StartCoroutine(RefreshCheckboxesAtStart());
+        }
+
+        private IEnumerator RefreshCheckboxesAtStart()
+        {
+            yield return new WaitForSeconds(.25f);
+            UpdateCheckboxes();
+        }
+
+        private void UpdateCheckboxes()
+        {
+            // update top selection
+            Player player = GameManager.GetInstance().localPlayer;
+            int teamIndex = player.photonView.GetTeam();
+
+            foreach (ClassSelectionTeamCheckbox checkbox in CheckboxList)
+            {
+                if (checkbox.TeamIndex == teamIndex)
+                    ClassSelectionTeamSelector.SelectTeam(checkbox);
+            }
+        }
+        
+        public override void OpenPanel()
+        {
+            UpdateCheckboxes();
+            base.OpenPanel();
         }
 
         private void Update()
@@ -64,18 +94,34 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
             ApplyButton.SetActive(true);
         }
 
-        public void ApplyChanges(bool respawnPlayer = false)
+        public void ApplyChangesButton()
+        {
+            ApplyChanges(false, false);
+        }
+
+        private void ApplyChanges(bool respawnPlayer, bool applyNow)
         {
             Player player = GameManager.GetInstance().localPlayer;
-            player.SetClass(ClassSelectionSelector.SelectedClassDefinition(), respawnPlayer);
-            player.PreferredTeamIndex = ClassSelectionTeamSelector.SelectedTeamIndex();
+            player.photonView.SetPreferredTeamIndex(ClassSelectionTeamSelector.SelectedTeamIndex());
+
+            player.SetClass(ClassSelectionSelector.SelectedClassDefinition(), respawnPlayer, applyNow);
             
             ClosePanel();
         }
 
-        public void RespawnPlayer()
+        public void RespawnPlayerButton()
         {
-            ApplyChanges(true);
+            ApplyChanges(true, true);
+        }
+
+        public void RespawnPlayerIfTeamChangedButton()
+        {
+            Player player = GameManager.GetInstance().localPlayer;
+            int teamIndex = player.photonView.GetTeam();
+
+            bool teamChanged = teamIndex != ClassSelectionTeamSelector.SelectedTeamIndex();
+            
+            ApplyChanges(teamChanged, true);
         }
 
         public bool CountdownIsActive()

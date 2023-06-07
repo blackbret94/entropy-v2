@@ -28,7 +28,7 @@ namespace Vashta.Entropy.SaveLoad
                 {
                     // Enemy
                     SpawnCollisionEffectEnemy();
-                    player.TakeDamage(10000, player);
+                    player.CmdKillPlayer();
                 }
             }
         }

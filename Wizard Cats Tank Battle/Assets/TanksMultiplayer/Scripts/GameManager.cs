@@ -344,7 +344,8 @@ namespace TanksMP
             //while waiting update the respawn countdown
             while (targetTime - Time.time > 0)
             {
-                ui.SetSpawnDelay(targetTime - Time.time);
+                float timeToSpawn = targetTime - Time.time;
+                ui.SetSpawnDelay(timeToSpawn);
                 yield return null;
             }
 
@@ -368,11 +369,6 @@ namespace TanksMP
             //starts coroutine for displaying the game over window
             StopCoroutine(SpawnRoutine());
             StartCoroutine(DisplayGameOver());
-        }
-
-        public void RespawnLocalPlayer()
-        {
-            localPlayer.TakeDamage(localPlayer.maxHealth*100, localPlayer);
         }
 
         //displays game over window after short delay

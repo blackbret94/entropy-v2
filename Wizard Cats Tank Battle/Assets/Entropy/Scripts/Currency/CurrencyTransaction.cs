@@ -38,7 +38,6 @@ namespace Entropy.Scripts.Currency
         {
             if (result.IsSuccess)
             {
-                Debug.Log("The user has successfully received the currency");
             }
             else
             {
@@ -48,7 +47,6 @@ namespace Entropy.Scripts.Currency
         
         private void RefreshCurrency()
         {
-            Debug.Log("Getting currency");
             CBSCurrency.GetCurrencies(OnGetCurrencies);
         }
         

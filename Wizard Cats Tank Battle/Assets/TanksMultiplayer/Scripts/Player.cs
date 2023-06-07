@@ -899,8 +899,6 @@ namespace TanksMP
         private bool PlayerCanRespawnFreely()
         {
             float countdownMax = ClassSelectionPanel.Instance.TimerLength;
-            
-            Debug.Log("Time: " + Time.time + " Join time: " + photonView.GetJoinTime() + " Countdown: " + countdownMax);
 
             if (Time.time <= photonView.GetJoinTime() + countdownMax)
             {

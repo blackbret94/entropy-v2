@@ -86,7 +86,6 @@ namespace Vashta.Entropy.Scripts.CBSIntegration
         {
             if (result.IsSuccess)
             {
-                Debug.LogFormat("Currency with code {0} was updated", result.CurrencyCode);
                 if(result.CurrencyCode == CURRENCY_CODE)
                     CoinsLabel.text = result.CurrentValue.ToString();
             }

@@ -20,7 +20,6 @@ namespace Entropy.Scripts.Currency
 
         public void AddCurrency(int delta)
         {
-            Debug.Log("Attempting to update currency with delta: " + delta);
             CBSCurrency.AddUserCurrency(delta, CURRENCY_CODE, OnUpdateCurrency);
         }
 

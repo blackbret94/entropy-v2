@@ -200,7 +200,6 @@ namespace TanksMP
                 return;
             
             lastInflatedObjectIndex = Random.Range(0, prefabList.Count);
-            Debug.Log("Index: " + lastInflatedObjectIndex);
             
             this.photonView.RPC("Instantiate", RpcTarget.All, lastInflatedObjectIndex);
         }

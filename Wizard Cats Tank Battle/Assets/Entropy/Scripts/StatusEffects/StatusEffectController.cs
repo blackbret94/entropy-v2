@@ -91,6 +91,7 @@ namespace Vashta.Entropy.StatusEffects
         {
             _statusEffects.Clear();
             _indexedIds.Clear();
+            _dirtyFlag = true;
         }
 
         private void Update()

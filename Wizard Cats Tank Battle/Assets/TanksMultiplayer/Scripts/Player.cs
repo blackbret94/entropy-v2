@@ -288,7 +288,7 @@ namespace TanksMP
             GameManager.GetInstance().ui.controls[0].onDragEnd += MoveEnd;
 
             // GameManager.GetInstance().ui.controls[1].onClick += Shoot;
-            // GameManager.GetInstance().ui.controls[1].onDragBegin += ShootBegin;
+            GameManager.GetInstance().ui.controls[1].onDragBegin += ShootBegin;
             GameManager.GetInstance().ui.controls[1].onDrag += RotateTurret;
             GameManager.GetInstance().ui.controls[1].onDrag += Shoot;
             #endif
@@ -917,6 +917,8 @@ namespace TanksMP
         protected virtual void RpcRespawn(short senderId, int bulletId)
         {
             
+            StatusEffectController.ClearStatusEffects();
+
             Bullet killingBlowBullet = BulletDictionary[bulletId];
             
             //toggle visibility for player gameobject (on/off)
@@ -927,8 +929,6 @@ namespace TanksMP
             //the player has been killed
             if (!isActive)
             {
-                StatusEffectController.ClearStatusEffects();
-                
                 //find original sender game object (killedBy)
                 PhotonView senderView = senderId > 0 ? PhotonView.Find(senderId) : null;
                 if (senderView != null && senderView.gameObject != null) killedBy = senderView.gameObject;

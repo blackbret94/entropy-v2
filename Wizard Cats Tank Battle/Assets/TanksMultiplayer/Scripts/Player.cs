@@ -45,6 +45,8 @@ namespace TanksMP
         public float counterDamageMod = 1.50f;
         public float sameClassDamageMod = .60f;
 
+        public float acceleration = 30f;
+
         /// <summary>
         /// Current turret rotation and shooting direction.
         /// </summary>
@@ -151,7 +153,7 @@ namespace TanksMP
 
         //reference to this rigidbody
         #pragma warning disable 0649
-		private Rigidbody rb;
+		protected Rigidbody rb;
 		#pragma warning restore 0649
         
         public bool IsLocal => GameManager.GetInstance().localPlayer == this;
@@ -173,7 +175,6 @@ namespace TanksMP
         // Lag compensation
         private Vector3 networkVelocity;
         private Vector3 networkPosition;
-        private Vector3 lastVelocity;
 
         private short networkTurretRotation;
         private float lastTransformUpdate;
@@ -184,7 +185,8 @@ namespace TanksMP
         public float lastDeathTime = 0f;
 
         public bool IsAlive => gameObject.activeInHierarchy;
-
+        private bool _hasLateInited = false;
+        
         //initialize server values for this player
         void Awake()
         {
@@ -200,7 +202,7 @@ namespace TanksMP
             if(!PhotonNetwork.IsMasterClient)
                 return;
             
-            _lastSecondUpdate = Time.time + 2f;
+            _lastSecondUpdate = Time.time + .1f;
             photonView.SetJoinTime(Time.time);
 
             GetView().SetKills(0);
@@ -366,7 +368,7 @@ namespace TanksMP
                 
                 // lag compensation
                 stream.SendNext(rb.position);
-                stream.SendNext(lastVelocity);
+                stream.SendNext(rb.velocity);
             }
             else
             {   
@@ -406,8 +408,10 @@ namespace TanksMP
 
         protected virtual void SlowUpdate()
         {
+            LateInit();
+            
+            // handle health changes from DoTs/HoTs
             int health = GetView().GetHealth();
-
             int healthPerSecond = (int)StatusEffectController.HealthPerSecond;
             
             health += healthPerSecond;
@@ -422,6 +426,17 @@ namespace TanksMP
                 PlayerDeath(StatusEffectController.LastDotAppliedBy, null);
 
             _lastSecondUpdate = Time.time;
+        }
+
+        private void LateInit()
+        {
+            if (_hasLateInited)
+                return;
+            
+            _hasLateInited = true;
+
+            if(rb)
+                rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
         }
 
         //continously check for input on desktop platforms
@@ -539,12 +554,19 @@ namespace TanksMP
                                      * Quaternion.Euler(0, camFollow.camTransform.eulerAngles.y, 0);
 
             //create movement vector based on current rotation and speed
-            Vector3 movementDir = transform.forward * ((moveSpeed + StatusEffectController.MovementSpeedModifier) *
-                                                       StatusEffectController.MovementSpeedMultiplier);
-            // Debug.Log("MovementDir: " + movementDir);
-            lastVelocity = movementDir;
+            float movementSpeed = ((moveSpeed + StatusEffectController.MovementSpeedModifier) *
+                                   StatusEffectController.MovementSpeedMultiplier);
+            Vector3 velocity = transform.forward * movementSpeed;
+
             //apply vector to rigidbody position
-            rb.MovePosition(rb.position + movementDir*Time.deltaTime);
+            rb.velocity = Vector3.MoveTowards(rb.velocity, velocity, acceleration);
+            // rb.AddForce(transform.forward * acceleration * Time.deltaTime);
+ 
+            // if (rb.velocity.magnitude > movementSpeed)
+                // rb.velocity = transform.forward * movementSpeed;
+            
+            // rb.velocity = velocity;
+            // rb.MovePosition(rb.position + movementDir*Time.deltaTime);
         }
 
 
@@ -554,7 +576,6 @@ namespace TanksMP
             //reset rigidbody physics values
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
-            lastVelocity = Vector3.zero;
         }
 
 

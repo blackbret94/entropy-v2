@@ -204,16 +204,6 @@ namespace TanksMP
             this.photonView.RPC("Instantiate", RpcTarget.All, lastInflatedObjectIndex);
         }
 
-        // private GameObject GetGameObjectToSpawn()
-        // {
-        //     if (prefabList.Count == 0)
-        //         return prefab;
-        //
-        //     int index = Random.Range(0, prefabList.Count);
-        //     return prefabList[index];
-        // }
-
-
         /// <summary>
         /// Collects the object and assigns it to the player with the corresponding view.
         /// </summary>

@@ -560,13 +560,6 @@ namespace TanksMP
 
             //apply vector to rigidbody position
             rb.velocity = Vector3.MoveTowards(rb.velocity, velocity, acceleration);
-            // rb.AddForce(transform.forward * acceleration * Time.deltaTime);
- 
-            // if (rb.velocity.magnitude > movementSpeed)
-                // rb.velocity = transform.forward * movementSpeed;
-            
-            // rb.velocity = velocity;
-            // rb.MovePosition(rb.position + movementDir*Time.deltaTime);
         }
 
 

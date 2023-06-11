@@ -29,7 +29,6 @@ namespace Vashta.Entropy.TanksExtensions
 
         private bool ApplyStatusEffect(Player p)
         {
-            Debug.Log("Applying status effect: " + StatusEffectData.Id);
             p.StatusEffectController.AddStatusEffect(StatusEffectData.Id, p);
 
             return true;

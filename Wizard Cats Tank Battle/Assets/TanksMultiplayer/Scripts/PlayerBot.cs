@@ -93,6 +93,8 @@ namespace TanksMP
             // add to player bot list
             GameManager.GetInstance().AddBot(this);
 
+            RefreshSlider();
+            
             //start enemy detection routine
             StartCoroutine(DetectPlayers());
         }

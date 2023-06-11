@@ -193,21 +193,21 @@ namespace TanksMP
             _playersByViewId.Add(GetId(), this);
             
             ClassDefinition classDefinition = defaultClassDefinition ? defaultClassDefinition : classList.RandomClass();
-            photonView.SetClassId(classDefinition.classId);
-            ApplyClass();
             
             StartCoroutine(RefreshHudCoroutine());
             
             //only let the master do initialization
-            if(!PhotonNetwork.IsMasterClient)
-                return;
-            
-            _lastSecondUpdate = Time.time + .1f;
-            photonView.SetJoinTime(Time.time);
+            if (PhotonNetwork.IsMasterClient)
+            {
+                _lastSecondUpdate = Time.time + .1f;
+                GetView().SetJoinTime(Time.time);
+                GetView().SetKills(0);
+                GetView().SetDeaths(0);
+                GetView().SetClassId(classDefinition.classId);
+                
+                GetView().RPC("RpcApplyClass", RpcTarget.All);
+            }
 
-            GetView().SetKills(0);
-            GetView().SetDeaths(0);
-            
             lastTransformUpdate = Time.time;
         }
 
@@ -267,11 +267,15 @@ namespace TanksMP
             //call hooks manually to update
             OnHealthChange(GetView().GetHealth());
             OnShieldChange(GetView().GetShield());
+            ApplyClass();
 
             _playerCurrencyRewarder = new PlayerCurrencyRewarder();
 
             //get components and set camera target
             rb = GetComponent<Rigidbody>();
+            
+            // refresh slider to fix render issues
+            RefreshSlider();
             
             //called only for this client 
             if (!photonView.IsMine)
@@ -296,12 +300,9 @@ namespace TanksMP
             #endif
 
             GameManager.GetInstance().ui.fireButton.Player = this;
-            
-            // refresh slider to fix render issues
-            RefreshSlider();
         }
 
-        private void RefreshSlider()
+        protected void RefreshSlider()
         {
             healthSlider.gameObject.SetActive(false);
             healthSlider.gameObject.SetActive(true);
@@ -393,23 +394,27 @@ namespace TanksMP
         // This needs to be on a second timer
         private void Update()
         {
+            // Standard update
             if (PhotonNetwork.IsMasterClient)
             {
                 // Check if the player is trying to change teams
                 float timeToSpawn = Time.time- (lastDeathTime + GameManager.GetInstance().respawnTime);
                 if(!gameObject.activeInHierarchy && timeToSpawn > 1f)
                     AttemptToChangeTeams();
+            }
+
+            // Delayed update
+            if (Time.time >= _lastSecondUpdate + _secondUpdateTime)
+            {
+                LateInit();
                 
-                // Execute slow update
-                if (Time.time >= _lastSecondUpdate + _secondUpdateTime)
+                if(PhotonNetwork.IsMasterClient)
                     SlowUpdate();
             }
         }
 
         protected virtual void SlowUpdate()
         {
-            LateInit();
-            
             // handle health changes from DoTs/HoTs
             int health = GetView().GetHealth();
             int healthPerSecond = (int)StatusEffectController.HealthPerSecond;
@@ -1100,10 +1105,19 @@ namespace TanksMP
             photonView.SetClassId(newClassDefinition.classId);
             
             if(applyInstantly)
-                ApplyClass();
-            
+                this.photonView.RPC("RpcApplyClass", RpcTarget.All);
+
             if(respawnPlayer)
                 CmdKillPlayer();
+        }
+
+        /// <summary>
+        /// Run on all clients, ensures classes are updated after being set
+        /// </summary>
+        [PunRPC]
+        private void RpcApplyClass()
+        {
+            ApplyClass();
         }
         
         private void ApplyClass()
@@ -1117,6 +1131,12 @@ namespace TanksMP
             }
 
             ClassDefinition classDefinition = classList[photonView.GetClassId()];
+
+            if (classDefinition == null)
+            {
+                Debug.LogError("Could not find class definition for class " + GetView().GetClassId());
+            }
+
             ClassApplier.ApplyClass(this, playerCollisionHandler, classDefinition, handicapModifier);
             SetMaxHealth();
             ReplaceClassMissile();

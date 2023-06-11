@@ -68,7 +68,7 @@ namespace Entropy.Scripts.Currency
         {
             if (result.IsSuccess)
             {
-                Debug.LogFormat("Currency with code {0} was updated", result.CurrencyCode);
+                // Debug.LogFormat("Currency with code {0} was updated", result.CurrencyCode);
                 if (result.CurrencyCode == CURRENCY_CODE)
                 {
                     _lastCurrency = result.CurrentValue;

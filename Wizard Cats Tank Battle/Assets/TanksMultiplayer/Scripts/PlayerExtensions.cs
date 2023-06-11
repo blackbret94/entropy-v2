@@ -80,7 +80,7 @@ namespace TanksMP
         /// </summary>
         public static void SetTeam(this PhotonView player, int teamIndex)
         {
-            Debug.Log("Setting team index: " + teamIndex);
+            // Debug.Log("Setting team index: " + teamIndex);
             if (PhotonNetwork.OfflineMode == true)
             {
                 PlayerBot bot = player.GetComponent<PlayerBot>();
@@ -595,7 +595,7 @@ namespace TanksMP
                                                          { PlayerExtensions.health, (byte)0 },
                                                          { PlayerExtensions.shield, (byte)0 },
                                                          {PlayerExtensions.joinTime, (byte)0 },
-                                                         {PlayerExtensions.classId, (byte)0 },
+                                                         {PlayerExtensions.classId, (byte)1 },
                                                          {PlayerExtensions.preferredTeam, (byte) RANDOM_TEAM_INDEX}
             });
         }

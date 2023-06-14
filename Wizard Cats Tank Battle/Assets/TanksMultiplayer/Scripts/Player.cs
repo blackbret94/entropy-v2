@@ -1115,7 +1115,7 @@ namespace TanksMP
         /// Run on all clients, ensures classes are updated after being set
         /// </summary>
         [PunRPC]
-        private void RpcApplyClass()
+        protected void RpcApplyClass()
         {
             ApplyClass();
         }

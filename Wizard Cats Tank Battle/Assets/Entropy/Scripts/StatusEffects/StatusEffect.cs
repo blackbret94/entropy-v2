@@ -55,7 +55,7 @@ namespace Vashta.Entropy.StatusEffects
 
         public string Description()
         {
-            return StatusEffectData().Description;
+            return StatusEffectData().AppliedDescription;
         }
 
         public float MovementSpeedModifier()

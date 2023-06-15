@@ -10,7 +10,10 @@ namespace Vashta.Entropy.StatusEffects
         public Sprite EffectIcon;
         public int MaxStack = 1;
         public string Title;
-        public string Description;
+        [FormerlySerializedAs("Description")] [Tooltip("This text appears when the status effect is applied")]
+        public string AppliedDescription;
+        [Tooltip("This text appears in the class selection menu")]
+        public string ClassDescription;
         [Tooltip("1 = 1 second")]
         public float TTL;
         public Color Color;

@@ -15,6 +15,8 @@ namespace Entropy.Scripts.ItemStore
         public PlayerInventory PlayerInventory;
         public GameObject ObjectRoot;
         public SfxController SfxController;
+
+        private Collider _objectCollider;
         
         protected int _itemIndex = 0;
         protected List<ScriptableWardrobeItem> _activeItemList;
@@ -24,6 +26,7 @@ namespace Entropy.Scripts.ItemStore
         
         private void Awake()
         {
+            _objectCollider = ObjectRoot.GetComponentInParent<Collider>();
             _currencyTransaction = new CurrencyTransaction();
             Init();
         }
@@ -47,10 +50,12 @@ namespace Entropy.Scripts.ItemStore
         public void Hide()
         {
             ObjectRoot.SetActive(false);
+            _objectCollider.enabled = false;
         }
 
         public void Show()
         {
+            _objectCollider.enabled = true;
             ObjectRoot.SetActive(true);
         }
         

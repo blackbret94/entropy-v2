@@ -33,6 +33,11 @@ namespace CBS.UI
             Clear();
         }
 
+        public void AutoLogin()
+        {
+            Auth.AutoLogin(OnLogined);
+        }
+
         // button click
         public void OnLoginWithMail()
         {

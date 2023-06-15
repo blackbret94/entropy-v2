@@ -1,7 +1,5 @@
 ﻿using CBS.Scriptable;
 using CBS.UI;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -31,12 +29,12 @@ namespace CBS.Context
             // var backgroundPrefab = AuthUIData.Background;
             // UIView.ShowWindow(backgroundPrefab);
             // check auto login
-            var autoLogin = AuthData.AutoLogin;
+            var autoLogin = PlayerPrefs.GetInt("autologin", 0) == 1;
             if (autoLogin)
             {
                 var popupViewer = new PopupViewer();
                 popupViewer.ShowLoadingPopup();
-
+            
                 Auth.AutoLogin(onAuth => { 
                     if (onAuth.IsSuccess)
                     {

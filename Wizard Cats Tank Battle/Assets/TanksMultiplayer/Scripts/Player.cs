@@ -375,12 +375,12 @@ namespace TanksMP
             {   
                 //here we receive the turret rotation angle from others and apply it
                 networkTurretRotation = (short)stream.ReceiveNext();
-                // this.turretRotation = (short)stream.ReceiveNext();
                 OnTurretRotation();
                 
                 // lag compensation
                 networkPosition = (Vector3)stream.ReceiveNext();
                 networkVelocity = (Vector3)stream.ReceiveNext();
+                rb.velocity = networkVelocity;
                 
                 float lag = Mathf.Abs((float) (PhotonNetwork.Time - info.timestamp));
 

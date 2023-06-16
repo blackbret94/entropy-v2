@@ -12,9 +12,11 @@ namespace Vashta.Entropy.TanksExtensions
         public Team Team { get; }
         public Material Material => Team.material;
         public bool IsLocalPlayer { get; }
+        public Player Player { get; }
 
         public ScoreboardRowData(Player player, Team team, bool isLocalPlayer)
         {
+            Player = player;
             Name = player.NickName;
             Kills = player.GetKills();
             Deaths = player.GetDeaths();

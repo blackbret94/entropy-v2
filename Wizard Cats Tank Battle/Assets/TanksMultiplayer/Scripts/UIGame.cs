@@ -178,11 +178,12 @@ namespace TanksMP
         /// Displays the game's end screen. Called by GameManager after few seconds delay.
         /// Tries to display a video ad, if not shown already.
         /// </summary>
-        public void ShowGameOver()
+        public void ShowGameOver(int winningTeamIndex, string winningTeamName, Color winningTeamColor)
         {       
             //hide text but enable game over window
             gameOverText.gameObject.SetActive(false);
-            gameOverMenu.SetActive(true);
+            MatchOverPanel.Get().Inflate(winningTeamName, winningTeamIndex, winningTeamColor);
+            // gameOverMenu.SetActive(true);
             
             //check whether an ad was shown during the game
             //if no ad was shown during the whole round, we request one here

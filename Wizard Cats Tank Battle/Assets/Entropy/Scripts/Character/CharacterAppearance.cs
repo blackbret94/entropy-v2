@@ -298,6 +298,34 @@ namespace Vashta.Entropy.Character
             ApplyOutfit();
         }
 
+        public void CopyFromOtherPlayer(CharacterAppearance source, Team team)
+        {
+            // Colorize
+            Team = team;
+            ColorizeCart();
+            
+            // Copy outfit
+            string hatId = source.Hat.Id;
+            Hat = PlayerCharacterWardrobe.GetHatById(hatId);
+
+            string bodyId = source.Body.Id;
+            Body = PlayerCharacterWardrobe.GetBodyTypeById(bodyId);
+
+            string skinId = source.Skin.Id;
+            Skin = PlayerCharacterWardrobe.GetSkinById(skinId);
+
+            string cartId = source.Cart.Id;
+            Cart = PlayerCharacterWardrobe.GetCartById(cartId);
+
+            string turretId = source.Turret.Id;
+            Turret = PlayerCharacterWardrobe.GetTurretById(turretId);
+
+            string meowId = source.Meow.Id;
+            Meow = PlayerCharacterWardrobe.GetMeowById(meowId);
+
+            ApplyOutfit();
+        }
+
         /****************************/
 
         private void ReplaceHat()

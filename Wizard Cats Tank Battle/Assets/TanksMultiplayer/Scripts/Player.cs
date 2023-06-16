@@ -308,10 +308,12 @@ namespace TanksMP
             healthSlider.gameObject.SetActive(true);
         }
         
-        private void ColorizePlayerForTeam()
+        private void ColorizePlayerForTeam(Team team = null)
         {
+            if(team == null)
+                team = GameManager.GetInstance().teams[GetView().GetTeam()];
+            
             //get corresponding team and colorize renderers in team color
-            Team team = GameManager.GetInstance().teams[GetView().GetTeam()];
             CharacterAppearance.Team = team;
             CharacterAppearance.ColorizeCart();
             

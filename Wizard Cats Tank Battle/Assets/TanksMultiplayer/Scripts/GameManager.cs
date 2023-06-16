@@ -364,22 +364,24 @@ namespace TanksMP
             //PhotonNetwork.isMessageQueueRunning = false;
             localPlayer.enabled = false;
             localPlayer.camFollow.HideMask(true);
-            ui.SetGameOverText(teams[teamIndex]);
+            Team winningTeam = teams[teamIndex];
+            ui.SetGameOverText(winningTeam);
 
             //starts coroutine for displaying the game over window
             StopCoroutine(SpawnRoutine());
-            StartCoroutine(DisplayGameOver());
+            StartCoroutine(DisplayGameOverCR(teamIndex));
         }
 
         //displays game over window after short delay
-        IEnumerator DisplayGameOver()
+        IEnumerator DisplayGameOverCR(int teamIndex)
         {
             //give the user a chance to read which team won the game
             //before enabling the game over screen
             yield return new WaitForSeconds(3);
 
             //show game over window (still connected at that point)
-            ui.ShowGameOver();
+            Team winningTeam = teams[teamIndex];
+            ui.ShowGameOver(teamIndex, winningTeam.name, winningTeam.material.color);
         }
 
 

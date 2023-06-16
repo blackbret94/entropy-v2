@@ -17,7 +17,14 @@ namespace Vashta.Entropy.UI
         public override void OpenPanel()
         {
             base.OpenPanel();
+            HUDPanel.Get().ClosePanel();
             Refresh();
+        }
+
+        public override void ClosePanel()
+        {
+            HUDPanel.Get().OpenPanel();
+            base.ClosePanel();
         }
 
         public override void Refresh()

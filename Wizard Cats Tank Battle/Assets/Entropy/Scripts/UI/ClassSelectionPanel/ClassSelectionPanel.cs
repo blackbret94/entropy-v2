@@ -41,6 +41,7 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
         private IEnumerator RefreshCheckboxesAtStart()
         {
             yield return new WaitForSeconds(.25f);
+
             UpdateCheckboxes();
         }
 
@@ -60,7 +61,14 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
         public override void OpenPanel()
         {
             UpdateCheckboxes();
+            HUDPanel.Get().ClosePanel();
             base.OpenPanel();
+        }
+
+        public override void ClosePanel()
+        {
+            HUDPanel.Get().OpenPanel();
+            base.ClosePanel();
         }
 
         private void Update()

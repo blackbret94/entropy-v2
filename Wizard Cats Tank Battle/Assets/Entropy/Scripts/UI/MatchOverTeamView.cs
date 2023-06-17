@@ -20,20 +20,23 @@ namespace Vashta.Entropy.UI
         {
             gameObject.SetActive(true);
 
-            if (player1 != null)
-                FirstPlaceText.Set(player1, FirstPlaceRoot);
-            else
-                FirstPlaceText.Hide();
+            ActivateOneCharacter(player1, FirstPlaceRoot, FirstPlaceText);
+            ActivateOneCharacter(player2, SecondPlaceRoot, SecondPlaceText);
+            ActivateOneCharacter(player3, ThirdPlaceRoot, ThirdPlaceText);
+        }
 
-            if (player2 != null)
-                SecondPlaceText.Set(player2, SecondPlaceRoot);
+        private void ActivateOneCharacter(ScoreboardRowData player, CharacterAppearance root, MatchOverPlayerText text)
+        {
+            if (player != null)
+            {
+                root.gameObject.SetActive(true);
+                text.Set(player, root);
+            }
             else
-                SecondPlaceText.Hide();
-            
-            if(player3 != null)
-                ThirdPlaceText.Set(player3, ThirdPlaceRoot);
-            else 
-                ThirdPlaceText.Hide();
+            {
+                root.gameObject.SetActive(false);
+                text.Hide();
+            }
         }
     }
 }

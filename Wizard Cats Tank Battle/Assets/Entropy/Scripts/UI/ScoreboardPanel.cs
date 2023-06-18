@@ -7,6 +7,7 @@ namespace Vashta.Entropy.UI
 {
     public class ScoreboardPanel : GamePanel
     {
+        public bool ControlsHUD = true;
         public List<ScoreboardTeamBadge> TeamPanel;
 
         private void Start()
@@ -17,13 +18,18 @@ namespace Vashta.Entropy.UI
         public override void OpenPanel()
         {
             base.OpenPanel();
-            HUDPanel.Get().ClosePanel();
+            
+            if(ControlsHUD)
+                HUDPanel.Get().ClosePanel();
+            
             Refresh();
         }
 
         public override void ClosePanel()
         {
-            HUDPanel.Get().OpenPanel();
+            if(ControlsHUD)
+                HUDPanel.Get().OpenPanel();
+            
             base.ClosePanel();
         }
 

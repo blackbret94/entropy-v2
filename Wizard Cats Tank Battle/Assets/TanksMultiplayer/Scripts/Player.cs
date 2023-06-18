@@ -366,6 +366,9 @@ namespace TanksMP
         {        
             if (stream.IsWriting)
             {             
+                if (rb == null)
+                    return;
+                
                 //here we send the turret rotation angle to other clients
                 stream.SendNext(turretRotation);
                 
@@ -374,7 +377,7 @@ namespace TanksMP
                 stream.SendNext(rb.velocity);
             }
             else
-            {   
+            {
                 //here we receive the turret rotation angle from others and apply it
                 networkTurretRotation = (short)stream.ReceiveNext();
                 OnTurretRotation();
@@ -382,6 +385,10 @@ namespace TanksMP
                 // lag compensation
                 networkPosition = (Vector3)stream.ReceiveNext();
                 networkVelocity = (Vector3)stream.ReceiveNext();
+                
+                if (rb == null)
+                    return;
+                
                 rb.velocity = networkVelocity;
                 
                 float lag = Mathf.Abs((float) (PhotonNetwork.Time - info.timestamp));
@@ -391,7 +398,6 @@ namespace TanksMP
                 lastTransformUpdate = Time.time;
             }
         }
-
         
         // This needs to be on a second timer
         private void Update()
@@ -446,8 +452,7 @@ namespace TanksMP
                 rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
         }
 
-        //continously check for input on desktop platforms
-        #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL
+        
         void FixedUpdate()
 		{
 			//skip further calls for remote clients    
@@ -456,6 +461,7 @@ namespace TanksMP
                 // lag compensation
                 // movement
                 rb.position = Vector3.MoveTowards(rb.position, networkPosition, Time.fixedDeltaTime);
+                rb.velocity = networkVelocity;
 
                 // rotation
                 short targetRotation = networkTurretRotation;
@@ -491,6 +497,9 @@ namespace TanksMP
 
                 return;
             }
+            
+            //continously check for input on desktop platforms
+#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL
 
             //movement variables
             Vector2 moveDir;
@@ -528,8 +537,6 @@ namespace TanksMP
             //rotate turret to look at the mouse direction
             RotateTurret(new Vector2(hitPos.x, hitPos.z));
             
-            
-
             //shoot bullet on left mouse click
             if (Input.GetButton("Fire1") && !EventSystem.current.IsPointerOverGameObject())
                 Shoot();
@@ -539,8 +546,8 @@ namespace TanksMP
 				GameManager.GetInstance().ui.controls[0].position = moveDir;
 				GameManager.GetInstance().ui.controls[1].position = turnDir;
 			#endif
+#endif
         }
-        #endif
             
       
         /// <summary>
@@ -871,7 +878,10 @@ namespace TanksMP
             {
                 int otherTeam = other.GetView().GetTeam();
                 if (GetView().GetTeam() != otherTeam)
+                {
                     GameManager.GetInstance().AddScore(ScoreType.Kill, otherTeam);
+                    other.GetView().IncrementKills();
+                }
                 else
                 {
                     if (!canRespawnFreely)
@@ -952,13 +962,13 @@ namespace TanksMP
                 PhotonView senderView = senderId > 0 ? PhotonView.Find(senderId) : null;
                 if (senderView != null && senderView.gameObject != null) killedBy = senderView.gameObject;
 
-                if (killedBy != null)
-                {
-                    Player killedByPlayer = killedBy.GetComponent<Player>();
+                // if (killedBy != null)
+                // {
+                    // Player killedByPlayer = killedBy.GetComponent<Player>();
 
-                    if (killedByPlayer != null)
-                        killedByPlayer.GetView().IncrementKills();
-                }
+                    // if (killedByPlayer != null)
+                        // killedByPlayer.GetView().IncrementKills();
+                // }
 
                 //detect whether the current user was responsible for the kill, but not for suicide
                 //yes, that's my kill: increase local kill counter

@@ -26,16 +26,8 @@ namespace Vashta.Entropy.UI
             PlayerName.color = color;
             
             Tagline.text = $"{kills} {(kills == 1 ? " Kill" : " Kills")}";
-
-            GameObject playerGo;
-            if (PhotonNetwork.OfflineMode == true)
-            {
-                playerGo = null;
-            }
-            else
-            {
-                playerGo = NetworkManagerCustom.GetInstance().GetPlayerGameObject(playerScoreData.Player);
-            }
+            
+            GameObject playerGo = NetworkManagerCustom.GetInstance().GetPlayerGameObject(playerScoreData.Player);
 
             // TODO: Handle copying bot outfits
             if (playerGo == null)
@@ -54,6 +46,7 @@ namespace Vashta.Entropy.UI
                 return;
             }
             
+            Debug.Log("Copying outfit from player");
             appearance.CopyFromOtherPlayer(player.CharacterAppearance, playerScoreData.Team);
         }
 

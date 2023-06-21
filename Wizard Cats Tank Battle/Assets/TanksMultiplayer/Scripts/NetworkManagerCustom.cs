@@ -389,6 +389,9 @@ namespace TanksMP
         /// </summary>
         public GameObject GetPlayerGameObject(Photon.Realtime.Player player)
         {
+            if (player == null)
+                return null;
+            
             GameObject[] rootObjs = SceneManager.GetActiveScene().GetRootGameObjects();
             List<Player> playerList = new List<Player>();
 
@@ -402,6 +405,9 @@ namespace TanksMP
             //find the game object where the creator matches this specific player ID
             for (int i = 0; i < playerList.Count; i++)
             {
+                if (playerList[i] == null || playerList[i].photonView == null)
+                    return null;
+                
                 if (playerList[i].photonView.CreatorActorNr == player.ActorNumber)
                 {
                     return playerList[i].gameObject;

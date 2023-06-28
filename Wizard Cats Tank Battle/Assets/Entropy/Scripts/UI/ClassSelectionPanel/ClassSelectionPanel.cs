@@ -32,7 +32,7 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
             _canvasGroup = GetComponent<CanvasGroup>();
             _canvasGroup.alpha = 1;
             
-            ShowCountdownButtons();
+            ShowFreeRespawnButtons();
             _counterEndTime = Time.time + TimerLength;
 
             StartCoroutine(RefreshCheckboxesAtStart());
@@ -62,6 +62,8 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
         {
             UpdateCheckboxes();
             HUDPanel.Get().ClosePanel();
+            UpdateButtonsAtBottomOfScreen();
+
             base.OpenPanel();
         }
 
@@ -74,7 +76,7 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
         private void Update()
         {
             
-            if (Time.time < _counterEndTime + 1)
+            if (CountdownIsActive())
             {
                 Counter.text = Mathf.CeilToInt(_counterEndTime - Time.time).ToString();
             }
@@ -83,19 +85,37 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
                 if (Counter.IsActive())
                 {
                     Counter.enabled = false;
-                    ShowPostCountdownButtons();
+                    UpdateButtonsAtBottomOfScreen();
                 }
             }
         }
 
-        private void ShowCountdownButtons()
+        private void UpdateButtonsAtBottomOfScreen()
+        {
+            if (CountdownIsActive() || IsInRespawnZone())
+            {
+                ShowFreeRespawnButtons();
+            }
+            else
+            {
+                ShowApplyRespawnButtons();
+            }
+        }
+
+        /// <summary>
+        /// These buttons are shown when the player can respawn freely
+        /// </summary>
+        private void ShowFreeRespawnButtons()
         {
             CountdownSelectionButton.SetActive(true);
             RespawnButton.SetActive(false);
             ApplyButton.SetActive(false);
         }
 
-        private void ShowPostCountdownButtons()
+        /// <summary>
+        /// These buttons are shown when the player cannot respawn freely
+        /// </summary>
+        private void ShowApplyRespawnButtons()
         {
             CountdownSelectionButton.SetActive(false);
             RespawnButton.SetActive(true);
@@ -135,6 +155,11 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
         public bool CountdownIsActive()
         {
             return _counterEndTime >= Time.time;
+        }
+
+        private bool IsInRespawnZone()
+        {
+            return GameManager.GetInstance().localPlayer.PlayerCanRespawnFreely();
         }
     }
 }

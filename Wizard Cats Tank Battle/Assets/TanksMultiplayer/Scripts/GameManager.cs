@@ -418,6 +418,8 @@ namespace TanksMP
         /// component attached, a point within the collider bounds will be used.
         /// </summary>
         public Transform spawn;
+
+        public Transform freeClassChange;
     }
 
 

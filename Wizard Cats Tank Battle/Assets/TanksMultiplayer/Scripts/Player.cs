@@ -840,7 +840,7 @@ namespace TanksMP
         /// </summary>
         public void CmdKillPlayer()
         {
-            if (!IsAlive)
+            if (!IsAlive || !IsLocal)
                 return;
             
             this.photonView.RPC("RpcKillPlayer", RpcTarget.MasterClient);
@@ -927,13 +927,27 @@ namespace TanksMP
             this.photonView.RPC("RpcRespawn", RpcTarget.All, senderId, killingBlow?killingBlow.GetId():0);
         }
 
-        private bool PlayerCanRespawnFreely()
+        public bool PlayerCanRespawnFreely()
         {
+            // Check timer
             float countdownMax = ClassSelectionPanel.Instance.TimerLength;
 
             if (Time.time <= photonView.GetJoinTime() + countdownMax)
             {
                 return true;
+            }
+            
+            // check for collision
+            Collider col = GameManager.GetInstance().teams[photonView.GetTeam()].freeClassChange.GetComponent<Collider>();
+
+            if (col == null)
+            {
+                Debug.LogError("Team is missing a free respawn collider! " + photonView.GetTeam());
+            }
+            else
+            {
+                if (col.bounds.Contains(transform.position))
+                    return true;
             }
             
             return false;

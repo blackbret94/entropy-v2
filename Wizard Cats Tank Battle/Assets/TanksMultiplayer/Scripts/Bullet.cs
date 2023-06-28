@@ -98,7 +98,7 @@ namespace TanksMP
         public GameObject owner;
         private float _timeCreated;
         private string _lastUUID = "";
-        private const float OwnerProtectionTime = 0.33f;
+        private const float OwnerProtectionTime = 1f;
 
         private bool OwnerIsProtected => Time.time - _timeCreated < OwnerProtectionTime;
 

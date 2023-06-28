@@ -11,9 +11,9 @@ namespace Entropy.Scripts.Player
         public string className = "DEFAULT";
         public string description;
         public string role;
-        [Range(0f,22f)]
+        [Range(0f,25f)]
         public int maxHealth = 10;
-        [Range(0.2f, 1.2f)]
+        [Range(0.2f, 1.5f)]
         public float fireRate = 0.75f;
         [Range(2f, 12f)]
         public float moveSpeed = 8f;

@@ -14,29 +14,40 @@ namespace Vashta.Entropy.UI
 
         public void GoToMainMenu()
         {
-            MainMenuParent.SetActive(true);
-            CharacterEditorParent.SetActive(false);
-            ItemStoreParent.SetActive(false);
+            DisableAll();
             
+            MainMenuParent.SetActive(true);
+            MainMenuGamePanel.SetActive(true);
             MainMenuGamePanel.Refresh();
         }
 
         public void GoToCharacterEditor()
         {
-            MainMenuParent.SetActive(false);
-            CharacterEditorParent.SetActive(true);
-            ItemStoreParent.SetActive(false);
+            DisableAll();
             
+            CharacterEditorParent.SetActive(true);
+            CharacterEditorGamePanel.SetActive(true);
             CharacterEditorGamePanel.Refresh();
         }
 
         public void GoToItemStore()
         {
+            DisableAll();
+            
+            ItemStoreParent.SetActive(true);
+            ItemStoreGamePanel.SetActive(true);
+            ItemStoreGamePanel.Refresh();
+        }
+
+        private void DisableAll()
+        {
             MainMenuParent.SetActive(false);
             CharacterEditorParent.SetActive(false);
-            ItemStoreParent.SetActive(true);
+            ItemStoreParent.SetActive(false);
             
-            ItemStoreGamePanel.Refresh();
+            MainMenuGamePanel.SetActive(false);
+            CharacterEditorGamePanel.SetActive(false);
+            ItemStoreGamePanel.SetActive(false);
         }
     }
 }

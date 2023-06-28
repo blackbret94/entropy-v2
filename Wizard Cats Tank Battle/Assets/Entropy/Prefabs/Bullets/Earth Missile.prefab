@@ -54,7 +54,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletId: 4
   speed: 13
-  damage: 6
+  damage: 5
   despawnDelay: 60
   bounce: 0
   maxTargets: 1
@@ -131,9 +131,17 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000010310479910}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 1
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Radius: 0.2
   m_Center: {x: 0, y: 0, z: 0.2}
 --- !u!54 &54000013431412088
@@ -143,10 +151,21 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000010310479910}
-  serializedVersion: 2
+  serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -280,7 +299,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4000012126426226}
     m_Modifications:
     - target: {fileID: 1746672929845058, guid: 49b7c959ca8c2a04fb624bfcc4ae6d70, type: 3}
@@ -430,7 +449,9 @@ PrefabInstance:
     - {fileID: 114012790586252362, guid: 49b7c959ca8c2a04fb624bfcc4ae6d70, type: 3}
     - {fileID: 54813845547034192, guid: 49b7c959ca8c2a04fb624bfcc4ae6d70, type: 3}
     - {fileID: 136757934063241816, guid: 49b7c959ca8c2a04fb624bfcc4ae6d70, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 49b7c959ca8c2a04fb624bfcc4ae6d70, type: 3}
 --- !u!4 &4518941467290001842 stripped
 Transform:

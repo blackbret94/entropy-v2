@@ -25,10 +25,7 @@ namespace TanksMP
                 return false;
             
             p.GetView().SetHealth(p.maxHealth);
-            
-            // show UI message
-            if(p.IsLocal)
-                GameManager.GetInstance().ui.PowerUpPanel.SetText(Powerup.DisplayText,Powerup.DisplaySubtext, Powerup.Color, Powerup.Icon);
+            p.CmdShowPowerupUI(Powerup.PowerupId);
 
             //return successful collection
             return true;

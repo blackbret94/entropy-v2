@@ -15,7 +15,7 @@ namespace Vashta.Entropy.UI
             gameObject.SetActive(false);
         }
 
-        public void SetPowerup(int bulletId, int ammo)
+        public void SetLoadout(int bulletId, int ammo)
         {
             if (bulletId > 0)
             {

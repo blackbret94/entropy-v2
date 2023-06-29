@@ -6,20 +6,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Entropy.Scripts.Audio;
 using Entropy.Scripts.Player;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using UnityEngine.EventSystems;
 using Vashta.Entropy.Character;
-using Vashta.Entropy.SaveLoad;
 using EckTechGames.FloatingCombatText;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.StatusEffects;
 using Vashta.Entropy.UI.ClassSelectionPanel;
-using Vashta.Entropy.UI.TeamScore;
 
 namespace TanksMP
 {
@@ -136,9 +132,6 @@ namespace TanksMP
         /// </summary>
         [HideInInspector]
         public FollowTarget camFollow;
-
-        public PlayerCollisionHandler PlayerCollisionHandler;
-        public PlayerMovementAudioAnimationController PlayerMovementAudioAnimationController;
         public StatusEffectController StatusEffectController;
 
         //timestamp when next shot should happen
@@ -146,8 +139,6 @@ namespace TanksMP
 
         public float TimeToNextFire => nextFire - Time.time;
         public float FractionFireReady => Mathf.Min(1-(TimeToNextFire / fireRate), 1);
-
-        public bool LoadClass;
 
         protected PlayerCurrencyRewarder _playerCurrencyRewarder;
 
@@ -159,7 +150,6 @@ namespace TanksMP
         public bool IsLocal => GameManager.GetInstance().localPlayer == this;
         public ClassDefinition defaultClassDefinition;
         public ClassList classList;
-        // public ClassDefinition classDefinition { get; private set; }
 
         private Vector3 _lastMousePos;
 
@@ -171,7 +161,8 @@ namespace TanksMP
         private static Dictionary<int, Player> _playersByViewId = new ();
 
         public BulletDictionary BulletDictionary;
-        
+        public PowerupDirectory PowerupDirectory;
+
         // Lag compensation
         private Vector3 networkVelocity;
         private Vector3 networkPosition;
@@ -358,6 +349,8 @@ namespace TanksMP
             //update values that could change any time for visualization to stay up to date
             OnHealthChange(player.GetHealth());
             OnShieldChange(player.GetShield());
+            
+            OnAmmoChange(player.GetBullet(), player.GetAmmo());
         }
 
         
@@ -1189,6 +1182,36 @@ namespace TanksMP
             }
 
             StatusEffectController.AddStatusEffect(statusEffectId, owner);
+        }
+
+        public void OnAmmoChange(int bulletId, int ammoValue)
+        {
+            if (!IsLocal)
+                return;
+
+            UIGame uiGame = GameManager.GetInstance().ui;
+            uiGame.bulletIcon.SetLoadout(bulletId, ammoValue);
+        }
+
+        public void CmdShowPowerupUI(int powerupId)
+        {
+            photonView.RPC("RpcShowPowerupUI", photonView.Owner, powerupId);
+        }
+
+        [PunRPC]
+        public void RpcShowPowerupUI(int powerupId)
+        {
+            Powerup powerup = PowerupDirectory[powerupId];
+            
+            Debug.Log("Attempting to show powerup ui for " + powerupId);
+            
+            if (!IsLocal || powerup == null)
+                return;
+            
+            Debug.Log("Powerup found!");
+
+            UIGame uiGame = GameManager.GetInstance().ui;
+            uiGame.PowerUpPanel.SetText(powerup.DisplayText,powerup.DisplaySubtext, powerup.Color, powerup.Icon);
         }
     }
 }

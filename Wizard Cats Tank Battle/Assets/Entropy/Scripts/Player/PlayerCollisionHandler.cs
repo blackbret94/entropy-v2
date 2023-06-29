@@ -45,7 +45,6 @@ namespace Entropy.Scripts.Player
                 return;
             
             _playersActivelyCollided = new List<PlayerCollisionHandler>();
-            player.PlayerCollisionHandler = this;
 
             _hasInit = true;
         }

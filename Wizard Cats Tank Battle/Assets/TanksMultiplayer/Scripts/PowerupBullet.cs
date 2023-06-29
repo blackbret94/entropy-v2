@@ -36,10 +36,7 @@ namespace TanksMP
 
             //otherwise assign new bullet and refill ammo
             p.GetView().SetAmmo(amount, bulletIndex);
-            
-            // show UI message
-            if(p.IsLocal)
-                GameManager.GetInstance().ui.PowerUpPanel.SetText(Powerup.DisplayText,Powerup.DisplaySubtext, Powerup.Color, Powerup.Icon);
+            p.CmdShowPowerupUI(Powerup.PowerupId);
 
             //return successful collection
             return true;

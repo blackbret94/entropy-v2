@@ -26,11 +26,8 @@ namespace TanksMP
             //assign absolute shield points to player
             p.GetView().SetShield(p.maxShield);
             p.GetView().SetHealth(p.maxHealth);
-
-            // show UI message
-            if(p.IsLocal)
-                GameManager.GetInstance().ui.PowerUpPanel.SetText(Powerup.DisplayText,Powerup.DisplaySubtext, Powerup.Color, Powerup.Icon);
-
+            p.CmdShowPowerupUI(Powerup.PowerupId);
+            
             //return successful collection
             return true;
         }

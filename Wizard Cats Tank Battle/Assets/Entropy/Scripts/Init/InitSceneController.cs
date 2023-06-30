@@ -79,6 +79,10 @@ namespace Vashta.Entropy.Scripts.Init
                     errorText.enabled = true;
                     errorText.text = "Error: " + error;
                     Debug.LogError (error);
+                    
+                    // This may cause issues.  It is meant to prevent the app from failing to launch after an update,
+                    // but there may be cases where it is best if it terminates here.
+                    LoadBundleByIndex(i+1, maxBundleIndex);
                 }
             );
         }

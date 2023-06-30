@@ -275,8 +275,6 @@ namespace TanksMP
             //yes, that's my kill: increase local kill counter
             if (killedBy == GameManager.GetInstance().localPlayer.gameObject) // This might be a problem if it is run on EVERY device
             {
-                
-                
                 Text[] killCounter = GameManager.GetInstance().ui.killCounter;
                 killCounter[0].text = GetView().GetKills().ToString();
                 killCounter[0].GetComponent<Animator>().Play("Animation");

@@ -968,15 +968,7 @@ namespace TanksMP
                 //find original sender game object (killedBy)
                 PhotonView senderView = senderId > 0 ? PhotonView.Find(senderId) : null;
                 if (senderView != null && senderView.gameObject != null) killedBy = senderView.gameObject;
-
-                // if (killedBy != null)
-                // {
-                    // Player killedByPlayer = killedBy.GetComponent<Player>();
-
-                    // if (killedByPlayer != null)
-                        // killedByPlayer.GetView().IncrementKills();
-                // }
-
+                
                 //detect whether the current user was responsible for the kill, but not for suicide
                 //yes, that's my kill: increase local kill counter
                 Player localPlayer = GameManager.GetInstance().localPlayer;

@@ -11,6 +11,8 @@ namespace Vashta.Entropy.UI
         private const string CURRENCY_CODE = "CC";
         
         public TextMeshProUGUI Text;
+        public Animator Animator;
+        public string AnimationTrigger = "CoinRewarded";
         
 
         private void Awake()
@@ -56,6 +58,7 @@ namespace Vashta.Entropy.UI
                 if (result.CurrencyCode == CURRENCY_CODE)
                 {
                     Text.text = result.CurrentValue.ToString();
+                    Animator.SetTrigger(AnimationTrigger);
                 }
             }
         }

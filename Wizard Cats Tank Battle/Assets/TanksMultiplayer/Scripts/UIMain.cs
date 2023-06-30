@@ -61,6 +61,8 @@ namespace TanksMP
         /// Settings: checkbox for playing background music.
         /// </summary>
         public Toggle musicToggle;
+        
+        public Toggle leftHandedModeToggle;
 
         /// <summary>
         /// Settings: slider for adjusting game sound volume.
@@ -92,6 +94,7 @@ namespace TanksMP
             if (!PlayerPrefs.HasKey(PrefsKeys.appVolume)) PlayerPrefs.SetFloat(PrefsKeys.appVolume, 1f);
             if (!PlayerPrefs.HasKey(PrefsKeys.activeTank)) PlayerPrefs.SetString(PrefsKeys.activeTank, Encryptor.Encrypt("0"));
             if (!PlayerPrefs.HasKey(Vashta.Entropy.SaveLoad.PrefsKeys.characterAppearance)) PlayerPrefs.SetString(Vashta.Entropy.SaveLoad.PrefsKeys.characterAppearance, CharacterAppearanceSaveLoad.DefaultAppearanceStringEncrypted());
+            if(!PlayerPrefs.HasKey(PrefsKeys.lefthandedMode)) PlayerPrefs.SetInt(PrefsKeys.lefthandedMode, 0);
 
             PlayerPrefs.Save();
             _playerNameVerification.VerifyName();
@@ -102,6 +105,7 @@ namespace TanksMP
             // gameModeDrop.value = PlayerPrefs.GetInt(PrefsKeys.gameMode);
             serverField.text = PlayerPrefs.GetString(PrefsKeys.serverAddress);
             musicToggle.isOn = bool.Parse(PlayerPrefs.GetString(PrefsKeys.playMusic));
+            leftHandedModeToggle.isOn = Convert.ToBoolean(PlayerPrefs.GetInt(PrefsKeys.lefthandedMode, 0));
             volumeSlider.value = PlayerPrefs.GetFloat(PrefsKeys.appVolume);
 
             //call the onValueChanged callbacks once with their saved values
@@ -253,6 +257,7 @@ namespace TanksMP
             PlayerPrefs.SetString(PrefsKeys.serverAddress, serverField.text);
             PlayerPrefs.SetString(PrefsKeys.playMusic, musicToggle.isOn.ToString());
             PlayerPrefs.SetFloat(PrefsKeys.appVolume, volumeSlider.value);
+            PlayerPrefs.SetInt(PrefsKeys.lefthandedMode, leftHandedModeToggle.isOn ? 1 : 0);
             PlayerPrefs.Save();
             
             _playerNameVerification.VerifyName();

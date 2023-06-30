@@ -46,5 +46,7 @@ namespace TanksMP
         /// PlayerPrefs key for selected player model: 0/1/2 etc.
         /// </summary>
         public const string activeTank = "TM_activeTank";
+        
+        public const string lefthandedMode = "TM_leftHandedMode";
     }
 }

@@ -13,6 +13,7 @@ namespace Vashta.Entropy.TanksExtensions
         public Material Material => Team.material;
         public bool IsLocalPlayer { get; }
         public Player Player { get; }
+        public int ClassId { get; }
 
         public ScoreboardRowData(Player player, Team team, bool isLocalPlayer)
         {
@@ -22,6 +23,7 @@ namespace Vashta.Entropy.TanksExtensions
             Deaths = player.GetDeaths();
             Team = team;
             IsLocalPlayer = isLocalPlayer;
+            ClassId = player.GetClassId();
         }
 
         public ScoreboardRowData(PlayerBot bot, Team team)
@@ -31,11 +33,7 @@ namespace Vashta.Entropy.TanksExtensions
             Deaths = bot.deaths;
             Team = team;
             IsLocalPlayer = false;
-        }
-
-        public string FormatAsString()
-        {
-            return $"Name: {Name}, Team: {Team.name}, Kills: {Kills}, Deaths: {Deaths}";
+            ClassId = bot.classId;
         }
     }
 }

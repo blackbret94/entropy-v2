@@ -1,3 +1,4 @@
+using System;
 using CBS;
 using Entropy.Scripts.Currency;
 using TMPro;
@@ -21,6 +22,11 @@ namespace Vashta.Entropy.UI
             CBSCurrency.OnCurrencyUpdated += OnCurrencyUpdated;
             
             Refresh();
+        }
+
+        private void OnDestroy()
+        {
+            CBSCurrency.OnCurrencyUpdated -= OnCurrencyUpdated;
         }
 
         public override void Refresh()

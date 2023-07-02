@@ -40,7 +40,7 @@ namespace Entropy.Scripts.Currency
             }
             else
             {
-                Debug.LogError("Error updating currency " + result.Error);
+                Debug.LogError("Error updating currency " + result.Error.Message);
             }
         }
         
@@ -60,7 +60,7 @@ namespace Entropy.Scripts.Currency
             }
             else
             {
-                Debug.LogError("Error refreshing currency! " + result.Error);
+                Debug.LogError("Error refreshing currency! " + result.Error.Message);
             }
         }
         

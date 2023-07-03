@@ -153,8 +153,12 @@ namespace PlayFab.Internal
         {
             InitializeHttp();
             SendEvent(apiEndpoint, request, null, ApiProcessingEventType.Pre);
+            
 
             var serializer = PluginManager.GetPlugin<ISerializerPlugin>(PluginContract.PlayFab_Serializer);
+            Debug.Log("Serializing request as: " + serializer.SerializeObject(request)); // On Android FunctionParameter is null
+
+            
             var reqContainer = new CallRequestContainer
             {
                 ApiEndpoint = apiEndpoint,
@@ -201,6 +205,10 @@ namespace PlayFab.Internal
                         reqContainer.RequestHeaders["X-EntityToken"] = authenticationContext.EntityToken;
                     break;
 #endif
+                case AuthType.TelemetryKey:
+                    if (authenticationContext != null)
+                        reqContainer.RequestHeaders["X-TelemetryKey"] = authenticationContext.TelemetryKey;
+                    break;
             }
 
             // These closures preserve the TResult generic information in a way that's safe for all the devices

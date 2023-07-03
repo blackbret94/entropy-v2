@@ -4,6 +4,7 @@ using UnityEngine;
 using PlayFab;
 using PlayFab.ClientModels;
 using System;
+using CBS.Playfab.Objects;
 
 namespace CBS.Playfab
 {
@@ -14,7 +15,7 @@ namespace CBS.Playfab
             var request = new PlayFab.CloudScriptModels.ExecuteFunctionRequest
             {
                 FunctionName = AzureFunctions.AddCurrencyMethod,
-                FunctionParameter = new { Currency = currency, Amount = amount }
+                FunctionParameter = new CBSCurrencyObj{ Currency = currency, Amount = amount }
             };
             PlayFabCloudScriptAPI.ExecuteFunction(request, OnUpdate, OnFailed);
         }
@@ -24,7 +25,7 @@ namespace CBS.Playfab
             var request = new PlayFab.CloudScriptModels.ExecuteFunctionRequest
             {
                 FunctionName = AzureFunctions.DecreaseCurrencyMethod,
-                FunctionParameter = new { Currency = currency, Amount = amount }
+                FunctionParameter = new CBSCurrencyObj{ Currency = currency, Amount = amount }
             };
             PlayFabCloudScriptAPI.ExecuteFunction(request, OnUpdate, OnFailed);
         }

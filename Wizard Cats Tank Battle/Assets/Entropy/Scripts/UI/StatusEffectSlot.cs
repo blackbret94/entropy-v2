@@ -37,6 +37,11 @@ namespace Vashta.Entropy.UI
             Animator.SetBool(BlinkBool, false);
             Animator.SetTrigger(FadeInTrigger);
         }
+        
+        public void ResetStatusEffect()
+        {
+            _canvasGroup.alpha = 0;
+        }
 
         public StatusEffect GetStatusEffect()
         {
@@ -59,6 +64,14 @@ namespace Vashta.Entropy.UI
             } else if (timeLeft < BlinkThreshold)
             {
                 Animator.SetBool(BlinkBool, true);
+            }
+            else
+            {
+                if (Animator.GetBool(BlinkBool))
+                {
+                    Animator.SetBool(BlinkBool, false);
+                    Animator.SetTrigger(FadeInTrigger);
+                }
             }
         }
 

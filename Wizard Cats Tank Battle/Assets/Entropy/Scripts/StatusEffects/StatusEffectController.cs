@@ -3,12 +3,15 @@ using Photon.Pun;
 using TanksMP;
 using UnityEngine;
 using Vashta.Entropy.Character;
+using Vashta.Entropy.UI;
 
 namespace Vashta.Entropy.StatusEffects
 {
     public class StatusEffectController : MonoBehaviour
     {
         public StatusEffectDirectory StatusEffectDirectory;
+        public StatusEffectPanel StatusEffectPanel;
+        
         private Player _player;
         private PlayerStatusEffectVisualizer _visualizer;
         
@@ -92,6 +95,7 @@ namespace Vashta.Entropy.StatusEffects
             _statusEffects.Clear();
             _indexedIds.Clear();
             _dirtyFlag = true;
+            StatusEffectPanel.ResetSlots();
         }
 
         private void Update()

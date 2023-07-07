@@ -39,17 +39,20 @@ namespace Vashta.Entropy.UI
             {
                 StatusEffectSlot slot = StatusEffectBlocks[iconIndex];
 
-                if (slot.GetStatusEffect() == statusEffect)
-                {
-                    // consider blinking or fading out
-                    // slot.UpdateAnimation();
-                }
-                else
+                if (slot.GetStatusEffect() != statusEffect)
                 {
                     slot.SetStatusEffect(statusEffect);
                 }
 
                 iconIndex++;
+            }
+        }
+
+        public void ResetSlots()
+        {
+            foreach (var slot in StatusEffectBlocks)
+            {
+                slot.ResetStatusEffect();
             }
         }
     }

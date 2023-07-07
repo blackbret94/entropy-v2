@@ -595,7 +595,10 @@ namespace TanksMP
         //on shot drag start set small delay for first shot
         void ShootBegin()
         {
-            nextFire = Time.time + 0.1f;
+            // Add delay to prevent firing before aiming.
+            // This check ensures nextFire is not always overridden, which lead to the rapid fire exploit.
+            if(Time.time > nextFire)
+                nextFire = Time.time + 0.1f;
         }
 
 

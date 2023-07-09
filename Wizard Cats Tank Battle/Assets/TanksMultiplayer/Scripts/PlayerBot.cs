@@ -257,7 +257,6 @@ namespace TanksMP
         //the actual respawn routine
         IEnumerator Respawn(short senderId, int killingBlowBulletId)
         {   
-            Bullet killingBlowBullet = BulletDictionary[killingBlowBulletId];
             
             //stop AI updates
             isDead = true;
@@ -282,14 +281,10 @@ namespace TanksMP
                 RewardCoins();
             }
 
-            if (defaultDeathFx)
-            {
-			     //spawn death particles 
-                 GameObject explosion = killingBlowBullet != null ? killingBlowBullet.deathFx : defaultDeathFx;
-                 PoolManager.Spawn(explosion, transform.position, transform.rotation);
-            }
-				
-			//play sound clip on player death
+            Bullet killingBlowBullet = BulletDictionary[killingBlowBulletId];
+            SpawnDeathFx(killingBlowBullet);
+
+            //play sound clip on player death
             // if(explosionClip) AudioManager.Play3D(explosionClip, transform.position);
             if (killedBy != null)
             {
@@ -300,9 +295,7 @@ namespace TanksMP
                     AudioManager.Play3D(player.CharacterAppearance.Meow.AudioClip, transform.position);
                 }
             }
-            // AudioManager.Play3D(CharacterAppearance.Meow.AudioClip, transform.position);
-            // CharacterAppearance.PlayMeow();
-            
+
             //toggle visibility for all rendering parts (off)
             ToggleComponents(false);
             //wait global respawn delay until reactivation
@@ -316,6 +309,20 @@ namespace TanksMP
             agent.Warp(targetPoint);
             agent.isStopped = false;
             isDead = false;
+        }
+        
+        private void SpawnDeathFx(Bullet killingBlowBullet)
+        {
+            GameObject deathFx = null;
+            
+            if(killingBlowBullet != null)
+                deathFx = killingBlowBullet.deathFx;
+                
+            if (deathFx == null)
+                deathFx = StatusEffectController.GetDeathFx();
+
+            if(deathFx != null)
+                PoolManager.Spawn(deathFx, transform.position, transform.rotation);
         }
 
 

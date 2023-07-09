@@ -156,9 +156,7 @@ namespace PlayFab.Internal
             
 
             var serializer = PluginManager.GetPlugin<ISerializerPlugin>(PluginContract.PlayFab_Serializer);
-            Debug.Log("Serializing request as: " + serializer.SerializeObject(request)); // On Android FunctionParameter is null
 
-            
             var reqContainer = new CallRequestContainer
             {
                 ApiEndpoint = apiEndpoint,

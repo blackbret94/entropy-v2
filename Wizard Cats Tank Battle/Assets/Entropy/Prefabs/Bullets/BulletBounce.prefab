@@ -98,9 +98,17 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000010310479910}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 1
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Radius: 0.2
   m_Center: {x: 0, y: 0, z: 0.2}
 --- !u!54 &54000013431412088
@@ -110,10 +118,21 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000010310479910}
-  serializedVersion: 2
+  serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -131,7 +150,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cd273be5de0c024da7ef86707f5d826, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletDictionary: {fileID: 11400000, guid: cb820bff8f12bf24e85b73b2e02f11ae, type: 2}
   bulletId: 2
   speed: 18
   damage: 3
@@ -142,15 +160,16 @@ MonoBehaviour:
   HitSfx: {fileID: 11400000, guid: f533087dc75e4234296e573f367e04b2, type: 2}
   CastSfx: {fileID: 11400000, guid: be7d0c9ec5a4df54a847bc00705ffdbb, type: 2}
   BounceSfx: {fileID: 11400000, guid: 123be4e74c4b3ba4c9b55eb474764eed, type: 2}
-  hitFX: {fileID: 1000010321467122, guid: 3ccf1b30bb4058f4499a550a8b569bc9, type: 3}
-  explosionFX: {fileID: 1000010321467122, guid: 0b39af0d39f5fe443807a910bd327abe,
+  hitFX: {fileID: 1000010321467122, guid: 8071eaa5ace941a43a40ae101f7adbc1, type: 3}
+  explosionFX: {fileID: 1000010321467122, guid: 7cef4e070cbde8f498c841b0d66c5772,
     type: 3}
-  deathFx: {fileID: 0}
+  deathFx: {fileID: 1000010321467122, guid: ff35bacec04f181439fa44f7658c7a33, type: 3}
   bounceInf: 0
-  StatusEffectOnEnemy: {fileID: 0}
-  StatusEffectOnEnemyChance: 0
-  StatusEffectOnAlly: {fileID: 0}
-  StatusEffectOnAllyChance: 0
+  StatusEffectOnEnemy: {fileID: 11400000, guid: 2775bb56807a28146a46d7b43d5b6f33,
+    type: 2}
+  StatusEffectOnEnemyChance: 1
+  StatusEffectOnAlly: {fileID: 11400000, guid: 15f24c184d415124e92f6e66e8c0dc6e, type: 2}
+  StatusEffectOnAllyChance: 1
   owner: {fileID: 0}
 --- !u!114 &114000011634847070
 MonoBehaviour:
@@ -280,7 +299,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4000012126426226}
     m_Modifications:
     - target: {fileID: 1170480630469472, guid: b348c70b70beb3849acc7a74e175bd99, type: 3}
@@ -482,7 +501,9 @@ PrefabInstance:
     - {fileID: 54262529832021736, guid: b348c70b70beb3849acc7a74e175bd99, type: 3}
     - {fileID: 135783975887450746, guid: b348c70b70beb3849acc7a74e175bd99, type: 3}
     - {fileID: 114441933697519776, guid: b348c70b70beb3849acc7a74e175bd99, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b348c70b70beb3849acc7a74e175bd99, type: 3}
 --- !u!4 &7796318095996296045 stripped
 Transform:

@@ -69,7 +69,7 @@ MonoBehaviour:
   bounceInf: 0
   StatusEffectOnEnemy: {fileID: 11400000, guid: 2a7654e6e6ee11a4a9e4d64599502981,
     type: 2}
-  StatusEffectOnEnemyChance: 0.3
+  StatusEffectOnEnemyChance: 1
   StatusEffectOnAlly: {fileID: 11400000, guid: 9160369c01bfd1f4ab72f360b0d53460, type: 2}
   StatusEffectOnAllyChance: 1
   owner: {fileID: 0}
@@ -131,9 +131,17 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000010310479910}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 1
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Radius: 0.2
   m_Center: {x: 0, y: 0, z: 0.2}
 --- !u!54 &54000013431412088
@@ -143,10 +151,21 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000010310479910}
-  serializedVersion: 2
+  serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -280,7 +299,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4000012126426226}
     m_Modifications:
     - target: {fileID: 1865968712415440, guid: e1d30abeb36499148bca7bfbd6a64d43, type: 3}
@@ -345,7 +364,9 @@ PrefabInstance:
     - {fileID: 114193548041706924, guid: e1d30abeb36499148bca7bfbd6a64d43, type: 3}
     - {fileID: 65066318336513134, guid: e1d30abeb36499148bca7bfbd6a64d43, type: 3}
     - {fileID: 54107153200278172, guid: e1d30abeb36499148bca7bfbd6a64d43, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e1d30abeb36499148bca7bfbd6a64d43, type: 3}
 --- !u!4 &5905957428005032122 stripped
 Transform:

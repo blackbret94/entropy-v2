@@ -36,5 +36,7 @@ namespace Vashta.Entropy.StatusEffects
         public float HealthPerSecond = 0f;
         [Tooltip("Toggles reflective bubble")]
         public bool IsReflective = false;
+        [Tooltip("Effect to play if the player is killed by this status effect.  Optional.")]
+        public GameObject DeathFx;
     }
 }

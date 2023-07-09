@@ -956,10 +956,6 @@ namespace TanksMP
         protected virtual void RpcRespawn(short senderId, int bulletId)
         {
             
-            StatusEffectController.ClearStatusEffects();
-
-            Bullet killingBlowBullet = BulletDictionary[bulletId];
-            
             //toggle visibility for player gameobject (on/off)
             gameObject.SetActive(!gameObject.activeInHierarchy);
             bool isActive = gameObject.activeInHierarchy;
@@ -984,10 +980,9 @@ namespace TanksMP
                     RewardCoins();
                 }
                 
-                //spawn death particles
-                GameObject explosion = killingBlowBullet != null ? killingBlowBullet.deathFx : defaultDeathFx;
-                if(explosion != null)
-                    PoolManager.Spawn(explosion, transform.position, transform.rotation);
+                Bullet killingBlowBullet = BulletDictionary[bulletId];
+                SpawnDeathFx(killingBlowBullet);
+                StatusEffectController.ClearStatusEffects();
 
                 //play sound clip on player death
                 // play killer's death cry
@@ -1042,6 +1037,20 @@ namespace TanksMP
                 //display respawn window (only for local player)
                 GameManager.GetInstance().DisplayDeath();
             }
+        }
+
+        private void SpawnDeathFx(Bullet killingBlowBullet)
+        {
+            GameObject deathFx = null;
+            
+            if(killingBlowBullet != null)
+                deathFx = killingBlowBullet.deathFx;
+                
+            if (deathFx == null)
+                deathFx = StatusEffectController.GetDeathFx();
+
+            if(deathFx != null)
+                PoolManager.Spawn(deathFx, transform.position, transform.rotation);
         }
 
         protected void RewardCoins()

@@ -170,5 +170,30 @@ namespace Vashta.Entropy.StatusEffects
 
             return null;
         }
+
+        /// <summary>
+        /// Iterate over all status effects, get death fx
+        /// </summary>
+        /// <returns></returns>
+        public GameObject GetDeathFx()
+        {
+            Debug.Log("Looking for death fx in status effects");
+            foreach (var statusEffect in _statusEffects)
+            {
+                StatusEffectData data = StatusEffectDirectory[statusEffect.Id()];
+
+                if (data && data.DeathFx != null)
+                {
+                    Debug.Log("Death fx found! "+ data.Title);
+                    return data.DeathFx;
+                }
+                else
+                {
+                    Debug.Log("Death fx not found! " + data.Title);
+                }
+            }
+
+            return null;
+        }
     }
 }

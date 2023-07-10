@@ -4,16 +4,9 @@ namespace Entropy.Scripts.Player
 {
     public class PlayerCurrencyRewarder
     {
-        private CurrencyTransaction _currencyTransaction;
-
         private const int KILL_REWARD = 25;
         private const int MATCH_BONUS = 50;
         private const int FIRST_PLACE_BONUS = 100;
-        
-        public PlayerCurrencyRewarder(bool refreshCurrency = true)
-        {
-            _currencyTransaction = new CurrencyTransaction(refreshCurrency);
-        }
 
         public int RewardForKill()
         {
@@ -35,7 +28,7 @@ namespace Entropy.Scripts.Player
         
         private void Reward(int value)
         {
-            _currencyTransaction.AddCurrency(value);
+            CurrencyTransaction.Instance.AddCurrency(value);
         }
     }
 }

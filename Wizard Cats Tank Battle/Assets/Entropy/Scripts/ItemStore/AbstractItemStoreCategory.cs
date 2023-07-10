@@ -20,14 +20,12 @@ namespace Entropy.Scripts.ItemStore
         
         protected int _itemIndex = 0;
         protected List<ScriptableWardrobeItem> _activeItemList;
-        protected CurrencyTransaction _currencyTransaction;
         
         public WardrobeCategory Category = WardrobeCategory.HAT;
         
         private void Awake()
         {
             _objectCollider = ObjectRoot.GetComponentInParent<Collider>();
-            _currencyTransaction = new CurrencyTransaction();
             Init();
         }
 
@@ -95,12 +93,12 @@ namespace Entropy.Scripts.ItemStore
         {
             int cost = ActiveItem().Cost;
 
-            if (_currencyTransaction.QueryPurchase(cost))
+            if (CurrencyTransaction.Instance.QueryPurchase(cost))
             {
                 Debug.Log("Purchasing " + ActiveItem().Id);
                 
                 // buy
-                _currencyTransaction.DecreaseCurrency(cost);
+                CurrencyTransaction.Instance.DecreaseCurrency(cost);
                 Purchase();
                 SfxController.PlayPurchase();
 

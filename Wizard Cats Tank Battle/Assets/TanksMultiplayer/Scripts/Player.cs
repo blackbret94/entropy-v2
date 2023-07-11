@@ -1206,13 +1206,9 @@ namespace TanksMP
         public void RpcShowPowerupUI(int powerupId)
         {
             Powerup powerup = PowerupDirectory[powerupId];
-            
-            Debug.Log("Attempting to show powerup ui for " + powerupId);
-            
+
             if (!IsLocal || powerup == null)
                 return;
-            
-            Debug.Log("Powerup found!");
 
             UIGame uiGame = GameManager.GetInstance().ui;
             uiGame.PowerUpPanel.SetText(powerup.DisplayText,powerup.DisplaySubtext, powerup.Color, powerup.Icon);

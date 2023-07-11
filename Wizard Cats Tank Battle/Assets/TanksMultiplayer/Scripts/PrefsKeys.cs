@@ -48,5 +48,7 @@ namespace TanksMP
         public const string activeTank = "TM_activeTank";
         
         public const string lefthandedMode = "TM_leftHandedMode";
+        
+        public const string selectedMap = "WCTB_SelectedMap";
     }
 }

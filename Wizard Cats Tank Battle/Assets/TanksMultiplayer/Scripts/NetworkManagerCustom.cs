@@ -13,6 +13,7 @@ using Photon.Realtime;
 using Vashta.Entropy.Character;
 using Vashta.Entropy.SaveLoad;
 using Vashta.Entropy.Scripts.CBSIntegration;
+using Vashta.Entropy.UI.MapSelection;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace TanksMP
@@ -59,6 +60,8 @@ namespace TanksMP
 
         // If null, uses best region
         public string FixedRegion = "us";
+
+        public MapDefinitionDictionary MapDefinitionDictionary;
 
         //initialize network view
         void Awake()
@@ -206,22 +209,12 @@ namespace TanksMP
         /// </summary>
         public override void OnCreatedRoom()
         {
+            string mapId = PlayerPrefs.GetString(PrefsKeys.selectedMap, "-1");
+            MapDefinition mapDefinition = MapDefinitionDictionary[mapId];
+            
             //the initial team size of the game for the server creating a new room.
             //unfortunately this cannot be set via the GameManager because it does not exist at that point
-            short initialArrayLength;
-            //get the selected game mode out of PlayerPrefs
-            GameMode activeGameMode = ((GameMode)PlayerPrefs.GetInt(PrefsKeys.gameMode));
-
-            //set the initial room array size initialization based on game mode
-            switch(activeGameMode)
-            {
-                case GameMode.CTF:
-                    initialArrayLength = 2;
-                    break;
-                default:
-                    initialArrayLength = 4;
-                    break;
-            }
+            short initialArrayLength = mapDefinition.TeamCount;
 
             //we created a room so we have to set the initial room properties for this room,
             //such as populating the team fill and score arrays
@@ -229,33 +222,14 @@ namespace TanksMP
             roomProps.Add(RoomExtensions.size, new int[initialArrayLength]);
             roomProps.Add(RoomExtensions.score, new int[initialArrayLength]);
             PhotonNetwork.CurrentRoom.SetCustomProperties(roomProps);
-
-            //load the online scene randomly out of all available scenes for the selected game mode
-            //we are checking for a naming convention here, if a scene starts with the game mode abbreviation
-            List<int> matchingScenes = new List<int>();
-            for(int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
-            {
-                string[] scenePath = SceneUtility.GetScenePathByBuildIndex(i).Split('/');
-                if (scenePath[scenePath.Length - 1].StartsWith(activeGameMode.ToString()))
-                {
-                    matchingScenes.Add(i);
-                }
-            }
-			
-			//check that your scene begins with the game mode abbreviation
-			if(matchingScenes.Count == 0)
-            {
-                Debug.LogWarning("No Scene for selected Game Mode found in Build Settings!");
-                return;
-            }
-
+            
             //get random scene out of available scenes and assign it as the online scene
-            onlineSceneIndex = matchingScenes[UnityEngine.Random.Range(0, matchingScenes.Count)];
+            onlineSceneIndex = mapDefinition.SceneIndex();
+            
             //then load it
             PhotonNetwork.LoadLevel(onlineSceneIndex);
         }
-
-
+        
         /// <summary>
         /// Called on entering a lobby on the Master Server.
         /// See the official Photon docs for more details.

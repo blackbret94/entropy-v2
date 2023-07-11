@@ -137,13 +137,13 @@ namespace TanksMP
         public void PlayMultiplayer()
         {
             PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Online);
-            Play();
+            // Play();
         }
         
         public void PlayVsAI()
         {
             PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Offline);
-            Play();
+            // Play();
         }
         
         //coroutine that waits 10 seconds before cancelling joining a match

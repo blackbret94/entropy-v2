@@ -165,6 +165,7 @@ namespace Jacovone.AssetBundleMagic
         /// The base URL, from which download bundles and Versions.txt file.
         /// </summary>
         public string BundlesBaseUrl = "http://127.0.0.1:8000";
+        public string BundlesBaseUrlDev = "http://127.0.0.1:8000";
 
         /// <summary>
         /// The base path of bundles, where AssetBundleMagic will generate bundles, and from
@@ -206,6 +207,16 @@ namespace Jacovone.AssetBundleMagic
 
         [SerializeField]
         public VersionsDictionary BuildVersions;
+
+        public string GetCorrectBundleBaseUrl()
+        {
+            if (Debug.isDebugBuild)
+            {
+                return BundlesBaseUrlDev;
+            }
+
+            return BundlesBaseUrl;
+        }
 
         /// <summary>
         /// Akake standard MonoBehavior method, manage Don't Destroy On Load mechanism.
@@ -331,7 +342,7 @@ namespace Jacovone.AssetBundleMagic
             if (Instance.TestMode) {
                 return LoadBundle (bundleName, finished);
             } else {
-                string url = Instance.BundlesBaseUrl + "/" + CurrentPlatformString () + "/" + bundleName;
+                string url = Instance.GetCorrectBundleBaseUrl() + "/" + CurrentPlatformString () + "/" + bundleName;
                 UnityWebRequest wr;
 
                 if (Versions.ContainsKey (bundleName)) {
@@ -398,7 +409,7 @@ namespace Jacovone.AssetBundleMagic
             if (Instance.TestMode) {
                 finished ("Fake Version.txt content");
             } else {
-                UnityWebRequest wr = UnityWebRequest.Get (Instance.BundlesBaseUrl + "/" + CurrentPlatformString () + "/Versions.txt");
+                UnityWebRequest wr = UnityWebRequest.Get (Instance.GetCorrectBundleBaseUrl() + "/" + CurrentPlatformString () + "/Versions.txt");
 
                 // If requested, the package try to download server-side cache management by setting
                 // up some header in the request
@@ -445,10 +456,10 @@ namespace Jacovone.AssetBundleMagic
                             Versions.Add (datas [idx].bundleName, datas [idx].version);
                         }
 
-                        if (CRCs.ContainsKey (Instance.BundlesBaseUrl + "/" + CurrentPlatformString () + "/" + datas [idx].bundleName)) {
-                            CRCs [Instance.BundlesBaseUrl + "/" + CurrentPlatformString () + "/" + datas [idx].bundleName] = datas [idx].crc;
+                        if (CRCs.ContainsKey (Instance.GetCorrectBundleBaseUrl() + "/" + CurrentPlatformString () + "/" + datas [idx].bundleName)) {
+                            CRCs [Instance.GetCorrectBundleBaseUrl() + "/" + CurrentPlatformString () + "/" + datas [idx].bundleName] = datas [idx].crc;
                         } else {
-                            CRCs.Add (Instance.BundlesBaseUrl + "/" + CurrentPlatformString () + "/" + datas [idx].bundleName, datas [idx].crc);
+                            CRCs.Add (Instance.GetCorrectBundleBaseUrl() + "/" + CurrentPlatformString () + "/" + datas [idx].bundleName, datas [idx].crc);
                         }
                     }
                 }

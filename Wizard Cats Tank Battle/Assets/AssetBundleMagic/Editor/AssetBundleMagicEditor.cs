@@ -56,6 +56,7 @@ namespace Jacovone.AssetBundleMagic
             EditorGUILayout.LabelField ("General", headerStyle);
 
             EditorGUILayout.PropertyField (serializedObject.FindProperty ("BundlesBaseUrl"), new GUIContent ("Bundles Url", "The base url for all bundles to download."));
+            EditorGUILayout.PropertyField (serializedObject.FindProperty ("BundlesBaseUrlDev"), new GUIContent ("Bundles Url Dev", "The base url for all dev bundles to download."));
             EditorGUILayout.PropertyField (serializedObject.FindProperty ("BundlesBasePath"), new GUIContent ("Bundles Path", "The complete path for all local bundles. Should include Bundles Directory."));
 
             EditorGUIUtility.labelWidth = 200;

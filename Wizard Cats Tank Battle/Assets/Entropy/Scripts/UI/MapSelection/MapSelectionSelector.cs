@@ -21,7 +21,9 @@ namespace Vashta.Entropy.UI.MapSelection
             ResetCheckboxes();
             checkbox.Toggle(true);
             _activeSelection = checkbox;
-            PlayerPrefs.SetString(PrefsKeys.selectedMap, checkbox.mapDefinition.Id);
+
+            string mapIdToSave = checkbox.mapDefinition ? checkbox.mapDefinition.Id : "-1";
+            PlayerPrefs.SetString(PrefsKeys.selectedMap, mapIdToSave);
         }
         
         private void ResetCheckboxes()

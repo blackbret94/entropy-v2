@@ -1046,7 +1046,7 @@ PrefabInstance:
     - target: {fileID: 5452673281980019481, guid: 1b5c3342956ea4f2391c4e10ce034478,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
-      value: PlayDramaticButtonClick
+      value: PlayGoBackSoundEffect
       objectReference: {fileID: 0}
     - target: {fileID: 5452673281980019481, guid: 1b5c3342956ea4f2391c4e10ce034478,
         type: 3}
@@ -2059,7 +2059,7 @@ PrefabInstance:
     - target: {fileID: 5452673281980019481, guid: 1b5c3342956ea4f2391c4e10ce034478,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: PlayDramaticButtonClick
+      value: PlayGoBackSoundEffect
       objectReference: {fileID: 0}
     - target: {fileID: 5452673281980019481, guid: 1b5c3342956ea4f2391c4e10ce034478,
         type: 3}
@@ -3861,7 +3861,7 @@ PrefabInstance:
     - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
         type: 3}
@@ -3870,12 +3870,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1242611342}
     - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 231560430}
+    - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
@@ -3885,8 +3900,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: PlayBasicButtonClick
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: Vashta.Entropy.UI.MapSelection.MapSelectionSelector, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Entropy.Scripts.Audio.SfxController, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
         type: 3}
@@ -3895,8 +3920,18 @@ PrefabInstance:
       objectReference: {fileID: 1146521657}
     - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: Vashta.Entropy.UI.MapSelection.MapSelectionCheckbox, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 8193998796224139102, guid: f279b729cda36d047ab73198649a1982,
         type: 3}
@@ -5734,6 +5769,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 231560430}
+        m_TargetAssemblyTypeName: Entropy.Scripts.Audio.SfxController, Assembly-CSharp
+        m_MethodName: PlayBasicButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1455201532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6997,7 +7044,7 @@ PrefabInstance:
     - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
         type: 3}
@@ -7006,12 +7053,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1242611342}
     - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 231560430}
+    - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
@@ -7021,8 +7083,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: PlayBasicButtonClick
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: Vashta.Entropy.UI.MapSelection.MapSelectionSelector, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Entropy.Scripts.Audio.SfxController, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
         type: 3}
@@ -7031,8 +7103,18 @@ PrefabInstance:
       objectReference: {fileID: 1807157299}
     - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: Vashta.Entropy.UI.MapSelection.MapSelectionCheckbox, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 8193998796224139102, guid: f279b729cda36d047ab73198649a1982,
         type: 3}
@@ -7679,7 +7761,7 @@ PrefabInstance:
     - target: {fileID: 274350897321453314, guid: 0767699d167fa4530a0fb52359271ab6,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: PlayDramaticButtonClick
+      value: PlayBasicButtonClick
       objectReference: {fileID: 0}
     - target: {fileID: 274350897321453314, guid: 0767699d167fa4530a0fb52359271ab6,
         type: 3}
@@ -10405,7 +10487,7 @@ PrefabInstance:
     - target: {fileID: 2203009770735352510, guid: 494d623cffdaf49938f9d0998f25c059,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1014.8523
+      value: 879.2107
       objectReference: {fileID: 0}
     - target: {fileID: 2203009770735352510, guid: 494d623cffdaf49938f9d0998f25c059,
         type: 3}
@@ -10490,7 +10572,7 @@ PrefabInstance:
     - target: {fileID: 2203009770735352511, guid: 494d623cffdaf49938f9d0998f25c059,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
-      value: PlayDramaticButtonClick
+      value: PlayBasicButtonClick
       objectReference: {fileID: 0}
     - target: {fileID: 2203009770735352511, guid: 494d623cffdaf49938f9d0998f25c059,
         type: 3}
@@ -10655,7 +10737,7 @@ PrefabInstance:
     - target: {fileID: 274350897321453314, guid: 0767699d167fa4530a0fb52359271ab6,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: PlayDramaticButtonClick
+      value: PlayBasicButtonClick
       objectReference: {fileID: 0}
     - target: {fileID: 274350897321453314, guid: 0767699d167fa4530a0fb52359271ab6,
         type: 3}
@@ -12136,7 +12218,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: de7749b2e0b802944b26ac533dbf334d,
+      objectReference: {fileID: 21300000, guid: 2993978521c6e1c498201462f189f9e2,
         type: 3}
     - target: {fileID: 4446630034723557907, guid: e5d0fa3806ee64c7ba8b27dcc22059e9,
         type: 3}
@@ -13440,7 +13522,7 @@ PrefabInstance:
     - target: {fileID: 2203009770735352510, guid: 494d623cffdaf49938f9d0998f25c059,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1147.3523
+      value: 1011.7107
       objectReference: {fileID: 0}
     - target: {fileID: 2203009770735352510, guid: 494d623cffdaf49938f9d0998f25c059,
         type: 3}
@@ -13505,7 +13587,7 @@ PrefabInstance:
     - target: {fileID: 2203009770735352511, guid: 494d623cffdaf49938f9d0998f25c059,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: PlayDramaticButtonClick
+      value: PlayBasicButtonClick
       objectReference: {fileID: 0}
     - target: {fileID: 2203009770735352511, guid: 494d623cffdaf49938f9d0998f25c059,
         type: 3}
@@ -14599,7 +14681,7 @@ PrefabInstance:
     - target: {fileID: 274350897321453314, guid: 0767699d167fa4530a0fb52359271ab6,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: PlayDramaticButtonClick
+      value: PlayBasicButtonClick
       objectReference: {fileID: 0}
     - target: {fileID: 274350897321453314, guid: 0767699d167fa4530a0fb52359271ab6,
         type: 3}
@@ -14970,7 +15052,7 @@ PrefabInstance:
     - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
         type: 3}
@@ -14979,12 +15061,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1242611342}
     - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 231560430}
+    - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
@@ -14994,8 +15091,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: PlayBasicButtonClick
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: Vashta.Entropy.UI.MapSelection.MapSelectionSelector, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Entropy.Scripts.Audio.SfxController, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
         type: 3}
@@ -15006,6 +15113,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: Vashta.Entropy.UI.MapSelection.MapSelectionCheckbox, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6687938876677366324, guid: f279b729cda36d047ab73198649a1982,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 8435777217489892964, guid: f279b729cda36d047ab73198649a1982,
         type: 3}
@@ -15298,6 +15410,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 231560430}
+    - target: {fileID: 1224564711129488062, guid: 7cc17fa40a002d94d9637181cfb1708b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: PlayBasicButtonClick
+      objectReference: {fileID: 0}
     - target: {fileID: 1224564711129488063, guid: 7cc17fa40a002d94d9637181cfb1708b,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -15488,7 +15605,7 @@ PrefabInstance:
     - target: {fileID: 2336165237712783455, guid: 7cc17fa40a002d94d9637181cfb1708b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
-      value: PlayDramaticButtonClick
+      value: PlayBasicButtonClick
       objectReference: {fileID: 0}
     - target: {fileID: 2336165237712783455, guid: 7cc17fa40a002d94d9637181cfb1708b,
         type: 3}
@@ -15774,7 +15891,7 @@ PrefabInstance:
     - target: {fileID: 5677062047268989263, guid: 7cc17fa40a002d94d9637181cfb1708b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
-      value: PlayDramaticButtonClick
+      value: PlayBasicButtonClick
       objectReference: {fileID: 0}
     - target: {fileID: 5677062047268989263, guid: 7cc17fa40a002d94d9637181cfb1708b,
         type: 3}
@@ -15879,6 +15996,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 231560430}
+    - target: {fileID: 7675129511961015948, guid: 7cc17fa40a002d94d9637181cfb1708b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: PlayBasicButtonClick
+      objectReference: {fileID: 0}
     - target: {fileID: 7675129511961015949, guid: 7cc17fa40a002d94d9637181cfb1708b,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -15929,6 +16051,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
       objectReference: {fileID: 8995538}
+    - target: {fileID: 8984443831560197922, guid: 7cc17fa40a002d94d9637181cfb1708b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: PlayBasicButtonClick
+      objectReference: {fileID: 0}
     - target: {fileID: 8984443831560197923, guid: 7cc17fa40a002d94d9637181cfb1708b,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -16868,7 +16995,7 @@ PrefabInstance:
     - target: {fileID: 274350897321453314, guid: 0767699d167fa4530a0fb52359271ab6,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: PlayDramaticButtonClick
+      value: PlayGoBackSoundEffect
       objectReference: {fileID: 0}
     - target: {fileID: 274350897321453314, guid: 0767699d167fa4530a0fb52359271ab6,
         type: 3}
@@ -17417,7 +17544,7 @@ PrefabInstance:
     - target: {fileID: 274350897321453314, guid: 0767699d167fa4530a0fb52359271ab6,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 274350897321453314, guid: 0767699d167fa4530a0fb52359271ab6,
         type: 3}
@@ -17438,8 +17565,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 6898808485328034056, guid: df06a16f7ad2fba44bdde7eed91a0e0a,
-        type: 3}
+      objectReference: {fileID: 231560430}
     - target: {fileID: 274350897321453314, guid: 0767699d167fa4530a0fb52359271ab6,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -17458,7 +17584,7 @@ PrefabInstance:
     - target: {fileID: 274350897321453314, guid: 0767699d167fa4530a0fb52359271ab6,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: SetCategoryTurrets
+      value: PlayBasicButtonClick
       objectReference: {fileID: 0}
     - target: {fileID: 274350897321453314, guid: 0767699d167fa4530a0fb52359271ab6,
         type: 3}
@@ -17468,7 +17594,7 @@ PrefabInstance:
     - target: {fileID: 274350897321453314, guid: 0767699d167fa4530a0fb52359271ab6,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: Entropy.Scripts.ItemStore.ItemStoreController, Assembly-CSharp
+      value: Entropy.Scripts.Audio.SfxController, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 274350897321453314, guid: 0767699d167fa4530a0fb52359271ab6,
         type: 3}
@@ -19923,7 +20049,7 @@ PrefabInstance:
     - target: {fileID: 274350897321453314, guid: 0767699d167fa4530a0fb52359271ab6,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 274350897321453314, guid: 0767699d167fa4530a0fb52359271ab6,
         type: 3}
@@ -19944,8 +20070,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 6898808485328034056, guid: df06a16f7ad2fba44bdde7eed91a0e0a,
-        type: 3}
+      objectReference: {fileID: 231560430}
     - target: {fileID: 274350897321453314, guid: 0767699d167fa4530a0fb52359271ab6,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -19964,7 +20089,7 @@ PrefabInstance:
     - target: {fileID: 274350897321453314, guid: 0767699d167fa4530a0fb52359271ab6,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: SetCategoryHats
+      value: PlayBasicButtonClick
       objectReference: {fileID: 0}
     - target: {fileID: 274350897321453314, guid: 0767699d167fa4530a0fb52359271ab6,
         type: 3}
@@ -19974,7 +20099,7 @@ PrefabInstance:
     - target: {fileID: 274350897321453314, guid: 0767699d167fa4530a0fb52359271ab6,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: Entropy.Scripts.ItemStore.ItemStoreController, Assembly-CSharp
+      value: Entropy.Scripts.Audio.SfxController, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 274350897321453314, guid: 0767699d167fa4530a0fb52359271ab6,
         type: 3}

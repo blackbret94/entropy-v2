@@ -19,6 +19,8 @@ namespace Vashta.Entropy.StatusEffects
         public Color Color;
         [Tooltip("Optional, for unique mechanics")]
         public int PowerupId;
+        [Tooltip("Adds a red outline around the status effect to show it is bad")]
+        public bool IsDebuff;
 
         [Header("Effects")] [Tooltip("Multiplies")]
         public float MovementSpeedMultiplier = 1f;

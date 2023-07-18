@@ -112,6 +112,11 @@ namespace Vashta.Entropy.StatusEffects
         {
             return StatusEffectData().IsReflective;
         }
+
+        public bool IsDebuff()
+        {
+            return StatusEffectData().IsDebuff;
+        }
         
         private StatusEffectData StatusEffectData()
         {

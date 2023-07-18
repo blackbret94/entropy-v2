@@ -17,6 +17,8 @@ namespace Vashta.Entropy.UI
         
         public Animator Animator;
         public Image Image;
+        public GameObject BuffOutline;
+        public GameObject DebuffOutline;
         private StatusEffect _statusEffect;
         private CanvasGroup _canvasGroup;
 
@@ -36,6 +38,9 @@ namespace Vashta.Entropy.UI
             Image.sprite = statusEffect.Icon();
             Animator.SetBool(BlinkBool, false);
             Animator.SetTrigger(FadeInTrigger);
+            
+            BuffOutline.SetActive(!statusEffect.IsDebuff());
+            DebuffOutline.SetActive(statusEffect.IsDebuff());
         }
         
         public void ResetStatusEffect()

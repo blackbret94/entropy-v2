@@ -71,6 +71,9 @@ namespace TanksMP
 
         public IntroductionPanel IntroductionPanel;
 
+        public string WebsiteUrl = "https://wizardcatstankbattle.com";
+        public string PrivacyPolicyUrl = "https://vashtaentertainment.com/privacy_policy.html";
+
         //how many times the shop has been opened
         //private int shopOpened = 0;
 
@@ -288,6 +291,16 @@ namespace TanksMP
             }
 			
 			Application.OpenURL(url);
+        }
+
+        public void OpenWebsite()
+        {
+            Application.OpenURL(WebsiteUrl);
+        }
+
+        public void OpenPrivacyPolicy()
+        {
+            Application.OpenURL(PrivacyPolicyUrl);
         }
     }
 }

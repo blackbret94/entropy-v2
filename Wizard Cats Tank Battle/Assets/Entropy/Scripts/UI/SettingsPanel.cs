@@ -1,4 +1,5 @@
 using System;
+using Entropy.Scripts.Audio;
 using TanksMP;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,6 +21,8 @@ namespace Vashta.Entropy.UI
         public Toggle leftHandedModeToggle;
 
         public JoystickPlacementController joystickPlacementController;
+
+        public MusicController MusicController;
         
         public override void OpenPanel()
         {
@@ -57,8 +60,8 @@ namespace Vashta.Entropy.UI
         
         public void OnMusicChanged(bool value)
         {
-            AudioManager.GetInstance().musicSource.enabled = musicToggle.isOn;
-            AudioManager.PlayMusic(1);
+            MusicController.AudioSource.enabled = musicToggle.isOn;
+            MusicController.PlayMusic();
         }
 
 

@@ -73,9 +73,15 @@ namespace Vashta.Entropy.StatusEffects
             Player owner = Player.GetPlayerById(playerId);
             StatusEffect statusEffect = new StatusEffect(this, statusEffectId, owner);
 
-            if(_player.IsLocal)
-                GameManager.GetInstance().ui.PowerUpPanel.SetText(statusEffect.Title(),statusEffect.Description(), statusEffect.Color(), statusEffect.Icon());
-            
+            if (_player.IsLocal)
+            {
+                GameManager.GetInstance().ui.PowerUpPanel.SetText(statusEffect.Title(), statusEffect.Description(),
+                    statusEffect.Color(), statusEffect.Icon());
+
+                if(statusEffect.Sfx())
+                    AudioManager.Play2D(statusEffect.Sfx());
+            }
+
             StatusEffect existingEffect = StatusEffectAlreadyExists(statusEffect.Id());
 
             if (existingEffect == null)

@@ -14,10 +14,15 @@ namespace Vashta.Entropy.UI.MapSelection
         public short PlayerCount;
         public short TeamCount;
 
+        [Header("Music")] 
+        public AudioClip[] MusicTracks;
+        // public AudioClip VictoryMusic;
+        // public AudioClip DefeatMusic;
+        
         [Header("Supported Game Modes")]
         public bool TeamDeathmatch;
-        public bool CaptureTheFlag;
-        public bool KingOfTheHill;
+        // public bool CaptureTheFlag;
+        // public bool KingOfTheHill;
 
         public int SceneIndex()
         {

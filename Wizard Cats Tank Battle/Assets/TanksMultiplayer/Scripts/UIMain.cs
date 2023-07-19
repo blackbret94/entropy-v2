@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections;
+using Entropy.Scripts.Audio;
 using UnityEngine;
 using UnityEngine.UI;
 using Vashta.Entropy.Character;
@@ -70,6 +71,7 @@ namespace TanksMP
         public Slider volumeSlider;
 
         public IntroductionPanel IntroductionPanel;
+        public MusicController MusicController;
 
         public string WebsiteUrl = "https://wizardcatstankbattle.com";
         public string PrivacyPolicyUrl = "https://vashtaentertainment.com/privacy_policy.html";
@@ -234,8 +236,8 @@ namespace TanksMP
         /// </summary>
         public void OnMusicChanged(bool value)
         {
-            AudioManager.GetInstance().musicSource.enabled = musicToggle.isOn;
-            AudioManager.PlayMusic(0);
+            MusicController.AudioSource.enabled = musicToggle.isOn;
+            MusicController.PlayMusic();
         }
 
 

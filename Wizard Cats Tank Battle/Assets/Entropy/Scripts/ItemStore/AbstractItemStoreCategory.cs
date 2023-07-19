@@ -114,6 +114,7 @@ namespace Entropy.Scripts.ItemStore
             else
             {
                 Debug.Log("Not purchasing" + ActiveItem().Id);
+                SfxController.PlayNoCoins();
                 // don't buy    
                 return false;
             }

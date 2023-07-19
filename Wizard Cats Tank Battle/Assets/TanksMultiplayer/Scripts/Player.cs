@@ -905,6 +905,7 @@ namespace TanksMP
             //the game is not over yet, reset runtime values
             //also tell all clients to despawn this player
             GetView().SetHealth(maxHealth);
+            GetView().SetShield(0);
             GetView().SetBullet(0);
 
             //clean up collectibles on this player by letting them drop down

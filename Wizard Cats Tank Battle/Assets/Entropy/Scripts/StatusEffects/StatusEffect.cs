@@ -117,6 +117,11 @@ namespace Vashta.Entropy.StatusEffects
         {
             return StatusEffectData().IsDebuff;
         }
+
+        public AudioClip Sfx()
+        {
+            return StatusEffectData().Sfx;
+        }
         
         private StatusEffectData StatusEffectData()
         {

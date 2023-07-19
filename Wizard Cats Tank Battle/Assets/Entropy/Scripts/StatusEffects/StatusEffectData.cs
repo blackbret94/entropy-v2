@@ -21,6 +21,8 @@ namespace Vashta.Entropy.StatusEffects
         public int PowerupId;
         [Tooltip("Adds a red outline around the status effect to show it is bad")]
         public bool IsDebuff;
+        [Tooltip("Sound effect that plays when it is applied")]
+        public AudioClip Sfx;
 
         [Header("Effects")] [Tooltip("Multiplies")]
         public float MovementSpeedMultiplier = 1f;

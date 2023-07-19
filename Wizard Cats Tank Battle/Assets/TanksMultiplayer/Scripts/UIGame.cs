@@ -56,7 +56,8 @@ namespace TanksMP
         public PowerUpPanel PowerUpPanel;
 
         public SfxController SfxController;
-
+        public MusicController MusicController;
+        
         public SceneNavigator SceneNavigator;
 
         //initialize variables
@@ -78,7 +79,7 @@ namespace TanksMP
             #endif
 
             //play background music
-            AudioManager.PlayMusic(1);
+            MusicController.PlayMusic();
         }
 
 

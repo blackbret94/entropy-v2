@@ -420,8 +420,19 @@ namespace TanksMP
             int health = GetView().GetHealth();
             int healthPerSecond = (int)StatusEffectController.HealthPerSecond;
             
-            health += healthPerSecond;
-            GetView().SetHealth(health);
+            if (healthPerSecond != 0)
+            {
+                int shield = GetView().GetShield();
+                if (shield > 0)
+                {
+                    GetView().DecreaseShield(1);
+                }
+                else
+                {
+                    health += healthPerSecond;
+                    GetView().SetHealth(health);
+                }
+            }
 
             bool shouldShowTextAndAnimation = healthPerSecond < 0 || health < maxHealth;
             if(shouldShowTextAndAnimation)

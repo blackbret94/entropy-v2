@@ -11,7 +11,7 @@ namespace Entropy.Scripts.Audio
 
         private int _currentTrackIndex = 0;
 
-        private void Start()
+        private void Awake()
         {
             AudioSource.clip = MapDefinition.MusicTracks[_currentTrackIndex];
             SceneManager.sceneLoaded += OnSceneLoaded;
@@ -19,7 +19,8 @@ namespace Entropy.Scripts.Audio
         
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            AudioSource.Stop();
+            if(AudioSource != null)
+                AudioSource.Stop();
         }
 
         private void Update()

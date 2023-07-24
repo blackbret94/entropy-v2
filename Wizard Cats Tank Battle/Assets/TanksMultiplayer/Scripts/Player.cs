@@ -944,18 +944,22 @@ namespace TanksMP
             {
                 return true;
             }
-            
-            // check for collision
-            Collider col = GameManager.GetInstance().teams[photonView.GetTeam()].freeClassChange.GetComponent<Collider>();
 
-            if (col == null)
+            // Check all potential team colliders
+            GameManager gameManager = GameManager.GetInstance();
+            foreach (var team in gameManager.teams)
             {
-                Debug.LogError("Team is missing a free respawn collider! " + photonView.GetTeam());
-            }
-            else
-            {
-                if (col.bounds.Contains(transform.position))
-                    return true;
+                Collider col = team.freeClassChange.GetComponent<Collider>();
+                    
+                if (col == null)
+                {
+                    Debug.LogError("Team is missing a free respawn collider! " + photonView.GetTeam());
+                }
+                else
+                {
+                    if (col.bounds.Contains(transform.position))
+                        return true;
+                }
             }
             
             return false;

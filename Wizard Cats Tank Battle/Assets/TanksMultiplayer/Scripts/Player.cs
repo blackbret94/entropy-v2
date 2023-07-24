@@ -420,7 +420,7 @@ namespace TanksMP
             if (healthPerSecond != 0)
             {
                 int shield = GetView().GetShield();
-                if (shield > 0)
+                if (shield > 0 && healthPerSecond < 0)
                 {
                     GetView().DecreaseShield(1);
                 }

@@ -316,11 +316,8 @@ namespace TanksMP
         /// </summary>
         private void AttemptToChangeTeams()
         {
-            Debug.Log("Attempting to change teams");
-            
             int preferredTeamIndex = GetView().GetPreferredTeamIndex();
             
-            Debug.Log("Preferred team index: " + preferredTeamIndex + " current team: " + GetView().GetTeam());
             if (preferredTeamIndex == PlayerExtensions.RANDOM_TEAM_INDEX || preferredTeamIndex == GetView().GetTeam() || !GameManager.GetInstance().TeamHasVacancy(preferredTeamIndex))
                 return;
 

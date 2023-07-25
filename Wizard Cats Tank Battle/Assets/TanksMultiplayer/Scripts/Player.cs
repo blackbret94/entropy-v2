@@ -73,11 +73,6 @@ namespace TanksMP
         /// Icon next to the slider displaying the player class
         /// </summary>
         public Image classIcon;
-        
-        /// <summary>
-        /// Clip to play when a shot has been fired.
-        /// </summary>
-        public AudioClip shotClip;
 
         /// <summary>
         /// Clip to play on player death.
@@ -700,7 +695,7 @@ namespace TanksMP
             }
 
             //send event to all clients for spawning effects
-            if (shotFX || shotClip)
+            if (shotFX)
                 RpcOnShot();
         }
 
@@ -710,7 +705,6 @@ namespace TanksMP
         protected void RpcOnShot()
         {
             if (shotFX) PoolManager.Spawn(shotFX, shotPos.position, Quaternion.identity);
-            if (shotClip) AudioManager.Play3D(shotClip, shotPos.position, 0.1f);
         }
 
 

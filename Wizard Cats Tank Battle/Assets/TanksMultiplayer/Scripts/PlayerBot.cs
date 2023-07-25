@@ -285,7 +285,6 @@ namespace TanksMP
             SpawnDeathFx(killingBlowBullet);
 
             //play sound clip on player death
-            // if(explosionClip) AudioManager.Play3D(explosionClip, transform.position);
             if (killedBy != null)
             {
                 Player player = killedBy.GetComponent<Player>();

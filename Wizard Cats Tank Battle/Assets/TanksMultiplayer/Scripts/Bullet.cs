@@ -324,7 +324,6 @@ namespace TanksMP
         {
             //create clips and particles on despawn
             if (explosionFX) PoolManager.Spawn(explosionFX, transform.position, transform.rotation);
-            // if (explosionClip) AudioManager.Play3D(explosionClip, transform.position);
 
             //reset modified variables to the initial state
             myRigidbody.velocity = Vector3.zero;
@@ -339,7 +338,6 @@ namespace TanksMP
             if (target.gameObject == owner || target.gameObject == null) return true;
             
             //perform the actual friendly fire check on both team indices and see if they match
-            // if (!GameManager.GetInstance().friendlyFire && origin.GetView().GetTeam() == target.GetView().GetTeam()) return true;
             if (origin.GetView().GetTeam() == target.GetView().GetTeam()) return true;
             
             return false;

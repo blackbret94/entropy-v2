@@ -16,6 +16,10 @@ namespace Vashta.Entropy.UI.MapSelection
 
         [Header("Music")] 
         public AudioClip[] MusicTracks;
+
+        public AudioClip VictoryMusic;
+
+        public AudioClip DefeatMusic;
         // public AudioClip VictoryMusic;
         // public AudioClip DefeatMusic;
         

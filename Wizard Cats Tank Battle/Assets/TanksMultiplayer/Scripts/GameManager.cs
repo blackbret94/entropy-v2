@@ -5,6 +5,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Entropy.Scripts.Audio;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
@@ -66,6 +67,7 @@ namespace TanksMP
         public bool friendlyFire = false;
 
         public List<GameObject> BotTargetList;
+        public MusicController MusicController;
 
         private int lastSpawnIndex = -1;
 
@@ -384,6 +386,12 @@ namespace TanksMP
             //show game over window (still connected at that point)
             Team winningTeam = teams[teamIndex];
             ui.ShowGameOver(teamIndex, winningTeam.name, winningTeam.material.color);
+
+            int playerTeamIndex = localPlayer.GetView().GetTeam();
+            if(playerTeamIndex == teamIndex)
+                MusicController.PlayVictoryMusic();
+            else
+                MusicController.PlayDefeatMusic();
         }
 
 

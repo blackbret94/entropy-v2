@@ -11,6 +11,7 @@ namespace Entropy.Scripts.Audio
         public MapDefinition MapDefinition;
 
         private int _currentTrackIndex = 0;
+        private bool _matchIsOver = false;
 
         private void Awake()
         {
@@ -28,7 +29,7 @@ namespace Entropy.Scripts.Audio
 
         private void Update()
         {
-            if (!AudioSource.enabled || AudioSource.isPlaying)
+            if (!AudioSource.enabled || AudioSource.isPlaying || _matchIsOver)
                 return;
 
             _currentTrackIndex++;
@@ -43,6 +44,30 @@ namespace Entropy.Scripts.Audio
         {
             if(AudioSource.enabled)
                 AudioSource.Play();
+        }
+
+        public void PlayVictoryMusic()
+        {
+            _matchIsOver = true;
+            
+            if (AudioSource.enabled)
+            {
+                AudioSource.clip = MapDefinition.VictoryMusic;
+                AudioSource.Play();
+                AudioSource.loop = false;
+            }
+        }
+
+        public void PlayDefeatMusic()
+        {
+            _matchIsOver = true;
+            
+            if (AudioSource.enabled)
+            {
+                AudioSource.clip = MapDefinition.DefeatMusic;
+                AudioSource.Play();
+                AudioSource.loop = false;
+            }
         }
     }
 }

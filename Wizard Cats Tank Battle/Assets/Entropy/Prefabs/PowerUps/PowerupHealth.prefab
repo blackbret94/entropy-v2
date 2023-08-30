@@ -97,13 +97,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86a7e96f0515fb445ac7b45328b213ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useClip: {fileID: 8300000, guid: eb0e73aa4ebab6b47ab5c27dc5a88da3, type: 3}
+  useClip: {fileID: 8300000, guid: fde9476645beb004983ae438b25409dc, type: 3}
   spawner: {fileID: 0}
   carrierId: -1
   Powerup: {fileID: 11400000, guid: 7fc98d1bc0ed77849acaacb9a506547a, type: 2}
 --- !u!95 &95000010928537750
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -117,6 +117,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -426,7 +427,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: c07e2b0672e2a7944be10d83a2ab87ee, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: becdc8835ee7b9c41a096a00f50b6178, type: 2}
     m_RemovedComponents: []

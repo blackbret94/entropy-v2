@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 114000011555951312}
   - component: {fileID: 95000013323926802}
   m_Layer: 2
-  m_Name: PowerupBulletPower
+  m_Name: PowerupBulletExplode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,9 +45,17 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000010293127126}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 1
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &54000011390207216
@@ -57,10 +65,21 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000010293127126}
-  serializedVersion: 2
+  serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -78,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b53a370524778fc4d838cf0c5a9d2069, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useClip: {fileID: 8300000, guid: 6af6e45190ba0d445908edcee328c17e, type: 3}
+  useClip: {fileID: 8300000, guid: d8e6ec9d910f94f449a55d29a5df32ea, type: 3}
   spawner: {fileID: 0}
   carrierId: -1
   Powerup: {fileID: 11400000, guid: b1d08e7a47fb84d4cb55e96e9baca00f, type: 2}
@@ -86,7 +105,7 @@ MonoBehaviour:
   bulletIndex: 1
 --- !u!95 &95000013323926802
 Animator:
-  serializedVersion: 4
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -100,10 +119,12 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1000010934237948
 GameObject:
   m_ObjectHideFlags: 0
@@ -341,7 +362,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4000013363303594}
     m_Modifications:
     - target: {fileID: 1961964258596952, guid: 5727f3393f270a34ca8464323e8247f3, type: 3}
@@ -515,7 +536,9 @@ PrefabInstance:
     - {fileID: 54013935248017186, guid: 5727f3393f270a34ca8464323e8247f3, type: 3}
     - {fileID: 136707689597492628, guid: 5727f3393f270a34ca8464323e8247f3, type: 3}
     - {fileID: 114255666497802202, guid: 5727f3393f270a34ca8464323e8247f3, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5727f3393f270a34ca8464323e8247f3, type: 3}
 --- !u!4 &5303595682869256654 stripped
 Transform:

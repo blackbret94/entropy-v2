@@ -163,6 +163,13 @@ namespace TanksMP
             //in case it was unparented during runtime, reparent it now
             if (instance.transform.parent != transform)
                 instance.transform.parent = transform;
+            
+            // clear particle systems
+            ParticleSystem[] particleSystems = instance.GetComponentsInChildren<ParticleSystem>();
+            foreach (ParticleSystem system in particleSystems)
+            {
+                system.Clear();
+            }
 
             //we want to deactivate it, remove it from the active list
             active.Remove(instance);

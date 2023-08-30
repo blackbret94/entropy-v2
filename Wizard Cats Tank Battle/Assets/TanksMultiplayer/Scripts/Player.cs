@@ -538,10 +538,10 @@ namespace TanksMP
                 Shoot();
 
 			//replicate input to mobile controls for illustration purposes
-			#if UNITY_EDITOR
+			// #if UNITY_EDITOR
 				GameManager.GetInstance().ui.controls[0].position = moveDir;
 				GameManager.GetInstance().ui.controls[1].position = turnDir;
-			#endif
+			// #endif
 #endif
         }
             
@@ -1016,6 +1016,8 @@ namespace TanksMP
             // Player is alive
             if (isActive)
             {
+                MovePlayerToSpawn();
+
                 // apply class
                 StatusEffectController.RefreshCache();
                 ApplyClass();
@@ -1029,7 +1031,7 @@ namespace TanksMP
             //local player got respawned so reset states
             if (isActive == true)
             {
-                ResetPosition();
+                ResetTransform();
             }
             else
             {
@@ -1083,7 +1085,7 @@ namespace TanksMP
         /// Repositions in team area and resets camera & input variables.
         /// This should only be called for the local player.
         /// </summary>
-        public void ResetPosition()
+        private void ResetTransform()
         {
             //start following the local player again
             camFollow.target = turret;
@@ -1091,7 +1093,7 @@ namespace TanksMP
             camFollow.HideMask(false);
 
             //get team area and reposition it there
-            transform.position = GameManager.GetInstance().GetSpawnPosition(GetView().GetTeam());
+            // transform.position = GameManager.GetInstance().GetSpawnPosition(GetView().GetTeam());
 
             //reset forces modified by input
             rb.velocity = Vector3.zero;
@@ -1100,6 +1102,14 @@ namespace TanksMP
             //reset input left over
             GameManager.GetInstance().ui.controls[0].OnEndDrag(null);
             GameManager.GetInstance().ui.controls[1].OnEndDrag(null);
+        }
+
+        /// <summary>
+        /// Repositions the player in the team area, called by all clients to prevent "ghost" cats
+        /// </summary>
+        private void MovePlayerToSpawn()
+        {
+            transform.position = GameManager.GetInstance().GetSpawnPosition(GetView().GetTeam());
         }
 
 

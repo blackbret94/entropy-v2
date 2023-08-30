@@ -14,6 +14,7 @@ namespace Vashta.Entropy.TanksExtensions
         public bool IsLocalPlayer { get; }
         public Player Player { get; }
         public int ClassId { get; }
+        public bool PlayerIsOnline { get; }
 
         public ScoreboardRowData(Player player, Team team, bool isLocalPlayer)
         {
@@ -24,6 +25,7 @@ namespace Vashta.Entropy.TanksExtensions
             Team = team;
             IsLocalPlayer = isLocalPlayer;
             ClassId = player.GetClassId();
+            PlayerIsOnline = true;
         }
 
         public ScoreboardRowData(PlayerBot bot, Team team)
@@ -34,6 +36,30 @@ namespace Vashta.Entropy.TanksExtensions
             Team = team;
             IsLocalPlayer = false;
             ClassId = bot.classId;
+            PlayerIsOnline = true;
+        }
+
+        public ScoreboardRowData(ScoreboardRowDataSerializable serializable)
+        {
+            Name = serializable.Name;
+            Kills = serializable.Kills;
+            Deaths = serializable.Deaths;
+            // TODO: Team
+            ClassId = serializable.ClassId;
+            PlayerIsOnline = serializable.PlayerIsOnline;
+        }
+        
+        public ScoreboardRowDataSerializable OfflinePlayerSerializable()
+        {
+            ScoreboardRowDataSerializable serializable = new ScoreboardRowDataSerializable();
+            serializable.Name = Name;
+            serializable.Kills = Kills;
+            serializable.Deaths = Deaths;
+            // serializable.TeamName = Team.name;
+            serializable.ClassId = ClassId;
+            serializable.PlayerIsOnline = false;
+
+            return serializable;
         }
     }
 }

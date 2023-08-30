@@ -13,6 +13,7 @@ using Photon.Realtime;
 using Vashta.Entropy.Character;
 using Vashta.Entropy.SaveLoad;
 using Vashta.Entropy.Scripts.CBSIntegration;
+using Vashta.Entropy.TanksExtensions;
 using Vashta.Entropy.UI.MapSelection;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -222,11 +223,9 @@ namespace TanksMP
             roomProps.Add(RoomExtensions.size, new int[initialArrayLength]);
             roomProps.Add(RoomExtensions.score, new int[initialArrayLength]);
             PhotonNetwork.CurrentRoom.SetCustomProperties(roomProps);
-            
-            //get random scene out of available scenes and assign it as the online scene
+
+            // Load scene
             onlineSceneIndex = mapDefinition.SceneIndex();
-            
-            //then load it
             PhotonNetwork.LoadLevel(onlineSceneIndex);
         }
         
@@ -329,6 +328,8 @@ namespace TanksMP
         /// Called when a remote player left the room.
         /// See the official Photon docs for more details.
         /// </summary>
+        /// TODO: Something is happening in this loop, causing it to not execute.  It is related to InRoomCallbackTargets in LoadBalancingClient
+        /// The calls to OnRoomPropertiesUpdate cause the collection to mutate while running
         public override void OnPlayerLeftRoom(Photon.Realtime.Player player)
         {
             //only let the master client handle this connection
@@ -349,6 +350,9 @@ namespace TanksMP
                     collectibles[i].spawner.photonView.RPC("Drop", RpcTarget.AllBuffered, targetPlayer.transform.position);
                 }
             }
+            
+            // remove player from Scoreboard
+            PhotonNetwork.CurrentRoom.AddOfflinePlayerToScoreboard(player);
 
             //clean up instances after processing leaving player
             PhotonNetwork.DestroyPlayerObjects(player);

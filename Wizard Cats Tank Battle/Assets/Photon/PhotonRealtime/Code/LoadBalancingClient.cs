@@ -4283,9 +4283,16 @@ namespace Photon.Realtime
         {
             this.client.UpdateCallbackTargets();
 
-            foreach (IInRoomCallbacks target in this)
+            try
             {
-                target.OnPlayerLeftRoom(otherPlayer);
+                foreach (IInRoomCallbacks target in this)
+                {
+                    target.OnPlayerLeftRoom(otherPlayer);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning("Caught exception when player left the room: " + e);
             }
         }
 

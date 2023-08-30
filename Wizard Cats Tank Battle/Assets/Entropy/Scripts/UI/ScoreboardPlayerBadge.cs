@@ -1,12 +1,13 @@
 using Entropy.Scripts.Player;
 using TanksMP;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 using Vashta.Entropy.TanksExtensions;
 
 namespace Vashta.Entropy.UI
 {
-    public class ScoreboardTeamBadge : GamePanel
+    public class ScoreboardPlayerBadge : GamePanel
     {
         public ClassList ClassList;
         public TextMeshProUGUI PlayerNamesText;
@@ -18,7 +19,11 @@ namespace Vashta.Entropy.UI
 
         public void Setup(ScoreboardRowData row)
         {
-            PlayerNamesText.color = row.Team.material.color;
+            if(row.Team != null)
+                PlayerNamesText.color = row.Team.material.color;
+            else
+                PlayerNamesText.color = Color.gray;
+            
             PlayerNamesText.text = row.Name;
             ScoreText.text = row.Kills.ToString();
             DeathsText.text = row.Deaths.ToString();

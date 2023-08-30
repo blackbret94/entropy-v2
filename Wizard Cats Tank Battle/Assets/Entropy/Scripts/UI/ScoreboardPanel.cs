@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using NUnit.Framework;
+using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Vashta.Entropy.TanksExtensions;
 
 namespace Vashta.Entropy.UI
@@ -8,7 +11,7 @@ namespace Vashta.Entropy.UI
     public class ScoreboardPanel : GamePanel
     {
         public bool ControlsHUD = true;
-        public List<ScoreboardTeamBadge> TeamPanel;
+        [FormerlySerializedAs("TeamPanel")] public List<ScoreboardPlayerBadge> PlayerRows;
 
         private void Start()
         {
@@ -43,7 +46,7 @@ namespace Vashta.Entropy.UI
         // note that "team" badges are a legacy name, these are rows for individual players now.
         private void Inflate()
         {
-            List<ScoreboardRowData> rows = new List<ScoreboardRowData>();
+            List<ScoreboardRowData> rows = GetOfflinePlayers();
             List<TeamState> teamStates = TeamUtility.GetTeamStates();
 
             foreach (TeamState teamState in teamStates)
@@ -53,25 +56,38 @@ namespace Vashta.Entropy.UI
 
             rows = rows.OrderByDescending(row => row.Kills).ThenBy(row => row.Kills).ToList();
 
-            if(rows.Count > TeamPanel.Count)
-                Debug.LogWarning($"There are more rows ({teamStates.Count}) than panels ({TeamPanel.Count})");
+            if(rows.Count > PlayerRows.Count)
+                Debug.LogWarning($"There are more rows ({teamStates.Count}) than panels ({PlayerRows.Count})");
             
-            for (int i = 0; i < TeamPanel.Count; i++)
+            for (int i = 0; i < PlayerRows.Count; i++)
             {
-                ScoreboardTeamBadge teamBadgePanel = TeamPanel[i];
+                ScoreboardPlayerBadge playerBadgePanel = PlayerRows[i];
 
                 if (i < rows.Count)
                 {
                     ScoreboardRowData data = rows[i];
 
-                    teamBadgePanel.Setup(data);
-                    teamBadgePanel.SetActive(true);
+                    playerBadgePanel.Setup(data);
+                    playerBadgePanel.SetActive(true);
                 }
                 else
                 {
-                    teamBadgePanel.SetActive(false);
+                    playerBadgePanel.SetActive(false);
                 }
             }
+        }
+
+        private List<ScoreboardRowData> GetOfflinePlayers()
+        {
+            List<ScoreboardRowData> rows = new List<ScoreboardRowData>();
+            ScoreboardRowDataSerializableList rowsSerialized = PhotonNetwork.CurrentRoom.ReadScoreboard();
+
+            foreach (ScoreboardRowDataSerializable serialized in rowsSerialized.list)
+            {
+                rows.Add(new ScoreboardRowData(serialized));
+            }
+
+            return rows;
         }
     }
 }

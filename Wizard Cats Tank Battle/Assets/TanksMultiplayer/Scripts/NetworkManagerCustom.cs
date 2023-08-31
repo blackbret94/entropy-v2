@@ -10,7 +10,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
-using Vashta.Entropy.Character;
 using Vashta.Entropy.SaveLoad;
 using Vashta.Entropy.Scripts.CBSIntegration;
 using Vashta.Entropy.TanksExtensions;
@@ -53,11 +52,6 @@ namespace TanksMP
         /// Event fired when a connection to the matchmaker service failed.
         /// </summary>
         public static event Action connectionFailedEvent;
-        
-        /// <summary>
-        /// Handles saving/loading character outfits
-        /// </summary>
-        public CharacterAppearanceSaveLoad CharacterAppearanceSaveLoad;
 
         // If null, uses best region
         public string FixedRegion = "us";
@@ -166,7 +160,7 @@ namespace TanksMP
 
             //for truly random matchmaking you would use this call without properties
             //PhotonNetwork.JoinRandomRoom();
-            PhotonNetwork.JoinRandomRoom(expectedCustomRoomProperties, (byte)this.maxPlayers);
+            PhotonNetwork.JoinRandomRoom(expectedCustomRoomProperties, (byte)0);
         }
 
 
@@ -183,10 +177,13 @@ namespace TanksMP
 
             //same as in OnCennectedToMaster() method above, here we are setting room properties for matchmaking
             //comment out for fully random matchmaking
+            string mapId = PlayerPrefs.GetString(PrefsKeys.selectedMap, "-1");
+            MapDefinition mapDefinition = MapDefinitionDictionary[mapId];
+            
             roomOptions.CustomRoomPropertiesForLobby = new string[] { "mode" };
             roomOptions.CustomRoomProperties = new Hashtable() { { "mode", (byte)PlayerPrefs.GetInt(PrefsKeys.gameMode) } };
 
-            roomOptions.MaxPlayers = (byte)this.maxPlayers;
+            roomOptions.MaxPlayers = (byte)mapDefinition.PlayerCount;
             roomOptions.CleanupCacheOnLeave = false;
             roomOptions.BroadcastPropsChangeToAll = false;
             PhotonNetwork.CreateRoom(null, roomOptions, null);
@@ -328,8 +325,6 @@ namespace TanksMP
         /// Called when a remote player left the room.
         /// See the official Photon docs for more details.
         /// </summary>
-        /// TODO: Something is happening in this loop, causing it to not execute.  It is related to InRoomCallbackTargets in LoadBalancingClient
-        /// The calls to OnRoomPropertiesUpdate cause the collection to mutate while running
         public override void OnPlayerLeftRoom(Photon.Realtime.Player player)
         {
             //only let the master client handle this connection

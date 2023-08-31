@@ -36,8 +36,6 @@ namespace Vashta.Entropy.TanksExtensions
                 return new ScoreboardRowDataSerializableList();
 
             return JsonUtility.FromJson<ScoreboardRowDataSerializableList>(encodedPlayerList);
-            
-            // return (List<ScoreboardRowDataSerializable>)room.CustomProperties[scoreboard] ?? new List<ScoreboardRowDataSerializable>();
         }
     }
 }

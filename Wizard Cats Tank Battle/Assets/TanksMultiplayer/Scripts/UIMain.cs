@@ -38,19 +38,9 @@ namespace TanksMP
         public GameObject billingErrorWindow;
 
         /// <summary>
-		/// Settings: input field for the player name.
-		/// </summary>
-		public InputField nameField;
-
-        /// <summary>
         /// Settings: dropdown selection for network mode.
         /// </summary>
         public Dropdown networkDrop;
-
-        /// <summary>
-        /// Dropdown selection for preferred game mode.
-        /// </summary>
-        public Dropdown gameModeDrop;
 
         /// <summary>
 		/// Settings: input field for manual server address,
@@ -76,12 +66,6 @@ namespace TanksMP
         public string WebsiteUrl = "https://wizardcatstankbattle.com";
         public string PrivacyPolicyUrl = "https://vashtaentertainment.com/privacy_policy.html";
 
-        //how many times the shop has been opened
-        //private int shopOpened = 0;
-
-        //how many times the settings have been opened
-        //private int settingsOpened = 0;
-
         private PlayerNameVerification _playerNameVerification;
 
         //initialize player selection in Settings window
@@ -105,9 +89,7 @@ namespace TanksMP
             _playerNameVerification.VerifyName();
 
             //read the selections and set them in the corresponding UI elements
-            // nameField.text = PlayerPrefs.GetString(PrefsKeys.playerName);
             networkDrop.value = PlayerPrefs.GetInt(PrefsKeys.networkMode);
-            // gameModeDrop.value = PlayerPrefs.GetInt(PrefsKeys.gameMode);
             serverField.text = PlayerPrefs.GetString(PrefsKeys.serverAddress);
             musicToggle.isOn = bool.Parse(PlayerPrefs.GetString(PrefsKeys.playMusic));
             leftHandedModeToggle.isOn = Convert.ToBoolean(PlayerPrefs.GetInt(PrefsKeys.lefthandedMode, 0));
@@ -131,9 +113,6 @@ namespace TanksMP
         /// </summary>
         public void Play()
         {
-            //UnityAnalyticsManager.MainSceneClosed(shopOpened, settingsOpened, musicToggle.isOn,
-            //                      Encryptor.Decrypt(PlayerPrefs.GetString(PrefsKeys.activeTank)));
-
             loadingWindow.SetActive(true);
             NetworkManagerCustom.StartMatch((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode));
             StartCoroutine(HandleTimeout());
@@ -142,13 +121,11 @@ namespace TanksMP
         public void PlayMultiplayer()
         {
             PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Online);
-            // Play();
         }
         
         public void PlayVsAI()
         {
             PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Offline);
-            // Play();
         }
         
         //coroutine that waits 10 seconds before cancelling joining a match
@@ -186,28 +163,6 @@ namespace TanksMP
 
             billingErrorWindow.SetActive(true);
         }
-
-
-        /// <summary>
-        /// Increase counter when opening the shop.
-        /// Used for Unity Analytics purposes.
-        /// </summary>
-        public void OpenShop()
-        {
-            //shopOpened++;
-        }
-
-
-        /// <summary>
-        /// Increase counter when opening settings.
-        /// Used for Unity Analytics purposes.
-        /// </summary>
-        public void OpenSettings()
-        {
-            // nameField.text = PlayerPrefs.GetString(PrefsKeys.playerName);
-            //settingsOpened++;
-        }
-
 
         /// <summary>
         /// Allow additional input of server address only in network mode LAN.
@@ -257,8 +212,6 @@ namespace TanksMP
         /// </summary>
         public void CloseSettings()
         {
-            // PlayerPrefs.SetString(PrefsKeys.playerName, nameField.text);
-            //PlayerPrefs.SetInt(PrefsKeys.networkMode, networkDrop.value);
             PlayerPrefs.SetString(PrefsKeys.serverAddress, serverField.text);
             PlayerPrefs.SetString(PrefsKeys.playMusic, musicToggle.isOn.ToString());
             PlayerPrefs.SetFloat(PrefsKeys.appVolume, volumeSlider.value);

@@ -159,7 +159,6 @@ namespace TanksMP
             Hashtable expectedCustomRoomProperties = new Hashtable() { { "mode", (byte)PlayerPrefs.GetInt(PrefsKeys.gameMode) } };
 
             //for truly random matchmaking you would use this call without properties
-            //PhotonNetwork.JoinRandomRoom();
             PhotonNetwork.JoinRandomRoom(expectedCustomRoomProperties, (byte)0);
         }
 

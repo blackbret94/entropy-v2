@@ -44,7 +44,6 @@ namespace Vashta.Entropy.TanksExtensions
             Name = serializable.Name;
             Kills = serializable.Kills;
             Deaths = serializable.Deaths;
-            // TODO: Team
             ClassId = serializable.ClassId;
             PlayerIsOnline = serializable.PlayerIsOnline;
         }
@@ -55,7 +54,6 @@ namespace Vashta.Entropy.TanksExtensions
             serializable.Name = Name;
             serializable.Kills = Kills;
             serializable.Deaths = Deaths;
-            // serializable.TeamName = Team.name;
             serializable.ClassId = ClassId;
             serializable.PlayerIsOnline = false;
 

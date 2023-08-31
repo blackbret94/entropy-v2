@@ -54,7 +54,7 @@ namespace Vashta.Entropy.UI
                 rows = rows.Concat(teamState.PlayerRows).ToList();
             }
 
-            rows = rows.OrderByDescending(row => row.Kills).ThenBy(row => row.Kills).ToList();
+            rows = rows.OrderByDescending(row => row.Kills).ThenBy(row => row.Deaths).ThenBy(row => row.Name).ToList();
 
             if(rows.Count > PlayerRows.Count)
                 Debug.LogWarning($"There are more rows ({teamStates.Count}) than panels ({PlayerRows.Count})");

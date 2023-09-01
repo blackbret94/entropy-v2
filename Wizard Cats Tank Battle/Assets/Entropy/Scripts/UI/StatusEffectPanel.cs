@@ -11,7 +11,7 @@ namespace Vashta.Entropy.UI
         public List<StatusEffectSlot> StatusEffectBlocks;
         public Player Player;
         private float _lastRefreshTime;
-        private float _refreshRate = .25f;
+        private float _refreshRate = .15f;
 
         private void Awake()
         {

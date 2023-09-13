@@ -20,7 +20,7 @@ namespace Entropy.Scripts.ItemStore
             foreach (var cart in Wardrobe.Carts)
             {
                 // add ones that aren't owned
-                if (!cart.AvailAtStart && !PlayerInventory.OwnsCartById(cart.Id))
+                if (!cart.AvailAtStart && cart.IsForSale && !PlayerInventory.OwnsCartById(cart.Id))
                 {
                     _activeItemList.Add(cart);
                 }

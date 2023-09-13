@@ -20,7 +20,7 @@ namespace Entropy.Scripts.ItemStore
             foreach (var turret in Wardrobe.Turrets)
             {
                 // add ones that aren't owned
-                if (!turret.AvailAtStart && !PlayerInventory.OwnsTurretById(turret.Id))
+                if (!turret.AvailAtStart && turret.IsForSale && !PlayerInventory.OwnsTurretById(turret.Id))
                 {
                     _activeItemList.Add(turret);
                 }

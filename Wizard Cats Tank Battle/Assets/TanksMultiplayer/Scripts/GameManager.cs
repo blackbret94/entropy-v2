@@ -6,6 +6,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Entropy.Scripts.Audio;
+using Entropy.Scripts.Player;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
@@ -72,7 +73,6 @@ namespace TanksMP
         private int lastSpawnIndex = -1;
 
         private List<PlayerBot> _botList;
-
 
         //initialize variables
         void Awake()

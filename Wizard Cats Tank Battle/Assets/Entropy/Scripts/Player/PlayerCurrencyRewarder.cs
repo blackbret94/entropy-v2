@@ -4,16 +4,18 @@ namespace Entropy.Scripts.Player
 {
     public class PlayerCurrencyRewarder
     {
-        private const int KILL_REWARD = 25;
-        private const int MATCH_BONUS = 50;
-        private const int FIRST_PLACE_BONUS = 100;
+        public const int KILL_REWARD = 25;
+        private const int MATCH_BONUS = 150;
+        private const int FIRST_PLACE_BONUS = 300;
+        private const int SECOND_PLACE_BONUS = 200;
+        private const int THIRD_PLACE_BONUS = 100;
 
         public int RewardForKill()
         {
             Reward(KILL_REWARD);
             return KILL_REWARD;
         }
-
+        
         public int RewardForMatchCompleted()
         {
             Reward(MATCH_BONUS);
@@ -24,6 +26,18 @@ namespace Entropy.Scripts.Player
         {
             Reward(FIRST_PLACE_BONUS);
             return FIRST_PLACE_BONUS;
+        }
+
+        public int RewardForSecondPlace()
+        {
+            Reward(SECOND_PLACE_BONUS);
+            return SECOND_PLACE_BONUS;
+        }
+
+        public int RewardForThirdPlace()
+        {
+            Reward(THIRD_PLACE_BONUS);
+            return THIRD_PLACE_BONUS;
         }
         
         private void Reward(int value)

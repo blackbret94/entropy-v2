@@ -64,9 +64,9 @@ namespace TanksMP
         void Start()
         {
             //on non-mobile devices hide joystick controls, except in editor
-            // #if !UNITY_EDITOR && (UNITY_STANDALONE || UNITY_WEBGL)
-                // ToggleControls(false);
-            // #endif
+            #if !UNITY_EDITOR && (UNITY_STANDALONE || UNITY_WEBGL)
+                ToggleControls(false);
+            #endif
             
             //on mobile devices enable additional aiming indicator
             #if !UNITY_EDITOR && !UNITY_STANDALONE && !UNITY_WEBGL

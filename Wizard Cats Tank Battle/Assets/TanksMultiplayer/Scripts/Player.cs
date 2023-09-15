@@ -538,10 +538,10 @@ namespace TanksMP
                 Shoot();
 
 			//replicate input to mobile controls for illustration purposes
-			// #if UNITY_EDITOR
+			#if UNITY_EDITOR
 				GameManager.GetInstance().ui.controls[0].position = moveDir;
 				GameManager.GetInstance().ui.controls[1].position = turnDir;
-			// #endif
+			#endif
 #endif
         }
             

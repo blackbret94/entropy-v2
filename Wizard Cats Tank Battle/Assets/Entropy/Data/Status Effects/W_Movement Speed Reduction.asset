@@ -10,22 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00a942a69f3a4bddacf99ff10b93326e, type: 3}
-  m_Name: Damage Boost
+  m_Name: W_Movement Speed Reduction
   m_EditorClassIdentifier: 
-  Id: 65b43913-9562-48a1-99dc-2ad9d2f47fdc
-  EffectIcon: {fileID: 21300000, guid: 7d6eda8327f3a99429153c8759f560fb, type: 3}
+  Id: ef86a2b6-7a12-4dd4-ba78-5ec0f1e7ccee
+  EffectIcon: {fileID: 21300000, guid: 24fd0a1d54ccd2e4f9bab1a9e2cbfd9b, type: 3}
   MaxStack: 1
-  Title: Damage Boost
-  AppliedDescription: Do Extra Damage!
-  ClassDescription: Boost ally damage
-  TTL: 8
-  Color: {r: 1, g: 0, b: 0, a: 1}
+  Title: Slowed
+  AppliedDescription: Move slowly
+  ClassDescription: Slow enemies
+  TTL: 5
+  Color: {r: 0, g: 0.28806448, b: 1, a: 1}
   PowerupId: 0
-  MovementSpeedMultiplier: 1
-  MovementSpeedModifier: 0
-  DamageOutputMultiplier: 1.333
+  IsDebuff: 1
+  MovementSpeedMultiplier: 0.5
+  MovementSpeedModifier: 1
+  DamageOutputMultiplier: 1
   AttackRateMultiplier: 1
   SpikeDamageModifier: 0
   DamageTakenModifier: 0
   HealthPerSecond: 0
   IsReflective: 0
+  DeathFx: {fileID: 0}

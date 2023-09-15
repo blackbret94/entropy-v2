@@ -42,5 +42,9 @@ namespace Vashta.Entropy.StatusEffects
         public bool IsReflective = false;
         [Tooltip("Effect to play if the player is killed by this status effect.  Optional.")]
         public GameObject DeathFx;
+        [Tooltip("Blocks the player from being buffed")]
+        public bool BlocksBuffs;
+        [Tooltip("Blocks the player from being debuffed")]
+        public bool BlocksDebuffs;
     }
 }

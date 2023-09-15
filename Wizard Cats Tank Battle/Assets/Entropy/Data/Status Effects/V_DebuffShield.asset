@@ -10,22 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00a942a69f3a4bddacf99ff10b93326e, type: 3}
-  m_Name: Healing
+  m_Name: V_DebuffShield
   m_EditorClassIdentifier: 
-  Id: 21dc73ac-7e53-46f6-983b-2390a6eb1ff5
-  EffectIcon: {fileID: 21300000, guid: 9534da6cd6d300540a144c7fd0c6419c, type: 3}
+  Id: 6760bbd0-eace-4c76-b04b-cccab66fae7c
+  EffectIcon: {fileID: 21300000, guid: 98eedab134759ee48ab162d2fa3d2071, type: 3}
   MaxStack: 1
-  Title: Healing
-  AppliedDescription: Heal over time
-  ClassDescription: Heal allies over time
+  Title: Debuff Shield
+  AppliedDescription: You are safe from debuffs!
+  ClassDescription: Protect allies from debuffs
   TTL: 5
-  Color: {r: 0, g: 0.6640029, b: 1, a: 1}
+  Color: {r: 0.9098039, g: 0.24705882, b: 0.9882353, a: 1}
   PowerupId: 0
+  IsDebuff: 0
+  Sfx: {fileID: 0}
   MovementSpeedMultiplier: 1
   MovementSpeedModifier: 0
   DamageOutputMultiplier: 1
   AttackRateMultiplier: 1
   SpikeDamageModifier: 0
   DamageTakenModifier: 0
-  HealthPerSecond: 2
+  HealthPerSecond: 0
   IsReflective: 0
+  DeathFx: {fileID: 0}
+  BlocksBuffs: 0
+  BlocksDebuffs: 1

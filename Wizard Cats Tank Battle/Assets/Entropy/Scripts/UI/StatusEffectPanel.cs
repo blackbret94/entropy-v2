@@ -37,6 +37,10 @@ namespace Vashta.Entropy.UI
 
             foreach (var statusEffect in statusEffects)
             {
+                // Return if there are more status effects than there are slots
+                if (iconIndex >= StatusEffectBlocks.Count)
+                    return;
+                
                 StatusEffectSlot slot = StatusEffectBlocks[iconIndex];
 
                 if (slot.GetStatusEffect() != statusEffect)

@@ -118,6 +118,21 @@ namespace Vashta.Entropy.StatusEffects
             return StatusEffectData().IsDebuff;
         }
 
+        public bool IsBuff()
+        {
+            return !StatusEffectData().IsDebuff;
+        }
+
+        public bool BlocksBuffs()
+        {
+            return StatusEffectData().BlocksBuffs;
+        }
+
+        public bool BlocksDebuffs()
+        {
+            return StatusEffectData().BlocksDebuffs;
+        }
+
         public AudioClip Sfx()
         {
             return StatusEffectData().Sfx;

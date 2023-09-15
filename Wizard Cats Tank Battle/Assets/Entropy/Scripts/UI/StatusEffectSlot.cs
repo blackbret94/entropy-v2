@@ -37,9 +37,10 @@ namespace Vashta.Entropy.UI
             _statusEffect = statusEffect;
             Image.sprite = statusEffect.Icon();
             Animator.SetBool(BlinkBool, false);
+            Animator.ResetTrigger(FadeOutTrigger);
             Animator.SetTrigger(FadeInTrigger);
             
-            BuffOutline.SetActive(!statusEffect.IsDebuff());
+            BuffOutline.SetActive(statusEffect.IsBuff());
             DebuffOutline.SetActive(statusEffect.IsDebuff());
         }
         

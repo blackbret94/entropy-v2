@@ -26,7 +26,9 @@ namespace Vashta.Entropy.StatusEffects
         private float _attackRateModifierCached = 1f;
         private float _spikeDamageModifierCached = 0f;
         private bool _isReflectiveCached = false;
-
+        private bool _blocksBuffsCached = false;
+        private bool _blocksDebuffsCached = false;
+        
         private const float _refreshRateS = .5f;
         private float _lastRefresh = 0;
         private Player _lastDotAppliedBy;
@@ -41,6 +43,8 @@ namespace Vashta.Entropy.StatusEffects
         public float AttackRateModifier => _attackRateModifierCached;
         public float SpikeDamageModifier => _spikeDamageModifierCached;
         public bool IsReflective => _isReflectiveCached;
+        public bool BlocksBuffs => _blocksBuffsCached;
+        public bool BlocksDebuffs => _blocksDebuffsCached;
         public Player LastDotAppliedBy => _lastDotAppliedBy;
 
         private void Awake()
@@ -72,26 +76,48 @@ namespace Vashta.Entropy.StatusEffects
         {
             Player owner = Player.GetPlayerById(playerId);
             StatusEffect statusEffect = new StatusEffect(this, statusEffectId, owner);
+            
+            // If a buff and buffs are blocked, return
+            if (statusEffect.IsBuff() && _blocksBuffsCached)
+                return;
+            
+            // If a debuff and debuffs are blocked, return
+            if (statusEffect.IsDebuff() && _blocksDebuffsCached)
+                return;
+            
+            // Clear buffs if this blocks buffs
+            if(statusEffect.BlocksBuffs())
+                ClearBuffs();
+            
+            // Clear debuffs if this blocks debuffs
+            if(statusEffect.BlocksDebuffs())
+                ClearDebuffs();
 
+            // Alert if local player
             if (_player.IsLocal)
             {
+                // Show panel
                 GameManager.GetInstance().ui.PowerUpPanel.SetText(statusEffect.Title(), statusEffect.Description(),
                     statusEffect.Color(), statusEffect.Icon());
 
+                // Play fx
                 if(statusEffect.Sfx())
                     AudioManager.Play2D(statusEffect.Sfx());
             }
 
+            // Check if status effect already exists
             StatusEffect existingEffect = StatusEffectAlreadyExists(statusEffect.Id());
 
             if (existingEffect == null)
             {
+                // If it doesn't exist, add it
                 _statusEffects.Add(statusEffect);
                 _indexedIds.Add(statusEffect.Id());
                 _dirtyFlag = true;
             }
             else
             {
+                // If it exists, update TTL
                 existingEffect.SetExpiration();
             }
         }
@@ -144,6 +170,8 @@ namespace Vashta.Entropy.StatusEffects
             _attackRateModifierCached = 1f;
             _spikeDamageModifierCached = 0f;
             _isReflectiveCached = false;
+            _blocksBuffsCached = false;
+            _blocksDebuffsCached = false;
 
             foreach (var statusEffect in _statusEffects)
             {
@@ -160,10 +188,40 @@ namespace Vashta.Entropy.StatusEffects
 
                 if (statusEffect.IsReflective())
                     _isReflectiveCached = true;
+
+                if (statusEffect.BlocksBuffs())
+                    _blocksBuffsCached = true;
+
+                if (statusEffect.BlocksDebuffs())
+                    _blocksDebuffsCached = true;
             }
 
             _visualizer.Refresh(_indexedIds);
             _dirtyFlag = false;
+        }
+
+        private void ClearBuffs()
+        {
+            // Copy to safely enum
+            List<StatusEffect> statusEffectsCopy = new List<StatusEffect>(_statusEffects);
+            
+            foreach (var statusEffect in statusEffectsCopy)
+            {
+                if(statusEffect.IsBuff())
+                    RemoveStatusEffect(statusEffect);
+            }
+        }
+
+        private void ClearDebuffs()
+        {
+            // Copy to safely enum
+            List<StatusEffect> statusEffectsCopy = new List<StatusEffect>(_statusEffects);
+            
+            foreach (var statusEffect in statusEffectsCopy)
+            {
+                if(statusEffect.IsDebuff())
+                    RemoveStatusEffect(statusEffect);
+            }
         }
 
         private StatusEffect StatusEffectAlreadyExists(string id)

@@ -28,10 +28,10 @@ namespace Vashta.Entropy.UI
             _resolutions = Screen.resolutions;
             for (int i = 0; i < _resolutions.Length; i++)
             {
-                if (Math.Abs(_resolutions[i].refreshRateRatio.value - _currentRefreshRate) < .01)
-                {
+                // if (Math.Abs(_resolutions[i].refreshRateRatio.value - _currentRefreshRate) < .01)
+                // {
                     _filteredResolutions.Add(_resolutions[i]);
-                }
+                // }
             }
 
             // stringify resolutions

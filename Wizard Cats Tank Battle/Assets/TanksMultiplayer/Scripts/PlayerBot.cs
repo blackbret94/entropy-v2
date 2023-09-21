@@ -40,13 +40,19 @@ namespace TanksMP
         /// </summary>
         public float range = 6f;
 
+        public float buffFrequencyS = 1f;
+        private float _lastBuffS = 0f;
+
         [Range(0f, 10f)]
         public float accuracyError = 0f;
 
         public CatNameGenerator CatNameGenerator;
         
         //list of enemy players that are in range of this bot
-        private List<GameObject> inRange = new List<GameObject>();
+        private List<GameObject> _enemiesInRange = new List<GameObject>();
+        
+        // List of allies that are in range of this bot
+        private List<GameObject> _alliesInRange = new List<GameObject>();
 
         //reference to the agent component
         private NavMeshAgent agent;
@@ -110,7 +116,8 @@ namespace TanksMP
             while(true)
             {
                 //empty list on each iteration
-                inRange.Clear();
+                _enemiesInRange.Clear();
+                _alliesInRange.Clear();
 
                 //casts a sphere to detect other player objects within the sphere radius
                 Collider[] cols = Physics.OverlapSphere(transform.position, range, LayerMask.GetMask("Player"));
@@ -118,11 +125,16 @@ namespace TanksMP
                 for (int i = 0; i < cols.Length; i++)
                 {
                     //get other Player component
-                    //only add the player to the list if its not in this team
                     Player p = cols[i].gameObject.GetComponent<Player>();
-                    if(p.GetView().GetTeam() != GetView().GetTeam() && !inRange.Contains(cols[i].gameObject))
+                    
+                    // Add enemies to the list
+                    if(p.GetView().GetTeam() != GetView().GetTeam() && !_enemiesInRange.Contains(cols[i].gameObject))
                     {
-                        inRange.Add(cols[i].gameObject);   
+                        _enemiesInRange.Add(cols[i].gameObject);   
+                    // Add allies to the list
+                    } else if (p.GetView().GetTeam() == GetView().GetTeam() && p != this)
+                    {
+                        _alliesInRange.Add(cols[i].gameObject);
                     }
                 }
                 
@@ -193,7 +205,7 @@ namespace TanksMP
             OnShieldChange(shield);
 
             //no enemy players are in range
-            if(inRange.Count == 0)
+            if(_enemiesInRange.Count == 0)
             {
                 //if this bot reached the the random point on the navigation mesh,
                 //then calculate another random point on the navmesh on continue moving around
@@ -213,18 +225,18 @@ namespace TanksMP
                 //this simulates more fluent "dancing" movement to avoid being shot easily
                 if(Vector3.Distance(transform.position, targetPoint) < agent.stoppingDistance)
                 {
-                    RandomPoint(inRange[0].transform.position, range * 2, out targetPoint);
+                    RandomPoint(_enemiesInRange[0].transform.position, range * 2, out targetPoint);
                 }
                 
                 //shooting loop 
-                for(int i = 0; i < inRange.Count; i++)
+                for(int i = 0; i < _enemiesInRange.Count; i++)
                 {
                     RaycastHit hit;
                     //raycast to detect visible enemies and shoot at their current position
-                    if (Physics.Linecast(transform.position, inRange[i].transform.position, out hit))
+                    if (Physics.Linecast(transform.position, _enemiesInRange[i].transform.position, out hit))
                     {
                         //get current enemy position and rotate this turret
-                        Vector3 lookPos = inRange[i].transform.position;
+                        Vector3 lookPos = _enemiesInRange[i].transform.position;
                         gameObject.transform.LookAt(lookPos);
                         gameObject.transform.eulerAngles = new Vector3(0, turret.eulerAngles.y, 0);
                         turretRotation = (short)turret.eulerAngles.y;
@@ -234,10 +246,41 @@ namespace TanksMP
                         Vector3 shotDirError = new Vector2(shotDir.x + CalculateAccuracyError(),
                             shotDir.z + CalculateAccuracyError());
                         Shoot(shotDirError);
-                        break;
+                        return;
                     }
                 }
             }
+            
+            // Shoot at an ally 
+            if (_alliesInRange.Count > 0 && CanBuff())
+            {
+                for(int i = 0; i < _alliesInRange.Count; i++)
+                {
+                    RaycastHit hit;
+                    //raycast to detect visible allies and shoot at their current position
+                    if (Physics.Linecast(transform.position, _alliesInRange[i].transform.position, out hit))
+                    {
+                        //get current ally position and rotate this turret
+                        Vector3 lookPos = _alliesInRange[i].transform.position;
+                        gameObject.transform.LookAt(lookPos);
+                        gameObject.transform.eulerAngles = new Vector3(0, turret.eulerAngles.y, 0);
+                        turretRotation = (short)turret.eulerAngles.y;
+
+                        //find shot direction and shoot there
+                        Vector3 shotDir = lookPos - transform.position;
+                        Vector3 shotDirError = new Vector2(shotDir.x + CalculateAccuracyError(),
+                            shotDir.z + CalculateAccuracyError());
+                        Shoot(shotDirError);
+                        _lastBuffS = Time.time;
+                        return;
+                    }
+                }
+            }
+        }
+
+        private bool CanBuff()
+        {
+            return Time.time - _lastBuffS > buffFrequencyS;
         }
 
         private float CalculateAccuracyError()
@@ -260,7 +303,7 @@ namespace TanksMP
             
             //stop AI updates
             isDead = true;
-            inRange.Clear();
+            _enemiesInRange.Clear();
             agent.isStopped = true;
             killedBy = null;
 

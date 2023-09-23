@@ -52,9 +52,10 @@ namespace TanksMP
         /// Event fired when a connection to the matchmaker service failed.
         /// </summary>
         public static event Action connectionFailedEvent;
-
-        // If null, uses best region
-        public string FixedRegion = "us";
+        
+        public string DefaultRegion = "us";
+        
+        private const string REGION_PREFS_KEY = "wctb_regionIndex";
 
         public MapDefinitionDictionary MapDefinitionDictionary;
 
@@ -76,17 +77,36 @@ namespace TanksMP
             //this is to avoid having the same ID in a scene
             PhotonView view = gameObject.AddComponent<PhotonView>();
             view.ViewID = 999;
-            
-            SetRegion();
+
+            LoadRegion();
         }
 
         /// <summary>
         /// Used to force a region.  If NullOrEmpty() use best region.
         /// Eventually control via a menu
-        /// </summary>
-        private void SetRegion()
+        // /// </summary>
+        // private void SetRegion()
+        // {
+        //     PhotonNetwork.PhotonServerSettings.AppSettings.FixedRegion = FixedRegion;
+        // }
+        
+        public void SaveRegion(string region)
         {
-            PhotonNetwork.PhotonServerSettings.AppSettings.FixedRegion = FixedRegion;
+            PlayerPrefs.SetString(REGION_PREFS_KEY, region);
+            PhotonNetwork.PhotonServerSettings.AppSettings.FixedRegion = region;
+        }
+
+        public string LoadRegion()
+        {
+            string region = PlayerPrefs.GetString(REGION_PREFS_KEY, DefaultRegion);
+            
+            PhotonNetwork.PhotonServerSettings.AppSettings.FixedRegion = region;
+            return region;
+        }
+
+        public string GetRegion()
+        {
+            return PhotonNetwork.PhotonServerSettings.AppSettings.FixedRegion;
         }
 
         /// <summary>

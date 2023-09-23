@@ -8,7 +8,7 @@ namespace Vashta.Entropy.Util
         #if UNITY_EDITOR
         private void Update()
         {
-            if (Input.GetKeyDown("space"))
+            if (Input.GetButtonDown("Screenshot"))
             {
                 string filename = $"{Application.persistentDataPath}/{Screen.width}x{Screen.height}-{DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss")}.png";
                 

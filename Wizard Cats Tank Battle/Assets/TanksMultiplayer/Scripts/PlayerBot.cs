@@ -223,7 +223,7 @@ namespace TanksMP
             {
                 //if we reached the targeted point, calculate a new point around the enemy
                 //this simulates more fluent "dancing" movement to avoid being shot easily
-                if(Vector3.Distance(transform.position, targetPoint) < agent.stoppingDistance)
+                if(Vector3.Distance(shotPos.position, targetPoint) < agent.stoppingDistance)
                 {
                     RandomPoint(_enemiesInRange[0].transform.position, range * 2, out targetPoint);
                 }
@@ -233,7 +233,7 @@ namespace TanksMP
                 {
                     RaycastHit hit;
                     //raycast to detect visible enemies and shoot at their current position
-                    if (Physics.Linecast(transform.position, _enemiesInRange[i].transform.position, out hit))
+                    if (Physics.Linecast(shotPos.position, _enemiesInRange[i].transform.position, out hit))
                     {
                         //get current enemy position and rotate this turret
                         Vector3 lookPos = _enemiesInRange[i].transform.position;
@@ -242,7 +242,7 @@ namespace TanksMP
                         turretRotation = (short)turret.eulerAngles.y;
 
                         //find shot direction and shoot there
-                        Vector3 shotDir = lookPos - transform.position;
+                        Vector3 shotDir = lookPos - shotPos.position;
                         Vector3 shotDirError = new Vector2(shotDir.x + CalculateAccuracyError(),
                             shotDir.z + CalculateAccuracyError());
                         Shoot(shotDirError);
@@ -258,7 +258,7 @@ namespace TanksMP
                 {
                     RaycastHit hit;
                     //raycast to detect visible allies and shoot at their current position
-                    if (Physics.Linecast(transform.position, _alliesInRange[i].transform.position, out hit))
+                    if (Physics.Linecast(shotPos.position, _alliesInRange[i].transform.position, out hit))
                     {
                         //get current ally position and rotate this turret
                         Vector3 lookPos = _alliesInRange[i].transform.position;
@@ -267,7 +267,7 @@ namespace TanksMP
                         turretRotation = (short)turret.eulerAngles.y;
 
                         //find shot direction and shoot there
-                        Vector3 shotDir = lookPos - transform.position;
+                        Vector3 shotDir = lookPos - shotPos.position;
                         Vector3 shotDirError = new Vector2(shotDir.x + CalculateAccuracyError(),
                             shotDir.z + CalculateAccuracyError());
                         Shoot(shotDirError);

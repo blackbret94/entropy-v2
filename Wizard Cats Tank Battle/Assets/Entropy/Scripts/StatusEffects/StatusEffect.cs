@@ -6,16 +6,20 @@ namespace Vashta.Entropy.StatusEffects
     public class StatusEffect
     {
         private StatusEffectController _statusEffectController;
-        private string _id;
-        private Player _originPlayer; // How to serialize this?
+        private string ID { get; }
+        private Player _originPlayer { get; }
         private float _expiration;
+        private bool _isFresh = false;
+
+        private StatusEffectData _data = null;
 
         public StatusEffect(StatusEffectController statusEffectController, string id, Player originPlayer)
         {
             _statusEffectController = statusEffectController;
-            _id = id;
+            ID = id;
             _originPlayer = originPlayer;
             SetExpiration();
+            _isFresh = true;
         }
 
         public Player OriginPlayer()
@@ -45,7 +49,7 @@ namespace Vashta.Entropy.StatusEffects
         
         public string Id()
         {
-            return StatusEffectData().Id;
+            return ID;
         }
         
         public string Title()
@@ -140,7 +144,29 @@ namespace Vashta.Entropy.StatusEffects
         
         private StatusEffectData StatusEffectData()
         {
-            return _statusEffectController.StatusEffectDirectory[_id];
+            // If cached, return cache
+            if (_data != null)
+                return _data;
+            
+            // Attempt to locate
+            _data = _statusEffectController.StatusEffectDirectory[ID];
+
+            if (_data == null)
+            {
+                Debug.LogError("Could not find status effect with ID: " + ID);
+            }
+
+            return _data;
+        }
+
+        public bool IsFresh()
+        {
+            return _isFresh;
+        }
+
+        public void SetFresh( bool fresh)
+        {
+            _isFresh = fresh;
         }
     }
 }

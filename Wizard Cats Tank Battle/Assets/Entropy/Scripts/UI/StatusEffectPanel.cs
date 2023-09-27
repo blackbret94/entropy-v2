@@ -13,9 +13,13 @@ namespace Vashta.Entropy.UI
         private float _lastRefreshTime;
         private float _refreshRate = .15f;
 
+        // private float _sortRateS = 1f;
+        // private float _lastSortTime;
+
         private void Awake()
         {
             _lastRefreshTime = Time.time + 1f;
+            // _lastSortTime = Time.time + 1f;
         }
         
         private void Update()
@@ -23,9 +27,23 @@ namespace Vashta.Entropy.UI
             if (Player == null)
                 return;
 
-            if (Time.time < _lastRefreshTime + _refreshRate)
-                return;
+            // Refresh effects
+            if (Time.time >= _lastRefreshTime + _refreshRate)
+            {
+                // SortSlots();
+                RefreshStatusEffects();
+                _lastRefreshTime = Time.time;
+            }
             
+            // Resort
+            // if (Time.time >= _lastSortTime + _sortRateS)
+            // {
+            //     _lastSortTime = Time.time;
+            // }
+        }
+
+        public void ForceRefresh()
+        {
             RefreshStatusEffects();
             _lastRefreshTime = Time.time;
         }
@@ -33,22 +51,34 @@ namespace Vashta.Entropy.UI
         private void RefreshStatusEffects()
         {
             List<StatusEffect> statusEffects = Player.StatusEffectController.StatusEffects;
-            int iconIndex = 0;
 
-            foreach (var statusEffect in statusEffects)
+            for(int i=0; i<StatusEffectBlocks.Count; i++)
             {
-                // Return if there are more status effects than there are slots
-                if (iconIndex >= StatusEffectBlocks.Count)
-                    return;
+                StatusEffectSlot slot = StatusEffectBlocks[i];
                 
-                StatusEffectSlot slot = StatusEffectBlocks[iconIndex];
-
-                if (slot.GetStatusEffect() != statusEffect)
+                // Hide blocks without status effects
+                if (i >= statusEffects.Count)
                 {
-                    slot.SetStatusEffect(statusEffect);
+                    slot.ResetStatusEffect();
+                    continue;
                 }
 
-                iconIndex++;
+                StatusEffect statusEffect = statusEffects[i];
+
+                // if (slot.GetStatusEffect() != statusEffect)
+                // {
+                    slot.SetStatusEffect(statusEffect);
+                // }
+            }
+        }
+
+        private void SortSlots()
+        {
+            StatusEffectBlocks.Sort(CompareStatusEffectSlots);
+
+            for (int i = 0; i < StatusEffectBlocks.Count; i++)
+            {
+                StatusEffectBlocks[i].transform.SetSiblingIndex(i);
             }
         }
 
@@ -58,6 +88,23 @@ namespace Vashta.Entropy.UI
             {
                 slot.ResetStatusEffect();
             }
+        }
+        
+        private  int CompareStatusEffectSlots(StatusEffectSlot x, StatusEffectSlot y)
+        {
+            if (x.GetStatusEffect() == null && y.GetStatusEffect() == null)
+                return 0;
+
+            if (x.GetStatusEffect() == null)
+                return 1;
+
+            if (y.GetStatusEffect() == null)
+                return -1;
+
+            if (x.GetStatusEffect().ExpirationTime() < y.GetStatusEffect().ExpirationTime())
+                return -1;
+
+            return 1;
         }
     }
 }

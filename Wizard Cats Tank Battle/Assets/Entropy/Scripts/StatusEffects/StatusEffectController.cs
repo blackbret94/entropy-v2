@@ -119,7 +119,10 @@ namespace Vashta.Entropy.StatusEffects
             {
                 // If it exists, update TTL
                 existingEffect.SetExpiration();
+                existingEffect.SetFresh(true);
             }
+            
+            StatusEffectPanel.ForceRefresh();
         }
 
         public void ClearStatusEffects()

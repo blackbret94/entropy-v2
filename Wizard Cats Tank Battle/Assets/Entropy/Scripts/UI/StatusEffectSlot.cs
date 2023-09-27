@@ -31,15 +31,24 @@ namespace Vashta.Entropy.UI
         public void SetStatusEffect(StatusEffect statusEffect)
         {
             // Ignore status effects that are about to fade away
-            if (statusEffect.GetTimeLeft() <= FadeOutThreshold + .01f)
-                return;
+            // if (statusEffect.GetTimeLeft() <= FadeOutThreshold + .01f)
+                // return;
             
             _statusEffect = statusEffect;
             Image.sprite = statusEffect.Icon();
-            Animator.SetBool(BlinkBool, false);
-            Animator.ResetTrigger(FadeOutTrigger);
-            Animator.SetTrigger(FadeInTrigger);
-            
+
+            if (statusEffect.IsFresh())
+            {
+                Animator.SetBool(BlinkBool, false);
+                Animator.ResetTrigger(FadeOutTrigger);
+                Animator.SetTrigger(FadeInTrigger);
+                statusEffect.SetFresh(false);
+            }
+            else
+            {
+                _canvasGroup.alpha = 1;
+            }
+
             BuffOutline.SetActive(statusEffect.IsBuff());
             DebuffOutline.SetActive(statusEffect.IsDebuff());
         }
@@ -86,6 +95,11 @@ namespace Vashta.Entropy.UI
             Animator.SetBool(BlinkBool, false);
             Animator.SetTrigger(FadeOutTrigger);
             _statusEffect = null;
+        }
+        
+        public void AnimationEnd()
+        {
+            ResetStatusEffect();
         }
     }
 }

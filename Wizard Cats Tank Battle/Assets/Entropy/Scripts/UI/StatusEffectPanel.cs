@@ -13,13 +13,13 @@ namespace Vashta.Entropy.UI
         private float _lastRefreshTime;
         private float _refreshRate = .15f;
 
-        // private float _sortRateS = 1f;
-        // private float _lastSortTime;
+        private float _sortRateS = 1f;
+        private float _lastSortTime;
 
         private void Awake()
         {
             _lastRefreshTime = Time.time + 1f;
-            // _lastSortTime = Time.time + 1f;
+            _lastSortTime = Time.time + 1f;
         }
         
         private void Update()
@@ -30,16 +30,17 @@ namespace Vashta.Entropy.UI
             // Refresh effects
             if (Time.time >= _lastRefreshTime + _refreshRate)
             {
-                // SortSlots();
                 RefreshStatusEffects();
                 _lastRefreshTime = Time.time;
             }
             
             // Resort
-            // if (Time.time >= _lastSortTime + _sortRateS)
-            // {
-            //     _lastSortTime = Time.time;
-            // }
+            if (Time.time >= _lastSortTime + _sortRateS)
+            {
+                SortSlots();
+
+                _lastSortTime = Time.time;
+            }
         }
 
         public void ForceRefresh()
@@ -65,10 +66,10 @@ namespace Vashta.Entropy.UI
 
                 StatusEffect statusEffect = statusEffects[i];
 
-                // if (slot.GetStatusEffect() != statusEffect)
-                // {
+                if (slot.GetStatusEffect() != statusEffect)
+                {
                     slot.SetStatusEffect(statusEffect);
-                // }
+                }
             }
         }
 

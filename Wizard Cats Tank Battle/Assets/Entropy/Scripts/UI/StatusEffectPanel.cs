@@ -51,7 +51,8 @@ namespace Vashta.Entropy.UI
 
         private void RefreshStatusEffects()
         {
-            List<StatusEffect> statusEffects = Player.StatusEffectController.StatusEffects;
+            List<StatusEffect> statusEffects = new List<StatusEffect>(Player.StatusEffectController.StatusEffects);
+            statusEffects.Sort(CompareStatusEffects);
 
             for(int i=0; i<StatusEffectBlocks.Count; i++)
             {
@@ -91,7 +92,7 @@ namespace Vashta.Entropy.UI
             }
         }
         
-        private  int CompareStatusEffectSlots(StatusEffectSlot x, StatusEffectSlot y)
+        private int CompareStatusEffectSlots(StatusEffectSlot x, StatusEffectSlot y)
         {
             if (x.GetStatusEffect() == null && y.GetStatusEffect() == null)
                 return 0;
@@ -103,6 +104,23 @@ namespace Vashta.Entropy.UI
                 return -1;
 
             if (x.GetStatusEffect().ExpirationTime() < y.GetStatusEffect().ExpirationTime())
+                return -1;
+
+            return 1;
+        }
+        
+        private int CompareStatusEffects(StatusEffect x, StatusEffect y)
+        {
+            if (x == null && y == null)
+                return 0;
+
+            if (x == null)
+                return 1;
+
+            if (y == null)
+                return -1;
+
+            if (x.ExpirationTime() < y.ExpirationTime())
                 return -1;
 
             return 1;

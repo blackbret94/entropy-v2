@@ -137,6 +137,8 @@ namespace TanksMP
 
         protected PlayerCurrencyRewarder _playerCurrencyRewarder;
 
+        private PlayerInputController InputController;
+
         //reference to this rigidbody
         #pragma warning disable 0649
 		protected Rigidbody rb;
@@ -247,6 +249,8 @@ namespace TanksMP
             if (GameManager.GetInstance().UsesTeams)
                 ColorizePlayerForTeam();
 
+            InputController = new PlayerInputController();
+            
             //set name in label
             label.text = GetView().GetName();
             
@@ -498,43 +502,24 @@ namespace TanksMP
 #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL
 
             //movement variables
-            Vector2 moveDir;
-            Vector2 turnDir;
+            Vector2 moveDir = InputController.GetAdapter().GetMovementVector(out bool isMoving);
+            Vector2 turnDir = InputController.GetAdapter().GetTurretRotation(transform.position);
 
-            //reset moving input when no arrow keys are pressed down
-            if (Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0)
+            if (isMoving)
             {
-                moveDir.x = 0;
-                moveDir.y = 0;
-                networkVelocity = Vector3.zero;
+                Move(moveDir);
             }
             else
             {
-                //read out moving directions and calculate force
-                moveDir.x = Input.GetAxis("Horizontal");
-                moveDir.y = Input.GetAxis("Vertical");
-                Move(moveDir);
+                // Stop network velocity if not moving
+                networkVelocity = Vector3.zero;
             }
-
-            //cast a ray on a plane at the mouse position for detecting where to shoot 
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Plane plane = new Plane(Vector3.up, Vector3.up);
-            float distance = 0f;
-            Vector3 hitPos = Vector3.zero;
-            //the hit position determines the mouse position in the scene
-            if (plane.Raycast(ray, out distance))
-            {
-                hitPos = ray.GetPoint(distance) - transform.position;
-            }
-
-            //we've converted the mouse position to a direction
-            turnDir = new Vector2(hitPos.x, hitPos.z);
-
+            
             //rotate turret to look at the mouse direction
-            RotateTurret(new Vector2(hitPos.x, hitPos.z));
+            RotateTurret(turnDir);
             
             //shoot bullet on left mouse click
-            if (Input.GetButton("Fire1") && !EventSystem.current.IsPointerOverGameObject())
+            if(InputController.GetAdapter().ShouldShoot())
                 Shoot();
 
 			//replicate input to mobile controls for illustration purposes

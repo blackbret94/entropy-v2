@@ -38,8 +38,8 @@ namespace TanksMP
 
         public int maxShield = 5;
 
-        public float counterDamageMod = 1.50f;
-        public float sameClassDamageMod = .60f;
+        public int counterDamageMod = 2;
+        public int sameClassDamageMod = -1;
 
         public float acceleration = 30f;
 
@@ -428,7 +428,7 @@ namespace TanksMP
 
             bool shouldShowTextAndAnimation = healthPerSecond < 0 || health < maxHealth;
             if(shouldShowTextAndAnimation)
-                this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer, -healthPerSecond, false, false);
+                this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer, -healthPerSecond);
             
             if (health <= 0)
                 // killed the player
@@ -629,7 +629,7 @@ namespace TanksMP
 
         //called on the server first but forwarded to all clients
         [PunRPC]
-        protected void CmdTakeDamage(int damage, bool attackerIsCounter=false, bool attackerIsSame=false)
+        protected void CmdTakeDamage(int damage)
         {
             if (damage == 0)
                 return;
@@ -637,19 +637,19 @@ namespace TanksMP
             // Show damage
             if (damage > 0)
             {
-                if (attackerIsCounter)
-                {
-                    OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.CriticalHit,
-                        damage);
-                }
-                else if (attackerIsSame)
-                {
-                    OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.Miss, damage);
-                }
-                else
-                {
+                // if (attackerIsCounter)
+                // {
+                //     OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.CriticalHit,
+                //         damage);
+                // }
+                // else if (attackerIsSame)
+                // {
+                //     OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.Miss, damage);
+                // }
+                // else
+                // {
                     OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.Hit, damage);
-                }
+                // }
             }
             else
             {
@@ -761,7 +761,7 @@ namespace TanksMP
             {
                 //we didn't die, set health to new value
                 GetView().SetHealth(health);
-                this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer, damage, false, false);
+                this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer, damage);
             }
         }
 
@@ -799,7 +799,7 @@ namespace TanksMP
             {
                 //we didn't die, set health to new value
                 GetView().SetHealth(health);
-                this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer, damage, attackerIsCounter, attackerIsSame);
+                this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer, damage);
             }
         }
 
@@ -813,18 +813,22 @@ namespace TanksMP
                 Debug.LogWarning("Warning! No class definition assigned to bullet");
             }
 
-            attackerIsCounter = bullet.ClassDefinition.IsCounter(photonView.GetClassId());
-            attackerIsSame = bullet.ClassDefinition.classId == photonView.GetClassId();
+            // Disable counters for now
+            attackerIsCounter = false;
+            attackerIsSame = false;
 
-            if (attackerIsCounter)
-            {
-                calculatedDamage *= counterDamageMod;
-            }
-
-            if (attackerIsSame)
-            {
-                calculatedDamage *= sameClassDamageMod;
-            }
+            // attackerIsCounter = bullet.ClassDefinition.IsCounter(photonView.GetClassId());
+            // attackerIsSame = bullet.ClassDefinition.classId == photonView.GetClassId();
+            //
+            // if (attackerIsCounter)
+            // {
+            //     calculatedDamage += counterDamageMod;
+            // }
+            //
+            // if (attackerIsSame)
+            // {
+            //     calculatedDamage += sameClassDamageMod;
+            // }
             
             // Check defense modifier
             calculatedDamage += StatusEffectController.DamageTakenModifier;

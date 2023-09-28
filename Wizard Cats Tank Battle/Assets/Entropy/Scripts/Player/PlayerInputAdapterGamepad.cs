@@ -9,8 +9,8 @@ namespace Entropy.Scripts.Player
         
         public Vector2 GetMovementVector(out bool isMoving)
         {
-            isMoving = !(Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0);
-            return new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            isMoving = !(Input.GetAxisRaw("HorizontalGamepad") == 0 && Input.GetAxisRaw("VerticalGamepad") == 0);
+            return new Vector2(Input.GetAxis("HorizontalGamepad"), Input.GetAxis("VerticalGamepad"));
         }
 
         public Vector2 GetTurretRotation(Vector3 pos)

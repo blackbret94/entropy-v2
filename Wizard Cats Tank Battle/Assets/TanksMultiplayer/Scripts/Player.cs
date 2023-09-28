@@ -249,7 +249,7 @@ namespace TanksMP
             if (GameManager.GetInstance().UsesTeams)
                 ColorizePlayerForTeam();
 
-            InputController = new PlayerInputController();
+            InputController = GameManager.GetInstance().PlayerInputController;
             
             //set name in label
             label.text = GetView().GetName();
@@ -501,6 +501,8 @@ namespace TanksMP
             //continously check for input on desktop platforms
 #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL
 
+            InputController.RefreshInput();
+            
             //movement variables
             Vector2 moveDir = InputController.GetAdapter().GetMovementVector(out bool isMoving);
             Vector2 turnDir = InputController.GetAdapter().GetTurretRotation(transform.position);

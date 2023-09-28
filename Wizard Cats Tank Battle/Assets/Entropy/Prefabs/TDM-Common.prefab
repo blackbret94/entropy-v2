@@ -2822,7 +2822,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &185101529586729136
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3725,7 +3725,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -6631,8 +6631,8 @@ RectTransform:
   m_Father: {fileID: 8317402341750561978}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -2.199997}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -10131,6 +10131,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 114000011365822250, guid: d0c802f41ec262242925e8e44affa6c7,
         type: 3}
+      propertyPath: PlayerInputController
+      value: 
+      objectReference: {fileID: 3379033224880523664}
+    - target: {fileID: 114000011365822250, guid: d0c802f41ec262242925e8e44affa6c7,
+        type: 3}
       propertyPath: 'BotTargetList.Array.data[0]'
       value: 
       objectReference: {fileID: 9157647857245153135}
@@ -10152,7 +10157,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1000013481812936, guid: d0c802f41ec262242925e8e44affa6c7,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3379033224880523664}
   m_SourcePrefab: {fileID: 100100000, guid: d0c802f41ec262242925e8e44affa6c7, type: 3}
 --- !u!4 &136804891913357965 stripped
 Transform:
@@ -10160,6 +10169,26 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 137415513384131037}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &138414424929679893 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1000013481812936, guid: d0c802f41ec262242925e8e44affa6c7,
+    type: 3}
+  m_PrefabInstance: {fileID: 137415513384131037}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3379033224880523664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 138414424929679893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff1fc251fb1b4830b4cfe87c8b6deb2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Cursor: {fileID: 7480117477843604406}
+  _currentInputType: 0
 --- !u!1001 &629020767658787000
 PrefabInstance:
   m_ObjectHideFlags: 0

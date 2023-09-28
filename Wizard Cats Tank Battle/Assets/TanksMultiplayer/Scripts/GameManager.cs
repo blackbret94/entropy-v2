@@ -69,7 +69,8 @@ namespace TanksMP
 
         public List<GameObject> BotTargetList;
         public MusicController MusicController;
-
+        public PlayerInputController PlayerInputController;
+        
         private int lastSpawnIndex = -1;
 
         private List<PlayerBot> _botList;

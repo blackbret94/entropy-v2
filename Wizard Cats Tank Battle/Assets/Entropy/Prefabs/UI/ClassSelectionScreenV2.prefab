@@ -6624,42 +6624,43 @@ PrefabInstance:
     - target: {fileID: 2426953311545954352, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
       propertyPath: m_Color.b
-      value: 0.5188679
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2426953311545954352, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
       propertyPath: m_Color.g
-      value: 0.5188679
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2426953311545954352, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
       propertyPath: m_Color.r
-      value: 0.5188679
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6100169987238265584, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
       propertyPath: ClassDefinition
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: a253fc87ef557aa4f8fdd92bb252ffc6,
+        type: 2}
     - target: {fileID: 7785179104946241359, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
       propertyPath: m_Color.b
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7785179104946241359, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
       propertyPath: m_Color.g
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7785179104946241359, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
       propertyPath: m_Color.r
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
@@ -6668,7 +6669,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 4241881759523576743}
+    - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
@@ -6678,13 +6694,33 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: SelectClass
+      objectReference: {fileID: 0}
+    - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: Entropy.Scripts.Audio.SfxController, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Vashta.Entropy.UI.ClassSelectionPanel.ClassSelectionSelector, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 322095314643844410}
+    - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: Vashta.Entropy.UI.ClassSelectionPanel.ClassSelectionCheckbox, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 8451020843661823446, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
@@ -6801,6 +6837,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3012d346b9f89854e88db88ac4f62791, type: 3}
+--- !u!114 &322095314643844410 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6100169987238265584, guid: 3012d346b9f89854e88db88ac4f62791,
+    type: 3}
+  m_PrefabInstance: {fileID: 5823268340646281162}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1f90f51559442d787ef0a20d8304b39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &2709030750817972764 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8451020843661823446, guid: 3012d346b9f89854e88db88ac4f62791,
@@ -8846,42 +8894,43 @@ PrefabInstance:
     - target: {fileID: 2426953311545954352, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
       propertyPath: m_Color.b
-      value: 0.5188679
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2426953311545954352, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
       propertyPath: m_Color.g
-      value: 0.5188679
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2426953311545954352, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
       propertyPath: m_Color.r
-      value: 0.5188679
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6100169987238265584, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
       propertyPath: ClassDefinition
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: 0bfc2978e8016834cb8a5c5c4cb86c51,
+        type: 2}
     - target: {fileID: 7785179104946241359, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
       propertyPath: m_Color.b
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7785179104946241359, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
       propertyPath: m_Color.g
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7785179104946241359, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
       propertyPath: m_Color.r
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
@@ -8890,7 +8939,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 4241881759523576743}
+    - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
@@ -8900,13 +8964,33 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: SelectClass
+      objectReference: {fileID: 0}
+    - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: Entropy.Scripts.Audio.SfxController, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Vashta.Entropy.UI.ClassSelectionPanel.ClassSelectionSelector, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 3292026278699566701}
+    - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 8380951087927832355, guid: 3012d346b9f89854e88db88ac4f62791,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: Vashta.Entropy.UI.ClassSelectionPanel.ClassSelectionCheckbox, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 8451020843661823446, guid: 3012d346b9f89854e88db88ac4f62791,
         type: 3}
@@ -9029,6 +9113,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 8721089002825155741}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3292026278699566701 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6100169987238265584, guid: 3012d346b9f89854e88db88ac4f62791,
+    type: 3}
+  m_PrefabInstance: {fileID: 8721089002825155741}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1f90f51559442d787ef0a20d8304b39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8897687789090190495
 PrefabInstance:
   m_ObjectHideFlags: 0

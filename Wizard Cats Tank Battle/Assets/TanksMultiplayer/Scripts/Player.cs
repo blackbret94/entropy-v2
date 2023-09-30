@@ -406,15 +406,18 @@ namespace TanksMP
                 LateInit();
                 
                 if(PhotonNetwork.IsMasterClient)
-                    SlowUpdate();
+                    StatusEffectTick();
             }
         }
 
-        protected virtual void SlowUpdate()
+        protected virtual void StatusEffectTick()
         {
+            // leech
+            StatusEffectController.Leech();
+            
             // handle health changes from DoTs/HoTs
             int health = GetView().GetHealth();
-            int healthPerSecond = (int)StatusEffectController.HealthPerSecond;
+            int healthPerSecond = Mathf.RoundToInt(StatusEffectController.HealthPerSecond);
             
             if (healthPerSecond != 0)
             {
@@ -429,9 +432,8 @@ namespace TanksMP
                     GetView().SetHealth(health);
                 }
             }
-
-            bool shouldShowTextAndAnimation = healthPerSecond < 0 || health < maxHealth;
-            if(shouldShowTextAndAnimation)
+            
+            if(healthPerSecond != 0 && (healthPerSecond < 0 || health < maxHealth))
                 this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer, -healthPerSecond);
             
             if (health <= 0)
@@ -669,6 +671,12 @@ namespace TanksMP
             bullet.owner = gameObject;
             bullet.ClassDefinition = classList[photonView.GetClassId()];
             bullet.damage = Mathf.CeilToInt(bullet.damage * StatusEffectController.DamageOutputModifier);
+
+            if (StatusEffectController.BlocksCastingBuffs)
+                bullet.canBuff = false;
+
+            if (StatusEffectController.BlocksCastingDebuffs)
+                bullet.canDebuff = false;
             
             // animate
             PlayerAnimator.Attack();
@@ -723,6 +731,24 @@ namespace TanksMP
 
         }
 
+        /// <summary>
+        /// Server only.  Heal the player a specified amount
+        /// </summary>
+        public void Heal(int healAmount)
+        {
+            // handle health changes from DoTs/HoTs
+            int health = GetView().GetHealth();
+
+            if (healAmount == 0)
+                return;
+            
+            health += healAmount;
+            GetView().SetHealth(health);
+            
+            if(healAmount < 0 || health < maxHealth)
+                this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer, -healAmount);
+        }
+        
         /// <summary>
         /// Server only: calculate damage to be taken by the Player,
         /// triggers score increase and respawn workflow on death.
@@ -861,10 +887,14 @@ namespace TanksMP
 
             //the game is already over so don't do anything
             if(GameManager.GetInstance().IsGameOver()) return;
+            
 
             //get killer and increase score for that enemy team
             if (other != null)
             {
+                // Reflect damage on killer if blood pact is active
+                StatusEffectController.BloodPact(other);
+                
                 int otherTeam = other.GetView().GetTeam();
                 if (GetView().GetTeam() != otherTeam)
                 {

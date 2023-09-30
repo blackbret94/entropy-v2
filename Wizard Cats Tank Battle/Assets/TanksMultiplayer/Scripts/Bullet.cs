@@ -94,8 +94,15 @@ namespace TanksMP
         /// <summary>
         /// Player gameobject that spawned this projectile.
         /// </summary>
-        [HideInInspector]
-        public GameObject owner;
+        [HideInInspector] public GameObject owner;
+        /// <summary>
+        /// This missile can buff allies
+        /// </summary>
+        [HideInInspector] public bool canBuff = true;
+        /// <summary>
+        /// This missile can debuff enemies
+        /// </summary>
+        [HideInInspector] public bool canDebuff = true;
         private float _timeCreated;
         private string _lastUUID = "";
         private const float OwnerProtectionTime = 1f;
@@ -260,9 +267,17 @@ namespace TanksMP
                         continue;
 
                     if (IsFriendlyFire(origin, target))
-                        AttemptApplyEffectAlly(origin, target);
+                    {
+                        // Buff allies
+                        if(canBuff)
+                            AttemptApplyEffectAlly(origin, target);
+                    }
                     else
-                        AttemptApplyEffectEnemy(origin, target);
+                    {
+                        // Debuff allies
+                        if(canDebuff)
+                            AttemptApplyEffectEnemy(origin, target);
+                    }
 
                     target.TakeDamage(this);
                 }

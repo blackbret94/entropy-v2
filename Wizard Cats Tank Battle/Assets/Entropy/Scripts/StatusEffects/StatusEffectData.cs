@@ -23,8 +23,11 @@ namespace Vashta.Entropy.StatusEffects
         public bool IsDebuff;
         [Tooltip("Sound effect that plays when it is applied")]
         public AudioClip Sfx;
+        [Tooltip("Doesn't add the status effect, but applies 1s of immediate effects.")]
+        public bool ApplyInstantly = false;
 
-        [Header("Effects")] [Tooltip("Multiplies")]
+        [Header("Effects")] 
+        [Tooltip("Multiplies")]
         public float MovementSpeedMultiplier = 1f;
         [Tooltip("Sums")]
         public float MovementSpeedModifier = 0f;
@@ -38,13 +41,23 @@ namespace Vashta.Entropy.StatusEffects
         public float DamageTakenModifier = 0f;
         [Tooltip("Sums")]
         public float HealthPerSecond = 0f;
+        [Tooltip("Damage done heals the caster")]
+        public int LeechingPerSecond;
         [Tooltip("Toggles reflective bubble")]
         public bool IsReflective = false;
         [Tooltip("Effect to play if the player is killed by this status effect.  Optional.")]
         public GameObject DeathFx;
+        
+        [Header("Behavior Changes")]
         [Tooltip("Blocks the player from being buffed")]
         public bool BlocksBuffs;
         [Tooltip("Blocks the player from being debuffed")]
         public bool BlocksDebuffs;
+        [Tooltip("Blocks the player from buffing their allies")]
+        public bool BlocksFromCastingBuffs;
+        [Tooltip("Blocks the player from debuffing their enemies")]
+        public bool BlocksFromCastingDeuffs;
+        [Tooltip("Enables Blood Pact, which damages the killer upon death")]
+        public int BloodPactDamage;
     }
 }

@@ -68,7 +68,7 @@ namespace Entropy.Scripts.Player
 
         private void SetInputGamepad()
         {
-            Debug.Log("Detected Gamepad!");
+            // Debug.Log("Detected Gamepad!");
             Cursor.lockState = CursorLockMode.Locked;
             ToggleCursor(false);
             SetInputType(PlayerInputType.Gamepad);
@@ -77,7 +77,7 @@ namespace Entropy.Scripts.Player
 
         private void SetInputMKb()
         {
-            Debug.Log("Detected M+KB");
+            // Debug.Log("Detected M+KB");
             Cursor.lockState = CursorLockMode.None;  
             ToggleCursor(true);
             SetInputType(PlayerInputType.MKb);

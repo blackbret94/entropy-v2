@@ -137,9 +137,34 @@ namespace Vashta.Entropy.StatusEffects
             return StatusEffectData().BlocksDebuffs;
         }
 
+        public bool BlocksCastingBuffs()
+        {
+            return StatusEffectData().BlocksFromCastingBuffs;
+        }
+
+        public bool BlocksCastingDebuffs()
+        {
+            return StatusEffectData().BlocksFromCastingDeuffs;
+        }
+
+        public int Leeching()
+        {
+            return StatusEffectData().LeechingPerSecond;
+        }
+
+        public int BloodPactDamage()
+        {
+            return StatusEffectData().BloodPactDamage;
+        }
+
         public AudioClip Sfx()
         {
             return StatusEffectData().Sfx;
+        }
+
+        public bool ApplyInstantly()
+        {
+            return StatusEffectData().ApplyInstantly;
         }
         
         private StatusEffectData StatusEffectData()

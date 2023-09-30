@@ -175,9 +175,9 @@ namespace TanksMP
             agent.SetDestination(result);
         }
         
-        protected override void SlowUpdate()
+        protected override void StatusEffectTick()
         {
-            base.SlowUpdate();
+            base.StatusEffectTick();
             
             // adjust speed
             float speed = ((moveSpeed + StatusEffectController.MovementSpeedModifier) *

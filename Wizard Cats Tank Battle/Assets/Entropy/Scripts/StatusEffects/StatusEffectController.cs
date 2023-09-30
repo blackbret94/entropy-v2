@@ -18,20 +18,29 @@ namespace Vashta.Entropy.StatusEffects
         private List<StatusEffect> _statusEffects = new();
         private SortedSet<string> _indexedIds = new();
         private bool _dirtyFlag;
-        private float _movementSpeedModifierCached = 0f;
-        private float _movementSpeedMultiplierCached = 1f;
-        private float _damageOutputModifierCached = 1f;
-        private float _damageTakenModifierCached = 1f;
-        private float _healthPerSecondCached = 0f;
-        private float _attackRateModifierCached = 1f;
-        private float _spikeDamageModifierCached = 0f;
-        private bool _isReflectiveCached = false;
-        private bool _blocksBuffsCached = false;
-        private bool _blocksDebuffsCached = false;
         
         private const float _refreshRateS = .5f;
         private float _lastRefresh = 0;
         private Player _lastDotAppliedBy;
+        
+        // effects
+        private float _movementSpeedModifierCached = 0f;
+        private float _movementSpeedMultiplierCached = 1f;
+        private float _damageOutputModifierCached = 1f;
+        private float _damageTakenModifierCached = 0f;
+        private float _healthPerSecondCached = 0f;
+        private int _leechingPerSecondCached = 0;
+        private float _attackRateModifierCached = 1f;
+        private float _spikeDamageModifierCached = 0f;
+        private bool _isReflectiveCached = false;
+        
+        // behavior changes
+        private bool _blocksBuffsCached = false;
+        private bool _blocksDebuffsCached = false;
+        private bool _blocksCastingBuffsCached = false;
+        private bool _blocksCastingDebuffsCached = false;
+        private Player _leechingAppliedByCached;
+        private int _bloodPactDamageCached = 0;
         
         public List<StatusEffect> StatusEffects => _statusEffects;
 
@@ -40,11 +49,18 @@ namespace Vashta.Entropy.StatusEffects
         public float DamageOutputModifier => _damageOutputModifierCached;
         public float DamageTakenModifier => _damageTakenModifierCached;
         public float HealthPerSecond => _healthPerSecondCached;
+        public int LeechingPerSecond => _leechingPerSecondCached;
         public float AttackRateModifier => _attackRateModifierCached;
         public float SpikeDamageModifier => _spikeDamageModifierCached;
         public bool IsReflective => _isReflectiveCached;
         public bool BlocksBuffs => _blocksBuffsCached;
         public bool BlocksDebuffs => _blocksDebuffsCached;
+        public bool BlocksCastingBuffs => _blocksCastingBuffsCached;
+        public bool BlocksCastingDebuffs => _blocksCastingDebuffsCached;
+        public Player LeechingAppliedBy => _leechingAppliedByCached;
+        public int BloodPactDamage => _bloodPactDamageCached;
+        
+        
         public Player LastDotAppliedBy => _lastDotAppliedBy;
 
         private void Awake()
@@ -108,6 +124,27 @@ namespace Vashta.Entropy.StatusEffects
             // Check if status effect already exists
             StatusEffect existingEffect = StatusEffectAlreadyExists(statusEffect.Id());
 
+            if (statusEffect.ApplyInstantly())
+            {
+                // Only run on master player
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    int healthPerSecond = Mathf.RoundToInt(statusEffect.HealthPerSecond());
+
+                    if (healthPerSecond > 0)
+                    {
+                        _player.Heal(healthPerSecond);
+                    }
+                    else if (healthPerSecond < 0)
+                    {
+                        _player.TakeDamage(healthPerSecond, statusEffect.OriginPlayer());
+                    }
+                }
+
+                // Do NOT add as status effect if it is supposed to be instantly applied
+                return;
+            }
+
             if (existingEffect == null)
             {
                 // If it doesn't exist, add it
@@ -140,8 +177,6 @@ namespace Vashta.Entropy.StatusEffects
             
             if(_dirtyFlag)
                 RefreshCache();
-
-            _lastRefresh = Time.time;
         }
         
         private void CheckLifeOfStatusEffects()
@@ -154,6 +189,8 @@ namespace Vashta.Entropy.StatusEffects
                 if (statusEffect.HasExpired())
                     RemoveStatusEffect(statusEffect);
             }
+            
+            _lastRefresh = Time.time;
         }
 
         private void RemoveStatusEffect(StatusEffect statusEffect)
@@ -167,17 +204,24 @@ namespace Vashta.Entropy.StatusEffects
         {
             _movementSpeedModifierCached = 0;
             _movementSpeedMultiplierCached = 1f;
-            _damageOutputModifierCached = 1;
-            _damageTakenModifierCached = 0;
+            _damageOutputModifierCached = 1f;
+            _damageTakenModifierCached = 0f;
             _healthPerSecondCached = 0f;
+            _leechingPerSecondCached = 0;
             _attackRateModifierCached = 1f;
             _spikeDamageModifierCached = 0f;
             _isReflectiveCached = false;
             _blocksBuffsCached = false;
             _blocksDebuffsCached = false;
+            _blocksCastingBuffsCached = false;
+            _blocksCastingDebuffsCached = false;
+            _bloodPactDamageCached = 0;
 
             foreach (var statusEffect in _statusEffects)
             {
+                if(statusEffect.HasExpired())
+                    continue;
+                
                 _movementSpeedModifierCached += statusEffect.MovementSpeedModifier();
                 _movementSpeedMultiplierCached *= statusEffect.MovementSpeedMultiplier();
                 _damageOutputModifierCached *= statusEffect.DamageOutputMultiplier();
@@ -185,6 +229,8 @@ namespace Vashta.Entropy.StatusEffects
                 _healthPerSecondCached += statusEffect.HealthPerSecond();
                 _attackRateModifierCached *= statusEffect.AttackRateMultiplier();
                 _spikeDamageModifierCached += statusEffect.SpikeDamageModifier();
+                _bloodPactDamageCached += statusEffect.BloodPactDamage();
+                _leechingPerSecondCached += statusEffect.Leeching();
 
                 if (statusEffect.HealthPerSecond() < 0)
                     _lastDotAppliedBy = statusEffect.OriginPlayer();
@@ -197,6 +243,18 @@ namespace Vashta.Entropy.StatusEffects
 
                 if (statusEffect.BlocksDebuffs())
                     _blocksDebuffsCached = true;
+
+                if (statusEffect.BlocksCastingBuffs())
+                    _blocksCastingBuffsCached = true;
+
+                if (statusEffect.BlocksCastingDebuffs())
+                    _blocksCastingDebuffsCached = true;
+
+                if (statusEffect.Leeching() > .1f &&
+                    (_leechingAppliedByCached == null || !_leechingAppliedByCached.gameObject.activeSelf))
+                {
+                    _leechingAppliedByCached = statusEffect.OriginPlayer();
+                }
             }
 
             _visualizer.Refresh(_indexedIds);
@@ -244,14 +302,12 @@ namespace Vashta.Entropy.StatusEffects
         /// <returns></returns>
         public GameObject GetDeathFx()
         {
-            Debug.Log("Looking for death fx in status effects");
             foreach (var statusEffect in _statusEffects)
             {
                 StatusEffectData data = StatusEffectDirectory[statusEffect.Id()];
 
                 if (data && data.DeathFx != null)
                 {
-                    Debug.Log("Death fx found! "+ data.Title);
                     return data.DeathFx;
                 }
                 else
@@ -261,6 +317,31 @@ namespace Vashta.Entropy.StatusEffects
             }
 
             return null;
+        }
+
+        public void Leech()
+        {
+            if (_leechingPerSecondCached <= 0)
+                return;
+            
+            _player.TakeDamage(_leechingPerSecondCached, _leechingAppliedByCached);
+            
+            if (_leechingAppliedByCached != null && _leechingAppliedByCached.IsAlive)
+            {
+                _leechingAppliedByCached.Heal(_leechingPerSecondCached);
+            }
+            
+        }
+
+        public void BloodPact(Player killer)
+        {
+            if (_bloodPactDamageCached <= 0)
+                return;
+            
+            if (killer.IsAlive)
+            {
+                killer.TakeDamage(_bloodPactDamageCached, _player);
+            }
         }
     }
 }

@@ -13,6 +13,7 @@ using Photon.Pun;
 using UnityEngine.EventSystems;
 using Vashta.Entropy.Character;
 using EckTechGames.FloatingCombatText;
+using TMPro;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.StatusEffects;
 using Vashta.Entropy.UI.ClassSelectionPanel;
@@ -115,6 +116,11 @@ namespace TanksMP
         public float handicapModifier = 1f;
 
         public PlayerAnimator PlayerAnimator;
+
+        /// <summary>
+        /// Shows the amount of health the player has
+        /// </summary>
+        public TextMeshProUGUI HealthbarText;
 
         /// <summary>
         /// Last player gameobject that killed this one.
@@ -429,6 +435,7 @@ namespace TanksMP
                 else
                 {
                     health += healthPerSecond;
+                    health = CapHealth(health);
                     GetView().SetHealth(health);
                 }
             }
@@ -716,7 +723,8 @@ namespace TanksMP
         //(the actual value updates via player properties)
         protected void OnHealthChange(int value)
         {
-            healthSlider.value = Mathf.Max(0,(float)value / maxHealth);
+            healthSlider.value = Mathf.Max(0f,(float)value / maxHealth);
+            HealthbarText.text = $"{value} / {maxHealth}";
         }
 
 
@@ -724,7 +732,7 @@ namespace TanksMP
         //(the actual value updates via player properties)
         protected void OnShieldChange(int value)
         {
-            float val = Mathf.Max(0, (float)value / maxShield);
+            float val = Mathf.Max(0f, (float)value / maxShield);
             
             shieldSlider.value = val;
             shieldSlider.gameObject.SetActive(val > .001f);
@@ -743,17 +751,29 @@ namespace TanksMP
                 return;
             
             health += healAmount;
+
+            health = CapHealth(health);
             GetView().SetHealth(health);
             
             if(healAmount < 0 || health < maxHealth)
                 this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer, -healAmount);
+        }
+
+        /// <summary>
+        /// Makes sure health never goes over the max value
+        /// </summary>
+        /// <param name="health"></param>
+        /// <returns></returns>
+        private int CapHealth(int health)
+        {
+            return Mathf.Min(health, maxHealth);
         }
         
         /// <summary>
         /// Server only: calculate damage to be taken by the Player,
         /// triggers score increase and respawn workflow on death.
         /// </summary>
-        public void TakeDamage(int damage, Player other)
+        public void TakeDamage(int damage, Player other, bool canKill = true)
         {
             int health = GetView().GetHealth();
             int shield = GetView().GetShield();
@@ -766,6 +786,16 @@ namespace TanksMP
             }
 
             health -= damage;
+            health = CapHealth(health);
+            
+            // Don't kill the player if this only brings them down to 1HP
+            if (!canKill)
+            {
+                if (health <= 0)
+                {
+                    health = 1;
+                }
+            }
             
             if (health <= 0)
                 // killed the player
@@ -804,6 +834,7 @@ namespace TanksMP
             int damage = CalculateDamageTaken(bullet, out bool attackerIsCounter, out bool attackerIsSame);
             
             health -= damage;
+            health = CapHealth(health);
             
             if (health <= 0)
                 //bullet killed the player

@@ -242,10 +242,10 @@ namespace TanksMP
                         turretRotation = (short)turret.eulerAngles.y;
 
                         //find shot direction and shoot there
-                        Vector3 shotDir = lookPos - shotPos.position;
-                        Vector3 shotDirError = new Vector2(shotDir.x + CalculateAccuracyError(),
-                            shotDir.z + CalculateAccuracyError());
-                        Shoot(shotDirError);
+                        // Vector3 shotDir = lookPos - shotPos.position;
+                        // Vector3 shotDirError = new Vector2(shotDir.x /*+ CalculateAccuracyError()*/,
+                        //     shotDir.z/* + CalculateAccuracyError()*/);
+                        Shoot();
                         return;
                     }
                 }
@@ -267,10 +267,10 @@ namespace TanksMP
                         turretRotation = (short)turret.eulerAngles.y;
 
                         //find shot direction and shoot there
-                        Vector3 shotDir = lookPos - shotPos.position;
-                        Vector3 shotDirError = new Vector2(shotDir.x + CalculateAccuracyError(),
-                            shotDir.z + CalculateAccuracyError());
-                        Shoot(shotDirError);
+                        // Vector3 shotDir = lookPos - shotPos.position;
+                        // Vector3 shotDirError = new Vector2(shotDir.x + CalculateAccuracyError(),
+                        //     shotDir.z + CalculateAccuracyError());
+                        Shoot();
                         _lastBuffS = Time.time;
                         return;
                     }

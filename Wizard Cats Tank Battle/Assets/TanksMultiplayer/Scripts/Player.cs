@@ -461,7 +461,7 @@ namespace TanksMP
                 rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
         }
 
-        
+        // Overriden in PlayerBot
         void FixedUpdate()
 		{
 			//skip further calls for remote clients    
@@ -509,8 +509,6 @@ namespace TanksMP
             
             //continously check for input on desktop platforms
 #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL
-
-            InputController.RefreshInput();
             
             //movement variables
             Vector2 moveDir = InputController.GetAdapter().GetMovementVector(out bool isMoving);
@@ -579,7 +577,8 @@ namespace TanksMP
 
 
         //rotates turret to the direction passed in
-        void RotateTurret(Vector2 direction = default(Vector2))
+        // Never called in PlayerBot
+        private void RotateTurret(Vector2 direction = default(Vector2))
         {
             //don't rotate without values
             if (direction == Vector2.zero)
@@ -711,6 +710,7 @@ namespace TanksMP
 
 
         //hook for updating turret rotation locally
+        //never called in PlayerBot
         void OnTurretRotation()
         {
             //we don't need to check for local ownership when setting the turretRotation,

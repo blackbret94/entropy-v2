@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -53,6 +54,13 @@ namespace Entropy.Scripts.Player
         public void SetInputType(PlayerInputType type)
         {
             _currentInputType = type;
+        }
+
+        private void Update()
+        {
+#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL
+            RefreshInput();
+#endif
         }
 
         public void RefreshInput()

@@ -48,7 +48,7 @@ namespace Vashta.Entropy.UI
         public void SetResolution(int resolutionIndex)
         {
             Resolution resolution = _resolutions[resolutionIndex];
-            Screen.SetResolution(resolution.width, resolution.height, true);
+            Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
         }
 
         private string GetAspectRatio(int x, int y)

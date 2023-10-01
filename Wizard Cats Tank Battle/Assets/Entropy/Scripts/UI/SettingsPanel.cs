@@ -23,6 +23,8 @@ namespace Vashta.Entropy.UI
         public JoystickPlacementController joystickPlacementController;
 
         public MusicController MusicController;
+
+        public Toggle FullscreenToggle;
         
         public override void OpenPanel()
         {
@@ -50,6 +52,7 @@ namespace Vashta.Entropy.UI
             PlayerPrefs.SetString(PrefsKeys.playMusic, musicToggle.isOn.ToString());
             PlayerPrefs.SetFloat(PrefsKeys.appVolume, volumeSlider.value);
             PlayerPrefs.SetInt(PrefsKeys.lefthandedMode, leftHandedModeToggle.isOn ? 1 : 0);
+            
             PlayerPrefs.Save();
         }
 

@@ -120,10 +120,8 @@ namespace Vashta.Entropy.StatusEffects
                 if(statusEffect.Sfx())
                     AudioManager.Play2D(statusEffect.Sfx());
             }
-
-            // Check if status effect already exists
-            StatusEffect existingEffect = StatusEffectAlreadyExists(statusEffect.Id());
-
+            
+            // Apply effects instantly if configured to do so
             if (statusEffect.ApplyInstantly())
             {
                 // Only run on master player
@@ -144,7 +142,10 @@ namespace Vashta.Entropy.StatusEffects
                 // Do NOT add as status effect if it is supposed to be instantly applied
                 return;
             }
-
+            
+            // Check if status effect already exists
+            StatusEffect existingEffect = StatusEffectAlreadyExists(statusEffect.Id());
+            
             if (existingEffect == null)
             {
                 // If it doesn't exist, add it
@@ -159,6 +160,7 @@ namespace Vashta.Entropy.StatusEffects
                 existingEffect.SetFresh(true);
             }
             
+            // Refresh the panel
             StatusEffectPanel.ForceRefresh();
         }
 
@@ -340,7 +342,10 @@ namespace Vashta.Entropy.StatusEffects
             
             if (killer.IsAlive)
             {
-                killer.TakeDamage(_bloodPactDamageCached, _player);
+                killer.TakeDamage(_bloodPactDamageCached, _player, false);
+                
+                // Should spawn fx
+                // PoolManager.Spawn(GetDeathFx(), transform.position, transform.rotation);
             }
         }
     }

@@ -10,20 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00a942a69f3a4bddacf99ff10b93326e, type: 3}
-  m_Name: N_BloodPact
+  m_Name: N_BloodVengeance
   m_EditorClassIdentifier: 
-  Id: 37fe87ff-caf9-4e05-98e3-a8a5fb1b7c42
+  Id: 9d057c4f-3d9f-4b21-9fae-d0d21ad38ca6
   EffectIcon: {fileID: 21300000, guid: f222aaf06f507ed4591e042925f00314, type: 3}
   MaxStack: 1
-  Title: Blood Pact
-  AppliedDescription: Damage killer upon death
-  ClassDescription: Allies damage their killers upon death
-  TTL: 7
+  Title: Blood Vengeance
+  AppliedDescription: Suffer the consequences of killing someone protected by Blood
+    Pact!
+  ClassDescription: 
+  TTL: 3
   Color: {r: 0.46666667, g: 0.7764706, b: 0.3254902, a: 1}
   PowerupId: 0
-  IsDebuff: 0
+  IsDebuff: 1
   Sfx: {fileID: 0}
-  DeathFx: {fileID: 1000010321467122, guid: 810015f9b6d407043a9c948bc0031708, type: 3}
+  DeathFx: {fileID: 1000010321467122, guid: b0af1f4ca9ce5f64e9cfb96e47803c2d, type: 3}
   ApplyInstantly: 0
   MovementSpeedMultiplier: 1
   MovementSpeedModifier: 0
@@ -31,13 +32,12 @@ MonoBehaviour:
   AttackRateMultiplier: 1
   SpikeDamageModifier: 0
   DamageTakenModifier: 0
-  HealthPerSecond: 0
+  HealthPerSecond: -2
   LeechingPerSecond: 0
   IsReflective: 0
   BlocksBuffs: 0
   BlocksDebuffs: 0
   BlocksFromCastingBuffs: 0
   BlocksFromCastingDeuffs: 0
-  BloodPact: 1
-  ChainedStatusEffect: {fileID: 11400000, guid: f64e38e1e70867e4ea8593e221220084,
-    type: 2}
+  BloodPact: 0
+  ChainedStatusEffect: {fileID: 0}

@@ -152,9 +152,9 @@ namespace Vashta.Entropy.StatusEffects
             return StatusEffectData().LeechingPerSecond;
         }
 
-        public int BloodPactDamage()
+        public bool BloodPact()
         {
-            return StatusEffectData().BloodPactDamage;
+            return StatusEffectData().BloodPact;
         }
 
         public AudioClip Sfx()
@@ -165,6 +165,16 @@ namespace Vashta.Entropy.StatusEffects
         public bool ApplyInstantly()
         {
             return StatusEffectData().ApplyInstantly;
+        }
+
+        public GameObject DeathFx()
+        {
+            return StatusEffectData().DeathFx;
+        }
+
+        public StatusEffectData GetChainedEffect()
+        {
+            return StatusEffectData().ChainedStatusEffect;
         }
         
         private StatusEffectData StatusEffectData()

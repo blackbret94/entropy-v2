@@ -40,7 +40,8 @@ namespace Vashta.Entropy.StatusEffects
         private bool _blocksCastingBuffsCached = false;
         private bool _blocksCastingDebuffsCached = false;
         private Player _leechingAppliedByCached;
-        private int _bloodPactDamageCached = 0;
+
+        private StatusEffectData _bloodVengeanceChainedEffect;
         
         public List<StatusEffect> StatusEffects => _statusEffects;
 
@@ -58,8 +59,6 @@ namespace Vashta.Entropy.StatusEffects
         public bool BlocksCastingBuffs => _blocksCastingBuffsCached;
         public bool BlocksCastingDebuffs => _blocksCastingDebuffsCached;
         public Player LeechingAppliedBy => _leechingAppliedByCached;
-        public int BloodPactDamage => _bloodPactDamageCached;
-        
         
         public Player LastDotAppliedBy => _lastDotAppliedBy;
 
@@ -217,7 +216,7 @@ namespace Vashta.Entropy.StatusEffects
             _blocksDebuffsCached = false;
             _blocksCastingBuffsCached = false;
             _blocksCastingDebuffsCached = false;
-            _bloodPactDamageCached = 0;
+            _bloodVengeanceChainedEffect = null;
 
             foreach (var statusEffect in _statusEffects)
             {
@@ -231,7 +230,6 @@ namespace Vashta.Entropy.StatusEffects
                 _healthPerSecondCached += statusEffect.HealthPerSecond();
                 _attackRateModifierCached *= statusEffect.AttackRateMultiplier();
                 _spikeDamageModifierCached += statusEffect.SpikeDamageModifier();
-                _bloodPactDamageCached += statusEffect.BloodPactDamage();
                 _leechingPerSecondCached += statusEffect.Leeching();
 
                 if (statusEffect.HealthPerSecond() < 0)
@@ -253,9 +251,15 @@ namespace Vashta.Entropy.StatusEffects
                     _blocksCastingDebuffsCached = true;
 
                 if (statusEffect.Leeching() > .1f &&
-                    (_leechingAppliedByCached == null || !_leechingAppliedByCached.gameObject.activeSelf))
+                    (_leechingAppliedByCached == null || !_leechingAppliedByCached.IsAlive)) // Only switch to a new player if the current cache is invalid
                 {
                     _leechingAppliedByCached = statusEffect.OriginPlayer();
+                }
+
+                if (statusEffect.BloodPact())
+                {
+                    // Trigger this effect when someone with Blood Pact is killed
+                    _bloodVengeanceChainedEffect = statusEffect.GetChainedEffect();
                 }
             }
 
@@ -306,15 +310,13 @@ namespace Vashta.Entropy.StatusEffects
         {
             foreach (var statusEffect in _statusEffects)
             {
-                StatusEffectData data = StatusEffectDirectory[statusEffect.Id()];
-
-                if (data && data.DeathFx != null)
+                if (statusEffect.DeathFx())
                 {
-                    return data.DeathFx;
+                    return statusEffect.DeathFx();
                 }
                 else
                 {
-                    Debug.Log("Death fx not found! " + data.Title);
+                    Debug.Log("Death fx not found! " + statusEffect.Title());
                 }
             }
 
@@ -323,30 +325,23 @@ namespace Vashta.Entropy.StatusEffects
 
         public void Leech()
         {
-            if (_leechingPerSecondCached <= 0)
+            if (_leechingPerSecondCached <= 0 || _leechingAppliedByCached != null || !_leechingAppliedByCached.IsAlive)
                 return;
             
             _player.TakeDamage(_leechingPerSecondCached, _leechingAppliedByCached);
-            
-            if (_leechingAppliedByCached != null && _leechingAppliedByCached.IsAlive)
-            {
-                _leechingAppliedByCached.Heal(_leechingPerSecondCached);
-            }
-            
+            _leechingAppliedByCached.Heal(_leechingPerSecondCached);
         }
 
+        // Server-only, trigger blood pact
         public void BloodPact(Player killer)
         {
-            if (_bloodPactDamageCached <= 0)
+            if (_bloodVengeanceChainedEffect == null || !killer.IsAlive)
                 return;
             
-            if (killer.IsAlive)
-            {
-                killer.TakeDamage(_bloodPactDamageCached, _player, false);
-                
-                // Should spawn fx
-                // PoolManager.Spawn(GetDeathFx(), transform.position, transform.rotation);
-            }
+            killer.StatusEffectController.AddStatusEffect(_bloodVengeanceChainedEffect.Id, _player);
+
+            Transform killerTransform = killer.transform;
+            PoolManager.Spawn(_bloodVengeanceChainedEffect.DeathFx, killerTransform.position, killerTransform.rotation);
         }
     }
 }

@@ -677,12 +677,8 @@ namespace TanksMP
             bullet.owner = gameObject;
             bullet.ClassDefinition = classList[photonView.GetClassId()];
             bullet.damage = Mathf.CeilToInt(bullet.damage * StatusEffectController.DamageOutputModifier);
-
-            if (StatusEffectController.BlocksCastingBuffs)
-                bullet.canBuff = false;
-
-            if (StatusEffectController.BlocksCastingDebuffs)
-                bullet.canDebuff = false;
+            bullet.canBuff = !StatusEffectController.BlocksCastingBuffs;
+            bullet.canDebuff = !StatusEffectController.BlocksCastingDebuffs;
             
             // animate
             PlayerAnimator.Attack();

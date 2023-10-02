@@ -23,8 +23,11 @@ namespace Vashta.Entropy.StatusEffects
         public bool IsDebuff;
         [Tooltip("Sound effect that plays when it is applied")]
         public AudioClip Sfx;
+        [Tooltip("Effect to play if the player is killed by this status effect.  Optional.")]
+        public GameObject DeathFx;
         [Tooltip("Doesn't add the status effect, but applies 1s of immediate effects.")]
         public bool ApplyInstantly = false;
+        
 
         [Header("Effects")] 
         [Tooltip("Multiplies")]
@@ -45,8 +48,6 @@ namespace Vashta.Entropy.StatusEffects
         public int LeechingPerSecond;
         [Tooltip("Toggles reflective bubble")]
         public bool IsReflective = false;
-        [Tooltip("Effect to play if the player is killed by this status effect.  Optional.")]
-        public GameObject DeathFx;
         
         [Header("Behavior Changes")]
         [Tooltip("Blocks the player from being buffed")]
@@ -57,7 +58,9 @@ namespace Vashta.Entropy.StatusEffects
         public bool BlocksFromCastingBuffs;
         [Tooltip("Blocks the player from debuffing their enemies")]
         public bool BlocksFromCastingDeuffs;
-        [Tooltip("Enables Blood Pact, which damages the killer upon death")]
-        public int BloodPactDamage;
+        [Tooltip("Enables Blood Pact, which triggers a chained status effect upon death")]
+        public bool BloodPact;
+        [Tooltip("Optional, allows chaining of status effects")]
+        public StatusEffectData ChainedStatusEffect = null;
     }
 }

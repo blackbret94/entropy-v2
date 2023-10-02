@@ -94,7 +94,6 @@ namespace Vashta.Entropy.UI
         {
             Animator.SetBool(BlinkBool, false);
             Animator.SetTrigger(FadeOutTrigger);
-            _statusEffect = null;
         }
         
         public void AnimationEnd()

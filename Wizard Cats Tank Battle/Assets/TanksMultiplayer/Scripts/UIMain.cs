@@ -68,10 +68,16 @@ namespace TanksMP
 
         private PlayerNameVerification _playerNameVerification;
 
+        private static UIMain _instance;
+
+        public static UIMain GetInstance() => _instance;
+        
         //initialize player selection in Settings window
         //if this is the first time launching the game, set initial values
         void Start()
         {
+            _instance = this;
+            
             _playerNameVerification = new PlayerNameVerification(CatNameGenerator);
             
             //set initial values for all settings
@@ -129,6 +135,19 @@ namespace TanksMP
         {
             PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Offline);
             NetworkManagerCustom.StartMatch((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode));
+        }
+
+        public void JoinRoom(string roomName)
+        {
+            loadingWindow.SetActive(true);
+            NetworkManagerCustom.JoinRoom(roomName);
+            // NetworkManagerCustom.StartMatch((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode));
+            StartCoroutine(HandleTimeout());
+        }
+
+        public void CreateRoom(string roomName)
+        {
+            NetworkManagerCustom.CreateMatch(roomName);
         }
         
         //coroutine that waits 10 seconds before cancelling joining a match

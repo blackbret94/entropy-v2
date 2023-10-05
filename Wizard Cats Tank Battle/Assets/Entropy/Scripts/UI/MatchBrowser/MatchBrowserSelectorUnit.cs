@@ -47,7 +47,7 @@ namespace Vashta.Entropy.UI.MatchBrowser
                 return;
             }
             
-            NetworkManagerCustom.JoinRoom(_roomName);
+            UIMain.GetInstance().JoinRoom(_roomName);
         }
 
         private void ShowButton(bool show)

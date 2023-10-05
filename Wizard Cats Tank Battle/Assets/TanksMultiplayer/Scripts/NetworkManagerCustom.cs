@@ -80,15 +80,6 @@ namespace TanksMP
 
             LoadRegion();
         }
-
-        /// <summary>
-        /// Used to force a region.  If NullOrEmpty() use best region.
-        /// Eventually control via a menu
-        // /// </summary>
-        // private void SetRegion()
-        // {
-        //     PhotonNetwork.PhotonServerSettings.AppSettings.FixedRegion = FixedRegion;
-        // }
         
         public void SaveRegion(string region)
         {
@@ -143,6 +134,11 @@ namespace TanksMP
                     PhotonNetwork.OfflineMode = true;
                     break;
             }
+        }
+
+        public static void CreateMatch(string roomName)
+        {
+            PhotonNetwork.CreateRoom(roomName);
         }
 
 

@@ -114,18 +114,21 @@ namespace TanksMP
         public void Play()
         {
             loadingWindow.SetActive(true);
-            NetworkManagerCustom.StartMatch((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode));
+            NetworkManagerCustom.JoinRandomRoom();
+            // NetworkManagerCustom.StartMatch((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode));
             StartCoroutine(HandleTimeout());
         }
         
         public void PlayMultiplayer()
         {
             PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Online);
+            NetworkManagerCustom.StartMatch((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode));
         }
         
         public void PlayVsAI()
         {
             PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Offline);
+            NetworkManagerCustom.StartMatch((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode));
         }
         
         //coroutine that waits 10 seconds before cancelling joining a match

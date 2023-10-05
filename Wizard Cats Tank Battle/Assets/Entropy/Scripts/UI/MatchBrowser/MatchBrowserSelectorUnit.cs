@@ -1,0 +1,79 @@
+using Photon.Realtime;
+using TanksMP;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace Vashta.Entropy.UI.MatchBrowser
+{
+    public class MatchBrowserSelectorUnit : MonoBehaviour
+    {
+        public Button Button;
+        public Image Image;
+        public TextMeshProUGUI Text;
+
+        private const int MaxNameLength = 6;
+
+        private string _roomName = "";
+        
+        public void SetRoomInfo(RoomInfo room)
+        {
+            if (room == null) return;
+            
+            // Get strings
+            _roomName = room.Name;
+            string roomString = StringifyRoom(room);
+
+            if (roomString == null) return;
+
+            Text.text = roomString;
+
+            // Format widget
+            ShowButton(room.IsOpen);
+        }
+
+        public void SetNoRoomsFound()
+        {
+            Text.text = "No matches could be found for the selected region!";
+            ShowButton(false);
+            Image.enabled = false;
+        }
+        
+        public void JoinRoom()
+        {
+            if (_roomName == "")
+            {
+                Debug.LogError("Cannot join room without name!");
+                return;
+            }
+            
+            NetworkManagerCustom.JoinRoom(_roomName);
+        }
+
+        private void ShowButton(bool show)
+        {
+            Button.gameObject.SetActive(show);
+        }
+
+        private string StringifyRoom(RoomInfo room)
+        {
+            if (!room.CustomProperties.ContainsKey("map"))
+            {
+                Debug.LogError("Retrieved lobby that is missing a map!");
+                return null;
+            }
+
+            string map = (string)room.CustomProperties["map"];
+            
+            if (!room.CustomProperties.ContainsKey("mode"))
+            {
+                Debug.LogError("Retrieved lobby that is missing a mode!");
+                return null;
+            }
+
+            string roomNameTrunc = room.Name.Substring(0, MaxNameLength);
+
+            return $"{map} ({room.PlayerCount}/{room.MaxPlayers}) - [{roomNameTrunc}]";
+        }
+    }
+}

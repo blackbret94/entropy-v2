@@ -176,10 +176,28 @@ namespace TanksMP
 
             //use this to define per-mode matchmaking selections instead of joining random rooms (also see OnPhotonRandomJoinFailed() method)
             //https://doc.photonengine.com/en-us/realtime/current/reference/matchmaking-and-lobby#not_so_random_matchmaking
-            Hashtable expectedCustomRoomProperties = new Hashtable() { { "mode", (byte)PlayerPrefs.GetInt(PrefsKeys.gameMode) } };
+            // Hashtable expectedCustomRoomProperties = new Hashtable() { { "mode", (byte)PlayerPrefs.GetInt(PrefsKeys.gameMode) } };
 
             //for truly random matchmaking you would use this call without properties
+            // PhotonNetwork.JoinRandomRoom(expectedCustomRoomProperties, (byte)0);
+        }
+
+
+        /// <summary>
+        /// Joins a random room, will eventually take parameters.  This is for "Quickplay"
+        /// </summary>
+        public static void JoinRandomRoom()
+        {
+            Hashtable expectedCustomRoomProperties = new Hashtable() { { "mode", (byte)PlayerPrefs.GetInt(PrefsKeys.gameMode) } };
             PhotonNetwork.JoinRandomRoom(expectedCustomRoomProperties, (byte)0);
+        }
+
+        /// <summary>
+        /// Join a specific room by name
+        /// </summary>
+        public static void JoinRoom(string roomName)
+        {
+            PhotonNetwork.JoinRoom(roomName);
         }
 
 
@@ -199,8 +217,8 @@ namespace TanksMP
             string mapId = PlayerPrefs.GetString(PrefsKeys.selectedMap, "-1");
             MapDefinition mapDefinition = MapDefinitionDictionary[mapId];
             
-            roomOptions.CustomRoomPropertiesForLobby = new string[] { "mode" };
-            roomOptions.CustomRoomProperties = new Hashtable() { { "mode", (byte)PlayerPrefs.GetInt(PrefsKeys.gameMode) } };
+            roomOptions.CustomRoomPropertiesForLobby = new string[] { "mode", "map" };
+            roomOptions.CustomRoomProperties = new Hashtable() { { "mode", (byte)PlayerPrefs.GetInt(PrefsKeys.gameMode) }, {"map", mapDefinition.Title} };
 
             roomOptions.MaxPlayers = (byte)mapDefinition.PlayerCount;
             roomOptions.CleanupCacheOnLeave = false;
@@ -252,7 +270,7 @@ namespace TanksMP
         public override void OnJoinedLobby()
         {
             //when connecting to the master, try joining a room
-            PhotonNetwork.JoinRandomRoom();
+            // PhotonNetwork.JoinRandomRoom();
         }
 
 

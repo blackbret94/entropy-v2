@@ -6,6 +6,7 @@
 using System;
 using System.Collections;
 using Entropy.Scripts.Audio;
+using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.UI;
 using Vashta.Entropy.Character;
@@ -145,9 +146,11 @@ namespace TanksMP
             StartCoroutine(HandleTimeout());
         }
 
-        public void CreateRoom(string roomName)
+        public void CreateRoom(string roomName, RoomOptions roomOptions)
         {
-            NetworkManagerCustom.CreateMatch(roomName);
+            loadingWindow.SetActive(true);
+            NetworkManagerCustom.CreateMatch(roomName, roomOptions);
+            StartCoroutine(HandleTimeout());
         }
         
         //coroutine that waits 10 seconds before cancelling joining a match

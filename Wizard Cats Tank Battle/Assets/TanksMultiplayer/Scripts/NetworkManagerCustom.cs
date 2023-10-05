@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
+using Vashta.Entropy.PhotonExtensions;
 using Vashta.Entropy.SaveLoad;
 using Vashta.Entropy.Scripts.CBSIntegration;
 using Vashta.Entropy.TanksExtensions;
@@ -22,6 +23,7 @@ namespace TanksMP
     /// Custom implementation of the most Photon callback handlers for network workflows. This script is
     /// responsible for connecting to Photon's Cloud, spawning players and handling disconnects.
     /// </summary>
+    [RequireComponent(typeof(RoomOptionsFactory))]
 	public class NetworkManagerCustom : MonoBehaviourPunCallbacks
     {
         //reference to this script instance
@@ -56,6 +58,7 @@ namespace TanksMP
         public string DefaultRegion = "us";
         
         private const string REGION_PREFS_KEY = "wctb_regionIndex";
+        private RoomOptionsFactory _roomOptionsFactory;
 
         public MapDefinitionDictionary MapDefinitionDictionary;
 
@@ -77,6 +80,14 @@ namespace TanksMP
             //this is to avoid having the same ID in a scene
             PhotonView view = gameObject.AddComponent<PhotonView>();
             view.ViewID = 999;
+            
+            // Get components
+            _roomOptionsFactory = GetComponent<RoomOptionsFactory>();
+
+            if (_roomOptionsFactory == null)
+            {
+                Debug.LogError("Missing room options factory!");
+            }
 
             LoadRegion();
         }
@@ -136,9 +147,9 @@ namespace TanksMP
             }
         }
 
-        public static void CreateMatch(string roomName)
+        public static void CreateMatch(string roomName, RoomOptions roomOptions)
         {
-            PhotonNetwork.CreateRoom(roomName);
+            PhotonNetwork.CreateRoom(roomName, roomOptions);
         }
 
 
@@ -206,20 +217,15 @@ namespace TanksMP
             Debug.Log("Photon did not find any matches on the Master Client we are connected to. Creating our own room...");
 
             //joining failed so try to create our own room
-            RoomOptions roomOptions = new RoomOptions();
-
-            //same as in OnCennectedToMaster() method above, here we are setting room properties for matchmaking
-            //comment out for fully random matchmaking
             string mapId = PlayerPrefs.GetString(PrefsKeys.selectedMap, "-1");
             MapDefinition mapDefinition = MapDefinitionDictionary[mapId];
-            
-            roomOptions.CustomRoomPropertiesForLobby = new string[] { "mode", "map" };
-            roomOptions.CustomRoomProperties = new Hashtable() { { "mode", (byte)PlayerPrefs.GetInt(PrefsKeys.gameMode) }, {"map", mapDefinition.Title} };
 
-            roomOptions.MaxPlayers = (byte)mapDefinition.PlayerCount;
-            roomOptions.CleanupCacheOnLeave = false;
-            roomOptions.BroadcastPropsChangeToAll = false;
-            PhotonNetwork.CreateRoom(null, roomOptions, null);
+            string roomName = _roomOptionsFactory.CreateRoomNameFromPlayerNickname(PhotonNetwork.NickName);
+            byte maxPlayersForMap = (byte)mapDefinition.PlayerCount;
+            string mapName = mapDefinition.Title;
+
+            RoomOptions roomOptions = _roomOptionsFactory.InitRoomOptions(mapName, maxPlayersForMap);
+            PhotonNetwork.CreateRoom(roomName, roomOptions, null);
         }
 
 

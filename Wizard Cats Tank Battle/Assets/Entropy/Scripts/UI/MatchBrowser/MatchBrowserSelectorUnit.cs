@@ -12,17 +12,15 @@ namespace Vashta.Entropy.UI.MatchBrowser
         public Image Image;
         public TextMeshProUGUI Text;
 
-        private const int MaxNameLength = 6;
-
         private string _roomName = "";
         
-        public void SetRoomInfo(RoomInfo room)
+        public void InitUnit(RoomInfo room)
         {
             if (room == null) return;
             
             // Get strings
             _roomName = room.Name;
-            string roomString = StringifyRoom(room);
+            string roomString = StringifyRoom(_roomName, room);
 
             if (roomString == null) return;
 
@@ -32,6 +30,9 @@ namespace Vashta.Entropy.UI.MatchBrowser
             ShowButton(room.IsOpen);
         }
 
+        /// <summary>
+        /// Display placeholder text if no rooms are found
+        /// </summary>
         public void SetNoRoomsFound()
         {
             Text.text = "No matches could be found for the selected region!";
@@ -39,6 +40,9 @@ namespace Vashta.Entropy.UI.MatchBrowser
             Image.enabled = false;
         }
         
+        /// <summary>
+        /// Wired to a button press to actually attempt to join the room
+        /// </summary>
         public void JoinRoom()
         {
             if (_roomName == "")
@@ -55,7 +59,7 @@ namespace Vashta.Entropy.UI.MatchBrowser
             Button.gameObject.SetActive(show);
         }
 
-        private string StringifyRoom(RoomInfo room)
+        private string StringifyRoom(string roomName, RoomInfo room)
         {
             if (!room.CustomProperties.ContainsKey("map"))
             {
@@ -71,9 +75,7 @@ namespace Vashta.Entropy.UI.MatchBrowser
                 return null;
             }
 
-            string roomNameTrunc = room.Name.Substring(0, MaxNameLength);
-
-            return $"{map} ({room.PlayerCount}/{room.MaxPlayers}) - [{roomNameTrunc}]";
+            return $"{roomName} | {map} ({room.PlayerCount}/{room.MaxPlayers})";
         }
     }
 }

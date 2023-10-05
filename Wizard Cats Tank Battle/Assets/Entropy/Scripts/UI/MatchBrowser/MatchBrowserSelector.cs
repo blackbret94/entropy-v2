@@ -46,7 +46,7 @@ namespace Vashta.Entropy.UI.MatchBrowser
                     if (unit)
                     {
                         // Init row
-                        unit.SetRoomInfo(room);
+                        unit.InitUnit(room);
                         validRooms++;
                     }
                 }

@@ -13,23 +13,33 @@ namespace Vashta.Entropy.UI
 
         private void Start()
         {
-            InputField.onValueChanged.AddListener(delegate { Clamp(); });
+            InputField.onEndEdit.AddListener(delegate { ClampInputField(); });
         }
 
-        private void Clamp()
+        private void ClampInputField()
+        {
+            InputField.text = Clamp().ToString();
+        }
+
+        private int Clamp()
         {
             try
             {
                 int value = Int32.Parse(InputField.text);
 
                 value = Mathf.Clamp(value, Min, Max);
-                InputField.text = value.ToString();
+                return value;
 
             }
             catch (FormatException)
             {
-                InputField.text = Max.ToString();
+                return Max;
             }
+        }
+
+        public int GetClampedValue()
+        {
+            return Clamp();
         }
     }
 }

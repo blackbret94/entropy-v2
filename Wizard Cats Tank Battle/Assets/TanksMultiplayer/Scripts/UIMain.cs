@@ -11,6 +11,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Vashta.Entropy.Character;
 using Vashta.Entropy.SaveLoad;
+using Vashta.Entropy.SceneNavigation;
 using Vashta.Entropy.TanksExtensions;
 using Vashta.Entropy.UI;
 
@@ -63,6 +64,7 @@ namespace TanksMP
 
         public IntroductionPanel IntroductionPanel;
         public MusicController MusicController;
+        public SceneNavigator SceneNavigator;
 
         public string WebsiteUrl = "https://wizardcatstankbattle.com";
         public string PrivacyPolicyUrl = "https://vashtaentertainment.com/privacy_policy.html";
@@ -129,13 +131,13 @@ namespace TanksMP
         public void PlayMultiplayer()
         {
             PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Online);
-            NetworkManagerCustom.StartMatch((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode));
+            NetworkManagerCustom.GetInstance().StartMatch((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode));
         }
         
         public void PlayVsAI()
         {
             PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Offline);
-            NetworkManagerCustom.StartMatch((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode));
+            NetworkManagerCustom.GetInstance().StartMatch((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode));
         }
 
         public void JoinRoom(string roomName)
@@ -177,7 +179,17 @@ namespace TanksMP
             connectionErrorWindow.SetActive(true);
         }
 
-
+        public void ReturnToLoginScreen()
+        {
+            if (SceneNavigator == null)
+            {
+                Debug.LogError("Missing SceneNavigator link!");
+                return;
+            }
+            
+            SceneNavigator.GoToLogin();
+        }
+        
         //activates the billing error window to be visible
         void OnBillingError(string error)
         {

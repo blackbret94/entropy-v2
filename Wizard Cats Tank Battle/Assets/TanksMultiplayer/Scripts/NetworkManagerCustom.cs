@@ -123,7 +123,7 @@ namespace TanksMP
         /// Starts initializing and connecting to a game. Depends on the selected network mode.
         /// Sets the current player name prior to connecting to the servers.
         /// </summary>
-        public static void StartMatch(NetworkMode mode)
+        public void StartMatch(NetworkMode mode)
         {
             PhotonNetwork.AutomaticallySyncScene = true;
             PhotonNetwork.NickName = CBSIntegrator.Instance.ProfileState.CachedDisplayName;
@@ -142,9 +142,23 @@ namespace TanksMP
 
                 //enable Photon offline mode to not send any network messages at all
                 case NetworkMode.Offline:
-                    PhotonNetwork.OfflineMode = true;
+                    StartCoroutine(Disconnect());
                     break;
             }
+        }
+        
+        /// <summary>
+        /// Need to disconnect before starting offline mode
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator Disconnect()
+        {
+            PhotonNetwork.Disconnect();
+            while (PhotonNetwork.IsConnected)
+            {
+                yield return null;
+            }
+            PhotonNetwork.OfflineMode = true;
         }
 
         public static void CreateMatch(string roomName, RoomOptions roomOptions)
@@ -159,9 +173,15 @@ namespace TanksMP
         /// </summary>
         public override void OnDisconnected(DisconnectCause cause)
         {
-            if (connectionFailedEvent != null)
+            if (cause != DisconnectCause.DisconnectByClientLogic &&
+                cause != DisconnectCause.DisconnectByServerLogic &&
+                connectionFailedEvent != null)
+            {
                 connectionFailedEvent();
-
+            }
+            
+            // Debug.LogError("Disconnect cause: " + cause);
+            
             //do not switch scenes automatically when the game over screen is being shown already
             if (GameManager.GetInstance() != null && GameManager.GetInstance().ui.gameOverMenu.activeInHierarchy)
                 return;

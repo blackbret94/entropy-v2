@@ -35,12 +35,12 @@ namespace Vashta.Entropy.UI
             }
             
             // Resort
-            if (Time.time >= _lastSortTime + _sortRateS)
-            {
-                SortSlots();
+            // if (Time.time >= _lastSortTime + _sortRateS)
+            // {
+                // SortSlots();
 
-                _lastSortTime = Time.time;
-            }
+                // _lastSortTime = Time.time;
+            // }
         }
 
         public void ForceRefresh()
@@ -53,6 +53,7 @@ namespace Vashta.Entropy.UI
         {
             List<StatusEffect> statusEffects = new List<StatusEffect>(Player.StatusEffectController.StatusEffects);
             statusEffects.Sort(CompareStatusEffects);
+            SortSlots();
 
             for(int i=0; i<StatusEffectBlocks.Count; i++)
             {
@@ -61,7 +62,7 @@ namespace Vashta.Entropy.UI
                 // Hide blocks without status effects
                 if (i >= statusEffects.Count)
                 {
-                    slot.ResetStatusEffect();
+                    // slot.ResetStatusEffect();
                     continue;
                 }
 

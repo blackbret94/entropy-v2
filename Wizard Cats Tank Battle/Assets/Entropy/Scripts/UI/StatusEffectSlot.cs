@@ -22,6 +22,10 @@ namespace Vashta.Entropy.UI
         public GameObject DebuffOutline;
         private StatusEffect _statusEffect;
         private CanvasGroup _canvasGroup;
+        
+        // DEBUG
+        [SerializeField]
+        private string _debugStatusEffectName;
 
         private void Start()
         {
@@ -36,6 +40,7 @@ namespace Vashta.Entropy.UI
                 // return;
             
             _statusEffect = statusEffect;
+            _debugStatusEffectName = statusEffect.Title();
             Image.sprite = statusEffect.Icon();
 
             if (statusEffect.IsFresh())
@@ -47,6 +52,8 @@ namespace Vashta.Entropy.UI
             }
             else
             {
+                Animator.SetBool(BlinkBool, false);
+                Animator.ResetTrigger(FadeOutTrigger);
                 _canvasGroup.alpha = 1;
             }
 
@@ -57,10 +64,14 @@ namespace Vashta.Entropy.UI
         public void ResetStatusEffect()
         {
             Animator.SetBool(BlinkBool, false);
+            Animator.ResetTrigger(FadeInTrigger);
+            Animator.ResetTrigger(FadeOutTrigger);
             Animator.SetTrigger(OffTrigger);
             _statusEffect = null;
-            Image.sprite = null;
-            // _canvasGroup.alpha = 0;
+
+            _debugStatusEffectName = "No effect";
+            // Image.sprite = null;
+            _canvasGroup.alpha = 0;
         }
 
         public StatusEffect GetStatusEffect()

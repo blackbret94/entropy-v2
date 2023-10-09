@@ -11,6 +11,7 @@ namespace Vashta.Entropy.UI
         public string FadeInTrigger = "Fade In";
         public string BlinkBool = "Blinking";
         public string FadeOutTrigger = "Fade Out";
+        public string OffTrigger = "Off";
 
         public float BlinkThreshold = 1f;
         public float FadeOutThreshold = .334f;
@@ -55,7 +56,11 @@ namespace Vashta.Entropy.UI
         
         public void ResetStatusEffect()
         {
-            _canvasGroup.alpha = 0;
+            Animator.SetBool(BlinkBool, false);
+            Animator.SetTrigger(OffTrigger);
+            _statusEffect = null;
+            Image.sprite = null;
+            // _canvasGroup.alpha = 0;
         }
 
         public StatusEffect GetStatusEffect()

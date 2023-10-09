@@ -30,7 +30,9 @@ namespace TanksMP
         /// <summary>
         /// Damage to cause on a player that gets hit.
         /// </summary>
-        public int damage = 3;
+        private int _damage = 3;
+        [SerializeField][Tooltip("Unmodified damage value, reset upon spawn")]
+        private int _damageRaw = 3;
 
         /// <summary>
         /// Delay until despawned automatically when nothing gets hit.
@@ -117,6 +119,21 @@ namespace TanksMP
             maxBounce = bounce;
         }
 
+        public int GetRawDamage()
+        {
+            return _damageRaw;
+        }
+
+        public int GetDamage()
+        {
+            return _damage;
+        }
+
+        public void SetDamage(int newDamage)
+        {
+            _damage = newDamage;
+        }
+
         public int GetId()
         {
             return bulletId;
@@ -124,6 +141,8 @@ namespace TanksMP
 
         public void SpawnNewBullet()
         {
+            // Reset damage
+            _damage = _damageRaw;   
             _timeCreated = Time.time;
         }
 

@@ -676,7 +676,7 @@ namespace TanksMP
             bullet.SpawnNewBullet();
             bullet.owner = gameObject;
             bullet.ClassDefinition = classList[photonView.GetClassId()];
-            bullet.damage = Mathf.CeilToInt(bullet.damage * StatusEffectController.DamageOutputModifier);
+            bullet.SetDamage(Mathf.CeilToInt(bullet.GetRawDamage() * StatusEffectController.DamageOutputModifier));
             bullet.canBuff = !StatusEffectController.BlocksCastingBuffs;
             bullet.canDebuff = !StatusEffectController.BlocksCastingDebuffs;
             
@@ -781,6 +781,8 @@ namespace TanksMP
                 return;
             }
 
+            // Debug.Log("Taking raw damage: " + damage);
+            
             health -= damage;
             health = CapHealth(health);
             
@@ -829,6 +831,8 @@ namespace TanksMP
             //locally for now, to only have one update later on
             int damage = CalculateDamageTaken(bullet, out bool attackerIsCounter, out bool attackerIsSame);
             
+            // Debug.Log("Taking damage from bullet: " + damage);
+            
             health -= damage;
             health = CapHealth(health);
             
@@ -845,7 +849,7 @@ namespace TanksMP
 
         private int CalculateDamageTaken(Bullet bullet, out bool attackerIsCounter, out bool attackerIsSame)
         {
-            float calculatedDamage = bullet.damage;
+            float calculatedDamage = bullet.GetDamage();
 
             // Check class modifiers
             if (bullet.ClassDefinition == null)

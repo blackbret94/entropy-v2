@@ -39,13 +39,16 @@ namespace Vashta.Entropy.PhotonExtensions
         
         public RoomOptions InitRoomOptions(string mapName, int maxPlayers)
         {
+            TanksMP.GameMode gameMode = TanksMP.GameMode.TDM; // TODO: Pass this in
+            
             RoomOptions roomOptions = new RoomOptions();
             roomOptions.MaxPlayers = maxPlayers;
             
             roomOptions.CustomRoomPropertiesForLobby = new string[] { "mode", "map" };
             roomOptions.CustomRoomProperties = new Hashtable()
             {
-                { "mode", (byte)PlayerPrefs.GetInt(PrefsKeys.gameMode) }, 
+                // { "mode", (byte)PlayerPrefs.GetInt(PrefsKeys.gameMode) }, 
+                { "mode", (byte)gameMode}, 
                 { "map", mapName}
             };
 

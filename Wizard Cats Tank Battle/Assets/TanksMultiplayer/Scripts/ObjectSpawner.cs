@@ -19,8 +19,6 @@ namespace TanksMP
         /// <summary>
         /// Prefab to sync the instantiation for over the network.
         /// </summary>
-		public GameObject prefab;
-
         public List<GameObject> prefabList;
 
         /// <summary>

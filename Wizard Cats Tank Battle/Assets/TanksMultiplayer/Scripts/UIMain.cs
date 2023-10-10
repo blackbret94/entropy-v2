@@ -214,11 +214,12 @@ namespace TanksMP
         /// <summary>
         /// Save newly selected GameMode value to PlayerPrefs in order to check it later.
         /// Called by DropDown onValueChanged event.
+        /// This should no longer be in PlayerPrefs
         /// </summary>
         public void OnGameModeChanged(int value)
         {
-            PlayerPrefs.SetInt(PrefsKeys.gameMode, value);
-            PlayerPrefs.Save();
+            // PlayerPrefs.SetInt(PrefsKeys.gameMode, value);
+            // PlayerPrefs.Save();
         }
 
 

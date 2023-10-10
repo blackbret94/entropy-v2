@@ -46,6 +46,11 @@ namespace TanksMP
             //try to apply collectible to player, the result should be true
             if (Apply(player))
             {
+                if (spawner == null)
+                {
+                    Debug.LogError("Missing spawner connection!");
+                }
+                
                 //clean up previous buffered RPCs so we only keep the most recent one
                 PhotonNetwork.RemoveRPCs(spawner.photonView);
 

@@ -10,6 +10,7 @@ using Entropy.Scripts.Player;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
+using Vashta.Entropy.PhotonExtensions;
 using Vashta.Entropy.UI.ClassSelectionPanel;
 #if UNITY_ADS
 using UnityEngine.Advertisements;
@@ -72,6 +73,7 @@ namespace TanksMP
         public PlayerInputController PlayerInputController;
         
         private int lastSpawnIndex = -1;
+        private RoomOptionsReader _roomOptionsReader;
 
         private List<PlayerBot> _botList;
 
@@ -80,6 +82,11 @@ namespace TanksMP
         {
             instance = this;
             _botList = new List<PlayerBot>();
+
+            _roomOptionsReader = new RoomOptionsReader();
+            gameMode = _roomOptionsReader.GetGameMode();
+
+
 
             //if Unity Ads is enabled, hook up its result callback
 #if UNITY_ADS
@@ -109,7 +116,7 @@ namespace TanksMP
         {
             return _botList;
         }
-
+        
         /// <summary>
         /// Global check whether this client is the match master or not.
         /// </summary>

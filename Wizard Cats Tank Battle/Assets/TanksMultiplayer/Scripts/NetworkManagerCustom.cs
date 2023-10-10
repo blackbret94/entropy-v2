@@ -146,6 +146,11 @@ namespace TanksMP
                     break;
             }
         }
+
+        public void DisconnectFromServer()
+        {
+            StartCoroutine(Disconnect());
+        }
         
         /// <summary>
         /// Need to disconnect before starting offline mode
@@ -159,6 +164,19 @@ namespace TanksMP
                 yield return null;
             }
             PhotonNetwork.OfflineMode = true;
+        }
+
+        public void Reconnect()
+        {
+            StartCoroutine(ReconnectCoroutine());
+        }
+
+        private IEnumerator ReconnectCoroutine()
+        {
+            yield return StartCoroutine(Disconnect());
+            
+            PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Online);
+            StartMatch(NetworkMode.Online);
         }
 
         public static void CreateMatch(string roomName, RoomOptions roomOptions)
@@ -219,6 +237,16 @@ namespace TanksMP
             PhotonNetwork.JoinRandomRoom(expectedCustomRoomProperties, (byte)0);
         }
 
+        public static void JoinRandomRoom(string mapName, int gameMode)
+        {
+            Hashtable expectedCustomRoomProperties = new Hashtable()
+            {
+                {"map", mapName },
+                { "mode", (byte) gameMode }
+            };
+            PhotonNetwork.JoinRandomRoom(expectedCustomRoomProperties, (byte)0);
+        }
+
         /// <summary>
         /// Join a specific room by name
         /// </summary>
@@ -243,8 +271,9 @@ namespace TanksMP
             string roomName = _roomOptionsFactory.CreateRoomNameFromPlayerNickname(PhotonNetwork.NickName);
             byte maxPlayersForMap = (byte)mapDefinition.PlayerCount;
             string mapName = mapDefinition.Title;
+            GameMode gameMode = (GameMode)PlayerPrefs.GetInt(PrefsKeys.gameMode, (int)GameMode.TDM);
 
-            RoomOptions roomOptions = _roomOptionsFactory.InitRoomOptions(mapName, maxPlayersForMap);
+            RoomOptions roomOptions = _roomOptionsFactory.InitRoomOptions(mapName, maxPlayersForMap, gameMode);
             PhotonNetwork.CreateRoom(roomName, roomOptions, null);
         }
 

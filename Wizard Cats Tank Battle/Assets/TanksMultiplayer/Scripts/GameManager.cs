@@ -469,6 +469,16 @@ namespace TanksMP
         /// <summary>
         /// Free For All
         /// </summary>
-        FFA
+        FFA,
+        
+        /// <summary>
+        /// King of the Hill
+        /// </summary>
+        KOTH,
+        
+        /// <summary>
+        /// Mouse Hunt
+        /// </summary>
+        MH
     }
 }

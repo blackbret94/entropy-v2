@@ -2,13 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Vashta.Entropy.UI.MapSelection
+namespace Vashta.Entropy.ScriptableObject
 {
-    [CreateAssetMenu(fileName = "MapDefinitionDictionary", menuName = "Entropy/MapDefinitionDictionary", order = 1)]
-    public class MapDefinitionDictionary : UnityEngine.ScriptableObject
+    [CreateAssetMenu(fileName = "Game Mode Dictionary", menuName = "Entropy/Game Mode Dictionary", order = 1)]
+    public class GameModeDictionary : UnityEngine.ScriptableObject
     {
-        public MapDefinition[] Directory;
-        private Dictionary<string, MapDefinition> _dictionary;
+        public GameModeDefinition[] Directory;
+        private Dictionary<string, GameModeDefinition> _dictionary;
 
         private void OnEnable()
         {
@@ -20,18 +20,17 @@ namespace Vashta.Entropy.UI.MapSelection
             if (_dictionary != null) 
                 return;
             
-            _dictionary = new Dictionary<string, MapDefinition>();
+            _dictionary = new Dictionary<string, GameModeDefinition>();
          
-            foreach (MapDefinition go in Directory)
+            foreach (GameModeDefinition go in Directory)
                 _dictionary.Add(go.Id,go);
         }
 
         /// <summary>
         /// Use this accessor to get the desired clip from other classes
-        /// audioDirectory["shoot"]
         /// </summary>
         /// <param name="key"></param>
-        public MapDefinition this[string key]
+        public GameModeDefinition this[string key]
         {
             get
             {
@@ -41,7 +40,7 @@ namespace Vashta.Entropy.UI.MapSelection
         }
         
         // Need to eventually take game modes into account here
-        public MapDefinition GetRandom()
+        public GameModeDefinition GetRandom()
         {
             return _dictionary.ElementAt(Random.Range(0, _dictionary.Count)).Value;
         }

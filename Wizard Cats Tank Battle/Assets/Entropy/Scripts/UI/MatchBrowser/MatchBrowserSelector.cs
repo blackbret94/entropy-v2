@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
@@ -18,7 +19,12 @@ namespace Vashta.Entropy.UI.MatchBrowser
         {
             RoomListCache.onUpdatedCache += Inflate;
         }
-        
+
+        private void OnDestroy()
+        {
+            RoomListCache.onUpdatedCache -= Inflate;
+        }
+
         private void Inflate()
         {
             // Clean up 
@@ -69,6 +75,12 @@ namespace Vashta.Entropy.UI.MatchBrowser
 
         private void Clear()
         {
+            if (!InflationRoot)
+            {
+                Debug.LogError("Missing inflation root!");
+                return;
+            }
+            
             foreach (Transform child in InflationRoot.transform) {
                 Destroy(child.gameObject);
             }

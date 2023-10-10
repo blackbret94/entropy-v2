@@ -1,4 +1,4 @@
-using System;
+using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
@@ -18,6 +18,8 @@ namespace Vashta.Entropy.PhotonExtensions
 
         public static event OnUpdatedCache onUpdatedCache;
 
+        private const float RefreshWaitTime = .5f;
+
         private void Start()
         {
             JoinLobby();
@@ -29,6 +31,17 @@ namespace Vashta.Entropy.PhotonExtensions
             bool joinedLobby = PhotonNetwork.JoinLobby();
             
             Debug.Log("Attempted to join lobby: " + joinedLobby);
+
+            if (!joinedLobby)
+            {
+                StartCoroutine(RetryConnection());
+            }
+        }
+
+        private IEnumerator RetryConnection()
+        {
+            yield return new WaitForSeconds(RefreshWaitTime);
+            JoinLobby();
         }
 
         private void UpdateCachedRoomList(List<RoomInfo> roomList)

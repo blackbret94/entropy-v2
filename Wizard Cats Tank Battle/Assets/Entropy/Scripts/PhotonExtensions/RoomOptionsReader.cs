@@ -1,4 +1,6 @@
+using System;
 using ExitGames.Client.Photon;
+using ExitGames.Client.Photon.StructWrapping;
 using Photon.Pun;
 using TanksMP;
 using UnityEngine;
@@ -17,14 +19,14 @@ namespace Vashta.Entropy.PhotonExtensions
             if (roomProperties.TryGetValue(GameModeString, out var property))
             {
                 Debug.Log("retrieved game mode from Room Info");
-                int gameMode = (int)property;
+                int gameMode = (byte)property;
                 return (TanksMP.GameMode) gameMode;
             }
             else
             {
                 Debug.Log("retrieved game mode from playerprefs");
-                TanksMP.GameMode gameMode = (TanksMP.GameMode)(int)PlayerPrefs.GetInt(PrefsKeys.gameMode);
-                return TanksMP.GameMode.CTF;
+                TanksMP.GameMode gameMode = (TanksMP.GameMode)PlayerPrefs.GetInt(PrefsKeys.gameMode);
+                return gameMode;
             }
         }
     }

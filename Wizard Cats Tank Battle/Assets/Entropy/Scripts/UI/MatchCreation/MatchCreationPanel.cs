@@ -1,10 +1,10 @@
-using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
 using TanksMP;
 using UnityEngine;
 using UnityEngine.UI;
 using Vashta.Entropy.PhotonExtensions;
+using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.UI.MapSelection;
 
 namespace Vashta.Entropy.UI.MatchCreation
@@ -15,8 +15,25 @@ namespace Vashta.Entropy.UI.MatchCreation
         public InputField PasswordInputField;
         public InputField MaxPlayersInputField;
         public MapSelectionSelector MapSelector;
+        public GameModeSelector GameModeSelector;
 
         public RoomOptionsFactory RoomOptionsFactory;
+
+        private void Start()
+        {
+            Init();
+        }
+
+        public override void OpenPanel()
+        {
+            base.OpenPanel();
+
+            if (!PhotonNetwork.IsConnected)
+            {
+                PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Online);
+                NetworkManagerCustom.GetInstance().StartMatch(NetworkMode.Online);
+            }
+        }
 
         private void Init()
         {
@@ -37,10 +54,11 @@ namespace Vashta.Entropy.UI.MatchCreation
             // string password = GetPassword();
             int maxPlayers = GetMaxPlayers();
             string mapName = GetMapName();
+            TanksMP.GameMode gameMode = GetGameMode();
             
             // format
             roomName = RoomOptionsFactory.CreateRoomName(roomName);
-            RoomOptions roomOptions = RoomOptionsFactory.InitRoomOptions(mapName, maxPlayers);
+            RoomOptions roomOptions = RoomOptionsFactory.InitRoomOptions(mapName, maxPlayers, gameMode);
             
             // create room
             UIMain.GetInstance().CreateRoom(roomName, roomOptions);
@@ -63,6 +81,23 @@ namespace Vashta.Entropy.UI.MatchCreation
         private string GetPassword()
         {
             return PasswordInputField.text;
+        }
+
+        private TanksMP.GameMode GetGameMode()
+        {
+            if (!GameModeSelector)
+            {
+                Debug.LogError("Missing connection to GameMode Selector!");
+            }
+            
+            GameModeDefinition definition = GameModeSelector.SelectedGameMode();
+
+            if (!definition)
+            {
+                Debug.LogError("Could not find definition in gamemode selector!");
+            }
+            
+            return definition.GameMode;
         }
 
         private int GetMaxPlayers()

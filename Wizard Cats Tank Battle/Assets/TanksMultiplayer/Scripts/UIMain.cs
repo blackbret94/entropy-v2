@@ -6,6 +6,7 @@
 using System;
 using System.Collections;
 using Entropy.Scripts.Audio;
+using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.UI;
@@ -127,17 +128,27 @@ namespace TanksMP
             // NetworkManagerCustom.StartMatch((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode));
             StartCoroutine(HandleTimeout());
         }
-        
-        public void PlayMultiplayer()
+
+        public void Play(string mapName, int gameMode)
         {
-            PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Online);
-            NetworkManagerCustom.GetInstance().StartMatch((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode));
+            loadingWindow.SetActive(true);
+            
+            ExitGames.Client.Photon.Hashtable expectedCustomRoomProperties = 
+                new ExitGames.Client.Photon.Hashtable()
+                {
+                    {"map", mapName},
+                    { "mode", (byte)gameMode }
+                };
+            
+            PhotonNetwork.JoinRandomRoom(expectedCustomRoomProperties, 0);
+            StartCoroutine(HandleTimeout());
         }
-        
-        public void PlayVsAI()
+
+        public void PlayOffline(string mapName, int gameMode)
         {
-            PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Offline);
-            NetworkManagerCustom.GetInstance().StartMatch((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode));
+            loadingWindow.SetActive(true);
+            NetworkManagerCustom.JoinRandomRoom();
+            StartCoroutine(HandleTimeout());
         }
 
         public void JoinRoom(string roomName)

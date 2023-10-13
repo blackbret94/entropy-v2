@@ -22,7 +22,7 @@ namespace Vashta.Entropy.UI.MapSelection
             if (!PhotonNetwork.IsConnected)
             {
                 PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Online);
-                NetworkManagerCustom.GetInstance().StartMatch(NetworkMode.Online);
+                NetworkManagerCustom.GetInstance().Connect(NetworkMode.Online);
             }
         }
 

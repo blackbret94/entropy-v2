@@ -123,7 +123,7 @@ namespace TanksMP
         /// Starts initializing and connecting to a game. Depends on the selected network mode.
         /// Sets the current player name prior to connecting to the servers.
         /// </summary>
-        public void StartMatch(NetworkMode mode)
+        public void Connect(NetworkMode mode)
         {
             PhotonNetwork.AutomaticallySyncScene = true;
             PhotonNetwork.NickName = CBSIntegrator.Instance.ProfileState.CachedDisplayName;
@@ -176,12 +176,12 @@ namespace TanksMP
             yield return StartCoroutine(Disconnect());
             
             PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Online);
-            StartMatch(NetworkMode.Online);
+            Connect(NetworkMode.Online);
         }
 
-        public static void CreateMatch(string roomName, RoomOptions roomOptions)
+        public static void CreateMatch(RoomOptions roomOptions)
         {
-            PhotonNetwork.CreateRoom(roomName, roomOptions);
+            PhotonNetwork.CreateRoom(null, roomOptions);
         }
 
 
@@ -273,8 +273,8 @@ namespace TanksMP
             string mapName = mapDefinition.Title;
             GameMode gameMode = (GameMode)PlayerPrefs.GetInt(PrefsKeys.gameMode, (int)GameMode.TDM);
 
-            RoomOptions roomOptions = _roomOptionsFactory.InitRoomOptions(mapName, maxPlayersForMap, gameMode);
-            PhotonNetwork.CreateRoom(roomName, roomOptions, null);
+            RoomOptions roomOptions = _roomOptionsFactory.InitRoomOptions(roomName, mapName, maxPlayersForMap, gameMode);
+            PhotonNetwork.CreateRoom(null, roomOptions, null);
         }
 
 
@@ -284,6 +284,8 @@ namespace TanksMP
         /// </summary>
         public override void OnCreateRoomFailed(short returnCode, string message)
         {
+            Debug.LogError("Error creating room: " + returnCode + " : " + message);
+            
             if (connectionFailedEvent != null)
                 connectionFailedEvent();
         }

@@ -13,7 +13,7 @@ namespace Vashta.Entropy.UI.MatchBrowser
             if (!PhotonNetwork.IsConnected)
             {
                 PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Online);
-                NetworkManagerCustom.GetInstance().StartMatch(NetworkMode.Online);
+                NetworkManagerCustom.GetInstance().Connect(NetworkMode.Online);
             }
         }
     }

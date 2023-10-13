@@ -31,7 +31,7 @@ namespace Vashta.Entropy.UI.MatchCreation
             if (!PhotonNetwork.IsConnected)
             {
                 PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Online);
-                NetworkManagerCustom.GetInstance().StartMatch(NetworkMode.Online);
+                NetworkManagerCustom.GetInstance().Connect(NetworkMode.Online);
             }
         }
 
@@ -58,10 +58,10 @@ namespace Vashta.Entropy.UI.MatchCreation
             
             // format
             roomName = RoomOptionsFactory.CreateRoomName(roomName);
-            RoomOptions roomOptions = RoomOptionsFactory.InitRoomOptions(mapName, maxPlayers, gameMode);
+            RoomOptions roomOptions = RoomOptionsFactory.InitRoomOptions(roomName, mapName, maxPlayers, gameMode);
             
             // create room
-            UIMain.GetInstance().CreateRoom(roomName, roomOptions);
+            UIMain.GetInstance().CreateRoom(roomOptions);
         }
         
         private string GetRoomName()

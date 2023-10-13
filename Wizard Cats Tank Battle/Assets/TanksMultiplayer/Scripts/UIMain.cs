@@ -159,10 +159,10 @@ namespace TanksMP
             StartCoroutine(HandleTimeout());
         }
 
-        public void CreateRoom(string roomName, RoomOptions roomOptions)
+        public void CreateRoom(RoomOptions roomOptions)
         {
             loadingWindow.SetActive(true);
-            NetworkManagerCustom.CreateMatch(roomName, roomOptions);
+            NetworkManagerCustom.CreateMatch(roomOptions);
             StartCoroutine(HandleTimeout());
         }
         
@@ -185,6 +185,8 @@ namespace TanksMP
             if (this == null)
                 return;
 
+            Debug.LogError("Connection error");
+            
             StopAllCoroutines();
             loadingWindow.SetActive(false);
             connectionErrorWindow.SetActive(true);

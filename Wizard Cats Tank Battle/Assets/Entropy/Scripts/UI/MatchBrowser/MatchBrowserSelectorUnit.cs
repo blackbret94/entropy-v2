@@ -20,7 +20,7 @@ namespace Vashta.Entropy.UI.MatchBrowser
             
             // Get strings
             _roomName = room.Name;
-            string roomString = StringifyRoom(_roomName, room);
+            string roomString = StringifyRoom(room);
 
             if (roomString == null) return;
 
@@ -59,7 +59,7 @@ namespace Vashta.Entropy.UI.MatchBrowser
             Button.gameObject.SetActive(show);
         }
 
-        private string StringifyRoom(string roomName, RoomInfo room)
+        private string StringifyRoom(RoomInfo room)
         {
             if (!room.CustomProperties.ContainsKey("map"))
             {
@@ -74,6 +74,14 @@ namespace Vashta.Entropy.UI.MatchBrowser
                 Debug.LogError("Retrieved lobby that is missing a mode!");
                 return null;
             }
+
+            if (!room.CustomProperties.ContainsKey("roomName"))
+            {
+                Debug.LogError("Retrieved lobby that is missing a room name!");
+                return null;
+            }
+
+            string roomName = (string)room.CustomProperties["roomName"];
 
             return $"{roomName} | {map} ({room.PlayerCount}/{room.MaxPlayers})";
         }

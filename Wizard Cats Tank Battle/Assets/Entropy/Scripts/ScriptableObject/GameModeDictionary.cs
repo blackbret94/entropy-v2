@@ -9,6 +9,7 @@ namespace Vashta.Entropy.ScriptableObject
     {
         public GameModeDefinition[] Directory;
         private Dictionary<string, GameModeDefinition> _dictionary;
+        private Dictionary<TanksMP.GameMode, GameModeDefinition> _dictionaryByGameMode;
 
         private void OnEnable()
         {
@@ -17,13 +18,22 @@ namespace Vashta.Entropy.ScriptableObject
         
         private void CreateDictionaryIfDoesNotExist()
         {
-            if (_dictionary != null) 
+            if (_dictionary != null && _dictionaryByGameMode != null) 
                 return;
             
+            // Create stringId indexed dictionary
             _dictionary = new Dictionary<string, GameModeDefinition>();
          
             foreach (GameModeDefinition go in Directory)
                 _dictionary.Add(go.Id,go);
+            
+            // Create GameMode indexed dictionary
+            _dictionaryByGameMode = new();
+
+            foreach (GameModeDefinition gameModeDefinition in Directory)
+            {
+                _dictionaryByGameMode.Add(gameModeDefinition.GameMode, gameModeDefinition);
+            }
         }
 
         /// <summary>
@@ -36,6 +46,15 @@ namespace Vashta.Entropy.ScriptableObject
             {
                 CreateDictionaryIfDoesNotExist();
                 return _dictionary.TryGetValue(key, out var value) ? value : GetRandom();
+            }
+        }
+
+        public GameModeDefinition this[TanksMP.GameMode key]
+        {
+            get
+            {
+                CreateDictionaryIfDoesNotExist();
+                return _dictionaryByGameMode.TryGetValue(key, out var value) ? value : GetRandom();
             }
         }
         

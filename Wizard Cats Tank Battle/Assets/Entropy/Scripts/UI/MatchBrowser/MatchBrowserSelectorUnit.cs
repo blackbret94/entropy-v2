@@ -3,6 +3,8 @@ using TanksMP;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Vashta.Entropy.PhotonExtensions;
+using Vashta.Entropy.ScriptableObject;
 
 namespace Vashta.Entropy.UI.MatchBrowser
 {
@@ -11,20 +13,30 @@ namespace Vashta.Entropy.UI.MatchBrowser
         public Button Button;
         public Image Image;
         public TextMeshProUGUI Text;
+        public Image GameModeIcon;
+
+        public GameModeDictionary GameModeDictionary;
 
         private string _roomName = "";
+        private RoomInfoWrapper _roomInfoWrapper;
         
         public void InitUnit(RoomInfo room)
         {
             if (room == null) return;
+
+            _roomInfoWrapper = new RoomInfoWrapper(room);
             
-            // Get strings
-            _roomName = room.Name;
-            string roomString = StringifyRoom(room);
+            // Format text
+            _roomName = _roomInfoWrapper.GetRoomName();
+            string roomString = _roomInfoWrapper.StringifyRoom();
 
             if (roomString == null) return;
 
             Text.text = roomString;
+            
+            // Format icon
+            GameModeDefinition gameModeDefinition = GameModeDictionary[_roomInfoWrapper.GetGameMode()];
+            GameModeIcon.sprite = gameModeDefinition.Icon;
 
             // Format widget
             ShowButton(room.IsOpen);
@@ -57,33 +69,6 @@ namespace Vashta.Entropy.UI.MatchBrowser
         private void ShowButton(bool show)
         {
             Button.gameObject.SetActive(show);
-        }
-
-        private string StringifyRoom(RoomInfo room)
-        {
-            if (!room.CustomProperties.ContainsKey("map"))
-            {
-                Debug.LogError("Retrieved lobby that is missing a map!");
-                return null;
-            }
-
-            string map = (string)room.CustomProperties["map"];
-            
-            if (!room.CustomProperties.ContainsKey("mode"))
-            {
-                Debug.LogError("Retrieved lobby that is missing a mode!");
-                return null;
-            }
-
-            if (!room.CustomProperties.ContainsKey("roomName"))
-            {
-                Debug.LogError("Retrieved lobby that is missing a room name!");
-                return null;
-            }
-
-            string roomName = (string)room.CustomProperties["roomName"];
-
-            return $"{roomName} | {map} ({room.PlayerCount}/{room.MaxPlayers})";
         }
     }
 }

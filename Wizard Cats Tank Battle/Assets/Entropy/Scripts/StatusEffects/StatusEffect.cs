@@ -10,6 +10,7 @@ namespace Vashta.Entropy.StatusEffects
         private Player _originPlayer { get; }
         private float _expiration;
         private bool _isFresh = false;
+        private bool _forceExpire = false;
 
         private StatusEffectData _data = null;
 
@@ -20,6 +21,11 @@ namespace Vashta.Entropy.StatusEffects
             _originPlayer = originPlayer;
             SetExpiration();
             _isFresh = true;
+        }
+
+        public void ForceExpire()
+        {
+            _forceExpire = true;
         }
 
         public Player OriginPlayer()
@@ -39,11 +45,23 @@ namespace Vashta.Entropy.StatusEffects
 
         public bool HasExpired()
         {
+            if (_forceExpire)
+                return true;
+            
+            if (_data.TTL < 0) 
+                return false;
+            
             return Time.time > _expiration;
         }
 
         public float GetTimeLeft()
         {
+            if (_forceExpire)
+                return 0;
+            
+            if (_data.TTL < 0)
+                return 100f;
+            
             return _expiration - Time.time;
         }
         
@@ -125,6 +143,11 @@ namespace Vashta.Entropy.StatusEffects
         public bool IsBuff()
         {
             return !StatusEffectData().IsDebuff;
+        }
+
+        public bool IsImmuneToRemoval()
+        {
+            return StatusEffectData().ImmuneToRemoval;
         }
 
         public bool BlocksBuffs()

@@ -27,6 +27,8 @@ namespace Vashta.Entropy.StatusEffects
         public GameObject DeathFx;
         [Tooltip("Doesn't add the status effect, but applies 1s of immediate effects.")]
         public bool ApplyInstantly = false;
+        [Tooltip("Overrides the Voidstalker's ability to remove buffs and debuffs")]
+        public bool ImmuneToRemoval;
         
 
         [Header("Effects")] 

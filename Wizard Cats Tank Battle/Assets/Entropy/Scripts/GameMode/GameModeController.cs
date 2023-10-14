@@ -36,7 +36,7 @@ namespace Vashta.Entropy.GameMode
         
         private void SetGameModeTDM()
         {
-            Debug.Log("Setting game mode to TDM");
+            // Debug.Log("Setting game mode to TDM");
 
             if(CtfRoot != null)
                 CtfRoot.SetActive(false);
@@ -47,7 +47,7 @@ namespace Vashta.Entropy.GameMode
 
         private void SetGameModeCTF()
         {
-            Debug.LogError("Setting game mode to CTF");
+            // Debug.LogError("Setting game mode to CTF");
             
             if(TdmRoot != null)
                 TdmRoot.SetActive(false);

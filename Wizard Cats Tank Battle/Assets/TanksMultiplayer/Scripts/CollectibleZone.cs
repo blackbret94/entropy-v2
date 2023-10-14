@@ -47,6 +47,8 @@ namespace TanksMP
 
             //check for the required object
             //continue, if it is not assigned to begin with
+            CollectibleCaptureTheFlag colReq = null;
+            
             if (requireObject != null)
             {
                 //the required object is not instantiated
@@ -54,17 +56,17 @@ namespace TanksMP
                     return;
 
                 //the required object either does not have a CollectibleTeam component,
-                //is still being carried around or not yet at back at the spawn position
-                CollectibleTeam colReq = requireObject.obj.GetComponent<CollectibleTeam>();
-                if (colReq == null || colReq.carrierId >= 0 ||
-                    colReq.transform.position != requireObject.transform.position)
+                //or not yet at back at the spawn position
+                colReq = requireObject.obj.GetComponent<CollectibleCaptureTheFlag>();
+                if (colReq == null)
+                    // || colReq.transform.position != requireObject.transform.position)
                     return;
             }
 
-            CollectibleTeam colOther = col.gameObject.GetComponent<CollectibleTeam>();
-
-            //a team item, which is not our own, has been brought to this zone 
-            if (colOther != null && colOther.teamIndex != teamIndex)
+            CollectibleCaptureTheFlag colOther = col.gameObject.GetComponent<CollectibleCaptureTheFlag>();
+            
+            //a team item has been brought to this zone 
+            if (colOther != null && colOther.teamIndex == teamIndex)
             {
                 if (scoreClip) AudioManager.Play3D(scoreClip, transform.position);
 
@@ -83,6 +85,9 @@ namespace TanksMP
                 //remove network messages about the Collectible since it is about to get destroyed 
                 PhotonNetwork.RemoveRPCs(colOther.spawner.photonView);
                 colOther.spawner.photonView.RPC("Destroy", RpcTarget.All);
+                
+                if(colReq != null)
+                    colReq.OnReturn();
             }
         }
     }

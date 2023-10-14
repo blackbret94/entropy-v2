@@ -93,11 +93,11 @@ namespace Vashta.Entropy.StatusEffects
             StatusEffect statusEffect = new StatusEffect(this, statusEffectId, owner);
             
             // If a buff and buffs are blocked, return
-            if (statusEffect.IsBuff() && _blocksBuffsCached)
+            if (!statusEffect.IsImmuneToRemoval() && (statusEffect.IsBuff() && _blocksBuffsCached))
                 return;
             
             // If a debuff and debuffs are blocked, return
-            if (statusEffect.IsDebuff() && _blocksDebuffsCached)
+            if (!statusEffect.IsImmuneToRemoval() && (statusEffect.IsDebuff() && _blocksDebuffsCached))
                 return;
             
             // Clear buffs if this blocks buffs
@@ -194,8 +194,49 @@ namespace Vashta.Entropy.StatusEffects
             _lastRefresh = Time.time;
         }
 
+        /// <summary>
+        /// Server only, call RPC on all clients
+        /// </summary>
+        /// <param name="statusEffectId"></param>
+        /// <param name="owner"></param>
+        public void RemoveStatusEffect(string statusEffectId)
+        {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                _player.photonView.RPC("RPCRemoveStatusEffect", RpcTarget.All, statusEffectId);
+            }
+        }
+
+        /// <summary>
+        /// Called on all clients to remove a status effect
+        /// </summary>
+        /// <param name="statusEffectId"></param>
+        /// <param name="playerId"></param>
+        [PunRPC]
+        public void RPCRemoveStatusEffect(string statusEffectId)
+        {
+            StatusEffect statusEffect = GetStatusEffectById(statusEffectId);
+
+            if (statusEffect == null)
+                return;
+            
+            RemoveStatusEffect(statusEffect);
+        }
+
+        private StatusEffect GetStatusEffectById(string id)
+        {
+            foreach (var statusEffect in _statusEffects)
+            {
+                if (statusEffect.Id() == id)
+                    return statusEffect;
+            }
+
+            return null;
+        }
+
         private void RemoveStatusEffect(StatusEffect statusEffect)
         {
+            statusEffect.ForceExpire();
             _statusEffects.Remove(statusEffect);
             _indexedIds.Remove(statusEffect.Id());
             _dirtyFlag = true;
@@ -274,7 +315,7 @@ namespace Vashta.Entropy.StatusEffects
             
             foreach (var statusEffect in statusEffectsCopy)
             {
-                if(statusEffect.IsBuff())
+                if(!statusEffect.IsImmuneToRemoval() && statusEffect.IsBuff())
                     RemoveStatusEffect(statusEffect);
             }
         }
@@ -286,7 +327,7 @@ namespace Vashta.Entropy.StatusEffects
             
             foreach (var statusEffect in statusEffectsCopy)
             {
-                if(statusEffect.IsDebuff())
+                if(!statusEffect.IsImmuneToRemoval() && statusEffect.IsDebuff())
                     RemoveStatusEffect(statusEffect);
             }
         }

@@ -111,7 +111,7 @@ namespace TanksMP
         /// </summary>
         public override void OnReturn()
         {
-            if (PhotonNetwork.IsMasterClient)
+            if (PhotonNetwork.IsMasterClient && _carriedBy != null)
             {
                 // remove status effect
                 _carriedBy.StatusEffectController.RemoveStatusEffect(StatusEffectToApply.Id);

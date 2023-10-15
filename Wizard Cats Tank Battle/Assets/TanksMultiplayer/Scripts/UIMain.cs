@@ -15,6 +15,7 @@ using Vashta.Entropy.SaveLoad;
 using Vashta.Entropy.SceneNavigation;
 using Vashta.Entropy.TanksExtensions;
 using Vashta.Entropy.UI;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace TanksMP
 {
@@ -147,6 +148,23 @@ namespace TanksMP
         public void PlayOffline(string mapName, int gameMode)
         {
             loadingWindow.SetActive(true);
+            
+            Hashtable expectedCustomRoomProperties = 
+                new Hashtable()
+                {
+                    {"map", mapName},
+                    { "mode", (byte)gameMode }
+                };
+            
+            StartCoroutine(PlayOfflineCoroutine(expectedCustomRoomProperties));
+        }
+
+        private IEnumerator PlayOfflineCoroutine(Hashtable expectedCustomRoomProperties)
+        {
+            PhotonNetwork.Disconnect();
+            while (PhotonNetwork.IsConnected)
+                yield return null;
+            
             NetworkManagerCustom.JoinRandomRoom();
             StartCoroutine(HandleTimeout());
         }

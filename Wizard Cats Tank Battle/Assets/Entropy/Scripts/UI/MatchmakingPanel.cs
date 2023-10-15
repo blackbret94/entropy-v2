@@ -2,15 +2,18 @@ using TanksMP;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Vashta.Entropy.UI.MapSelection;
+using Vashta.Entropy.UI.MatchBrowser;
+using Vashta.Entropy.UI.MatchCreation;
 
 namespace Vashta.Entropy.UI
 {
     public class MatchmakingPanel : GamePanel
     {
-        public GamePanel QuickplayPanel;
-        public GamePanel BrowsePanel;
-        public GamePanel CreatePanel;
-        public GamePanel PracticePanel;
+        public QuickplayPanel QuickplayPanel;
+        public MatchBrowserPanel BrowsePanel;
+        public MatchCreationPanel CreatePanel;
+        public PracticePanel PracticePanel;
 
         public TextMeshProUGUI QuickplayButtonText;
         public TextMeshProUGUI BrowseButtonText;

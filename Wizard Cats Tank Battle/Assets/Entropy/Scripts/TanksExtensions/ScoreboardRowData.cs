@@ -12,9 +12,13 @@ namespace Vashta.Entropy.TanksExtensions
         public Team Team { get; }
         public Material Material => Team.material;
         public bool IsLocalPlayer { get; }
+
         public Player Player { get; }
+
         public int ClassId { get; }
         public bool PlayerIsOnline { get; }
+        
+        public PlayerBot Bot { get; }
 
         public ScoreboardRowData(Player player, Team team, bool isLocalPlayer)
         {
@@ -30,6 +34,7 @@ namespace Vashta.Entropy.TanksExtensions
 
         public ScoreboardRowData(PlayerBot bot, Team team)
         {
+            Bot = bot;
             Name = bot.myName;
             Kills = bot.kills;
             Deaths = bot.deaths;
@@ -58,6 +63,23 @@ namespace Vashta.Entropy.TanksExtensions
             serializable.PlayerIsOnline = false;
 
             return serializable;
+        }
+
+        public bool IsAlive()
+        {
+            if (Player != null)
+            {
+                // Get player health
+                return Player.GetIsAlive();
+            }
+
+            if (Bot != null)
+            {
+                return Bot.IsAlive;
+            }
+            
+            Debug.LogError("Row is not attached to a player OR a bot!");
+            return false;
         }
     }
 }

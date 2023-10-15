@@ -197,6 +197,7 @@ namespace TanksMP
                 GetView().SetJoinTime(Time.time);
                 GetView().SetKills(0);
                 GetView().SetDeaths(0);
+                GetView().SetIsAlive(true);
                 GetView().SetClassId(classDefinition.classId);
                 
                 GetView().RPC("RpcApplyClass", RpcTarget.All);
@@ -244,6 +245,11 @@ namespace TanksMP
                 return _playersByViewId[id];
 
             return null;
+        }
+
+        public string GetName()
+        {
+            return GetView().GetName();
         }
 
         /// <summary>
@@ -913,6 +919,8 @@ namespace TanksMP
             bool canRespawnFreely = PlayerCanRespawnFreely();
             lastDeathTime = Time.time;
             
+            GetView().SetIsAlive(false);
+            
             if(!canRespawnFreely)
                 GetView().IncrementDeaths();
 
@@ -1074,6 +1082,9 @@ namespace TanksMP
                 StatusEffectController.RefreshCache();
                 ApplyClass();
                 ColorizePlayerForTeam();
+                
+                if(PhotonNetwork.IsMasterClient)
+                    GetView().SetIsAlive(true);
             }
 
             //further changes only affect the local client
@@ -1220,6 +1231,11 @@ namespace TanksMP
 
             if(respawnPlayer)
                 CmdKillPlayer();
+        }
+
+        public int GetClassId()
+        {
+            return GetView().GetClassId();
         }
 
         /// <summary>

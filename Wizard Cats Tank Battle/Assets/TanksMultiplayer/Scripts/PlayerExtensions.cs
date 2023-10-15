@@ -27,6 +27,7 @@ namespace TanksMP
         public const string joinTime = "joinTime";
         public const string classId = "classId";
         public const string preferredTeam = "preferredTeam"; // for changing teams
+        public const string isAlive = "isAlive";
 
         public const int RANDOM_TEAM_INDEX = 100;
 
@@ -127,6 +128,60 @@ namespace TanksMP
         public static int GetHealth(this Photon.Realtime.Player player)
         {
             return System.Convert.ToInt32(player.CustomProperties[health]);
+        }
+        
+        /// <summary>
+        /// Offline: synchronizes the team number of a PlayerBot locally.
+        /// Fallback to online mode for the master or in case offline mode was turned off.
+        /// </summary>
+        public static void SetIsAlive(this PhotonView player, bool bIsAlive)
+        {
+            // Debug.Log("Setting team index: " + teamIndex);
+            if (PhotonNetwork.OfflineMode == true)
+            {
+                PlayerBot bot = player.GetComponent<PlayerBot>();
+                if (bot != null)
+                {
+                    // Bots have isAlive
+                    return;
+                }
+            }
+
+            player.Owner.SetIsAlive(bIsAlive);
+        }
+
+        /// <summary>
+        /// Online: synchronizes the team number of the player for all players via properties.
+        /// </summary>
+        public static void SetIsAlive(this Photon.Realtime.Player player, bool bIsAlive)
+        {
+            player.SetCustomProperties(new Hashtable() { { isAlive, bIsAlive } });
+        }
+
+        /// <summary>
+        /// Offline: returns the health value of a bot stored in PlayerBot.
+        /// Fallback to online mode for the master or in case offline mode was turned off.
+        /// </summary>
+        public static bool GetIsAlive(this PhotonView player)
+        {
+            if (PhotonNetwork.OfflineMode == true)
+            {
+                PlayerBot bot = player.GetComponent<PlayerBot>();
+                if (bot != null)
+                {
+                    return bot.IsAlive;
+                }
+            }
+
+            return player.Owner.GetIsAlive();
+        }
+
+        /// <summary>
+        /// Online: returns the networked health value of the player out of properties.
+        /// </summary>
+        public static bool GetIsAlive(this Photon.Realtime.Player player)
+        {
+            return System.Convert.ToBoolean(player.CustomProperties[isAlive]);
         }
 
         /// <summary>

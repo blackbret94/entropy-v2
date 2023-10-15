@@ -321,7 +321,7 @@ namespace TanksMP
                 killCounter[0].text = GetView().GetKills().ToString();
                 killCounter[0].GetComponent<Animator>().Play("Animation");
                 
-                RewardCoins();
+                RewardCoinsForKill();
             }
 
             Bullet killingBlowBullet = BulletDictionary[killingBlowBulletId];

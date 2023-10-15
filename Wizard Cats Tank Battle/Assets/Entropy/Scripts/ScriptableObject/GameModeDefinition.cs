@@ -10,5 +10,6 @@ namespace Vashta.Entropy.ScriptableObject
         public Sprite Icon;
         public Sprite IconSmall;
         public TanksMP.GameMode GameMode;
+        public int ScoreToWin = 20;
     }
 }

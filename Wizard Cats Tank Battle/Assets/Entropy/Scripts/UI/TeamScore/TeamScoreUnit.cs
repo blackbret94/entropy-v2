@@ -50,6 +50,7 @@ namespace Vashta.Entropy.UI.TeamScore
             if (TextAnimator != null)
                 TextAnimator.Play("Animation");
 
+            TeamScoreSlider.maxValue = GameManager.GetInstance().maxScore;
             TeamScoreSlider.value = score;
         }
 

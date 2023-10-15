@@ -23,16 +23,15 @@ namespace Vashta.Entropy.ScriptableObject
             
             // Create stringId indexed dictionary
             _dictionary = new Dictionary<string, GameModeDefinition>();
-         
-            foreach (GameModeDefinition go in Directory)
-                _dictionary.Add(go.Id,go);
             
             // Create GameMode indexed dictionary
-            _dictionaryByGameMode = new();
+            _dictionaryByGameMode = new Dictionary<TanksMP.GameMode, GameModeDefinition>();
 
-            foreach (GameModeDefinition gameModeDefinition in Directory)
+
+            foreach (GameModeDefinition go in Directory)
             {
-                _dictionaryByGameMode.Add(gameModeDefinition.GameMode, gameModeDefinition);
+                _dictionary.Add(go.Id, go);
+                _dictionaryByGameMode.Add(go.GameMode, go);
             }
         }
 

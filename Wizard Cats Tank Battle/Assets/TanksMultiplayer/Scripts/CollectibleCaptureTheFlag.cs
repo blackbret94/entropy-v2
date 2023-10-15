@@ -8,6 +8,8 @@ namespace TanksMP
     {
          public StatusEffectData StatusEffectToApply;
          private Player _carriedBy;
+
+         public Player CarriedBy => _carriedBy;
          
          private int _defaultTeamIndex = -1;
 
@@ -31,6 +33,7 @@ namespace TanksMP
             //try to apply collectible to player, the result should be true
             if (Apply(player))
             {
+                // Attach
                 _carriedBy = player;
                 _carriedBy.StatusEffectController.AddStatusEffect(StatusEffectToApply.Id, player);
                 Colorize();
@@ -42,19 +45,9 @@ namespace TanksMP
                 
                 //clean up previous buffered RPCs so we only keep the most recent one
                 PhotonNetwork.RemoveRPCs(spawner.photonView);
-
-                //check if colliding player belongs to the same team as the item
-                // if (teamIndex == player.GetView().GetTeam())
-                // {
-                    //player collected team item, return it to team home base
-                    //we do not have to send this as buffered RPC because this is the default spawn position
-                    // spawner.photonView.RPC("Return", RpcTarget.All);
-                // }
-                // else
-                // {
-                    //player picked up item from other team, send out buffered RPC for it to be remembered
-                    spawner.photonView.RPC("Pickup", RpcTarget.AllBuffered, (short)player.GetView().ViewID);
-                // }
+                
+                //player picked up item from other team, send out buffered RPC for it to be remembered
+                spawner.photonView.RPC("Pickup", RpcTarget.AllBuffered, (short)player.GetView().ViewID);
             }
         }
 
@@ -104,8 +97,7 @@ namespace TanksMP
 
             ResetFlag();
         }
-
-
+        
         /// <summary>
         /// Overrides the default behavior with a custom implementation.
         /// </summary>

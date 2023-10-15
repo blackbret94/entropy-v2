@@ -9,6 +9,7 @@ namespace Vashta.Entropy.UI.MapSelection
     {
         public MapDefinition[] Directory;
         private Dictionary<string, MapDefinition> _dictionary;
+        private Dictionary<string, MapDefinition> _dictionaryByName;
 
         private void OnEnable()
         {
@@ -21,9 +22,14 @@ namespace Vashta.Entropy.UI.MapSelection
                 return;
             
             _dictionary = new Dictionary<string, MapDefinition>();
-         
+            _dictionaryByName = new Dictionary<string, MapDefinition>();
+
+
             foreach (MapDefinition go in Directory)
-                _dictionary.Add(go.Id,go);
+            {
+                _dictionary.Add(go.Id, go);
+                _dictionaryByName.Add(go.Title, go);
+            }
         }
 
         /// <summary>
@@ -38,6 +44,11 @@ namespace Vashta.Entropy.UI.MapSelection
                 CreateDictionaryIfDoesNotExist();
                 return _dictionary.TryGetValue(key, out var value) ? value : GetRandom();
             }
+        }
+
+        public MapDefinition GetByName(string mapName)
+        {
+            return _dictionary.TryGetValue(mapName, out var value) ? value : GetRandom();
         }
         
         // Need to eventually take game modes into account here

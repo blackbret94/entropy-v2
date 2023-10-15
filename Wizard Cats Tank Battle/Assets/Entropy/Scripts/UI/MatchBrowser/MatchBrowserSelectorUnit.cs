@@ -27,7 +27,7 @@ namespace Vashta.Entropy.UI.MatchBrowser
             _roomInfoWrapper = new RoomInfoWrapper(room);
             
             // Format text
-            _roomName = _roomInfoWrapper.GetRoomName();
+            _roomName = _roomInfoWrapper.GetDisplayRoomName();
             string roomString = _roomInfoWrapper.StringifyRoom();
 
             if (roomString == null) return;
@@ -57,13 +57,15 @@ namespace Vashta.Entropy.UI.MatchBrowser
         /// </summary>
         public void JoinRoom()
         {
-            if (_roomName == "")
+            string roomNameId = _roomInfoWrapper.GetRoomNameId();
+            
+            if (roomNameId == "")
             {
                 Debug.LogError("Cannot join room without name!");
                 return;
             }
             
-            UIMain.GetInstance().JoinRoom(_roomName);
+            UIMain.GetInstance().JoinRoom(roomNameId);
         }
 
         private void ShowButton(bool show)

@@ -11,7 +11,9 @@ using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
 using Vashta.Entropy.PhotonExtensions;
+using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.UI.ClassSelectionPanel;
+using Vashta.Entropy.UI.MapSelection;
 #if UNITY_ADS
 using UnityEngine.Advertisements;
 #endif
@@ -56,7 +58,7 @@ namespace TanksMP
         /// <summary>
         /// The maximum amount of kills to reach before ending the game.
         /// </summary>
-        public int maxScore = 30;
+        public int maxScore { get; private set; }= 30;
 
         /// <summary>
         /// The delay in seconds before respawning a player after it got killed.
@@ -71,6 +73,12 @@ namespace TanksMP
         public List<GameObject> BotTargetList;
         public MusicController MusicController;
         public PlayerInputController PlayerInputController;
+
+        public MapDefinitionDictionary MapDefinitionDictionary;
+        private MapDefinition _mapDefinition;
+        
+        public GameModeDictionary GameModeDictionary;
+        private GameModeDefinition _gameModeDefinition;
         
         private int lastSpawnIndex = -1;
         private RoomOptionsReader _roomOptionsReader;
@@ -85,8 +93,12 @@ namespace TanksMP
 
             _roomOptionsReader = new RoomOptionsReader();
             gameMode = _roomOptionsReader.GetGameMode();
+            _gameModeDefinition = GameModeDictionary[gameMode];
 
+            string mapName = _roomOptionsReader.GetMapName();
+            _mapDefinition = MapDefinitionDictionary.GetByName(mapName);
 
+            maxScore = _gameModeDefinition.ScoreToWin;
 
             //if Unity Ads is enabled, hook up its result callback
 #if UNITY_ADS
@@ -123,6 +135,21 @@ namespace TanksMP
         public static bool isMaster()
         {
             return PhotonNetwork.IsMasterClient;
+        }
+
+        public GameModeDefinition GetGameModeDefinition()
+        {
+            if (_gameModeDefinition == null)
+            {
+                Debug.LogError("Missing game mode definition!");
+            }
+            
+            return _gameModeDefinition;
+        }
+
+        public MapDefinition GetMap()
+        {
+            return _mapDefinition;
         }
 
 

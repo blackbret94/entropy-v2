@@ -1,8 +1,11 @@
 using System;
 using Entropy.Scripts.Audio;
 using TanksMP;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Vashta.Entropy.ScriptableObject;
+using Vashta.Entropy.UI.MapSelection;
 
 namespace Vashta.Entropy.UI
 {
@@ -25,12 +28,41 @@ namespace Vashta.Entropy.UI
         public MusicController MusicController;
 
         public Toggle FullscreenToggle;
+
+        public TextMeshProUGUI MapNameText;
+        public TextMeshProUGUI GameModeText;
+        public TextMeshProUGUI GameModeDescription;
         
         public override void OpenPanel()
         {
             base.OpenPanel();
             ReadSettings();
+            UpdateGameModeText();
+            UpdateMapNameText();
             HUDPanel.Get().ClosePanel();
+        }
+
+        private void UpdateGameModeText()
+        {
+            if (GameModeText == null)
+                return;
+
+            GameModeDefinition gameModeDefinition = GameManager.GetInstance().GetGameModeDefinition();
+            GameModeText.text = gameModeDefinition.Title;
+
+            if (GameModeDescription == null)
+                return;
+
+            GameModeDescription.text = gameModeDefinition.Description;
+        }
+
+        private void UpdateMapNameText()
+        {
+            if (MapNameText == null)
+                return;
+            
+            MapDefinition gameModeDefinition = GameManager.GetInstance().GetMap();
+            MapNameText.text = gameModeDefinition.Title;
         }
 
         public override void ClosePanel()

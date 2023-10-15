@@ -38,7 +38,12 @@ namespace Vashta.Entropy.PhotonExtensions
             return TanksMP.GameMode.TDM;
         }
 
-        public string GetRoomName()
+        public string GetRoomNameId()
+        {
+            return _roomInfo.Name;
+        }
+
+        public string GetDisplayRoomName()
         {
             Hashtable customProperties = _roomInfo.CustomProperties;
 

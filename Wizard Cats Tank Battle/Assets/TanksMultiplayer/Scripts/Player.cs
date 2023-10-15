@@ -1036,7 +1036,7 @@ namespace TanksMP
                     killCounter[0].text = GetView().GetKills().ToString();
                     killCounter[0].GetComponent<Animator>().Play("Animation");
 
-                    RewardCoins();
+                    RewardCoinsForKill();
                 }
                 
                 Bullet killingBlowBullet = BulletDictionary[bulletId];
@@ -1114,14 +1114,33 @@ namespace TanksMP
                 PoolManager.Spawn(deathFx, transform.position, transform.rotation);
         }
 
-        protected void RewardCoins()
+        protected void RewardCoinsForKill()
         {
             // reward coins if the player is on a different team
-            int coinsRewarded = _playerCurrencyRewarder.RewardForKill();
-            OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.CoinReward, "+"+coinsRewarded);
+            RewardCoins(_playerCurrencyRewarder.RewardForKill());
+            
+        }
+
+        private void RewardCoins(int amount)
+        {
+            OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.CoinReward, "+"+amount);
 
             // play coin reward sound
             GameManager.GetInstance().ui.SfxController.PlayCoinEarnedSound();
+        }
+
+        public void CmdRewardForCapture()
+        {
+            photonView.RPC("RpcRewardForCapture", RpcTarget.All);
+        }
+        
+        [PunRPC]
+        protected virtual void RpcRewardForCapture()
+        {
+            if (!IsLocal)
+                return;
+            
+            RewardCoins(_playerCurrencyRewarder.RewardForFlagCapture());
         }
 
         /// <summary>

@@ -1142,6 +1142,7 @@ namespace TanksMP
 
         public void CmdRewardForCapture()
         {
+            GetView().IncrementKills(10);
             photonView.RPC("RpcRewardForCapture", RpcTarget.All);
         }
         

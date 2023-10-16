@@ -17,7 +17,7 @@ namespace Vashta.Entropy.UI
         public void Set(ScoreboardRowData playerScoreData, CharacterAppearance appearance)
         {
             string playerName = playerScoreData.Name;
-            int kills = playerScoreData.Kills;
+            int points = playerScoreData.Kills;
             Color color = playerScoreData.Material.color;
 
             gameObject.SetActive(true);
@@ -25,7 +25,7 @@ namespace Vashta.Entropy.UI
             PlayerName.text = $"#{Place} {playerName}";
             PlayerName.color = color;
             
-            Tagline.text = $"{kills} {(kills == 1 ? " Kill" : " Kills")}";
+            Tagline.text = $"{points} {(points == 1 ? " Point" : " Points")}";
             
             GameObject playerGo = NetworkManagerCustom.GetInstance().GetPlayerGameObject(playerScoreData.Player);
 

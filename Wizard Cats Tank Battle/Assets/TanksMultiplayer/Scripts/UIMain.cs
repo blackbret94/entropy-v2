@@ -11,6 +11,7 @@ using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.UI;
 using Vashta.Entropy.Character;
+using Vashta.Entropy.PhotonExtensions;
 using Vashta.Entropy.SaveLoad;
 using Vashta.Entropy.SceneNavigation;
 using Vashta.Entropy.TanksExtensions;
@@ -134,11 +135,11 @@ namespace TanksMP
         {
             loadingWindow.SetActive(true);
             
-            ExitGames.Client.Photon.Hashtable expectedCustomRoomProperties = 
-                new ExitGames.Client.Photon.Hashtable()
+            Hashtable expectedCustomRoomProperties = 
+                new Hashtable()
                 {
-                    {"map", mapName},
-                    { "mode", (byte)gameMode }
+                    { RoomKeys.mapKey, mapName},
+                    { RoomKeys.modeKey, (byte)gameMode }
                 };
             
             PhotonNetwork.JoinRandomRoom(expectedCustomRoomProperties, 0);
@@ -152,21 +153,11 @@ namespace TanksMP
             Hashtable expectedCustomRoomProperties = 
                 new Hashtable()
                 {
-                    {"map", mapName},
-                    { "mode", (byte)gameMode }
+                    { RoomKeys.mapKey, mapName},
+                    { RoomKeys.modeKey, (byte)gameMode }
                 };
             
-            StartCoroutine(PlayOfflineCoroutine(expectedCustomRoomProperties));
-        }
-
-        private IEnumerator PlayOfflineCoroutine(Hashtable expectedCustomRoomProperties)
-        {
-            PhotonNetwork.Disconnect();
-            while (PhotonNetwork.IsConnected)
-                yield return null;
-            
-            NetworkManagerCustom.JoinRandomRoom();
-            StartCoroutine(HandleTimeout());
+            NetworkManagerCustom.GetInstance().JoinRandomRoomOffline(expectedCustomRoomProperties);
         }
 
         public void JoinRoom(string roomName)
@@ -190,7 +181,7 @@ namespace TanksMP
             yield return new WaitForSeconds(10);
 
             //timeout has passed, we would like to stop joining a game now
-            Photon.Pun.PhotonNetwork.Disconnect();
+            PhotonNetwork.Disconnect();
             //display connection issue window
             OnConnectionError();
         }

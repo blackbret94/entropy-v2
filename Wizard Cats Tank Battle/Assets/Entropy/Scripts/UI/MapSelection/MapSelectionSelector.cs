@@ -6,6 +6,7 @@ namespace Vashta.Entropy.UI.MapSelection
 {
     public class MapSelectionSelector : MonoBehaviour
     {
+        public MapDefinitionDictionary MapDefinitionDictionary;
         public List<MapSelectionCheckbox> MapSelectionCheckboxes;
 
         private MapSelectionCheckbox _activeSelection;
@@ -36,8 +37,8 @@ namespace Vashta.Entropy.UI.MapSelection
 
         public MapDefinition SelectedMapDefinition()
         {
-            if (_activeSelection == null)
-                return null;
+            if (_activeSelection == null || _activeSelection.IsRandom)
+                return MapDefinitionDictionary.GetRandom();
 
             return _activeSelection.mapDefinition;
         }

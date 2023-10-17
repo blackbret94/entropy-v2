@@ -72,27 +72,27 @@ namespace Vashta.Entropy.PhotonExtensions
         
         public string StringifyRoom()
         {
-            if (!_roomInfo.CustomProperties.ContainsKey("map"))
+            if (!_roomInfo.CustomProperties.ContainsKey(RoomKeys.mapKey))
             {
                 Debug.LogError("Retrieved lobby that is missing a map!");
                 return null;
             }
 
-            string map = (string)_roomInfo.CustomProperties["map"];
+            string map = (string)_roomInfo.CustomProperties[RoomKeys.mapKey];
             
-            if (!_roomInfo.CustomProperties.ContainsKey("mode"))
+            if (!_roomInfo.CustomProperties.ContainsKey(RoomKeys.modeKey))
             {
                 Debug.LogError("Retrieved lobby that is missing a mode!");
                 return null;
             }
 
-            if (!_roomInfo.CustomProperties.ContainsKey("roomName"))
+            if (!_roomInfo.CustomProperties.ContainsKey(RoomKeys.roomNameKey))
             {
                 Debug.LogError("Retrieved lobby that is missing a room name!");
                 return null;
             }
 
-            string roomName = (string)_roomInfo.CustomProperties["roomName"];
+            string roomName = (string)_roomInfo.CustomProperties[RoomKeys.roomNameKey];
 
             return $"{roomName} | {map} ({_roomInfo.PlayerCount}/{_roomInfo.MaxPlayers})";
         }

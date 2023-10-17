@@ -163,7 +163,7 @@ namespace TanksMP
             {
                 yield return null;
             }
-            PhotonNetwork.OfflineMode = true;
+            // PhotonNetwork.OfflineMode = true;
         }
 
         public void Reconnect()
@@ -233,7 +233,7 @@ namespace TanksMP
         /// </summary>
         public static void JoinRandomRoom()
         {
-            Hashtable expectedCustomRoomProperties = new Hashtable() { { "mode", (byte)PlayerPrefs.GetInt(PrefsKeys.gameMode) } };
+            Hashtable expectedCustomRoomProperties = new Hashtable() { { RoomKeys.modeKey, (byte)PlayerPrefs.GetInt(PrefsKeys.gameMode) } };
             PhotonNetwork.JoinRandomRoom(expectedCustomRoomProperties, (byte)0);
         }
 
@@ -241,9 +241,21 @@ namespace TanksMP
         {
             Hashtable expectedCustomRoomProperties = new Hashtable()
             {
-                {"map", mapName },
-                { "mode", (byte) gameMode }
+                { RoomKeys.mapKey, mapName },
+                { RoomKeys.modeKey, (byte) gameMode }
             };
+            PhotonNetwork.JoinRandomRoom(expectedCustomRoomProperties, (byte)0);
+        }
+
+        public void JoinRandomRoomOffline(Hashtable expectedCustomRoomProperties)
+        {
+            StartCoroutine(DisconnectAndJoinRoom(expectedCustomRoomProperties));
+        }
+
+        private IEnumerator DisconnectAndJoinRoom(Hashtable expectedCustomRoomProperties)
+        {
+            yield return StartCoroutine(Disconnect());
+            PhotonNetwork.OfflineMode = true;
             PhotonNetwork.JoinRandomRoom(expectedCustomRoomProperties, (byte)0);
         }
 

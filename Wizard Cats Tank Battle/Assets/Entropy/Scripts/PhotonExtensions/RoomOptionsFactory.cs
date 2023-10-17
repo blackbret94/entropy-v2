@@ -42,7 +42,7 @@ namespace Vashta.Entropy.PhotonExtensions
             RoomOptions roomOptions = new RoomOptions();
             roomOptions.MaxPlayers = maxPlayers;
             
-            roomOptions.CustomRoomPropertiesForLobby = new string[] { "mode", "map", "roomName" };
+            roomOptions.CustomRoomPropertiesForLobby = new string[] { RoomKeys.modeKey, RoomKeys.mapKey, RoomKeys.roomNameKey };
             roomOptions.CustomRoomProperties = new Hashtable()
             {
                 { RoomKeys.roomNameKey, roomName},

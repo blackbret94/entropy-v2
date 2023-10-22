@@ -24,6 +24,7 @@ namespace Vashta.Entropy.StatusEffects
         private Player _lastDotAppliedBy;
         
         // effects
+        private float _massMultiplierCashed = 1f;
         private float _movementSpeedModifierCached = 0f;
         private float _movementSpeedMultiplierCached = 1f;
         private float _damageOutputModifierCached = 1f;
@@ -45,6 +46,7 @@ namespace Vashta.Entropy.StatusEffects
         
         public List<StatusEffect> StatusEffects => _statusEffects;
 
+        public float MassMultiplier => _massMultiplierCashed;
         public float MovementSpeedModifier => _movementSpeedModifierCached;
         public float MovementSpeedMultiplier => _movementSpeedMultiplierCached;
         public float DamageOutputModifier => _damageOutputModifierCached;
@@ -244,6 +246,7 @@ namespace Vashta.Entropy.StatusEffects
 
         public void RefreshCache()
         {
+            _massMultiplierCashed = 1f;
             _movementSpeedModifierCached = 0;
             _movementSpeedMultiplierCached = 1f;
             _damageOutputModifierCached = 1f;
@@ -263,7 +266,8 @@ namespace Vashta.Entropy.StatusEffects
             {
                 if(statusEffect.HasExpired())
                     continue;
-                
+
+                _massMultiplierCashed *= statusEffect.MassMultiplier();
                 _movementSpeedModifierCached += statusEffect.MovementSpeedModifier();
                 _movementSpeedMultiplierCached *= statusEffect.MovementSpeedMultiplier();
                 _damageOutputModifierCached *= statusEffect.DamageOutputMultiplier();
@@ -366,7 +370,7 @@ namespace Vashta.Entropy.StatusEffects
 
         public void Leech()
         {
-            if (_leechingPerSecondCached <= 0 || _leechingAppliedByCached != null || !_leechingAppliedByCached.IsAlive)
+            if (_leechingPerSecondCached <= 0 || (_leechingAppliedByCached != null && !_leechingAppliedByCached.IsAlive))
                 return;
             
             _player.TakeDamage(_leechingPerSecondCached, _leechingAppliedByCached);

@@ -152,7 +152,7 @@ namespace TanksMP
                 else
                 {
                     //instantiate a new copy on all clients
-                    SpawnObject();
+                    SpawnObject(false);
                 }
             }
         }
@@ -188,18 +188,23 @@ namespace TanksMP
                 else colType = CollectionType.Use;
             }
 		}
-
-        /// <summary>
-        /// Server only, chooses an index then sends it to all clients
-        /// </summary>
-        private void SpawnObject()
+        
+        private void SpawnObject(bool spawnInstantly)
         {
-            if (!PhotonNetwork.IsMasterClient)
-                return;
-            
             lastInflatedObjectIndex = Random.Range(0, prefabList.Count);
-            
-            this.photonView.RPC("Instantiate", RpcTarget.All, lastInflatedObjectIndex);
+
+            if (spawnInstantly)
+            {
+                Instantiate(lastInflatedObjectIndex);
+            }
+            else
+            {
+                // Server only
+                if (!PhotonNetwork.IsMasterClient)
+                    return;
+                
+                this.photonView.RPC("Instantiate", RpcTarget.All, lastInflatedObjectIndex);
+            }
         }
 
         /// <summary>
@@ -211,7 +216,7 @@ namespace TanksMP
             //in case this method call is received over the network earlier than the
             //spawner instantiation, here we make sure to catch up and instantiate it directly
             if (obj == null)
-                SpawnObject();
+                SpawnObject(true);
 
             //get target view transform to parent to
             PhotonView view = PhotonView.Find(viewId);
@@ -241,7 +246,7 @@ namespace TanksMP
             //in case this method call is received over the network earlier than the
             //spawner instantiation, here we make sure to catch up and instantiate it directly
             if (obj == null)
-                SpawnObject();
+                SpawnObject(true);
 
             //re-parent object to this spawner
             obj.transform.parent = PoolManager.GetPool(obj).transform;

@@ -29,9 +29,11 @@ namespace Vashta.Entropy.StatusEffects
         public bool ApplyInstantly = false;
         [Tooltip("Overrides the Voidstalker's ability to remove buffs and debuffs")]
         public bool ImmuneToRemoval;
-        
+
 
         [Header("Effects")] 
+        [Tooltip("Multiplies")]
+        public float MassMultiplaier = 1f;
         [Tooltip("Multiplies")]
         public float MovementSpeedMultiplier = 1f;
         [Tooltip("Sums")]

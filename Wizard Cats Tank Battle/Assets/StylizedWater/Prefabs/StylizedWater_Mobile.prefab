@@ -17,7 +17,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 119
   m_IsActive: 1
 --- !u!4 &4000010198742726
 Transform:
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 1000013276728082}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 1, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f4248de3f6095664f97000e850cb9264, type: 2}
+  - {fileID: 2100000, guid: 7d5637ad8f4215e4f817ce326b8d5b73, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -99,8 +99,8 @@ MonoBehaviour:
   shaderNames:
   - Desktop
   - Mobile
-  shaderIndex: 0
-  shader: {fileID: 4800000, guid: 4bcc0b68579a5c740ad31644411ffb54, type: 3}
+  shaderIndex: 1
+  shader: {fileID: 4800000, guid: 644d4419f6d30214892dd65158332ba7, type: 3}
   renderQueue: 3000
   enableVertexColors: 0
   enableDepthTex: 1
@@ -133,35 +133,36 @@ MonoBehaviour:
     atime6: 0
     atime7: 0
     m_Mode: 0
+    m_ColorSpace: -1
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
-  waterShallowColor: {r: 0.41911757, g: 1, b: 0.8798174, a: 1}
-  depth: 13
-  waterColor: {r: 0.1176471, g: 0.6348885, b: 1, a: 0}
+  waterShallowColor: {r: 0.2549306, g: 0.60276526, b: 0.6226415, a: 0.2784314}
+  depth: 2.8
+  waterColor: {r: 0.15896086, g: 0.57758063, b: 0.61049575, a: 1}
   fresnelColor: {r: 0.5, g: 0.8551724, b: 1, a: 0.084}
   fresnel: 2.6
-  rimColor: {r: 1, g: 1, b: 1, a: 0.509}
-  waveTint: -0.077
-  transparency: 1
+  rimColor: {r: 0.57913846, g: 0.89413816, b: 0.9245283, a: 0.12941177}
+  waveTint: 0
+  transparency: 0.612
   glossiness: 1
   metallicness: 0
-  edgeFade: 0.2448298
+  edgeFade: 0.58
   tilingMethodNames:
   - Mesh UV
   - World-aligned (planar)
   worldSpaceTiling: 0
   refractionAmount: 0.057
   enableNormalMap: 1
-  normalStrength: 0.15
+  normalStrength: 0.96
   enableMacroNormals: 0
   macroNormalsDistance: 1000
-  normalTiling: 0.79999995
+  normalTiling: 0.613
   intersectionSolver: 0
   intersectionSolverNames:
   - Depth-based
   - Vertex color (red)
-  rimSize: 4.6
-  rimFalloff: 1.8
+  rimSize: 0.88
+  rimFalloff: 1.9
   rimTiling: 0.5
   rimDistortion: 0.139
   enableVCIntersection: 0
@@ -169,18 +170,18 @@ MonoBehaviour:
   foamSolverNames:
   - Normal map
   - Intersection texture
-  foamOpacity: 0.1
-  foamTiling: 0.15
+  foamOpacity: 0.13
+  foamTiling: 1
   foamSize: 0
   foamDistortion: 0.45
-  foamSpeed: 0.1
+  foamSpeed: 0.416
   waveFoam: 0
   reflectionStrength: 1
   reflectionFresnel: 2
   showReflection: 0
   reflectionRefraction: 0.006
   waveSpeed: 0.75
-  waveStrength: 0.011
+  waveStrength: 0.723
   waveDirectionXZ: {x: 1, y: 0, z: 0, w: 0}
   enableSecondaryWaves: 0
   customIntersection: {fileID: 0}
@@ -215,12 +216,12 @@ MonoBehaviour:
   - Chaotic
   - Custom...
   waveHeightmapStyle: 0
-  waveSize: 0.1
+  waveSize: 1
   useCustomIntersection: 0
   useCustomNormals: 0
   useCustomHeightmap: 0
-  normals: {fileID: 2800000, guid: 3a41e7c7976846a47a62be3520f418ed, type: 3}
-  shadermap: {fileID: 2800000, guid: 79c7ba25d6c5cf644b73f1961a00bfa4, type: 3}
+  normals: {fileID: 2800000, guid: c82d3857ddde1564dbfca22bf42180a7, type: 3}
+  shadermap: {fileID: 2800000, guid: 074be3d448e5b7649871d00d25b25644, type: 3}
   colorGradientTex: {fileID: 2800000, guid: 7e177bfc0bd15734bb6123a25bd6b7c6, type: 3}
   useCompression: 0
   useReflection: 0
@@ -255,10 +256,10 @@ MonoBehaviour:
   enableShadows: 0
   shadowCaster: {fileID: 0}
   currentCam: {fileID: 0}
-  material: {fileID: 2100000, guid: f4248de3f6095664f97000e850cb9264, type: 2}
-  isMobileAdvanced: 0
+  material: {fileID: 2100000, guid: 7d5637ad8f4215e4f817ce326b8d5b73, type: 2}
+  isMobileAdvanced: 1
   isMobilePlatform: 0
-  shaderName: StylizedWater/Desktop
+  shaderName: StylizedWater/Mobile
   isWaterLayer: 1
   hasShaderParams: 1
   hasMaterial: 1

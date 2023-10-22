@@ -39,10 +39,12 @@ namespace TanksMP
 
         public int maxShield = 5;
 
-        public int counterDamageMod = 2;
-        public int sameClassDamageMod = -1;
+        // public int counterDamageMod = 2;
+        // public int sameClassDamageMod = -1;
 
         public float acceleration = 30f;
+
+        public float defaultMass = 1;
 
         /// <summary>
         /// Current turret rotation and shooting direction.
@@ -470,6 +472,8 @@ namespace TanksMP
         // Overriden in PlayerBot
         void FixedUpdate()
 		{
+            UpdateMass();
+            
 			//skip further calls for remote clients    
             if (!photonView.IsMine)
             {
@@ -544,7 +548,11 @@ namespace TanksMP
 			#endif
 #endif
         }
-            
+
+        private void UpdateMass()
+        {
+            rb.mass = defaultMass * StatusEffectController.MassMultiplier;
+        }
       
         /// <summary>
         /// Helper method for getting the current object owner.

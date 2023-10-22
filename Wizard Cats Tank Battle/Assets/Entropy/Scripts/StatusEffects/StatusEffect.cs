@@ -80,6 +80,11 @@ namespace Vashta.Entropy.StatusEffects
             return StatusEffectData().AppliedDescription;
         }
 
+        public float MassMultiplier()
+        {
+            return StatusEffectData().MassMultiplaier;
+        }
+        
         public float MovementSpeedModifier()
         {
             return StatusEffectData().MovementSpeedModifier;

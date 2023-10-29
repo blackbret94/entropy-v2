@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 using Vashta.Entropy.StatusEffects;
@@ -13,12 +15,21 @@ namespace TanksMP
          
          private int _defaultTeamIndex = -1;
 
+         private static List<CollectibleCaptureTheFlag> _allFlags = new();
+         public static List<CollectibleCaptureTheFlag> GetAllFlags() => _allFlags;
+
          private void Start()
          {
              _defaultTeamIndex = teamIndex;
+             _allFlags.Add(this);
          }
 
-        /// <summary>
+         private void OnDestroy()
+         {
+             _allFlags.Remove(this);
+         }
+
+         /// <summary>
         /// Server only: check for players colliding with the powerup.
         /// Possible collision are defined in the Physics Matrix.
         /// </summary>

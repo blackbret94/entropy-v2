@@ -6,6 +6,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Entropy.Scripts.Player;
 using UnityEngine;
 using UnityEngine.UI;
@@ -136,6 +137,7 @@ namespace TanksMP
         [HideInInspector]
         public FollowTarget camFollow;
         public StatusEffectController StatusEffectController;
+        public Renderer Renderer;
 
         //timestamp when next shot should happen
         private float nextFire;
@@ -164,6 +166,7 @@ namespace TanksMP
         private float _initTime;
 
         private static Dictionary<int, Player> _playersByViewId = new ();
+        public static List<Player> GetAllPlayers => _playersByViewId.Values.ToList();
 
         public BulletDictionary BulletDictionary;
         public PowerupDirectory PowerupDirectory;
@@ -181,7 +184,10 @@ namespace TanksMP
         public float lastDeathTime = 0f;
 
         public bool IsAlive => gameObject.activeInHierarchy;
+        public bool IsDead => !IsAlive;
         private bool _hasLateInited = false;
+        
+        public bool IsVisible => Renderer.isVisible;
         
         //initialize server values for this player
         void Awake()

@@ -30,6 +30,8 @@ namespace TanksMP
             GameObject obj = col.gameObject;
             Player player = obj.GetComponent<Player>();
 
+            if (player == null) return;
+
             //try to apply collectible to player, the result should be true
             if (Apply(player))
             {
@@ -49,6 +51,19 @@ namespace TanksMP
                 //player picked up item from other team, send out buffered RPC for it to be remembered
                 spawner.photonView.RPC("Pickup", RpcTarget.AllBuffered, (short)player.GetView().ViewID);
             }
+            else
+            {
+                // Should the flag reset?
+                // Do not reset a neutral flag
+                if (teamIndex == -1) return;
+                
+                int playerTeam = player.GetView().GetTeam();
+                
+                if (playerTeam != teamIndex)
+                {
+                    spawner.photonView.RPC("Return", RpcTarget.All);
+                }
+            }
         }
 
 
@@ -58,9 +73,6 @@ namespace TanksMP
         /// </summary>
         public override bool Apply(Player p)
         {
-            if (p == null)
-                return false;
-            
             int playerTeam = p.GetView().GetTeam();
 
             // Ignore if player is not on the right team

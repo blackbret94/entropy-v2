@@ -249,6 +249,19 @@ namespace TanksMP
             return null;
         }
 
+        public static Player GetLocalPlayer()
+        {
+            foreach (KeyValuePair<int,Player> keyValuePair in _playersByViewId)
+            {
+                Player kvpPlayer = keyValuePair.Value;
+
+                if (kvpPlayer != null && kvpPlayer.IsLocal)
+                    return kvpPlayer;
+            }
+
+            return null;
+        }
+
         public string GetName()
         {
             return GetView().GetName();
@@ -978,13 +991,7 @@ namespace TanksMP
             GetView().SetShield(0);
             GetView().SetBullet(0);
 
-            //clean up collectibles on this player by letting them drop down
-            Collectible[] collectibles = GetComponentsInChildren<Collectible>(true);
-            for (int i = 0; i < collectibles.Length; i++)
-            {
-                PhotonNetwork.RemoveRPCs(collectibles[i].spawner.photonView);
-                collectibles[i].spawner.photonView.RPC("Drop", RpcTarget.AllBuffered, transform.position);
-            }
+            DropCollectibles();
 
             //tell the dead player who killed them (owner of the bullet)
             short senderId = 0;
@@ -992,6 +999,24 @@ namespace TanksMP
                 senderId = (short)other.GetComponent<PhotonView>().ViewID;
 
             this.photonView.RPC("RpcRespawn", RpcTarget.All, senderId, killingBlow?killingBlow.GetId():0);
+        }
+
+        public void CommandDropCollectibles()
+        {
+            photonView.RPC("DropCollectibles", RpcTarget.MasterClient);
+        }
+        
+        /// Server only
+        [PunRPC]
+        private void DropCollectibles()
+        {
+            //clean up collectibles on this player by letting them drop down
+            Collectible[] collectibles = GetComponentsInChildren<Collectible>(true);
+            for (int i = 0; i < collectibles.Length; i++)
+            {
+                PhotonNetwork.RemoveRPCs(collectibles[i].spawner.photonView);
+                collectibles[i].spawner.photonView.RPC("Drop", RpcTarget.AllBuffered, transform.position);
+            }
         }
 
         public bool PlayerCanRespawnFreely()

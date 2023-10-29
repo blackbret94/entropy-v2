@@ -60,6 +60,8 @@ namespace TanksMP
         
         public SceneNavigator SceneNavigator;
 
+        public DropCollectiblesButton DropCollectiblesButton;
+
         //initialize variables
         void Start()
         {

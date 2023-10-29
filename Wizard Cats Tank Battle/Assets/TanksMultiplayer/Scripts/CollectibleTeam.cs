@@ -119,5 +119,21 @@ namespace TanksMP
                     targetRenderer.material = baseMaterial;
             }
         }
+        
+        public override void OnPickup()
+        {
+            Player localPlayer = Player.GetLocalPlayer();
+
+            if (!localPlayer)
+            {
+                Debug.LogError("Local player not found!");
+                return;
+            }
+
+            if (carrierId == localPlayer.GetView().ViewID)
+            {
+                GameManager.GetInstance().ui.DropCollectiblesButton.gameObject.SetActive(true);
+            }
+        }
     }
 }

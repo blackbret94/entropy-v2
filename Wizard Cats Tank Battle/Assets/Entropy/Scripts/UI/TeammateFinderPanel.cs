@@ -90,6 +90,7 @@ namespace Vashta.Entropy.UI
                     
                     Sprite sprite = gameModeDefinition.IconSmall;
                     _teammateFinderIcons[iconListIndex].SetFlag(flag, sprite);
+                    iconListIndex++;
                 }
             }
         }

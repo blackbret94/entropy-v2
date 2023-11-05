@@ -40,6 +40,12 @@ namespace Vashta.Entropy.UI
 
         private void RefreshIcons()
         {
+            // reset icons
+            foreach (TeammateFinderIcon icon in _teammateFinderIcons)
+            {
+                icon.Hide();
+            }
+            
             // save our place while adding icons to the list
             int iconListIndex = 0;
             
@@ -79,6 +85,9 @@ namespace Vashta.Entropy.UI
                     if (iconListIndex > _teammateFinderIcons.Count) break;
 
                     CollectibleCaptureTheFlag flag = flags[i];
+
+                    if (!flag.gameObject.activeInHierarchy)
+                        continue;
 
                     GameModeDefinition gameModeDefinition = GameModeDictionary[TanksMP.GameMode.CTF];
 

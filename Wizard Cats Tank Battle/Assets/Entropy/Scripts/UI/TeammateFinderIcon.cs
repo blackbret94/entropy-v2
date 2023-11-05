@@ -15,6 +15,12 @@ namespace Vashta.Entropy.UI
 
         private bool _showsPlayer;
 
+        public void Hide()
+        {
+            _player = null;
+            _flag = null;
+        }
+
         public void SetPlayer(Player player)
         {
             _showsPlayer = true;

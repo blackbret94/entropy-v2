@@ -1070,6 +1070,12 @@ namespace TanksMP
             //the player has been killed
             if (!isActive)
             {
+                if (IsLocal)
+                {
+                    // Hide "Drop Flag" button if local player
+                    GameManager.GetInstance().ui.DropCollectiblesButton.gameObject.SetActive(false);
+                }
+                
                 //find original sender game object (killedBy)
                 PhotonView senderView = senderId > 0 ? PhotonView.Find(senderId) : null;
                 if (senderView != null && senderView.gameObject != null) killedBy = senderView.gameObject;
@@ -1191,6 +1197,8 @@ namespace TanksMP
             if (!IsLocal)
                 return;
             
+            GameManager.GetInstance().ui.DropCollectiblesButton.gameObject.SetActive(false);
+
             RewardCoins(_playerCurrencyRewarder.RewardForFlagCapture());
         }
 

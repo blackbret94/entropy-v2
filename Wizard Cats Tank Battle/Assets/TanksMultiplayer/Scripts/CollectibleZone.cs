@@ -71,8 +71,10 @@ namespace TanksMP
                 if (scoreClip) AudioManager.Play3D(scoreClip, transform.position);
                 
                 // reward player for capture
-                if(colReq != null && colReq.CarriedBy != null)
+                if (colReq != null && colReq.CarriedBy != null)
+                {
                     colReq.CarriedBy.CmdRewardForCapture();
+                }
 
                 //add points for this score type to the correct team
                 GameManager.GetInstance().AddScore(ScoreType.Capture, teamIndex);

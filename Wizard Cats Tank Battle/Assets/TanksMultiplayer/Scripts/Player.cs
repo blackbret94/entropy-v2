@@ -11,7 +11,6 @@ using Entropy.Scripts.Player;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
-using UnityEngine.EventSystems;
 using Vashta.Entropy.Character;
 using EckTechGames.FloatingCombatText;
 using TMPro;
@@ -37,8 +36,8 @@ namespace TanksMP
         /// Maximum health value at game start.
         /// </summary>
         public int maxHealth = 10;
-
         public int maxShield = 5;
+        public int maxUltimate = 10;
 
         // public int counterDamageMod = 2;
         // public int sameClassDamageMod = -1;
@@ -77,22 +76,12 @@ namespace TanksMP
         /// Icon next to the slider displaying the player class
         /// </summary>
         public Image classIcon;
-
-        /// <summary>
-        /// Clip to play on player death.
-        /// </summary>
-        public AudioClip explosionClip;
-
+        
         /// <summary>
         /// Object to spawn on shooting.
         /// </summary>
         public GameObject shotFX;
-
-        /// <summary>
-        /// Object to spawn on player death.
-        /// </summary>
-        public GameObject defaultDeathFx;
-
+        
         /// <summary>
         /// Turret to rotate with look direction.
         /// </summary>
@@ -1315,6 +1304,8 @@ namespace TanksMP
             ClassApplier.ApplyClass(this, playerCollisionHandler, classDefinition, handicapModifier);
             SetMaxHealth();
             ReplaceClassMissile();
+            
+            GameManager.GetInstance().ui.CastUltimateButton.UpdateSpellIcon(classDefinition.ultimateIcon);
         }
 
         private void ReplaceClassMissile()
@@ -1364,6 +1355,64 @@ namespace TanksMP
 
             UIGame uiGame = GameManager.GetInstance().ui;
             uiGame.PowerUpPanel.SetText(powerup.DisplayText,powerup.DisplaySubtext, powerup.Color, powerup.Icon);
+        }
+
+        /// Section: ULTIMATES
+
+        // Server only
+        public void IncreaseUltimate()
+        {
+            if(!PhotonNetwork.IsMasterClient)
+                return;
+
+            // Only give to living players
+            if (!IsAlive)
+                return;
+            
+            if(GetView().GetUltimate() < maxUltimate)
+                GetView().SetUltimate(GetView().GetUltimate()+1);
+        }
+
+        // Server only
+        [PunRPC]
+        public void RpcClearUltimate()
+        {
+            if (!PhotonNetwork.IsMasterClient)
+                return;
+            
+            GetView().SetUltimate(0);
+        }
+        
+        public int GetUltimate()
+        {
+            return GetView().GetUltimate();
+        }
+
+        public float GetUltimatePerun()
+        {
+            return (float)GetView().GetUltimate() / maxUltimate;
+        }
+
+        /// <summary>
+        /// Called by local player
+        /// </summary>
+        /// <returns></returns>
+        public void TryCastUltimate()
+        {
+            if (GetView().GetUltimate() >= maxUltimate)
+            {
+                GetView().RPC("RpcClearUltimate", RpcTarget.MasterClient);
+                GetView().RPC("RpcCastUltimate", RpcTarget.All);
+            }
+        }
+
+        /// <summary>
+        /// Create ultimate effect, run on all clients
+        /// </summary>
+        [PunRPC]
+        public void RpcCastUltimate()
+        {
+            
         }
     }
 }

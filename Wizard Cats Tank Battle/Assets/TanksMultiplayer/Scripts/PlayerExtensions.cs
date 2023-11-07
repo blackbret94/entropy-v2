@@ -28,6 +28,7 @@ namespace TanksMP
         public const string classId = "classId";
         public const string preferredTeam = "preferredTeam"; // for changing teams
         public const string isAlive = "isAlive";
+        public const string ultimate = "ultimate";
 
         public const int RANDOM_TEAM_INDEX = 100;
 
@@ -614,6 +615,46 @@ namespace TanksMP
         {
             player.SetCustomProperties(new Hashtable() { { preferredTeam, (byte)value } });
         }
+        
+        // Ultimate
+        public static int GetUltimate(this Photon.Realtime.Player player)
+        {
+            return System.Convert.ToInt32(player.CustomProperties[ultimate]);
+        }
+
+        public static int GetUltimate(this PhotonView player)
+        {
+            if (PhotonNetwork.OfflineMode == true)
+            {
+                PlayerBot bot = player.GetComponent<PlayerBot>();
+                if (bot != null)
+                {
+                    return bot.ultimate;
+                }
+            }
+
+            return player.Owner.GetUltimate();
+        }
+        
+        public static void SetUltimate(this PhotonView player, int value)
+        {
+            if (PhotonNetwork.OfflineMode == true)
+            {
+                PlayerBot bot = player.GetComponent<PlayerBot>();
+                if (bot != null)
+                {
+                    bot.ultimate = value;
+                    return;
+                }
+            }
+
+            player.Owner.SetUltimate(value);
+        }
+
+        public static void SetUltimate(this Photon.Realtime.Player player, int value)
+        {
+            player.SetCustomProperties(new Hashtable() { { ultimate, (byte)value } });
+        }
 
         /// <summary>
         /// Offline: clears all properties of a PlayerBot locally.
@@ -631,6 +672,7 @@ namespace TanksMP
                     bot.shield = 0;
                     bot.joinTime = 0;
                     bot.classId = 0;
+                    bot.ultimate = 0;
                     return;
                 }
             }
@@ -648,7 +690,8 @@ namespace TanksMP
                                                          { PlayerExtensions.shield, (byte)0 },
                                                          {PlayerExtensions.joinTime, (byte)0 },
                                                          {PlayerExtensions.classId, (byte)1 },
-                                                         {PlayerExtensions.preferredTeam, (byte) RANDOM_TEAM_INDEX}
+                                                         {PlayerExtensions.preferredTeam, (byte) RANDOM_TEAM_INDEX},
+                                                         {PlayerExtensions.ultimate, (byte)0 }
             });
         }
     }

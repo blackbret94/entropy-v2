@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Vashta.Entropy.Spells;
 
 namespace Entropy.Scripts.Player
 {
@@ -30,7 +31,9 @@ namespace Entropy.Scripts.Player
         public Color colorTertiary;
 
         public ClassList classList;
-        
+
+        public Sprite ultimateIcon;
+        public SpellData ultimateSpell;
 
         // The class does extra damage to these classes
         public List<ClassDefinition> classCounters;

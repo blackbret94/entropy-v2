@@ -249,6 +249,8 @@ namespace TanksMP
             //at this point, continue with the critical game aspects only on the server
             if (!PhotonNetwork.IsMasterClient) return;
 
+            // -- START SERVER ONLY --
+            
             //create list for affected players by this bullet and add the collided player immediately,
             //we have done validation & friendly fire checks above already
             List<Player> targets = new List<Player>();
@@ -275,7 +277,7 @@ namespace TanksMP
                 }
             }
 
-            //apply bullet damage to the collided players
+            //apply damage and effects to the collided players
             if (owner != null)
             {
                 Player origin = owner.GetComponent<Player>();
@@ -293,12 +295,16 @@ namespace TanksMP
                     }
                     else
                     {
-                        // Debuff allies
+                        // Debuff enemies
                         if(canDebuff)
                             AttemptApplyEffectEnemy(origin, target);
                     }
 
+                    // apply damage
                     target.TakeDamage(this);
+                    
+                    // increase ultimate for player
+                    origin.IncreaseUltimate();
                 }
             }
         }

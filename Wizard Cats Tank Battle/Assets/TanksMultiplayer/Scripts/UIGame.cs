@@ -37,6 +37,8 @@ namespace TanksMP
         public GameObject aimIndicator;
         
         public DeathPanel DeathPanel;
+
+        public HUDPanel HUD;
         
         /// <summary>
         /// UI text for indicating game end and which team has won the round.
@@ -61,6 +63,7 @@ namespace TanksMP
         public SceneNavigator SceneNavigator;
 
         public DropCollectiblesButton DropCollectiblesButton;
+        public CastUltimateButton CastUltimateButton;
 
         //initialize variables
         void Start()
@@ -185,6 +188,7 @@ namespace TanksMP
         {       
             //hide text but enable game over window
             gameOverText.gameObject.SetActive(false);
+            HUD.ClosePanel();
             MatchOverPanel.Get().Inflate(winningTeamName, winningTeamIndex, winningTeamColor);
             // gameOverMenu.SetActive(true);
             

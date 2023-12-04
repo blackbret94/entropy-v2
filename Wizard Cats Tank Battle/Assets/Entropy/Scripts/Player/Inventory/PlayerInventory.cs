@@ -97,7 +97,7 @@ namespace Entropy.Scripts.Player.Inventory
                     return i;
             }
 
-            Debug.Log("Could not find hat with ID: " + id);
+            // Debug.Log("Could not find hat with ID: " + id);
             return 0;
         }
 
@@ -123,7 +123,7 @@ namespace Entropy.Scripts.Player.Inventory
                     return i;
             }
 
-            Debug.Log("Could not find BodyType with ID: " + id);
+            // Debug.Log("Could not find BodyType with ID: " + id);
             return 0;
         }
 
@@ -157,7 +157,7 @@ namespace Entropy.Scripts.Player.Inventory
                     return i;
             }
             
-            Debug.Log("Could not find Skin with ID: " + id);
+            // Debug.Log("Could not find Skin with ID: " + id);
             return 0;
         }
         
@@ -170,7 +170,7 @@ namespace Entropy.Scripts.Player.Inventory
                     return i;
             }
 
-            Debug.Log("Could not find cart with ID: " + id);
+            // Debug.Log("Could not find cart with ID: " + id);
             return 0;
         }
 
@@ -234,7 +234,7 @@ namespace Entropy.Scripts.Player.Inventory
                     return i;
             }
             
-            Debug.Log("Could not find turret with ID: " + id);
+            // Debug.Log("Could not find turret with ID: " + id);
             return 0;
         }
 
@@ -285,7 +285,7 @@ namespace Entropy.Scripts.Player.Inventory
                     return i;
             }
             
-            Debug.Log("Could not find meow with ID: " + id);
+            // Debug.Log("Could not find meow with ID: " + id);
             return 0;
         }
 

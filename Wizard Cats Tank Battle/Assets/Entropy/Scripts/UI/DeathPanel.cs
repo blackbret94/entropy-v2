@@ -15,7 +15,7 @@ namespace Vashta.Entropy.UI
         public void Set(string playerName, Team team)
         {
             //show killer name and colorize the name converting its team color to an HTML RGB hex value for UI markup
-            deathText.text = "KILLED BY\n<color=#" + ColorUtility.ToHtmlStringRGB(team.material.color) + ">" + playerName + "</color>";
+            deathText.text = "KNOCKED OUT BY \n<color=#" + ColorUtility.ToHtmlStringRGB(team.material.color) + ">" + playerName + "</color>";
 
             tipText.text = "TIP: " + tipList.getRandomString();
         }

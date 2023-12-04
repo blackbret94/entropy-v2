@@ -12,6 +12,7 @@ using Photon.Pun;
 using UnityEngine.UI;
 using Vashta.Entropy.SaveLoad;
 using Vashta.Entropy.UI;
+using Vashta.Entropy.World;
 
 namespace TanksMP
 {          

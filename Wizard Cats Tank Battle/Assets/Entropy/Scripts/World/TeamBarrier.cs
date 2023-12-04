@@ -2,7 +2,7 @@ using System;
 using TanksMP;
 using UnityEngine;
 
-namespace Vashta.Entropy.SaveLoad
+namespace Vashta.Entropy.World
 {
     public class TeamBarrier : MonoBehaviour
     {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Vashta.Entropy.SaveLoad
+namespace Vashta.Entropy.World
 {
     /// <summary>
     /// This class is used to restrict AI agents from attempting to reach enemy safezones.

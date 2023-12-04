@@ -951,18 +951,21 @@ namespace TanksMP
                 StatusEffectController.BloodPact(other);
                 
                 int otherTeam = other.GetView().GetTeam();
+                
+                // killer is other team
                 if (GetView().GetTeam() != otherTeam)
                 {
                     GameManager.GetInstance().AddScore(ScoreType.Kill, otherTeam);
                     other.GetView().IncrementKills();
                 }
-                else
-                {
-                    if (!canRespawnFreely)
-                    {
-                        GameManager.GetInstance().RemoveScore(ScoreType.Kill, otherTeam);
-                    }
-                }
+                // else
+                // killer is self (respawn)
+                // {
+                    // if (!canRespawnFreely)
+                    // {
+                    //     GameManager.GetInstance().RemoveScore(ScoreType.Kill, otherTeam);
+                    // }
+                // }
 
                 //the maximum score has been reached now
                 if (GameManager.GetInstance().IsGameOver())

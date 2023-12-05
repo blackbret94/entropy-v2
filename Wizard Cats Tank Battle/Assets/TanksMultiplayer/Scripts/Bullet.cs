@@ -8,7 +8,9 @@ using UnityEngine;
 using System.Collections.Generic;
 using Entropy.Scripts.Player;
 using Photon.Pun;
+using UnityEngine.Serialization;
 using Vashta.Entropy.ScriptableObject;
+using Vashta.Entropy.Spells;
 using Vashta.Entropy.StatusEffects;
 using Random = UnityEngine.Random;
 
@@ -25,7 +27,7 @@ namespace TanksMP
         /// <summary>
         /// Projectile travel speed in units.
         /// </summary>
-        public float speed = 10;
+        public float baseSpeed = 10;
 
         /// <summary>
         /// Damage to cause on a player that gets hit.
@@ -134,6 +136,16 @@ namespace TanksMP
             _damage = newDamage;
         }
 
+        public float GetBaseSpeed()
+        {
+            return baseSpeed;
+        }
+        
+        public void SetSpeed(float newSpeed)
+        {
+            myRigidbody.velocity = newSpeed * transform.forward;
+        }
+        
         public int GetId()
         {
             return bulletId;
@@ -142,7 +154,7 @@ namespace TanksMP
         public void SpawnNewBullet()
         {
             // Reset damage
-            _damage = _damageRaw;   
+            _damage = _damageRaw;
             _timeCreated = Time.time;
         }
 
@@ -166,10 +178,9 @@ namespace TanksMP
                 if(BounceSfx) AudioManager.Play3D(BounceSfx.GetRandomClip(), transform.position);
             }
 
-            myRigidbody.velocity = speed * transform.forward;
+            myRigidbody.velocity = baseSpeed * transform.forward;
             PoolManager.Despawn(gameObject, despawnDelay);
         }
-
 
         ///check what was hit on collisions. Only do non-critical client work here,
         //not even accessing player variables or anything like that. The server side is separate below
@@ -240,6 +251,11 @@ namespace TanksMP
                     return;
                 }
             }
+            
+            // see if we hit a spell field
+            SpellField spellField = obj.GetComponent<SpellField>();
+            if (spellField)
+                return;
 
             //despawn gameobject
             PoolManager.Despawn(gameObject);

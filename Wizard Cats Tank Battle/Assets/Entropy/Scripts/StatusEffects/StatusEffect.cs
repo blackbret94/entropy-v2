@@ -195,6 +195,11 @@ namespace Vashta.Entropy.StatusEffects
             return StatusEffectData().ApplyInstantly;
         }
 
+        public bool BuffsLastForever()
+        {
+            return StatusEffectData().BuffsLastForever;
+        }
+
         public GameObject DeathFx()
         {
             return StatusEffectData().DeathFx;

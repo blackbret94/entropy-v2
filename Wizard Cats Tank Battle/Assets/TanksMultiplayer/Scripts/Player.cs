@@ -15,6 +15,7 @@ using Vashta.Entropy.Character;
 using EckTechGames.FloatingCombatText;
 using TMPro;
 using Vashta.Entropy.ScriptableObject;
+using Vashta.Entropy.Spells;
 using Vashta.Entropy.StatusEffects;
 using Vashta.Entropy.UI.ClassSelectionPanel;
 
@@ -1309,7 +1310,8 @@ namespace TanksMP
             SetMaxHealth();
             ReplaceClassMissile();
             
-            GameManager.GetInstance().ui.CastUltimateButton.UpdateSpellIcon(classDefinition.ultimateIcon);
+            if(IsLocal)
+                GameManager.GetInstance().ui.CastUltimateButton.UpdateSpellIcon(classDefinition.ultimateIcon);
         }
 
         private void ReplaceClassMissile()
@@ -1416,7 +1418,16 @@ namespace TanksMP
         [PunRPC]
         public void RpcCastUltimate()
         {
-            
+            ClassDefinition classDefinition = classList[photonView.GetClassId()];
+            SpellData ultimateSpell = classDefinition.ultimateSpell;
+
+            if (!ultimateSpell)
+            {
+                Debug.LogError("Class with ID " + photonView.GetClassId() + " is missing an ultimate spell!");
+                return;
+            }
+
+            ultimateSpell.Cast(this);
         }
     }
 }

@@ -30,7 +30,6 @@ namespace Vashta.Entropy.StatusEffects
         [Tooltip("Overrides the Voidstalker's ability to remove buffs and debuffs")]
         public bool ImmuneToRemoval;
 
-
         [Header("Effects")] 
         [Tooltip("Multiplies")]
         public float MassMultiplaier = 1f;
@@ -66,5 +65,8 @@ namespace Vashta.Entropy.StatusEffects
         public bool BloodPact;
         [Tooltip("Optional, allows chaining of status effects")]
         public StatusEffectData ChainedStatusEffect = null;
+
+        [Tooltip("Does not remove buffs while active")]
+        public bool BuffsLastForever;
     }
 }

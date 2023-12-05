@@ -41,6 +41,7 @@ namespace Vashta.Entropy.StatusEffects
         private bool _blocksCastingBuffsCached = false;
         private bool _blocksCastingDebuffsCached = false;
         private Player _leechingAppliedByCached;
+        private bool _buffsLastForeverCached = false;
 
         private StatusEffectData _bloodVengeanceChainedEffect;
         
@@ -58,6 +59,7 @@ namespace Vashta.Entropy.StatusEffects
         public bool IsReflective => _isReflectiveCached;
         public bool BlocksBuffs => _blocksBuffsCached;
         public bool BlocksDebuffs => _blocksDebuffsCached;
+        public bool BuffsLastForever => _buffsLastForeverCached;
         public bool BlocksCastingBuffs => _blocksCastingBuffsCached;
         public bool BlocksCastingDebuffs => _blocksCastingDebuffsCached;
         public Player LeechingAppliedBy => _leechingAppliedByCached;
@@ -189,8 +191,16 @@ namespace Vashta.Entropy.StatusEffects
 
             foreach (StatusEffect statusEffect in statusEffects)
             {
+                // Refresh expiration if buffs last forever
+                if (_buffsLastForeverCached && statusEffect.BuffsLastForever())
+                {
+                    statusEffect.SetExpiration();
+                }
+                
                 if (statusEffect.HasExpired())
+                {
                     RemoveStatusEffect(statusEffect);
+                }
             }
             
             _lastRefresh = Time.time;
@@ -258,6 +268,7 @@ namespace Vashta.Entropy.StatusEffects
             _isReflectiveCached = false;
             _blocksBuffsCached = false;
             _blocksDebuffsCached = false;
+            _buffsLastForeverCached = false;
             _blocksCastingBuffsCached = false;
             _blocksCastingDebuffsCached = false;
             _bloodVengeanceChainedEffect = null;
@@ -294,6 +305,9 @@ namespace Vashta.Entropy.StatusEffects
 
                 if (statusEffect.BlocksCastingDebuffs())
                     _blocksCastingDebuffsCached = true;
+
+                if (statusEffect.BuffsLastForever())
+                    _buffsLastForeverCached = true;
 
                 if (statusEffect.Leeching() > .1f &&
                     (_leechingAppliedByCached == null || !_leechingAppliedByCached.IsAlive)) // Only switch to a new player if the current cache is invalid

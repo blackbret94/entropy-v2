@@ -39,8 +39,8 @@ namespace TanksMP
         public int maxShield = 5;
         public int maxUltimate = 10;
 
-        // public int counterDamageMod = 2;
-        // public int sameClassDamageMod = -1;
+        public int counterDamageMod = 2;
+        public int sameClassDamageMod = -1;
 
         public float acceleration = 30f;
 
@@ -457,7 +457,7 @@ namespace TanksMP
             }
             
             if(healthPerSecond != 0 && (healthPerSecond < 0 || health < maxHealth))
-                this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer, -healthPerSecond);
+                this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer, -healthPerSecond, false, false);
             
             if (health <= 0)
                 // killed the player
@@ -646,7 +646,7 @@ namespace TanksMP
 
         //called on the server first but forwarded to all clients
         [PunRPC]
-        protected void CmdTakeDamage(int damage)
+        protected void CmdTakeDamage(int damage, bool attackerIsCounter, bool attackerIsSame)
         {
             if (damage == 0)
                 return;
@@ -654,22 +654,23 @@ namespace TanksMP
             // Show damage
             if (damage > 0)
             {
-                // if (attackerIsCounter)
-                // {
-                //     OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.CriticalHit,
-                //         damage);
-                // }
-                // else if (attackerIsSame)
-                // {
-                //     OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.Miss, damage);
-                // }
-                // else
-                // {
+                if (attackerIsCounter)
+                {
+                    OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.CriticalHit,
+                        damage);
+                }
+                else if (attackerIsSame)
+                {
+                    OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.Miss, damage);
+                }
+                else
+                {
                     OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.Hit, damage);
-                // }
+                }
             }
             else
             {
+                // Show heals
                 OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.Heal, Mathf.Abs(damage));
             }
 
@@ -774,7 +775,7 @@ namespace TanksMP
             GetView().SetHealth(health);
             
             if(healAmount < 0 || health < maxHealth)
-                this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer, -healAmount);
+                this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer, -healAmount, false, false);
         }
 
         /// <summary>
@@ -824,7 +825,7 @@ namespace TanksMP
             {
                 //we didn't die, set health to new value
                 GetView().SetHealth(health);
-                this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer, damage);
+                this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer, damage, false, false);
             }
         }
 
@@ -865,7 +866,7 @@ namespace TanksMP
             {
                 //we didn't die, set health to new value
                 GetView().SetHealth(health);
-                this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer, damage);
+                this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer, damage, attackerIsCounter, attackerIsSame);
             }
         }
 
@@ -883,18 +884,18 @@ namespace TanksMP
             attackerIsCounter = false;
             attackerIsSame = false;
 
-            // attackerIsCounter = bullet.ClassDefinition.IsCounter(photonView.GetClassId());
-            // attackerIsSame = bullet.ClassDefinition.classId == photonView.GetClassId();
-            //
-            // if (attackerIsCounter)
-            // {
-            //     calculatedDamage += counterDamageMod;
-            // }
-            //
-            // if (attackerIsSame)
-            // {
-            //     calculatedDamage += sameClassDamageMod;
-            // }
+            attackerIsCounter = bullet.ClassDefinition.IsCounter(photonView.GetClassId());
+            attackerIsSame = bullet.ClassDefinition.classId == photonView.GetClassId();
+            
+            if (attackerIsCounter)
+            {
+                calculatedDamage += counterDamageMod;
+            }
+            
+            if (attackerIsSame)
+            {
+                calculatedDamage += sameClassDamageMod;
+            }
             
             // Check defense modifier
             calculatedDamage += StatusEffectController.DamageTakenModifier;

@@ -116,7 +116,7 @@ namespace Vashta.Entropy.ScriptableObject
             if (_indexedCarts.ContainsKey(id))
                 return _indexedCarts[id];
 
-            Debug.Log("Could not find cart with ID: " + id);
+            // Debug.Log("Could not find cart with ID: " + id);
             return Carts[0];
         }
 
@@ -131,7 +131,7 @@ namespace Vashta.Entropy.ScriptableObject
             if (_indexedTurrets.ContainsKey(id))
                 return _indexedTurrets[id];
 
-            Debug.Log("Could not find turret with ID: " + id);
+            // Debug.Log("Could not find turret with ID: " + id);
             return Turrets[0];
         }
 
@@ -146,7 +146,7 @@ namespace Vashta.Entropy.ScriptableObject
             if (_indexedMeows.ContainsKey(id))
                 return _indexedMeows[id];
             
-            Debug.Log("Could not find Meow with ID: " + id);
+            // Debug.Log("Could not find Meow with ID: " + id);
             return Meows[0];
         }
 

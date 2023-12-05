@@ -16,8 +16,13 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
         
         public Image ClassPortrait;
         public Image ClassIcon;
+
+        public GameObject ClassCounteredByGO;
         [FormerlySerializedAs("ClassCounter")] public Image ClassCounteredBy;
+
+        public GameObject ClassCountersGO;
         public Image ClassCounters;
+        
         public ClassSkillComponent Skill1;
         public ClassSkillComponent Skill2;
 
@@ -40,25 +45,25 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
             // Counters
             if (definition.classCounters.Count > 0)
             {
-                ClassCounters.gameObject.SetActive(true);
+                ClassCountersGO.SetActive(true);
                 ClassCounters.sprite = definition.classCounters[0].classIcon;
             }
             else
             {
                 // Hide if no counter
-                ClassCounters.gameObject.SetActive(false);
+                ClassCountersGO.SetActive(false);
             }
             
             // Update countered by
             List<ClassDefinition> counteredByList = definition.GetClassesCounteredBy();
             if (counteredByList.Count > 0)
             {
-                ClassCounteredBy.gameObject.SetActive(true);
+                ClassCounteredByGO.SetActive(true);
                 ClassCounteredBy.sprite = counteredByList[0].classIcon;
             }
             else
             {
-                ClassCounteredBy.gameObject.SetActive(false);
+                ClassCounteredByGO.SetActive(false);
             }
             
             Bullet bullet = definition.Missile.GetComponent<Bullet>();

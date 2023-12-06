@@ -20,11 +20,20 @@ namespace Vashta.Entropy.Spells
         private int _teamIndex;
 
         private float _spawnTime;
+
+        private GameObject _spawnedParticleEffect;
         
         public void Init(Player caster, SpellData spellData)
         {
+            // clear
+            if (_spawnedParticleEffect != null)
+            {
+                PoolManager.Despawn(_spawnedParticleEffect);
+            }
+            
             _playersInZone.Clear();
             
+            // set new values
             _caster = caster;
             _teamIndex = caster.GetView().GetTeam();
             
@@ -32,6 +41,12 @@ namespace Vashta.Entropy.Spells
             Collider.radius = _spell.Radius;
 
             _spawnTime = Time.time;
+
+            if (_spell.EffectToSpawn)
+            {
+                _spawnedParticleEffect =
+                    PoolManager.Spawn(_spell.EffectToSpawn, transform.position, Quaternion.identity);
+            }
             
             ParticleSystem.MainModule mainModule = ParticleSystem.main;
             mainModule.startLifetime = _spell.Radius/5;

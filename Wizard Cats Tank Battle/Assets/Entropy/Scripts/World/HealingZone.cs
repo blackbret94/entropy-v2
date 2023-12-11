@@ -28,8 +28,14 @@ namespace Vashta.Entropy.World
             
             if (_lastHeal + HealRateS <= Time.time)
             {
-                foreach (Player player in _playersInZone)
+                // Allow safe mutation of collection
+                List<Player> playersInZoneSafeCopy = new List<Player>(_playersInZone);
+                
+                foreach (Player player in playersInZoneSafeCopy)
                 {
+                    if (!player.IsAlive || player.GetView().GetTeam() != HealTeamId)
+                        _playersInZone.Remove(player);
+                    
                     player.Heal(HealAmount);
                 }
                 
@@ -55,10 +61,7 @@ namespace Vashta.Entropy.World
                 return;
             
             Player player = other.gameObject.GetComponent<Player>();
-            if (player != null && player.GetView().GetTeam() == HealTeamId)
-            {
-                _playersInZone.Remove(player);
-            }
+            _playersInZone.Remove(player);
         }
     }
 }

@@ -64,31 +64,47 @@ namespace Vashta.Entropy.Spells
             List<Player> enemiesList;
             
             GetPlayers(caster, out alliesList, out enemiesList);
+            
+            Quaternion rotation = Quaternion.Euler(-90, 0, 0);
 
             //Apply effects to allies
             foreach (Player player in alliesList)
             {
                 player.Heal(HealAlliesOnCast);
-                
-                if(CastStatusEffectAllies)
+
+                if (CastStatusEffectAllies)
+                {
                     player.ApplyStatusEffect(CastStatusEffectAllies.Id, caster.GetId());
+                    PoolManager.Spawn(HealAlliesEffect, player.transform.position + Vector3.up, rotation);
+                }
             }
             
             // Apply effects to enemies
             foreach (Player player in enemiesList)
             {
                 player.TakeDamage(DamageEnemiesOnCast, caster);
-                
-                if(CastStatusEffectEnemies)
+
+                if (CastStatusEffectEnemies)
+                {
                     player.ApplyStatusEffect(CastStatusEffectEnemies.Id, caster.GetId());
+                    PoolManager.Spawn(DamageEnemiesEffect, player.transform.position + Vector3.up, rotation);
+                }
             }
             
             // Place field
             if (SpawnsField)
             {
-                GameObject field = PoolManager.Spawn(SpellFieldPrefab, caster.transform.position, Quaternion.identity);
+                GameObject field = PoolManager.Spawn(SpellFieldPrefab, caster.transform.position + Vector3.up, Quaternion.identity);
                 SpellField spellField = field.GetComponent<SpellField>();
                 spellField.Init(caster, this);
+            }
+            else
+            {
+                // Create effect as one-off
+                if (EffectToSpawn)
+                {
+                    PoolManager.Spawn(EffectToSpawn, caster.transform.position + Vector3.up, rotation);
+                }
             }
         }
 

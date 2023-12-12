@@ -44,12 +44,15 @@ namespace Vashta.Entropy.Spells
 
             if (_spell.EffectToSpawn)
             {
+                Quaternion rotation = Quaternion.Euler(-90, 0, 0);
                 _spawnedParticleEffect =
-                    PoolManager.Spawn(_spell.EffectToSpawn, transform.position, Quaternion.identity);
+                    PoolManager.Spawn(_spell.EffectToSpawn, transform.position, rotation);
+
+                _spawnedParticleEffect.transform.parent = transform;
             }
             
-            ParticleSystem.MainModule mainModule = ParticleSystem.main;
-            mainModule.startLifetime = _spell.Radius/5;
+            // ParticleSystem.MainModule mainModule = ParticleSystem.main;
+            // mainModule.startLifetime = _spell.Radius/5;
         }
 
         private void Update()

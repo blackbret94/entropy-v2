@@ -990,6 +990,7 @@ namespace TanksMP
             GetView().SetHealth(maxHealth);
             GetView().SetShield(0);
             GetView().SetBullet(0);
+            GetView().SetUltimate(0);
 
             DropCollectibles();
 
@@ -1068,6 +1069,7 @@ namespace TanksMP
                 {
                     // Hide "Drop Flag" button if local player
                     GameManager.GetInstance().ui.DropCollectiblesButton.gameObject.SetActive(false);
+                    GameManager.GetInstance().ui.CastUltimateButton.gameObject.SetActive(false);
                 }
                 
                 //find original sender game object (killedBy)
@@ -1121,6 +1123,10 @@ namespace TanksMP
                 StatusEffectController.RefreshCache();
                 ApplyClass();
                 ColorizePlayerForTeam();
+                
+                // Show ultimates button
+                // if(IsLocal)
+                    // GameManager.GetInstance().ui.CastUltimateButton.gameObject.SetActive(true);
                 
                 if(PhotonNetwork.IsMasterClient)
                     GetView().SetIsAlive(true);

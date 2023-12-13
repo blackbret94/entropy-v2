@@ -125,8 +125,21 @@ namespace TanksMP
         /// </summary>
         public void Play()
         {
+            NetworkMode networkMode = (NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode);
+            
             loadingWindow.SetActive(true);
-            NetworkManagerCustom.JoinRandomRoom();
+
+            if (networkMode == NetworkMode.Online)
+            {
+                // Join online
+                NetworkManagerCustom.JoinRandomRoom();
+            }
+            else
+            {
+                // Join offline
+                NetworkManagerCustom.GetInstance().JoinRandomRoomOffline(new Hashtable());
+            }
+            
             // NetworkManagerCustom.StartMatch((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode));
             StartCoroutine(HandleTimeout());
         }

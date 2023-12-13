@@ -35,32 +35,46 @@ namespace TanksMP
         IEnumerator EnterPlay()
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
-            
-            // Clear connection
-            // PhotonNetwork.Disconnect();
-            // while (PhotonNetwork.IsConnected)
-            // {
-            //     Debug.LogWarning("Disconnecting...");
-            //     yield return null;
-            // }
-            //
-            if (!PhotonNetwork.IsConnected)
-            {
-                Debug.LogWarning("Disconnected");
-                NetworkManagerCustom.GetInstance().Connect((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode));
+            NetworkMode networkMode = (NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode);
 
-                while (!PhotonNetwork.IsConnected)
+            if (networkMode == NetworkMode.Online)
+            {
+                // Handle online
+            
+                if (!PhotonNetwork.IsConnected)
                 {
-                    Debug.LogWarning("Connecting...");
-                    yield return null;
+                    NetworkManagerCustom.GetInstance().Connect(networkMode);
+
+                    // while (!PhotonNetwork.IsConnected)
+                    // {
+                    //     yield return null;
+                    // }
                 }
-                
-                Debug.LogWarning("Connected");
+                else
+                {
+                    OnConnectedToMaster();
+                }
             }
             else
             {
+                // Handle offline
+                
+                // Clear connection
+                if (PhotonNetwork.IsConnected)
+                {
+                    PhotonNetwork.Disconnect();
+                    while (PhotonNetwork.IsConnected)
+                    {
+                        yield return null;
+                    }
+                }
+            
+                NetworkManagerCustom.GetInstance().Connect(networkMode);
+                
                 OnConnectedToMaster();
             }
+            
+            
         }
 
         /// <summary>

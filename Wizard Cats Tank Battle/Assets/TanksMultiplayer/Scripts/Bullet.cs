@@ -193,6 +193,11 @@ namespace TanksMP
 
         public void Collide(GameObject obj)
         {
+            // see if we hit a spell field
+            SpellField spellField = obj.GetComponent<SpellField>();
+            if (spellField)
+                return;
+            
             //try to get a player component out of the collided gameobject
             Player player = obj.GetComponent<Player>();
 
@@ -251,11 +256,6 @@ namespace TanksMP
                     return;
                 }
             }
-            
-            // see if we hit a spell field
-            SpellField spellField = obj.GetComponent<SpellField>();
-            if (spellField)
-                return;
 
             //despawn gameobject
             PoolManager.Despawn(gameObject);

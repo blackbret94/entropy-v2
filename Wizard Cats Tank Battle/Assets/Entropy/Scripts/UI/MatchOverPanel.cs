@@ -80,7 +80,7 @@ namespace Vashta.Entropy.UI
             
             if (topPlayers.Count >= minPlayersToShow)
             {
-                if (topPlayers[0].Player.IsLocal)
+                if (topPlayers[0].Player is { IsLocal: true })
                 {
                     // player is in first
                     Debug.Log("Player is in first!");
@@ -89,7 +89,7 @@ namespace Vashta.Entropy.UI
                     return;
                 }
                 
-                if (topPlayers[1].Player.IsLocal)
+                if (topPlayers[1].Player is {IsLocal : true})
                 {
                     // player is in second
                     Debug.Log("Player is in second!");
@@ -98,7 +98,7 @@ namespace Vashta.Entropy.UI
                     return;
                 }
                 
-                if (topPlayers[2].Player.IsLocal)
+                if (topPlayers[2].Player is {IsLocal : true})
                 {
                     // player is in third
                     Debug.Log("Player is in third!");

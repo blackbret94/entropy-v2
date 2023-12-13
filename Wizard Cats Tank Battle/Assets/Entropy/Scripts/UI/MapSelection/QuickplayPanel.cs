@@ -16,10 +16,10 @@ namespace Vashta.Entropy.UI.MapSelection
         public override void OpenPanel()
         {
             base.OpenPanel();
+            PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Online);
 
             if (!PhotonNetwork.IsConnected)
             {
-                PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Online);
                 NetworkManagerCustom.GetInstance().Connect(NetworkMode.Online);
             }
         }

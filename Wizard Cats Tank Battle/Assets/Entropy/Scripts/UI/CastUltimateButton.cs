@@ -11,9 +11,15 @@ namespace Vashta.Entropy.UI
         
         private Player _localPlayer;
         
+        private const float LERP_RATE = 20f;
+        private const float LERP_CLAMP = .1f;
+        private float _currentDisplayedValue = 0f;
+        
         private void Start()
         {
             FindLocalPlayer();
+            _currentDisplayedValue = 0f;
+            UltimateSlider.value = 0f;
         }
         
         public void CastUltimateLocalPlayer()
@@ -35,6 +41,12 @@ namespace Vashta.Entropy.UI
             SpellIcon.sprite = sprite;
         }
 
+        public void ResetUltimate()
+        {
+            _currentDisplayedValue = 0f;
+            UltimateSlider.value = 0;
+        }
+
         private void Update()
         {
             if(!_localPlayer)
@@ -45,8 +57,27 @@ namespace Vashta.Entropy.UI
                 Debug.LogError("Could not find local player!");
                 return;
             }
+
+            float newUltimateValue = 1 - _localPlayer.GetUltimatePerun();
+
+            if (newUltimateValue > .99 || newUltimateValue < .01)
+            {
+                // CLAMP
+                _currentDisplayedValue = newUltimateValue;
+            }
+            else if (Mathf.Abs(_currentDisplayedValue - newUltimateValue) < LERP_CLAMP)
+            {
+                // Clamp
+                _currentDisplayedValue = newUltimateValue;
+            }
+            else
+            {
+                // Lerp
+                _currentDisplayedValue = Mathf.Lerp(_currentDisplayedValue, newUltimateValue, LERP_RATE * Time.deltaTime);
+            }
             
-            UltimateSlider.value = 1-_localPlayer.GetUltimatePerun();
+            // Apply
+            UltimateSlider.value = _currentDisplayedValue;
         }
 
         private void FindLocalPlayer()

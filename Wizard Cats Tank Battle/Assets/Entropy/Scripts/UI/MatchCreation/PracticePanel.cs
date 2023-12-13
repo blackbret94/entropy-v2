@@ -15,9 +15,10 @@ namespace Vashta.Entropy.UI.MatchCreation
         {
             base.OpenPanel();
 
+            PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Offline);
+            
             if (PhotonNetwork.IsConnected)
             {
-                PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Offline);
                 NetworkManagerCustom.GetInstance().DisconnectFromServer();
             }
         }

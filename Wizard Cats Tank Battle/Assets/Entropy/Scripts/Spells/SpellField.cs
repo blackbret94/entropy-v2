@@ -8,7 +8,6 @@ namespace Vashta.Entropy.Spells
     public class SpellField : MonoBehaviour
     {
         public CapsuleCollider Collider;
-        public ParticleSystem ParticleSystem;
         
         private List<Player> _playersInZone = new ();
         
@@ -46,13 +45,10 @@ namespace Vashta.Entropy.Spells
             {
                 Quaternion rotation = Quaternion.Euler(-90, 0, 0);
                 _spawnedParticleEffect =
-                    PoolManager.Spawn(_spell.EffectToSpawn, transform.position, rotation);
+                    PoolManager.Spawn(_spell.EffectToSpawn, caster.transform.position+Vector3.up*.1f+spellData.CastEffectOffset, rotation);
 
                 _spawnedParticleEffect.transform.parent = transform;
             }
-            
-            // ParticleSystem.MainModule mainModule = ParticleSystem.main;
-            // mainModule.startLifetime = _spell.Radius/5;
         }
 
         private void Update()

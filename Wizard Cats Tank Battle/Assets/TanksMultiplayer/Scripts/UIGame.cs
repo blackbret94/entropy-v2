@@ -209,11 +209,11 @@ namespace TanksMP
         /// </summary>
         public void Restart()
         {
+            Disconnect();
+
             GameObject gObj = new GameObject("RestartNow");
             gObj.AddComponent<UIRestartButton>();
             DontDestroyOnLoad(gObj);
-            
-            Disconnect();
         }
 
 

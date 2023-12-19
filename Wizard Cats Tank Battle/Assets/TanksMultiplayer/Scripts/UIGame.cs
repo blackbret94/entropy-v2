@@ -11,6 +11,7 @@ using Photon.Pun;
 using UnityEngine.Serialization;
 using Vashta.Entropy.SceneNavigation;
 using Vashta.Entropy.UI;
+using Vashta.Entropy.UI.ClassSelectionPanel;
 using Vashta.Entropy.UI.TeamScore;
 
 namespace TanksMP
@@ -65,9 +66,18 @@ namespace TanksMP
         public DropCollectiblesButton DropCollectiblesButton;
         public CastUltimateButton CastUltimateButton;
 
+        public ClassSelectionPanel ClassSelectionPanel;
+        public SettingsPanel SettingsPanel;
+        public ScoreboardPanel ScoreboardPanel;
+
+        private static UIGame _instance;
+        public static UIGame GetInstance() => _instance;
+
         //initialize variables
         void Start()
         {
+            _instance = this;
+            
             //on non-mobile devices hide joystick controls, except in editor
             #if !UNITY_EDITOR && (UNITY_STANDALONE || UNITY_WEBGL)
                 ToggleControls(false);

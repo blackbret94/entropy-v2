@@ -38,6 +38,9 @@ namespace TanksMP
             if (!PhotonNetwork.IsMasterClient)
                 return;
 
+            if (_carriedBy != null)
+                return;
+
             GameObject obj = col.gameObject;
             Player player = obj.GetComponent<Player>();
 

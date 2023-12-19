@@ -192,7 +192,8 @@ namespace Vashta.Entropy.StatusEffects
             foreach (StatusEffect statusEffect in statusEffects)
             {
                 // Refresh expiration if buffs last forever
-                if (_buffsLastForeverCached && statusEffect.BuffsLastForever())
+                // Makes sure that this is NOT a buffsLastForever effect, as that would be preserved forever
+                if (_buffsLastForeverCached && !statusEffect.BuffsLastForever())
                 {
                     statusEffect.SetExpiration();
                 }

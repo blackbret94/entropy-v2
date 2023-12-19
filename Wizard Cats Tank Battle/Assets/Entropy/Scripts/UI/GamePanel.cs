@@ -6,6 +6,8 @@ namespace Vashta.Entropy.UI
     public class GamePanel: MonoBehaviour
     {
         public List<GamePanel> ChildPanels;
+        // Does hitting "escape" close this panel?
+        public bool CanBeClosedByHotkey = false;
         
         public virtual void Refresh()
         {
@@ -36,6 +38,12 @@ namespace Vashta.Entropy.UI
         public virtual void ClosePanel()
         {
             gameObject.SetActive(false);
+        }
+
+        public virtual void CloseByHotkey()
+        {
+            if(CanBeClosedByHotkey)
+                ClosePanel();
         }
     }
 }

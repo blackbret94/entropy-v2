@@ -15,14 +15,28 @@ namespace Vashta.Entropy.UI
         [FormerlySerializedAs("TeamPanel")] public List<ScoreboardPlayerBadge> PlayerRows;
         private ScoreboardCalculator _scoreboardCalculator;
 
+        private bool _hasInit = false;
+        
         private void Start()
         {
+            Init();
+        }
+
+        private void Init()
+        {
+            if (_hasInit)
+                return;
+
             _scoreboardCalculator = new ScoreboardCalculator();
             Inflate();
+
+            _hasInit = true;
         }
 
         public override void OpenPanel()
         {
+            Init();
+            
             base.OpenPanel();
             
             if(ControlsHUD)

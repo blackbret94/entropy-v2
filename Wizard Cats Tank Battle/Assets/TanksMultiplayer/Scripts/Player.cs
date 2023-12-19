@@ -1125,8 +1125,8 @@ namespace TanksMP
                 ColorizePlayerForTeam();
                 
                 // Show ultimates button
-                // if(IsLocal)
-                    // GameManager.GetInstance().ui.CastUltimateButton.gameObject.SetActive(true);
+                if(IsLocal)
+                    GameManager.GetInstance().ui.CastUltimateButton.gameObject.SetActive(true);
                 
                 if(PhotonNetwork.IsMasterClient)
                     GetView().SetIsAlive(true);

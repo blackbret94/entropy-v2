@@ -41,6 +41,13 @@ namespace Vashta.Entropy.UI
             UpdateMapNameText();
             HUDPanel.Get().ClosePanel();
         }
+        
+        public override void ClosePanel()
+        {
+            base.ClosePanel();
+            ApplySettings();
+            HUDPanel.Get().OpenPanel();
+        }
 
         private void UpdateGameModeText()
         {
@@ -63,13 +70,6 @@ namespace Vashta.Entropy.UI
             
             MapDefinition gameModeDefinition = GameManager.GetInstance().GetMap();
             MapNameText.text = gameModeDefinition.Title;
-        }
-
-        public override void ClosePanel()
-        {
-            base.ClosePanel();
-            ApplySettings();
-            HUDPanel.Get().OpenPanel();
         }
 
         private void ReadSettings()
@@ -98,8 +98,7 @@ namespace Vashta.Entropy.UI
             MusicController.AudioSource.enabled = musicToggle.isOn;
             MusicController.PlayMusic();
         }
-
-
+        
         /// <summary>
         /// Modify global game volume based on player selection.
         /// Called by Slider onValueChanged event.

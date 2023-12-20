@@ -70,8 +70,7 @@ namespace TanksMP
         /// Object to spawn when this projectile gets despawned.
         /// </summary>
         public GameObject explosionFX;
-
-        public GameObject deathFx;
+        public VisualEffect deathFxData;
 
         public bool bounceInf;
 

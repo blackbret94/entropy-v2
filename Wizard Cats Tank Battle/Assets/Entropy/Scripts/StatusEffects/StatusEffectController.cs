@@ -3,6 +3,7 @@ using Photon.Pun;
 using TanksMP;
 using UnityEngine;
 using Vashta.Entropy.Character;
+using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.UI;
 
 namespace Vashta.Entropy.StatusEffects
@@ -366,21 +367,17 @@ namespace Vashta.Entropy.StatusEffects
         /// Iterate over all status effects, get death fx
         /// </summary>
         /// <returns></returns>
-        public GameObject GetDeathFx()
+        public string GetDeathFx()
         {
             foreach (var statusEffect in _statusEffects)
             {
-                if (statusEffect.DeathFx())
+                if (statusEffect.DeathFxData())
                 {
-                    return statusEffect.DeathFx();
-                }
-                else
-                {
-                    Debug.Log("Death fx not found! " + statusEffect.Title());
+                    return statusEffect.DeathFxData().Id;
                 }
             }
 
-            return null;
+            return "";
         }
 
         public void Leech()
@@ -401,7 +398,7 @@ namespace Vashta.Entropy.StatusEffects
             killer.StatusEffectController.AddStatusEffect(_bloodVengeanceChainedEffect.Id, _player);
 
             Transform killerTransform = killer.transform;
-            PoolManager.Spawn(_bloodVengeanceChainedEffect.DeathFx, killerTransform.position, killerTransform.rotation);
+            PoolManager.Spawn(_bloodVengeanceChainedEffect.DeathFxData.VisualEffectPrefab, killerTransform.position, killerTransform.rotation);
         }
     }
 }

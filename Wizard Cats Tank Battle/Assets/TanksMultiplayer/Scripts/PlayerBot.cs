@@ -294,13 +294,13 @@ namespace TanksMP
         /// Override of the base method to handle bot respawn separately.
         /// </summary>
         [PunRPC]
-        protected override void RpcRespawn(short senderId, int killingBlowBulletId)
+        protected override void RpcRespawn(short senderId, string deathFxId)
         {
-            StartCoroutine(Respawn(senderId, killingBlowBulletId));
+            StartCoroutine(Respawn(senderId, deathFxId));
         }
 
         //the actual respawn routine
-        IEnumerator Respawn(short senderId, int killingBlowBulletId)
+        IEnumerator Respawn(short senderId, string deathFxId)
         {   
             
             //stop AI updates
@@ -325,9 +325,8 @@ namespace TanksMP
                 
                 RewardCoinsForKill();
             }
-
-            Bullet killingBlowBullet = BulletDictionary[killingBlowBulletId];
-            SpawnDeathFx(killingBlowBullet);
+            
+            SpawnDeathFx(deathFxId);
 
             //play sound clip on player death
             if (killedBy != null)
@@ -354,21 +353,6 @@ namespace TanksMP
             agent.isStopped = false;
             isDead = false;
         }
-        
-        private void SpawnDeathFx(Bullet killingBlowBullet)
-        {
-            GameObject deathFx = null;
-            
-            if(killingBlowBullet != null)
-                deathFx = killingBlowBullet.deathFx;
-                
-            if (deathFx == null)
-                deathFx = StatusEffectController.GetDeathFx();
-
-            if(deathFx != null)
-                PoolManager.Spawn(deathFx, transform.position, transform.rotation);
-        }
-
 
         //disable rendering or blocking components
         void ToggleComponents(bool state)

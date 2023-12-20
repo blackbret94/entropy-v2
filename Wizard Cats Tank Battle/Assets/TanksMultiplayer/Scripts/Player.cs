@@ -158,8 +158,10 @@ namespace TanksMP
         private static Dictionary<int, Player> _playersByViewId = new ();
         public static List<Player> GetAllPlayers => _playersByViewId.Values.ToList();
 
+        // Data tables
         public BulletDictionary BulletDictionary;
         public PowerupDirectory PowerupDirectory;
+        public VisualEffectDirectory VisualEffectDirectory;
 
         // Lag compensation
         private Vector3 networkVelocity;
@@ -459,10 +461,14 @@ namespace TanksMP
             
             if(healthPerSecond != 0 && (healthPerSecond < 0 || health < maxHealth))
                 this.photonView.RPC("CmdTakeDamage", RpcTarget.AllViaServer, -healthPerSecond, false, false);
-            
+
             if (health <= 0)
+            {
+                string deathFx = StatusEffectController.GetDeathFx();
+                
                 // killed the player
-                PlayerDeath(StatusEffectController.LastDotAppliedBy, null);
+                PlayerDeath(StatusEffectController.LastDotAppliedBy, deathFx);
+            }
 
             _lastSecondUpdate = Time.time;
         }
@@ -793,7 +799,7 @@ namespace TanksMP
         /// Server only: calculate damage to be taken by the Player,
         /// triggers score increase and respawn workflow on death.
         /// </summary>
-        public void TakeDamage(int damage, Player other, bool canKill = true)
+        public void TakeDamage(int damage, Player other, bool canKill = true, string deathFxId = "")
         {
             int health = GetView().GetHealth();
             int shield = GetView().GetShield();
@@ -804,8 +810,6 @@ namespace TanksMP
                 GetView().DecreaseShield(1);
                 return;
             }
-
-            // Debug.Log("Taking raw damage: " + damage);
             
             health -= damage;
             health = CapHealth(health);
@@ -821,7 +825,7 @@ namespace TanksMP
             
             if (health <= 0)
                 // killed the player
-                PlayerDeath(other, null);
+                PlayerDeath(other, deathFxId);
             else
             {
                 //we didn't die, set health to new value
@@ -862,7 +866,7 @@ namespace TanksMP
             
             if (health <= 0)
                 //bullet killed the player
-                PlayerDeath(bullet.owner.GetComponent<Player>(), bullet);
+                PlayerDeath(bullet.owner.GetComponent<Player>(), bullet.deathFxData.Id);
             else
             {
                 //we didn't die, set health to new value
@@ -932,7 +936,7 @@ namespace TanksMP
         /// Server-only.  Handles player death
         /// </summary>
         /// <param name="other"></param>
-        private void PlayerDeath(Player other, Bullet killingBlow)
+        private void PlayerDeath(Player other, string deathFxId)
         {
             bool canRespawnFreely = PlayerCanRespawnFreely();
             lastDeathTime = Time.time;
@@ -999,7 +1003,7 @@ namespace TanksMP
             if (other != null)
                 senderId = (short)other.GetComponent<PhotonView>().ViewID;
 
-            this.photonView.RPC("RpcRespawn", RpcTarget.All, senderId, killingBlow?killingBlow.GetId():0);
+            this.photonView.RPC("RpcRespawn", RpcTarget.All, senderId, deathFxId);
         }
 
         public void CommandDropCollectibles()
@@ -1054,7 +1058,7 @@ namespace TanksMP
         //called on all clients on both player death and respawn
         //only difference is that on respawn, the client sends the request
         [PunRPC]
-        protected virtual void RpcRespawn(short senderId, int bulletId)
+        protected virtual void RpcRespawn(short senderId, string deathFxId)
         {
             
             //toggle visibility for player gameobject (on/off)
@@ -1088,8 +1092,7 @@ namespace TanksMP
                     RewardCoinsForKill();
                 }
                 
-                Bullet killingBlowBullet = BulletDictionary[bulletId];
-                SpawnDeathFx(killingBlowBullet);
+                SpawnDeathFx(deathFxId);
                 StatusEffectController.ClearStatusEffects();
 
                 //play sound clip on player death
@@ -1156,18 +1159,21 @@ namespace TanksMP
             }
         }
 
-        private void SpawnDeathFx(Bullet killingBlowBullet)
+        protected void SpawnDeathFx(string killingBlowDeathFx)
         {
-            GameObject deathFx = null;
+            string deathFx = "";
             
-            if(killingBlowBullet != null)
-                deathFx = killingBlowBullet.deathFx;
+            if(killingBlowDeathFx != "")
+                deathFx = killingBlowDeathFx;
                 
-            if (deathFx == null)
+            if (deathFx == "")
                 deathFx = StatusEffectController.GetDeathFx();
 
-            if(deathFx != null)
-                PoolManager.Spawn(deathFx, transform.position, transform.rotation);
+            if (deathFx != null)
+            {
+                VisualEffect deathFxData = VisualEffectDirectory[deathFx];
+                PoolManager.Spawn(deathFxData.VisualEffectPrefab, transform.position, transform.rotation);
+            }
         }
 
         protected void RewardCoinsForKill()

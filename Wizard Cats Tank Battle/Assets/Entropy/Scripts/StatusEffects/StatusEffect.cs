@@ -1,5 +1,6 @@
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.ScriptableObject;
 
 namespace Vashta.Entropy.StatusEffects
 {
@@ -150,6 +151,11 @@ namespace Vashta.Entropy.StatusEffects
             return !StatusEffectData().IsDebuff;
         }
 
+        public VisualEffect DeathFxData()
+        {
+            return _data.DeathFxData;
+        }
+
         public bool IsImmuneToRemoval()
         {
             return StatusEffectData().ImmuneToRemoval;
@@ -198,11 +204,6 @@ namespace Vashta.Entropy.StatusEffects
         public bool BuffsLastForever()
         {
             return StatusEffectData().BuffsLastForever;
-        }
-
-        public GameObject DeathFx()
-        {
-            return StatusEffectData().DeathFx;
         }
 
         public StatusEffectData GetChainedEffect()

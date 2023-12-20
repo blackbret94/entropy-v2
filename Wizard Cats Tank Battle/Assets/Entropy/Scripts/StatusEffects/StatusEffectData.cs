@@ -26,7 +26,7 @@ namespace Vashta.Entropy.StatusEffects
         [Tooltip("Sound effect that plays when it is applied")]
         public AudioClip Sfx;
         [Tooltip("Effect to play if the player is killed by this status effect.  Optional.")]
-        public GameObject DeathFx;
+        public VisualEffect DeathFxData;
         [Tooltip("Doesn't add the status effect, but applies 1s of immediate effects.")]
         public bool ApplyInstantly = false;
         [Tooltip("Overrides the Voidstalker's ability to remove buffs and debuffs")]

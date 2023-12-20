@@ -43,6 +43,7 @@ namespace Vashta.Entropy.Spells
         public int DamageEnemiesOnCast = 0;
         public GameObject DamageEnemiesEffect;
         [FormerlySerializedAs("CastStatusEffectToApplyToEnemies")] public StatusEffectData CastStatusEffectEnemies;
+        public GameObject EnemyDeathEffect;
         
         [FormerlySerializedAs("ActiveStatusEffectToApplyToAllies")]
         [Header("While Active")]

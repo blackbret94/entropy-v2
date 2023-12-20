@@ -21,6 +21,8 @@ namespace Vashta.Entropy.Spells
         private float _spawnTime;
 
         private GameObject _spawnedParticleEffect;
+
+        private bool _setToDespawn;
         
         public void Init(Player caster, SpellData spellData)
         {
@@ -40,6 +42,7 @@ namespace Vashta.Entropy.Spells
             Collider.radius = _spell.Radius;
 
             _spawnTime = Time.time;
+            _setToDespawn = false;
 
             if (_spell.EffectToSpawn)
             {
@@ -48,6 +51,8 @@ namespace Vashta.Entropy.Spells
                     PoolManager.Spawn(_spell.EffectToSpawn, caster.transform.position+Vector3.up*.1f+spellData.CastEffectOffset, rotation);
 
                 _spawnedParticleEffect.transform.parent = transform;
+                
+                GetParticleSystem().Play(true);
             }
         }
 
@@ -57,13 +62,17 @@ namespace Vashta.Entropy.Spells
             if (!PhotonNetwork.IsMasterClient)
                 return;
             
-            // Destroy if expired
-            if(_spawnTime + _spell.TTL < Time.time)
-                PoolManager.Despawn(gameObject);
-            
-            // Destroy if the caster is dead
-            if(!_caster.IsAlive)
-                PoolManager.Despawn(gameObject);
+            // Destroy if expired or if the caster is dead
+            if (_spawnTime + _spell.TTL < Time.time || !_caster.IsAlive)
+            {
+                if (!_setToDespawn)
+                {
+                    PoolManager.Despawn(gameObject, 1f);
+                    GetParticleSystem().Stop(true);
+                    _setToDespawn = true;
+                }
+                return;
+            }
 
             // Follow caster if not stationary
             if (!_spell.IsStationary)
@@ -78,6 +87,19 @@ namespace Vashta.Entropy.Spells
                 Tick();
                 _lastTickS = Time.time;
             }
+        }
+
+        private ParticleSystem GetParticleSystem()
+        {
+            if (_spawnedParticleEffect == null)
+                return null;
+
+            ParticleSystem ps = _spawnedParticleEffect.GetComponent<ParticleSystem>();
+
+            if (ps == null)
+                return null;
+
+            return ps;
         }
 
         private void Tick()

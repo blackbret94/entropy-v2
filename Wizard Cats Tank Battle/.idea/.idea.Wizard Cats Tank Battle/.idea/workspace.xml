@@ -5,36 +5,122 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2d0b1129-1c08-4810-a5a8-04b901ecd844" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/ScriptableObject/VisualEffect.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/ScriptableObject/VisualEffect.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/ScriptableObject/VisualEffectDirectory.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/ScriptableObject/VisualEffectDirectory.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Character/Slot.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Character/Slot.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Character/StatusEffectVisualizerSlot.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Character/StatusEffectVisualizerSlot.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Wizard Cats Tank Battle/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Wizard Cats Tank Battle/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Data/Spells/A_Ult_Tempest.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Data/Spells/A_Ult_Tempest.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Data/Spells/E_Ult_ShatterEarth.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Data/Spells/E_Ult_ShatterEarth.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Data/Spells/F_Ult_RingOfFire.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Data/Spells/F_Ult_RingOfFire.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Data/Spells/L_Ult_SacredGround.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Data/Spells/L_Ult_SacredGround.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Data/Spells/N_Ult_Infestation.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Data/Spells/N_Ult_Infestation.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Data/Spells/V_Ult_Voidgate.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Data/Spells/V_Ult_Voidgate.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Data/Spells/W_Ult_FountainOfLife.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Data/Spells/W_Ult_FountainOfLife.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Bullets/Air Missile.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Bullets/Air Missile.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Bullets/BulletBounce.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Bullets/BulletBounce.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Bullets/Earth Missile.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Bullets/Earth Missile.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Bullets/ExplodingMissile.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Bullets/ExplodingMissile.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Bullets/Fire Missile.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Bullets/Fire Missile.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Bullets/Light Missile.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Bullets/Light Missile.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Bullets/Necro Missile.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Bullets/Necro Missile.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Bullets/Void Missile.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Bullets/Void Missile.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Bullets/Water Missile.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Bullets/Water Missile.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Data/Status Effects/F_Enraged.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Data/Status Effects/F_Enraged.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Data/Visual Effects/Visual Effect Directory.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Data/Visual Effects/Visual Effect Directory.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Character/BuffVisualizers.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Character/BuffVisualizers.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Explosion.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Explosion/FXPlayerExplosion (Air).prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Explosion/FXPlayerExplosion (Air).prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Explosion/FXPlayerExplosion (Arcane).prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Explosion/FXPlayerExplosion (Arcane).prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Explosion/FXPlayerExplosion (Earth).prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Explosion/FXPlayerExplosion (Earth).prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Explosion/FXPlayerExplosion (Fire).prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Explosion/FXPlayerExplosion (Fire).prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Explosion/FXPlayerExplosion (Light).prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Explosion/FXPlayerExplosion (Light).prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Explosion/FXPlayerExplosion (Necro).prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Explosion/FXPlayerExplosion (Necro).prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Explosion/FXPlayerExplosion (Void).prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Explosion/FXPlayerExplosion (Void).prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Explosion/FXPlayerExplosion (Water).prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Explosion/FXPlayerExplosion (Water).prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/FXCollision.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/FXCollision.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/FXShot.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/FXShot.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/FxBarrierCollision.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/FxBarrierCollision.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/FxInfestation (Necro).prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/FxInfestation (Necro).prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Explosion.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Explosion/FxMissileExplosion (Air).prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Explosion/FxMissileExplosion (Air).prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Explosion/FxMissileExplosion (Earth).prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Explosion/FxMissileExplosion (Earth).prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Explosion/FxMissileExplosion (Fire).prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Explosion/FxMissileExplosion (Fire).prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Explosion/FxMissileExplosion (Light).prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Explosion/FxMissileExplosion (Light).prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Explosion/FxMissileExplosion (Necro).prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Explosion/FxMissileExplosion (Necro).prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Explosion/FxMissileExplosion (Void).prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Explosion/FxMissileExplosion (Void).prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Explosion/FxMissileExplosion (Water).prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Explosion/FxMissileExplosion (Water).prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Hit.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Hit/FxMissileHit (Air).prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Hit/FxMissileHit (Air).prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Hit/FxMissileHit (Earth).prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Hit/FxMissileHit (Earth).prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Hit/FxMissileHit (Fire).prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Hit/FxMissileHit (Fire).prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Hit/FxMissileHit (Light).prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Hit/FxMissileHit (Light).prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Hit/FxMissileHit (Necro).prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Hit/FxMissileHit (Necro).prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Hit/FxMissileHit (Void).prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Hit/FxMissileHit (Void).prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Hit/FxMissileHit (Water).prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Missile Hit/FxMissileHit (Water).prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_AirField.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_AirField.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_AirHit.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_AirHit.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_EarthCast.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_EarthCast.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_EarthHitEnemy.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_EarthHitEnemy.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_FireCast.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_FireCast.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_FireHitAlly.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_FireHitAlly.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_FireHitEnemy.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_FireHitEnemy.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_LightField.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_LightField.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_LightHit.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_LightHit.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_NecroField.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_NecroField.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_NecroHit.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_NecroHit.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_VoidField.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_VoidField.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_WaterField.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_WaterField.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_WaterHit.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Effects/Ultimates/Fx_Ultimate_WaterHit.prefab.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Resources/BotCharacter.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Resources/BotCharacter.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Resources/PlayerCharacter.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Resources/PlayerCharacter.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Spells/SpellData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Spells/SpellData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Character/PlayerStatusEffectVisualizer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Character/PlayerStatusEffectVisualizer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/ScriptableObject/VisualEffect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/ScriptableObject/VisualEffect.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/StatusEffects/StatusEffect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/StatusEffects/StatusEffect.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/StatusEffects/StatusEffectController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/StatusEffects/StatusEffectController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/StatusEffects/StatusEffectData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/StatusEffects/StatusEffectData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/Bullet.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/Bullet.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/Player.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/Player.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/PlayerBot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/PlayerBot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GUI PRO Kit - Fantasy RPG/ResourcesData/Sprites/Component/Icon_EquipmentIcons_(x2)/NoShadow/NoShadow.unitypackage.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GUI PRO Kit - Fantasy RPG/ResourcesData/Sprites/Component/Icon_EquipmentIcons_(x2)/Shadow/Shadow.unitypackage.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GUI PRO Kit - Fantasy RPG/ResourcesData/Sprites/Component/Icon_ItemIcons_(x2)/NoShadow/NoShadow.unitypackage.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GUI PRO Kit - Fantasy RPG/ResourcesData/Sprites/Component/Icon_ItemIcons_(x2)/Shadow/Shadow.unitypackage.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GUI PRO Kit - Fantasy RPG/ResourcesData/Sprites/Component/Icon_PictoIcons_(x2)/PictoIcons_(x2).unitypackage.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MagicArsenal/Upgrades/Magic Arsenal Standard (Legacy Shaders).unitypackage.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MagicArsenal/Upgrades/Magic Arsenal URP Upgrade.unitypackage.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MeshBaker/Examples/CharacterCustomization/blenderFile.unitypackage.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MeshBaker/Examples/Examples_HDRP.unitypackage.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MeshBaker/Examples/Examples_URP.unitypackage.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/PlayFabEditorExtensions/Editor/Resources/MostRecentPackage.unitypackage.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/PlayFabEditorExtensions/Editor/Resources/PlayFabEditorPrefsSO.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/PlayFabEditorExtensions/Editor/Resources/PlayFabEditorPrefsSO.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TanksMultiplayer/Editor/Packages/Mirror.unitypackage.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TanksMultiplayer/Editor/Packages/PhotonPUN.unitypackage.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TanksMultiplayer/Editor/Packages/UnityMLAPI.unitypackage.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/default-2023.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/default-2023.dwlt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,7 +131,6 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/40b2f4cd20bf45ec93e4617a0d19541025c00/87/a71a68c4/Collider.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/AssetBundleMagic/Scripts/AssetBundleMagic.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Entropy/Scripts/CBSIntegration/ProfileState.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.cinemachine@2.9.7/Samples~/Cinemachine Example Scenes/Shared/Scripts/PlayerMove.cs" root0="SKIP_HIGHLIGHTING" />
@@ -83,30 +168,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Discover.Launch.Via.Unity&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Discover.Launch.Via.Unity": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "rider.run.widget.enabled.cache": "false",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;rider.external.source.directories&quot;: [
-      &quot;C:\\Users\\emoma\\AppData\\Roaming\\JetBrains\\Rider2023.2\\resharper-host\\DecompilerCache&quot;,
-      &quot;C:\\Users\\emoma\\AppData\\Roaming\\JetBrains\\Rider2023.2\\resharper-host\\SourcesCache&quot;,
-      &quot;C:\\Users\\emoma\\AppData\\Local\\Symbols\\src&quot;
+  "keyToStringList": {
+    "rider.external.source.directories": [
+      "C:\\Users\\emoma\\AppData\\Roaming\\JetBrains\\Rider2023.2\\resharper-host\\DecompilerCache",
+      "C:\\Users\\emoma\\AppData\\Roaming\\JetBrains\\Rider2023.2\\resharper-host\\SourcesCache",
+      "C:\\Users\\emoma\\AppData\\Local\\Symbols\\src"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Standalone Player" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="$PROJECT_DIR$/Builds/Windows/Wizard Cats Tank Battle.exe" />
@@ -133,7 +219,7 @@
       <method v="2" />
     </configuration>
     <configuration name="UnitTests (batch mode)" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2023.1.2f1\Editor\Unity.exe" />
+      <option name="EXE_PATH" value="/Volumes/VashtaGames/Unity/2023.1.2f1/Unity.app/Contents/MacOS/Unity" />
       <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath &quot;C:\Users\emoma\Documents\GitHub\entropy-v2\Wizard Cats Tank Battle&quot; -testResults Logs/results.xml -testPlatform EditMode -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="C:\Users\emoma\Documents\GitHub\entropy-v2\Wizard Cats Tank Battle" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -281,6 +367,7 @@
       <workItem from="1701793838862" duration="12282000" />
       <workItem from="1702253190252" duration="19986000" />
       <workItem from="1702857552800" duration="16286000" />
+      <workItem from="1704081119091" duration="6595000" />
     </task>
     <servers />
   </component>

@@ -1,4 +1,5 @@
 using UnityEngine;
+using Vashta.Entropy.Character;
 
 namespace Vashta.Entropy.ScriptableObject
 {
@@ -6,5 +7,8 @@ namespace Vashta.Entropy.ScriptableObject
     public class VisualEffect : ScriptableObjectWithID
     {
         public GameObject VisualEffectPrefab;
+        public Slot slot;
+        public bool loops;
+        public float duration;
     }
 }

@@ -110,8 +110,11 @@ namespace Vashta.Entropy.StatusEffects
                 ClearBuffs();
             
             // Clear debuffs if this blocks debuffs
-            if(statusEffect.BlocksDebuffs())
+            if (statusEffect.BlocksDebuffs())
                 ClearDebuffs();
+            
+            // Apply fx
+            _visualizer.AddEffect(statusEffect.ApplyFxData());
 
             // Alert if local player
             if (_player.IsLocal)
@@ -174,6 +177,7 @@ namespace Vashta.Entropy.StatusEffects
             _indexedIds.Clear();
             _dirtyFlag = true;
             StatusEffectPanel.ResetSlots();
+            _visualizer.Clear();
         }
 
         private void Update()
@@ -253,6 +257,7 @@ namespace Vashta.Entropy.StatusEffects
             statusEffect.ForceExpire();
             _statusEffects.Remove(statusEffect);
             _indexedIds.Remove(statusEffect.Id());
+            _visualizer.RemoveEffect(statusEffect.ApplyFxData());
             _dirtyFlag = true;
         }
 

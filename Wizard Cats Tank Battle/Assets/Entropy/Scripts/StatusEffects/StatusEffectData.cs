@@ -21,13 +21,13 @@ namespace Vashta.Entropy.StatusEffects
         public int PowerupId;
         [Tooltip("Adds a red outline around the status effect to show it is bad")]
         public bool IsDebuff;
-        [Tooltip("Use this particle effect while active")]
-        public GameObject ActiveFx;
         [Tooltip("Sound effect that plays when it is applied")]
         public AudioClip Sfx;
+        [Tooltip("Effect to play when applied")]
+        public VisualEffect ApplyFxData;
         [Tooltip("Effect to play if the player is killed by this status effect.  Optional.")]
         public VisualEffect DeathFxData;
-        [Tooltip("Doesn't add the status effect, but applies 1s of immediate effects.")]
+        [Tooltip("Doesn't add the status effect, but applies 1 second of immediate effects.")]
         public bool ApplyInstantly = false;
         [Tooltip("Overrides the Voidstalker's ability to remove buffs and debuffs")]
         public bool ImmuneToRemoval;

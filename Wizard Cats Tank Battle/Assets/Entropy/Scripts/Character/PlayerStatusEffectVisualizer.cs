@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
+using Vashta.Entropy.ScriptableObject;
 
 namespace Vashta.Entropy.Character
 {
@@ -17,10 +19,37 @@ namespace Vashta.Entropy.Character
             SunderedVisualizer,
             HardenedVisualizer;
 
+        [FormerlySerializedAs("Slots")] public List<StatusEffectVisualizerSlot> slots;
+        private Dictionary<Slot, StatusEffectVisualizerSlot> _visualizerBySlot;
+
+        private bool _hasInit;
+
         private void Start()
         {
             Spawn();
             ToggleAll(false);
+            
+            Init();
+        }
+
+        private void Init()
+        {
+            if (_hasInit)
+                return;
+            
+            PopulateDictionary();
+
+            _hasInit = true;
+        }
+
+        private void PopulateDictionary()
+        {
+            _visualizerBySlot = new Dictionary<Slot, StatusEffectVisualizerSlot>();
+            
+            foreach (StatusEffectVisualizerSlot slot in slots)
+            {
+                _visualizerBySlot.Add(slot.slot, slot);
+            }
         }
 
         private void Spawn()
@@ -60,6 +89,48 @@ namespace Vashta.Entropy.Character
             BurningVisualizer.Toggle(indexedIds);
             SunderedVisualizer.Toggle(indexedIds);
             HardenedVisualizer.Toggle(indexedIds);
+        }
+
+        public void Clear()
+        {
+            foreach (var slot in _visualizerBySlot)
+            {
+                slot.Value.Clear();
+            }
+        }
+        
+        public void AddEffect(VisualEffect effect)
+        {
+            Init();
+
+            if (effect == null)
+                return;
+
+            if (_visualizerBySlot.ContainsKey(effect.slot))
+            {
+                _visualizerBySlot[effect.slot].AddEffect(effect);
+            }
+            else
+            {
+                Debug.Log("No slot for: " + effect.slot);
+            }
+        }
+
+        public void RemoveEffect(VisualEffect effect)
+        {
+            Init();
+
+            if (effect == null)
+                return;
+
+            if (_visualizerBySlot.ContainsKey(effect.slot))
+            {
+                _visualizerBySlot[effect.slot].RemoveEffect(effect);
+            }
+            else
+            {
+                Debug.Log("No slot for: " + effect.slot);
+            }
         }
     }
 }

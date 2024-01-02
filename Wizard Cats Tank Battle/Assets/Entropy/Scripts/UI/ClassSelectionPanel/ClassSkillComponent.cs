@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Vashta.Entropy.Spells;
 using Vashta.Entropy.StatusEffects;
 
 namespace Vashta.Entropy.UI.ClassSelectionPanel
@@ -20,6 +21,17 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
             Description.color = colorSecondary;
             
             Icon.sprite = statusEffect.EffectIcon;
+        }
+        
+        public void Set(SpellData spellData, Color colorPrimary, Color colorSecondary)
+        {
+            Title.text = spellData.Title;
+            Title.color = colorPrimary;
+            
+            Description.text = spellData.ClassDescription;
+            Description.color = colorSecondary;
+            
+            Icon.sprite = spellData.SpellIcon;
         }
     }
 }

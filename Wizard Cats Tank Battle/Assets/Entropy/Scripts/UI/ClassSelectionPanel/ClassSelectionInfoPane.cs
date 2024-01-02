@@ -8,11 +8,10 @@ using UnityEngine.UI;
 
 namespace Vashta.Entropy.UI.ClassSelectionPanel
 {
-    public class ClassSelectionInfoPane : MonoBehaviour
+    public class ClassSelectionInfoPane : GamePanel
     {
         public TextMeshProUGUI ClassName;
         [FormerlySerializedAs("ClassRole")] public TextMeshProUGUI ClassDescription;
-        
         
         public Image ClassPortrait;
         public Image ClassIcon;
@@ -25,6 +24,13 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
         
         public ClassSkillComponent Skill1;
         public ClassSkillComponent Skill2;
+        public ClassSkillComponent UltimateSkill;
+
+        public Slider HealthSlider;
+        public Slider DamageSlider;
+        public Slider MovementSlider;
+
+        public TextMeshProUGUI Role;
 
         public void SetClass(ClassDefinition definition)
         {
@@ -42,6 +48,12 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
             // Icon
             ClassIcon.sprite = definition.classIcon;
 
+            // Role
+            if (Role)
+            {
+                Role.text = definition.role;
+            }
+            
             // Counters
             if (definition.classCounters.Count > 0)
             {
@@ -68,7 +80,7 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
             
             Bullet bullet = definition.Missile.GetComponent<Bullet>();
             
-            // Skills
+            // SKILLS
             // On enemy hit
             if (bullet.StatusEffectOnEnemy)
             {
@@ -89,6 +101,36 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
             else
             {
                 Skill2.ClosePanel();
+            }
+            
+            // Ultimate
+            if (definition.ultimateSpell != null)
+            {
+                UltimateSkill.OpenPanel();
+                UltimateSkill.Set(definition.ultimateSpell, definition.colorPrimary, definition.colorSecondary);
+            }
+            else
+            {
+                UltimateSkill.ClosePanel();
+            }
+            
+            // SLIDERS
+            if (HealthSlider)
+            {
+                HealthSlider.value = definition.healthDisplay;
+                HealthSlider.fillRect.GetComponent<Image>().color = definition.colorPrimary;
+            }
+
+            if (DamageSlider)
+            {
+                DamageSlider.value = definition.damageDisplay;
+                DamageSlider.fillRect.GetComponent<Image>().color = definition.colorPrimary;
+            }
+
+            if (MovementSlider)
+            {
+                MovementSlider.value = definition.speedDisplay;
+                MovementSlider.fillRect.GetComponent<Image>().color = definition.colorPrimary;
             }
         }
     }

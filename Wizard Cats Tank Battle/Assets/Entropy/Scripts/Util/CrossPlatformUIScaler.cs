@@ -36,5 +36,24 @@ namespace Vashta.Entropy.Util
 
             return isLargeScreen;
         }
+
+        public static bool IsLargeScreenStatic()
+        {
+#if UNITY_STANDALONE
+            return true;
+#endif
+
+#if UNITY_IPHONE || UNITY_ANDROID
+            string identifier = SystemInfo.deviceModel;
+            if(identifier.StartsWith("iPhone"))
+            {
+                return false;
+            }
+            else if(identifier.StartsWith("iPad"))
+            {
+                return true;
+            }
+#endif
+        }
     }
 }

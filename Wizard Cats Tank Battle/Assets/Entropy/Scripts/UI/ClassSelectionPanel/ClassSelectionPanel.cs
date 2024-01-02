@@ -9,6 +9,7 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
     public class ClassSelectionPanel : GamePanel
     {
         public ClassSelectionSelector ClassSelectionSelector;
+        public ClassSelectionSelectorMultipanel ClassSelectionSelectorMultipanel;
         public ClassSelectionTeamSelector ClassSelectionTeamSelector;
         public List<ClassSelectionTeamCheckbox> CheckboxList;
 
@@ -132,7 +133,7 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
             Player player = GameManager.GetInstance().localPlayer;
             player.photonView.SetPreferredTeamIndex(ClassSelectionTeamSelector.SelectedTeamIndex());
 
-            player.SetClass(ClassSelectionSelector.SelectedClassDefinition(), respawnPlayer, applyNow);
+            player.SetClass(ClassSelectionSelectorMultipanel.SelectedClassDefinition(), respawnPlayer, applyNow);
             
             ClosePanel();
         }

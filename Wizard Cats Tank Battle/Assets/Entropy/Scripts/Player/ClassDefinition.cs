@@ -9,9 +9,25 @@ namespace Entropy.Scripts.Player
     public class ClassDefinition: ScriptableObject
     {
         public int classId = 0;
+        
+        [Header("Display")]
         public string className = "DEFAULT";
         public string description;
         public string role;
+        
+        public Sprite classIcon;
+        public Sprite classPortrait;
+        
+        public Color colorPrimary;
+        public Color colorSecondary;
+        public Color colorTertiary;
+        [Range(1, 5)] 
+        public int healthDisplay;
+        [Range(1, 5)] 
+        public int damageDisplay;
+        [Range(1, 5)] 
+        public int speedDisplay;
+        
         [Range(0f,50f)]
         public int maxHealth = 10;
         [Range(0.2f, 1.5f)]
@@ -22,13 +38,7 @@ namespace Entropy.Scripts.Player
         public int damageAmtOnCollision = 5;
         [Range(0f, 7f)]
         public int armor = 2;
-        public Sprite classIcon;
-        public Sprite classPortrait;
-        public Color color;
         public GameObject Missile;
-        public Color colorPrimary;
-        public Color colorSecondary;
-        public Color colorTertiary;
 
         public ClassList classList;
 

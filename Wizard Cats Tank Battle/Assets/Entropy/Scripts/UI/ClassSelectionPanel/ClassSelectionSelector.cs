@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using Entropy.Scripts.Player;
-using UnityEngine;
 
 namespace Vashta.Entropy.UI.ClassSelectionPanel
 {
-    public class ClassSelectionSelector : MonoBehaviour
+    public class ClassSelectionSelector : GamePanel
     {
         public List<ClassSelectionCheckbox> ClassSelectionCheckboxes;
-        public ClassSelectionInfoPane InfoPane;
+        public ClassSelectionInfoPaneMultipanel InfoMultiPanel;
         
         private ClassSelectionCheckbox _activeSelection;
 
@@ -16,7 +15,8 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
             if (ClassSelectionCheckboxes.Count > 0)
                 _activeSelection = ClassSelectionCheckboxes[0];
             
-            InfoPane.SetClass(_activeSelection.ClassDefinition);
+            // InfoPane.SetClass(_activeSelection.ClassDefinition);
+            InfoMultiPanel.SetClass(_activeSelection.ClassDefinition);
         }
         
         public void SelectClass(ClassSelectionCheckbox checkbox)
@@ -24,7 +24,8 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
             ResetCheckboxes();
             checkbox.Toggle(true);
             _activeSelection = checkbox;
-            InfoPane.SetClass(checkbox.ClassDefinition);
+            // InfoPane.SetClass(checkbox.ClassDefinition);
+            InfoMultiPanel.SetClass(_activeSelection.ClassDefinition);
         }
 
         private void ResetCheckboxes()

@@ -53,6 +53,8 @@ namespace Vashta.Entropy.Util
             {
                 return true;
             }
+
+            return false;
 #endif
         }
     }

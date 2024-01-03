@@ -40,7 +40,7 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
             
             // Description
             ClassDescription.text = definition.description;
-            ClassDescription.color = definition.colorSecondary;
+            ClassDescription.color = definition.colorTertiary;
 
             // Portrait
             ClassPortrait.sprite = definition.classPortrait;
@@ -118,19 +118,19 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
             if (HealthSlider)
             {
                 HealthSlider.value = definition.healthDisplay;
-                HealthSlider.fillRect.GetComponent<Image>().color = definition.colorPrimary;
+                HealthSlider.fillRect.GetComponent<Image>().color = definition.colorTertiary;
             }
 
             if (DamageSlider)
             {
                 DamageSlider.value = definition.damageDisplay;
-                DamageSlider.fillRect.GetComponent<Image>().color = definition.colorPrimary;
+                DamageSlider.fillRect.GetComponent<Image>().color = definition.colorTertiary;
             }
 
             if (MovementSlider)
             {
                 MovementSlider.value = definition.speedDisplay;
-                MovementSlider.fillRect.GetComponent<Image>().color = definition.colorPrimary;
+                MovementSlider.fillRect.GetComponent<Image>().color = definition.colorTertiary;
             }
         }
     }

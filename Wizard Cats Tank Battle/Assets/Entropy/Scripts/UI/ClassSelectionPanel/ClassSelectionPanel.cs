@@ -16,9 +16,12 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
         public float TimerLength = 30f;
         public TextMeshProUGUI Counter;
 
-        public GameObject ApplyButton;
-        public GameObject RespawnButton;
-        public GameObject CountdownSelectionButton;
+        public GameObject ApplyButton,
+            ApplyButtonLow;
+        public GameObject RespawnButton,
+            RespawnButtonLow;
+        public GameObject CountdownSelectionButton,
+            CountdownSelectionButtonLow;
         
         private float _counterEndTime;
         private CanvasGroup _canvasGroup;
@@ -109,8 +112,13 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
         private void ShowFreeRespawnButtons()
         {
             CountdownSelectionButton.SetActive(true);
+            CountdownSelectionButtonLow.SetActive(true);
+            
             RespawnButton.SetActive(false);
+            RespawnButtonLow.SetActive(false);
+            
             ApplyButton.SetActive(false);
+            ApplyButtonLow.SetActive(false);
         }
 
         /// <summary>
@@ -119,8 +127,13 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
         private void ShowApplyRespawnButtons()
         {
             CountdownSelectionButton.SetActive(false);
+            CountdownSelectionButtonLow.SetActive(false);
+            
             RespawnButton.SetActive(true);
+            RespawnButtonLow.SetActive(true);
+            
             ApplyButton.SetActive(true);
+            ApplyButtonLow.SetActive(true);
         }
 
         public void ApplyChangesButton()

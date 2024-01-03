@@ -6,6 +6,7 @@ namespace Vashta.Entropy.Util
     {
         public bool AllowOnDesktop;
         public bool AllowOnMobile;
+        public bool AllowInEditor;
 
 
         private void Start()
@@ -23,6 +24,14 @@ namespace Vashta.Entropy.Util
             if(!AllowOnMobile)
             {
                 gameObject.SetActive(false);
+            }
+            #endif
+            
+            // Handle editor
+            #if UNITY_EDITOR
+            if (AllowInEditor)
+            {
+                gameObject.SetActive(true);
             }
             #endif
         }

@@ -42,8 +42,11 @@ namespace Entropy.Scripts.Player
 
         public ClassList classList;
 
+        [Header("Ultimates")]
         public Sprite ultimateIcon;
         public SpellData ultimateSpell;
+        [Tooltip("Cost to cast ultimate")]
+        public int ultimateCost;
 
         // The class does extra damage to these classes
         public List<ClassDefinition> classCounters;

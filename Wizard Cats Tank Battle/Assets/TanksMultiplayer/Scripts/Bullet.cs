@@ -324,6 +324,15 @@ namespace TanksMP
             }
         }
 
+        public int GetTeam()
+        {
+            Player origin = owner.GetComponent<Player>();
+            if (!origin)
+                return -1;
+
+            return origin.GetTeam();
+        }
+
         private void AttemptApplyEffectAlly(Player player, Player target)
         {
             if(Random.Range(0f, 1f) < StatusEffectOnAllyChance)

@@ -6,6 +6,8 @@ namespace Vashta.Entropy.Character
         BODY,
         BASE,
         BACK,
-        FRONT
+        FRONT,
+        WAND,
+        ABOVE
     }
 }

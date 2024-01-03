@@ -53,6 +53,8 @@ namespace Vashta.Entropy.StatusEffects
         public int LeechingPerSecond;
         [Tooltip("Toggles reflective bubble")]
         public bool IsReflective = false;
+        [Tooltip("Stops player from firing")] 
+        public bool DisableFiring;
         
         [Header("Behavior Changes")]
         [Tooltip("Blocks the player from being buffed")]

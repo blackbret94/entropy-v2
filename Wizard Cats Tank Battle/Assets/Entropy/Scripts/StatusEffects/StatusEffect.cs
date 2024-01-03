@@ -242,5 +242,10 @@ namespace Vashta.Entropy.StatusEffects
         {
             _isFresh = fresh;
         }
+
+        public bool DisableFiring()
+        {
+            return _data.DisableFiring;
+        }
     }
 }

@@ -35,6 +35,7 @@ namespace Vashta.Entropy.StatusEffects
         private float _attackRateModifierCached = 1f;
         private float _spikeDamageModifierCached = 0f;
         private bool _isReflectiveCached = false;
+        private bool _disableFiringCached = false;
         
         // behavior changes
         private bool _blocksBuffsCached = false;
@@ -55,6 +56,7 @@ namespace Vashta.Entropy.StatusEffects
         public float DamageTakenModifier => _damageTakenModifierCached;
         public float HealthPerSecond => _healthPerSecondCached;
         public int LeechingPerSecond => _leechingPerSecondCached;
+        public bool DisableFiring => _disableFiringCached;
         public float AttackRateModifier => _attackRateModifierCached;
         public float SpikeDamageModifier => _spikeDamageModifierCached;
         public bool IsReflective => _isReflectiveCached;
@@ -97,6 +99,9 @@ namespace Vashta.Entropy.StatusEffects
             Player owner = Player.GetPlayerById(playerId);
             StatusEffect statusEffect = new StatusEffect(this, statusEffectId, owner);
             
+            // Check if status effect already exists
+            StatusEffect existingEffect = StatusEffectAlreadyExists(statusEffect.Id());
+            
             // If a buff and buffs are blocked, return
             if (!statusEffect.IsImmuneToRemoval() && (statusEffect.IsBuff() && _blocksBuffsCached))
                 return;
@@ -117,7 +122,7 @@ namespace Vashta.Entropy.StatusEffects
             _visualizer.AddEffect(statusEffect.ApplyFxData());
 
             // Alert if local player
-            if (_player.IsLocal)
+            if (_player.IsLocal && existingEffect == null)
             {
                 // Show panel
                 GameManager.GetInstance().ui.PowerUpPanel.SetText(statusEffect.Title(), statusEffect.Description(),
@@ -149,9 +154,6 @@ namespace Vashta.Entropy.StatusEffects
                 // Do NOT add as status effect if it is supposed to be instantly applied
                 return;
             }
-            
-            // Check if status effect already exists
-            StatusEffect existingEffect = StatusEffectAlreadyExists(statusEffect.Id());
             
             if (existingEffect == null)
             {
@@ -279,6 +281,7 @@ namespace Vashta.Entropy.StatusEffects
             _blocksCastingBuffsCached = false;
             _blocksCastingDebuffsCached = false;
             _bloodVengeanceChainedEffect = null;
+            _disableFiringCached = false;
 
             foreach (var statusEffect in _statusEffects)
             {
@@ -326,6 +329,11 @@ namespace Vashta.Entropy.StatusEffects
                 {
                     // Trigger this effect when someone with Blood Pact is killed
                     _bloodVengeanceChainedEffect = statusEffect.GetChainedEffect();
+                }
+
+                if (statusEffect.DisableFiring())
+                {
+                    _disableFiringCached = true;
                 }
             }
 

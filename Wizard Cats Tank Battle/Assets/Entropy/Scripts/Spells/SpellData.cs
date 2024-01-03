@@ -59,6 +59,18 @@ namespace Vashta.Entropy.Spells
         public GameObject EffectToSpawn;
         [Tooltip("Sound effect that plays when it is cast")]
         public AudioClip Sfx;
+        [Tooltip("Visual effect that spawns when a projectile hits this field")]
+        public GameObject FieldCollisionVfxProjectile;
+        [Tooltip("Audio to play when a projectile hits this field")]
+        public AudioClip FieldHitSfxProjectile;
+        [Tooltip("Visual effect that spawns when a character hits this field")]
+        public GameObject FieldCollisionVfxCharacter;
+        [Tooltip("Audio to play when a character hits this field")]
+        public AudioClip FieldHitSfxCharacter;
+        public bool VfxPlayForEnemies = true;
+        public bool VfxPlayForAllies = true;
+        public bool AudioPlayForEnemies = true;
+        public bool AudioPlayForAllies = true;
 
         public void Cast(Player caster)
         {

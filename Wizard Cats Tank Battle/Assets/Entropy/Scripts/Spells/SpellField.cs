@@ -8,6 +8,7 @@ namespace Vashta.Entropy.Spells
     public class SpellField : MonoBehaviour
     {
         public CapsuleCollider Collider;
+        public AudioSource AudioSource;
         
         private List<Player> _playersInZone = new ();
         
@@ -58,10 +59,6 @@ namespace Vashta.Entropy.Spells
 
         private void Update()
         {
-            // Only execute on the server
-            if (!PhotonNetwork.IsMasterClient)
-                return;
-            
             // Destroy if expired or if the caster is dead
             if (_spawnTime + _spell.TTL < Time.time || !_caster.IsAlive)
             {
@@ -80,6 +77,10 @@ namespace Vashta.Entropy.Spells
                 Vector3 casterPos = _caster.transform.position;
                 transform.position = new Vector3(casterPos.x, transform.position.y, casterPos.z);
             }
+            
+            // Only execute on the server
+            if (!PhotonNetwork.IsMasterClient)
+                return;
 
             // Apply effects
             if (_lastTickS + _tickTimeS <= Time.time)
@@ -130,18 +131,62 @@ namespace Vashta.Entropy.Spells
             if (!PhotonNetwork.IsMasterClient)
                 return;
             
-            // check for player
+            // Check for player
             Player player;
             if ((player = other.gameObject.GetComponent<Player>()) != null)
             {
                 _playersInZone.Add(player);
+                
+                bool playerIsAlly = player.GetTeam() == _teamIndex;
+
+                // VFX
+                if (_spell.FieldCollisionVfxCharacter)
+                {
+                    if ((playerIsAlly && _spell.VfxPlayForAllies) || (!playerIsAlly && _spell.VfxPlayForEnemies))
+                    {
+                        GameObject spawnedEffect = PoolManager.Spawn(_spell.FieldCollisionVfxCharacter,
+                            other.transform.position, Quaternion.identity);
+                        PoolManager.Despawn(spawnedEffect, 2f);
+                    }
+                }
+
+                // Audio
+                if (_spell.FieldHitSfxCharacter)
+                {
+                    if ((playerIsAlly && _spell.AudioPlayForAllies) || (!playerIsAlly && _spell.AudioPlayForEnemies))
+                    {
+                        AudioManager.Play3D(_spell.FieldHitSfxCharacter, player.transform.position);
+                    }
+                }
             }
             
-            // check for bullet
+            // Check for bullet
             Bullet bullet;
             if ((bullet = other.gameObject.GetComponent<Bullet>()) != null)
             {
                 HandleBulletTriggerEnter(bullet);
+                
+                bool bulletIsAlly = bullet.GetTeam() == _teamIndex;
+                
+                // VFX
+                if (_spell.FieldCollisionVfxProjectile)
+                {
+                    if ((bulletIsAlly && _spell.VfxPlayForAllies) || (!bulletIsAlly && _spell.VfxPlayForEnemies))
+                    {
+                        GameObject spawnedEffect = PoolManager.Spawn(_spell.FieldCollisionVfxCharacter,
+                            other.transform.position, Quaternion.identity);
+                        PoolManager.Despawn(spawnedEffect, 2f);
+                    }
+                }
+
+                // Audio
+                if (_spell.FieldHitSfxProjectile)
+                {
+                    if ((bulletIsAlly && _spell.AudioPlayForAllies) || (!bulletIsAlly && _spell.AudioPlayForEnemies))
+                    {
+                        AudioManager.Play3D(_spell.FieldHitSfxProjectile, bullet.transform.position);
+                    }
+                }
             }
         }
 
@@ -149,7 +194,7 @@ namespace Vashta.Entropy.Spells
         {
             if (bullet.owner != null)
             {
-                if (bullet.owner.GetPhotonView().GetTeam() == _teamIndex)
+                if (bullet.GetTeam() == _teamIndex)
                 {
                     if (_spell.IncreaseAlliedProjectileSpeedWhileActive > 0)
                     {

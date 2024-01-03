@@ -38,7 +38,6 @@ namespace TanksMP
         /// </summary>
         public int maxHealth = 10;
         public int maxShield = 5;
-        public int maxUltimate = 10;
 
         public int counterDamageMod = 2;
         public int sameClassDamageMod = -1;
@@ -637,7 +636,7 @@ namespace TanksMP
             float fireRateMod = fireRate * StatusEffectController.AttackRateModifier;
             
             //if shot delay is over  
-            if (Time.time > nextFire)
+            if (Time.time > nextFire && !StatusEffectController.DisableFiring)
             {
                 //set next shot timestamp
                 nextFire = Time.time + fireRateMod;
@@ -1386,8 +1385,9 @@ namespace TanksMP
             // Only give to living players
             if (!IsAlive)
                 return;
-            
-            if(GetView().GetUltimate() < maxUltimate)
+
+            int ultimateCost = GetClass().ultimateCost;
+            if(GetView().GetUltimate() < ultimateCost)
                 GetView().SetUltimate(GetView().GetUltimate()+1);
         }
 
@@ -1408,7 +1408,8 @@ namespace TanksMP
 
         public float GetUltimatePerun()
         {
-            return (float)GetView().GetUltimate() / maxUltimate;
+            int ultimateCost = GetClass().ultimateCost;
+            return (float)GetView().GetUltimate() / ultimateCost;
         }
 
         /// <summary>
@@ -1417,7 +1418,9 @@ namespace TanksMP
         /// <returns></returns>
         public void TryCastUltimate()
         {
-            if (GetView().GetUltimate() >= maxUltimate)
+            int ultimateCost = GetClass().ultimateCost;
+            
+            if (GetView().GetUltimate() >= ultimateCost)
             {
                 GetView().RPC("RpcClearUltimate", RpcTarget.MasterClient);
                 GetView().RPC("RpcCastUltimate", RpcTarget.All);
@@ -1430,7 +1433,7 @@ namespace TanksMP
         [PunRPC]
         public void RpcCastUltimate()
         {
-            ClassDefinition classDefinition = classList[photonView.GetClassId()];
+            ClassDefinition classDefinition = GetClass();
             SpellData ultimateSpell = classDefinition.ultimateSpell;
 
             if (!ultimateSpell)
@@ -1440,6 +1443,16 @@ namespace TanksMP
             }
 
             ultimateSpell.Cast(this);
+        }
+
+        public ClassDefinition GetClass()
+        {
+            return classList[photonView.GetClassId()];
+        }
+
+        public int GetTeam()
+        {
+            return photonView.GetTeam();
         }
     }
 }

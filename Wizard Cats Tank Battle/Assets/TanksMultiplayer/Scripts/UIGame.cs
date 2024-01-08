@@ -52,6 +52,7 @@ namespace TanksMP
         public GameObject gameOverMenu;
 
         public FireButton fireButton;
+        public UIJoystick Joystick;
         [FormerlySerializedAs("powerupIcon")] public PowerupIcon bulletIcon;
         
         public TeammateKilledPopup teammateKilledPopup;

@@ -179,6 +179,8 @@ namespace TanksMP
         private bool _hasLateInited = false;
         
         public bool IsVisible => Renderer.isVisible;
+
+        public AudioClip CantShootSound;
         
         //initialize server values for this player
         void Awake()
@@ -432,6 +434,12 @@ namespace TanksMP
                 if(PhotonNetwork.IsMasterClient)
                     StatusEffectTick();
             }
+            
+            // Update UI
+            // if (IsLocal)
+            // {
+            //     UIGame.GetInstance().Joystick.SetCanUse(!StatusEffectController.BlocksCastingBuffs);
+            // }
         }
 
         protected virtual void StatusEffectTick()
@@ -647,6 +655,13 @@ namespace TanksMP
                 //send shot request with origin to server
                 // Debug.Log(turretRotation);
                 this.photonView.RPC("CmdShoot", RpcTarget.AllViaServer, pos, turretRotation);
+            }
+            else
+            {
+                if (CantShootSound)
+                {
+                    AudioManager.Play2D(CantShootSound);
+                }
             }
         }
 
@@ -1088,7 +1103,7 @@ namespace TanksMP
                     killCounter[0].text = GetView().GetKills().ToString();
                     killCounter[0].GetComponent<Animator>().Play("Animation");
 
-                    RewardCoinsForKill();
+                    RewardUltimateForKill();
                 }
                 
                 SpawnDeathFx(deathFxId);
@@ -1099,6 +1114,8 @@ namespace TanksMP
                 if (killedBy != null)
                 {
                     Player player = killedBy.GetComponent<Player>();
+                    
+                    player.RewardUltimateForKill();
                 
                     if (player != null && player != this)
                     {
@@ -1389,6 +1406,23 @@ namespace TanksMP
             int ultimateCost = GetClass().ultimateCost;
             if(GetView().GetUltimate() < ultimateCost)
                 GetView().SetUltimate(GetView().GetUltimate()+1);
+        }
+
+        public void RewardUltimateForKill()
+        {
+            if (!PhotonNetwork.IsMasterClient)
+                return;
+            
+            // Only give to living players
+            if (!IsAlive)
+                return;
+
+            int ultimateIncrease = 5;
+            int ultimateCost = GetClass().ultimateCost;
+            int currentUltimate = GetView().GetUltimate();
+            
+            if(currentUltimate < ultimateCost)
+                GetView().SetUltimate(currentUltimate+ultimateIncrease);
         }
 
         // Server only

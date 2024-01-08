@@ -313,8 +313,11 @@ namespace TanksMP
             PhotonView senderView = senderId > 0 ? PhotonView.Find(senderId) : null;
             if (senderView != null && senderView.gameObject != null) killedBy = senderView.gameObject;
             
-            // Player killedByPlayer = killedBy.GetComponent<Player>();
-
+            Player killedByPlayer = killedBy.GetComponent<Player>();
+            
+            if(killedByPlayer)
+                killedByPlayer.RewardUltimateForKill();
+            
             //detect whether the current user was responsible for the kill
             //yes, that's my kill: increase local kill counter
             if (killedBy == GameManager.GetInstance().localPlayer.gameObject) // This might be a problem if it is run on EVERY device

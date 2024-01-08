@@ -40,6 +40,7 @@ namespace TanksMP
         /// The target object i.e. jostick thumb being dragged by the user.
         /// </summary>
         public Transform target;
+        public Image targetSprite;
 
         /// <summary>
         /// Maximum radius for the target object to be moved in distance from the center.
@@ -58,6 +59,10 @@ namespace TanksMP
         //reference to thumb being dragged around
 		private RectTransform thumb;
 
+		public Color CanBeUsedColor;
+		public Color CantBeUsedColor;
+
+		private bool _canUse = true;
 
         //initialize variables
 		void Start()
@@ -79,6 +84,9 @@ namespace TanksMP
         /// </summary>
         public void OnBeginDrag(PointerEventData data)
         {
+	        // if (!_canUse)
+		       //  return;
+	        
             isDragging = true;
             if(onDragBegin != null)
                 onDragBegin();
@@ -116,6 +124,13 @@ namespace TanksMP
             position = target.localPosition;
             //smoothly lerps the Vector2 thumb position based on the old positions
             position = position / radius * Mathf.InverseLerp(radius, 2, 1);
+        }
+
+        public void SetCanUse(bool canUse)
+        {
+	        // _canUse = canUse;
+	        //
+	        // targetSprite.color = canUse ? CanBeUsedColor : CantBeUsedColor;
         }
         
         

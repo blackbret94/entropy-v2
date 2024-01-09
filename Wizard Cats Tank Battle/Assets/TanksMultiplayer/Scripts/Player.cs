@@ -642,25 +642,29 @@ namespace TanksMP
         protected void Shoot(Vector2 direction = default(Vector2))
         {
             float fireRateMod = fireRate * StatusEffectController.AttackRateModifier;
-            
-            //if shot delay is over  
-            if (Time.time > nextFire && !StatusEffectController.DisableFiring)
+
+            if (StatusEffectController.DisableFiring)
             {
-                //set next shot timestamp
-                nextFire = Time.time + fireRateMod;
-                
-                //send current client position and turret rotation along to sync the shot position
-                //also we are sending it as a short array (only x,z - skip y) to save additional bandwidth
-                short[] pos = new short[] { (short)(shotPos.position.x * 10), (short)(shotPos.position.z * 10)};
-                //send shot request with origin to server
-                // Debug.Log(turretRotation);
-                this.photonView.RPC("CmdShoot", RpcTarget.AllViaServer, pos, turretRotation);
-            }
-            else
-            {
+                // Play sound if shooting is disabled
                 if (CantShootSound)
                 {
                     AudioManager.Play2D(CantShootSound);
+                }
+            }
+            else
+            {
+                //if shot delay is over  
+                if (Time.time > nextFire)
+                {
+                    //set next shot timestamp
+                    nextFire = Time.time + fireRateMod;
+
+                    //send current client position and turret rotation along to sync the shot position
+                    //also we are sending it as a short array (only x,z - skip y) to save additional bandwidth
+                    short[] pos = new short[] { (short)(shotPos.position.x * 10), (short)(shotPos.position.z * 10) };
+                    //send shot request with origin to server
+                    // Debug.Log(turretRotation);
+                    this.photonView.RPC("CmdShoot", RpcTarget.AllViaServer, pos, turretRotation);
                 }
             }
         }

@@ -33,10 +33,10 @@ namespace Vashta.Entropy.World
                 
                 foreach (Player player in playersInZoneSafeCopy)
                 {
-                    if (!player.IsAlive || player.GetView().GetTeam() != HealTeamId)
+                    if (player == null || !player.IsAlive || player.GetView().GetTeam() != HealTeamId)
                         _playersInZone.Remove(player);
-                    
-                    player.Heal(HealAmount);
+                    else
+                        player.Heal(HealAmount);
                 }
                 
                 _lastHeal = Time.time;

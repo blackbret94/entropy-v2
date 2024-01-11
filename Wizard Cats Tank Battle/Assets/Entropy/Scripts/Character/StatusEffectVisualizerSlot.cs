@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TanksMP;
 using UnityEngine;
@@ -53,10 +54,16 @@ namespace Vashta.Entropy.Character
 
         public void RemoveEffect(VisualEffect effect)
         {
-            if (_activeEffects.ContainsKey(effect.Id))
+            if (_activeEffects.ContainsKey(effect.Id) && _activeEffects[effect.Id] != null)
             {
-                PoolManager.Despawn(_activeEffects[effect.Id]);
+                try
+                {
+                    PoolManager.Despawn(_activeEffects[effect.Id]);
+                }
+                catch (NullReferenceException e) { }
+                
                 _activeEffects.Remove(effect.Id);
+
             }
         }
 
@@ -66,6 +73,8 @@ namespace Vashta.Entropy.Character
             {
                 PoolManager.Despawn(effect.Value);
             }
+            
+            _activeEffects.Clear();
         }
 
     }

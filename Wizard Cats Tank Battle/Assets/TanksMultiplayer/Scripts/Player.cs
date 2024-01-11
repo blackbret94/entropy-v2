@@ -174,7 +174,7 @@ namespace TanksMP
         [HideInInspector]
         public float lastDeathTime = 0f;
 
-        public bool IsAlive => gameObject.activeInHierarchy;
+        public bool IsAlive => gameObject ? gameObject : gameObject.activeInHierarchy; // Issue might be here
         public bool IsDead => !IsAlive;
         private bool _hasLateInited = false;
         

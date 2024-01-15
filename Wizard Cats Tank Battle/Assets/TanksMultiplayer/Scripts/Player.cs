@@ -415,7 +415,7 @@ namespace TanksMP
         }
         
         // This needs to be on a second timer
-        private void Update()
+        protected virtual void Update()
         {
             // Standard update
             if (PhotonNetwork.IsMasterClient)
@@ -1107,7 +1107,7 @@ namespace TanksMP
                     killCounter[0].text = GetView().GetKills().ToString();
                     killCounter[0].GetComponent<Animator>().Play("Animation");
 
-                    RewardUltimateForKill();
+                    // RewardUltimateForKill();
                 }
                 
                 SpawnDeathFx(deathFxId);

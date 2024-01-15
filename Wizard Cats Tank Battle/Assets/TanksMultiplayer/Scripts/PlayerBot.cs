@@ -68,6 +68,9 @@ namespace TanksMP
         //toggle for update logic
         private bool isDead = false;
 
+        private float _slowUpdateRate = .5f;
+        private float _lastUpdateTime;
+
 
         //called before SyncVar updates
         void Start()
@@ -105,6 +108,8 @@ namespace TanksMP
             
             //start enemy detection routine
             StartCoroutine(DetectPlayers());
+
+            _slowUpdateRate += Random.Range(0f, .25f);
         }
         
         
@@ -185,6 +190,51 @@ namespace TanksMP
             float speed = ((moveSpeed + StatusEffectController.MovementSpeedModifier) *
                            StatusEffectController.MovementSpeedMultiplier);
             agent.speed = speed;
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+
+            if (Time.time >= _lastUpdateTime + _slowUpdateRate)
+            {
+                SlowUpdate();
+            }
+        }
+
+        // Cast ultimates
+        void SlowUpdate()
+        {
+            //empty list on each iteration
+            _enemiesInRange.Clear();
+            _alliesInRange.Clear();
+            float detectionRange = 4;
+
+            //casts a sphere to detect other player objects within the sphere radius
+            Collider[] cols = Physics.OverlapSphere(transform.position, detectionRange, LayerMask.GetMask("Player"));
+            //loop over players found within bot radius
+            for (int i = 0; i < cols.Length; i++)
+            {
+                //get other Player component
+                Player p = cols[i].gameObject.GetComponent<Player>();
+                    
+                // Add enemies to the list
+                if(p.GetView().GetTeam() != GetView().GetTeam() && !_enemiesInRange.Contains(cols[i].gameObject))
+                {
+                    _enemiesInRange.Add(cols[i].gameObject);   
+                    // Add allies to the list
+                } else if (p.GetView().GetTeam() == GetView().GetTeam() && p != this)
+                {
+                    _alliesInRange.Add(cols[i].gameObject);
+                }
+            }
+
+            if (_enemiesInRange.Count > 0)
+            {
+                TryCastUltimate();
+            }
+
+            _lastUpdateTime = Time.time;
         }
 
         void FixedUpdate()

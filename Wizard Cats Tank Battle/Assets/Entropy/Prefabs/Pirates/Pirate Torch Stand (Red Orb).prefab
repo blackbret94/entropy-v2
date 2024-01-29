@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4693696009729364184}
+  - component: {fileID: 5751038619250547578}
   m_Layer: 0
   m_Name: Pirate Torch Stand (Red Orb)
   m_TagString: Untagged
@@ -33,6 +34,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &5751038619250547578
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3696795034441039650}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.4
+  m_Height: 3
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.1, z: 0}
 --- !u!1001 &3430407576718605570
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -116,6 +140,11 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 7165408e61a96eb45ae3c49d40d780a6,
+        type: 3}
+      propertyPath: m_ReceiveGI
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 7165408e61a96eb45ae3c49d40d780a6,
         type: 3}
       propertyPath: m_Name
@@ -147,17 +176,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2836875539901156086, guid: f3dadc2e642823c41a9391cb064cddf0,
         type: 3}
+      propertyPath: m_Range
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2836875539901156086, guid: f3dadc2e642823c41a9391cb064cddf0,
+        type: 3}
       propertyPath: m_Color.b
-      value: 0.5509434
+      value: 0.56037736
       objectReference: {fileID: 0}
     - target: {fileID: 2836875539901156086, guid: f3dadc2e642823c41a9391cb064cddf0,
         type: 3}
       propertyPath: m_Color.g
-      value: 0.5509434
+      value: 0.56037736
       objectReference: {fileID: 0}
     - target: {fileID: 2836875539901156086, guid: f3dadc2e642823c41a9391cb064cddf0,
         type: 3}
       propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2836875539901156086, guid: f3dadc2e642823c41a9391cb064cddf0,
+        type: 3}
+      propertyPath: m_Intensity
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4363821685826252456, guid: f3dadc2e642823c41a9391cb064cddf0,
@@ -234,6 +273,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8217619007991478574, guid: f3dadc2e642823c41a9391cb064cddf0,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.38
       objectReference: {fileID: 0}
     - target: {fileID: 8506348971209431715, guid: f3dadc2e642823c41a9391cb064cddf0,
         type: 3}

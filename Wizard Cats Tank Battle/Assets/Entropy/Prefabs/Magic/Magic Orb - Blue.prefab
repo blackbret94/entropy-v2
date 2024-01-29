@@ -276,7 +276,7 @@ Transform:
   - {fileID: 6561880855764035366}
   - {fileID: 8628262127878728202}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &6561880855764474110
 PrefabInstance:
@@ -354,6 +354,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 494306, guid: f890edb5313e4464bab60a417d428b67, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 494306, guid: f890edb5313e4464bab60a417d428b67, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 494306, guid: f890edb5313e4464bab60a417d428b67, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 19872848, guid: f890edb5313e4464bab60a417d428b67, type: 3}
       propertyPath: InitialModule.startSizeY.minMaxState
       value: 3
@@ -369,6 +381,10 @@ PrefabInstance:
     - target: {fileID: 19872848, guid: f890edb5313e4464bab60a417d428b67, type: 3}
       propertyPath: InitialModule.startRotationY.minMaxState
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 19888506, guid: f890edb5313e4464bab60a417d428b67, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 19888506, guid: f890edb5313e4464bab60a417d428b67, type: 3}
       propertyPath: ColorModule.gradient.maxGradient.key0.b
@@ -491,10 +507,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 489064, guid: c2cd89526710f7545a5af19ac0d8757b, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 489064, guid: c2cd89526710f7545a5af19ac0d8757b, type: 3}
       propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 489064, guid: c2cd89526710f7545a5af19ac0d8757b, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 19825338, guid: c2cd89526710f7545a5af19ac0d8757b, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 19825338, guid: c2cd89526710f7545a5af19ac0d8757b, type: 3}
@@ -506,12 +530,20 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 19825338, guid: c2cd89526710f7545a5af19ac0d8757b, type: 3}
+      propertyPath: InitialModule.startLifetime.minScalar
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 19825338, guid: c2cd89526710f7545a5af19ac0d8757b, type: 3}
       propertyPath: InitialModule.startRotationX.minMaxState
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 19825338, guid: c2cd89526710f7545a5af19ac0d8757b, type: 3}
       propertyPath: InitialModule.startRotationY.minMaxState
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 19880656, guid: c2cd89526710f7545a5af19ac0d8757b, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 19943326, guid: c2cd89526710f7545a5af19ac0d8757b, type: 3}
       propertyPath: m_CastShadows

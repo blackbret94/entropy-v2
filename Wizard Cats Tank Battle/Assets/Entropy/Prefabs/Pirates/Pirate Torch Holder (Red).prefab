@@ -32,7 +32,7 @@ Transform:
   - {fileID: 6219235215751649532}
   - {fileID: 1405621704353124125}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &7607055814879224238
 GameObject:
@@ -77,7 +77,7 @@ Light:
   serializedVersion: 10
   m_Type: 0
   m_Shape: 0
-  m_Color: {r: 0.9607843, g: 0.3686274, b: 0.39880574, a: 1}
+  m_Color: {r: 1, g: 0.627451, b: 0.78966343, a: 1}
   m_Intensity: 2
   m_Range: 5
   m_SpotAngle: 97.3
@@ -136,6 +136,31 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3477654462643437919}
     m_Modifications:
+    - target: {fileID: 2836875539901156086, guid: f3dadc2e642823c41a9391cb064cddf0,
+        type: 3}
+      propertyPath: m_Range
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2836875539901156086, guid: f3dadc2e642823c41a9391cb064cddf0,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.76013017
+      objectReference: {fileID: 0}
+    - target: {fileID: 2836875539901156086, guid: f3dadc2e642823c41a9391cb064cddf0,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.6313726
+      objectReference: {fileID: 0}
+    - target: {fileID: 2836875539901156086, guid: f3dadc2e642823c41a9391cb064cddf0,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.99215686
+      objectReference: {fileID: 0}
+    - target: {fileID: 2836875539901156086, guid: f3dadc2e642823c41a9391cb064cddf0,
+        type: 3}
+      propertyPath: m_Intensity
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4363821685826252456, guid: f3dadc2e642823c41a9391cb064cddf0,
         type: 3}
       propertyPath: m_RootOrder
@@ -210,6 +235,41 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6561880855783417006, guid: f3dadc2e642823c41a9391cb064cddf0,
+        type: 3}
+      propertyPath: InitialModule.gravityModifier.scalar
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6561880855783432580, guid: f3dadc2e642823c41a9391cb064cddf0,
+        type: 3}
+      propertyPath: InitialModule.gravityModifier.scalar
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7963956468826253713, guid: f3dadc2e642823c41a9391cb064cddf0,
+        type: 3}
+      propertyPath: InitialModule.gravityModifier.scalar
+      value: -0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7963956468826370555, guid: f3dadc2e642823c41a9391cb064cddf0,
+        type: 3}
+      propertyPath: InitialModule.gravityModifier.scalar
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8217619007991478574, guid: f3dadc2e642823c41a9391cb064cddf0,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.381
+      objectReference: {fileID: 0}
+    - target: {fileID: 8217619007991478574, guid: f3dadc2e642823c41a9391cb064cddf0,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8217619007991478574, guid: f3dadc2e642823c41a9391cb064cddf0,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8506348971209431715, guid: f3dadc2e642823c41a9391cb064cddf0,
         type: 3}
@@ -310,10 +370,20 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: efedb3476070edf4381c70e9443d30d0,
+        type: 3}
+      propertyPath: m_ReceiveGI
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: efedb3476070edf4381c70e9443d30d0,
         type: 3}
       propertyPath: m_Name
       value: TorchHolder
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: efedb3476070edf4381c70e9443d30d0,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

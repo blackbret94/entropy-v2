@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1279219700921141528}
+  - component: {fileID: 5750508520420114617}
   m_Layer: 0
   m_Name: Pirate Torch Stand (Blue Orb)
   m_TagString: Untagged
@@ -33,6 +34,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &5750508520420114617
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 25206443031971802}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 3
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.87, z: 0}
 --- !u!1001 &7452345249902667741
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -148,27 +172,32 @@ PrefabInstance:
     - target: {fileID: 1723665286315167641, guid: 824eae790117c9146bb8e4de7ce04fba,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.25
+      value: 0.18
       objectReference: {fileID: 0}
     - target: {fileID: 1723665286315167641, guid: 824eae790117c9146bb8e4de7ce04fba,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.25
+      value: 0.18
       objectReference: {fileID: 0}
     - target: {fileID: 1723665286315167641, guid: 824eae790117c9146bb8e4de7ce04fba,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.25
+      value: 0.18
       objectReference: {fileID: 0}
     - target: {fileID: 1723665286315167641, guid: 824eae790117c9146bb8e4de7ce04fba,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.269
+      value: 0.248
+      objectReference: {fileID: 0}
+    - target: {fileID: 1723665286315167641, guid: 824eae790117c9146bb8e4de7ce04fba,
+        type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2836875539901156086, guid: 824eae790117c9146bb8e4de7ce04fba,
         type: 3}
       propertyPath: m_Range
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2836875539901156086, guid: 824eae790117c9146bb8e4de7ce04fba,
         type: 3}
@@ -178,12 +207,22 @@ PrefabInstance:
     - target: {fileID: 2836875539901156086, guid: 824eae790117c9146bb8e4de7ce04fba,
         type: 3}
       propertyPath: m_Color.g
-      value: 0.6649596
+      value: 0.53912616
       objectReference: {fileID: 0}
     - target: {fileID: 2836875539901156086, guid: 824eae790117c9146bb8e4de7ce04fba,
         type: 3}
       propertyPath: m_Color.r
-      value: 0.6264151
+      value: 0.48490566
+      objectReference: {fileID: 0}
+    - target: {fileID: 2836875539901156086, guid: 824eae790117c9146bb8e4de7ce04fba,
+        type: 3}
+      propertyPath: m_Intensity
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2836875539901156086, guid: 824eae790117c9146bb8e4de7ce04fba,
+        type: 3}
+      propertyPath: m_ShadowRadius
+      value: 5.1
       objectReference: {fileID: 0}
     - target: {fileID: 4363821685826252456, guid: 824eae790117c9146bb8e4de7ce04fba,
         type: 3}
@@ -259,6 +298,51 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6561880855764035366, guid: 824eae790117c9146bb8e4de7ce04fba,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6561880855764035366, guid: 824eae790117c9146bb8e4de7ce04fba,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6561880855764035366, guid: 824eae790117c9146bb8e4de7ce04fba,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7963956468812104309, guid: 824eae790117c9146bb8e4de7ce04fba,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 7963956468812104309, guid: 824eae790117c9146bb8e4de7ce04fba,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 7963956468812104309, guid: 824eae790117c9146bb8e4de7ce04fba,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 7963956468812104309, guid: 824eae790117c9146bb8e4de7ce04fba,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.108
+      objectReference: {fileID: 0}
+    - target: {fileID: 7963956468812104309, guid: 824eae790117c9146bb8e4de7ce04fba,
+        type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7963956468826253713, guid: 824eae790117c9146bb8e4de7ce04fba,
+        type: 3}
+      propertyPath: InitialModule.gravityModifier.scalar
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 8506348971209431715, guid: 824eae790117c9146bb8e4de7ce04fba,
         type: 3}

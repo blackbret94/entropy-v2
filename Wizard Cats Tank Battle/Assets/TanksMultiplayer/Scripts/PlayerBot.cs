@@ -35,6 +35,7 @@ namespace TanksMP
         [HideInInspector] public int deaths;
         [HideInInspector] public float joinTime;
         [HideInInspector] public int classId;
+        [HideInInspector] public int classIdQueued;
         [HideInInspector] public int ultimate;
 
         /// <summary>

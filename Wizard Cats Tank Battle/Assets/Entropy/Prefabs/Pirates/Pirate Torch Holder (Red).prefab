@@ -32,7 +32,7 @@ Transform:
   - {fileID: 6219235215751649532}
   - {fileID: 1405621704353124125}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &7607055814879224238
 GameObject:
@@ -117,7 +117,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 1
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -159,7 +159,22 @@ PrefabInstance:
     - target: {fileID: 2836875539901156086, guid: f3dadc2e642823c41a9391cb064cddf0,
         type: 3}
       propertyPath: m_Intensity
-      value: 1
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2836875539901156086, guid: f3dadc2e642823c41a9391cb064cddf0,
+        type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2836875539901156086, guid: f3dadc2e642823c41a9391cb064cddf0,
+        type: 3}
+      propertyPath: m_ShadowRadius
+      value: 5.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2836875539901156086, guid: f3dadc2e642823c41a9391cb064cddf0,
+        type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4363821685826252456, guid: f3dadc2e642823c41a9391cb064cddf0,
         type: 3}

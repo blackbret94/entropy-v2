@@ -26,6 +26,7 @@ namespace TanksMP
         public const string deaths = "deaths";
         public const string joinTime = "joinTime";
         public const string classId = "classId";
+        public const string classIdQueued = "classIdQueued";
         public const string preferredTeam = "preferredTeam"; // for changing teams
         public const string isAlive = "isAlive";
         public const string ultimate = "ultimate";
@@ -575,6 +576,46 @@ namespace TanksMP
         public static void SetClassId(this Photon.Realtime.Player player, int value)
         {
             player.SetCustomProperties(new Hashtable() { { classId, (byte)value } });
+        }
+        
+        // ClassIdQueued
+        public static int GetClassIdQueued(this Photon.Realtime.Player player)
+        {
+            return System.Convert.ToInt32(player.CustomProperties[classIdQueued]);
+        }
+
+        public static int GetClassIdQueued(this PhotonView player)
+        {
+            if (PhotonNetwork.OfflineMode == true)
+            {
+                PlayerBot bot = player.GetComponent<PlayerBot>();
+                if (bot != null)
+                {
+                    return bot.classIdQueued;
+                }
+            }
+
+            return player.Owner.GetClassIdQueued();
+        }
+        
+        public static void SetClassIdQueued(this PhotonView player, int value)
+        {
+            if (PhotonNetwork.OfflineMode == true)
+            {
+                PlayerBot bot = player.GetComponent<PlayerBot>();
+                if (bot != null)
+                {
+                    bot.classIdQueued = value;
+                    return;
+                }
+            }
+
+            player.Owner.SetClassIdQueued(value);
+        }
+
+        public static void SetClassIdQueued(this Photon.Realtime.Player player, int value)
+        {
+            player.SetCustomProperties(new Hashtable() { { classIdQueued, (byte)value } });
         }
         
         // Preferred Team Index

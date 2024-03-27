@@ -277,8 +277,16 @@ namespace BuildReportTool
 			settings.EnableExplicitNullChecks = EditorUserBuildSettings.explicitNullChecks;
 
 #if UNITY_EDITOR_WIN
+#if UNITY_5_6_OR_NEWER
 			settings.WinIncludeNativePdbFilesInBuild = UnityEditor.WindowsStandalone.UserBuildSettings.copyPDBFiles;
+#else
+			settings.WinIncludeNativePdbFilesInBuild = false;
+#endif
+#if UNITY_2017_1_OR_NEWER
 			settings.WinCreateVisualStudioSolution = UnityEditor.WindowsStandalone.UserBuildSettings.createSolution;
+#else
+			settings.WinCreateVisualStudioSolution = false;
+#endif
 #endif
 
 #if !UNITY_5_3_AND_LESSER
@@ -352,8 +360,17 @@ namespace BuildReportTool
 
 			settings.CompileDefines = defines.ToArray();
 
+#if UNITY_2023_1_OR_NEWER
+			BuildTarget buildTarget = EditorUserBuildSettings.activeBuildTarget;
+			BuildTargetGroup targetGroup = BuildPipeline.GetBuildTargetGroup(buildTarget);
+			var namedBuildTarget = UnityEditor.Build.NamedBuildTarget.FromBuildTargetGroup(targetGroup);
+#endif
 
-#if UNITY_2018_3_OR_NEWER
+#if UNITY_2023_1_OR_NEWER
+			settings.StrippingLevelUsed = PlayerSettings
+			                              .GetManagedStrippingLevel(namedBuildTarget)
+			                              .ToString();
+#elif UNITY_2018_3_OR_NEWER
 			settings.StrippingLevelUsed = PlayerSettings
 			                              .GetManagedStrippingLevel(EditorUserBuildSettings.selectedBuildTargetGroup)
 			                              .ToString();
@@ -361,7 +378,11 @@ namespace BuildReportTool
 			settings.StrippingLevelUsed = PlayerSettings.strippingLevel.ToString();
 #endif
 
-#if UNITY_5_6_OR_NEWER
+#if UNITY_2023_1_OR_NEWER
+			settings.NETApiCompatibilityLevel = PlayerSettings
+			                                    .GetApiCompatibilityLevel(namedBuildTarget)
+			                                    .ToString();
+#elif UNITY_5_6_OR_NEWER
 			settings.NETApiCompatibilityLevel = PlayerSettings
 			                                    .GetApiCompatibilityLevel(EditorUserBuildSettings.selectedBuildTargetGroup)
 			                                    .ToString();
@@ -408,6 +429,7 @@ namespace BuildReportTool
 			settings.EnableVirtualRealitySupport = UnityEngine.XR.XRSettings.enabled;
 #endif
 
+#if !UNITY_2022_2_OR_NEWER
 			// collect all aspect ratios
 			UnityEditor.AspectRatio[] aspectRatios =
 			{
@@ -432,6 +454,9 @@ namespace BuildReportTool
 			}
 
 			settings.AspectRatiosAllowed = aspectRatiosList.ToArray();
+#else
+			settings.AspectRatiosAllowed = new string[]{"N/A"}; // AspectRatio enum removed in Unity 2022.2
+#endif
 
 #if !UNITY_5_1_AND_LESSER // 5.2 and greater
 			settings.GraphicsAPIsUsed = PlayerSettings.GetGraphicsAPIs(EditorUserBuildSettings.activeBuildTarget)
@@ -648,7 +673,11 @@ namespace BuildReportTool
 
 			settings.AndroidBuildSubtarget = EditorUserBuildSettings.androidBuildSubtarget.ToString();
 
-			// settings.AndroidUseAPKExpansionFiles = PlayerSettings.Android.splitApplicationBinary;
+#if UNITY_2023_1_OR_NEWER
+			settings.AndroidUseAPKExpansionFiles = PlayerSettings.Android.splitApplicationBinary;
+#else
+			settings.AndroidUseAPKExpansionFiles = PlayerSettings.Android.useAPKExpansionFiles;
+#endif
 
 #if !UNITY_4
 			settings.AndroidAsAndroidProject = EditorUserBuildSettings.exportAsGoogleAndroidProject;
@@ -902,12 +931,13 @@ namespace BuildReportTool
 		public static void PopulateBigConsoleGen08Settings(UnityBuildSettings settings)
 		{
 #if !UNITY_4
+#if !UNITY_2021_1_OR_NEWER
 			// Xbox One build settings
 			// ---------------------------------------------------------------
-			// settings.XboxOneDeployMethod = EditorUserBuildSettings.xboxOneDeployMethod.ToString();
-			// settings.XboxOneTitleId = PlayerSettings.XboxOne.TitleId;
-			// settings.XboxOneContentId = PlayerSettings.XboxOne.ContentId;
-			// settings.XboxOneProductId = PlayerSettings.XboxOne.ProductId;
+			settings.XboxOneDeployMethod = EditorUserBuildSettings.xboxOneDeployMethod.ToString();
+			settings.XboxOneTitleId = PlayerSettings.XboxOne.TitleId;
+			settings.XboxOneContentId = PlayerSettings.XboxOne.ContentId;
+			settings.XboxOneProductId = PlayerSettings.XboxOne.ProductId;
 
 #if UNITY_5_5_AND_LESSER
 			settings.XboxOneSandboxId = PlayerSettings.XboxOne.SandboxId;
@@ -925,7 +955,7 @@ namespace BuildReportTool
 
 			settings.XboxOneDisableKinectGpuReservation = PlayerSettings.XboxOne.DisableKinectGpuReservation;
 			settings.XboxOneEnableVariableGPU = PlayerSettings.XboxOne.EnableVariableGPU;
-			// settings.XboxOneStreamingInstallLaunchRange = EditorUserBuildSettings.streamingInstallLaunchRange;
+			settings.XboxOneStreamingInstallLaunchRange = EditorUserBuildSettings.streamingInstallLaunchRange;
 			settings.XboxOnePersistentLocalStorageSize = PlayerSettings.XboxOne.PersistentLocalStorageSize;
 
 			settings.XboxOneSocketNames = PlayerSettings.XboxOne.SocketNames;
@@ -933,6 +963,7 @@ namespace BuildReportTool
 			settings.XboxOneGameOsOverridePath = PlayerSettings.XboxOne.GameOsOverridePath;
 			settings.XboxOneAppManifestOverridePath = PlayerSettings.XboxOne.AppManifestOverridePath;
 			settings.XboxOnePackagingOverridePath = PlayerSettings.XboxOne.PackagingOverridePath;
+#endif
 
 
 			// PS4 build settings

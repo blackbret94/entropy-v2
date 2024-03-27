@@ -2,6 +2,6 @@ namespace BuildReportTool
 {
 	public static class Info
 	{
-		public const string ReadableVersion = "Build Report Tool v3.9.5";
+		public const string ReadableVersion = "Build Report Tool v3.11.4";
 	}
 }

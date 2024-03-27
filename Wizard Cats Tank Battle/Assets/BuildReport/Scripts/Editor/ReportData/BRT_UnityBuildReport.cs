@@ -100,11 +100,16 @@ namespace BuildReportTool
 
 			outputFolder = outputFolder.Replace("\\", "/");
 
-			var outputFiles = new List<OutputFile>(buildReport.GetFiles().Length);
-			OutputFiles = new OutputFile[buildReport.GetFiles().Length];
-			for (int i = 0; i < buildReport.GetFiles().Length; ++i)
+#if !UNITY_2022_2_OR_NEWER
+			var files = buildReport.files;
+#else
+			var files = buildReport.GetFiles();
+#endif
+			var outputFiles = new List<OutputFile>(files.Length);
+			OutputFiles = new OutputFile[files.Length];
+			for (int i = 0; i < files.Length; ++i)
 			{
-				if (!buildReport.GetFiles()[i].path.StartsWith(outputFolder))
+				if (!files[i].path.StartsWith(outputFolder))
 				{
 					// file is not inside the build folder, likely a temporary or debug file (like a pdb file)
 					//Debug.Log($"Found file not in build {i}: {buildReport.files[i].path}");
@@ -112,9 +117,9 @@ namespace BuildReportTool
 				}
 
 				OutputFile newEntry;
-				newEntry.FilePath = buildReport.GetFiles()[i].path.Substring(outputPathLength);
-				newEntry.Role = buildReport.GetFiles()[i].role;
-				newEntry.Size = buildReport.GetFiles()[i].size;
+				newEntry.FilePath = files[i].path.Substring(outputPathLength);
+				newEntry.Role = files[i].role;
+				newEntry.Size = files[i].size;
 				outputFiles.Add(newEntry);
 			}
 			OutputFiles = outputFiles.ToArray();

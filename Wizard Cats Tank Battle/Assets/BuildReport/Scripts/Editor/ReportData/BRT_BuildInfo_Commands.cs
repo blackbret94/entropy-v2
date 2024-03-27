@@ -525,7 +525,7 @@ namespace BuildReportTool
 		/// Last asset number that each batch displays.
 		/// </summary>
 		[System.Xml.Serialization.XmlIgnore]
-		public List<int> UnusedAssetsBatchFinalNum { get; set; } = new List<int>();
+		public List<int> UnusedAssetsBatchFinalNum = new List<int>();
 
 		public void ResetUnusedAssetsBatchData()
 		{

@@ -367,7 +367,7 @@ namespace BuildReportTool
 
 
 			var styleToUse = GetStyleToUse(assetList.All.Length, _selectedFilterIdx, 0);
-			var label = $"All ({assetList.All.Length.ToString()})";
+			var label = string.Format("All ({0})", assetList.All.Length.ToString());
 
 			var widthToAdd = styleToUse.CalcSize(new GUIContent(label)).x;
 

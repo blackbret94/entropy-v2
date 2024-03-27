@@ -26,6 +26,8 @@ namespace BuildReportTool
 		/// </summary>
 		public int SaveType;
 
+		public bool KeepCopyOfLogOfLastSuccessfulBuild = true;
+
 		// ----------------------------------------------------------
 
 		public bool CollectBuildInfo = true;
@@ -35,6 +37,7 @@ namespace BuildReportTool
 		public bool CollectTextureImportSettingsOnUnusedToo = false;
 		public bool CollectMeshData = true;
 		public bool CollectMeshDataOnUnusedToo;
+		public bool CollectPrefabData = true;
 
 		public bool GetProjectSettings = true;
 
@@ -110,6 +113,19 @@ namespace BuildReportTool
 		public bool ShowMeshColumnAnimationType;
 		public bool ShowMeshColumnAnimationClipCount = true;
 
+		// ----------------------------------------------------------
+
+		public string FileFilterNameForPrefabData = "Prefabs";
+
+		public bool ShowPrefabColumnContributeGI;
+		public bool ShowPrefabColumnBatchingStatic = true;
+		public bool ShowPrefabColumnOccluderStatic;
+		public bool ShowPrefabColumnOccludeeStatic;
+		public bool ShowPrefabColumnReflectionProbeStatic;
+		
+		public bool ShowPrefabColumnNavigationStatic;
+		public bool ShowPrefabColumnOffMeshLinkGeneration;
+		
 		// ----------------------------------------------------------
 
 		public bool ShowColumnAssetPath = true;
@@ -493,6 +509,24 @@ namespace BuildReportTool
 			}
 		}
 
+		public static bool KeepCopyOfLogOfLastSuccessfulBuild
+		{
+			get
+			{
+				InitializeOptionsIfNeeded();
+				return _savedOptions.KeepCopyOfLogOfLastSuccessfulBuild;
+			}
+			set
+			{
+				InitializeOptionsIfNeeded();
+				if (_savedOptions.KeepCopyOfLogOfLastSuccessfulBuild != value)
+				{
+					_savedOptions.KeepCopyOfLogOfLastSuccessfulBuild = value;
+					SaveOptions();
+				}
+			}
+		}
+
 		public static bool IncludeSvnInUnused
 		{
 			get
@@ -700,6 +734,24 @@ namespace BuildReportTool
 				if (_savedOptions.CollectMeshDataOnUnusedToo != value)
 				{
 					_savedOptions.CollectMeshDataOnUnusedToo = value;
+					SaveOptions();
+				}
+			}
+		}
+
+		public static bool CollectPrefabData
+		{
+			get
+			{
+				InitializeOptionsIfNeeded();
+				return _savedOptions.CollectPrefabData;
+			}
+			set
+			{
+				InitializeOptionsIfNeeded();
+				if (_savedOptions.CollectPrefabData != value)
+				{
+					_savedOptions.CollectPrefabData = value;
 					SaveOptions();
 				}
 			}
@@ -1974,6 +2026,152 @@ namespace BuildReportTool
 				if (_savedOptions.ShowMeshColumnAnimationClipCount != value)
 				{
 					_savedOptions.ShowMeshColumnAnimationClipCount = value;
+					SaveOptions();
+				}
+			}
+		}
+
+		// -----------------------------------------------------------------
+
+		public static string FileFilterNameForPrefabData
+		{
+			get
+			{
+				InitializeOptionsIfNeeded();
+				return _savedOptions.FileFilterNameForPrefabData;
+			}
+			set
+			{
+				InitializeOptionsIfNeeded();
+				if (_savedOptions.FileFilterNameForPrefabData != value)
+				{
+					_savedOptions.FileFilterNameForPrefabData = value;
+					SaveOptions();
+				}
+			}
+		}
+
+		public static bool ShowPrefabColumnContributeGI
+		{
+			get
+			{
+				InitializeOptionsIfNeeded();
+				return _savedOptions.ShowPrefabColumnContributeGI;
+			}
+			set
+			{
+				InitializeOptionsIfNeeded();
+				if (_savedOptions.ShowPrefabColumnContributeGI != value)
+				{
+					_savedOptions.ShowPrefabColumnContributeGI = value;
+					SaveOptions();
+				}
+			}
+		}
+
+		public static bool ShowPrefabColumnBatchingStatic
+		{
+			get
+			{
+				InitializeOptionsIfNeeded();
+				return _savedOptions.ShowPrefabColumnBatchingStatic;
+			}
+			set
+			{
+				InitializeOptionsIfNeeded();
+				if (_savedOptions.ShowPrefabColumnBatchingStatic != value)
+				{
+					_savedOptions.ShowPrefabColumnBatchingStatic = value;
+					SaveOptions();
+				}
+			}
+		}
+
+		public static bool ShowPrefabColumnOccluderStatic
+		{
+			get
+			{
+				InitializeOptionsIfNeeded();
+				return _savedOptions.ShowPrefabColumnOccluderStatic;
+			}
+			set
+			{
+				InitializeOptionsIfNeeded();
+				if (_savedOptions.ShowPrefabColumnOccluderStatic != value)
+				{
+					_savedOptions.ShowPrefabColumnOccluderStatic = value;
+					SaveOptions();
+				}
+			}
+		}
+
+		public static bool ShowPrefabColumnOccludeeStatic
+		{
+			get
+			{
+				InitializeOptionsIfNeeded();
+				return _savedOptions.ShowPrefabColumnOccludeeStatic;
+			}
+			set
+			{
+				InitializeOptionsIfNeeded();
+				if (_savedOptions.ShowPrefabColumnOccludeeStatic != value)
+				{
+					_savedOptions.ShowPrefabColumnOccludeeStatic = value;
+					SaveOptions();
+				}
+			}
+		}
+
+		public static bool ShowPrefabColumnReflectionProbeStatic
+		{
+			get
+			{
+				InitializeOptionsIfNeeded();
+				return _savedOptions.ShowPrefabColumnReflectionProbeStatic;
+			}
+			set
+			{
+				InitializeOptionsIfNeeded();
+				if (_savedOptions.ShowPrefabColumnReflectionProbeStatic != value)
+				{
+					_savedOptions.ShowPrefabColumnReflectionProbeStatic = value;
+					SaveOptions();
+				}
+			}
+		}
+
+		public static bool ShowPrefabColumnNavigationStatic
+		{
+			get
+			{
+				InitializeOptionsIfNeeded();
+				return _savedOptions.ShowPrefabColumnNavigationStatic;
+			}
+			set
+			{
+				InitializeOptionsIfNeeded();
+				if (_savedOptions.ShowPrefabColumnNavigationStatic != value)
+				{
+					_savedOptions.ShowPrefabColumnNavigationStatic = value;
+					SaveOptions();
+				}
+			}
+		}
+
+		public static bool ShowPrefabColumnOffMeshLinkGeneration
+		{
+			get
+			{
+				InitializeOptionsIfNeeded();
+				return _savedOptions.ShowPrefabColumnOffMeshLinkGeneration;
+			}
+			set
+			{
+				InitializeOptionsIfNeeded();
+				if (_savedOptions.ShowPrefabColumnOffMeshLinkGeneration != value)
+				{
+					_savedOptions.ShowPrefabColumnOffMeshLinkGeneration = value;
 					SaveOptions();
 				}
 			}

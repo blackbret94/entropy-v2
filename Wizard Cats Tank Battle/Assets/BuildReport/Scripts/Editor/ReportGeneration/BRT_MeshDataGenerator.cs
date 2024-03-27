@@ -74,8 +74,9 @@ namespace BuildReportTool
 
 		static readonly List<MeshFilter> MeshFilters = new List<MeshFilter>();
 		static readonly List<SkinnedMeshRenderer> SkinnedMeshRenderers = new List<SkinnedMeshRenderer>();
-
+#if UNITY_5_5_OR_NEWER
 		static readonly List<int> TriangleBuffer = new List<int>();
+#endif
 
 		static MeshData.Entry CreateEntry(string assetPath, bool debugLog = false)
 		{
@@ -127,8 +128,16 @@ namespace BuildReportTool
 
 					for (int m = 0; m < subMeshCount; ++m)
 					{
+#if UNITY_2017_3_OR_NEWER
 						MeshFilters[n].sharedMesh.GetTriangles(TriangleBuffer, m, false);
 						totalTriangleCount += TriangleBuffer.Count/3;
+#elif UNITY_5_5_OR_NEWER
+						MeshFilters[n].sharedMesh.GetTriangles(TriangleBuffer, m);
+						totalTriangleCount += TriangleBuffer.Count/3;
+#else
+						var triangles = MeshFilters[n].sharedMesh.GetTriangles(m);
+						totalTriangleCount += triangles.Length/3;
+#endif
 					}
 				}
 
@@ -142,8 +151,16 @@ namespace BuildReportTool
 
 					for (int m = 0; m < subMeshCount; ++m)
 					{
+#if UNITY_2017_3_OR_NEWER
 						SkinnedMeshRenderers[n].sharedMesh.GetTriangles(TriangleBuffer, m, false);
 						totalTriangleCount += TriangleBuffer.Count/3;
+#elif UNITY_5_5_OR_NEWER
+						SkinnedMeshRenderers[n].sharedMesh.GetTriangles(TriangleBuffer, m);
+						totalTriangleCount += TriangleBuffer.Count/3;
+#else
+						var triangles = SkinnedMeshRenderers[n].sharedMesh.GetTriangles(m);
+						totalTriangleCount += triangles.Length/3;
+#endif
 					}
 				}
 			}

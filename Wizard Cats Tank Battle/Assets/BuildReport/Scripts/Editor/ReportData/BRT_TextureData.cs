@@ -408,6 +408,7 @@ The original width and height of the image <i>before</i> it was resized by the <
 
 			/// <summary>
 			/// Maps to <see cref="UnityEditor.TextureImporter.mipMapsPreserveCoverage"/>
+			/// Added in Unity 2017.1.
 			/// <inheritdoc cref="UnityEditor.TextureImporter.mipMapsPreserveCoverage"/>
 			/// </summary>
 			public bool PreserveCoverageMipMaps;
@@ -552,6 +553,7 @@ The original width and height of the image <i>before</i> it was resized by the <
 
 			/// <summary>
 			/// Like <see cref="TextureResizeAlgorithm"/> but if the image's platform override was set, this is the overriding value.
+			/// Added in Unity 2017.2.
 			/// Maps to <see cref="UnityEditor.TextureImporterPlatformSettings.resizeAlgorithm"/>
 			/// <inheritdoc cref="UnityEditor.TextureImporterPlatformSettings.resizeAlgorithm"/>
 			/// </summary>

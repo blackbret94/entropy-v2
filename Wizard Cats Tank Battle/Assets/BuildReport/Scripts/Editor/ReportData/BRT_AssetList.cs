@@ -113,6 +113,7 @@ namespace BuildReportTool
 
 			TextureData,
 			MeshData,
+			PrefabData,
 		}
 
 		public enum SortOrder
@@ -125,6 +126,7 @@ namespace BuildReportTool
 		SortType _lastSortType = SortType.None;
 		BuildReportTool.TextureData.DataId _lastTextureSortType = BuildReportTool.TextureData.DataId.None;
 		BuildReportTool.MeshData.DataId _lastMeshSortType = BuildReportTool.MeshData.DataId.None;
+		BuildReportTool.PrefabData.DataId _lastPrefabSortType = BuildReportTool.PrefabData.DataId.None;
 		SortOrder _lastSortOrder = SortOrder.None;
 
 		public SortType LastSortType
@@ -191,6 +193,28 @@ namespace BuildReportTool
 			else
 			{
 				AssetListUtility.SortAssetList(_perCategory[fileFilters.SelectedFilterIdx], meshData, sortType, sortOrder);
+			}
+		}
+
+		public void Sort(BuildReportTool.PrefabData prefabData, BuildReportTool.PrefabData.DataId sortType, SortOrder sortOrder, BuildReportTool.FileFilterGroup fileFilters)
+		{
+			_lastTextureSortType = BuildReportTool.TextureData.DataId.None;
+			_lastPrefabSortType = sortType;
+			_lastSortType = SortType.PrefabData;
+			_lastSortOrder = sortOrder;
+
+			_hasListBeenSorted.Clear();
+
+			_hasListBeenSorted.Add(fileFilters.SelectedFilterIdx);
+
+			// sort only currently displayed list
+			if (fileFilters.SelectedFilterIdx == -1)
+			{
+				AssetListUtility.SortAssetList(_all, prefabData, sortType, sortOrder);
+			}
+			else
+			{
+				AssetListUtility.SortAssetList(_perCategory[fileFilters.SelectedFilterIdx], prefabData, sortType, sortOrder);
 			}
 		}
 

@@ -160,7 +160,8 @@ namespace BuildReportTool.Window.Screen
 		Vector2 _assetListScrollPos;
 
 
-		public override void RefreshData(BuildInfo buildReport, AssetDependencies assetDependencies, TextureData textureData, MeshData meshData, UnityBuildReport unityBuildReport)
+		public override void RefreshData(BuildInfo buildReport, AssetDependencies assetDependencies,
+			TextureData textureData, MeshData meshData, PrefabData prefabData, UnityBuildReport unityBuildReport)
 		{
 			if (_saveTypeLabels == null)
 			{
@@ -197,10 +198,10 @@ namespace BuildReportTool.Window.Screen
 		Texture2D _iconInvalid;
 
 		public override void DrawGUI(Rect position,
-			BuildInfo buildReportToDisplay, AssetDependencies assetDependencies, TextureData textureData, MeshData meshData,
-			UnityBuildReport unityBuildReport,
-			out bool requestRepaint
-		)
+			BuildInfo buildReportToDisplay, AssetDependencies assetDependencies,
+			TextureData textureData, MeshData meshData, PrefabData prefabData,
+			UnityBuildReport unityBuildReport, BuildReportTool.ExtraData extraData,
+			out bool requestRepaint)
 		{
 			if (Event.current.type == EventType.Repaint)
 			{
@@ -279,7 +280,7 @@ namespace BuildReportTool.Window.Screen
 			GUILayout.BeginHorizontal(BRT_BuildReportWindow.LayoutNone);
 			GUILayout.Space(20);
 			GUILayout.Label(
-				"Note: For batchmode builds, to create build reports, call <b>BuildReportTool.ReportGenerator.CreateReport()</b> after <b>BuildPipeline.BuildPlayer()</b> in your build scripts.\n\nAlso call <b>BuildReportTool.ReportGenerator.OnPreBuild()</b> in your <b>OnPreprocessBuild()</b> methods so the build time can be recorded properly.\n\nThe Build Report is automatically saved as an XML file.",
+				"Note: For batchmode builds, to create build reports, call <b>BuildReportTool.ReportGenerator.CreateReport()</b> after <b>BuildPipeline.BuildPlayer()</b> in your build scripts.\n\nThe Build Report is automatically saved as an XML file.",
 				boxedLabelStyle, LayoutMaxWidth593);
 			GUILayout.EndHorizontal();
 			GUILayout.Space(10);
@@ -295,6 +296,13 @@ namespace BuildReportTool.Window.Screen
 			BuildReportTool.Options.AllowDeletingOfUsedAssets = GUILayout.Toggle(
 				BuildReportTool.Options.AllowDeletingOfUsedAssets,
 				"Allow deleting of Used Assets (practice caution!)", BRT_BuildReportWindow.LayoutNone);
+
+			GUILayout.Space(20);
+
+			BuildReportTool.Options.KeepCopyOfLogOfLastSuccessfulBuild = GUILayout.Toggle(
+				BuildReportTool.Options.KeepCopyOfLogOfLastSuccessfulBuild,
+				"Keep a copy of the last successful build's Editor.log, which will be re-used if no build was detected in the current Editor.log.",
+				BRT_BuildReportWindow.LayoutNone);
 
 			GUILayout.Space(20);
 
@@ -1021,7 +1029,7 @@ namespace BuildReportTool.Window.Screen
 
 			GUILayout.Space(30);
 
-			#region Column 2
+			#region Column 3
 			GUILayout.BeginVertical(BRT_BuildReportWindow.LayoutNone);
 
 			BuildReportTool.Options.ShowMeshColumnAnimationType = GUILayout.Toggle(
@@ -1044,6 +1052,91 @@ namespace BuildReportTool.Window.Screen
 			GUILayout.FlexibleSpace();
 
 			GUILayout.EndHorizontal();
+
+			// --------------------------------------------
+
+			GUILayout.Space(10);
+			GUILayout.Label("Prefab Data", header2Style, BRT_BuildReportWindow.LayoutNone);
+			
+			GUILayout.BeginHorizontal(BRT_BuildReportWindow.LayoutNone);
+			GUILayout.Label("Name of File Filter where Prefab Data will be shown:", BRT_BuildReportWindow.LayoutNone);
+			BuildReportTool.Options.FileFilterNameForPrefabData =
+				GUILayout.TextField(BuildReportTool.Options.FileFilterNameForPrefabData, LayoutMinWidth200);
+			GUILayout.FlexibleSpace();
+			GUILayout.EndHorizontal();
+
+			GUILayout.Space(3);
+			GUILayout.Label("Prefab Data To Show in Asset Lists:", BRT_BuildReportWindow.LayoutNone);
+			GUILayout.BeginHorizontal(BRT_BuildReportWindow.LayoutNone);
+			GUILayout.Space(10);
+
+			#region Column 1
+			GUILayout.BeginVertical(BRT_BuildReportWindow.LayoutNone);
+
+			BuildReportTool.Options.ShowPrefabColumnContributeGI = GUILayout.Toggle(
+				BuildReportTool.Options.ShowPrefabColumnContributeGI, "Contribute Global Illumination", BRT_BuildReportWindow.LayoutNone);
+			if (Event.current.type == EventType.Repaint && GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition))
+			{
+				_hoveredControlTooltipText = BuildReportTool.PrefabData.GetTooltipTextFromId(BuildReportTool.PrefabData.DataId.ContributeGI);
+			}
+
+			BuildReportTool.Options.ShowPrefabColumnBatchingStatic = GUILayout.Toggle(
+				BuildReportTool.Options.ShowPrefabColumnBatchingStatic, "Static Batching", BRT_BuildReportWindow.LayoutNone);
+			if (Event.current.type == EventType.Repaint && GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition))
+			{
+				_hoveredControlTooltipText = BuildReportTool.PrefabData.GetTooltipTextFromId(BuildReportTool.PrefabData.DataId.BatchingStatic);
+			}
+
+			BuildReportTool.Options.ShowPrefabColumnReflectionProbeStatic = GUILayout.Toggle(
+				BuildReportTool.Options.ShowPrefabColumnReflectionProbeStatic, "Reflection Probe Static", BRT_BuildReportWindow.LayoutNone);
+			if (Event.current.type == EventType.Repaint && GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition))
+			{
+				_hoveredControlTooltipText = BuildReportTool.PrefabData.GetTooltipTextFromId(BuildReportTool.PrefabData.DataId.ReflectionProbeStatic);
+			}
+
+			GUILayout.EndVertical();
+			#endregion
+
+			GUILayout.Space(30);
+
+			#region Column 2
+			GUILayout.BeginVertical(BRT_BuildReportWindow.LayoutNone);
+
+			BuildReportTool.Options.ShowPrefabColumnOccluderStatic = GUILayout.Toggle(
+				BuildReportTool.Options.ShowPrefabColumnOccluderStatic, "Occluder Static", BRT_BuildReportWindow.LayoutNone);
+			if (Event.current.type == EventType.Repaint && GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition))
+			{
+				_hoveredControlTooltipText = BuildReportTool.PrefabData.GetTooltipTextFromId(BuildReportTool.PrefabData.DataId.OccluderStatic);
+			}
+
+			BuildReportTool.Options.ShowPrefabColumnOccludeeStatic = GUILayout.Toggle(
+				BuildReportTool.Options.ShowPrefabColumnOccludeeStatic, "Occludee Static", BRT_BuildReportWindow.LayoutNone);
+			if (Event.current.type == EventType.Repaint && GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition))
+			{
+				_hoveredControlTooltipText = BuildReportTool.PrefabData.GetTooltipTextFromId(BuildReportTool.PrefabData.DataId.OccludeeStatic);
+			}
+
+			BuildReportTool.Options.ShowPrefabColumnNavigationStatic = GUILayout.Toggle(
+				BuildReportTool.Options.ShowPrefabColumnNavigationStatic, "Navigation Static", BRT_BuildReportWindow.LayoutNone);
+			if (Event.current.type == EventType.Repaint && GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition))
+			{
+				_hoveredControlTooltipText = BuildReportTool.PrefabData.GetTooltipTextFromId(BuildReportTool.PrefabData.DataId.NavigationStatic);
+			}
+
+			BuildReportTool.Options.ShowPrefabColumnOffMeshLinkGeneration = GUILayout.Toggle(
+				BuildReportTool.Options.ShowPrefabColumnOffMeshLinkGeneration, "Off-Mesh Link Generation", BRT_BuildReportWindow.LayoutNone);
+			if (Event.current.type == EventType.Repaint && GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition))
+			{
+				_hoveredControlTooltipText = BuildReportTool.PrefabData.GetTooltipTextFromId(BuildReportTool.PrefabData.DataId.OffMeshLinkGeneration);
+			}
+
+			GUILayout.EndVertical();
+			#endregion
+
+			GUILayout.FlexibleSpace();
+
+			GUILayout.EndHorizontal();
+			
 			// --------------------------------------------
 
 			GUILayout.Space(10);

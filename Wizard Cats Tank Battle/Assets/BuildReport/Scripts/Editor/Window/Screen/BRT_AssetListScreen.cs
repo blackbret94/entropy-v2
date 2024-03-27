@@ -37,7 +37,12 @@ namespace BuildReportTool.Window.Screen
 
 		BuildReportTool.MeshData.DataId _hoveredMeshDataId = BuildReportTool.MeshData.DataId.None;
 		BuildReportTool.MeshData.DataId _clickedMeshDataId = BuildReportTool.MeshData.DataId.None;
+		
+		BuildReportTool.PrefabData.DataId _currentPrefabDataSortType = BuildReportTool.PrefabData.DataId.None;
 
+		BuildReportTool.PrefabData.DataId _hoveredPrefabDataId = BuildReportTool.PrefabData.DataId.None;
+		BuildReportTool.PrefabData.DataId _clickedPrefabDataId = BuildReportTool.PrefabData.DataId.None;
+		
 		/// <summary>
 		/// Whether we are sorting ascending or descending.
 		/// </summary>
@@ -122,7 +127,8 @@ namespace BuildReportTool.Window.Screen
 			get { return ""; }
 		}
 
-		public override void RefreshData(BuildInfo buildReport, AssetDependencies assetDependencies, TextureData textureData, MeshData meshData, UnityBuildReport unityBuildReport)
+		public override void RefreshData(BuildInfo buildReport, AssetDependencies assetDependencies,
+			TextureData textureData, MeshData meshData, PrefabData prefabData, UnityBuildReport unityBuildReport)
 		{
 			RefreshConfiguredFileFilters();
 
@@ -198,7 +204,7 @@ namespace BuildReportTool.Window.Screen
 				columnOptionsBg.x = _showColumnOptionButtonRect.x;
 				columnOptionsBg.y = _showColumnOptionButtonRect.yMax;
 				columnOptionsBg.width = UnityEngine.Screen.width - _showColumnOptionButtonRect.x - 19;
-				columnOptionsBg.height = 412;
+				columnOptionsBg.height = 448;
 
 				columnOptionsBg.x = UnityEngine.Screen.width - columnOptionsBg.width - 19;
 
@@ -214,6 +220,7 @@ namespace BuildReportTool.Window.Screen
 				{
 					_hoveredTextureDataId = TextureData.DataId.None;
 					_hoveredMeshDataId = MeshData.DataId.None;
+					_hoveredPrefabDataId = PrefabData.DataId.None;
 					_overridenTextureDataTooltipText = null;
 				}
 
@@ -669,6 +676,7 @@ namespace BuildReportTool.Window.Screen
 
 				float meshColumn1Width = 0;
 				float meshColumn2Width = 0;
+				float meshDataLowestY = 0;
 
 				// column 1
 				rect.x = startX;
@@ -703,6 +711,8 @@ namespace BuildReportTool.Window.Screen
 				}
 				rect.y += rect.height + TOGGLE_SPACING;
 				meshColumn1Width = Mathf.Max(meshColumn1Width, rect.width);
+
+				meshDataLowestY = Mathf.Max(meshDataLowestY, rect.y);
 
 				#endregion
 
@@ -747,6 +757,8 @@ namespace BuildReportTool.Window.Screen
 				rect.y += rect.height + TOGGLE_SPACING;
 				meshColumn2Width = Mathf.Max(meshColumn2Width, rect.width);
 
+				meshDataLowestY = Mathf.Max(meshDataLowestY, rect.y);
+
 				#endregion
 
 				// -----------------------------------------------------------------------
@@ -777,8 +789,126 @@ namespace BuildReportTool.Window.Screen
 				}
 				rect.y += rect.height + TOGGLE_SPACING;
 
+				meshDataLowestY = Mathf.Max(meshDataLowestY, rect.y);
+
 				#endregion
 
+				// -----------------------------------------------------------------------
+
+				float prefabColumn1Width = 0;
+				float prefabColumn2Width = 0;
+
+				// column 1
+				rect.x = startX;
+				rect.y = meshDataLowestY + 8;
+
+				_columnLabel.text = "Prefab Data Columns:";
+				rect.size = toggleHeaderStyle.CalcSize(_columnLabel);
+				GUI.Label(rect, _columnLabel, toggleHeaderStyle);
+				rect.y += rect.height - 2;
+				toggleYStart = rect.y;
+				
+				#region Prefab Column 1
+
+				_columnLabel.text = "Contribute Global Illumination";
+				rect.size = GUI.skin.toggle.CalcSize(_columnLabel);
+				rect.width += TOGGLE_EXTRA_WIDTH;
+				BuildReportTool.Options.ShowPrefabColumnContributeGI = GUI.Toggle(rect, BuildReportTool.Options.ShowPrefabColumnContributeGI, _columnLabel);
+				if (rect.Contains(Event.current.mousePosition))
+				{
+					_hoveredPrefabDataId = PrefabData.DataId.ContributeGI;
+				}
+				rect.y += rect.height + TOGGLE_SPACING;
+				prefabColumn1Width = Mathf.Max(prefabColumn1Width, rect.width);
+
+				_columnLabel.text = "Static Batching";
+				rect.size = GUI.skin.toggle.CalcSize(_columnLabel);
+				rect.width += TOGGLE_EXTRA_WIDTH;
+				BuildReportTool.Options.ShowPrefabColumnBatchingStatic = GUI.Toggle(rect, BuildReportTool.Options.ShowPrefabColumnBatchingStatic, _columnLabel);
+				if (rect.Contains(Event.current.mousePosition))
+				{
+					_hoveredPrefabDataId = PrefabData.DataId.BatchingStatic;
+				}
+				rect.y += rect.height + TOGGLE_SPACING;
+				prefabColumn1Width = Mathf.Max(prefabColumn1Width, rect.width);
+
+				_columnLabel.text = "Reflection Probe Static";
+				rect.size = GUI.skin.toggle.CalcSize(_columnLabel);
+				rect.width += TOGGLE_EXTRA_WIDTH;
+				BuildReportTool.Options.ShowPrefabColumnReflectionProbeStatic = GUI.Toggle(rect, BuildReportTool.Options.ShowPrefabColumnReflectionProbeStatic, _columnLabel);
+				if (rect.Contains(Event.current.mousePosition))
+				{
+					_hoveredPrefabDataId = PrefabData.DataId.ReflectionProbeStatic;
+				}
+				rect.y += rect.height + TOGGLE_SPACING;
+				prefabColumn1Width = Mathf.Max(prefabColumn1Width, rect.width);
+				
+				#endregion
+
+				// -----------------------------------------------------------------------
+				// column 2
+
+				rect.x += prefabColumn1Width + COLUMN_SPACING;
+				rect.y = toggleYStart;
+
+				#region Prefab Column 2
+
+				_columnLabel.text = "Occluder Static";
+				rect.size = GUI.skin.toggle.CalcSize(_columnLabel);
+				rect.width += TOGGLE_EXTRA_WIDTH;
+				BuildReportTool.Options.ShowPrefabColumnOccluderStatic = GUI.Toggle(rect, BuildReportTool.Options.ShowPrefabColumnOccluderStatic, _columnLabel);
+				if (rect.Contains(Event.current.mousePosition))
+				{
+					_hoveredPrefabDataId = PrefabData.DataId.OccluderStatic;
+				}
+				rect.y += rect.height + TOGGLE_SPACING;
+				prefabColumn2Width = Mathf.Max(prefabColumn2Width, rect.width);
+
+				_columnLabel.text = "Occludee Static";
+				rect.size = GUI.skin.toggle.CalcSize(_columnLabel);
+				rect.width += TOGGLE_EXTRA_WIDTH;
+				BuildReportTool.Options.ShowPrefabColumnOccludeeStatic = GUI.Toggle(rect, BuildReportTool.Options.ShowPrefabColumnOccludeeStatic, _columnLabel);
+				if (rect.Contains(Event.current.mousePosition))
+				{
+					_hoveredPrefabDataId = PrefabData.DataId.OccludeeStatic;
+				}
+				rect.y += rect.height + TOGGLE_SPACING;
+				prefabColumn2Width = Mathf.Max(prefabColumn2Width, rect.width);
+
+				#endregion
+
+				// -----------------------------------------------------------------------
+				// column 3
+
+				rect.x += prefabColumn2Width + COLUMN_SPACING;
+				rect.y = toggleYStart;
+
+				#region Prefab Column 3
+
+				_columnLabel.text = "Navigation Static";
+				rect.size = GUI.skin.toggle.CalcSize(_columnLabel);
+				rect.width += TOGGLE_EXTRA_WIDTH;
+				BuildReportTool.Options.ShowPrefabColumnNavigationStatic = GUI.Toggle(rect, BuildReportTool.Options.ShowPrefabColumnNavigationStatic, _columnLabel);
+				if (rect.Contains(Event.current.mousePosition))
+				{
+					_hoveredPrefabDataId = PrefabData.DataId.NavigationStatic;
+				}
+				rect.y += rect.height + TOGGLE_SPACING;
+				prefabColumn2Width = Mathf.Max(prefabColumn2Width, rect.width);
+
+				_columnLabel.text = "Off-Mesh Link Generation";
+				rect.size = GUI.skin.toggle.CalcSize(_columnLabel);
+				rect.width += TOGGLE_EXTRA_WIDTH;
+				BuildReportTool.Options.ShowPrefabColumnOffMeshLinkGeneration = GUI.Toggle(rect, BuildReportTool.Options.ShowPrefabColumnOffMeshLinkGeneration, _columnLabel);
+				if (rect.Contains(Event.current.mousePosition))
+				{
+					_hoveredPrefabDataId = PrefabData.DataId.OffMeshLinkGeneration;
+				}
+				rect.y += rect.height + TOGGLE_SPACING;
+				prefabColumn2Width = Mathf.Max(prefabColumn2Width, rect.width);
+				
+				#endregion
+				
 				// -----------------------------------------------------------------------
 
 				// input catcher
@@ -798,6 +928,7 @@ namespace BuildReportTool.Window.Screen
 				{
 					_hoveredTextureDataId = TextureData.DataId.None;
 					_hoveredMeshDataId = MeshData.DataId.None;
+					_hoveredPrefabDataId = PrefabData.DataId.None;
 					_overridenTextureDataTooltipText = null;
 				}
 
@@ -931,10 +1062,10 @@ namespace BuildReportTool.Window.Screen
 		}
 
 		public override void DrawGUI(Rect position,
-			BuildInfo buildReportToDisplay, AssetDependencies assetDependencies, TextureData textureData, MeshData meshData,
-			UnityBuildReport unityBuildReport,
-			out bool requestRepaint
-		)
+			BuildInfo buildReportToDisplay, AssetDependencies assetDependencies,
+			TextureData textureData, MeshData meshData, PrefabData prefabData,
+			UnityBuildReport unityBuildReport, BuildReportTool.ExtraData extraData,
+			out bool requestRepaint)
 		{
 			if (buildReportToDisplay == null || !buildReportToDisplay.HasUsedAssets)
 			{
@@ -1009,7 +1140,7 @@ namespace BuildReportTool.Window.Screen
 
 			if (buildReportToDisplay.HasUsedAssets)
 			{
-				DrawAssetList(position, buildReportToDisplay, assetDependencies, textureData, meshData,
+				DrawAssetList(position, buildReportToDisplay, assetDependencies, textureData, meshData, prefabData,
 					listToDisplay, fileFilterGroupToUse, BuildReportTool.Options.AssetListPaginationLength);
 				GUILayout.FlexibleSpace();
 			}
@@ -1229,7 +1360,8 @@ namespace BuildReportTool.Window.Screen
 					BRT_BuildReportWindow.DrawThumbnailTooltip(position, textureData);
 				}
 				else if (_hoveredTextureDataId != BuildReportTool.TextureData.DataId.None ||
-				         _hoveredMeshDataId != BuildReportTool.MeshData.DataId.None)
+				         _hoveredMeshDataId != BuildReportTool.MeshData.DataId.None ||
+				         _hoveredPrefabDataId != BuildReportTool.PrefabData.DataId.None)
 				{
 					if (_hoveredTextureDataId != BuildReportTool.TextureData.DataId.None)
 					{
@@ -1239,6 +1371,10 @@ namespace BuildReportTool.Window.Screen
 					else if (_hoveredMeshDataId != BuildReportTool.MeshData.DataId.None)
 					{
 						_textureDataTooltipLabel.text = BuildReportTool.MeshData.GetTooltipTextFromId(_hoveredMeshDataId);
+					}
+					else if (_hoveredPrefabDataId != BuildReportTool.PrefabData.DataId.None)
+					{
+						_textureDataTooltipLabel.text = BuildReportTool.PrefabData.GetTooltipTextFromId(_hoveredPrefabDataId);
 					}
 
 					if (!string.IsNullOrEmpty(_textureDataTooltipLabel.text))
@@ -1445,6 +1581,61 @@ namespace BuildReportTool.Window.Screen
 			else
 			{
 				assetList.Sort(meshData, _currentMeshDataSortType, _currentSortOrder, fileFilters);
+			}
+		}
+
+		void ToggleSort(BuildReportTool.AssetList assetList, BuildReportTool.PrefabData prefabData,
+			BuildReportTool.PrefabData.DataId newSortType, BuildReportTool.FileFilterGroup fileFilters)
+		{
+			if (_currentSortType != BuildReportTool.AssetList.SortType.PrefabData ||
+			    _currentPrefabDataSortType != newSortType)
+			{
+				_currentSortType = BuildReportTool.AssetList.SortType.PrefabData;
+				_currentPrefabDataSortType = newSortType;
+				_currentSortOrder = BuildReportTool.AssetList.SortOrder.Descending; // descending by default
+			}
+			else
+			{
+				// already in this sort type
+				// now toggle the sort order
+				if (_currentSortOrder == BuildReportTool.AssetList.SortOrder.Descending)
+				{
+					_currentSortOrder = BuildReportTool.AssetList.SortOrder.Ascending;
+				}
+				else if (_currentSortOrder == BuildReportTool.AssetList.SortOrder.Ascending)
+				{
+					if (_searchResults != null)
+					{
+						// clicked again while sort order is in ascending
+						// now disable it (which means sorting goes back to sort by search rank)
+						_currentSortType = BuildReportTool.AssetList.SortType.None;
+						_currentSortOrder = BuildReportTool.AssetList.SortOrder.None;
+						_currentPrefabDataSortType = BuildReportTool.PrefabData.DataId.None;
+					}
+					else
+					{
+						_currentSortOrder = BuildReportTool.AssetList.SortOrder.Descending;
+					}
+				}
+			}
+
+			if (_searchResults != null)
+			{
+				if (_currentSortType == BuildReportTool.AssetList.SortType.None &&
+				    _currentPrefabDataSortType == BuildReportTool.PrefabData.DataId.None)
+				{
+					// no column used as sort
+					// revert to sorting by search rank
+					SortBySearchRank(_searchResults, _lastSearchText);
+				}
+				else
+				{
+					BuildReportTool.AssetListUtility.SortAssetList(_searchResults, prefabData, _currentPrefabDataSortType, _currentSortOrder);
+				}
+			}
+			else
+			{
+				assetList.Sort(prefabData, _currentPrefabDataSortType, _currentSortOrder, fileFilters);
 			}
 		}
 
@@ -1833,7 +2024,7 @@ namespace BuildReportTool.Window.Screen
 
 		void DrawAssetList(Rect position,
 			BuildReportTool.BuildInfo buildReportToDisplay, BuildReportTool.AssetDependencies assetDependencies,
-			BuildReportTool.TextureData textureData, BuildReportTool.MeshData meshData,
+			BuildReportTool.TextureData textureData, BuildReportTool.MeshData meshData, BuildReportTool.PrefabData prefabData,
 			BuildReportTool.AssetList list, BuildReportTool.FileFilterGroup filter, int length)
 		{
 			if (list == null)
@@ -1949,6 +2140,11 @@ namespace BuildReportTool.Window.Screen
 			                      filter.GetSelectedFilterLabel() == BuildReportTool.Options.FileFilterNameForMeshData &&
 			                      meshData != null &&
 			                      meshData.HasContents;
+
+			var showPrefabColumns = filter.SelectedFilterIdx >= 0 &&
+			                        filter.GetSelectedFilterLabel() == BuildReportTool.Options.FileFilterNameForPrefabData &&
+			                        prefabData != null &&
+			                        prefabData.HasContents;
 
 			// --------------------------------------------------------------------------------------------------------
 
@@ -2634,6 +2830,80 @@ namespace BuildReportTool.Window.Screen
 			#endregion
 
 			// --------------------------------------------------------------------------------------------------------
+			
+			#region Columns: Prefab Data
+			
+			if (Event.current.type == EventType.Repaint)
+			{
+				_hoveredPrefabDataId = BuildReportTool.PrefabData.DataId.None;
+			}
+
+			_clickedPrefabDataId = BuildReportTool.PrefabData.DataId.None;
+
+			if (showPrefabColumns)
+			{
+				if (BuildReportTool.Options.ShowPrefabColumnContributeGI)
+				{
+					DrawPrefabDataColumn(viewOffset, len,
+						BuildReportTool.PrefabData.DataId.ContributeGI, "ContributeGI",
+						true, false, list, prefabData,
+						assetListToUse, ref _assetListScrollPos);
+				}
+				if (BuildReportTool.Options.ShowPrefabColumnBatchingStatic)
+				{
+					DrawPrefabDataColumn(viewOffset, len,
+						BuildReportTool.PrefabData.DataId.BatchingStatic, "Static Batching",
+						true, false, list, prefabData,
+						assetListToUse, ref _assetListScrollPos);
+				}
+				if (BuildReportTool.Options.ShowPrefabColumnOccluderStatic)
+				{
+					DrawPrefabDataColumn(viewOffset, len,
+						BuildReportTool.PrefabData.DataId.OccluderStatic, "Occluder Static",
+						true, false, list, prefabData,
+						assetListToUse, ref _assetListScrollPos);
+				}
+				if (BuildReportTool.Options.ShowPrefabColumnOccludeeStatic)
+				{
+					DrawPrefabDataColumn(viewOffset, len,
+						BuildReportTool.PrefabData.DataId.OccludeeStatic, "Occludee Static",
+						true, false, list, prefabData,
+						assetListToUse, ref _assetListScrollPos);
+				}
+				if (BuildReportTool.Options.ShowPrefabColumnReflectionProbeStatic)
+				{
+					DrawPrefabDataColumn(viewOffset, len,
+						BuildReportTool.PrefabData.DataId.ReflectionProbeStatic, "Reflection Probe Static",
+						true, false, list, prefabData,
+						assetListToUse, ref _assetListScrollPos);
+				}
+				if (BuildReportTool.Options.ShowPrefabColumnNavigationStatic)
+				{
+					DrawPrefabDataColumn(viewOffset, len,
+						BuildReportTool.PrefabData.DataId.NavigationStatic, "Navigation Static",
+						true, false, list, prefabData,
+						assetListToUse, ref _assetListScrollPos);
+				}
+				if (BuildReportTool.Options.ShowPrefabColumnOffMeshLinkGeneration)
+				{
+					DrawPrefabDataColumn(viewOffset, len,
+						BuildReportTool.PrefabData.DataId.OffMeshLinkGeneration, "Off-Mesh Link Generation",
+						true, false, list, prefabData,
+						assetListToUse, ref _assetListScrollPos);
+				}
+
+				// -------------------------------
+
+				if (_clickedPrefabDataId != BuildReportTool.PrefabData.DataId.None)
+				{
+					ToggleSort(list, prefabData, _clickedPrefabDataId, filter);
+					_clickedPrefabDataId = BuildReportTool.PrefabData.DataId.None;
+				}
+			}
+
+			#endregion
+			
+			// --------------------------------------------------------------------------------------------------------
 
 			#region Column: Raw File Size (Size Before Build)
 
@@ -3136,6 +3406,131 @@ namespace BuildReportTool.Window.Screen
 				if (assetHasMeshData)
 				{
 					dataToDisplay = meshDataEntries[b.Name].ToDisplayedValue(meshDataId);
+				}
+
+				GUILayout.Label(dataToDisplay, styleToUse, BRT_BuildReportWindow.LayoutListHeightMinWidth90);
+
+				useAlt = !useAlt;
+			}
+
+			GUILayout.Space(SCROLLBAR_BOTTOM_PADDING);
+
+			GUILayout.EndScrollView();
+
+			GUILayout.EndVertical();
+		}
+
+		void DrawPrefabDataColumn(int sta, int end, PrefabData.DataId prefabDataId, string columnName,
+			bool allowSort, bool showScrollbar, BuildReportTool.AssetList assetListCollection, PrefabData prefabData,
+			SizePart[] assetList, ref Vector2 scrollbarPos)
+		{
+			var hiddenHorizontalScrollbarStyle = GUI.skin.FindStyle(BuildReportTool.Window.Settings.HIDDEN_SCROLLBAR_STYLE_NAME);
+			if (hiddenHorizontalScrollbarStyle == null)
+			{
+				hiddenHorizontalScrollbarStyle = GUI.skin.horizontalScrollbar;
+			}
+
+			var hiddenVerticalScrollbarStyle = GUI.skin.FindStyle(BuildReportTool.Window.Settings.HIDDEN_SCROLLBAR_STYLE_NAME);
+			if (hiddenVerticalScrollbarStyle == null)
+			{
+				hiddenVerticalScrollbarStyle = GUI.skin.verticalScrollbar;
+			}
+
+			var verticalScrollbarStyle = GUI.skin.verticalScrollbar;
+
+			var listEntryStyle = GUI.skin.FindStyle(BuildReportTool.Window.Settings.LIST_SMALL_STYLE_NAME);
+			if (listEntryStyle == null)
+			{
+				listEntryStyle = GUI.skin.label;
+			}
+
+			var listAltEntryStyle = GUI.skin.FindStyle(BuildReportTool.Window.Settings.LIST_SMALL_ALT_STYLE_NAME);
+			if (listAltEntryStyle == null)
+			{
+				listAltEntryStyle = GUI.skin.label;
+			}
+
+			var listSelectedEntryStyle = GUI.skin.FindStyle(BuildReportTool.Window.Settings.LIST_SMALL_SELECTED_NAME);
+			if (listSelectedEntryStyle == null)
+			{
+				listSelectedEntryStyle = GUI.skin.label;
+			}
+
+			// ----------------------------------------------------------
+
+			GUILayout.BeginVertical(BRT_BuildReportWindow.LayoutNone);
+
+			// ----------------------------------------------------------
+			// column header
+			string sortTypeStyleName = BuildReportTool.Window.Settings.LIST_COLUMN_HEADER_STYLE_NAME;
+			if (allowSort && _currentSortType == BuildReportTool.AssetList.SortType.PrefabData && _currentPrefabDataSortType == prefabDataId)
+			{
+				if (_currentSortOrder == BuildReportTool.AssetList.SortOrder.Descending)
+				{
+					sortTypeStyleName = BuildReportTool.Window.Settings.LIST_COLUMN_HEADER_DESC_STYLE_NAME;
+				}
+				else
+				{
+					sortTypeStyleName = BuildReportTool.Window.Settings.LIST_COLUMN_HEADER_ASC_STYLE_NAME;
+				}
+			}
+			var sortTypeStyle = GUI.skin.FindStyle(sortTypeStyleName);
+			if (sortTypeStyle == null)
+			{
+				sortTypeStyle = GUI.skin.label;
+			}
+
+			if (GUILayout.Button(columnName, sortTypeStyle, BRT_BuildReportWindow.LayoutListHeight) && allowSort)
+			{
+				_clickedPrefabDataId = prefabDataId;
+			}
+
+			if (Event.current.type == EventType.Repaint)
+			{
+				var lastRect = GUILayoutUtility.GetLastRect();
+				if (lastRect.Contains(Event.current.mousePosition))
+				{
+					_hoveredPrefabDataId = prefabDataId;
+				}
+			}
+
+			// ----------------------------------------------------------
+			// scrollbar
+			if (showScrollbar)
+			{
+				scrollbarPos = GUILayout.BeginScrollView(scrollbarPos,
+					hiddenHorizontalScrollbarStyle,
+					verticalScrollbarStyle, BRT_BuildReportWindow.LayoutNone);
+			}
+			else
+			{
+				scrollbarPos = GUILayout.BeginScrollView(scrollbarPos,
+					hiddenHorizontalScrollbarStyle,
+					hiddenVerticalScrollbarStyle, BRT_BuildReportWindow.LayoutNone);
+			}
+
+			// ----------------------------------------------------------
+			// actual contents
+			bool useAlt = false;
+
+			var prefabDataEntries = prefabData.GetPrefabData();
+			for (int n = sta; n < end; ++n)
+			{
+				var b = assetList[n];
+
+				var styleToUse = useAlt
+					                    ? listAltEntryStyle
+					                    : listEntryStyle;
+				if (assetListCollection.InSumSelection(b))
+				{
+					styleToUse = listSelectedEntryStyle;
+				}
+
+				var dataToDisplay = string.Empty;
+				var assetHasMeshData = prefabDataEntries.ContainsKey(b.Name);
+				if (assetHasMeshData)
+				{
+					dataToDisplay = prefabDataEntries[b.Name].HasValue(prefabDataId);
 				}
 
 				GUILayout.Label(dataToDisplay, styleToUse, BRT_BuildReportWindow.LayoutListHeightMinWidth90);

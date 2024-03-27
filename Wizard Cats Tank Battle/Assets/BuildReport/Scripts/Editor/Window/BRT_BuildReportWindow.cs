@@ -3,11 +3,14 @@
 #if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEditor;
 using System.Threading;
 using BuildReportTool;
 using BuildReportTool.Window;
+using UnityEditor.U2D;
+using UnityEngine.U2D;
 
 // can't put this in a namespace since older versions of Unity doesn't allow that
 public class BRT_BuildReportWindow : EditorWindow
@@ -63,8 +66,8 @@ public class BRT_BuildReportWindow : EditorWindow
 	{
 		if (BuildReportTool.Options.AutoResortAssetsWhenUnityEditorRegainsFocus)
 		{
-			_usedAssetsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport);
-			_unusedAssetsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport);
+			_usedAssetsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport);
+			_unusedAssetsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport);
 
 			// check if configured file filters changed and only then do we need to recategorize
 
@@ -120,15 +123,16 @@ public class BRT_BuildReportWindow : EditorWindow
 		_usedAssetsScreen.SetListToDisplay(BuildReportTool.Window.Screen.AssetList.ListToDisplay.UsedAssets);
 		_unusedAssetsScreen.SetListToDisplay(BuildReportTool.Window.Screen.AssetList.ListToDisplay.UnusedAssets);
 
-		_overviewScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport);
-		_buildSettingsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport);
-		_buildStepsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport);
-		_sizeStatsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport);
-		_usedAssetsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport);
-		_unusedAssetsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport);
+		_overviewScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport);
+		_buildSettingsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport);
+		_buildStepsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport);
+		_sizeStatsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport);
+		_usedAssetsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport);
+		_unusedAssetsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport);
+		_extraDataScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport);
 
-		_optionsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport);
-		_helpScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport);
+		_optionsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport);
+		_helpScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport);
 	}
 
 	double _lastTime;
@@ -193,6 +197,7 @@ public class BRT_BuildReportWindow : EditorWindow
 	readonly BuildReportTool.Window.Screen.SizeStats _sizeStatsScreen = new BuildReportTool.Window.Screen.SizeStats();
 	readonly BuildReportTool.Window.Screen.AssetList _usedAssetsScreen = new BuildReportTool.Window.Screen.AssetList();
 	readonly BuildReportTool.Window.Screen.AssetList _unusedAssetsScreen = new BuildReportTool.Window.Screen.AssetList();
+	readonly BuildReportTool.Window.Screen.ExtraData _extraDataScreen = new BuildReportTool.Window.Screen.ExtraData();
 
 	readonly BuildReportTool.Window.Screen.Options _optionsScreen = new BuildReportTool.Window.Screen.Options();
 	readonly BuildReportTool.Window.Screen.Help _helpScreen = new BuildReportTool.Window.Screen.Help();
@@ -235,7 +240,15 @@ public class BRT_BuildReportWindow : EditorWindow
 	/// </summary>
 	static BuildReportTool.MeshData _meshData;
 
+	/// <summary>
+	/// The PrefabData being used
+	/// for whichever Build Report is displayed.
+	/// </summary>
+	static BuildReportTool.PrefabData _prefabData;
+	
 	static BuildReportTool.UnityBuildReport _unityBuildReport;
+
+	static ExtraData _extraData;
 
 	public const bool FORCE_USE_DARK_SKIN = false;
 
@@ -514,6 +527,7 @@ public class BRT_BuildReportWindow : EditorWindow
 			ownStyle.onHover.background = nativeStyle.onHover.background;
 			ownStyle.onActive.background = nativeStyle.onActive.background;
 
+#if UNITY_5_6_OR_NEWER
 			if (nativeStyle.normal.scaledBackgrounds != null && nativeStyle.normal.scaledBackgrounds.Length > 0)
 			{
 				ownStyle.normal.scaledBackgrounds = new Texture2D[nativeStyle.normal.scaledBackgrounds.Length];
@@ -609,6 +623,7 @@ public class BRT_BuildReportWindow : EditorWindow
 					ownStyle.onActive.scaledBackgrounds = null;
 				}
 			}
+#endif
 
 			ownStyle.normal.textColor = nativeStyle.normal.textColor;
 			ownStyle.hover.textColor = nativeStyle.hover.textColor;
@@ -803,17 +818,17 @@ public class BRT_BuildReportWindow : EditorWindow
 			}
 
 
-			if (nativeLogIcon.normal.background != null)
+			if (nativeLogIcon != null && nativeLogIcon.normal.background != null)
 			{
 				logMessageIcons.normal.background = nativeLogIcon.normal.background;
 			}
 
-			if (nativeWarningIcon.normal.background != null)
+			if (nativeWarningIcon != null && nativeWarningIcon.normal.background != null)
 			{
 				logMessageIcons.hover.background = nativeWarningIcon.normal.background;
 			}
 
-			if (nativeErrorIcon.normal.background != null)
+			if (nativeErrorIcon != null && nativeErrorIcon.normal.background != null)
 			{
 				logMessageIcons.active.background = nativeErrorIcon.normal.background;
 			}
@@ -1011,7 +1026,7 @@ public class BRT_BuildReportWindow : EditorWindow
 	void Refresh(bool fromBuild)
 	{
 		GoToOverviewScreen();
-		BuildReportTool.ReportGenerator.RefreshData(fromBuild, ref _buildInfo, ref _assetDependencies, ref _textureData, ref _meshData);
+		BuildReportTool.ReportGenerator.RefreshData(fromBuild, ref _buildInfo, ref _assetDependencies, ref _textureData, ref _meshData, ref _prefabData);
 	}
 
 	bool IsWaitingForBuildCompletionToGenerateBuildReport
@@ -1025,11 +1040,12 @@ public class BRT_BuildReportWindow : EditorWindow
 
 		if (BuildReportTool.Util.BuildInfoHasContents(_buildInfo))
 		{
-			_buildSettingsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport);
-			_buildStepsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport);
-			_usedAssetsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport);
-			_unusedAssetsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport);
-			_sizeStatsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport);
+			_buildSettingsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport);
+			_buildStepsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport);
+			_usedAssetsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport);
+			_unusedAssetsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport);
+			_sizeStatsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport);
+			_extraDataScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport);
 
 			_buildInfo.OnAfterLoad();
 			_buildInfo.SetSavedPath(_lastOpenedBuildInfoFilePath);
@@ -1041,7 +1057,7 @@ public class BRT_BuildReportWindow : EditorWindow
 
 	void OnFinishGeneratingBuildReport()
 	{
-		BuildReportTool.ReportGenerator.OnFinishedGetValues(_buildInfo, _assetDependencies, _textureData, _meshData);
+		BuildReportTool.ReportGenerator.OnFinishedGetValues(_buildInfo, _assetDependencies, _textureData, _meshData, _prefabData);
 		_buildInfo.UnescapeAssetNames();
 
 		GoToOverviewScreen();
@@ -1052,8 +1068,8 @@ public class BRT_BuildReportWindow : EditorWindow
 			Debug.Log(string.Format("UnityBuildReport displayed is now: {0}", _unityBuildReport.SavedPath));
 		}
 
-		_buildSettingsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport);
-		_buildStepsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport);
+		_buildSettingsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport);
+		_buildStepsScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport);
 	}
 
 
@@ -1109,6 +1125,11 @@ public class BRT_BuildReportWindow : EditorWindow
 		get { return _selectedCategoryIdx == UNUSED_ASSETS_IDX; }
 	}
 
+	bool IsInExtraDataCategory
+	{
+		get { return _selectedCategoryIdx == EXTRA_DATA_IDX; }
+	}
+
 	bool IsInOptionsCategory
 	{
 		get { return _selectedCategoryIdx == OPTIONS_IDX; }
@@ -1127,9 +1148,10 @@ public class BRT_BuildReportWindow : EditorWindow
 	const int SIZE_STATS_IDX = 4;
 	const int USED_ASSETS_IDX = 5;
 	const int UNUSED_ASSETS_IDX = 6;
+	const int EXTRA_DATA_IDX = 7;
 
-	const int OPTIONS_IDX = 7;
-	const int HELP_IDX = 8;
+	const int OPTIONS_IDX = 8;
+	const int HELP_IDX = 9;
 
 
 	bool _finishedOpeningFromThread = false;
@@ -1198,20 +1220,59 @@ public class BRT_BuildReportWindow : EditorWindow
 			_meshData = null;
 		}
 
+		var prefabDataFilePath = BuildReportTool.Util.GetPrefabDataFilenameFromBuildInfo(filepath);
+		if (System.IO.File.Exists(prefabDataFilePath))
+		{
+			var loadedPrefabData = BuildReportTool.Util.OpenSerialized<BuildReportTool.PrefabData>(prefabDataFilePath);
+			if (loadedPrefabData != null)
+			{
+				_prefabData = loadedPrefabData;
+			}
+		}
+		else
+		{
+			_prefabData = null;
+		}
+
 		var unityBuildReportFilePath = BuildReportTool.Util.GetUnityBuildReportFilenameFromBuildInfo(filepath);
 		if (System.IO.File.Exists(unityBuildReportFilePath))
 		{
-			var loadedUnityBuildReport = BuildReportTool.Util.OpenSerialized<BuildReportTool.UnityBuildReport>(unityBuildReportFilePath);
-			if (loadedUnityBuildReport != null)
+			try
 			{
-				_unityBuildReport = loadedUnityBuildReport;
-				//Debug.Log(string.Format("UnityBuildReport displayed is now: {0}", _unityBuildReport.SavedPath));
+				var loadedUnityBuildReport =
+					BuildReportTool.Util.OpenSerialized<BuildReportTool.UnityBuildReport>(unityBuildReportFilePath);
+				if (loadedUnityBuildReport != null)
+				{
+					_unityBuildReport = loadedUnityBuildReport;
+					//Debug.Log(string.Format("UnityBuildReport displayed is now: {0}", _unityBuildReport.SavedPath));
+				}
+				else
+				{
+					_unityBuildReport = null;
+				}
+			}
+			catch (Exception e)
+			{
+				Debug.LogWarning(string.Format("Can't open additional build info data due to Unity version incompatibility.\n\n{0}", e));
+				_unityBuildReport = null;
 			}
 		}
 		else
 		{
 			//Debug.LogWarning(string.Format("Not found: {0}", unityBuildReportFilePath));
 			_unityBuildReport = null;
+		}
+
+		var extraDataFilePath = BuildReportTool.Util.GetExtraDataFilename(filepath).Replace('\\', '/');
+		if (System.IO.File.Exists(extraDataFilePath))
+		{
+			_extraData.Contents = System.IO.File.ReadAllText(extraDataFilePath);
+			_extraData.SavedPath = extraDataFilePath;
+		}
+		else
+		{
+			_extraData.Contents = null;
+			_extraData.SavedPath = null;
 		}
 
 		_finishedOpeningFromThread = true;
@@ -1258,21 +1319,27 @@ public class BRT_BuildReportWindow : EditorWindow
 		// derive the build report file from it
 		if (filepath.DoesFileBeginWith("DEP-"))
 		{
-			var path = System.IO.Path.GetDirectoryName(filepath);
-			var filename = filepath.GetFileNameOnly();
-			filepath = string.Format("{0}/{1}", path, filename.Substring(4)); // filename without the "DEP-" at the start
+			filepath = TakeOutPrefix(filepath, "DEP-");
 		}
 		else if (filepath.DoesFileBeginWith("TextureData-"))
 		{
-			var path = System.IO.Path.GetDirectoryName(filepath);
-			var filename = filepath.GetFileNameOnly();
-			filepath = string.Format("{0}/{1}", path, filename.Substring(12)); // filename without the "TextureData-" at the start
+			filepath = TakeOutPrefix(filepath, "TextureData-");
+		}
+		else if (filepath.DoesFileBeginWith("MeshData-"))
+		{
+			filepath = TakeOutPrefix(filepath, "MeshData-");
+		}
+		else if (filepath.DoesFileBeginWith("PrefabData-"))
+		{
+			filepath = TakeOutPrefix(filepath, "PrefabData-");
 		}
 		else if (filepath.DoesFileBeginWith("UBR-"))
 		{
-			var path = System.IO.Path.GetDirectoryName(filepath);
-			var filename = filepath.GetFileNameOnly();
-			filepath = string.Format("{0}/{1}", path, filename.Substring(4)); // filename without the "UBR-" at the start
+			filepath = TakeOutPrefix(filepath, "UBR-");
+		}
+		else if (filepath.DoesFileBeginWith("ExtraData-"))
+		{
+			filepath = TakeOutPrefix(filepath, "ExtraData-");
 		}
 
 		if (!BuildReportTool.Options.UseThreadedFileLoading)
@@ -1291,6 +1358,13 @@ public class BRT_BuildReportWindow : EditorWindow
 			_currentBuildReportFileLoadThread.Start();
 			Debug.LogFormat(this, "Build Report Tool: Started new load background thread...");
 		}
+	}
+
+	static string TakeOutPrefix(string s, string prefixToRemove)
+	{
+		var path = System.IO.Path.GetDirectoryName(s);
+		var filename = s.GetFileNameOnly();
+		return string.Format("{0}/{1}", path, filename.Substring(prefixToRemove.Length));
 	}
 
 	void LoadThread(string filepath)
@@ -1407,6 +1481,12 @@ public class BRT_BuildReportWindow : EditorWindow
 					BuildReportTool.Util.Serialize(_meshData, meshDataFilePath);
 				}
 
+				if (_prefabData != null && _prefabData.HasContents)
+				{
+					var prefabDataFilePath = BuildReportTool.Util.GetPrefabDataFilenameFromBuildInfo(filepath);
+					BuildReportTool.Util.Serialize(_prefabData, prefabDataFilePath);
+				}
+
 				if (_unityBuildReport != null)
 				{
 					var unityBuildReportFilePath = BuildReportTool.Util.GetUnityBuildReportFilenameFromBuildInfo(filepath);
@@ -1430,7 +1510,7 @@ public class BRT_BuildReportWindow : EditorWindow
 		if (GUI.Button(new Rect(toolbarX, 5, 70, 40), _toolbarLabelHelp, rightToolbarStyle))
 		{
 			_selectedCategoryIdx = HELP_IDX;
-			_helpScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport);
+			_helpScreen.RefreshData(_buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport);
 		}
 	}
 
@@ -1485,12 +1565,12 @@ public class BRT_BuildReportWindow : EditorWindow
 			if (IsInOptionsCategory)
 			{
 				GUILayout.Space(40);
-				_optionsScreen.DrawGUI(position, _buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport, out requestRepaint);
+				_optionsScreen.DrawGUI(position, _buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport, _extraData, out requestRepaint);
 			}
 			else if (IsInHelpCategory)
 			{
 				GUILayout.Space(40);
-				_helpScreen.DrawGUI(position, _buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport, out requestRepaint);
+				_helpScreen.DrawGUI(position, _buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport, _extraData, out requestRepaint);
 			}
 			else if (IsWaitingForBuildCompletionToGenerateBuildReport)
 			{
@@ -1565,6 +1645,12 @@ public class BRT_BuildReportWindow : EditorWindow
 			_selectedCategoryIdx = SIZE_STATS_IDX;
 		}
 
+		if (!string.IsNullOrEmpty(_extraData.Contents) &&
+		    GUILayout.Toggle(IsInExtraDataCategory, "Extra Data", midTabStyle, LayoutExpandWidth))
+		{
+			_selectedCategoryIdx = EXTRA_DATA_IDX;
+		}
+
 		if (GUILayout.Toggle(IsInUsedAssetsCategory, "Used Assets", midTabStyle, LayoutExpandWidth))
 		{
 			if (_selectedCategoryIdx != USED_ASSETS_IDX && BuildReportTool.Options.HasSearchTypeChanged)
@@ -1623,35 +1709,39 @@ public class BRT_BuildReportWindow : EditorWindow
 
 		if (IsInOverviewCategory)
 		{
-			_overviewScreen.DrawGUI(position, _buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport, out requestRepaintOnTabs);
+			_overviewScreen.DrawGUI(position, _buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport, _extraData, out requestRepaintOnTabs);
 		}
 		else if (IsInBuildSettingsCategory)
 		{
-			_buildSettingsScreen.DrawGUI(position, _buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport, out requestRepaintOnTabs);
+			_buildSettingsScreen.DrawGUI(position, _buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport, _extraData, out requestRepaintOnTabs);
 		}
 		else if (IsInBuildStepsCategory)
 		{
-			_buildStepsScreen.DrawGUI(position, _buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport, out requestRepaintOnTabs);
+			_buildStepsScreen.DrawGUI(position, _buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport, _extraData, out requestRepaintOnTabs);
 		}
 		else if (IsInSizeStatsCategory)
 		{
-			_sizeStatsScreen.DrawGUI(position, _buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport, out requestRepaintOnTabs);
+			_sizeStatsScreen.DrawGUI(position, _buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport, _extraData, out requestRepaintOnTabs);
 		}
 		else if (IsInUsedAssetsCategory)
 		{
-			_usedAssetsScreen.DrawGUI(position, _buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport, out requestRepaintOnTabs);
+			_usedAssetsScreen.DrawGUI(position, _buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport, _extraData, out requestRepaintOnTabs);
 		}
 		else if (IsInUnusedAssetsCategory)
 		{
-			_unusedAssetsScreen.DrawGUI(position, _buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport, out requestRepaintOnTabs);
+			_unusedAssetsScreen.DrawGUI(position, _buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport, _extraData, out requestRepaintOnTabs);
+		}
+		else if (IsInExtraDataCategory)
+		{
+			_extraDataScreen.DrawGUI(position, _buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport, _extraData, out requestRepaintOnTabs);
 		}
 		else if (IsInOptionsCategory)
 		{
-			_optionsScreen.DrawGUI(position, _buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport, out requestRepaintOnTabs);
+			_optionsScreen.DrawGUI(position, _buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport, _extraData, out requestRepaintOnTabs);
 		}
 		else if (IsInHelpCategory)
 		{
-			_helpScreen.DrawGUI(position, _buildInfo, _assetDependencies, _textureData, _meshData, _unityBuildReport, out requestRepaintOnTabs);
+			_helpScreen.DrawGUI(position, _buildInfo, _assetDependencies, _textureData, _meshData, _prefabData, _unityBuildReport, _extraData, out requestRepaintOnTabs);
 		}
 
 		GUILayout.FlexibleSpace();
@@ -1686,6 +1776,11 @@ public class BRT_BuildReportWindow : EditorWindow
 
 	// =====================================================================================
 
+	static readonly MethodInfo GetAtlasPreviewTextureMethod = typeof(SpriteAtlasExtensions)
+		.GetMethod("GetPreviewTextures", BindingFlags.Static | BindingFlags.NonPublic);
+
+	static readonly object[] GetAtlasPreviewTextureParams = new object[1];
+
 	public static Texture GetAssetPreview(SizePart sizePart)
 	{
 		if (sizePart == null)
@@ -1706,13 +1801,43 @@ public class BRT_BuildReportWindow : EditorWindow
 		Texture thumbnailImage = null;
 		if (assetName.IsTextureFile())
 		{
+#if UNITY_5_6_OR_NEWER
 			thumbnailImage = AssetDatabase.LoadAssetAtPath<Texture>(assetName);
+#else
+			thumbnailImage = (Texture)AssetDatabase.LoadAssetAtPath(assetName, typeof(Texture));
+#endif
 		}
 		else //if (_assetListEntryHovered.Name.EndsWith(".prefab") || BuildReportTool.Util.IsFileAUnityMesh(_assetListEntryHovered.Name))
 		{
+#if UNITY_5_6_OR_NEWER
 			var loadedObj = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(assetName);
+#else
+			var loadedObj = (UnityEngine.Object)AssetDatabase.LoadAssetAtPath(assetName, typeof(UnityEngine.Object));
+#endif
 
-			if (loadedObj != null)
+			if (loadedObj == null)
+			{
+				return null;
+			}
+
+			if (loadedObj is SpriteAtlas atlas)
+			{
+				GetAtlasPreviewTextureParams[0] = atlas;
+
+				if (GetAtlasPreviewTextureMethod?.Invoke(null, GetAtlasPreviewTextureParams) is Texture2D[] textures &&
+				    textures.Length > 0 &&
+				    textures[0] != null)
+				{
+					thumbnailImage = textures[0];
+				}
+				else
+				{
+					// If SpriteAtlasExtensions.GetPreviewTextures failed,
+					// just try AssetPreview.GetAssetPreview
+					thumbnailImage = AssetPreview.GetAssetPreview(atlas);
+				}
+			}
+			else
 			{
 				thumbnailImage = AssetPreview.GetAssetPreview(loadedObj);
 				//thumbnailImage = AssetPreview.GetMiniThumbnail(loadedObj);

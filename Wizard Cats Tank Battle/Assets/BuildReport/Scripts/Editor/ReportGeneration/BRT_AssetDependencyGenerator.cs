@@ -528,7 +528,11 @@ namespace BuildReportTool
 					if (newAssetToInspect.IsMaterialFile() && foundDependencies[n].IsTextureFile())
 					{
 						bool textureFound = false;
+#if UNITY_5_6_OR_NEWER
 						var material = AssetDatabase.LoadAssetAtPath<Material>(newAssetToInspect);
+#else
+						var material = (Material)AssetDatabase.LoadAssetAtPath(newAssetToInspect, typeof(Material));
+#endif
 						if (material == null)
 						{
 							// couldn't find material in current project

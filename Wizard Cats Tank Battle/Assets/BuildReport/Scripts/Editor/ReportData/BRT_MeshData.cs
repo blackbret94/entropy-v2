@@ -245,7 +245,7 @@ Number of imported Animation Clips in the asset.";
 		{
 			_meshData.Clear();
 
-			var platformName = TextureData.GetPlatformNameFromBuildType(BuildType);
+			//var platformName = TextureData.GetPlatformNameFromBuildType(BuildType);
 			var len = Mathf.Min(Assets.Count, Data.Count);
 			for (int n = 0; n < len; ++n)
 			{

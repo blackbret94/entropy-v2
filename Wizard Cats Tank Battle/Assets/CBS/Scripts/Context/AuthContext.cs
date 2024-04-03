@@ -2,6 +2,7 @@
 using CBS.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.AddressableAssets;
 
 namespace CBS.Context
 {
@@ -71,7 +72,8 @@ namespace CBS.Context
                 {
                     LoginForm.OnLogined -= OnLoginComplete;
                 }
-                SceneManager.LoadSceneAsync(LobbyScene);
+                Addressables.LoadSceneAsync(LobbyScene);
+                // SceneManager.LoadSceneAsync(LobbyScene);
             }
         }
     }

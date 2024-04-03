@@ -1,20 +1,19 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 
 namespace Vashta.Entropy.SceneNavigation
 {
     public class SceneNavigator: MonoBehaviour
     {
-        private const string WardrobeSceneName = "CharacterEditor";
         private const string MainMenuSceneName = "MainMenu";
-        private const string ItemStoreSceneName = "Store";
         private const string LoginSceneName = "Login";
         private const string InitSceneName = "Init";
         
         public void GoToMainMenu()
         {
-            SceneManager.LoadScene(MainMenuSceneName);
+            Addressables.LoadSceneAsync(MainMenuSceneName);
         }
 
         public void GoToMainMenuAsync()
@@ -24,33 +23,27 @@ namespace Vashta.Entropy.SceneNavigation
         
         IEnumerator LoadMainMenuAsync()
         {
-            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(MainMenuSceneName);
-
-            // Wait until the asynchronous scene fully loads
-            while (!asyncLoad.isDone)
+            UnityEngine.AddressableAssets.Addressables.LoadAssetsAsync<Object>("entropy-maps-01", delegate(Object o)
             {
-                yield return null;
-            }
-        }
+                var asyncLoad = Addressables.LoadSceneAsync(MainMenuSceneName);
 
-        public void GoToWardrobe()
-        {
-            SceneManager.LoadScene(WardrobeSceneName);
+                // Wait until the asynchronous scene fully loads
+                // while (!asyncLoad.IsDone)
+                // {
+                //     yield return null;
+                // }
+            });
+            yield return null;
         }
-
-        public void GoToItemStore()
-        {
-            SceneManager.LoadScene(ItemStoreSceneName);
-        }
-
+        
         public void GoToLogin()
         {
-            SceneManager.LoadScene(LoginSceneName);
+            Addressables.LoadSceneAsync(LoginSceneName);
         }
 
         public void GoToInit()
         {
-            SceneManager.LoadScene(InitSceneName);
+            Addressables.LoadSceneAsync(InitSceneName);
         }
     }
 }

@@ -1,8 +1,11 @@
-﻿using CBS.Scriptable;
+﻿using System;
+using CBS.Scriptable;
 using CBS.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceProviders;
 
 namespace CBS.Context
 {
@@ -15,6 +18,8 @@ namespace CBS.Context
         private LoginForm LoginForm { get; set; }
         private AuthData AuthData { get; set; }
         private IAuth Auth { get; set; }
+
+        private AsyncOperationHandle<SceneInstance> _handle;
 
         private void Start()
         {
@@ -72,9 +77,13 @@ namespace CBS.Context
                 {
                     LoginForm.OnLogined -= OnLoginComplete;
                 }
-                Addressables.LoadSceneAsync(LobbyScene);
-                // SceneManager.LoadSceneAsync(LobbyScene);
+                _handle = Addressables.LoadSceneAsync(LobbyScene);
             }
+        }
+
+        private void OnDestroy()
+        {
+            Addressables.Release(_handle);
         }
     }
 }

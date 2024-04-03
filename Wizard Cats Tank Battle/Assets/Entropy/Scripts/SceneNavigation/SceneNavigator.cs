@@ -1,7 +1,9 @@
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.SceneManagement;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceProviders;
+using Object = UnityEngine.Object;
 
 namespace Vashta.Entropy.SceneNavigation
 {
@@ -10,40 +12,47 @@ namespace Vashta.Entropy.SceneNavigation
         private const string MainMenuSceneName = "MainMenu";
         private const string LoginSceneName = "Login";
         private const string InitSceneName = "Init";
+
+        private List<AsyncOperationHandle<SceneInstance>> SceneHandles;
         
         public void GoToMainMenu()
         {
-            Addressables.LoadSceneAsync(MainMenuSceneName);
-        }
-
-        public void GoToMainMenuAsync()
-        {
-            StartCoroutine(LoadMainMenuAsync());
-        }
-        
-        IEnumerator LoadMainMenuAsync()
-        {
-            UnityEngine.AddressableAssets.Addressables.LoadAssetsAsync<Object>("entropy-maps-01", delegate(Object o)
-            {
-                var asyncLoad = Addressables.LoadSceneAsync(MainMenuSceneName);
-
-                // Wait until the asynchronous scene fully loads
-                // while (!asyncLoad.IsDone)
-                // {
-                //     yield return null;
-                // }
-            });
-            yield return null;
+            GoToScene(MainMenuSceneName);
         }
         
         public void GoToLogin()
         {
-            Addressables.LoadSceneAsync(LoginSceneName);
+            GoToScene(LoginSceneName);
         }
 
         public void GoToInit()
         {
-            Addressables.LoadSceneAsync(InitSceneName);
+            GoToScene(InitSceneName);
+        }
+
+        public void OnDestroy()
+        {
+            foreach (var handle in SceneHandles)
+            {
+                Addressables.Release(handle);
+            }
+        }
+
+        public void GoToScene(string key)
+        {
+            Addressables.LoadAssetsAsync<Object>("entropy-maps-01", delegate(Object o)
+            {
+                var handle = Addressables.LoadSceneAsync(key);
+                RegisterHandle(handle);
+            });
+        }
+
+        private void RegisterHandle(AsyncOperationHandle<SceneInstance> handle)
+        {
+            if (SceneHandles == null)
+                SceneHandles = new List<AsyncOperationHandle<SceneInstance>>();
+            
+            SceneHandles.Add(handle);
         }
     }
 }

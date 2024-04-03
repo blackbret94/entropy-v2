@@ -40,7 +40,12 @@ namespace Vashta.Entropy.UI
 
         private string FormatPercent(float perun)
         {
-            return $"{Mathf.Floor(perun * 100)}% (Downloading {_currentAssetIndex}/{_maxAssetIndex})";
+            return $"{RoundToOneDecimal(perun)}% (Downloading {_currentAssetIndex}/{_maxAssetIndex})";
+        }
+
+        private float RoundToOneDecimal(float f)
+        {
+            return Mathf.Floor(f * 1000)/10;
         }
     }
 }

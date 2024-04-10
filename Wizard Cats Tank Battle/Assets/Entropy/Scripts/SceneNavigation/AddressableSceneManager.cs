@@ -17,11 +17,12 @@ namespace Vashta.Entropy.SceneNavigation
         
         public void GoToScene(string key)
         {
-            Addressables.LoadAssetsAsync<SceneInstance>(MAPS_ASSET_BUNDLE, delegate(SceneInstance o)
-            {
-                Addressables.LoadSceneAsync(key);//.Completed += Addressables.Release;
-                // RegisterHandle(handle);
-            });
+            // Addressables.LoadAssetsAsync<SceneInstance>(MAPS_ASSET_BUNDLE, delegate(SceneInstance o)
+            // {
+            SceneManager.LoadSceneAsync(key);
+            // Addressables.LoadSceneAsync(key);//.Completed += Addressables.Release;
+            // RegisterHandle(handle);
+            // });
         }
         
         // private void RegisterHandle(AsyncOperationHandle<SceneInstance> handle)

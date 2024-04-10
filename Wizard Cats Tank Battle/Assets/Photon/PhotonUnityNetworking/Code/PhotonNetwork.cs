@@ -3131,9 +3131,11 @@ namespace Photon.Pun
         
             PhotonNetwork.IsMessageQueueRunning = false;
             loadingLevelAndPausedNetwork = true;
+
+            SceneManager.LoadSceneAsync(levelName);
             
-            var handle = Addressables.LoadSceneAsync(levelName);
-            handle.Completed += Addressables.Release;
+            // var handle = Addressables.LoadSceneAsync(levelName);
+            // handle.Completed += Addressables.Release;
         }
 
         /// <summary>

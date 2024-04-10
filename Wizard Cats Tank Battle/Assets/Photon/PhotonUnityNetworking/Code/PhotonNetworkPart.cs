@@ -2113,7 +2113,7 @@ namespace Photon.Pun
             {
                 if (SceneManagerHelper.ActiveSceneName != (string)sceneId)
                 {
-                    PhotonNetwork.LoadLevel((string)sceneId);
+                    PhotonNetwork.LoadLevelFromBundle((string)sceneId);
                 }
             }
         }

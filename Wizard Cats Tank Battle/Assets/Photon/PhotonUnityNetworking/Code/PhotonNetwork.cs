@@ -9,6 +9,8 @@
 // ----------------------------------------------------------------------------
 
 
+using UnityEngine.ResourceManagement.ResourceProviders;
+
 namespace Photon.Pun
 {
     using System.Diagnostics;
@@ -18,7 +20,10 @@ namespace Photon.Pun
     using System.Collections.Generic;
     using ExitGames.Client.Photon;
     using UnityEngine.SceneManagement;
-
+    using UnityEngine.AddressableAssets;
+    using UnityEngine.ResourceManagement.AsyncOperations;
+    // using UnityEngine.ResourceManagement.ResourceProviders;
+    
     using Photon.Realtime;
     using Debug = UnityEngine.Debug;
     using Hashtable = ExitGames.Client.Photon.Hashtable;
@@ -3110,6 +3115,25 @@ namespace Photon.Pun
             PhotonNetwork.IsMessageQueueRunning = false;
             loadingLevelAndPausedNetwork = true;
             _AsyncLevelLoadingOperation = SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Single);
+        }
+
+        public static void LoadLevelFromBundle(string levelName)
+        {
+            if (PhotonHandler.AppQuits)
+            {
+                return;
+            }
+        
+            if (PhotonNetwork.AutomaticallySyncScene)
+            {
+                SetLevelInPropsIfSynced(levelName);
+            }
+        
+            PhotonNetwork.IsMessageQueueRunning = false;
+            loadingLevelAndPausedNetwork = true;
+            
+            var handle = Addressables.LoadSceneAsync(levelName);
+            handle.Completed += Addressables.Release;
         }
 
         /// <summary>

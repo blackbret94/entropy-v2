@@ -7,11 +7,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.SceneManagement;
 using Vashta.Entropy.PhotonExtensions;
 using Vashta.Entropy.SaveLoad;
+using Vashta.Entropy.SceneNavigation;
 using Vashta.Entropy.Scripts.CBSIntegration;
 using Vashta.Entropy.TanksExtensions;
 using Vashta.Entropy.UI.MapSelection;
@@ -24,6 +25,7 @@ namespace TanksMP
     /// responsible for connecting to Photon's Cloud, spawning players and handling disconnects.
     /// </summary>
     [RequireComponent(typeof(RoomOptionsFactory))]
+    [RequireComponent(typeof(AddressableSceneManager))]
 	public class NetworkManagerCustom : MonoBehaviourPunCallbacks
     {
         //reference to this script instance
@@ -32,13 +34,13 @@ namespace TanksMP
         /// <summary>
         /// Scene index that gets loaded when disconnecting from a game.
         /// </summary>
-        public int offlineSceneIndex = 1;
+        public string offlineSceneIndex = "MainMenu";
 
         /// <summary>
         /// Scene index that gets loaded after a connection has been established.
         /// Will get overridden by random matching scene, when using GameMode filtering.
         /// </summary>
-        public int onlineSceneIndex = 2;
+        public string onlineSceneIndex = "Null";
 
         /// <summary>
         /// Maximum amount of players per room.
@@ -61,6 +63,7 @@ namespace TanksMP
         private RoomOptionsFactory _roomOptionsFactory;
 
         public MapDefinitionDictionary MapDefinitionDictionary;
+        private AddressableSceneManager _addressableSceneManager;
 
         //initialize network view
         void Awake()
@@ -90,6 +93,19 @@ namespace TanksMP
             }
 
             LoadRegion();
+        }
+        
+        private AddressableSceneManager GetSceneManager()
+        {
+            if (!_addressableSceneManager)
+                _addressableSceneManager = GetComponent<AddressableSceneManager>();
+
+            if (!_addressableSceneManager)
+            {
+                Debug.LogError("A SceneNavigator is missing an AddressableSceneManager component!");
+            }
+
+            return _addressableSceneManager;
         }
         
         public void SaveRegion(string region)
@@ -205,8 +221,8 @@ namespace TanksMP
                 return;
 
             //switch from the online to the offline scene after connection is closed
-            if (SceneManager.GetActiveScene().buildIndex != offlineSceneIndex)
-                SceneManager.LoadScene(offlineSceneIndex);
+            if (!GetSceneManager().IsMainMenu())
+                GetSceneManager().GoToScene("MainMenu");
         }
 
 
@@ -324,8 +340,8 @@ namespace TanksMP
             PhotonNetwork.CurrentRoom.SetCustomProperties(roomProps);
 
             // Load scene
-            onlineSceneIndex = mapDefinition.SceneIndex();
-            PhotonNetwork.LoadLevel(onlineSceneIndex);
+            onlineSceneIndex = mapDefinition.SceneName;
+            PhotonNetwork.LoadLevelFromBundle(onlineSceneIndex);
         }
         
         /// <summary>
@@ -366,7 +382,7 @@ namespace TanksMP
         //leaving this in for all other network modes too
         IEnumerator WaitForSceneChange()
         {
-            while (SceneManager.GetActiveScene().buildIndex != onlineSceneIndex)
+            while (SceneManager.GetActiveScene().name != onlineSceneIndex)
             {
                 yield return null;
             }

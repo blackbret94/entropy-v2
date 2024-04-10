@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,6 +6,8 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using Vashta.Entropy.SceneNavigation;
 using Vashta.Entropy.UI;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.Exceptions;
+using UnityEngine.ResourceManagement.ResourceProviders;
 using Object = UnityEngine.Object;
 
 namespace Vashta.Entropy.Scripts.Init
@@ -15,7 +16,7 @@ namespace Vashta.Entropy.Scripts.Init
     {
         public SceneNavigator SceneNavigator;
         public InitProgressDisplay InitProgressDisplay;
-        public List<string> BundlesToDownload;
+        public List<AddressableDefinition> BundlesToDownloadDef;
         public TextMeshProUGUI errorText;
         public GameObject ConnectionErrorPanel;
 
@@ -26,58 +27,58 @@ namespace Vashta.Entropy.Scripts.Init
             errorText.gameObject.SetActive(false);
             StartCoroutine(CheckInternetConnection());
 
-            StartCoroutine(DownloadAssetsForLabels(BundlesToDownload));
+            StartCoroutine(DownloadAssetsForLabels(BundlesToDownloadDef));
         }
         
-        private IEnumerator DownloadAssetsForLabels(List<string> labels)
+        private IEnumerator DownloadAssetsForLabels(List<AddressableDefinition> addressables)
         {
-            List<AsyncOperationHandle> handles = new List<AsyncOperationHandle>();
-
-            InitProgressDisplay.SetMaxIndex(labels.Count);
+            InitProgressDisplay.SetMaxIndex(addressables.Count);
             
             int i = 0;
-            foreach (string label in labels)
+            foreach (AddressableDefinition addressable in addressables)
             {
-                Debug.Log($"Starting download for label: {label}");
+                Debug.Log($"Starting download for label: {addressable.Name}");
                 InitProgressDisplay.SetCurrentAssetIndex(i);
-                
-                var handle = Addressables.LoadAssetsAsync<Object>(label, null);
-                
-                handles.Add(handle);
-                
-                while (!handle.IsDone)
+
+                if (addressable.IsScene)
                 {
-                    InitProgressDisplay.UpdateLoadingBar(handle.PercentComplete);
-                    yield return null; // Wait until the next frame
-                }
-                
-                // yield return handle;
-                if (handle.Status == AsyncOperationStatus.Succeeded)
-                {
-                    Debug.Log($"Assets for label {label} downloaded successfully.");
-                    InitProgressDisplay.UpdateLoadingBar(1f);
+                    yield return DownloadAddressable<SceneInstance>(addressable);
                 }
                 else
                 {
-                    Debug.LogError($"Failed to download assets for label {label}.");
-                    errorText.gameObject.SetActive(true);
-                    errorText.text = "There was an error downloading bundle: " + label;
+                    yield return DownloadAddressable<Object>(addressable);
                 }
                 
                 i++;
             }
 
-            // Optionally, here you can use the assets as needed, now that they are downloaded.
-            // For example, adding them to a pool, instantiating, etc.
-
-            // Make sure to release the handles when done to avoid memory leaks.
-            foreach (var handle in handles)
-            {
-                Addressables.Release(handle);
-            }
-
             Debug.Log("All downloads completed.");
             SceneNavigator.GoToLogin();
+        }
+
+        private IEnumerator DownloadAddressable<T>(AddressableDefinition addressable)
+        {
+            var handle = Addressables.LoadAssetsAsync<T>(addressable.Name, null);
+
+            while (!handle.IsDone)
+            {
+                InitProgressDisplay.UpdateLoadingBar(handle.PercentComplete);
+                yield return null; // Wait until the next frame
+            }
+
+            if (handle.Status == AsyncOperationStatus.Succeeded)
+            {
+                Debug.Log($"Assets for label {addressable.Name} downloaded successfully.");
+                InitProgressDisplay.UpdateLoadingBar(1f);
+            }
+            else
+            {
+                Debug.LogError($"Failed to download assets for label {addressable.Name}.");
+                errorText.gameObject.SetActive(true);
+                errorText.text = "There was an error downloading bundle: " + addressable.Name;
+            }
+
+            // Addressables.Release(handle);
         }
 
         private IEnumerator CheckInternetConnection(){
@@ -89,5 +90,12 @@ namespace Vashta.Entropy.Scripts.Init
                 ConnectionErrorPanel.SetActive(false);
             }
         } 
+    }
+
+    [System.Serializable]
+    public struct AddressableDefinition
+    {
+        public string Name;
+        public bool IsScene;
     }
 }

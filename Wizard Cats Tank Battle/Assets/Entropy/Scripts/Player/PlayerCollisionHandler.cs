@@ -58,6 +58,10 @@ namespace Entropy.Scripts.Player
             if (colPlayer == null)
                 return;
 
+            // Ignore if player does not have spikes
+            if (player.StatusEffectController.SpikeDamageModifier == 0)
+                return;
+            
             // ignore active collisions
             if (_playersActivelyCollided.Contains(colPlayer))
                 return;
@@ -67,7 +71,7 @@ namespace Entropy.Scripts.Player
                 return;
             
             // ignore players that have spike buffs
-            if (player.StatusEffectController.SpikeDamageModifier > 0)
+            if (colPlayer.player.StatusEffectController.SpikeDamageModifier > 0)
                 return;
             
             _playersActivelyCollided.Add(colPlayer);

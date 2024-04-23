@@ -66,6 +66,7 @@ namespace TanksMP
 
         public DropCollectiblesButton DropCollectiblesButton;
         public CastUltimateButton CastUltimateButton;
+        public CastPowerupButton CastPowerupButton;
 
         public ClassSelectionPanel ClassSelectionPanel;
         public SettingsPanel SettingsPanel;

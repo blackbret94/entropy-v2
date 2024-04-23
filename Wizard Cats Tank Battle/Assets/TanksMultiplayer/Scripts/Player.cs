@@ -181,6 +181,7 @@ namespace TanksMP
         public bool IsVisible => Renderer.isVisible;
 
         public AudioClip CantShootSound;
+        public StatusEffectDirectory StatusEffectDirectory;
         
         //initialize server values for this player
         void Awake()
@@ -190,6 +191,7 @@ namespace TanksMP
             ClassDefinition classDefinition = defaultClassDefinition ? defaultClassDefinition : classList.RandomClass();
             
             StartCoroutine(RefreshHudCoroutine());
+            GameManager.GetInstance().ui.CastPowerupButton.gameObject.SetActive(false);
             
             //only let the master do initialization
             if (PhotonNetwork.IsMasterClient)
@@ -1092,6 +1094,7 @@ namespace TanksMP
                     // Hide "Drop Flag" button if local player
                     GameManager.GetInstance().ui.DropCollectiblesButton.gameObject.SetActive(false);
                     GameManager.GetInstance().ui.CastUltimateButton.gameObject.SetActive(false);
+                    GameManager.GetInstance().ui.CastPowerupButton.gameObject.SetActive(false);
                 }
                 
                 //find original sender game object (killedBy)
@@ -1378,6 +1381,34 @@ namespace TanksMP
             uiGame.bulletIcon.SetLoadout(bulletId, ammoValue);
         }
 
+        /// <summary>
+        /// Shows, or updates, the powerup icon in the bottom-right corner
+        /// </summary>
+        /// <param name="powerupSessionId"></param>
+        public void CmdShowPowerupIcon(int powerupSessionId)
+        {
+            photonView.RPC("RpcShowPowerupIcon", photonView.Owner, powerupSessionId);
+        }
+
+        [PunRPC]
+        public void RpcShowPowerupIcon(int powerupSessionId)
+        {
+            StatusEffectData statusEffectData = StatusEffectDirectory.GetBySessionId(powerupSessionId);
+
+            if (statusEffectData)
+            {
+                UIGame.GetInstance().CastPowerupButton.UpdateIcon(statusEffectData.EffectIcon);
+            }
+            else
+            {
+                Debug.LogError("Could not show powerup icon for powerup with session ID: " + powerupSessionId);
+            }
+        }
+
+        /// <summary>
+        /// Shows UI overlay announcing powerup
+        /// </summary>
+        /// <param name="powerupId"></param>
         public void CmdShowPowerupUI(int powerupId)
         {
             photonView.RPC("RpcShowPowerupUI", photonView.Owner, powerupId);
@@ -1481,6 +1512,53 @@ namespace TanksMP
             }
 
             ultimateSpell.Cast(this);
+        }
+
+        /// <summary>
+        /// Called by local player
+        /// </summary>
+        public void TryCastPowerup()
+        {
+            if (GetView().GetPowerup() > 0)
+            {
+                GetView().RPC("RpcCastPowerup", RpcTarget.All);
+            }
+            else
+            {
+                Debug.LogWarning("Tried to cast powerup with ID <=0: "+ GetView().GetPowerup());
+            }
+        }
+
+        [PunRPC]
+        public void RpcCastPowerup()
+        {
+            int sessionId = GetView().GetPowerup();
+
+            if (sessionId < 1)
+            {
+                Debug.LogError("Could not cast powerup, session ID: " + sessionId);
+            }
+            
+            StatusEffectData data = StatusEffectDirectory.GetBySessionId(sessionId);
+
+            if (!data)
+            {
+                Debug.LogError("Could not find powerup, session ID: " + sessionId);
+            }
+            
+            StatusEffectController.AddStatusEffect(data.Id, this);
+            
+            RpcClearPowerup();
+        }
+
+        [PunRPC]
+        public void RpcClearPowerup()
+        {
+            if (!PhotonNetwork.IsMasterClient)
+                return;
+            
+            GetView().SetPowerup(0);
+            UIGame.GetInstance().CastPowerupButton.ClosePanel();
         }
 
         public ClassDefinition GetClass()

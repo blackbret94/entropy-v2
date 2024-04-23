@@ -8,6 +8,7 @@ namespace Vashta.Entropy.TanksExtensions
     public class PowerupBuff : Collectible
     {
         public StatusEffectData StatusEffectData;
+        public StatusEffectDirectory StatusEffectDirectory;
 
         /// <summary>
         /// Overrides the default behavior with a custom implementation.
@@ -29,7 +30,18 @@ namespace Vashta.Entropy.TanksExtensions
 
         private bool ApplyStatusEffect(Player p)
         {
-            p.StatusEffectController.AddStatusEffect(StatusEffectData.Id, p);
+            // p.StatusEffectController.AddStatusEffect(StatusEffectData.Id, p);
+
+            int statusEffectSessionId = StatusEffectDirectory.GetSessionId(StatusEffectData);
+
+            if (statusEffectSessionId <= 0)
+            {
+                Debug.LogError("Could not find status effect with ID: " + StatusEffectData.Id);
+                return false;
+            }
+            
+            p.GetView().SetPowerup(statusEffectSessionId);
+            p.CmdShowPowerupIcon(statusEffectSessionId);
 
             return true;
         }

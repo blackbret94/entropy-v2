@@ -30,6 +30,7 @@ namespace TanksMP
         public const string preferredTeam = "preferredTeam"; // for changing teams
         public const string isAlive = "isAlive";
         public const string ultimate = "ultimate";
+        public const string powerup = "powerup";
 
         public const int RANDOM_TEAM_INDEX = 100;
 
@@ -697,6 +698,50 @@ namespace TanksMP
             player.SetCustomProperties(new Hashtable() { { ultimate, (byte)value } });
         }
 
+        public static int GetPowerup(this Photon.Realtime.Player player)
+        {
+            return System.Convert.ToInt32(player.CustomProperties[powerup]);
+        }
+        
+        public static int GetPowerup(this PhotonView player)
+        {
+            if (PhotonNetwork.OfflineMode == true)
+            {
+                PlayerBot bot = player.GetComponent<PlayerBot>();
+                if (bot != null)
+                {
+                    return bot.powerup;
+                }
+            }
+
+            return player.Owner.GetPowerup();
+        }
+        
+        public static void SetPowerup(this PhotonView player, int value)
+        {
+            if (PhotonNetwork.OfflineMode == true)
+            {
+                PlayerBot bot = player.GetComponent<PlayerBot>();
+                if (bot != null)
+                {
+                    bot.powerup = value;
+                    
+                    // Always use powerup immediately if bot
+                    if(value > 0)
+                        bot.TryCastPowerup();
+                    
+                    return;
+                }
+            }
+
+            player.Owner.SetPowerup(value);
+        }
+
+        public static void SetPowerup(this Photon.Realtime.Player player, int value)
+        {
+            player.SetCustomProperties(new Hashtable() { { powerup, (byte)value } });
+        }
+
         /// <summary>
         /// Offline: clears all properties of a PlayerBot locally.
         /// Fallback to online mode for the master or in case offline mode was turned off.
@@ -714,6 +759,7 @@ namespace TanksMP
                     bot.joinTime = 0;
                     bot.classId = 0;
                     bot.ultimate = 0;
+                    bot.powerup = 0;
                     return;
                 }
             }
@@ -732,7 +778,8 @@ namespace TanksMP
                                                          {PlayerExtensions.joinTime, (byte)0 },
                                                          {PlayerExtensions.classId, (byte)1 },
                                                          {PlayerExtensions.preferredTeam, (byte) RANDOM_TEAM_INDEX},
-                                                         {PlayerExtensions.ultimate, (byte)0 }
+                                                         {PlayerExtensions.ultimate, (byte)0 },
+                                                         {PlayerExtensions.powerup, (byte)0}
             });
         }
     }

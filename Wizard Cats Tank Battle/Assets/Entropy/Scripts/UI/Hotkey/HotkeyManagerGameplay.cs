@@ -10,6 +10,7 @@ namespace Vashta.Entropy.UI.Hotkey
         {
             if(Input.GetButtonDown("Action1")) Action1();
             if(Input.GetButtonDown("CastUltimate")) CastUltimate();
+            if (Input.GetButtonDown("CastPowerup")) CastPowerup();
         }
 
         private void Action1()
@@ -31,6 +32,16 @@ namespace Vashta.Entropy.UI.Hotkey
             if (player != null)
             {
                 player.TryCastUltimate();
+            }
+        }
+
+        private void CastPowerup()
+        {
+            Player player = Player.GetLocalPlayer();
+
+            if (player != null)
+            {
+                player.TryCastPowerup();
             }
         }
     }

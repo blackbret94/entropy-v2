@@ -10,7 +10,6 @@ using UnityEngine;
 using UnityEngine.AI;
 using Photon.Pun;
 using UnityEngine.UI;
-using Vashta.Entropy.SaveLoad;
 using Vashta.Entropy.UI;
 using Vashta.Entropy.World;
 
@@ -37,7 +36,8 @@ namespace TanksMP
         [HideInInspector] public int classId;
         [HideInInspector] public int classIdQueued;
         [HideInInspector] public int ultimate;
-
+        [HideInInspector] public int powerup;
+        
         /// <summary>
         /// Radius in units for detecting other players.
         /// </summary>

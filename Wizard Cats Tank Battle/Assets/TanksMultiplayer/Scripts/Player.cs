@@ -1564,11 +1564,15 @@ namespace TanksMP
         [PunRPC]
         public void RpcClearPowerup()
         {
+            if (IsLocal)
+            {
+                UIGame.GetInstance().CastPowerupButton.ClosePanel();
+            }
+            
             if (!PhotonNetwork.IsMasterClient)
                 return;
             
             GetView().SetPowerup(0);
-            UIGame.GetInstance().CastPowerupButton.ClosePanel();
         }
 
         public ClassDefinition GetClass()

@@ -1306,7 +1306,7 @@ namespace TanksMP
             if(applyInstantly)
                 this.photonView.RPC("RpcApplyClass", RpcTarget.All);
 
-            if(respawnPlayer)
+            if(respawnPlayer && !PlayerCanRespawnFreely())
                 CmdKillPlayer();
         }
 
@@ -1393,6 +1393,9 @@ namespace TanksMP
         [PunRPC]
         public void RpcShowPowerupIcon(int powerupSessionId)
         {
+            if (!IsLocal)
+                return;
+            
             StatusEffectData statusEffectData = StatusEffectDirectory.GetBySessionId(powerupSessionId);
 
             if (statusEffectData)

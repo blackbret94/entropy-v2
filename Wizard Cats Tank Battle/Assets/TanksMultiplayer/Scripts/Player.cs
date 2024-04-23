@@ -1455,9 +1455,11 @@ namespace TanksMP
             int ultimateIncrease = 5;
             int ultimateCost = GetClass().ultimateCost;
             int currentUltimate = GetView().GetUltimate();
-            
-            if(currentUltimate < ultimateCost)
-                GetView().SetUltimate(currentUltimate+ultimateIncrease);
+
+            if (currentUltimate < ultimateCost)
+            {
+                GetView().SetUltimate(currentUltimate + ultimateIncrease);
+            }
         }
 
         // Server only
@@ -1485,7 +1487,7 @@ namespace TanksMP
         /// Called by local player
         /// </summary>
         /// <returns></returns>
-        public void TryCastUltimate()
+        public bool TryCastUltimate()
         {
             int ultimateCost = GetClass().ultimateCost;
             
@@ -1493,6 +1495,11 @@ namespace TanksMP
             {
                 GetView().RPC("RpcClearUltimate", RpcTarget.MasterClient);
                 GetView().RPC("RpcCastUltimate", RpcTarget.All);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 

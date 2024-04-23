@@ -11,7 +11,9 @@ namespace Entropy.Scripts.Audio
             Purchase,
             CoinEarned,
             NoCoins,
-            TeammateKilled;
+            TeammateKilled,
+            UltimateReady,
+            UltimateNotReady;
         
         public AudioSource Source;
 
@@ -53,6 +55,16 @@ namespace Entropy.Scripts.Audio
         public void PlayGoBackSoundEffect()
         {
             PlaySound(GoBackButtonClick);
+        }
+
+        public void PlayUltimateReady()
+        {
+            PlaySound(UltimateReady);
+        }
+
+        public void PlayUltimateNotReady()
+        {
+            PlaySound(UltimateNotReady);
         }
     }
 }

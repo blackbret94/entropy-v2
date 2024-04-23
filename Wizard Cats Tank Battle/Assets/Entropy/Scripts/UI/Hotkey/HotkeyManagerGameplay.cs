@@ -31,7 +31,10 @@ namespace Vashta.Entropy.UI.Hotkey
 
             if (player != null)
             {
-                player.TryCastUltimate();
+                bool couldCast = player.TryCastUltimate();
+
+                if (!couldCast)
+                    GameManager.GetInstance().ui.SfxController.PlayUltimateNotReady();
             }
         }
 

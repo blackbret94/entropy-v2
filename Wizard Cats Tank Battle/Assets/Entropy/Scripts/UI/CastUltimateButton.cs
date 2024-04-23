@@ -14,6 +14,7 @@ namespace Vashta.Entropy.UI
         private const float LERP_RATE = 20f;
         private const float LERP_CLAMP = .1f;
         private float _currentDisplayedValue = 0f;
+        private bool isReady = false;
         
         private void Start()
         {
@@ -33,7 +34,12 @@ namespace Vashta.Entropy.UI
                 return;
             }
             
-            _localPlayer.TryCastUltimate();
+            bool couldCast = _localPlayer.TryCastUltimate();
+
+            if (!couldCast)
+            {
+                GameManager.GetInstance().ui.SfxController.PlayUltimateNotReady();
+            }
         }
 
         public void UpdateSpellIcon(Sprite sprite)
@@ -45,6 +51,7 @@ namespace Vashta.Entropy.UI
         {
             _currentDisplayedValue = 0f;
             UltimateSlider.value = 0;
+            isReady = false;
         }
 
         private void Update()
@@ -58,16 +65,29 @@ namespace Vashta.Entropy.UI
                 return;
             }
 
+            // Get perun and INVERT
             float newUltimateValue = 1 - _localPlayer.GetUltimatePerun();
 
+            // Play sfx
+            if (newUltimateValue > .01)
+            {
+                isReady = false;
+            }
+            else
+            {
+                if(!isReady)
+                    UIGame.GetInstance().SfxController.PlayUltimateReady();
+                
+                isReady = true;
+            }
+
+            // Clamp
             if (newUltimateValue > .99 || newUltimateValue < .01)
             {
-                // CLAMP
                 _currentDisplayedValue = newUltimateValue;
             }
             else if (Mathf.Abs(_currentDisplayedValue - newUltimateValue) < LERP_CLAMP)
             {
-                // Clamp
                 _currentDisplayedValue = newUltimateValue;
             }
             else

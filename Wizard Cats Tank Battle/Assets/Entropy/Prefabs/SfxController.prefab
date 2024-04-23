@@ -25,13 +25,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3439106677852619822}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.846061, y: 8.318071, z: -46.917904}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3439106677852619823
 MonoBehaviour:
@@ -52,6 +52,8 @@ MonoBehaviour:
   CoinEarned: {fileID: 8300000, guid: 288738f22da62c94187cda4807b13c37, type: 3}
   NoCoins: {fileID: 8300000, guid: acc2ffd41af5311459c3fdafb9966d84, type: 3}
   TeammateKilled: {fileID: 8300000, guid: 9a1384d28184a5443881ac1ecafa61d7, type: 3}
+  UltimateReady: {fileID: 8300000, guid: 9b641a1aee918cd4cbf2ddf06207919d, type: 3}
+  UltimateNotReady: {fileID: 8300000, guid: b7c8f79973d34bc4dacab868d0d85e14, type: 3}
   Source: {fileID: 3257366367838664633}
 --- !u!82 &3257366367838664633
 AudioSource:
@@ -64,6 +66,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1

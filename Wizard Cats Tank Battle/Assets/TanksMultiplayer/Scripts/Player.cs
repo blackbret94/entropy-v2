@@ -294,6 +294,11 @@ namespace TanksMP
             
             // refresh slider to fix render issues
             RefreshSlider();
+
+            // if (PhotonNetwork.IsMasterClient)
+            // {
+                // StartCoroutine(ChangeTeamsCoroutine());
+            // }
             
             //called only for this client 
             if (!photonView.IsMine)
@@ -338,21 +343,66 @@ namespace TanksMP
             label.color = team.material.color;
         }
 
+        public void SetPreferredTeam(int preferredTeamIndex)
+        {
+            photonView.SetPreferredTeamIndex(preferredTeamIndex);
+        }
+
         /// <summary>
         /// Server only
         /// </summary>
-        private void AttemptToChangeTeams()
+        private void AttemptToChangeTeams(bool respawn)
         {
             int preferredTeamIndex = GetView().GetPreferredTeamIndex();
-            
-            if (preferredTeamIndex == PlayerExtensions.RANDOM_TEAM_INDEX || preferredTeamIndex == GetView().GetTeam() || !GameManager.GetInstance().TeamHasVacancy(preferredTeamIndex))
+            int currentTeam = GetView().GetTeam();
+
+            if (preferredTeamIndex == PlayerExtensions.RANDOM_TEAM_INDEX && preferredTeamIndex != currentTeam)
+            {
+                GetView().SetPreferredTeamIndex(currentTeam);
                 return;
+            }
+
+            if (preferredTeamIndex == PlayerExtensions.RANDOM_TEAM_INDEX || preferredTeamIndex == GetView().GetTeam() ||
+                !GameManager.GetInstance().TeamHasVacancy(preferredTeamIndex))
+            {
+                return;
+            }
+
+            Debug.Log("Changing teams to: " + preferredTeamIndex);
 
             PhotonNetwork.CurrentRoom.AddSize(GetView().GetTeam(), -1);
             GetView().SetTeam(preferredTeamIndex);
             PhotonNetwork.CurrentRoom.AddSize(GetView().GetTeam(), 1);
             
+            // Force respawn
+            if(respawn)
+                CmdRespawn();
+            
             this.photonView.RPC("RpcChangeTeams", RpcTarget.All);
+        }
+
+        // Server-only
+        protected void OnePassCheckChangeTeams(bool respawn)
+        {
+            if (!PhotonNetwork.IsMasterClient)
+                return;
+            
+            int preferredTeamIndex = GetView().GetPreferredTeamIndex();
+            bool prefersDifferentTeam = preferredTeamIndex != GetView().GetTeam();
+
+            if (prefersDifferentTeam)
+            {
+                Debug.Log("Prefers a different team");
+                if (GameManager.GetInstance().TeamHasVacancy(preferredTeamIndex))
+                {
+                    // Handle game over
+                    if (GameManager.GetInstance().IsGameOver())
+                        return;
+
+                    AttemptToChangeTeams(respawn);
+                }
+            }
+            
         }
 
         [PunRPC]
@@ -419,30 +469,20 @@ namespace TanksMP
         // This needs to be on a second timer
         protected virtual void Update()
         {
-            // Standard update
-            if (PhotonNetwork.IsMasterClient)
-            {
-                // Check if the player is trying to change teams
-                float timeToSpawn = Time.time- (lastDeathTime + GameManager.GetInstance().respawnTime);
-                if(!gameObject.activeInHierarchy && timeToSpawn > 1f)
-                    AttemptToChangeTeams();
-            }
-
             // Delayed update
             if (Time.time >= _lastSecondUpdate + _secondUpdateTime)
             {
                 LateInit();
-                
-                if(PhotonNetwork.IsMasterClient)
+
+                if (PhotonNetwork.IsMasterClient)
+                {
                     StatusEffectTick();
+                    // OnePassCheckChangeTeams();
+                }
             }
-            
-            // Update UI
-            // if (IsLocal)
-            // {
-            //     UIGame.GetInstance().Joystick.SetCanUse(!StatusEffectController.BlocksCastingBuffs);
-            // }
         }
+        
+        
 
         protected virtual void StatusEffectTick()
         {
@@ -670,6 +710,21 @@ namespace TanksMP
                 }
             }
         }
+
+        public void CmdTryChangeTeams(bool respawn)
+        {
+            if (PlayerCanRespawnFreely() || !IsAlive)
+            {
+                photonView.RPC("RpcTryChangeTeams", RpcTarget.MasterClient, respawn);
+            }
+        }
+        
+        [PunRPC]
+        protected void RpcTryChangeTeams(bool respawn)
+        {
+            OnePassCheckChangeTeams(respawn);
+        }
+        
 
         //called on the server first but forwarded to all clients
         [PunRPC]
@@ -946,8 +1001,6 @@ namespace TanksMP
         [PunRPC]
         protected void RpcKillPlayer()
         {
-            AttemptToChangeTeams();
-            
             // PlayerDeath
             PlayerDeath(this, null);
         }
@@ -965,11 +1018,12 @@ namespace TanksMP
             
             if(!canRespawnFreely)
                 GetView().IncrementDeaths();
-
+            
             //the game is already over so don't do anything
             if(GameManager.GetInstance().IsGameOver()) return;
-            
 
+            OnePassCheckChangeTeams(false);
+            
             //get killer and increase score for that enemy team
             if (other != null)
             {
@@ -1047,12 +1101,12 @@ namespace TanksMP
         public bool PlayerCanRespawnFreely()
         {
             // Check timer
-            float countdownMax = ClassSelectionPanel.Instance.TimerLength;
+            // float countdownMax = ClassSelectionPanel.Instance.TimerLength;
 
-            if (Time.time <= photonView.GetJoinTime() + countdownMax)
-            {
-                return true;
-            }
+            // if (Time.time <= photonView.GetJoinTime() + countdownMax)
+            // {
+                // return true;
+            // }
 
             // Check all potential team colliders
             GameManager gameManager = GameManager.GetInstance();
@@ -1153,9 +1207,12 @@ namespace TanksMP
                 // Show ultimates button
                 if(IsLocal)
                     GameManager.GetInstance().ui.CastUltimateButton.gameObject.SetActive(true);
-                
-                if(PhotonNetwork.IsMasterClient)
+
+                if (PhotonNetwork.IsMasterClient)
+                {
                     GetView().SetIsAlive(true);
+                    // StartCoroutine(ChangeTeamsCoroutine());
+                }
             }
 
             //further changes only affect the local client

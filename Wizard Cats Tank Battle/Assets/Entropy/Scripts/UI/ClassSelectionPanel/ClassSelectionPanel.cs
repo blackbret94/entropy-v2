@@ -53,7 +53,7 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
         {
             // update top selection
             Player player = GameManager.GetInstance().localPlayer;
-            int teamIndex = player.photonView.GetTeam();
+            int teamIndex = player.photonView.GetPreferredTeamIndex();
 
             foreach (ClassSelectionTeamCheckbox checkbox in CheckboxList)
             {
@@ -144,10 +144,10 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
         private void ApplyChanges(bool respawnPlayer, bool applyNow)
         {
             Player player = GameManager.GetInstance().localPlayer;
-            player.photonView.SetPreferredTeamIndex(ClassSelectionTeamSelector.SelectedTeamIndex());
+            player.SetPreferredTeam(ClassSelectionTeamSelector.SelectedTeamIndex());
 
             player.SetClass(ClassSelectionSelectorMultipanel.SelectedClassDefinition(), respawnPlayer, applyNow);
-            
+            player.CmdTryChangeTeams(respawnPlayer);
             ClosePanel();
         }
 

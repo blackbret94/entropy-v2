@@ -480,8 +480,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 15/32
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: d70f485aa27dc43f79a8fd168f58435c, type: 2}
-  m_sharedMaterial: {fileID: 5416806443266638455, guid: d70f485aa27dc43f79a8fd168f58435c,
+  m_fontAsset: {fileID: 11400000, guid: 18e5ede33e490485d9576cb16d82ad1e, type: 2}
+  m_sharedMaterial: {fileID: -4171563015097924827, guid: 18e5ede33e490485d9576cb16d82ad1e,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -528,7 +528,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -1039,6 +1039,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1012860225213918089}
+  - component: {fileID: 6663878824608157515}
   m_Layer: 9
   m_Name: Healthbar
   m_TagString: Untagged
@@ -1070,6 +1071,24 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 38.25879, y: 4.799999}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6663878824608157515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2740918417988662657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b750657f334e44438eae1a0d7f799060, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ChildPanels: []
+  CanBeClosedByHotkey: 0
+  TeamDefinitionDictionary: {fileID: 11400000, guid: ef07b78dc4c20ea498711a9e413ac626,
+    type: 2}
+  HealthbarSprite: {fileID: 2639646801047935945}
+  ArmorbarSprite: {fileID: 628930344313959113}
 --- !u!1 &3193063241682249623
 GameObject:
   m_ObjectHideFlags: 0
@@ -1572,6 +1591,7 @@ MonoBehaviour:
   handicapModifier: 0.75
   PlayerAnimator: {fileID: 7904873436139118149}
   HealthbarText: {fileID: 301257562763696086}
+  HealthbarHUD: {fileID: 6663878824608157515}
   killedBy: {fileID: 0}
   camFollow: {fileID: 0}
   StatusEffectController: {fileID: 17881755486394314}
@@ -1882,7 +1902,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -7460,14 +7480,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.16470589}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cf1cc45a5906c4f30a6c71479d9ab473, type: 3}
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -8106,6 +8126,7 @@ MonoBehaviour:
     material: {fileID: 0}
     spawn: {fileID: 0}
     freeClassChange: {fileID: 0}
+    teamDefinition: {fileID: 0}
 --- !u!114 &2425203863067720665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8208,8 +8229,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5649518a0104c4fdda2a3d3d0d10ad55, type: 3}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: e0892499300910d40b40c3b60dd52c2f, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4

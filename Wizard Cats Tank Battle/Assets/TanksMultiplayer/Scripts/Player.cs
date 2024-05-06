@@ -17,6 +17,7 @@ using TMPro;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.Spells;
 using Vashta.Entropy.StatusEffects;
+using Vashta.Entropy.UI;
 using Vashta.Entropy.UI.ClassSelectionPanel;
 
 namespace TanksMP
@@ -113,6 +114,8 @@ namespace TanksMP
         /// Shows the amount of health the player has
         /// </summary>
         public TextMeshProUGUI HealthbarText;
+
+        public PlayerHealthbarHUD HealthbarHUD;
 
         /// <summary>
         /// Last player gameobject that killed this one.
@@ -340,7 +343,8 @@ namespace TanksMP
             CharacterAppearance.Team = team;
             CharacterAppearance.ColorizeCart();
             
-            label.color = team.material.color;
+            label.color = team.teamDefinition.TeamColorPrim;
+            HealthbarHUD.SetTeam(team.teamDefinition);
         }
 
         public void SetPreferredTeam(int preferredTeamIndex)

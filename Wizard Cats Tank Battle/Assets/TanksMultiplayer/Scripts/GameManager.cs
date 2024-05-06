@@ -9,6 +9,7 @@ using Entropy.Scripts.Audio;
 using Entropy.Scripts.Player;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Vashta.Entropy.PhotonExtensions;
 using Vashta.Entropy.ScriptableObject;
@@ -463,6 +464,8 @@ namespace TanksMP
         public Transform spawn;
 
         public Transform freeClassChange;
+
+        public TeamDefinition teamDefinition;
     }
 
 

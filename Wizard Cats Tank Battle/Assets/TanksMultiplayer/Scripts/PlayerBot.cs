@@ -94,6 +94,7 @@ namespace TanksMP
             //set name in label
             label.text = myName = CatNameGenerator.GetRandomName();
             label.color = team.material.color;
+            HealthbarHUD.SetTeam(team.teamDefinition);
             
             rb = GetComponent<Rigidbody>();
            

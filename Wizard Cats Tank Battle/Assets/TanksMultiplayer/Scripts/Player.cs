@@ -782,12 +782,29 @@ namespace TanksMP
             //spawn bullet using pooling
             GameObject obj = PoolManager.Spawn(bullets[currentBullet], shotCenter, syncedRot);
             Bullet bullet = obj.GetComponent<Bullet>();
+            
             bullet.SpawnNewBullet();
             bullet.owner = gameObject;
             bullet.ClassDefinition = classList[photonView.GetClassId()];
             bullet.SetDamage(Mathf.CeilToInt(bullet.GetRawDamage() * StatusEffectController.DamageOutputModifier));
             bullet.canBuff = !StatusEffectController.BlocksCastingBuffs;
             bullet.canDebuff = !StatusEffectController.BlocksCastingDebuffs;
+
+            if (StatusEffectController.ProjectileExplodes)
+            {
+                bullet.SetExplosionRange(3);
+                bullet.SetMaxTargets(3);
+            }
+
+            if (StatusEffectController.ProjectileReflects)
+            {
+                bullet.SetMaxBounce(10);
+            }
+
+            if (StatusEffectController.ProjectileLifeExtended > 0)
+            {
+                bullet.IncreaseDespawnDelay(StatusEffectController.ProjectileLifeExtended);
+            }
             
             // animate
             PlayerAnimator.Attack();

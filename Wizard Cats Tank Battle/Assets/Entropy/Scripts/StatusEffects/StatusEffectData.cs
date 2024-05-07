@@ -55,6 +55,12 @@ namespace Vashta.Entropy.StatusEffects
         public bool IsReflective = false;
         [Tooltip("Stops player from firing")] 
         public bool DisableFiring;
+        [Tooltip("Causes missiles to explode")]
+        public bool ProjectilesExplode;
+        [Tooltip("Causes missiles to reflect off walls")]
+        public bool ProjectileReflects;
+        [Tooltip("Extends life of missiles")] 
+        public float ProjectileLifeExtended;
         
         [Header("Behavior Changes")]
         [Tooltip("Blocks the player from being buffed")]

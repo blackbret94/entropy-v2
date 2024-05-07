@@ -36,6 +36,9 @@ namespace Vashta.Entropy.StatusEffects
         private float _spikeDamageModifierCached = 0f;
         private bool _isReflectiveCached = false;
         private bool _disableFiringCached = false;
+        private bool _projectileExplodesCached = false;
+        private bool _projectileReflectsCached = false;
+        private float _projectileLifeExtendedCached = 0f;
         
         // behavior changes
         private bool _blocksBuffsCached = false;
@@ -66,6 +69,11 @@ namespace Vashta.Entropy.StatusEffects
         public bool BlocksCastingBuffs => _blocksCastingBuffsCached;
         public bool BlocksCastingDebuffs => _blocksCastingDebuffsCached;
         public Player LeechingAppliedBy => _leechingAppliedByCached;
+
+        public bool ProjectileExplodes => _projectileExplodesCached;
+        public bool ProjectileReflects => _projectileReflectsCached;
+        public float ProjectileLifeExtended => _projectileLifeExtendedCached;
+        
         
         public Player LastDotAppliedBy => _lastDotAppliedBy;
 
@@ -282,6 +290,9 @@ namespace Vashta.Entropy.StatusEffects
             _blocksCastingDebuffsCached = false;
             _bloodVengeanceChainedEffect = null;
             _disableFiringCached = false;
+            _projectileExplodesCached = false;
+            _projectileReflectsCached = false;
+            _projectileLifeExtendedCached = 0;
 
             foreach (var statusEffect in _statusEffects)
             {
@@ -335,6 +346,18 @@ namespace Vashta.Entropy.StatusEffects
                 {
                     _disableFiringCached = true;
                 }
+
+                if (statusEffect.ProjectileExplodes())
+                {
+                    _projectileExplodesCached = true;
+                }
+
+                if (statusEffect.ProjectileReflects())
+                {
+                    _projectileReflectsCached = true;
+                }
+
+                _projectileLifeExtendedCached += statusEffect.ProjectileLifeExtension();
             }
 
             _visualizer.Refresh(_indexedIds);

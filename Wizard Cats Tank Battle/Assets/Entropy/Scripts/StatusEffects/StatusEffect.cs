@@ -247,5 +247,20 @@ namespace Vashta.Entropy.StatusEffects
         {
             return _data.DisableFiring;
         }
+
+        public bool ProjectileExplodes()
+        {
+            return _data.ProjectilesExplode;
+        }
+
+        public bool ProjectileReflects()
+        {
+            return _data.ProjectileReflects;
+        }
+
+        public float ProjectileLifeExtension()
+        {
+            return _data.ProjectileLifeExtended;
+        }
     }
 }

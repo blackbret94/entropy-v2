@@ -30,6 +30,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000010310479910}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -38,7 +39,6 @@ Transform:
   - {fileID: 4000013005982452}
   - {fileID: 9056941372914786554}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &114000014051134244
 MonoBehaviour:
@@ -58,14 +58,13 @@ MonoBehaviour:
   despawnDelay: 0.75
   bounce: 0
   maxTargets: 1
-  explosionRange: 1
+  explosionRangeBase: 1
   HitSfx: {fileID: 11400000, guid: 0e71addc8f774d44697c6a2b53a8e8b0, type: 2}
   CastSfx: {fileID: 11400000, guid: 9ac7591d381453a4bbd7d4cbba034b3f, type: 2}
-  BounceSfx: {fileID: 0}
+  BounceSfx: {fileID: 11400000, guid: 123be4e74c4b3ba4c9b55eb474764eed, type: 2}
   hitFX: {fileID: 1000010321467122, guid: d10c7e9a7840ca844b7c5fa1b7d014c6, type: 3}
   explosionFX: {fileID: 1000010321467122, guid: 8fe0310324507c248b6bdceb48a42c28,
     type: 3}
-  deathFx: {fileID: 1000010321467122, guid: 1e84baf5e24d4f14e94b00db12eafb0f, type: 3}
   deathFxData: {fileID: 11400000, guid: def80e943cc9dd4429491728e4130838, type: 2}
   bounceInf: 0
   StatusEffectOnEnemy: {fileID: 11400000, guid: 80b2625781cf4e2459fcacb5603e4fba,
@@ -101,6 +100,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -237,13 +238,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000013784038190}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: -0.9, z: 0.125}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4000012126426226}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!212 &212000011361524834
 SpriteRenderer:
@@ -262,6 +263,8 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

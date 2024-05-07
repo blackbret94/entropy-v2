@@ -49,13 +49,15 @@ namespace TanksMP
         /// <summary>
         /// Maximum amount of Players this bullet can hit on explosion.
         /// </summary>
-        public int maxTargets = 1;
+        [FormerlySerializedAs("maxTargets")] 
+        public int maxTargetsBase = 1;
 
         /// <summary>
         /// Range within the explosion deals damage to other Players.
         /// The area is only checked if maxTargets is greater than 1.
         /// </summary>
-        public float explosionRange = 1;
+        [FormerlySerializedAs("explosionRange")] 
+        public float explosionRangeBase = 1;
 
         public ScriptableAudioClipList HitSfx;
         public ScriptableAudioClipList CastSfx;
@@ -87,7 +89,7 @@ namespace TanksMP
         //reference to collider component
         private SphereCollider sphereCol;
         //caching maximum count of bounces for restore
-        private int maxBounce;
+        private int _maxBounceBase;
         //caching last bounce position for calculating next direction. Instead of using
         //the current bullet position on collision, calculating the bounce off the previous
         //bullet position improves the result for high speed bullets which could skip colliders
@@ -109,6 +111,11 @@ namespace TanksMP
         private float _timeCreated;
         private string _lastUUID = "";
         private const float OwnerProtectionTime = 1f;
+        
+        private float _modifiedDespawnDelay;
+        private float _modifiedExplosionRange;
+        private int _modifiedMaxBounce;
+        private int _modifiedMaxTargets;
 
         private bool OwnerIsProtected => Time.time - _timeCreated < OwnerProtectionTime;
 
@@ -117,7 +124,7 @@ namespace TanksMP
         {
             myRigidbody = GetComponent<Rigidbody>();
             sphereCol = GetComponent<SphereCollider>();
-            maxBounce = bounce;
+            _maxBounceBase = bounce;
         }
 
         public int GetRawDamage()
@@ -155,6 +162,12 @@ namespace TanksMP
             // Reset damage
             _damage = _damageRaw;
             _timeCreated = Time.time;
+            
+            // Reset modifiers
+            _modifiedExplosionRange = explosionRangeBase;
+            _modifiedDespawnDelay = despawnDelay;
+            _modifiedMaxBounce = _maxBounceBase;
+            _modifiedMaxTargets = maxTargetsBase;
         }
 
         //set initial travelling velocity
@@ -162,7 +175,7 @@ namespace TanksMP
         void OnSpawn()
         {
             // Check if it is the initial path or if it has bounced
-            if (bounce == maxBounce)
+            if (bounce == _modifiedMaxBounce)
             {
                 Vector3 pos = transform.position;
                 
@@ -178,7 +191,42 @@ namespace TanksMP
             }
 
             myRigidbody.velocity = baseSpeed * transform.forward;
-            PoolManager.Despawn(gameObject, despawnDelay);
+        }
+        
+        public void IncreaseDespawnDelay(float delay)
+        {
+            _modifiedDespawnDelay = despawnDelay + delay;
+        }
+
+        public void SetExplosionRange(int newRange)
+        {
+            _modifiedExplosionRange = newRange;
+        }
+
+        public void SetMaxBounce(int newMaxBounce)
+        {
+            _modifiedMaxBounce = newMaxBounce;
+            bounce = newMaxBounce;
+        }
+
+        public void SetMaxTargets(int newMaxTargets)
+        {
+            _modifiedMaxTargets = newMaxTargets;
+        }
+
+        private void CheckRespawn()
+        {
+            float despawnTime = _timeCreated + _modifiedDespawnDelay;
+
+            if (Time.time >= despawnTime)
+            {
+                PoolManager.Despawn(gameObject);
+            }
+        }
+
+        private void Update()
+        {
+            CheckRespawn();
         }
 
         ///check what was hit on collisions. Only do non-critical client work here,
@@ -272,10 +320,10 @@ namespace TanksMP
             if(player != null) targets.Add(player);
 
             //in case this bullet can hit more than 1 target, perform the additional physics area check
-            if (maxTargets > 1)
+            if (_modifiedMaxTargets > 1)
             {
                 //find all colliders in the specified range around this bullet, on the Player layer
-                Collider[] others = Physics.OverlapSphere(transform.position, explosionRange, 1 << 8);
+                Collider[] others = Physics.OverlapSphere(transform.position, _modifiedExplosionRange, 1 << 8);
 
                 //loop over all player collisions found
                 for (int i = 0; i < others.Length; i++)
@@ -287,7 +335,7 @@ namespace TanksMP
                     //add this Player component to the list
                     //cancel in case we do reach the maximum count now
                     targets.Add(other);
-                    if (targets.Count == maxTargets)
+                    if (targets.Count == _modifiedMaxTargets)
                         break;
                 }
             }
@@ -387,12 +435,20 @@ namespace TanksMP
         void OnDespawn()
         {
             //create clips and particles on despawn
-            if (explosionFX) PoolManager.Spawn(explosionFX, transform.position, transform.rotation);
+            if (explosionFX)
+            {
+                PoolManager.Spawn(explosionFX, transform.position, transform.rotation);
+            }
 
             //reset modified variables to the initial state
             myRigidbody.velocity = Vector3.zero;
             myRigidbody.angularVelocity = Vector3.zero;
-            bounce = maxBounce;
+            bounce = _maxBounceBase;
+            _modifiedExplosionRange = explosionRangeBase;
+            _modifiedDespawnDelay = despawnDelay;
+            _modifiedMaxBounce = _maxBounceBase;
+            _modifiedMaxTargets = maxTargetsBase;
+            _damage = _damageRaw;
         }
         
         //method to check for friendly fire (same team index).

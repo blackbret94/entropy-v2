@@ -72,6 +72,7 @@ namespace TanksMP
         /// Object to spawn when this projectile gets despawned.
         /// </summary>
         public GameObject explosionFX;
+        public GameObject explosionFxLarge;
         public VisualEffect deathFxData;
 
         public bool bounceInf;
@@ -159,8 +160,6 @@ namespace TanksMP
 
         public void SpawnNewBullet()
         {
-            // Reset damage
-            _damage = _damageRaw;
             _timeCreated = Time.time;
             
             // Reset modifiers
@@ -168,6 +167,7 @@ namespace TanksMP
             _modifiedDespawnDelay = despawnDelay;
             _modifiedMaxBounce = _maxBounceBase;
             _modifiedMaxTargets = maxTargetsBase;
+            _damage = _damageRaw;
         }
 
         //set initial travelling velocity
@@ -306,13 +306,6 @@ namespace TanksMP
 
             //despawn gameobject
             PoolManager.Despawn(gameObject);
-
-            //the previous code is not synced to clients at all, because all that clients need is the
-            //initial position and direction of the bullet to calculate the exact same behavior on their end.
-            //at this point, continue with the critical game aspects only on the server
-            if (!PhotonNetwork.IsMasterClient) return;
-
-            // -- START SERVER ONLY --
             
             //create list for affected players by this bullet and add the collided player immediately,
             //we have done validation & friendly fire checks above already
@@ -322,6 +315,7 @@ namespace TanksMP
             //in case this bullet can hit more than 1 target, perform the additional physics area check
             if (_modifiedMaxTargets > 1)
             {
+                Debug.Log("Checking for targets: " + _modifiedMaxTargets + " with range " + _modifiedExplosionRange);
                 //find all colliders in the specified range around this bullet, on the Player layer
                 Collider[] others = Physics.OverlapSphere(transform.position, _modifiedExplosionRange, 1 << 8);
 
@@ -335,10 +329,20 @@ namespace TanksMP
                     //add this Player component to the list
                     //cancel in case we do reach the maximum count now
                     targets.Add(other);
+                    
+                    PoolManager.Spawn(explosionFX, other.transform.position, transform.rotation);
+
                     if (targets.Count == _modifiedMaxTargets)
                         break;
                 }
             }
+            
+            //the previous code is not synced to clients at all, because all that clients need is the
+            //initial position and direction of the bullet to calculate the exact same behavior on their end.
+            //at this point, continue with the critical game aspects only on the server
+            if (!PhotonNetwork.IsMasterClient) return;
+
+            // -- START SERVER ONLY --
 
             //apply damage and effects to the collided players
             if (owner != null)
@@ -435,7 +439,10 @@ namespace TanksMP
         void OnDespawn()
         {
             //create clips and particles on despawn
-            if (explosionFX)
+            if (explosionFxLarge && _modifiedExplosionRange > 1)
+            {
+                PoolManager.Spawn(explosionFxLarge, transform.position, transform.rotation);
+            } else if (explosionFX)
             {
                 PoolManager.Spawn(explosionFX, transform.position, transform.rotation);
             }
@@ -444,11 +451,6 @@ namespace TanksMP
             myRigidbody.velocity = Vector3.zero;
             myRigidbody.angularVelocity = Vector3.zero;
             bounce = _maxBounceBase;
-            _modifiedExplosionRange = explosionRangeBase;
-            _modifiedDespawnDelay = despawnDelay;
-            _modifiedMaxBounce = _maxBounceBase;
-            _modifiedMaxTargets = maxTargetsBase;
-            _damage = _damageRaw;
         }
         
         //method to check for friendly fire (same team index).

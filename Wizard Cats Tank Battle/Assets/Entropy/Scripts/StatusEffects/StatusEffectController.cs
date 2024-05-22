@@ -39,6 +39,8 @@ namespace Vashta.Entropy.StatusEffects
         private bool _projectileExplodesCached = false;
         private bool _projectileReflectsCached = false;
         private float _projectileLifeExtendedCached = 0f;
+        private int _additionalProjectilesSprayCached = 0;
+        private bool _piercesCached = false;
         
         // behavior changes
         private bool _blocksBuffsCached = false;
@@ -73,6 +75,8 @@ namespace Vashta.Entropy.StatusEffects
         public bool ProjectileExplodes => _projectileExplodesCached;
         public bool ProjectileReflects => _projectileReflectsCached;
         public float ProjectileLifeExtended => _projectileLifeExtendedCached;
+        public int AdditionalProjectilesSpray => _additionalProjectilesSprayCached;
+        public bool Pierces => _piercesCached;
         
         
         public Player LastDotAppliedBy => _lastDotAppliedBy;
@@ -293,6 +297,8 @@ namespace Vashta.Entropy.StatusEffects
             _projectileExplodesCached = false;
             _projectileReflectsCached = false;
             _projectileLifeExtendedCached = 0;
+            _additionalProjectilesSprayCached = 0;
+            _piercesCached = false;
 
             foreach (var statusEffect in _statusEffects)
             {
@@ -308,6 +314,7 @@ namespace Vashta.Entropy.StatusEffects
                 _attackRateModifierCached *= statusEffect.AttackRateMultiplier();
                 _spikeDamageModifierCached += statusEffect.SpikeDamageModifier();
                 _leechingPerSecondCached += statusEffect.Leeching();
+                _additionalProjectilesSprayCached += statusEffect.AdditionalProjectilesSpray();
 
                 if (statusEffect.HealthPerSecond() < 0)
                     _lastDotAppliedBy = statusEffect.OriginPlayer();
@@ -355,6 +362,11 @@ namespace Vashta.Entropy.StatusEffects
                 if (statusEffect.ProjectileReflects())
                 {
                     _projectileReflectsCached = true;
+                }
+
+                if (statusEffect.Pierces())
+                {
+                    _piercesCached = true;
                 }
 
                 _projectileLifeExtendedCached += statusEffect.ProjectileLifeExtension();

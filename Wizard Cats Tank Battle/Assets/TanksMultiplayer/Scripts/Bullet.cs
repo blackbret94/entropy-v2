@@ -117,6 +117,9 @@ namespace TanksMP
         private float _modifiedExplosionRange;
         private int _modifiedMaxBounce;
         private int _modifiedMaxTargets;
+        private bool _isPiercing;
+
+        private List<Player> _playerCollidedWith = new List<Player>();
 
         private bool OwnerIsProtected => Time.time - _timeCreated < OwnerProtectionTime;
 
@@ -168,6 +171,8 @@ namespace TanksMP
             _modifiedMaxBounce = _maxBounceBase;
             _modifiedMaxTargets = maxTargetsBase;
             _damage = _damageRaw;
+            _isPiercing = false;
+            _playerCollidedWith.Clear();
         }
 
         //set initial travelling velocity
@@ -214,6 +219,11 @@ namespace TanksMP
             _modifiedMaxTargets = newMaxTargets;
         }
 
+        public void SetPiercing(bool pierces)
+        {
+            _isPiercing = pierces;
+        }
+
         private void CheckRespawn()
         {
             float despawnTime = _timeCreated + _modifiedDespawnDelay;
@@ -257,10 +267,29 @@ namespace TanksMP
                     return;
                 }
 
+                // Handle reflection
                 if (player.StatusEffectController.IsReflective)
                 {
                     BounceOffReflectivePlayer(player);
                     return;
+                }
+
+                // Handle piercing
+                if (_isPiercing)
+                {
+                    if (HasAlreadyHitPlayer(player))
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        _playerCollidedWith.Add(player);
+                    }
+                }
+                else
+                {
+                    //despawn gameobject
+                    PoolManager.Despawn(gameObject);
                 }
 
                 //create clips and particles on hit
@@ -268,44 +297,47 @@ namespace TanksMP
                 
                 AudioManager.Play3D(HitSfx.GetRandomClip(), transform.position);
             }
-            else if (bounce > 0 || bounceInf)
+            else
             {
-                //a player was not hit but something else, and we still have some bounces left
-                //create a ray that points in the direction this bullet is currently flying to
-                Ray ray = new Ray(lastBouncePos - transform.forward * 0.5f, transform.forward);
-                RaycastHit hit;
-
-                //perform spherecast in the flying direction, on the default layer
-                if (Physics.SphereCast(ray, sphereCol.radius, out hit, Mathf.Infinity, 1 << 0))
+                if (bounce > 0 || bounceInf)
                 {
-                    //ignore multiple collisions i.e. inside colliders
-                    if (Vector3.Distance(transform.position, lastBouncePos) < 0.05f)
+                    //a player was not hit but something else, and we still have some bounces left
+                    //create a ray that points in the direction this bullet is currently flying to
+                    Ray ray = new Ray(lastBouncePos - transform.forward * 0.5f, transform.forward);
+                    RaycastHit hit;
+
+                    //perform spherecast in the flying direction, on the default layer
+                    if (Physics.SphereCast(ray, sphereCol.radius, out hit, Mathf.Infinity, 1 << 0))
                     {
+                        //ignore multiple collisions i.e. inside colliders
+                        if (Vector3.Distance(transform.position, lastBouncePos) < 0.05f)
+                        {
+                            return;
+                        }
+
+                        //cache latest collision point
+                        lastBouncePos = hit.point;
+                        //substract bouncing count by one
+                        bounce--;
+
+                        //something was hit in the direction this projectile is flying to
+                        //get new reflected (bounced off) direction of the colliding object
+                        Vector3 dir = Vector3.Reflect(ray.direction, hit.normal);
+                        //rotate bullet to face the new direction
+                        transform.rotation = Quaternion.LookRotation(dir);
+                        //reassign velocity with the new direction in mind
+                        OnSpawn();
+
+                        //play clip at the collided position
+                        AudioManager.Play3D(HitSfx.GetRandomClip(), transform.position);
+                        //exit execution until next collision
                         return;
                     }
-
-                    //cache latest collision point
-                    lastBouncePos = hit.point;
-                    //substract bouncing count by one
-                    bounce--;
-
-                    //something was hit in the direction this projectile is flying to
-                    //get new reflected (bounced off) direction of the colliding object
-                    Vector3 dir = Vector3.Reflect(ray.direction, hit.normal);
-                    //rotate bullet to face the new direction
-                    transform.rotation = Quaternion.LookRotation(dir);
-                    //reassign velocity with the new direction in mind
-                    OnSpawn();
-
-                    //play clip at the collided position
-                    AudioManager.Play3D(HitSfx.GetRandomClip(), transform.position);
-                    //exit execution until next collision
-                    return;
                 }
-            }
 
-            //despawn gameobject
-            PoolManager.Despawn(gameObject);
+                //despawn gameobject
+                PoolManager.Despawn(gameObject);
+            }
             
             //create list for affected players by this bullet and add the collided player immediately,
             //we have done validation & friendly fire checks above already
@@ -468,6 +500,11 @@ namespace TanksMP
         private bool HasHitProtectedOwner(Player target)
         {
             return target.gameObject == owner && OwnerIsProtected;
+        }
+
+        private bool HasAlreadyHitPlayer(Player player)
+        {
+            return _playerCollidedWith.Contains(player);
         }
     }
 }

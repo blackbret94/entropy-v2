@@ -771,16 +771,45 @@ namespace TanksMP
         [PunRPC]
         protected void CmdShoot(short[] position, short angle)
         {   
-            //get current bullet type
-            int currentBullet = GetView().GetBullet();
-
             //calculate center between shot position sent and current server position (factor 0.6f = 40% client, 60% server)
             //this is done to compensate network lag and smoothing it out between both client/server positions
             Vector3 shotCenter = Vector3.Lerp(shotPos.position, new Vector3(position[0]/10f, shotPos.position.y, position[1]/10f), 0.6f);
             Quaternion syncedRot = turret.rotation = Quaternion.Euler(0, angle, 0);
 
             //spawn bullet using pooling
-            GameObject obj = PoolManager.Spawn(bullets[currentBullet], shotCenter, syncedRot);
+            SpawnProjectile(shotCenter, syncedRot);
+
+            // Spray.  Only handles 3 projectiles right now
+            if (StatusEffectController.AdditionalProjectilesSpray > 0)
+            {
+                // shoot left
+                Quaternion leftProjectile = Quaternion.Euler(0, angle - 5, 0);
+                SpawnProjectile(shotCenter, leftProjectile);
+                
+                // shoot right
+                Quaternion rightProjectile = Quaternion.Euler(0, angle + 5, 0);
+                SpawnProjectile(shotCenter, rightProjectile);
+            }
+            
+            // animate
+            PlayerAnimator.Attack();
+
+            //send event to all clients for spawning effects
+            if (shotFX)
+                RpcOnShot();
+        }
+
+
+        //called on all clients after bullet spawn
+        //spawn effects or sounds locally, if set
+        protected void RpcOnShot()
+        {
+            if (shotFX) PoolManager.Spawn(shotFX, shotPos.position, Quaternion.identity);
+        }
+
+        private void SpawnProjectile(Vector3 shotCenter, Quaternion syncedRot)
+        {
+            GameObject obj = PoolManager.Spawn(bullets[0], shotCenter, syncedRot);
             Bullet bullet = obj.GetComponent<Bullet>();
             
             bullet.SpawnNewBullet();
@@ -805,29 +834,11 @@ namespace TanksMP
             {
                 bullet.IncreaseDespawnDelay(StatusEffectController.ProjectileLifeExtended);
             }
-            
-            // animate
-            PlayerAnimator.Attack();
 
-            //check for current ammunition
-            //let the server decrease special ammunition, if present
-            if (PhotonNetwork.IsMasterClient && currentBullet != 0)
+            if (StatusEffectController.Pierces)
             {
-                //if ran out of ammo: reset bullet automatically
-                GetView().DecreaseAmmo(1);
+                bullet.SetPiercing(true);
             }
-
-            //send event to all clients for spawning effects
-            if (shotFX)
-                RpcOnShot();
-        }
-
-
-        //called on all clients after bullet spawn
-        //spawn effects or sounds locally, if set
-        protected void RpcOnShot()
-        {
-            if (shotFX) PoolManager.Spawn(shotFX, shotPos.position, Quaternion.identity);
         }
 
 

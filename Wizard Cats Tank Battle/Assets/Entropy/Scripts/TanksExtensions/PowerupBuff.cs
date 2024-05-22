@@ -30,8 +30,6 @@ namespace Vashta.Entropy.TanksExtensions
 
         private bool ApplyStatusEffect(Player p)
         {
-            // p.StatusEffectController.AddStatusEffect(StatusEffectData.Id, p);
-
             int statusEffectSessionId = StatusEffectDirectory.GetSessionId(StatusEffectData);
 
             if (statusEffectSessionId <= 0)

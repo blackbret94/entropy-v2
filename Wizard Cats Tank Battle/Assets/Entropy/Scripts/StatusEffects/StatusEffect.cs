@@ -262,5 +262,15 @@ namespace Vashta.Entropy.StatusEffects
         {
             return _data.ProjectileLifeExtended;
         }
+
+        public int AdditionalProjectilesSpray()
+        {
+            return _data.AdditionalProjectilesSpray;
+        }
+
+        public bool Pierces()
+        {
+            return _data.Pierces;
+        }
     }
 }

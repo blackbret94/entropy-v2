@@ -61,6 +61,10 @@ namespace Vashta.Entropy.StatusEffects
         public bool ProjectileReflects;
         [Tooltip("Extends life of missiles")] 
         public float ProjectileLifeExtended;
+        [Tooltip("Adds projectiles in a spray pattern")] 
+        public int AdditionalProjectilesSpray = 0;
+        [Tooltip("Pierces through enemies")]
+        public bool Pierces;
         
         [Header("Behavior Changes")]
         [Tooltip("Blocks the player from being buffed")]

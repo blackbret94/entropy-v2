@@ -19,7 +19,7 @@ namespace Vashta.Entropy.SceneNavigation
         {
             // Addressables.LoadAssetsAsync<SceneInstance>(MAPS_ASSET_BUNDLE, delegate(SceneInstance o)
             // {
-            SceneManager.LoadSceneAsync(key);
+            SceneManager.LoadScene(key);
             // Addressables.LoadSceneAsync(key);//.Completed += Addressables.Release;
             // RegisterHandle(handle);
             // });

@@ -14,5 +14,11 @@ namespace Vashta.Entropy.ScriptableObject
         public Sprite HealthBarSprite;
         public Sprite ShieldBarSprite;
         public Material Material;
+
+        public Color GetPrimaryColorLight()
+        {
+            float blendFactor = .5f;
+            return Color.Lerp(TeamColorPrim, Color.white, blendFactor);
+        }
     }
 }

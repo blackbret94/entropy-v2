@@ -348,7 +348,7 @@ namespace TanksMP
 
             if (PlayerAimGraphic)
             {
-                PlayerAimGraphic.SetColor(team.teamDefinition.TeamColorPrim);
+                PlayerAimGraphic.SetColor(team.teamDefinition.GetPrimaryColorLight());
             }
         }
 

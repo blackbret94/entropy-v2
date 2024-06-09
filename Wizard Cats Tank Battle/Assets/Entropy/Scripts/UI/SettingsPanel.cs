@@ -4,6 +4,7 @@ using TanksMP;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Vashta.Entropy.IO;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.UI.MapSelection;
 
@@ -28,7 +29,8 @@ namespace Vashta.Entropy.UI
         public MusicController MusicController;
 
         public Toggle FullscreenToggle;
-
+        public Toggle AimArrowToggle;
+        
         public TextMeshProUGUI MapNameText;
         public TextMeshProUGUI GameModeText;
         public TextMeshProUGUI GameModeDescription;
@@ -74,9 +76,10 @@ namespace Vashta.Entropy.UI
 
         private void ReadSettings()
         {
-            musicToggle.isOn = bool.Parse(PlayerPrefs.GetString(PrefsKeys.playMusic));
-            volumeSlider.value = PlayerPrefs.GetFloat(PrefsKeys.appVolume);
-            leftHandedModeToggle.isOn = Convert.ToBoolean(PlayerPrefs.GetInt(PrefsKeys.lefthandedMode, 0));
+            musicToggle.isOn = SettingsReader.GetMusicIsOn();
+            volumeSlider.value = SettingsReader.GetVolume();
+            leftHandedModeToggle.isOn = SettingsReader.GetLeftHandedMode();
+            AimArrowToggle.isOn = SettingsReader.GetAimArrow();
         }
 
         public void ApplySettings()
@@ -84,6 +87,9 @@ namespace Vashta.Entropy.UI
             PlayerPrefs.SetString(PrefsKeys.playMusic, musicToggle.isOn.ToString());
             PlayerPrefs.SetFloat(PrefsKeys.appVolume, volumeSlider.value);
             PlayerPrefs.SetInt(PrefsKeys.lefthandedMode, leftHandedModeToggle.isOn ? 1 : 0);
+            PlayerPrefs.SetInt(PrefsKeys.aimArrow, AimArrowToggle.isOn ? 1 : 0);
+            
+            UIGame.GetInstance().RefreshAimArrow();
             
             PlayerPrefs.Save();
         }
@@ -97,6 +103,10 @@ namespace Vashta.Entropy.UI
         {
             MusicController.AudioSource.enabled = musicToggle.isOn;
             MusicController.PlayMusic();
+        }
+
+        public void OnAimArrowChanged(bool value)
+        {
         }
         
         /// <summary>

@@ -14,10 +14,12 @@ namespace Vashta.Entropy.World
         public float HealRateS = 1f;
 
         private float _lastHeal = 0f;
+        private Collider _collider;
         
         private void Start()
         {
             _playersInZone = new List<Player>();
+            _collider = GetComponent<Collider>();
         }
 
         private void Update()
@@ -25,6 +27,12 @@ namespace Vashta.Entropy.World
             // only execute on the server
             if (!PhotonNetwork.IsMasterClient)
                 return;
+
+            if (!_collider)
+            {
+                Debug.LogError("Missing collider connection!");
+                return;
+            }
             
             if (_lastHeal + HealRateS <= Time.time)
             {
@@ -33,7 +41,7 @@ namespace Vashta.Entropy.World
                 
                 foreach (Player player in playersInZoneSafeCopy)
                 {
-                    if (player == null || !player.IsAlive || player.GetView().GetTeam() != HealTeamId)
+                    if (player == null || !player.IsAlive || player.GetView().GetTeam() != HealTeamId || !_collider.bounds.Contains(player.transform.position))
                         _playersInZone.Remove(player);
                     else
                         player.Heal(HealAmount);

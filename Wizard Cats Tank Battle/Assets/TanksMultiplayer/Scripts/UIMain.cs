@@ -11,6 +11,7 @@ using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.UI;
 using Vashta.Entropy.Character;
+using Vashta.Entropy.IO;
 using Vashta.Entropy.PhotonExtensions;
 using Vashta.Entropy.SaveLoad;
 using Vashta.Entropy.SceneNavigation;
@@ -60,6 +61,8 @@ namespace TanksMP
         
         public Toggle leftHandedModeToggle;
 
+        public Toggle AimArrowToggle;
+
         /// <summary>
         /// Settings: slider for adjusting game sound volume.
         /// </summary>
@@ -96,6 +99,7 @@ namespace TanksMP
             if (!PlayerPrefs.HasKey(PrefsKeys.activeTank)) PlayerPrefs.SetString(PrefsKeys.activeTank, Encryptor.Encrypt("0"));
             if (!PlayerPrefs.HasKey(Vashta.Entropy.SaveLoad.PrefsKeys.characterAppearance)) PlayerPrefs.SetString(Vashta.Entropy.SaveLoad.PrefsKeys.characterAppearance, CharacterAppearanceSaveLoad.DefaultAppearanceStringEncrypted());
             if(!PlayerPrefs.HasKey(PrefsKeys.lefthandedMode)) PlayerPrefs.SetInt(PrefsKeys.lefthandedMode, 0);
+            if(!PlayerPrefs.HasKey(PrefsKeys.aimArrow)) PlayerPrefs.SetInt(PrefsKeys.aimArrow, 0);
 
             PlayerPrefs.Save();
             _playerNameVerification.VerifyName();
@@ -103,9 +107,12 @@ namespace TanksMP
             //read the selections and set them in the corresponding UI elements
             networkDrop.value = PlayerPrefs.GetInt(PrefsKeys.networkMode);
             serverField.text = PlayerPrefs.GetString(PrefsKeys.serverAddress);
-            musicToggle.isOn = bool.Parse(PlayerPrefs.GetString(PrefsKeys.playMusic));
-            leftHandedModeToggle.isOn = Convert.ToBoolean(PlayerPrefs.GetInt(PrefsKeys.lefthandedMode, 0));
-            volumeSlider.value = PlayerPrefs.GetFloat(PrefsKeys.appVolume);
+            musicToggle.isOn = SettingsReader.GetMusicIsOn();
+            leftHandedModeToggle.isOn = SettingsReader.GetLeftHandedMode();
+            volumeSlider.value = SettingsReader.GetVolume();
+
+            if (AimArrowToggle)
+                AimArrowToggle.isOn = SettingsReader.GetAimArrow();
 
             //call the onValueChanged callbacks once with their saved values
             OnMusicChanged(musicToggle.isOn);
@@ -279,6 +286,11 @@ namespace TanksMP
             AudioListener.volume = value;
         }
 
+        public void OnAimArrowChanged(bool value)
+        {
+            // Do nothing... For now
+        }
+
 
         /// <summary>
         /// Saves all player selections chosen in the Settings window on the device.
@@ -289,6 +301,10 @@ namespace TanksMP
             PlayerPrefs.SetString(PrefsKeys.playMusic, musicToggle.isOn.ToString());
             PlayerPrefs.SetFloat(PrefsKeys.appVolume, volumeSlider.value);
             PlayerPrefs.SetInt(PrefsKeys.lefthandedMode, leftHandedModeToggle.isOn ? 1 : 0);
+            
+            if(AimArrowToggle)
+                PlayerPrefs.SetInt(PrefsKeys.aimArrow, AimArrowToggle.isOn ? 1 : 0);
+            
             PlayerPrefs.Save();
             
             _playerNameVerification.VerifyName();

@@ -18,7 +18,6 @@ using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.Spells;
 using Vashta.Entropy.StatusEffects;
 using Vashta.Entropy.UI;
-using Vashta.Entropy.UI.ClassSelectionPanel;
 
 namespace TanksMP
 {
@@ -185,6 +184,7 @@ namespace TanksMP
 
         public AudioClip CantShootSound;
         public StatusEffectDirectory StatusEffectDirectory;
+        public PlayerAimGraphic PlayerAimGraphic;
         
         //initialize server values for this player
         void Awake()
@@ -345,6 +345,11 @@ namespace TanksMP
             
             label.color = team.teamDefinition.TeamColorPrim;
             HealthbarHUD.SetTeam(team.teamDefinition);
+
+            if (PlayerAimGraphic)
+            {
+                PlayerAimGraphic.SetColor(team.teamDefinition.TeamColorPrim);
+            }
         }
 
         public void SetPreferredTeam(int preferredTeamIndex)
@@ -784,11 +789,11 @@ namespace TanksMP
             {
                 // shoot left
                 Quaternion leftProjectile = Quaternion.Euler(0, angle - 5, 0);
-                SpawnProjectile(shotCenter, leftProjectile);
+                SpawnProjectile(shotCenter, leftProjectile, .66f);
                 
                 // shoot right
                 Quaternion rightProjectile = Quaternion.Euler(0, angle + 5, 0);
-                SpawnProjectile(shotCenter, rightProjectile);
+                SpawnProjectile(shotCenter, rightProjectile, .66f);
             }
             
             // animate
@@ -807,7 +812,7 @@ namespace TanksMP
             if (shotFX) PoolManager.Spawn(shotFX, shotPos.position, Quaternion.identity);
         }
 
-        private void SpawnProjectile(Vector3 shotCenter, Quaternion syncedRot)
+        private void SpawnProjectile(Vector3 shotCenter, Quaternion syncedRot, float DamageModifier = 1)
         {
             GameObject obj = PoolManager.Spawn(bullets[0], shotCenter, syncedRot);
             Bullet bullet = obj.GetComponent<Bullet>();
@@ -815,7 +820,7 @@ namespace TanksMP
             bullet.SpawnNewBullet();
             bullet.owner = gameObject;
             bullet.ClassDefinition = classList[photonView.GetClassId()];
-            bullet.SetDamage(Mathf.CeilToInt(bullet.GetRawDamage() * StatusEffectController.DamageOutputModifier));
+            bullet.SetDamage(Mathf.CeilToInt(bullet.GetRawDamage() * StatusEffectController.DamageOutputModifier * DamageModifier));
             bullet.canBuff = !StatusEffectController.BlocksCastingBuffs;
             bullet.canDebuff = !StatusEffectController.BlocksCastingDebuffs;
 

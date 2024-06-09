@@ -13,4 +13,4 @@ Start-Process -FilePath $steamBuild -Wait
 # Run AZCopy
 # Upload for Android
 # Force user to quit manually
-Read-Host -Prompt "Press Enter to exit"
+# Read-Host -Prompt "Press Enter to exit"

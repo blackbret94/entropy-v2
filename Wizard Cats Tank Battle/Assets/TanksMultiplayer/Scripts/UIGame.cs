@@ -4,6 +4,7 @@
  * 	otherwise make available to any third party the Service or the Content. */
 
 using Entropy.Scripts.Audio;
+using Entropy.Scripts.Player;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -245,6 +246,16 @@ namespace TanksMP
         public override void OnLeftRoom()
         {
             SceneNavigator.GoToMainMenu();
+        }
+
+        public void RefreshAimArrow()
+        {
+            PlayerAimGraphic playerAimGraphic = GameManager.GetInstance().localPlayer.PlayerAimGraphic;
+
+            if (playerAimGraphic)
+            {
+                playerAimGraphic.RefreshAlwaysOn();
+            }
         }
     }
 }

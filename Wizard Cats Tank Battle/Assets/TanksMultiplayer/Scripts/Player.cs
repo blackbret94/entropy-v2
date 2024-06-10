@@ -1396,6 +1396,7 @@ namespace TanksMP
         public void SetClass(ClassDefinition newClassDefinition, bool respawnPlayer, bool applyInstantly)
         {
             photonView.SetClassId(newClassDefinition.classId);
+            UIGame.GetInstance().ClassSelectionButton.UpdateIcon();
             
             if(applyInstantly)
                 this.photonView.RPC("RpcApplyClass", RpcTarget.All);

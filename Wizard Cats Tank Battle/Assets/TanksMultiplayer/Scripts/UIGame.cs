@@ -72,6 +72,7 @@ namespace TanksMP
         public ClassSelectionPanel ClassSelectionPanel;
         public SettingsPanel SettingsPanel;
         public ScoreboardPanel ScoreboardPanel;
+        public ClassSelectionButton ClassSelectionButton;
 
         private static UIGame _instance;
         public static UIGame GetInstance() => _instance;

@@ -190,12 +190,15 @@ namespace TanksMP
         void Awake()
         {
             _playersByViewId.Add(GetId(), this);
-            
+
             ClassDefinition classDefinition = defaultClassDefinition ? defaultClassDefinition : classList.RandomClass();
-            
+
             StartCoroutine(RefreshHudCoroutine());
-            GameManager.GetInstance().ui.CastPowerupButton.gameObject.SetActive(false);
-            
+            if (IsLocal)
+            {
+                GameManager.GetInstance().ui.CastPowerupButton.gameObject.SetActive(false);
+            }
+
             //only let the master do initialization
             if (PhotonNetwork.IsMasterClient)
             {

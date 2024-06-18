@@ -1203,8 +1203,6 @@ namespace TanksMP
                     Text[] killCounter = GameManager.GetInstance().ui.killCounter;
                     killCounter[0].text = GetView().GetKills().ToString();
                     killCounter[0].GetComponent<Animator>().Play("Animation");
-
-                    // RewardUltimateForKill();
                 }
                 
                 SpawnDeathFx(deathFxId);

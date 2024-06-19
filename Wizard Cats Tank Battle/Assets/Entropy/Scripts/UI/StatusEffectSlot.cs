@@ -47,6 +47,7 @@ namespace Vashta.Entropy.UI
             {
                 Animator.SetBool(BlinkBool, false);
                 Animator.ResetTrigger(FadeOutTrigger);
+                Animator.ResetTrigger(OffTrigger);
                 Animator.SetTrigger(FadeInTrigger);
                 statusEffect.SetFresh(false);
             }
@@ -54,6 +55,7 @@ namespace Vashta.Entropy.UI
             {
                 Animator.SetBool(BlinkBool, false);
                 Animator.ResetTrigger(FadeOutTrigger);
+                Animator.ResetTrigger(OffTrigger);
                 _canvasGroup.alpha = 1;
             }
 

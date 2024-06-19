@@ -172,11 +172,14 @@ namespace TanksMP
         private float lastTransformUpdate;
         private const float _maxTransformLerp = .15f; 
         
+        // death loop protections
+        private const float minTimeBetweenDeaths = .5f;
+        
         // Spawn timer
         [HideInInspector]
         public float lastDeathTime = 0f;
 
-        public bool IsAlive => gameObject ? gameObject : gameObject.activeInHierarchy; // Issue might be here
+        public bool IsAlive => gameObject ? gameObject : gameObject.activeInHierarchy;
         public bool IsDead => !IsAlive;
         private bool _hasLateInited = false;
         
@@ -1051,6 +1054,12 @@ namespace TanksMP
         /// <param name="other"></param>
         private void PlayerDeath(Player other, string deathFxId)
         {
+            if (lastDeathTime + minTimeBetweenDeaths >= Time.time)
+            {
+                Debug.LogWarning("Attempted to respawn within the min time between spawns");
+                return;
+            }
+            
             bool canRespawnFreely = PlayerCanRespawnFreely();
             lastDeathTime = Time.time;
             
@@ -1174,6 +1183,10 @@ namespace TanksMP
         [PunRPC]
         protected virtual void RpcRespawn(short senderId, string deathFxId)
         {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                lastDeathTime = Time.time;
+            }
             
             //toggle visibility for player gameobject (on/off)
             gameObject.SetActive(!gameObject.activeInHierarchy);

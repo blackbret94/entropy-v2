@@ -12,6 +12,7 @@ namespace Vashta.Entropy.StatusEffects
         private float _expiration;
         private bool _isFresh = false;
         private bool _forceExpire = false;
+        private float _timeCreated;
 
         private StatusEffectData _data = null;
 
@@ -22,8 +23,14 @@ namespace Vashta.Entropy.StatusEffects
             _originPlayer = originPlayer;
             SetExpiration();
             _isFresh = true;
+            _timeCreated = Time.time;
         }
 
+        public float GetAge()
+        {
+            return Time.time - _timeCreated;
+        }
+        
         public void ForceExpire()
         {
             _forceExpire = true;

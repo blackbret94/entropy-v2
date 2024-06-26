@@ -9,7 +9,8 @@ namespace Entropy.Scripts.Player
         public float ToggleRate = .5f;
         public Transform TurretTransform;
         public float RotationTolerance = 10;
-        
+
+        private bool _disabled = false;
         private bool ShouldShow = false;
         private bool _alwaysOn = false;
         private float _lastRotation;
@@ -41,7 +42,7 @@ namespace Entropy.Scripts.Player
 
         private void UpdateRotation()
         {
-            if (!TurretTransform || _alwaysOn)
+            if (!TurretTransform || _alwaysOn || _disabled)
                 return;
 
             float newRotation = TurretTransform.eulerAngles.y;
@@ -61,7 +62,7 @@ namespace Entropy.Scripts.Player
 
         public void SetColor(Color color)
         {
-            if (!Graphic)
+            if (!Graphic || _disabled)
                 return;
 
             Graphic.color = color;
@@ -79,6 +80,9 @@ namespace Entropy.Scripts.Player
 
         private void ShowImage()
         {
+            if (_disabled)
+                return;
+            
             ShouldShow = true;
         }
 
@@ -92,6 +96,9 @@ namespace Entropy.Scripts.Player
 
         private void Update()
         {
+            if (_disabled)
+                return;
+            
             if (Time.time - _lastSlowUpdate > _slowUpdateRate)
             {
                 SlowUpdate();
@@ -126,6 +133,17 @@ namespace Entropy.Scripts.Player
         {
             _lastSlowUpdate = Time.time;
             UpdateRotation();
+        }
+
+        public void Disable()
+        {
+            ShouldShow = false;
+            _alwaysOn = false;
+            _disabled = true;
+            
+            Color color = Graphic.color;
+            color.a = 0;
+            Graphic.color = color;
         }
     }
 }

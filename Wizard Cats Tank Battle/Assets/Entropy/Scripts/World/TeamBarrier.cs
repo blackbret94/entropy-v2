@@ -1,4 +1,5 @@
 using System;
+using Photon.Pun;
 using TanksMP;
 using UnityEngine;
 
@@ -28,7 +29,11 @@ namespace Vashta.Entropy.World
                 {
                     // Enemy
                     SpawnCollisionEffectEnemy();
-                    player.CmdKillPlayer();
+
+                    if (PhotonNetwork.IsMasterClient)
+                    {
+                        player.CmdKillPlayer();
+                    }
                 }
             }
         }

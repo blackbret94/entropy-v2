@@ -12,9 +12,7 @@ namespace Vashta.Entropy.UI
         public Player Player;
         private float _lastRefreshTime;
         private float _refreshRate = .15f;
-
-        private float _sortRateS = 1f;
-
+        
         private void Awake()
         {
             _lastRefreshTime = Time.time + 1f;
@@ -52,7 +50,7 @@ namespace Vashta.Entropy.UI
                 // Hide blocks without status effects
                 if (i >= statusEffects.Count)
                 {
-                    // slot.ResetStatusEffect();
+                    slot.ResetStatusEffect();
                     continue;
                 }
 
@@ -62,6 +60,19 @@ namespace Vashta.Entropy.UI
                 {
                     slot.SetStatusEffect(statusEffect);
                 }
+                else
+                {
+                    // Temp 
+                    slot.ShowNoAnimation();
+                }
+                // else
+                // {
+                //     // Attempt to fix issue of disappearing status effects
+                //     if (statusEffect.GetAge() > .5f && statusEffect.GetTimeLeft() > .5f)
+                //     {
+                //         slot.SetStatusEffect(statusEffect);
+                //     }
+                // }
             }
         }
 

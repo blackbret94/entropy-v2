@@ -283,8 +283,16 @@ namespace TanksMP
         /// </summary>
         void Start()
         {
+            if (photonView.IsMine)
+            {
+                //set a global reference to the local player
+                GameManager.GetInstance().localPlayer = this;
+            }
+
             if (GameManager.GetInstance().UsesTeams)
+            {
                 ColorizePlayerForTeam();
+            }
 
             InputController = GameManager.GetInstance().PlayerInputController;
             
@@ -303,25 +311,16 @@ namespace TanksMP
             
             // refresh slider to fix render issues
             RefreshSlider();
-
-            // if (PhotonNetwork.IsMasterClient)
-            // {
-                // StartCoroutine(ChangeTeamsCoroutine());
-            // }
             
             //called only for this client 
-            if (!photonView.IsMine)
-                return;
+            if (photonView.IsMine)
+            {
+                camFollow = Camera.main.GetComponent<FollowTarget>();
+                camFollow.target = turret;
 
-			//set a global reference to the local player
-            GameManager.GetInstance().localPlayer = this;
-
-            camFollow = Camera.main.GetComponent<FollowTarget>();
-            camFollow.target = turret;
-
-			//initialize input controls for mobile devices
-			//[0]=left joystick for movement, [1]=right joystick for shooting
-            #if !UNITY_STANDALONE && !UNITY_WEBGL
+                //initialize input controls for mobile devices
+                //[0]=left joystick for movement, [1]=right joystick for shooting
+#if !UNITY_STANDALONE && !UNITY_WEBGL
             GameManager.GetInstance().ui.controls[0].onDrag += Move;
             GameManager.GetInstance().ui.controls[0].onDragEnd += MoveEnd;
 
@@ -329,9 +328,10 @@ namespace TanksMP
             GameManager.GetInstance().ui.controls[1].onDragBegin += ShootBegin;
             GameManager.GetInstance().ui.controls[1].onDrag += RotateTurret;
             GameManager.GetInstance().ui.controls[1].onDrag += Shoot;
-            #endif
+#endif
 
-            GameManager.GetInstance().ui.fireButton.Player = this;
+                GameManager.GetInstance().ui.fireButton.Player = this;
+            }
         }
 
         protected void RefreshSlider()
@@ -352,9 +352,19 @@ namespace TanksMP
             label.color = team.teamDefinition.TeamColorPrim;
             HealthbarHUD.SetTeam(team.teamDefinition);
 
-            if (PlayerAimGraphic)
+            if (IsLocal)
             {
-                PlayerAimGraphic.SetColor(team.teamDefinition.GetPrimaryColorLight());
+                if (PlayerAimGraphic)
+                {
+                    PlayerAimGraphic.SetColor(team.teamDefinition.GetPrimaryColorLight());
+                }
+            }
+            else
+            {
+                if (PlayerAimGraphic)
+                {
+                    PlayerAimGraphic.Disable();
+                }
             }
         }
 
@@ -499,6 +509,9 @@ namespace TanksMP
         
         
 
+        /// <summary>
+        /// Server only, one status effect tick
+        /// </summary>
         protected virtual void StatusEffectTick()
         {
             // leech

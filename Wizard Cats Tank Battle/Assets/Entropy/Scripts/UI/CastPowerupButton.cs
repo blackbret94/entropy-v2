@@ -13,6 +13,7 @@ namespace Vashta.Entropy.UI
         private void Start()
         {
             FindLocalPlayer();
+            ClosePanel();
         }
         
         private void FindLocalPlayer()

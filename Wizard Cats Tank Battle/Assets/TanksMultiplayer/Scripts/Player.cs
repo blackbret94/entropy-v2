@@ -491,7 +491,6 @@ namespace TanksMP
             }
         }
         
-        // This needs to be on a second timer
         protected virtual void Update()
         {
             // Delayed update
@@ -506,8 +505,6 @@ namespace TanksMP
                 }
             }
         }
-        
-        
 
         /// <summary>
         /// Server only, one status effect tick
@@ -1397,8 +1394,12 @@ namespace TanksMP
         [PunRPC]
         protected void RpcGameOver(byte teamIndex)
         {
+            int teamIndexInt = teamIndex;
+            if (teamIndexInt == 255)
+                teamIndexInt = -1;
+            
             //display game over window
-            GameManager.GetInstance().DisplayGameOver(teamIndex);
+            GameManager.GetInstance().DisplayGameOver(teamIndexInt);
         }
 
         public void OnPhotonInstantiate(PhotonMessageInfo info)

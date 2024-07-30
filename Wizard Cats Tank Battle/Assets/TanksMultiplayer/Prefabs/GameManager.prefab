@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4000012160439120}
   - component: {fileID: 114000011365822250}
   - component: {fileID: 114000010886265526}
+  - component: {fileID: 8396695766144529577}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -25,13 +26,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000013481812936}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &114000011365822250
 MonoBehaviour:
@@ -53,19 +54,22 @@ MonoBehaviour:
     material: {fileID: 2100000, guid: bd77ec7e7c2bcec498601902e4b6e28d, type: 2}
     spawn: {fileID: 0}
     freeClassChange: {fileID: 0}
+    teamDefinition: {fileID: 0}
   - name: BLUE
     material: {fileID: 2100000, guid: c97449f961d124745bc2d7c5972ddd91, type: 2}
     spawn: {fileID: 0}
     freeClassChange: {fileID: 0}
+    teamDefinition: {fileID: 0}
   - name: GREEN
     material: {fileID: 2100000, guid: 5942ca0d18e9eeb47b312e51dec49088, type: 2}
     spawn: {fileID: 0}
     freeClassChange: {fileID: 0}
+    teamDefinition: {fileID: 0}
   - name: YELLOW
     material: {fileID: 2100000, guid: c4d04e17f416e5748ad3b305797df88b, type: 2}
     spawn: {fileID: 0}
     freeClassChange: {fileID: 0}
-  maxScore: 30
+    teamDefinition: {fileID: 0}
   respawnTime: 8
   friendlyFire: 0
   BotTargetList:
@@ -73,6 +77,11 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  MusicController: {fileID: 0}
+  PlayerInputController: {fileID: 0}
+  MatchTimer: {fileID: 8396695766144529577}
+  MapDefinitionDictionary: {fileID: 0}
+  GameModeDictionary: {fileID: 0}
 --- !u!114 &114000010886265526
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,3 +99,16 @@ MonoBehaviour:
   - {fileID: 4388435187269524573, guid: c2ea8a2999a8dc94a9c822b0ff72b92c, type: 3}
   - {fileID: 1000013952619036, guid: 7c5bc23e033f3ec4982442db246e19c9, type: 2}
   - {fileID: 1000011908511644, guid: 8be7517548c45f04e94cf617523cc394, type: 2}
+--- !u!114 &8396695766144529577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000013481812936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d76005541ae64685882fb13cbc064397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxTime: 600

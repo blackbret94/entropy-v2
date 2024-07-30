@@ -11,6 +11,7 @@ using UnityEngine;
 using Photon.Pun;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Vashta.Entropy.GameMode;
 using Vashta.Entropy.PhotonExtensions;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.UI.ClassSelectionPanel;
@@ -25,6 +26,7 @@ namespace TanksMP
     /// Manages game workflow and provides high-level access to networked logic during a game.
     /// It manages functions such as team fill, scores and ending a game, but also video ad results.
     /// </summary>
+    [RequireComponent(typeof(MatchTimer))]
     public class GameManager : MonoBehaviourPun
     {
         //reference to this script instance
@@ -61,6 +63,8 @@ namespace TanksMP
         /// </summary>
         public int maxScore { get; private set; }= 30;
 
+        
+
         /// <summary>
         /// The delay in seconds before respawning a player after it got killed.
         /// </summary>
@@ -74,6 +78,7 @@ namespace TanksMP
         public List<GameObject> BotTargetList;
         public MusicController MusicController;
         public PlayerInputController PlayerInputController;
+        public MatchTimer MatchTimer;
 
         public MapDefinitionDictionary MapDefinitionDictionary;
         private MapDefinition _mapDefinition;
@@ -100,6 +105,8 @@ namespace TanksMP
             _mapDefinition = MapDefinitionDictionary.GetByName(mapName);
 
             maxScore = _gameModeDefinition.ScoreToWin;
+
+            MatchTimer.InitTimer();            
 
             //if Unity Ads is enabled, hook up its result callback
 #if UNITY_ADS
@@ -152,8 +159,7 @@ namespace TanksMP
         {
             return _mapDefinition;
         }
-
-
+        
         /// <summary>
         /// Returns the next team index a player should be assigned to.
         /// </summary>
@@ -309,6 +315,9 @@ namespace TanksMP
         /// </summary>
         public bool IsGameOver()
         {
+            if (MatchTimer.MatchTimeIsRunning())
+                return false;
+            
             //init variables
             bool isOver = false;
             int[] score = PhotonNetwork.CurrentRoom.GetScore();
@@ -327,6 +336,29 @@ namespace TanksMP
             
             //return the result
             return isOver;
+        }
+
+        public int GetTeamWithHighestScore()
+        {
+            int[] score = PhotonNetwork.CurrentRoom.GetScore();
+            int teamWithHighestScore = -1;
+            int highestScoreFound = 0;
+            
+            //loop over teams to find the highest score
+            for(int i = 0; i < teams.Length; i++)
+            {
+                if(score[i] > highestScoreFound)
+                {
+                    highestScoreFound = score[i];
+                    teamWithHighestScore = i;
+                    
+                } else if (score[i] == highestScoreFound)
+                {
+                    teamWithHighestScore = -1;
+                }
+            }
+
+            return teamWithHighestScore;
         }
         
         
@@ -393,19 +425,31 @@ namespace TanksMP
             ui.DisableDeath();
             localPlayer.CmdRespawn();
         }
-
-
+        
+        
         /// <summary>
         /// Only for this player: sets game over text stating the winning team.
         /// Disables player movement so no updates are sent through the network.
         /// </summary>
         public void DisplayGameOver(int teamIndex)
         {
+            Debug.Log("Team Index: " + teamIndex);
+            
+            
+            MatchTimer.StopTimer();
             //PhotonNetwork.isMessageQueueRunning = false;
             localPlayer.enabled = false;
             localPlayer.camFollow.HideMask(true);
-            Team winningTeam = teams[teamIndex];
-            ui.SetGameOverText(winningTeam);
+            
+            if (teamIndex != -1)
+            {
+                Team winningTeam = teams[teamIndex];
+                ui.SetGameOverText(winningTeam);
+            }
+            else
+            {
+                ui.SetGameOverText(null);
+            }
 
             //starts coroutine for displaying the game over window
             StopCoroutine(SpawnRoutine());
@@ -420,14 +464,24 @@ namespace TanksMP
             yield return new WaitForSeconds(3);
 
             //show game over window (still connected at that point)
-            Team winningTeam = teams[teamIndex];
-            ui.ShowGameOver(teamIndex, winningTeam.name, winningTeam.material.color);
+            if (teamIndex != -1)
+            {
+                // Handle victory
+                Team winningTeam = teams[teamIndex];
+                ui.ShowGameOver(teamIndex, winningTeam.name, winningTeam.material.color);
 
-            int playerTeamIndex = localPlayer.GetView().GetTeam();
-            if(playerTeamIndex == teamIndex)
-                MusicController.PlayVictoryMusic();
+                int playerTeamIndex = localPlayer.GetView().GetTeam();
+                if (playerTeamIndex == teamIndex)
+                    MusicController.PlayVictoryMusic();
+                else
+                    MusicController.PlayDefeatMusic();
+            }
             else
+            {
+                // Handle tie
+                ui.ShowGameOver(teamIndex, "NO ONE", Color.white);
                 MusicController.PlayDefeatMusic();
+            }
         }
 
 

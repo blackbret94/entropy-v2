@@ -113,7 +113,7 @@ namespace Vashta.Entropy.UI
 
         private MatchOverTeamView ChooseTeamView(int teamIndex)
         {
-            if (teamIndex >= TeamViews.Count)
+            if (teamIndex >= TeamViews.Count || teamIndex == -1)
                 return TeamViews[0];
 
             return TeamViews[teamIndex];

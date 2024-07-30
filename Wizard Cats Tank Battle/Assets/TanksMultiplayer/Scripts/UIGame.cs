@@ -73,6 +73,7 @@ namespace TanksMP
         public SettingsPanel SettingsPanel;
         public ScoreboardPanel ScoreboardPanel;
         public ClassSelectionButton ClassSelectionButton;
+        public GamePanel MatchTimer;
 
         private static UIGame _instance;
         public static UIGame GetInstance() => _instance;
@@ -120,7 +121,8 @@ namespace TanksMP
         /// </summary>
         public void OnTeamSizeChanged(int[] size)
         {
-            TeamScoreController.GetInstance().UpdateTeamSizes(size);
+            if(TeamScoreController.GetInstance())
+                TeamScoreController.GetInstance().UpdateTeamSizes(size);
         }
         
         /// <summary>
@@ -188,9 +190,17 @@ namespace TanksMP
                 ToggleControls(false);
                 bulletIcon.SetActive(false);
             #endif
-            
-            //show winning team and colorize it by converting the team color to an HTML RGB hex value for UI markup
-            gameOverText.text = "TEAM <color=#" + ColorUtility.ToHtmlStringRGB(team.material.color) + ">" + team.name + "</color> WINS!";
+
+            if (team != null)
+            {
+                //show winning team and colorize it by converting the team color to an HTML RGB hex value for UI markup
+                gameOverText.text = "TEAM <color=#" + ColorUtility.ToHtmlStringRGB(team.material.color) + ">" +
+                                    team.name + "</color> WINS!";
+            }
+            else
+            {
+                gameOverText.text = "TIE!";
+            }
         }
 
 

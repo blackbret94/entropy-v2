@@ -131,7 +131,8 @@ namespace TanksMP
         /// </summary>
         public void OnTeamScoreChanged(int[] score)
         {
-            TeamScoreController.GetInstance().UpdateScores(score);
+            if(TeamScoreController.GetInstance())
+                TeamScoreController.GetInstance().UpdateScores(score);
         }
         
         /// <summary>

@@ -26,7 +26,8 @@ namespace Vashta.Entropy.UI.ObjectivesPanel
             // set class icon
             ClassDefinition classDefinition = ClassList[classId];
 
-            ClassIcon.sprite = classDefinition.classIcon;
+            if(classDefinition != null)
+                ClassIcon.sprite = classDefinition.classIcon;
         }
 
         public void RefreshContent()

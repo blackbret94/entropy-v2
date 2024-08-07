@@ -76,6 +76,7 @@ namespace TanksMP
         //called before SyncVar updates
         void Start()
         {
+            isBot = true;
             _playerCurrencyRewarder = new PlayerCurrencyRewarder();
             
             //get components and set camera target

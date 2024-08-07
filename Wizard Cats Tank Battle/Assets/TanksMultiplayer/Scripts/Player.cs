@@ -145,7 +145,7 @@ namespace TanksMP
 		protected Rigidbody rb;
 		#pragma warning restore 0649
         
-        public bool IsLocal => GameManager.GetInstance().localPlayer == this;
+        public bool IsLocal => (GameManager.GetInstance().localPlayer == this && !isBot);
         public ClassDefinition defaultClassDefinition;
         public ClassList classList;
 
@@ -188,6 +188,7 @@ namespace TanksMP
         public AudioClip CantShootSound;
         public StatusEffectDirectory StatusEffectDirectory;
         public PlayerAimGraphic PlayerAimGraphic;
+        protected bool isBot = false;
         
         //initialize server values for this player
         void Awake()
@@ -265,7 +266,7 @@ namespace TanksMP
             {
                 Player kvpPlayer = keyValuePair.Value;
 
-                if (kvpPlayer != null && kvpPlayer.IsLocal)
+                if (kvpPlayer != null && kvpPlayer.IsLocal && !kvpPlayer.isBot)
                     return kvpPlayer;
             }
 
@@ -283,7 +284,7 @@ namespace TanksMP
         /// </summary>
         void Start()
         {
-            if (photonView.IsMine)
+            if (photonView.IsMine && !isBot)
             {
                 //set a global reference to the local player
                 GameManager.GetInstance().localPlayer = this;

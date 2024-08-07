@@ -30,6 +30,7 @@ namespace Vashta.Entropy.World
                     // Enemy
                     SpawnCollisionEffectEnemy();
 
+                    // On poor connections, maybe this is missed?
                     if (PhotonNetwork.IsMasterClient)
                     {
                         player.CmdKillPlayer();

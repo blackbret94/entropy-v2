@@ -1394,6 +1394,11 @@ namespace TanksMP
         [PunRPC]
         protected void RpcGameOver(byte teamIndex)
         {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                PhotonNetwork.CurrentRoom.IsOpen = false;
+            }
+            
             int teamIndexInt = teamIndex;
             if (teamIndexInt == 255)
                 teamIndexInt = -1;

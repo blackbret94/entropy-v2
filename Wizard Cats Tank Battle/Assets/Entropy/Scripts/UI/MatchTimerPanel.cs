@@ -5,11 +5,13 @@ using UnityEngine;
 
 namespace Vashta.Entropy.UI
 {
+    [RequireComponent(typeof(CanvasGroup))]
     public class MatchTimerPanel : GamePanel
     {
         public Animator TextAnimator;
         public string AnimationName = "Animation";
         public TextMeshProUGUI Textbox;
+        public CanvasGroup CanvasGroup;
         
         private float _timerRefreshRate = .25f;
         private float _lastUpdateTime;
@@ -41,6 +43,16 @@ namespace Vashta.Entropy.UI
             Textbox.text = $"{minutes}:{seconds}";
             
             _lastSavedMatchTime = currentMatchTime;
+        }
+
+        public void Hide()
+        {
+            CanvasGroup.alpha = 0;
+        }
+
+        public void Show()
+        {
+            CanvasGroup.alpha = 1;
         }
     }
 }

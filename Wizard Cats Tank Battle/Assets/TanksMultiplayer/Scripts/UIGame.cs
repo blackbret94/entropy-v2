@@ -73,7 +73,7 @@ namespace TanksMP
         public SettingsPanel SettingsPanel;
         public ScoreboardPanel ScoreboardPanel;
         public ClassSelectionButton ClassSelectionButton;
-        public GamePanel MatchTimer;
+        public MatchTimerPanel MatchTimer;
 
         private static UIGame _instance;
         public static UIGame GetInstance() => _instance;
@@ -157,6 +157,7 @@ namespace TanksMP
             #endif
             
             DeathPanel.Set(playerName, team);
+            MatchTimer.Hide();
         }
         
         public void SetSpawnDelay(float time)
@@ -177,6 +178,9 @@ namespace TanksMP
             
             //clear text component values
             DeathPanel.Clear();
+            
+            // Enable timer
+            MatchTimer.Show();
         }
 
 

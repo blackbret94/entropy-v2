@@ -28,8 +28,8 @@ namespace TanksMP
         void Awake()
         {
             //disabled when not in offline mode
-            if ((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode) != NetworkMode.Offline)
-                this.enabled = false;
+            // if ((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode) != NetworkMode.Offline)
+                // this.enabled = false;
         }
 
 

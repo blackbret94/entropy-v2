@@ -7,8 +7,6 @@ namespace Entropy.Scripts.Player
 {
     public class PlayerInputAdapterMKB : PlayerInputAdapter
     {
-        private const string SHOOT_CODE = "Fire1";
-        
         public PlayerInputAdapterMKB(InputDirectory inputDirectory, PlayerInputController playerInputController, PlayerInputActionsWCTB playerInputActions) : 
             base(inputDirectory, playerInputController, playerInputActions)
         {
@@ -49,82 +47,58 @@ namespace Entropy.Scripts.Player
         public override bool ShouldShoot()
         {
             return PlayerInputController.GetFireIsHeldDown() && !EventSystem.current.IsPointerOverGameObject();
-            //return Input.GetButton(SHOOT_CODE) && !EventSystem.current.IsPointerOverGameObject();
-        }
-
-        public override bool ShouldDropCollectible()
-        {
-            return InputDirectory.DropCollectible.GetKeyDown(PlayerInputType.MKb);
-        }
-
-        public override bool ShouldUsePowerup()
-        {
-            return InputDirectory.UsePowerup.GetKeyDown(PlayerInputType.MKb);
-        }
-
-        public override bool ShouldUseUltimate()
-        {
-            return InputDirectory.UseUltimate.GetKeyDown(PlayerInputType.MKb);
-        }
-
-        public override bool ShouldToggleSettings()
-        {
-            return InputDirectory.OpenSettings.GetKeyDown(PlayerInputType.MKb);
-        }
-
-        public override bool ShouldToggleClassSelection()
-        {
-            return InputDirectory.OpenClassSelection.GetKeyDown(PlayerInputType.MKb);
-        }
-
-        public override bool ShouldToggleScoreboard()
-        {
-            return InputDirectory.OpenScoreboard.GetKeyDown(PlayerInputType.MKb);
-        }
-
-        public override bool ShouldClosePanel()
-        {
-            return InputDirectory.ClosePanel.GetKeyDown(PlayerInputType.MKb);
         }
 
         public override bool DetectUI_Up()
         {
-            return InputDirectory.UI_Up.GetKeyDown(PlayerInputType.MKb);
+            InputAction iaNavigation = PlayerInputActions.UI.Navigate;
+            Vector2 navVector = iaNavigation.ReadValue<Vector2>();
+            
+            if (navVector.y >= .9999)
+            {
+                return true;
+            }
+            
+            return false;
         }
 
         public override bool DetectUI_Down()
         {
-            return InputDirectory.UI_Down.GetKeyDown(PlayerInputType.MKb);
+            InputAction iaNavigation = PlayerInputActions.UI.Navigate;
+            Vector2 navVector = iaNavigation.ReadValue<Vector2>();
+            
+            if (navVector.y <= -.9999)
+            {
+                return true;
+            }
+            
+            return false;
         }
 
         public override bool DetectUI_Left()
         {
-            return InputDirectory.UI_Left.GetKeyDown(PlayerInputType.MKb);
+            InputAction iaNavigation = PlayerInputActions.UI.Navigate;
+            Vector2 navVector = iaNavigation.ReadValue<Vector2>();
+            
+            if (navVector.x <= -.9999)
+            {
+                return true;
+            }
+            
+            return false;
         }
 
         public override bool DetectUI_Right()
         {
-            return InputDirectory.UI_Right.GetKeyDown(PlayerInputType.MKb);
-        }
-
-        public override bool DetectUI_Primary()
-        {
-            return InputDirectory.UI_Primary.GetKeyDown(PlayerInputType.MKb);
-        }
-
-        public override bool DetectUI_Secondary()
-        {
-            return InputDirectory.UI_Secondary.GetKeyDown(PlayerInputType.MKb);
-        }
-
-        public override bool DetectUI_Tertiary()
-        {
-            return InputDirectory.UI_Tertiary.GetKeyDown(PlayerInputType.MKb);
-        }
-
-        public override bool DetectUI_Quartary()
-        {
-            return InputDirectory.UI_Quatrary.GetKeyDown(PlayerInputType.MKb);
+            InputAction iaNavigation = PlayerInputActions.UI.Navigate;
+            Vector2 navVector = iaNavigation.ReadValue<Vector2>();
+            
+            if (navVector.x >= .9999)
+            {
+                return true;
+            }
+            
+            return false;
         }
     }
 }

@@ -194,7 +194,14 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
 
         public override void UI_Primary()
         {
-            ApplyChangesButton();
+            if (IsInRespawnZone())
+            {
+                RespawnPlayerButton();
+            }
+            else
+            {
+                ApplyChangesButton();
+            }
         }
 
         public override void UI_Tertiary()

@@ -6484,7 +6484,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -28, y: 240}
+  m_AnchoredPosition: {x: -28, y: 400}
   m_SizeDelta: {x: 160, y: 160}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &7156585508594083194
@@ -6614,7 +6614,7 @@ MonoBehaviour:
   parameterizedTextFields:
   - name: BodyText
     placeholder: '%BodyText%'
-    value: Use Powerup (R)
+    value: Use Powerup
   dynamicImageFields: []
   dynamicSectionFields: []
   isRemotelyActivated: 0
@@ -7091,6 +7091,7 @@ GameObject:
   - component: {fileID: 751209674772651678}
   - component: {fileID: 8701048780285683519}
   - component: {fileID: 1652795064849680887}
+  - component: {fileID: 7179945249384649254}
   m_Layer: 5
   m_Name: Hotkey
   m_TagString: Untagged
@@ -7114,7 +7115,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 110.2, y: -42.2}
+  m_AnchoredPosition: {x: 110.2, y: -35}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7512295591020892573
@@ -7145,7 +7146,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Q
+  m_text: <sprite="Keyboard and Mouse_Grey" name="Q">
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 18e5ede33e490485d9576cb16d82ad1e, type: 2}
   m_sharedMaterial: {fileID: -4171563015097924827, guid: 18e5ede33e490485d9576cb16d82ad1e,
@@ -7173,8 +7174,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45
-  m_fontSizeBase: 45
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -7247,6 +7248,53 @@ MonoBehaviour:
   AllowOnDesktop: 1
   AllowOnMobile: 0
   AllowInEditor: 0
+--- !u!114 &7179945249384649254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3783438134330819182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f1f96be540f95a4fb9b01e690c12f29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textComponent: {fileID: 751209674772651678}
+  originalText: <inputaction>
+  textPromptDatas:
+  - actionReference: {fileID: 1692608581975964682, guid: d2982243fc9d1194d8cc662cc33dc282,
+      type: 3}
+    bindingSearchStrategy: 1
+    compositeType: 0
+    bindingType: 0
+    deviceType: 0
+    bindingIndexKeyboard: 0
+    bindingIndexGamepad: 1
+    keyboardControlSchemeIndex: 0
+    gamepadControlSchemeIndex: 0
+    bindingIDInAvailableList: 0
+    advancedMode: 0
+    compositeTypeKeyboardAdvanced: 0
+    compositeTypeGamepadAdvanced: 1
+    bindingTypeKeyboardAdvanced: 0
+    bindingTypeGamepadAdvanced: 0
+    keyboardControlSchemeIndexAdvanced: 0
+    gamepadControlSchemeIndexAdvanced: 0
+    bindingIDInAvailableListKeyboardAdvanced: 0
+    bindingIDInAvailableListGamepadAdvanced: 0
+    optionalKeyboardIconSet: {fileID: 0}
+    optionalGamepadIconSet: {fileID: 0}
+    actionDisplayType: 0
+    bindingIDInAvailableListAllMatchingBindings: 0
+    bindingIDInAvailableListAllMatchingBindingsSingleKeyboard: 0
+    bindingIDInAvailableListAllMatchingBindingsSingleGamepad: 0
+    bindingIDInAvailableListAllMatchingBindingsWidthDelimiterKeyboard: 0
+    bindingIDInAvailableListAllMatchingBindingsWidthDelimiterGamepad: 0
+    delimiter: ' or '
+    allowTinting: 0
+    useSDFFont: 0
+    showAllInfo: 1
 --- !u!1 &3817133559758542241
 GameObject:
   m_ObjectHideFlags: 0
@@ -7284,9 +7332,9 @@ RectTransform:
   - {fileID: 1119272054369594870}
   m_Father: {fileID: 3768112788729991801}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 336, y: 74}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -356, y: 74}
   m_SizeDelta: {x: 120, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1652898324293293414
@@ -7412,7 +7460,7 @@ MonoBehaviour:
   parameterizedTextFields:
   - name: BodyText
     placeholder: '%BodyText%'
-    value: Drop Spoon (Q)
+    value: Drop Spoon
   dynamicImageFields: []
   dynamicSectionFields: []
   isRemotelyActivated: 0
@@ -7660,6 +7708,7 @@ GameObject:
   - component: {fileID: 2255945477992952923}
   - component: {fileID: 3121918927573803040}
   - component: {fileID: 4426305836105418670}
+  - component: {fileID: 3093513534564930814}
   m_Layer: 5
   m_Name: Hotkey
   m_TagString: Untagged
@@ -7683,7 +7732,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 144.4, y: -60.6}
+  m_AnchoredPosition: {x: 130, y: -60.6}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7561114579593744507
@@ -7714,7 +7763,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: E
+  m_text: <sprite="Keyboard and Mouse_Grey" name="E">
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 18e5ede33e490485d9576cb16d82ad1e, type: 2}
   m_sharedMaterial: {fileID: -4171563015097924827, guid: 18e5ede33e490485d9576cb16d82ad1e,
@@ -7742,8 +7791,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45
-  m_fontSizeBase: 45
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -7816,6 +7865,53 @@ MonoBehaviour:
   AllowOnDesktop: 1
   AllowOnMobile: 0
   AllowInEditor: 0
+--- !u!114 &3093513534564930814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4155646882479770266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f1f96be540f95a4fb9b01e690c12f29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textComponent: {fileID: 2255945477992952923}
+  originalText: <inputaction>
+  textPromptDatas:
+  - actionReference: {fileID: 307760948451561951, guid: d2982243fc9d1194d8cc662cc33dc282,
+      type: 3}
+    bindingSearchStrategy: 1
+    compositeType: 0
+    bindingType: 0
+    deviceType: 0
+    bindingIndexKeyboard: 0
+    bindingIndexGamepad: 1
+    keyboardControlSchemeIndex: 0
+    gamepadControlSchemeIndex: 0
+    bindingIDInAvailableList: 0
+    advancedMode: 1
+    compositeTypeKeyboardAdvanced: 0
+    compositeTypeGamepadAdvanced: 1
+    bindingTypeKeyboardAdvanced: 0
+    bindingTypeGamepadAdvanced: 0
+    keyboardControlSchemeIndexAdvanced: 0
+    gamepadControlSchemeIndexAdvanced: 0
+    bindingIDInAvailableListKeyboardAdvanced: 0
+    bindingIDInAvailableListGamepadAdvanced: 0
+    optionalKeyboardIconSet: {fileID: 0}
+    optionalGamepadIconSet: {fileID: 0}
+    actionDisplayType: 0
+    bindingIDInAvailableListAllMatchingBindings: 0
+    bindingIDInAvailableListAllMatchingBindingsSingleKeyboard: 0
+    bindingIDInAvailableListAllMatchingBindingsSingleGamepad: 0
+    bindingIDInAvailableListAllMatchingBindingsWidthDelimiterKeyboard: 0
+    bindingIDInAvailableListAllMatchingBindingsWidthDelimiterGamepad: 0
+    delimiter: ' or '
+    allowTinting: 0
+    useSDFFont: 0
+    showAllInfo: 1
 --- !u!1 &4271563874222269943
 GameObject:
   m_ObjectHideFlags: 0
@@ -8061,7 +8157,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -28, y: 400}
+  m_AnchoredPosition: {x: -28, y: 240}
   m_SizeDelta: {x: 160, y: 160}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &4447836359481541299
@@ -8189,7 +8285,7 @@ MonoBehaviour:
   parameterizedTextFields:
   - name: BodyText
     placeholder: '%BodyText%'
-    value: Cast Ultimate (E)
+    value: Cast Ultimate
   dynamicImageFields: []
   dynamicSectionFields: []
   isRemotelyActivated: 0
@@ -8753,6 +8849,7 @@ GameObject:
   - component: {fileID: 2465571316738754880}
   - component: {fileID: 1020653999820498763}
   - component: {fileID: 2310099647661658923}
+  - component: {fileID: 694592943324257185}
   m_Layer: 5
   m_Name: Hotkey
   m_TagString: Untagged
@@ -8776,7 +8873,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 144.4, y: -60.6}
+  m_AnchoredPosition: {x: 130, y: -60.6}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4450307843518873076
@@ -8807,7 +8904,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: R
+  m_text: <sprite="Keyboard and Mouse_Grey" name="R">
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 18e5ede33e490485d9576cb16d82ad1e, type: 2}
   m_sharedMaterial: {fileID: -4171563015097924827, guid: 18e5ede33e490485d9576cb16d82ad1e,
@@ -8835,8 +8932,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45
-  m_fontSizeBase: 45
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -8909,6 +9006,53 @@ MonoBehaviour:
   AllowOnDesktop: 1
   AllowOnMobile: 0
   AllowInEditor: 0
+--- !u!114 &694592943324257185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5681293483201902460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f1f96be540f95a4fb9b01e690c12f29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textComponent: {fileID: 2465571316738754880}
+  originalText: <inputaction>
+  textPromptDatas:
+  - actionReference: {fileID: -8919427258089596613, guid: d2982243fc9d1194d8cc662cc33dc282,
+      type: 3}
+    bindingSearchStrategy: 1
+    compositeType: 0
+    bindingType: 0
+    deviceType: 0
+    bindingIndexKeyboard: 0
+    bindingIndexGamepad: 1
+    keyboardControlSchemeIndex: 0
+    gamepadControlSchemeIndex: 0
+    bindingIDInAvailableList: 0
+    advancedMode: 1
+    compositeTypeKeyboardAdvanced: 0
+    compositeTypeGamepadAdvanced: 1
+    bindingTypeKeyboardAdvanced: 0
+    bindingTypeGamepadAdvanced: 0
+    keyboardControlSchemeIndexAdvanced: 0
+    gamepadControlSchemeIndexAdvanced: 0
+    bindingIDInAvailableListKeyboardAdvanced: 0
+    bindingIDInAvailableListGamepadAdvanced: 0
+    optionalKeyboardIconSet: {fileID: 0}
+    optionalGamepadIconSet: {fileID: 0}
+    actionDisplayType: 0
+    bindingIDInAvailableListAllMatchingBindings: 0
+    bindingIDInAvailableListAllMatchingBindingsSingleKeyboard: 0
+    bindingIDInAvailableListAllMatchingBindingsSingleGamepad: 0
+    bindingIDInAvailableListAllMatchingBindingsWidthDelimiterKeyboard: 0
+    bindingIDInAvailableListAllMatchingBindingsWidthDelimiterGamepad: 0
+    delimiter: ' or '
+    allowTinting: 0
+    useSDFFont: 0
+    showAllInfo: 1
 --- !u!1 &5752310918316439450
 GameObject:
   m_ObjectHideFlags: 0
@@ -13053,6 +13197,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3768112788729991801}
     m_Modifications:
+    - target: {fileID: 1003333735716521538, guid: 1b5c3342956ea4f2391c4e10ce034478,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 140
+      objectReference: {fileID: 0}
+    - target: {fileID: 1003333735716521538, guid: 1b5c3342956ea4f2391c4e10ce034478,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -40
+      objectReference: {fileID: 0}
     - target: {fileID: 5452673281980019480, guid: 1b5c3342956ea4f2391c4e10ce034478,
         type: 3}
       propertyPath: m_Pivot.x
@@ -13283,7 +13437,17 @@ PrefabInstance:
     - target: {fileID: 5884154159372867049, guid: 1b5c3342956ea4f2391c4e10ce034478,
         type: 3}
       propertyPath: m_text
-      value: C
+      value: <sprite="Keyboard and Mouse_Grey" name="C">
+      objectReference: {fileID: 0}
+    - target: {fileID: 5884154159372867049, guid: 1b5c3342956ea4f2391c4e10ce034478,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 5884154159372867049, guid: 1b5c3342956ea4f2391c4e10ce034478,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 5884154159372867049, guid: 1b5c3342956ea4f2391c4e10ce034478,
         type: 3}
@@ -13302,7 +13466,64 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2381520983129091392}
+    - targetCorrespondingSourceObject: {fileID: 4847503330755647219, guid: 1b5c3342956ea4f2391c4e10ce034478,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8707885004430585801}
   m_SourcePrefab: {fileID: 100100000, guid: 1b5c3342956ea4f2391c4e10ce034478, type: 3}
+--- !u!1 &4804769290851908179 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4847503330755647219, guid: 1b5c3342956ea4f2391c4e10ce034478,
+    type: 3}
+  m_PrefabInstance: {fileID: 137415511638568096}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8707885004430585801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4804769290851908179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f1f96be540f95a4fb9b01e690c12f29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textComponent: {fileID: 5782768870843939145}
+  originalText: <inputaction>
+  textPromptDatas:
+  - actionReference: {fileID: -4622268837109165900, guid: d2982243fc9d1194d8cc662cc33dc282,
+      type: 3}
+    bindingSearchStrategy: 1
+    compositeType: 0
+    bindingType: 0
+    deviceType: 0
+    bindingIndexKeyboard: 0
+    bindingIndexGamepad: 1
+    keyboardControlSchemeIndex: 0
+    gamepadControlSchemeIndex: 0
+    bindingIDInAvailableList: 0
+    advancedMode: 0
+    compositeTypeKeyboardAdvanced: 0
+    compositeTypeGamepadAdvanced: 1
+    bindingTypeKeyboardAdvanced: 0
+    bindingTypeGamepadAdvanced: 0
+    keyboardControlSchemeIndexAdvanced: 0
+    gamepadControlSchemeIndexAdvanced: 0
+    bindingIDInAvailableListKeyboardAdvanced: 0
+    bindingIDInAvailableListGamepadAdvanced: 0
+    optionalKeyboardIconSet: {fileID: 0}
+    optionalGamepadIconSet: {fileID: 0}
+    actionDisplayType: 0
+    bindingIDInAvailableListAllMatchingBindings: 0
+    bindingIDInAvailableListAllMatchingBindingsSingleKeyboard: 0
+    bindingIDInAvailableListAllMatchingBindingsSingleGamepad: 0
+    bindingIDInAvailableListAllMatchingBindingsWidthDelimiterKeyboard: 0
+    bindingIDInAvailableListAllMatchingBindingsWidthDelimiterGamepad: 0
+    delimiter: ' or '
+    allowTinting: 0
+    useSDFFont: 0
+    showAllInfo: 1
 --- !u!1 &5351397704112463751 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5452673281980019495, guid: 1b5c3342956ea4f2391c4e10ce034478,
@@ -13339,7 +13560,7 @@ MonoBehaviour:
   parameterizedTextFields:
   - name: BodyText
     placeholder: '%BodyText%'
-    value: Change Class (C)
+    value: Change Class
   dynamicImageFields: []
   dynamicSectionFields: []
   isRemotelyActivated: 0
@@ -13372,6 +13593,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5782768870843939145 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5884154159372867049, guid: 1b5c3342956ea4f2391c4e10ce034478,
+    type: 3}
+  m_PrefabInstance: {fileID: 137415511638568096}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4804769290851908179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &137415512045337166
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13380,6 +13613,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3768112788729991801}
     m_Modifications:
+    - target: {fileID: 1003333735716521538, guid: 1b5c3342956ea4f2391c4e10ce034478,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 140
+      objectReference: {fileID: 0}
+    - target: {fileID: 1003333735716521538, guid: 1b5c3342956ea4f2391c4e10ce034478,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -40
+      objectReference: {fileID: 0}
     - target: {fileID: 5452673281980019480, guid: 1b5c3342956ea4f2391c4e10ce034478,
         type: 3}
       propertyPath: m_Pivot.x
@@ -13615,7 +13858,17 @@ PrefabInstance:
     - target: {fileID: 5884154159372867049, guid: 1b5c3342956ea4f2391c4e10ce034478,
         type: 3}
       propertyPath: m_text
-      value: V
+      value: <sprite="Keyboard and Mouse_Grey" name="ESCAPE">
+      objectReference: {fileID: 0}
+    - target: {fileID: 5884154159372867049, guid: 1b5c3342956ea4f2391c4e10ce034478,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 5884154159372867049, guid: 1b5c3342956ea4f2391c4e10ce034478,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 5884154159372867049, guid: 1b5c3342956ea4f2391c4e10ce034478,
         type: 3}
@@ -13630,7 +13883,64 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1008180114016243065}
+    - targetCorrespondingSourceObject: {fileID: 4847503330755647219, guid: 1b5c3342956ea4f2391c4e10ce034478,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8753433723712964645}
   m_SourcePrefab: {fileID: 100100000, guid: 1b5c3342956ea4f2391c4e10ce034478, type: 3}
+--- !u!1 &4804769290486131901 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4847503330755647219, guid: 1b5c3342956ea4f2391c4e10ce034478,
+    type: 3}
+  m_PrefabInstance: {fileID: 137415512045337166}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8753433723712964645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4804769290486131901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f1f96be540f95a4fb9b01e690c12f29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textComponent: {fileID: 5782768871016083367}
+  originalText: <inputaction>
+  textPromptDatas:
+  - actionReference: {fileID: 1859564163588265099, guid: d2982243fc9d1194d8cc662cc33dc282,
+      type: 3}
+    bindingSearchStrategy: 1
+    compositeType: 0
+    bindingType: 0
+    deviceType: 0
+    bindingIndexKeyboard: 0
+    bindingIndexGamepad: 1
+    keyboardControlSchemeIndex: 0
+    gamepadControlSchemeIndex: 0
+    bindingIDInAvailableList: 0
+    advancedMode: 0
+    compositeTypeKeyboardAdvanced: 0
+    compositeTypeGamepadAdvanced: 1
+    bindingTypeKeyboardAdvanced: 0
+    bindingTypeGamepadAdvanced: 0
+    keyboardControlSchemeIndexAdvanced: 0
+    gamepadControlSchemeIndexAdvanced: 0
+    bindingIDInAvailableListKeyboardAdvanced: 0
+    bindingIDInAvailableListGamepadAdvanced: 0
+    optionalKeyboardIconSet: {fileID: 0}
+    optionalGamepadIconSet: {fileID: 0}
+    actionDisplayType: 0
+    bindingIDInAvailableListAllMatchingBindings: 0
+    bindingIDInAvailableListAllMatchingBindingsSingleKeyboard: 0
+    bindingIDInAvailableListAllMatchingBindingsSingleGamepad: 0
+    bindingIDInAvailableListAllMatchingBindingsWidthDelimiterKeyboard: 0
+    bindingIDInAvailableListAllMatchingBindingsWidthDelimiterGamepad: 0
+    delimiter: ' or '
+    allowTinting: 0
+    useSDFFont: 0
+    showAllInfo: 1
 --- !u!224 &5351397704536262998 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5452673281980019480, guid: 1b5c3342956ea4f2391c4e10ce034478,
@@ -13660,7 +13970,7 @@ MonoBehaviour:
   parameterizedTextFields:
   - name: BodyText
     placeholder: '%BodyText%'
-    value: Settings (V)
+    value: Settings
   dynamicImageFields: []
   dynamicSectionFields: []
   isRemotelyActivated: 0
@@ -13675,6 +13985,18 @@ MonoBehaviour:
   staysOpen: 0
   neverRotate: 0
   isBlocking: 0
+--- !u!114 &5782768871016083367 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5884154159372867049, guid: 1b5c3342956ea4f2391c4e10ce034478,
+    type: 3}
+  m_PrefabInstance: {fileID: 137415512045337166}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4804769290486131901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &137415512453469666
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14545,7 +14867,7 @@ PrefabInstance:
     - target: {fileID: 5604731144547220038, guid: febae0f85f6834e42bfaa650e7957dcb,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -98
+      value: -109.4
       objectReference: {fileID: 0}
     - target: {fileID: 5604731144547220038, guid: febae0f85f6834e42bfaa650e7957dcb,
         type: 3}
@@ -17539,6 +17861,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3768112788729991801}
     m_Modifications:
+    - target: {fileID: 1003333735716521538, guid: 1b5c3342956ea4f2391c4e10ce034478,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 140
+      objectReference: {fileID: 0}
+    - target: {fileID: 1003333735716521538, guid: 1b5c3342956ea4f2391c4e10ce034478,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -40
+      objectReference: {fileID: 0}
     - target: {fileID: 5452673281980019480, guid: 1b5c3342956ea4f2391c4e10ce034478,
         type: 3}
       propertyPath: m_Pivot.x
@@ -17768,6 +18100,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5884154159372867049, guid: 1b5c3342956ea4f2391c4e10ce034478,
         type: 3}
+      propertyPath: m_text
+      value: <sprite="Keyboard and Mouse_Grey" name="F">
+      objectReference: {fileID: 0}
+    - target: {fileID: 5884154159372867049, guid: 1b5c3342956ea4f2391c4e10ce034478,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 5884154159372867049, guid: 1b5c3342956ea4f2391c4e10ce034478,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 5884154159372867049, guid: 1b5c3342956ea4f2391c4e10ce034478,
+        type: 3}
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
       value: 1801810542
       objectReference: {fileID: 0}
@@ -17779,7 +18126,64 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1108864149139213112}
+    - targetCorrespondingSourceObject: {fileID: 4847503330755647219, guid: 1b5c3342956ea4f2391c4e10ce034478,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 928125140000606812}
   m_SourcePrefab: {fileID: 100100000, guid: 1b5c3342956ea4f2391c4e10ce034478, type: 3}
+--- !u!1 &2635735914040560966 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4847503330755647219, guid: 1b5c3342956ea4f2391c4e10ce034478,
+    type: 3}
+  m_PrefabInstance: {fileID: 7480981740322167733}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &928125140000606812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2635735914040560966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f1f96be540f95a4fb9b01e690c12f29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textComponent: {fileID: 3925307404544675420}
+  originalText: <inputaction>
+  textPromptDatas:
+  - actionReference: {fileID: -4800011918504851527, guid: d2982243fc9d1194d8cc662cc33dc282,
+      type: 3}
+    bindingSearchStrategy: 1
+    compositeType: 0
+    bindingType: 0
+    deviceType: 0
+    bindingIndexKeyboard: 0
+    bindingIndexGamepad: 1
+    keyboardControlSchemeIndex: 0
+    gamepadControlSchemeIndex: 0
+    bindingIDInAvailableList: 0
+    advancedMode: 1
+    compositeTypeKeyboardAdvanced: 0
+    compositeTypeGamepadAdvanced: 1
+    bindingTypeKeyboardAdvanced: 0
+    bindingTypeGamepadAdvanced: 0
+    keyboardControlSchemeIndexAdvanced: 0
+    gamepadControlSchemeIndexAdvanced: 0
+    bindingIDInAvailableListKeyboardAdvanced: 0
+    bindingIDInAvailableListGamepadAdvanced: 0
+    optionalKeyboardIconSet: {fileID: 0}
+    optionalGamepadIconSet: {fileID: 0}
+    actionDisplayType: 0
+    bindingIDInAvailableListAllMatchingBindings: 0
+    bindingIDInAvailableListAllMatchingBindingsSingleKeyboard: 0
+    bindingIDInAvailableListAllMatchingBindingsSingleGamepad: 0
+    bindingIDInAvailableListAllMatchingBindingsWidthDelimiterKeyboard: 0
+    bindingIDInAvailableListAllMatchingBindingsWidthDelimiterGamepad: 0
+    delimiter: ' or '
+    allowTinting: 0
+    useSDFFont: 0
+    showAllInfo: 1
 --- !u!1 &3204874308765132946 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5452673281980019495, guid: 1b5c3342956ea4f2391c4e10ce034478,
@@ -17803,7 +18207,7 @@ MonoBehaviour:
   parameterizedTextFields:
   - name: BodyText
     placeholder: '%BodyText%'
-    value: Scoreboard (F)
+    value: Scoreboard
   dynamicImageFields: []
   dynamicSectionFields: []
   isRemotelyActivated: 0
@@ -17824,6 +18228,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 7480981740322167733}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3925307404544675420 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5884154159372867049, guid: 1b5c3342956ea4f2391c4e10ce034478,
+    type: 3}
+  m_PrefabInstance: {fileID: 7480981740322167733}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2635735914040560966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7702704097972387674
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using TanksMP;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -14,9 +14,6 @@ namespace Entropy.Scripts.Player
         public InputDirectory InputDirectory;
         public PlayerInputActionsWCTB PlayerInputActions;
         
-        // EVENTS
-        public event System.Action PlayerFired;
-        
         private Dictionary<PlayerInputType, PlayerInputAdapter> _inputAdapterDict;
         [SerializeField]
         private PlayerInputType _currentInputType = PlayerInputType.MKb;
@@ -25,7 +22,7 @@ namespace Entropy.Scripts.Player
         private GamePanel _selectedPanel;
 
         private bool _fireIsHeldDown = false;
-
+        
         private void Awake()
         {
             PlayerInputActions = new PlayerInputActionsWCTB();
@@ -33,6 +30,7 @@ namespace Entropy.Scripts.Player
 
         private void OnEnable()
         {
+            // Controls
             PlayerInputActions.Player.Move.Enable();
             PlayerInputActions.Player.Aim.Enable();
 
@@ -40,13 +38,67 @@ namespace Entropy.Scripts.Player
             iaFire.Enable();
             iaFire.performed += Fire;
             iaFire.canceled += ReleaseFire;
+
+            InputAction iaCastPowerup = PlayerInputActions.Player.CastPowerup;
+            iaCastPowerup.Enable();
+            iaCastPowerup.performed += CastPowerup;
+
+            InputAction iaCastUltimate = PlayerInputActions.Player.CastUltimate;
+            iaCastUltimate.Enable();
+            iaCastUltimate.performed += CastUltimate;
+
+            InputAction iaDropSpoon = PlayerInputActions.Player.DropSpoon;
+            iaDropSpoon.Enable();
+            iaDropSpoon.performed += DropSpoon;
+
+            // UI
+            InputAction iaClosePanel = PlayerInputActions.UI.Cancel;
+            iaClosePanel.Enable();
+            iaClosePanel.performed += CancelMenu;
+
+            InputAction iaToggleSettings = PlayerInputActions.UI.ToggleSettings;
+            iaToggleSettings.Enable();
+            iaToggleSettings.performed += ToggleSettings;
+
+            InputAction iaToggleClassSelection = PlayerInputActions.UI.ToggleChangeClass;
+            iaToggleClassSelection.Enable();
+            iaToggleClassSelection.performed += ToggleClassSelectionPanel;
+
+            InputAction iaToggleScoreboard = PlayerInputActions.UI.ToggleScoreboard;
+            iaToggleScoreboard.Enable();
+            iaToggleScoreboard.performed += ToggleScoreboard;
+
+            InputAction navigateMenu = PlayerInputActions.UI.Navigate;
+            navigateMenu.Enable();
+
+            InputAction submit = PlayerInputActions.UI.Submit;
+            submit.Enable();
+            submit.performed += SubmitMenu;
+
+            InputAction secondaryMenu = PlayerInputActions.UI.MenuSecondaryAction;
+            secondaryMenu.Enable();
+            secondaryMenu.performed += MenuSecondary;
         }
 
         private void OnDisable()
         {
+            // Controls
             PlayerInputActions.Player.Move.Disable();
             PlayerInputActions.Player.Fire.Disable();
             PlayerInputActions.Player.Aim.Disable();
+            PlayerInputActions.Player.CastPowerup.Disable();
+            PlayerInputActions.Player.CastUltimate.Disable();
+            PlayerInputActions.Player.DropSpoon.Disable();
+            
+            // UI
+            PlayerInputActions.UI.Cancel.Disable();
+            PlayerInputActions.UI.ToggleSettings.Disable();
+            PlayerInputActions.UI.ToggleChangeClass.Disable();
+            PlayerInputActions.UI.ToggleScoreboard.Disable();
+            
+            PlayerInputActions.UI.Navigate.Disable();
+            PlayerInputActions.UI.Submit.Disable();
+            PlayerInputActions.UI.MenuSecondaryAction.Disable();
         }
 
         private void Start()
@@ -141,7 +193,7 @@ namespace Entropy.Scripts.Player
 
             return false;
         }
-
+        
         private bool DetectMKBInput()
         {
             Vector3 mousePos = Input.mousePosition;
@@ -199,7 +251,120 @@ namespace Entropy.Scripts.Player
 
         public bool GetFireIsHeldDown()
         {
+            if (GameplayActionsBlocked())
+                return false;
+            
             return _fireIsHeldDown;
+        }
+
+        private void CastPowerup(InputAction.CallbackContext context)
+        {
+            if (GameplayActionsBlocked())
+                return;
+            
+            TanksMP.Player player = TanksMP.Player.GetLocalPlayer();
+
+            if (player != null)
+            {
+                player.TryCastPowerup();
+            }
+        }
+
+        private void CastUltimate(InputAction.CallbackContext context)
+        {
+            if (GameplayActionsBlocked())
+                return;
+            
+            TanksMP.Player player = TanksMP.Player.GetLocalPlayer();
+            
+            if (player != null)
+            {
+                bool couldCast = player.TryCastUltimate();
+            
+                if (!couldCast)
+                    GameManager.GetInstance().ui.SfxController.PlayUltimateNotReady();
+            }
+        }
+
+        private void DropSpoon(InputAction.CallbackContext context)
+        {
+            if (GameplayActionsBlocked())
+                return;
+            
+            TanksMP.Player player = TanksMP.Player.GetLocalPlayer();
+            
+            if (player != null)
+            {
+                player.CommandDropCollectibles();
+                UIGame.GetInstance().DropCollectiblesButton.gameObject.SetActive(false);
+            }
+        }
+
+        protected void SubmitMenu(InputAction.CallbackContext context)
+        {
+            GamePanel selectedPanel = GetSelectedGamePanel();
+            if (selectedPanel)
+            {
+                selectedPanel.UI_Primary();
+            }
+        }
+        
+        protected void CancelMenu(InputAction.CallbackContext context)
+        {
+            GamePanel[] gamePanels = Object.FindObjectsByType<GamePanel>(FindObjectsSortMode.None);
+
+            foreach (GamePanel gamePanel in gamePanels)
+            {
+                gamePanel.CloseByHotkey();
+            }
+        }
+
+        public void MenuSecondary(InputAction.CallbackContext context)
+        {
+            GamePanel selectedPanel = GetSelectedGamePanel();
+            if (selectedPanel)
+            {
+                selectedPanel.UI_Tertiary();
+            }
+        }
+
+        protected void ToggleClassSelectionPanel(InputAction.CallbackContext context)
+        {
+            if (UIGame.GetInstance().ClassSelectionPanel.isActiveAndEnabled)
+            {
+                CancelMenu(context);
+            }
+            else
+            {
+                CancelMenu(context);
+                UIGame.GetInstance().ClassSelectionPanel.TogglePanel();
+            }
+        }
+
+        protected void ToggleSettings(InputAction.CallbackContext context)
+        {
+            if (UIGame.GetInstance().SettingsPanel.isActiveAndEnabled)
+            {
+                CancelMenu(context);
+            }
+            else
+            {
+                CancelMenu(context);
+                UIGame.GetInstance().SettingsPanel.TogglePanel();
+            }
+        }
+
+        protected void ToggleScoreboard(InputAction.CallbackContext context)
+        {
+            if (UIGame.GetInstance().ScoreboardPanel.isActiveAndEnabled)
+            {
+                CancelMenu(context);
+            }
+            else
+            {
+                CancelMenu(context);
+                UIGame.GetInstance().ScoreboardPanel.TogglePanel();
+            }
         }
     }
 }

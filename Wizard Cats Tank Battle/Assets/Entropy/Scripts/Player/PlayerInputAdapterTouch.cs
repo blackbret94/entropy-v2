@@ -24,41 +24,6 @@ namespace Entropy.Scripts.Player
             return false;
         }
 
-        public override bool ShouldDropCollectible()
-        {
-            return false;
-        }
-
-        public override bool ShouldUsePowerup()
-        {
-            return false;
-        }
-
-        public override bool ShouldUseUltimate()
-        {
-            return false;
-        }
-
-        public override bool ShouldToggleSettings()
-        {
-            return false;
-        }
-
-        public override bool ShouldToggleClassSelection()
-        {
-            return false;
-        }
-
-        public override bool ShouldToggleScoreboard()
-        {
-            return false;
-        }
-
-        public override bool ShouldClosePanel()
-        {
-            return false;
-        }
-
         public override bool DetectUI_Up()
         {
             return false;
@@ -75,26 +40,6 @@ namespace Entropy.Scripts.Player
         }
 
         public override bool DetectUI_Right()
-        {
-            return false;
-        }
-
-        public override bool DetectUI_Primary()
-        {
-            return false;
-        }
-
-        public override bool DetectUI_Secondary()
-        {
-            return false;
-        }
-
-        public override bool DetectUI_Tertiary()
-        {
-            return false;
-        }
-
-        public override bool DetectUI_Quartary()
         {
             return false;
         }

@@ -53,6 +53,33 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""CastPowerup"",
+                    ""type"": ""Button"",
+                    ""id"": ""7378ad6c-d030-42a0-aca2-19cc2a488b3c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CastUltimate"",
+                    ""type"": ""Button"",
+                    ""id"": ""0d75a691-83c5-4f13-b3f0-59ba0c92b672"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DropSpoon"",
+                    ""type"": ""Button"",
+                    ""id"": ""8878160e-7de0-420b-8116-790d7bbc1577"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -275,6 +302,72 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
                     ""action"": ""Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d993bbfb-794e-4ddf-bdc6-1beb80cf3ea9"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""CastPowerup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""21f3aed6-5dd1-471a-8992-976cff95f9c5"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""CastPowerup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fd5e0faf-346b-48ab-928a-7fad0f8a32cb"",
+                    ""path"": ""<Keyboard>/#(E)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""CastUltimate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3247e202-d709-45bd-8d09-61eb9e4b7e15"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""CastUltimate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""45b0219b-22da-4f94-817f-2a78d88770ee"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""DropSpoon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""241224d3-7abb-4cef-81fe-7ed6f5a9961c"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""DropSpoon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -368,6 +461,42 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
                     ""type"": ""PassThrough"",
                     ""id"": ""46fe70ac-e49d-4044-b93d-bc096d0aa649"",
                     ""expectedControlType"": ""Quaternion"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleSettings"",
+                    ""type"": ""Button"",
+                    ""id"": ""cf2cb2d5-8a02-4dc3-beb4-e6afaa89a1df"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleChangeClass"",
+                    ""type"": ""Button"",
+                    ""id"": ""1bc88faf-8699-4c0c-aa3c-2914c7e8f734"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleScoreboard"",
+                    ""type"": ""Button"",
+                    ""id"": ""55f827aa-9584-404c-aa2b-0f479edc6c7d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MenuSecondaryAction"",
+                    ""type"": ""Button"",
+                    ""id"": ""2a86fe8c-2326-4ed3-9259-051d517a9c6c"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -791,6 +920,83 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
                     ""action"": ""TrackedDeviceOrientation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""23c38b8e-f39b-4906-ad2b-b4716d9e212b"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ToggleSettings"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6e379a65-8b2f-4f25-9178-3f1cf0fd00e9"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""ToggleSettings"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ff1eda22-2790-4180-9eba-e6d3a6db1b48"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ToggleChangeClass"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""afe640d4-0e9e-499e-a483-d5e342c47351"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""ToggleChangeClass"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""af631750-05bb-467f-a2bd-eb8843c09175"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ToggleScoreboard"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""928d857e-3203-4d6a-860f-c3128a3a6af0"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""ToggleScoreboard"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b11b3378-b6e3-4373-913f-1f0a963b0f0e"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""MenuSecondaryAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -863,6 +1069,9 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
+        m_Player_CastPowerup = m_Player.FindAction("CastPowerup", throwIfNotFound: true);
+        m_Player_CastUltimate = m_Player.FindAction("CastUltimate", throwIfNotFound: true);
+        m_Player_DropSpoon = m_Player.FindAction("DropSpoon", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -875,6 +1084,10 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
         m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+        m_UI_ToggleSettings = m_UI.FindAction("ToggleSettings", throwIfNotFound: true);
+        m_UI_ToggleChangeClass = m_UI.FindAction("ToggleChangeClass", throwIfNotFound: true);
+        m_UI_ToggleScoreboard = m_UI.FindAction("ToggleScoreboard", throwIfNotFound: true);
+        m_UI_MenuSecondaryAction = m_UI.FindAction("MenuSecondaryAction", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -939,6 +1152,9 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Aim;
     private readonly InputAction m_Player_Fire;
+    private readonly InputAction m_Player_CastPowerup;
+    private readonly InputAction m_Player_CastUltimate;
+    private readonly InputAction m_Player_DropSpoon;
     public struct PlayerActions
     {
         private @PlayerInputActionsWCTB m_Wrapper;
@@ -946,6 +1162,9 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Aim => m_Wrapper.m_Player_Aim;
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
+        public InputAction @CastPowerup => m_Wrapper.m_Player_CastPowerup;
+        public InputAction @CastUltimate => m_Wrapper.m_Player_CastUltimate;
+        public InputAction @DropSpoon => m_Wrapper.m_Player_DropSpoon;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -964,6 +1183,15 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
             @Fire.started += instance.OnFire;
             @Fire.performed += instance.OnFire;
             @Fire.canceled += instance.OnFire;
+            @CastPowerup.started += instance.OnCastPowerup;
+            @CastPowerup.performed += instance.OnCastPowerup;
+            @CastPowerup.canceled += instance.OnCastPowerup;
+            @CastUltimate.started += instance.OnCastUltimate;
+            @CastUltimate.performed += instance.OnCastUltimate;
+            @CastUltimate.canceled += instance.OnCastUltimate;
+            @DropSpoon.started += instance.OnDropSpoon;
+            @DropSpoon.performed += instance.OnDropSpoon;
+            @DropSpoon.canceled += instance.OnDropSpoon;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -977,6 +1205,15 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
             @Fire.started -= instance.OnFire;
             @Fire.performed -= instance.OnFire;
             @Fire.canceled -= instance.OnFire;
+            @CastPowerup.started -= instance.OnCastPowerup;
+            @CastPowerup.performed -= instance.OnCastPowerup;
+            @CastPowerup.canceled -= instance.OnCastPowerup;
+            @CastUltimate.started -= instance.OnCastUltimate;
+            @CastUltimate.performed -= instance.OnCastUltimate;
+            @CastUltimate.canceled -= instance.OnCastUltimate;
+            @DropSpoon.started -= instance.OnDropSpoon;
+            @DropSpoon.performed -= instance.OnDropSpoon;
+            @DropSpoon.canceled -= instance.OnDropSpoon;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1008,6 +1245,10 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
     private readonly InputAction m_UI_RightClick;
     private readonly InputAction m_UI_TrackedDevicePosition;
     private readonly InputAction m_UI_TrackedDeviceOrientation;
+    private readonly InputAction m_UI_ToggleSettings;
+    private readonly InputAction m_UI_ToggleChangeClass;
+    private readonly InputAction m_UI_ToggleScoreboard;
+    private readonly InputAction m_UI_MenuSecondaryAction;
     public struct UIActions
     {
         private @PlayerInputActionsWCTB m_Wrapper;
@@ -1022,6 +1263,10 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
         public InputAction @RightClick => m_Wrapper.m_UI_RightClick;
         public InputAction @TrackedDevicePosition => m_Wrapper.m_UI_TrackedDevicePosition;
         public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
+        public InputAction @ToggleSettings => m_Wrapper.m_UI_ToggleSettings;
+        public InputAction @ToggleChangeClass => m_Wrapper.m_UI_ToggleChangeClass;
+        public InputAction @ToggleScoreboard => m_Wrapper.m_UI_ToggleScoreboard;
+        public InputAction @MenuSecondaryAction => m_Wrapper.m_UI_MenuSecondaryAction;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1061,6 +1306,18 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
             @TrackedDeviceOrientation.started += instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.performed += instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.canceled += instance.OnTrackedDeviceOrientation;
+            @ToggleSettings.started += instance.OnToggleSettings;
+            @ToggleSettings.performed += instance.OnToggleSettings;
+            @ToggleSettings.canceled += instance.OnToggleSettings;
+            @ToggleChangeClass.started += instance.OnToggleChangeClass;
+            @ToggleChangeClass.performed += instance.OnToggleChangeClass;
+            @ToggleChangeClass.canceled += instance.OnToggleChangeClass;
+            @ToggleScoreboard.started += instance.OnToggleScoreboard;
+            @ToggleScoreboard.performed += instance.OnToggleScoreboard;
+            @ToggleScoreboard.canceled += instance.OnToggleScoreboard;
+            @MenuSecondaryAction.started += instance.OnMenuSecondaryAction;
+            @MenuSecondaryAction.performed += instance.OnMenuSecondaryAction;
+            @MenuSecondaryAction.canceled += instance.OnMenuSecondaryAction;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -1095,6 +1352,18 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
             @TrackedDeviceOrientation.started -= instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.performed -= instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.canceled -= instance.OnTrackedDeviceOrientation;
+            @ToggleSettings.started -= instance.OnToggleSettings;
+            @ToggleSettings.performed -= instance.OnToggleSettings;
+            @ToggleSettings.canceled -= instance.OnToggleSettings;
+            @ToggleChangeClass.started -= instance.OnToggleChangeClass;
+            @ToggleChangeClass.performed -= instance.OnToggleChangeClass;
+            @ToggleChangeClass.canceled -= instance.OnToggleChangeClass;
+            @ToggleScoreboard.started -= instance.OnToggleScoreboard;
+            @ToggleScoreboard.performed -= instance.OnToggleScoreboard;
+            @ToggleScoreboard.canceled -= instance.OnToggleScoreboard;
+            @MenuSecondaryAction.started -= instance.OnMenuSecondaryAction;
+            @MenuSecondaryAction.performed -= instance.OnMenuSecondaryAction;
+            @MenuSecondaryAction.canceled -= instance.OnMenuSecondaryAction;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -1162,6 +1431,9 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
         void OnMove(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
+        void OnCastPowerup(InputAction.CallbackContext context);
+        void OnCastUltimate(InputAction.CallbackContext context);
+        void OnDropSpoon(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
@@ -1175,5 +1447,9 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
         void OnRightClick(InputAction.CallbackContext context);
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+        void OnToggleSettings(InputAction.CallbackContext context);
+        void OnToggleChangeClass(InputAction.CallbackContext context);
+        void OnToggleScoreboard(InputAction.CallbackContext context);
+        void OnMenuSecondaryAction(InputAction.CallbackContext context);
     }
 }

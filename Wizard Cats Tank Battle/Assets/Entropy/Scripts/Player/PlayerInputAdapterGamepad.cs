@@ -11,7 +11,7 @@ namespace Entropy.Scripts.Player
         {
         }
         
-        private const string SHOOT_CODE = "Fire Controller";
+        // private const string SHOOT_CODE = "Fire Controller";
         private const float MIN_TIME_BETWEEN_UI_MOVEMENTS = .2f;
         private float _lastUiMovement = 0f;
         
@@ -47,56 +47,6 @@ namespace Entropy.Scripts.Player
 
             return PlayerInputController.GetFireIsHeldDown();
         }
-
-        public override bool ShouldDropCollectible()
-        {
-            if (PlayerInputController.GameplayActionsBlocked())
-            {
-                return false;
-            }
-
-            return InputDirectory.DropCollectible.GetKeyDown(PlayerInputType.Gamepad);
-        }
-
-        public override bool ShouldUsePowerup()
-        {
-            if (PlayerInputController.GameplayActionsBlocked())
-            {
-                return false;
-            }
-
-            return InputDirectory.UsePowerup.GetKeyDown(PlayerInputType.Gamepad);
-        }
-
-        public override bool ShouldUseUltimate()
-        {
-            if (PlayerInputController.GameplayActionsBlocked())
-            {
-                return false;
-            }
-            
-            return InputDirectory.UseUltimate.GetKeyDown(PlayerInputType.Gamepad);
-        }
-
-        public override bool ShouldToggleSettings()
-        {
-            return InputDirectory.OpenSettings.GetKeyDown(PlayerInputType.Gamepad);
-        }
-
-        public override bool ShouldToggleClassSelection()
-        {
-            return InputDirectory.OpenClassSelection.GetKeyDown(PlayerInputType.Gamepad);
-        }
-
-        public override bool ShouldToggleScoreboard()
-        {
-            return InputDirectory.OpenScoreboard.GetKeyDown(PlayerInputType.Gamepad);
-        }
-
-        public override bool ShouldClosePanel()
-        {
-            return InputDirectory.ClosePanel.GetKeyDown(PlayerInputType.Gamepad);
-        }
         
         private bool UIMovementIsValid()
         {
@@ -107,9 +57,11 @@ namespace Entropy.Scripts.Player
         {
             if (!UIMovementIsValid())
                 return false;
+
+            InputAction iaNavigation = PlayerInputActions.UI.Navigate;
+            Vector2 navVector = iaNavigation.ReadValue<Vector2>();
             
-            // TODO: Support arrows
-            if (Input.GetAxisRaw("VerticalGamepad") >= .9999)
+            if (navVector.y >= .9999)
             {
                 _lastUiMovement = Time.time;
                 return true;
@@ -123,8 +75,10 @@ namespace Entropy.Scripts.Player
             if (!UIMovementIsValid())
                 return false;
             
-            // TODO: Support arrows
-            if (Input.GetAxisRaw("VerticalGamepad") <= -.9999)
+            InputAction iaNavigation = PlayerInputActions.UI.Navigate;
+            Vector2 navVector = iaNavigation.ReadValue<Vector2>();
+            
+            if (navVector.y <= -.9999)
             {
                 _lastUiMovement = Time.time;
                 return true;
@@ -138,8 +92,10 @@ namespace Entropy.Scripts.Player
             if (!UIMovementIsValid())
                 return false;
             
-            // TODO: Support arrows
-            if (Input.GetAxisRaw("HorizontalGamepad") <= -.9999)
+            InputAction iaNavigation = PlayerInputActions.UI.Navigate;
+            Vector2 navVector = iaNavigation.ReadValue<Vector2>();
+            
+            if (navVector.x <= -.9999)
             {
                 _lastUiMovement = Time.time;
                 return true;
@@ -153,34 +109,16 @@ namespace Entropy.Scripts.Player
             if (!UIMovementIsValid())
                 return false;
             
-            // TODO: Support arrows
-            if (Input.GetAxisRaw("HorizontalGamepad") >= .9999)
+            InputAction iaNavigation = PlayerInputActions.UI.Navigate;
+            Vector2 navVector = iaNavigation.ReadValue<Vector2>();
+            
+            if (navVector.x >= .9999)
             {
                 _lastUiMovement = Time.time;
                 return true;
             }
             
             return false;
-        }
-
-        public override bool DetectUI_Primary()
-        {
-            return InputDirectory.UI_Primary.GetKeyDown(PlayerInputType.Gamepad);
-        }
-
-        public override bool DetectUI_Secondary()
-        {
-            return InputDirectory.UI_Secondary.GetKeyDown(PlayerInputType.Gamepad);
-        }
-
-        public override bool DetectUI_Tertiary()
-        {
-            return InputDirectory.UI_Tertiary.GetKeyDown(PlayerInputType.Gamepad);
-        }
-
-        public override bool DetectUI_Quartary()
-        {
-            return InputDirectory.UI_Quatrary.GetKeyDown(PlayerInputType.Gamepad);
         }
     }
 }

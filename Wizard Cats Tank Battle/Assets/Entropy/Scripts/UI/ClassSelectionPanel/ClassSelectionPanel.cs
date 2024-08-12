@@ -70,7 +70,8 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
 
             base.OpenPanel();
             
-            ClassSelectionSelectorMultipanel.GetPanel().SetAsSelectedPanel();
+            SetAsSelectedPanel();
+            // ClassSelectionSelectorMultipanel.GetPanel().SetAsSelectedPanel();
         }
 
         public override void ClosePanel()
@@ -176,6 +177,31 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
         private bool IsInRespawnZone()
         {
             return GameManager.GetInstance().localPlayer.PlayerCanRespawnFreely();
+        }
+        
+        // UI
+        public override void UI_Down()
+        {
+            GamePanel gamePanel = ClassSelectionSelectorMultipanel.GetPanel();
+            ClassSelectionSelector selector = (ClassSelectionSelector)gamePanel;
+            selector.SelectNext();
+        }
+
+        public override void UI_Up()
+        {
+            GamePanel gamePanel = ClassSelectionSelectorMultipanel.GetPanel();
+            ClassSelectionSelector selector = (ClassSelectionSelector)gamePanel;
+            selector.SelectPrevious();
+        }
+
+        public override void UI_Primary()
+        {
+            ApplyChangesButton();
+        }
+
+        public override void UI_Tertiary()
+        {
+            RespawnPlayerButton();
         }
     }
 }

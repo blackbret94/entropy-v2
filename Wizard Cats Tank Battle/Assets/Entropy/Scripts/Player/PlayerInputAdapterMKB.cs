@@ -94,5 +94,25 @@ namespace Entropy.Scripts.Player
         {
             return InputDirectory.UI_Right.GetKeyDown(PlayerInputType.MKb);
         }
+
+        public override bool DetectUI_Primary()
+        {
+            return InputDirectory.UI_Primary.GetKeyDown(PlayerInputType.MKb);
+        }
+
+        public override bool DetectUI_Secondary()
+        {
+            return InputDirectory.UI_Secondary.GetKeyDown(PlayerInputType.MKb);
+        }
+
+        public override bool DetectUI_Tertiary()
+        {
+            return InputDirectory.UI_Tertiary.GetKeyDown(PlayerInputType.MKb);
+        }
+
+        public override bool DetectUI_Quartary()
+        {
+            return InputDirectory.UI_Quatrary.GetKeyDown(PlayerInputType.MKb);
+        }
     }
 }

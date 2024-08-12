@@ -50,6 +50,22 @@ namespace Vashta.Entropy.UI
             if(CanBeClosedByHotkey)
                 ClosePanel();
         }
+        
+        public void SetAsSelectedPanel()
+        {
+            UIGame uiGame = UIGame.GetInstance();
+            if (uiGame)
+            {
+                PlayerInputController playerInputController = uiGame.PlayerInputController;
+
+                if (playerInputController)
+                {
+                    playerInputController.SetSelectedPanel(this);
+                }
+            }
+            
+            // TODO: UIMain
+        }
 
         public virtual void UI_Up()
         {
@@ -71,20 +87,24 @@ namespace Vashta.Entropy.UI
             
         }
 
-        public void SetAsSelectedPanel()
+        public virtual void UI_Primary()
         {
-            UIGame uiGame = UIGame.GetInstance();
-            if (uiGame)
-            {
-                PlayerInputController playerInputController = uiGame.PlayerInputController;
-
-                if (playerInputController)
-                {
-                    playerInputController.SetSelectedPanel(this);
-                }
-            }
             
-            // TODO: UIMain
+        }
+
+        public virtual void UI_Secondary()
+        {
+            
+        }
+
+        public virtual void UI_Tertiary()
+        {
+            
+        }
+
+        public virtual void UI_Quartary()
+        {
+            
         }
     }
 }

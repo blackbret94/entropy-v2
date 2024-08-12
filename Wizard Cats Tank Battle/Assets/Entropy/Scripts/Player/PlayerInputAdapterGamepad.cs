@@ -92,11 +92,17 @@ namespace Entropy.Scripts.Player
             return InputDirectory.ClosePanel.GetKeyDown(PlayerInputType.Gamepad);
         }
         
+        private bool UIMovementIsValid()
+        {
+            return Time.time > _lastUiMovement + MIN_TIME_BETWEEN_UI_MOVEMENTS;
+        }
+        
         public override bool DetectUI_Up()
         {
             if (!UIMovementIsValid())
                 return false;
             
+            // TODO: Support arrows
             if (Input.GetAxisRaw("VerticalGamepad") >= .9999)
             {
                 _lastUiMovement = Time.time;
@@ -111,6 +117,7 @@ namespace Entropy.Scripts.Player
             if (!UIMovementIsValid())
                 return false;
             
+            // TODO: Support arrows
             if (Input.GetAxisRaw("VerticalGamepad") <= -.9999)
             {
                 _lastUiMovement = Time.time;
@@ -125,6 +132,7 @@ namespace Entropy.Scripts.Player
             if (!UIMovementIsValid())
                 return false;
             
+            // TODO: Support arrows
             if (Input.GetAxisRaw("HorizontalGamepad") <= -.9999)
             {
                 _lastUiMovement = Time.time;
@@ -139,6 +147,7 @@ namespace Entropy.Scripts.Player
             if (!UIMovementIsValid())
                 return false;
             
+            // TODO: Support arrows
             if (Input.GetAxisRaw("HorizontalGamepad") >= .9999)
             {
                 _lastUiMovement = Time.time;
@@ -148,9 +157,24 @@ namespace Entropy.Scripts.Player
             return false;
         }
 
-        private bool UIMovementIsValid()
+        public override bool DetectUI_Primary()
         {
-            return Time.time > _lastUiMovement + MIN_TIME_BETWEEN_UI_MOVEMENTS;
+            return InputDirectory.UI_Primary.GetKeyDown(PlayerInputType.Gamepad);
+        }
+
+        public override bool DetectUI_Secondary()
+        {
+            return InputDirectory.UI_Secondary.GetKeyDown(PlayerInputType.Gamepad);
+        }
+
+        public override bool DetectUI_Tertiary()
+        {
+            return InputDirectory.UI_Tertiary.GetKeyDown(PlayerInputType.Gamepad);
+        }
+
+        public override bool DetectUI_Quartary()
+        {
+            return InputDirectory.UI_Quatrary.GetKeyDown(PlayerInputType.Gamepad);
         }
     }
 }

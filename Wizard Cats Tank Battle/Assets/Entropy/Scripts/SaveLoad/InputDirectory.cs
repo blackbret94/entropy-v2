@@ -15,8 +15,18 @@ namespace Vashta.Entropy.SaveLoad
             UI_Up,
             UI_Down,
             UI_Left,
-            UI_Right,
-            ClosePanel;
+            UI_Right;
+
+        [Tooltip("Bottom button (A)")]
+        public InputCode UI_Primary;
+        [Tooltip("Right button (B)")]
+        public InputCode UI_Secondary;
+        [Tooltip("Left button (X)")]
+        public InputCode UI_Tertiary;
+        [Tooltip("Top button (Y)")]
+        public InputCode UI_Quatrary;
+        
+        public InputCode ClosePanel;
 
     }
 }

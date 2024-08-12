@@ -59,16 +59,6 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
             return _activeSelection.ClassDefinition;
         }
 
-        public override void UI_Down()
-        {
-            SelectNext();
-        }
-
-        public override void UI_Up()
-        {
-            SelectPrevious();
-        }
-
         public void SelectNext()
         {
             Debug.Log("Selecting next");

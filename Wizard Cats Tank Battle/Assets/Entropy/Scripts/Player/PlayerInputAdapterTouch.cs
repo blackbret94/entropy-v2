@@ -78,5 +78,25 @@ namespace Entropy.Scripts.Player
         {
             return false;
         }
+
+        public override bool DetectUI_Primary()
+        {
+            return false;
+        }
+
+        public override bool DetectUI_Secondary()
+        {
+            return false;
+        }
+
+        public override bool DetectUI_Tertiary()
+        {
+            return false;
+        }
+
+        public override bool DetectUI_Quartary()
+        {
+            return false;
+        }
     }
 }

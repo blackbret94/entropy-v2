@@ -7,8 +7,8 @@ namespace Entropy.Scripts.Player
 {
     public abstract class PlayerInputAdapter
     {
-        protected InputDirectory InputDirectory;
-        protected PlayerInputController PlayerInputController;
+        protected readonly InputDirectory InputDirectory;
+        protected readonly PlayerInputController PlayerInputController;
 
         public PlayerInputAdapter(InputDirectory inputDirectory, PlayerInputController playerInputController)
         {
@@ -23,7 +23,7 @@ namespace Entropy.Scripts.Player
             if(ShouldUseUltimate()) CastUltimate();
             if(ShouldUsePowerup()) CastPowerup();
             
-            // UI Actions
+            // UI Panels
             if(ShouldClosePanel()) CloseWindow();
             if(ShouldToggleClassSelection()) ToggleClassSelectionPanel();
             if(ShouldToggleSettings()) ToggleSettings();
@@ -34,6 +34,12 @@ namespace Entropy.Scripts.Player
             if(DetectUI_Down()) UI_Down();
             if(DetectUI_Left()) UI_Left();
             if(DetectUI_Right()) UI_Right();
+            
+            // UI Actions
+            if(DetectUI_Primary()) UI_Primary();
+            if(DetectUI_Secondary()) UI_Secondary();
+            if(DetectUI_Tertiary()) UI_Tertiary();
+            if(DetectUI_Quartary()) UI_Quartary();
         }
         
         // Gameplay
@@ -44,7 +50,7 @@ namespace Entropy.Scripts.Player
         public abstract bool ShouldUsePowerup();
         public abstract bool ShouldUseUltimate();
         
-        // UI
+        // UI Panels
         public abstract bool ShouldToggleSettings();
         public abstract bool ShouldToggleClassSelection();
         public abstract bool ShouldToggleScoreboard();
@@ -55,6 +61,12 @@ namespace Entropy.Scripts.Player
         public abstract bool DetectUI_Down();
         public abstract bool DetectUI_Left();
         public abstract bool DetectUI_Right();
+        
+        // UI Actions
+        public abstract bool DetectUI_Primary();
+        public abstract bool DetectUI_Secondary();
+        public abstract bool DetectUI_Tertiary();
+        public abstract bool DetectUI_Quartary();
         
         protected void DropSpoon()
         {
@@ -173,6 +185,42 @@ namespace Entropy.Scripts.Player
             if (selectedPanel)
             {
                 selectedPanel.UI_Right();
+            }
+        }
+
+        protected void UI_Primary()
+        {
+            GamePanel selectedPanel = PlayerInputController.GetSelectedGamePanel();
+            if (selectedPanel)
+            {
+                selectedPanel.UI_Primary();
+            }
+        }
+
+        protected void UI_Secondary()
+        {
+            GamePanel selectedPanel = PlayerInputController.GetSelectedGamePanel();
+            if (selectedPanel)
+            {
+                selectedPanel.UI_Secondary();
+            }
+        }
+
+        protected void UI_Tertiary()
+        {
+            GamePanel selectedPanel = PlayerInputController.GetSelectedGamePanel();
+            if (selectedPanel)
+            {
+                selectedPanel.UI_Tertiary();
+            }
+        }
+
+        protected void UI_Quartary()
+        {
+            GamePanel selectedPanel = PlayerInputController.GetSelectedGamePanel();
+            if (selectedPanel)
+            {
+                selectedPanel.UI_Quartary();
             }
         }
     }

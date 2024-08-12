@@ -74,6 +74,7 @@ namespace TanksMP
         public ScoreboardPanel ScoreboardPanel;
         public ClassSelectionButton ClassSelectionButton;
         public MatchTimerPanel MatchTimer;
+        public PlayerInputController PlayerInputController;
 
         private static UIGame _instance;
         public static UIGame GetInstance() => _instance;

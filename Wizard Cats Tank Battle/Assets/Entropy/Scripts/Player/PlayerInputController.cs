@@ -1,26 +1,29 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Vashta.Entropy.SaveLoad;
+using Vashta.Entropy.UI;
 
 namespace Entropy.Scripts.Player
 {
     public class PlayerInputController : MonoBehaviour
     {
         [FormerlySerializedAs("Cursor")] public GameObject CursorGo;
+        public InputDirectory InputDirectory;
         
-        private Dictionary<PlayerInputType, IPlayerInputAdapter> _inputAdapterDict;
+        private Dictionary<PlayerInputType, PlayerInputAdapter> _inputAdapterDict;
         [SerializeField]
         private PlayerInputType _currentInputType = PlayerInputType.MKb;
 
         private Vector3 _lastMousePosition;
+        private GamePanel _selectedPanel;
 
         private void Start()
         {
             _inputAdapterDict = new();
-            _inputAdapterDict.Add(PlayerInputType.MKb, new PlayerInputAdapterMKB());
-            _inputAdapterDict.Add(PlayerInputType.Touch, new PlayerInputAdapterTouch());
-            _inputAdapterDict.Add(PlayerInputType.Gamepad, new PlayerInputAdapterGamepad());
+            _inputAdapterDict.Add(PlayerInputType.MKb, new PlayerInputAdapterMKB(InputDirectory, this));
+            _inputAdapterDict.Add(PlayerInputType.Touch, new PlayerInputAdapterTouch(InputDirectory, this));
+            _inputAdapterDict.Add(PlayerInputType.Gamepad, new PlayerInputAdapterGamepad(InputDirectory, this));
 
             _lastMousePosition = Input.mousePosition;
 
@@ -46,7 +49,7 @@ namespace Entropy.Scripts.Player
             }
         }
 
-        public IPlayerInputAdapter GetAdapter()
+        public PlayerInputAdapter GetAdapter()
         {
             return _inputAdapterDict[_currentInputType];
         }
@@ -60,6 +63,7 @@ namespace Entropy.Scripts.Player
         {
 #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL
             RefreshInput();
+            GetAdapter().Update();
 #endif
         }
 
@@ -118,6 +122,36 @@ namespace Entropy.Scripts.Player
         private void ToggleCursor(bool enable)
         {
             CursorGo.SetActive(enable);
+        }
+
+        public void SetSelectedPanel(GamePanel panel)
+        {
+            if (!panel)
+            {
+                Debug.Log("Attempted to set active panel to a game panel that does not exist!");
+                return;
+            }
+
+            _selectedPanel = panel;
+        }
+
+        public GamePanel GetSelectedGamePanel()
+        {
+            return _selectedPanel;
+        }
+
+        public bool GameplayActionsBlocked()
+        {
+            if (!_selectedPanel)
+                return false;
+            
+            if (!_selectedPanel.isActiveAndEnabled)
+            {
+                _selectedPanel = null;
+                return false;
+            }
+
+            return _selectedPanel.BlockGameplayWhenSelected;
         }
     }
 }

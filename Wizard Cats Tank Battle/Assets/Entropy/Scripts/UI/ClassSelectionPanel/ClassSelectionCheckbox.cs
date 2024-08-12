@@ -6,6 +6,8 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
 {
     public class ClassSelectionCheckbox : MonoBehaviour
     {
+        private int _uiIndex;
+        
         public Image ClassIcon;
         public Image SelectedFrame;
         public ClassDefinition ClassDefinition;
@@ -22,6 +24,16 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
         public void Toggle(bool setActive)
         {
             SelectedFrame.gameObject.SetActive(setActive);
+        }
+
+        public void SetUI_Index(int newIndex)
+        {
+            _uiIndex = newIndex;
+        }
+
+        public int GetUI_Index()
+        {
+            return _uiIndex;
         }
     }
 }

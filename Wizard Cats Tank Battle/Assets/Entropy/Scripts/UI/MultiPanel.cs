@@ -74,7 +74,7 @@ namespace Vashta.Entropy.UI
             GetPanel().SetActive(b);
         }
 
-        protected GamePanel GetPanel()
+        public GamePanel GetPanel()
         {
             Init();
             

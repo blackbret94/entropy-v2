@@ -69,6 +69,8 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
             UpdateButtonsAtBottomOfScreen();
 
             base.OpenPanel();
+            
+            ClassSelectionSelectorMultipanel.GetPanel().SetAsSelectedPanel();
         }
 
         public override void ClosePanel()

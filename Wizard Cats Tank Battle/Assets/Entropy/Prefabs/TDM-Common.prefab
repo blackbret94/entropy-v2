@@ -1577,6 +1577,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CursorGo: {fileID: 7480117477843604406}
+  InputDirectory: {fileID: 11400000, guid: 2e70c283ff326bb4b9398bfcf59689ea, type: 2}
   _currentInputType: 0
 --- !u!114 &6166256212765671815
 MonoBehaviour:
@@ -2197,8 +2198,6 @@ GameObject:
   - component: {fileID: 137415513587353570}
   - component: {fileID: 6591822126655183648}
   - component: {fileID: 2804921207581459740}
-  - component: {fileID: 4711121106719459649}
-  - component: {fileID: 4952098179824070899}
   - component: {fileID: 4212994600174295603}
   m_Layer: 0
   m_Name: UI
@@ -2262,6 +2261,7 @@ MonoBehaviour:
   ScoreboardPanel: {fileID: 2751583989889741107}
   ClassSelectionButton: {fileID: 3578231402450167120}
   MatchTimer: {fileID: 2707934073211076314}
+  PlayerInputController: {fileID: 814139332491763589}
 --- !u!114 &6591822126655183648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2299,30 +2299,6 @@ MonoBehaviour:
   - {fileID: 6617375056273642721}
   - {fileID: 2885184275777276534}
   - {fileID: 448603626952815806}
---- !u!114 &4711121106719459649
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 137415513587353569}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dfd115bf68664637a2efde016c710fb1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &4952098179824070899
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 137415513587353569}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3194fd3e8784542b115726cd8ab1cd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4212994600174295603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3241,6 +3217,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ChildPanels: []
   CanBeClosedByHotkey: 0
+  OverrideGameMovementWhenSelected: 0
   TeamViews:
   - {fileID: 0}
   - {fileID: 0}
@@ -3315,6 +3292,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ChildPanels: []
   CanBeClosedByHotkey: 1
+  OverrideGameMovementWhenSelected: 0
   musicToggle: {fileID: 5012861884845653728}
   volumeSlider: {fileID: 5620492543767027476}
   leftHandedModeToggle: {fileID: 6581434398435071162}
@@ -4562,6 +4540,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ChildPanels: []
   CanBeClosedByHotkey: 0
+  OverrideGameMovementWhenSelected: 0
 --- !u!1 &1378403328072985964
 GameObject:
   m_ObjectHideFlags: 0
@@ -6616,6 +6595,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ChildPanels: []
   CanBeClosedByHotkey: 0
+  OverrideGameMovementWhenSelected: 0
   PowerupIcon: {fileID: 7186669450817579247}
 --- !u!114 &4181541821169720954
 MonoBehaviour:
@@ -7663,6 +7643,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ChildPanels: []
   CanBeClosedByHotkey: 0
+  OverrideGameMovementWhenSelected: 0
   TeammateFinderIconPrefab: {fileID: 7081490961990144971, guid: fdeb8e02529d3ac418d06e059474d5f3,
     type: 3}
   GameModeDictionary: {fileID: 11400000, guid: df65c41f7b31fae40add89502279b5aa, type: 2}
@@ -10446,6 +10427,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ChildPanels: []
   CanBeClosedByHotkey: 0
+  OverrideGameMovementWhenSelected: 0
   TextAnimator: {fileID: 7975915681224341124}
   AnimationName: Animation
   Textbox: {fileID: 8353421418443225442}

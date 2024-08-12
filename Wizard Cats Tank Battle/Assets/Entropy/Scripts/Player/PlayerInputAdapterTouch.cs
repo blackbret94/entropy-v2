@@ -1,21 +1,80 @@
 using UnityEngine;
+using Vashta.Entropy.SaveLoad;
 
 namespace Entropy.Scripts.Player
 {
-    public class PlayerInputAdapterTouch : IPlayerInputAdapter
+    public class PlayerInputAdapterTouch : PlayerInputAdapter
     {
-
-        public Vector2 GetMovementVector(out bool isMoving)
+        public PlayerInputAdapterTouch(InputDirectory inputDirectory, PlayerInputController playerInputController) : base(inputDirectory, playerInputController)
+        {
+        }
+        
+        public override Vector2 GetMovementVector(out bool isMoving)
         {
             throw new System.NotImplementedException();
         }
 
-        public Vector2 GetTurretRotation(Vector3 pos)
+        public override Vector2 GetTurretRotation(Vector3 pos)
         {
             throw new System.NotImplementedException();
         }
 
-        public bool ShouldShoot()
+        public override bool ShouldShoot()
+        {
+            return false;
+        }
+
+        public override bool ShouldDropCollectible()
+        {
+            return false;
+        }
+
+        public override bool ShouldUsePowerup()
+        {
+            return false;
+        }
+
+        public override bool ShouldUseUltimate()
+        {
+            return false;
+        }
+
+        public override bool ShouldToggleSettings()
+        {
+            return false;
+        }
+
+        public override bool ShouldToggleClassSelection()
+        {
+            return false;
+        }
+
+        public override bool ShouldToggleScoreboard()
+        {
+            return false;
+        }
+
+        public override bool ShouldClosePanel()
+        {
+            return false;
+        }
+
+        public override bool DetectUI_Up()
+        {
+            return false;
+        }
+
+        public override bool DetectUI_Down()
+        {
+            return false;
+        }
+
+        public override bool DetectUI_Left()
+        {
+            return false;
+        }
+
+        public override bool DetectUI_Right()
         {
             return false;
         }

@@ -284,18 +284,19 @@ namespace TanksMP
         /// </summary>
         void Start()
         {
+            InputController = GameManager.GetInstance().PlayerInputController;
+            
             if (photonView.IsMine && !isBot)
             {
                 //set a global reference to the local player
                 GameManager.GetInstance().localPlayer = this;
+                // InputController.PlayerFired += OnFire;
             }
 
             if (GameManager.GetInstance().UsesTeams)
             {
                 ColorizePlayerForTeam();
             }
-
-            InputController = GameManager.GetInstance().PlayerInputController;
             
             //set name in label
             label.text = GetView().GetName();
@@ -638,6 +639,15 @@ namespace TanksMP
 			#endif
 #endif
         }
+
+        // public void OnFire()
+        // {
+        //     if (!photonView.IsMine)
+        //         return;
+        //     
+        //     Debug.Log("Event recieved! Shooting!");
+        //     Shoot();
+        // }
 
         private void UpdateMass()
         {

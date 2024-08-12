@@ -1,5 +1,6 @@
 using Entropy.Scripts.Player;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Vashta.Entropy.GameInput
 {
@@ -14,6 +15,9 @@ namespace Vashta.Entropy.GameInput
         public KeyCode DefaultValueMKB;
         public string KeyGamePad;
         public KeyCode DefaultValueGamepad;
+
+        // New input system!
+        // public InputAction InputAction;
 
         public KeyCode GetValue(PlayerInputType playerInputType)
         {

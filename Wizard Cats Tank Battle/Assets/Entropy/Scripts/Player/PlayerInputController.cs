@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 using Vashta.Entropy.GameInput;
 using Vashta.Entropy.UI;
@@ -10,6 +12,10 @@ namespace Entropy.Scripts.Player
     {
         [FormerlySerializedAs("Cursor")] public GameObject CursorGo;
         public InputDirectory InputDirectory;
+        public PlayerInputActionsWCTB PlayerInputActions;
+        
+        // EVENTS
+        public event System.Action PlayerFired;
         
         private Dictionary<PlayerInputType, PlayerInputAdapter> _inputAdapterDict;
         [SerializeField]
@@ -18,12 +24,37 @@ namespace Entropy.Scripts.Player
         private Vector3 _lastMousePosition;
         private GamePanel _selectedPanel;
 
+        private bool _fireIsHeldDown = false;
+
+        private void Awake()
+        {
+            PlayerInputActions = new PlayerInputActionsWCTB();
+        }
+
+        private void OnEnable()
+        {
+            PlayerInputActions.Player.Move.Enable();
+            PlayerInputActions.Player.Aim.Enable();
+
+            InputAction iaFire = PlayerInputActions.Player.Fire;
+            iaFire.Enable();
+            iaFire.performed += Fire;
+            iaFire.canceled += ReleaseFire;
+        }
+
+        private void OnDisable()
+        {
+            PlayerInputActions.Player.Move.Disable();
+            PlayerInputActions.Player.Fire.Disable();
+            PlayerInputActions.Player.Aim.Disable();
+        }
+
         private void Start()
         {
             _inputAdapterDict = new();
-            _inputAdapterDict.Add(PlayerInputType.MKb, new PlayerInputAdapterMKB(InputDirectory, this));
-            _inputAdapterDict.Add(PlayerInputType.Touch, new PlayerInputAdapterTouch(InputDirectory, this));
-            _inputAdapterDict.Add(PlayerInputType.Gamepad, new PlayerInputAdapterGamepad(InputDirectory, this));
+            _inputAdapterDict.Add(PlayerInputType.MKb, new PlayerInputAdapterMKB(InputDirectory, this, PlayerInputActions));
+            _inputAdapterDict.Add(PlayerInputType.Touch, new PlayerInputAdapterTouch(InputDirectory, this, PlayerInputActions));
+            _inputAdapterDict.Add(PlayerInputType.Gamepad, new PlayerInputAdapterGamepad(InputDirectory, this, PlayerInputActions));
 
             _lastMousePosition = Input.mousePosition;
 
@@ -152,6 +183,23 @@ namespace Entropy.Scripts.Player
             }
 
             return _selectedPanel.BlockGameplayWhenSelected;
+        }
+
+        private void Fire(InputAction.CallbackContext context)
+        {
+            // Debug.Log("Fired!");
+            // PlayerFired?.Invoke();
+            _fireIsHeldDown = true;
+        }
+
+        private void ReleaseFire(InputAction.CallbackContext context)
+        {
+            _fireIsHeldDown = false;
+        }
+
+        public bool GetFireIsHeldDown()
+        {
+            return _fireIsHeldDown;
         }
     }
 }

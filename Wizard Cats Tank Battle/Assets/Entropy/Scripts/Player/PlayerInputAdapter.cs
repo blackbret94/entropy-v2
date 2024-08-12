@@ -1,5 +1,6 @@
 using TanksMP;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Vashta.Entropy.GameInput;
 using Vashta.Entropy.UI;
 
@@ -9,11 +10,14 @@ namespace Entropy.Scripts.Player
     {
         protected readonly InputDirectory InputDirectory;
         protected readonly PlayerInputController PlayerInputController;
+        protected readonly PlayerInputActionsWCTB PlayerInputActions;
 
-        public PlayerInputAdapter(InputDirectory inputDirectory, PlayerInputController playerInputController)
+        public PlayerInputAdapter(InputDirectory inputDirectory, PlayerInputController playerInputController, 
+            PlayerInputActionsWCTB playerInputActions)
         {
             InputDirectory = inputDirectory;
             PlayerInputController = playerInputController;
+            PlayerInputActions = playerInputActions;
         }
 
         public void Update()
@@ -44,7 +48,9 @@ namespace Entropy.Scripts.Player
         
         // Gameplay
         public abstract Vector2 GetMovementVector(out bool isMoving);
+
         public abstract Vector2 GetTurretRotation(Vector3 pos);
+        
         public abstract bool ShouldShoot();
         public abstract bool ShouldDropCollectible();
         public abstract bool ShouldUsePowerup();

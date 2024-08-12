@@ -5,7 +5,7 @@ namespace Entropy.Scripts.Player
 {
     public class PlayerInputAdapterTouch : PlayerInputAdapter
     {
-        public PlayerInputAdapterTouch(InputDirectory inputDirectory, PlayerInputController playerInputController) : base(inputDirectory, playerInputController)
+        public PlayerInputAdapterTouch(InputDirectory inputDirectory, PlayerInputController playerInputController, PlayerInputActionsWCTB playerInputActionsWctb) : base(inputDirectory, playerInputController, playerInputActionsWctb)
         {
         }
         

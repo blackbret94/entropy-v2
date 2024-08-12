@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using Vashta.Entropy.GameInput;
 
 namespace Entropy.Scripts.Player
@@ -8,14 +9,24 @@ namespace Entropy.Scripts.Player
     {
         private const string SHOOT_CODE = "Fire1";
         
-        public PlayerInputAdapterMKB(InputDirectory inputDirectory, PlayerInputController playerInputController) : base(inputDirectory, playerInputController)
+        public PlayerInputAdapterMKB(InputDirectory inputDirectory, PlayerInputController playerInputController, PlayerInputActionsWCTB playerInputActions) : 
+            base(inputDirectory, playerInputController, playerInputActions)
         {
         }
         
+        // public override Vector2 GetMovementVector(out bool isMoving)
+        // {
+        //     isMoving = !(Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0);
+        //     return new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        // }
+        
         public override Vector2 GetMovementVector(out bool isMoving)
         {
-            isMoving = !(Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0);
-            return new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            InputAction iaMove = PlayerInputActions.Player.Move;
+            Vector2 movementVector = iaMove.ReadValue<Vector2>();
+            isMoving = !(movementVector.x == 0 && movementVector.y == 0);
+            
+            return movementVector;
         }
 
         public override Vector2 GetTurretRotation(Vector3 pos)
@@ -37,7 +48,8 @@ namespace Entropy.Scripts.Player
 
         public override bool ShouldShoot()
         {
-            return Input.GetButton(SHOOT_CODE) && !EventSystem.current.IsPointerOverGameObject();
+            return PlayerInputController.GetFireIsHeldDown() && !EventSystem.current.IsPointerOverGameObject();
+            //return Input.GetButton(SHOOT_CODE) && !EventSystem.current.IsPointerOverGameObject();
         }
 
         public override bool ShouldDropCollectible()

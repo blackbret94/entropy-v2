@@ -1,7 +1,7 @@
 using Entropy.Scripts.Player;
 using UnityEngine;
 
-namespace Vashta.Entropy.SaveLoad
+namespace Vashta.Entropy.GameInput
 {
     
     [CreateAssetMenu(fileName = "Input Code", menuName = "Entropy/Input Code", order = 1)]

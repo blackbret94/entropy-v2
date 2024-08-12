@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Vashta.Entropy.SaveLoad
+namespace Vashta.Entropy.GameInput
 {
     [CreateAssetMenu(fileName = "Input Code Directory", menuName = "Entropy/Input Code Directory", order = 1)]
     public class InputDirectory : UnityEngine.ScriptableObject

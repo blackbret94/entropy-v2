@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
-using Vashta.Entropy.SaveLoad;
+using Vashta.Entropy.GameInput;
 using Vashta.Entropy.UI;
 
 namespace Entropy.Scripts.Player

@@ -1,5 +1,5 @@
 using UnityEngine;
-using Vashta.Entropy.SaveLoad;
+using Vashta.Entropy.GameInput;
 
 namespace Entropy.Scripts.Player
 {

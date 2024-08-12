@@ -1,6 +1,6 @@
 using TanksMP;
 using UnityEngine;
-using Vashta.Entropy.SaveLoad;
+using Vashta.Entropy.GameInput;
 using Vashta.Entropy.UI;
 
 namespace Entropy.Scripts.Player

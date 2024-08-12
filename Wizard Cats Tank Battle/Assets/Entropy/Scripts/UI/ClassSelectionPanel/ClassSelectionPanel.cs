@@ -8,7 +8,6 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
 {
     public class ClassSelectionPanel : GamePanel
     {
-        public ClassSelectionSelector ClassSelectionSelector;
         public ClassSelectionSelectorMultipanel ClassSelectionSelectorMultipanel;
         public ClassSelectionTeamSelector ClassSelectionTeamSelector;
         public List<ClassSelectionTeamCheckbox> CheckboxList;
@@ -71,7 +70,6 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
             base.OpenPanel();
             
             SetAsSelectedPanel();
-            // ClassSelectionSelectorMultipanel.GetPanel().SetAsSelectedPanel();
         }
 
         public override void ClosePanel()

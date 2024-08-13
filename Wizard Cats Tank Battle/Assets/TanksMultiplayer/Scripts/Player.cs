@@ -640,15 +640,6 @@ namespace TanksMP
 #endif
         }
 
-        // public void OnFire()
-        // {
-        //     if (!photonView.IsMine)
-        //         return;
-        //     
-        //     Debug.Log("Event recieved! Shooting!");
-        //     Shoot();
-        // }
-
         private void UpdateMass()
         {
             rb.mass = defaultMass * StatusEffectController.MassMultiplier;
@@ -668,13 +659,21 @@ namespace TanksMP
         {
             //if direction is not zero, rotate player in the moving direction relative to camera
             if (direction != Vector2.zero)
-                transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.y))
-                                     * Quaternion.Euler(0, camFollow.camTransform.eulerAngles.y, 0);
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.y))
+                                            * Quaternion.Euler(0, camFollow.camTransform.eulerAngles.y, 0);
+
+                float rotationSpeed = Time.deltaTime * 450;
+                transform.rotation = Quaternion.RotateTowards(
+                    transform.rotation, targetRotation,
+                    rotationSpeed);
+            }
 
             //create movement vector based on current rotation and speed
             float movementSpeed = ((moveSpeed + StatusEffectController.MovementSpeedModifier) *
                                    StatusEffectController.MovementSpeedMultiplier);
-            Vector3 velocity = transform.forward * movementSpeed;
+            // Vector3 velocity = transform.forward * movementSpeed;
+            Vector3 velocity = new Vector3(direction.x, 0, direction.y) * movementSpeed;
 
             //apply vector to rigidbody position
             rb.velocity = Vector3.MoveTowards(rb.velocity, velocity, acceleration);

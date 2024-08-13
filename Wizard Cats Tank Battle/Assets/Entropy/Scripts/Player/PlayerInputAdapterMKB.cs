@@ -12,16 +12,11 @@ namespace Entropy.Scripts.Player
         {
         }
         
-        // public override Vector2 GetMovementVector(out bool isMoving)
-        // {
-        //     isMoving = !(Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0);
-        //     return new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        // }
-        
         public override Vector2 GetMovementVector(out bool isMoving)
         {
             InputAction iaMove = PlayerInputActions.Player.Move;
             Vector2 movementVector = iaMove.ReadValue<Vector2>();
+            
             isMoving = !(movementVector.x == 0 && movementVector.y == 0);
             
             return movementVector;

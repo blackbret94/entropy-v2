@@ -18,7 +18,7 @@ namespace Entropy.Scripts.Player
             PlayerInputActions = playerInputActions;
         }
 
-        public void Update()
+        public virtual void Update()
         {
             // UI Directions
             if(DetectUI_Up()) UI_Up();

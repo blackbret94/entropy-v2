@@ -1,19 +1,19 @@
 using UnityEngine;
-using Vashta.Entropy.GameInput;
 using Vashta.Entropy.UI;
 
 namespace Entropy.Scripts.Player
 {
     public abstract class PlayerInputAdapter
     {
-        protected readonly InputDirectory InputDirectory;
         protected readonly PlayerInputController PlayerInputController;
         protected readonly PlayerInputActionsWCTB PlayerInputActions;
+        
+        protected const float MIN_TIME_BETWEEN_UI_MOVEMENTS = .2f;
+        protected float _lastUiMovement = 0f;
 
-        public PlayerInputAdapter(InputDirectory inputDirectory, PlayerInputController playerInputController, 
+        public PlayerInputAdapter(PlayerInputController playerInputController, 
             PlayerInputActionsWCTB playerInputActions)
         {
-            InputDirectory = inputDirectory;
             PlayerInputController = playerInputController;
             PlayerInputActions = playerInputActions;
         }
@@ -75,6 +75,11 @@ namespace Entropy.Scripts.Player
             {
                 selectedPanel.UI_Right();
             }
+        }
+        
+        protected bool UIMovementIsValid()
+        {
+            return Time.time > _lastUiMovement + MIN_TIME_BETWEEN_UI_MOVEMENTS;
         }
     }
 }

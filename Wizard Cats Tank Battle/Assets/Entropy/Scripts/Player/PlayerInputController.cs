@@ -3,7 +3,6 @@ using TanksMP;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
-using Vashta.Entropy.GameInput;
 using Vashta.Entropy.UI;
 
 namespace Entropy.Scripts.Player
@@ -11,7 +10,6 @@ namespace Entropy.Scripts.Player
     public class PlayerInputController : MonoBehaviour
     {
         [FormerlySerializedAs("Cursor")] public GameObject CursorGo;
-        public InputDirectory InputDirectory;
         public PlayerInputActionsWCTB PlayerInputActions;
         
         private Dictionary<PlayerInputType, PlayerInputAdapter> _inputAdapterDict;
@@ -104,9 +102,9 @@ namespace Entropy.Scripts.Player
         private void Start()
         {
             _inputAdapterDict = new();
-            _inputAdapterDict.Add(PlayerInputType.MKb, new PlayerInputAdapterMKB(InputDirectory, this, PlayerInputActions));
-            _inputAdapterDict.Add(PlayerInputType.Touch, new PlayerInputAdapterTouch(InputDirectory, this, PlayerInputActions));
-            _inputAdapterDict.Add(PlayerInputType.Gamepad, new PlayerInputAdapterGamepad(InputDirectory, this, PlayerInputActions));
+            _inputAdapterDict.Add(PlayerInputType.MKb, new PlayerInputAdapterMKB(this, PlayerInputActions));
+            _inputAdapterDict.Add(PlayerInputType.Touch, new PlayerInputAdapterTouch(this, PlayerInputActions));
+            _inputAdapterDict.Add(PlayerInputType.Gamepad, new PlayerInputAdapterGamepad(this, PlayerInputActions));
 
             _lastMousePosition = Input.mousePosition;
 

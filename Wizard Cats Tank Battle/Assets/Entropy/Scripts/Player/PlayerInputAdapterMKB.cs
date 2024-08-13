@@ -1,14 +1,13 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using Vashta.Entropy.GameInput;
 
 namespace Entropy.Scripts.Player
 {
     public class PlayerInputAdapterMKB : PlayerInputAdapter
     {
-        public PlayerInputAdapterMKB(InputDirectory inputDirectory, PlayerInputController playerInputController, PlayerInputActionsWCTB playerInputActions) : 
-            base(inputDirectory, playerInputController, playerInputActions)
+        public PlayerInputAdapterMKB(PlayerInputController playerInputController, PlayerInputActionsWCTB playerInputActions) : 
+            base(playerInputController, playerInputActions)
         {
         }
         
@@ -46,11 +45,15 @@ namespace Entropy.Scripts.Player
 
         public override bool DetectUI_Up()
         {
+            if (!UIMovementIsValid())
+                return false;
+            
             InputAction iaNavigation = PlayerInputActions.UI.Navigate;
             Vector2 navVector = iaNavigation.ReadValue<Vector2>();
             
             if (navVector.y >= .9999)
             {
+                _lastUiMovement = Time.time;
                 return true;
             }
             
@@ -59,11 +62,15 @@ namespace Entropy.Scripts.Player
 
         public override bool DetectUI_Down()
         {
+            if (!UIMovementIsValid())
+                return false;
+            
             InputAction iaNavigation = PlayerInputActions.UI.Navigate;
             Vector2 navVector = iaNavigation.ReadValue<Vector2>();
             
             if (navVector.y <= -.9999)
             {
+                _lastUiMovement = Time.time;
                 return true;
             }
             
@@ -72,11 +79,15 @@ namespace Entropy.Scripts.Player
 
         public override bool DetectUI_Left()
         {
+            if (!UIMovementIsValid())
+                return false;
+            
             InputAction iaNavigation = PlayerInputActions.UI.Navigate;
             Vector2 navVector = iaNavigation.ReadValue<Vector2>();
             
             if (navVector.x <= -.9999)
             {
+                _lastUiMovement = Time.time;
                 return true;
             }
             
@@ -85,11 +96,15 @@ namespace Entropy.Scripts.Player
 
         public override bool DetectUI_Right()
         {
+            if (!UIMovementIsValid())
+                return false;
+            
             InputAction iaNavigation = PlayerInputActions.UI.Navigate;
             Vector2 navVector = iaNavigation.ReadValue<Vector2>();
             
             if (navVector.x >= .9999)
             {
+                _lastUiMovement = Time.time;
                 return true;
             }
             

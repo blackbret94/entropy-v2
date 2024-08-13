@@ -1,11 +1,10 @@
 using UnityEngine;
-using Vashta.Entropy.GameInput;
 
 namespace Entropy.Scripts.Player
 {
     public class PlayerInputAdapterTouch : PlayerInputAdapter
     {
-        public PlayerInputAdapterTouch(InputDirectory inputDirectory, PlayerInputController playerInputController, PlayerInputActionsWCTB playerInputActionsWctb) : base(inputDirectory, playerInputController, playerInputActionsWctb)
+        public PlayerInputAdapterTouch(PlayerInputController playerInputController, PlayerInputActionsWCTB playerInputActionsWctb) : base(playerInputController, playerInputActionsWctb)
         {
         }
         

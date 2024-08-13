@@ -1,19 +1,16 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Vashta.Entropy.GameInput;
 
 namespace Entropy.Scripts.Player
 {
     public class PlayerInputAdapterGamepad : PlayerInputAdapter
     {
-        public PlayerInputAdapterGamepad(InputDirectory inputDirectory, PlayerInputController playerInputController, PlayerInputActionsWCTB playerInputActionsWctb) : 
-            base(inputDirectory, playerInputController, playerInputActionsWctb)
+        public PlayerInputAdapterGamepad(PlayerInputController playerInputController, PlayerInputActionsWCTB playerInputActionsWctb) : 
+            base(playerInputController, playerInputActionsWctb)
         {
         }
         
         // private const string SHOOT_CODE = "Fire Controller";
-        private const float MIN_TIME_BETWEEN_UI_MOVEMENTS = .2f;
-        private float _lastUiMovement = 0f;
         
         public override Vector2 GetMovementVector(out bool isMoving)
         {
@@ -48,10 +45,7 @@ namespace Entropy.Scripts.Player
             return PlayerInputController.GetFireIsHeldDown();
         }
         
-        private bool UIMovementIsValid()
-        {
-            return Time.time > _lastUiMovement + MIN_TIME_BETWEEN_UI_MOVEMENTS;
-        }
+        
         
         public override bool DetectUI_Up()
         {

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using InputIcons;
 using TanksMP;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -10,7 +11,7 @@ namespace Entropy.Scripts.Player
     public class PlayerInputController : MonoBehaviour
     {
         [FormerlySerializedAs("Cursor")] public GameObject CursorGo;
-        public PlayerInputActionsWCTB PlayerInputActions;
+        private PlayerInputActionsWCTB PlayerInputActions=>InitPlayerControls.PlayerInputActions;
         
         private Dictionary<PlayerInputType, PlayerInputAdapter> _inputAdapterDict;
         [SerializeField]
@@ -20,11 +21,6 @@ namespace Entropy.Scripts.Player
         private GamePanel _selectedPanel;
 
         private bool _fireIsHeldDown = false;
-        
-        private void Awake()
-        {
-            PlayerInputActions = new PlayerInputActionsWCTB();
-        }
 
         private void OnEnable()
         {
@@ -237,8 +233,6 @@ namespace Entropy.Scripts.Player
 
         private void Fire(InputAction.CallbackContext context)
         {
-            // Debug.Log("Fired!");
-            // PlayerFired?.Invoke();
             _fireIsHeldDown = true;
         }
 

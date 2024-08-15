@@ -10,8 +10,6 @@ namespace Entropy.Scripts.Player
         {
         }
         
-        // private const string SHOOT_CODE = "Fire Controller";
-        
         public override Vector2 GetMovementVector(out bool isMoving)
         {
             InputAction iaMove = PlayerInputActions.Player.Move;
@@ -44,8 +42,6 @@ namespace Entropy.Scripts.Player
 
             return PlayerInputController.GetFireIsHeldDown();
         }
-        
-        
         
         public override bool DetectUI_Up()
         {

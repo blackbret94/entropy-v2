@@ -63,6 +63,7 @@ namespace InputIcons
         public void RedrawLists()
         {
             serializedManager = new SerializedObject(InputIconsManagerSO.Instance);
+            //InputIconsManagerSO.UpdateStyleData();
             DrawCustomContextList();
         }
 

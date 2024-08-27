@@ -233,7 +233,7 @@ namespace InputIcons
 
 
 
-            /*
+            
             EditorGUILayout.LabelField("List of keyboard input data. Automatically updated at runtime when needed.", EditorStyles.boldLabel);
             EditorGUILayout.LabelField("Copy TMPro Style Tag entry into a textfield to display bindings.", EditorStyles.label);
             styleTagKeyboardDatas.DoLayoutList();
@@ -247,7 +247,7 @@ namespace InputIcons
             styleTagGamepadDatas.displayAdd = false;
             styleTagGamepadDatas.displayRemove = false;
             styleTagGamepadDatas.draggable = false;
-            */
+            
 
             EditorGUILayout.EndVertical();
 

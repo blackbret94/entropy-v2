@@ -39,6 +39,7 @@ namespace InputIcons
         private ReorderableList keyboardSchemeNames;
         private ReorderableList gamepadSchemeNames;
 
+        private bool showDeprecatedSection = false;
         public GameObject activationPrefab;
 
         [MenuItem("Tools/Input Icons/Select Input Icons Manager", priority = 1)]
@@ -180,12 +181,24 @@ namespace InputIcons
 
 
             GUILayout.Space(10);
+            // Create a foldout
             GUILayout.Label("Required step in earlier versions, should not be needed anymore", textStyleBold);
-            GUILayout.Label("Add the activation prefab to your first scene (or one of your early scenes). This ensures the InputIconsManager will be active in our builds " +
-                "and will update the displayed icons when needed.", textStyle);
-            EditorGUI.BeginDisabledGroup(true);
-            activationPrefab = (GameObject)EditorGUILayout.ObjectField("", activationPrefab, typeof(GameObject), true);
-            EditorGUI.EndDisabledGroup();
+            EditorGUI.indentLevel++;
+            showDeprecatedSection = EditorGUILayout.Foldout(showDeprecatedSection, "Show Deprecated Section");
+            
+            if (showDeprecatedSection)
+            {
+                EditorGUI.indentLevel++;
+
+                
+                GUILayout.Label("Add the activation prefab to your first scene (or one of your early scenes). This ensures the InputIconsManager will be active in our builds " +
+                    "and will update the displayed icons when needed.", textStyle);
+                EditorGUI.BeginDisabledGroup(true);
+                activationPrefab = (GameObject)EditorGUILayout.ObjectField("", activationPrefab, typeof(GameObject), true);
+                EditorGUI.EndDisabledGroup();
+
+                EditorGUI.indentLevel--;
+            }
 
 
 
@@ -828,7 +841,7 @@ namespace InputIcons
 
             if(EditorGUI.EndChangeCheck())
             {
-                InputIconsManagerSO.Instance.CreateInputStyleData();
+                InputIconsManagerSO.Instance.CreateInputStyleData(false);
             }
         }
 

@@ -1,11 +1,13 @@
 using InputIcons;
 using UnityEngine;
-
-public class InputIconsManagerInitializer
+namespace InputIcons
 {
-    [RuntimeInitializeOnLoadMethod]
-    static void OnRuntimeInitialized()
+    public class InputIconsManagerInitializer
     {
-        InputIconsManagerSO.Instance.Initialize();
+        [RuntimeInitializeOnLoadMethod]
+        static void OnRuntimeInitialized()
+        {
+            InputIconsManagerSO.Instance.Initialize();
+        }
     }
 }

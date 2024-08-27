@@ -26,6 +26,8 @@ namespace Entropy.Scripts.Player
                 }
 
                 InputIconsManagerSO.onBindingsReset += HandleAllBindingsReset;
+                PlayerInputActions.Player.Enable();
+                PlayerInputActions.UI.Enable();
             }
         }
         

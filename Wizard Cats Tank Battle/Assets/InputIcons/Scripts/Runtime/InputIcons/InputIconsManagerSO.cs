@@ -514,7 +514,7 @@ namespace InputIcons
         }
 
 
-        public void CreateInputStyleData()
+        public void CreateInputStyleData(bool updateStyleSheet = true)
         {
             if (InputIconSetConfiguratorSO.Instance == null)
             {

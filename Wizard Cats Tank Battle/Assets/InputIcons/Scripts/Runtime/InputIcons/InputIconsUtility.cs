@@ -476,6 +476,7 @@ namespace InputIcons
 
             if (!BindingGroupContainsControlScheme(binding.groups, controlSchemeName))
             {
+                //InputIconsLogger.LogWarning("Action does not contain searched control scheme name: " + controlSchemeName);
                 return null;
             }
 
@@ -512,7 +513,6 @@ namespace InputIcons
 
             string tmproReference = "<style="+bindingName+">";
             string fontReference = "<style=font/"+bindingName+">";
-
 
             string humanReadableString = GetHumanReadableActionName(action, binding, controlSchemeName);
             //Debug.Log(humanReadableString);
@@ -1374,6 +1374,7 @@ namespace InputIcons
             {
                 if (usedActionAssets[k] == null)
                     continue;
+
 
                 for (int m = 0; m < usedActionAssets[k].actionMaps.Count; m++)
                 {

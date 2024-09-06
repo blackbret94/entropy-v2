@@ -62,9 +62,7 @@ namespace TanksMP
         /// The maximum amount of kills to reach before ending the game.
         /// </summary>
         public int maxScore { get; private set; }= 30;
-
         
-
         /// <summary>
         /// The delay in seconds before respawning a player after it got killed.
         /// </summary>
@@ -79,9 +77,9 @@ namespace TanksMP
         public MusicController MusicController;
         public PlayerInputController PlayerInputController;
         public MatchTimer MatchTimer;
-
-        public MapDefinitionDictionary MapDefinitionDictionary;
-        private MapDefinition _mapDefinition;
+        
+        [FormerlySerializedAs("_mapDefinition")] [SerializeField]
+        private MapDefinition mapDefinition;
         
         public GameModeDictionary GameModeDictionary;
         private GameModeDefinition _gameModeDefinition;
@@ -101,8 +99,8 @@ namespace TanksMP
             gameMode = _roomOptionsReader.GetGameMode();
             _gameModeDefinition = GameModeDictionary[gameMode];
 
-            string mapName = _roomOptionsReader.GetMapName();
-            _mapDefinition = MapDefinitionDictionary.GetByName(mapName);
+            // string mapName = _roomOptionsReader.GetMapName();
+            // _mapDefinition = MapDefinitionDictionary.GetByName(mapName);
 
             maxScore = _gameModeDefinition.ScoreToWin;
 
@@ -157,7 +155,7 @@ namespace TanksMP
 
         public MapDefinition GetMap()
         {
-            return _mapDefinition;
+            return mapDefinition;
         }
         
         /// <summary>

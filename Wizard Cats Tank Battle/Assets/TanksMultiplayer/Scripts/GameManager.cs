@@ -313,8 +313,8 @@ namespace TanksMP
         /// </summary>
         public bool IsGameOver()
         {
-            if (MatchTimer.MatchTimeIsRunning())
-                return false;
+            if (!MatchTimer.MatchTimeIsRunning())
+                return true;
             
             //init variables
             bool isOver = false;

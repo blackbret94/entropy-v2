@@ -14,28 +14,31 @@ namespace Vashta.Entropy.World
         public AudioClip CollisionSfxAlly;
         public AudioClip CollisionSfxEnemy;
 
+        // Damage to enemies is DISABLED
         private void OnTriggerEnter(Collider col)
         {
             // if it is a player, check the team
             Player player = col.gameObject.GetComponent<Player>();
             if (player != null)
             {
-                if (player.GetView().GetTeam() == TeamId)
-                {
+                SpawnCollisionEffectAlly();
+                
+                // if (player.GetView().GetTeam() == TeamId)
+                // {
                     // Ally
-                    SpawnCollisionEffectAlly();
-                }
-                else
-                {
+                    // SpawnCollisionEffectAlly();
+                // }
+                // else
+                // {
                     // Enemy
-                    SpawnCollisionEffectEnemy();
+                    // SpawnCollisionEffectEnemy();
 
                     // On poor connections, maybe this is missed?
-                    if (PhotonNetwork.IsMasterClient)
-                    {
-                        player.CmdKillPlayer();
-                    }
-                }
+                    // if (PhotonNetwork.IsMasterClient)
+                    // {
+                        // player.CmdKillPlayer();
+                    // }
+                // }
             }
         }
 

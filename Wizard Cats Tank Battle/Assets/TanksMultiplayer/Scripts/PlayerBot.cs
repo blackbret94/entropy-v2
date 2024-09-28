@@ -113,6 +113,15 @@ namespace TanksMP
             StartCoroutine(DetectPlayers());
 
             _slowUpdateRate += Random.Range(0f, .25f);
+            
+            if (PhotonNetwork.IsMasterClient)
+            {
+                // Apply status effect
+                if (StatusEffectApplyOnSpawn)
+                {
+                    StatusEffectController.AddStatusEffect(StatusEffectApplyOnSpawn.Id, this);
+                }
+            }
         }
         
         
@@ -408,6 +417,15 @@ namespace TanksMP
             agent.Warp(targetPoint);
             agent.isStopped = false;
             isDead = false;
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                // Apply status effect
+                if (StatusEffectApplyOnSpawn)
+                {
+                    StatusEffectController.AddStatusEffect(StatusEffectApplyOnSpawn.Id, this);
+                }
+            }
         }
 
         //disable rendering or blocking components

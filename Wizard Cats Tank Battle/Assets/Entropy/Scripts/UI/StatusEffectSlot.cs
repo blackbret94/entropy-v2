@@ -80,7 +80,9 @@ namespace Vashta.Entropy.UI
 
             _debugStatusEffectName = "No effect";
             // Image.sprite = null;
-            _canvasGroup.alpha = 0;
+            
+            if(_canvasGroup)
+                _canvasGroup.alpha = 0;
         }
 
         public StatusEffect GetStatusEffect()

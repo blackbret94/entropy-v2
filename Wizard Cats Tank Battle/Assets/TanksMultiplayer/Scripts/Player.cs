@@ -188,6 +188,8 @@ namespace TanksMP
         public AudioClip CantShootSound;
         public StatusEffectDirectory StatusEffectDirectory;
         public PlayerAimGraphic PlayerAimGraphic;
+        public StatusEffectData StatusEffectApplyOnSpawn;
+        
         protected bool isBot = false;
         
         //initialize server values for this player
@@ -333,6 +335,15 @@ namespace TanksMP
 #endif
 
                 GameManager.GetInstance().ui.fireButton.Player = this;
+            }
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                // Apply status effect
+                if (StatusEffectApplyOnSpawn)
+                {
+                    StatusEffectController.AddStatusEffect(StatusEffectApplyOnSpawn.Id, this);
+                }
             }
         }
 
@@ -1279,10 +1290,16 @@ namespace TanksMP
                 if(IsLocal)
                     GameManager.GetInstance().ui.CastUltimateButton.gameObject.SetActive(true);
 
+                // Server only
                 if (PhotonNetwork.IsMasterClient)
                 {
                     GetView().SetIsAlive(true);
-                    // StartCoroutine(ChangeTeamsCoroutine());
+                    
+                    // Apply status effect
+                    if (StatusEffectApplyOnSpawn)
+                    {
+                        StatusEffectController.AddStatusEffect(StatusEffectApplyOnSpawn.Id, this);
+                    }
                 }
             }
 

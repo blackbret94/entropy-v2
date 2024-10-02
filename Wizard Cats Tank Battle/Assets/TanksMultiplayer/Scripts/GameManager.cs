@@ -288,7 +288,7 @@ namespace TanksMP
                 break;
 
                 //in CTF, we grant points for both killing and flag capture
-                case GameMode.CTF:
+                case GameMode.CTF: case GameMode.CTFS:
                     switch(scoreType)
                     {
                         case ScoreType.Kill:
@@ -300,6 +300,23 @@ namespace TanksMP
                             break;
                     }
                 break;
+                
+                case GameMode.KOTH:
+                    switch (scoreType)
+                    {
+                        case ScoreType.Kill:
+                            PhotonNetwork.CurrentRoom.AddScore(teamIndex, 1);
+                            break;
+
+                        case ScoreType.Capture:
+                            PhotonNetwork.CurrentRoom.AddScore(teamIndex, 10);
+                            break;
+                        
+                        case ScoreType.HoldPoint:
+                            PhotonNetwork.CurrentRoom.AddScore(teamIndex, 5);
+                            break;
+                    }
+                    break;
             }
         }
 
@@ -528,7 +545,9 @@ namespace TanksMP
     public enum ScoreType
     {
         Kill,
-        Capture
+        Capture,
+        HoldPoint,
+        TargetDestroyed
     }
 
 
@@ -561,6 +580,11 @@ namespace TanksMP
         /// <summary>
         /// Mouse Hunt
         /// </summary>
-        MH
+        MH,
+        
+        /// <summary>
+        /// Capture The Flags
+        /// </summary>
+        CTFS
     }
 }

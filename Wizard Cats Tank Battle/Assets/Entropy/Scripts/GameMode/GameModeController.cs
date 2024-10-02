@@ -1,5 +1,3 @@
-using ExitGames.Client.Photon;
-using Photon.Pun;
 using UnityEngine;
 using Vashta.Entropy.PhotonExtensions;
 
@@ -9,9 +7,10 @@ namespace Vashta.Entropy.GameMode
     {
         public GameObject TdmRoot;
         public GameObject CtfRoot;
+        public GameObject CtfsRoot;
+        public GameObject KothRoot;
 
         private RoomOptionsReader _roomOptionsReader;
-
 
         private void Start()
         {
@@ -31,15 +30,36 @@ namespace Vashta.Entropy.GameMode
                 case TanksMP.GameMode.CTF:
                     SetGameModeCTF();
                     break;
+                
+                case TanksMP.GameMode.CTFS:
+                    SetGameModeCTFS();
+                    break;
+                
+                case TanksMP.GameMode.KOTH:
+                    SetGameModeKOTH();
+                    break;
             }
+        }
+
+        private void DeactivateAll()
+        {
+            if(CtfRoot != null)
+                CtfRoot.SetActive(false);
+
+            if(CtfsRoot != null)
+                CtfsRoot.SetActive(false);
+            
+            if (TdmRoot != null)
+                TdmRoot.SetActive(false);
+            
+            if(KothRoot != null)
+                KothRoot.SetActive(false);
         }
         
         private void SetGameModeTDM()
         {
             // Debug.Log("Setting game mode to TDM");
-
-            if(CtfRoot != null)
-                CtfRoot.SetActive(false);
+            DeactivateAll();
             
             if(TdmRoot != null)
                 TdmRoot.SetActive(true);
@@ -48,12 +68,26 @@ namespace Vashta.Entropy.GameMode
         private void SetGameModeCTF()
         {
             // Debug.LogError("Setting game mode to CTF");
-            
-            if(TdmRoot != null)
-                TdmRoot.SetActive(false);
+            DeactivateAll();
             
             if(CtfRoot != null)
                 CtfRoot.SetActive(true);
+        }
+
+        private void SetGameModeCTFS()
+        {
+            DeactivateAll();
+            
+            if(CtfsRoot != null)
+                CtfsRoot.SetActive(true);
+        }
+
+        private void SetGameModeKOTH()
+        {
+            DeactivateAll();
+            
+            if(KothRoot != null)
+                KothRoot.SetActive(true);
         }
     }
 }

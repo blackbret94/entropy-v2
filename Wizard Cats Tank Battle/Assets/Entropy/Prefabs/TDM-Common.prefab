@@ -1592,6 +1592,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TdmRoot: {fileID: 0}
   CtfRoot: {fileID: 0}
+  CtfsRoot: {fileID: 0}
+  KothRoot: {fileID: 0}
 --- !u!1 &137415512961597740
 GameObject:
   m_ObjectHideFlags: 0
@@ -7145,7 +7147,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: <sprite="Keyboard and Mouse_Grey" name="Q">
+  m_text: <sprite="Keyboard and Mouse_Font" name="Q">
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 18e5ede33e490485d9576cb16d82ad1e, type: 2}
   m_sharedMaterial: {fileID: -4171563015097924827, guid: 18e5ede33e490485d9576cb16d82ad1e,
@@ -7762,7 +7764,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: <sprite="Keyboard and Mouse_Grey" name="E">
+  m_text: <sprite="Keyboard and Mouse_Font" name="E">
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 18e5ede33e490485d9576cb16d82ad1e, type: 2}
   m_sharedMaterial: {fileID: -4171563015097924827, guid: 18e5ede33e490485d9576cb16d82ad1e,
@@ -8903,7 +8905,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: <sprite="Keyboard and Mouse_Grey" name="R">
+  m_text: <sprite="Keyboard and Mouse_Font" name="R">
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 18e5ede33e490485d9576cb16d82ad1e, type: 2}
   m_sharedMaterial: {fileID: -4171563015097924827, guid: 18e5ede33e490485d9576cb16d82ad1e,
@@ -13436,7 +13438,7 @@ PrefabInstance:
     - target: {fileID: 5884154159372867049, guid: 1b5c3342956ea4f2391c4e10ce034478,
         type: 3}
       propertyPath: m_text
-      value: <sprite="Keyboard and Mouse_Grey" name="C">
+      value: <sprite="Keyboard and Mouse_Font" name="C">
       objectReference: {fileID: 0}
     - target: {fileID: 5884154159372867049, guid: 1b5c3342956ea4f2391c4e10ce034478,
         type: 3}
@@ -13857,7 +13859,7 @@ PrefabInstance:
     - target: {fileID: 5884154159372867049, guid: 1b5c3342956ea4f2391c4e10ce034478,
         type: 3}
       propertyPath: m_text
-      value: <sprite="Keyboard and Mouse_Grey" name="ESCAPE">
+      value: <sprite="Keyboard and Mouse_Font" name="ESCAPE">
       objectReference: {fileID: 0}
     - target: {fileID: 5884154159372867049, guid: 1b5c3342956ea4f2391c4e10ce034478,
         type: 3}
@@ -14290,14 +14292,51 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1000013481812936, guid: d0c802f41ec262242925e8e44affa6c7,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8135626346909647254}
   m_SourcePrefab: {fileID: 100100000, guid: d0c802f41ec262242925e8e44affa6c7, type: 3}
+--- !u!114 &35238000799135479 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114000011365822250, guid: d0c802f41ec262242925e8e44affa6c7,
+    type: 3}
+  m_PrefabInstance: {fileID: 137415513384131037}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 138414424929679893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17a55adfe3d000247b07d5f9373dd1eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &136804891913357965 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4000012160439120, guid: d0c802f41ec262242925e8e44affa6c7,
     type: 3}
   m_PrefabInstance: {fileID: 137415513384131037}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &138414424929679893 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1000013481812936, guid: d0c802f41ec262242925e8e44affa6c7,
+    type: 3}
+  m_PrefabInstance: {fileID: 137415513384131037}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8135626346909647254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 138414424929679893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87cd8ea999eb4d03ac10c2991bb4aef8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ControlPoints: []
+  TickTimeS: 1
+  GameManager: {fileID: 35238000799135479}
 --- !u!1001 &629020767658787000
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18100,7 +18139,7 @@ PrefabInstance:
     - target: {fileID: 5884154159372867049, guid: 1b5c3342956ea4f2391c4e10ce034478,
         type: 3}
       propertyPath: m_text
-      value: <sprite="Keyboard and Mouse_Grey" name="F">
+      value: <sprite="Keyboard and Mouse_Font" name="F">
       objectReference: {fileID: 0}
     - target: {fileID: 5884154159372867049, guid: 1b5c3342956ea4f2391c4e10ce034478,
         type: 3}

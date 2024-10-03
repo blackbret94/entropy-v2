@@ -23,6 +23,7 @@ namespace Vashta.Entropy.UI.MapSelection
         [Header("Supported Game Modes")]
         public bool TeamDeathmatch;
         public bool CaptureTheFlag;
+        public bool CaptureTheFlagMulti;
         public bool KingOfTheHill;
         public bool MouseHunt;
 

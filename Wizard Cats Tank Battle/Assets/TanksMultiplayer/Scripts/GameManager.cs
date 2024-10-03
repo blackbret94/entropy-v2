@@ -157,6 +157,16 @@ namespace TanksMP
         {
             return mapDefinition;
         }
+
+        public Team GetTeamByIndex(int index)
+        {
+            if (index < teams.Length)
+            {
+                return teams[index];
+            }
+
+            return teams[0];
+        }
         
         /// <summary>
         /// Returns the next team index a player should be assigned to.

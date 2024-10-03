@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Photon.Pun;
 using TanksMP;
 using UnityEngine;
 
@@ -12,8 +13,12 @@ namespace Vashta.Entropy.GameMode
 
         private float _lastTick;
 
+        // SERVER ONLY
         private void Update()
         {
+            if (!PhotonNetwork.IsMasterClient)
+                return;
+            
             // Only run if game mode is KOTH
             if (GameManager.GetGameModeDefinition().GameMode == TanksMP.GameMode.KOTH)
             {

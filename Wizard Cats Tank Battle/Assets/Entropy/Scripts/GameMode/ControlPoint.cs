@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using Photon.Pun;
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.ScriptableObject;
 
 namespace Vashta.Entropy.GameMode
 {
@@ -11,6 +13,8 @@ namespace Vashta.Entropy.GameMode
 
         // What team is control LEANING TOWARDS (during capture)
         public int CaptureTeamIndex { get; set; } = -1;
+        public ControlPointGraphics ControlPointGraphics;
+        public TeamDefinition TeamDefinitionNeutral;
 
         private int _captureTicks;
         private int _ticksToCapture = 100;
@@ -24,6 +28,7 @@ namespace Vashta.Entropy.GameMode
                 return;
 
             _playersInBounds = new HashSet<Player>();
+            ControlPointGraphics.ChangeTeamColor(TeamDefinitionNeutral);
             
             _hasInit = true;
         }
@@ -31,11 +36,6 @@ namespace Vashta.Entropy.GameMode
         private void Start()
         {
             Init();
-        }
-
-        private void Update()
-        {
-            
         }
 
         public void OneTickCapture()
@@ -81,29 +81,37 @@ namespace Vashta.Entropy.GameMode
             }
             
             // Calculate who is capturing
+            // Check if the state should change back to neutral
             if (_captureTicks == 0)
             {
                 CaptureTeamIndex = teamIndex;
-            }
-            
-            // Calculate who controls the point
-            if (_captureTicks == _ticksToCapture)
-            {
-                // Award the capture
-                if (ControlledByTeamIndex != teamIndex)
-                {
-                    ControlledByTeamIndex = teamIndex;
-                }
+                
+                ControlledByTeamIndex = -1;
+                ControlPointGraphics.ChangeTeamColor(TeamDefinitionNeutral);
             }
             else
             {
-                // No one controls the point
-                ControlledByTeamIndex = -1;
+                // Calculate who controls the point
+                if (_captureTicks == _ticksToCapture)
+                {
+                    // Award the capture
+                    if (ControlledByTeamIndex != teamIndex)
+                    {
+                        ControlledByTeamIndex = teamIndex;
+                        Team team = GameManager.GetInstance().GetTeamByIndex(teamIndex);
+                        ControlPointGraphics.ChangeTeamColor(team.teamDefinition);
+                        // Need to relay changes - RPC?
+                    }
+                }
             }
         }
 
+        // SERVER ONLY
         private void OnTriggerEnter(Collider other)
         {
+            if (!PhotonNetwork.IsMasterClient)
+                return;
+            
             Init();
             
             Player player = other.GetComponent<Player>();
@@ -114,8 +122,12 @@ namespace Vashta.Entropy.GameMode
             _playersInBounds.Add(player);
         }
 
+        // SERVER ONLY
         private void OnTriggerExit(Collider other)
         {
+            if (!PhotonNetwork.IsMasterClient)
+                return;
+            
             Init();
             
             Player player = other.GetComponent<Player>();

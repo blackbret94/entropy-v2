@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using Entropy.Scripts.Player;
 using Photon.Pun;
 using UnityEngine.Serialization;
+using Vashta.Entropy.GameMode;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.Spells;
 using Vashta.Entropy.StatusEffects;
@@ -253,6 +254,11 @@ namespace TanksMP
             // see if we hit a spell field
             SpellField spellField = obj.GetComponent<SpellField>();
             if (spellField)
+                return;
+            
+            // see if we hit a control point
+            ControlPoint controlPoint = obj.GetComponent<ControlPoint>();
+            if (controlPoint)
                 return;
             
             //try to get a player component out of the collided gameobject

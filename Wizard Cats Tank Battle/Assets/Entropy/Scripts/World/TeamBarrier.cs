@@ -21,43 +21,12 @@ namespace Vashta.Entropy.World
             Player player = col.gameObject.GetComponent<Player>();
             if (player != null)
             {
-                SpawnCollisionEffectAlly();
-                
-                // if (player.GetView().GetTeam() == TeamId)
-                // {
-                    // Ally
-                    // SpawnCollisionEffectAlly();
-                // }
-                // else
-                // {
-                    // Enemy
-                    // SpawnCollisionEffectEnemy();
-
-                    // On poor connections, maybe this is missed?
-                    // if (PhotonNetwork.IsMasterClient)
-                    // {
-                        // player.CmdKillPlayer();
-                    // }
-                // }
+                if(CollisionEffectAlly)
+                    PoolManager.Spawn(CollisionEffectAlly, col.transform.position, Quaternion.identity);
+            
+                if(CollisionSfxAlly)
+                    AudioManager.Play3D(CollisionSfxAlly, col.transform.position);
             }
-        }
-
-        private void SpawnCollisionEffectAlly()
-        {
-            if(CollisionEffectAlly)
-                PoolManager.Spawn(CollisionEffectAlly, transform.position, Quaternion.identity);
-            
-            if(CollisionSfxAlly)
-                AudioManager.Play3D(CollisionSfxAlly, transform.position);
-        }
-
-        private void SpawnCollisionEffectEnemy()
-        {
-            if(CollisionEffectEnemy)
-                PoolManager.Spawn(CollisionEffectEnemy, transform.position, Quaternion.identity);
-            
-            if(CollisionSfxEnemy)
-                AudioManager.Play3D(CollisionSfxEnemy, transform.position);
         }
     }
 }

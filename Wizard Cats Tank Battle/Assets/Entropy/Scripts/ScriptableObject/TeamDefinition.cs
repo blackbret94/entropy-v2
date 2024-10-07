@@ -14,6 +14,7 @@ namespace Vashta.Entropy.ScriptableObject
         public Sprite HealthBarSprite;
         public Sprite ShieldBarSprite;
         public Material Material;
+        public Material BarrierMaterial;
         public Material FlagMaterial;
         public Color TeamLightColorPrim;
         public Color TeamLightColorSec;

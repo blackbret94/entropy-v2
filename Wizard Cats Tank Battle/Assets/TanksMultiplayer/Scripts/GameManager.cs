@@ -160,7 +160,7 @@ namespace TanksMP
 
         public Team GetTeamByIndex(int index)
         {
-            if (index < teams.Length)
+            if (index < teams.Length && index >= 0)
             {
                 return teams[index];
             }
@@ -323,7 +323,7 @@ namespace TanksMP
                             break;
                         
                         case ScoreType.HoldPoint:
-                            PhotonNetwork.CurrentRoom.AddScore(teamIndex, 5);
+                            PhotonNetwork.CurrentRoom.AddScore(teamIndex, 1);
                             break;
                     }
                     break;

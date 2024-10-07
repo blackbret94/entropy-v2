@@ -15,7 +15,7 @@ namespace Vashta.Entropy.GameMode
                 // Change material on flag
                 if (OrbMesh)
                 {
-                    OrbMesh.material = teamDefinition.Material;
+                    OrbMesh.material = teamDefinition.BarrierMaterial;
                 }
 
                 // Change color on light

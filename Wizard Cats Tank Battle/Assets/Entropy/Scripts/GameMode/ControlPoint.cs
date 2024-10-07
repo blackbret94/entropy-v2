@@ -16,8 +16,8 @@ namespace Vashta.Entropy.GameMode
         public ControlPointGraphics ControlPointGraphics;
         public TeamDefinition TeamDefinitionNeutral;
 
-        private int _captureTicks;
-        private int _ticksToCapture = 100;
+        private int _captureTicks = 0;
+        private int _ticksToCapture = 5;
         private HashSet<Player> _playersInBounds;
 
         private bool _hasInit;
@@ -28,7 +28,7 @@ namespace Vashta.Entropy.GameMode
                 return;
 
             _playersInBounds = new HashSet<Player>();
-            ControlPointGraphics.ChangeTeamColor(TeamDefinitionNeutral);
+            ControlPointGraphics.ChangeTeamColorControl(TeamDefinitionNeutral);
             
             _hasInit = true;
         }
@@ -71,14 +71,16 @@ namespace Vashta.Entropy.GameMode
                 // Continue capturing
                 if (teamIndex == CaptureTeamIndex)
                 {
-                    _ticksToCapture = Mathf.Min(_captureTicks + 1, _ticksToCapture);
+                    _captureTicks = Mathf.Min(_captureTicks + 1, _ticksToCapture);
                 }
                 // Uncapture towards 0
                 else
                 {
-                    _ticksToCapture = Mathf.Max(_captureTicks - 1, 0);
+                    _captureTicks = Mathf.Max(_captureTicks - 1, 0);
                 }
             }
+            
+            ControlPointGraphics.SetFlagPosition((float)_captureTicks/_ticksToCapture);
             
             // Calculate who is capturing
             // Check if the state should change back to neutral
@@ -87,7 +89,7 @@ namespace Vashta.Entropy.GameMode
                 CaptureTeamIndex = teamIndex;
                 
                 ControlledByTeamIndex = -1;
-                ControlPointGraphics.ChangeTeamColor(TeamDefinitionNeutral);
+                ControlPointGraphics.ChangeTeamColorControl(TeamDefinitionNeutral);
             }
             else
             {
@@ -99,9 +101,15 @@ namespace Vashta.Entropy.GameMode
                     {
                         ControlledByTeamIndex = teamIndex;
                         Team team = GameManager.GetInstance().GetTeamByIndex(teamIndex);
-                        ControlPointGraphics.ChangeTeamColor(team.teamDefinition);
+                        ControlPointGraphics.ChangeTeamColorControl(team.teamDefinition);
+                        ControlPointGraphics.SetFlagPosition(1);
                         // Need to relay changes - RPC?
                     }
+                }
+                else
+                {
+                    Team team = GameManager.GetInstance().GetTeamByIndex(teamIndex);
+                    ControlPointGraphics.ChangeTeamColorCapturing(team.teamDefinition);
                 }
             }
         }

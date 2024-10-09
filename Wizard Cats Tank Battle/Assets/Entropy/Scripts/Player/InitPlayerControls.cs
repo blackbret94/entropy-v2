@@ -12,10 +12,10 @@ namespace Entropy.Scripts.Player
         
         private void Awake()
         {
-            DontDestroyOnLoad(gameObject);
-            
             if (PlayerInputActions == null)
             {
+                DontDestroyOnLoad(gameObject);
+                
                 PlayerInputActions = new PlayerInputActionsWCTB();
 
                 if (InputIconsManagerSO.Instance.loadAndSaveInputBindingOverrides)

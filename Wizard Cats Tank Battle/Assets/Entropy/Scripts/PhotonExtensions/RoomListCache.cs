@@ -29,13 +29,24 @@ namespace Vashta.Entropy.PhotonExtensions
         {
             PhotonNetwork.ConnectUsingSettings();
             bool joinedLobby = PhotonNetwork.JoinLobby();
-            
-            Debug.Log("Attempted to join lobby: " + joinedLobby);
+            //
+            // Debug.Log("Attempted to join lobby: " + joinedLobby);
 
             if (!joinedLobby)
             {
                 StartCoroutine(RetryConnection());
             }
+        }
+
+        public void RefreshLobbies()
+        {
+            // Clear text
+            cachedRoomList.Clear();
+            
+            if (onUpdatedCache != null) onUpdatedCache();
+            
+            // Refresh
+            JoinLobby();
         }
 
         private IEnumerator RetryConnection()

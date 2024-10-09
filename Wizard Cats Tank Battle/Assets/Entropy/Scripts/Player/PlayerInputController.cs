@@ -25,20 +25,20 @@ namespace Entropy.Scripts.Player
         private void OnEnable()
         {
             // Controls
-            // PlayerInputActions.Player.Move.Enable();
-            // PlayerInputActions.Player.Aim.Enable();
+            PlayerInputActions.Player.Move.Enable();
+            PlayerInputActions.Player.Aim.Enable();
 
             InputAction iaFire = PlayerInputActions.Player.Fire;
-            // iaFire.Enable();
+            iaFire.Enable();
             iaFire.performed += Fire;
             iaFire.canceled += ReleaseFire;
 
             InputAction iaCastPowerup = PlayerInputActions.Player.CastPowerup;
-            // iaCastPowerup.Enable();
+            iaCastPowerup.Enable();
             iaCastPowerup.performed += CastPowerup;
 
             InputAction iaCastUltimate = PlayerInputActions.Player.CastUltimate;
-            // iaCastUltimate.Enable();
+            iaCastUltimate.Enable();
             iaCastUltimate.performed += CastUltimate;
 
             InputAction iaDropSpoon = PlayerInputActions.Player.DropSpoon;
@@ -47,30 +47,30 @@ namespace Entropy.Scripts.Player
 
             // UI
             InputAction iaClosePanel = PlayerInputActions.UI.Cancel;
-            // iaClosePanel.Enable();
+            iaClosePanel.Enable();
             iaClosePanel.performed += CancelMenu;
 
             InputAction iaToggleSettings = PlayerInputActions.UI.ToggleSettings;
-            // iaToggleSettings.Enable();
+            iaToggleSettings.Enable();
             iaToggleSettings.performed += ToggleSettings;
 
             InputAction iaToggleClassSelection = PlayerInputActions.UI.ToggleChangeClass;
-            // iaToggleClassSelection.Enable();
+            iaToggleClassSelection.Enable();
             iaToggleClassSelection.performed += ToggleClassSelectionPanel;
 
             InputAction iaToggleScoreboard = PlayerInputActions.UI.ToggleScoreboard;
-            // iaToggleScoreboard.Enable();
+            iaToggleScoreboard.Enable();
             iaToggleScoreboard.performed += ToggleScoreboard;
 
             InputAction navigateMenu = PlayerInputActions.UI.Navigate;
-            // navigateMenu.Enable();
+            navigateMenu.Enable();
 
             InputAction submit = PlayerInputActions.UI.Submit;
-            // submit.Enable();
+            submit.Enable();
             submit.performed += SubmitMenu;
 
             InputAction secondaryMenu = PlayerInputActions.UI.MenuSecondaryAction;
-            // secondaryMenu.Enable();
+            secondaryMenu.Enable();
             secondaryMenu.performed += MenuSecondary;
         }
 
@@ -78,21 +78,42 @@ namespace Entropy.Scripts.Player
         {
             // Controls
             PlayerInputActions.Player.Move.Disable();
+            
             PlayerInputActions.Player.Fire.Disable();
+            PlayerInputActions.Player.Fire.performed -= Fire;
+            PlayerInputActions.Player.Fire.canceled -= ReleaseFire;
+            
             PlayerInputActions.Player.Aim.Disable();
+            
             PlayerInputActions.Player.CastPowerup.Disable();
+            PlayerInputActions.Player.CastPowerup.performed -= CastPowerup;
+            
             PlayerInputActions.Player.CastUltimate.Disable();
+            PlayerInputActions.Player.CastUltimate.performed -= CastUltimate;
+            
             PlayerInputActions.Player.DropSpoon.Disable();
+            PlayerInputActions.Player.DropSpoon.performed -= DropSpoon;
             
             // UI
             PlayerInputActions.UI.Cancel.Disable();
+            PlayerInputActions.UI.Cancel.performed -= CancelMenu;
+            
             PlayerInputActions.UI.ToggleSettings.Disable();
+            PlayerInputActions.UI.ToggleSettings.performed -= ToggleSettings;
+            
             PlayerInputActions.UI.ToggleChangeClass.Disable();
+            PlayerInputActions.UI.ToggleChangeClass.performed -= ToggleClassSelectionPanel;
+            
             PlayerInputActions.UI.ToggleScoreboard.Disable();
+            PlayerInputActions.UI.ToggleScoreboard.performed -= ToggleScoreboard;
             
             PlayerInputActions.UI.Navigate.Disable();
+            
             PlayerInputActions.UI.Submit.Disable();
+            PlayerInputActions.UI.Submit.performed -= SubmitMenu;
+            
             PlayerInputActions.UI.MenuSecondaryAction.Disable();
+            PlayerInputActions.UI.MenuSecondaryAction.performed -= MenuSecondary;
         }
 
         private void Start()

@@ -108,8 +108,9 @@ namespace Vashta.Entropy.GameMode
                     }
                 }
             }
-            
-            ControlPointGraphics.SetFlagPosition((float)_captureTicks/_ticksToCapture);
+
+            float flagPosition = Mathf.Abs(_captureTicks) / (float)_ticksToCapture;
+            ControlPointGraphics.SetFlagPosition(flagPosition);
             
             // Calculate who is capturing
             // Check if the state should change back to neutral
@@ -124,7 +125,7 @@ namespace Vashta.Entropy.GameMode
                 if (_captureTicks == _ticksToCapture)
                 {
                     // Award the capture
-                    if (ControlledByTeamIndex != teamIndex)
+                    if (teamIndex != -1 && ControlledByTeamIndex != teamIndex)
                     {
                         CmdSetControlledByTeamIndex((short)teamIndex);
                     }

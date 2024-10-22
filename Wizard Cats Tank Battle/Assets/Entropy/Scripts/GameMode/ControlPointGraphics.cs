@@ -6,7 +6,7 @@ namespace Vashta.Entropy.GameMode
 {
     public class ControlPointGraphics : MonoBehaviour
     {
-        public MeshRenderer GroundMesh;
+        public List<MeshRenderer> MeshesForControl;
         public List<TeamColorChangingProp> PropsForControl; // These show who CONTROLS the point
         public List<TeamColorChangingProp> PropsForCapturing; // These show the CAPTURE STATUS of the point
         public ElevationChangingProp FlagRoot;
@@ -23,8 +23,12 @@ namespace Vashta.Entropy.GameMode
             {
                 Debug.LogError("Attempted to change a control point colors to a null team!");
             }
+
+            foreach (MeshRenderer mesh in MeshesForControl)
+            {
+                mesh.material = team.AnimatedBarrierMaterial;
+            }
             
-            GroundMesh.material = team.BarrierMaterial;
             foreach (TeamColorChangingProp prop in PropsForControl)
             {
                 prop.SetTeamColors(team);

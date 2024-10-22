@@ -180,7 +180,7 @@ namespace TanksMP
         [HideInInspector]
         public float lastDeathTime = 0f;
 
-        public bool IsAlive => gameObject ? gameObject : gameObject.activeInHierarchy;
+        public bool IsAlive = true;
         public bool IsDead => !IsAlive;
         private bool _hasLateInited = false;
         
@@ -1224,6 +1224,8 @@ namespace TanksMP
             //the player has been killed
             if (!isActive)
             {
+                IsAlive = false;
+                
                 if (IsLocal)
                 {
                     // Hide "Drop Flag" button if local player
@@ -1276,6 +1278,8 @@ namespace TanksMP
             // Player is alive
             if (isActive)
             {
+                IsAlive = true;
+                
                 MovePlayerToSpawn();
 
                 // apply class

@@ -66,9 +66,6 @@ namespace TanksMP
         //timestamp when next shot should happen
         private float nextShot;
 
-        //toggle for update logic
-        private bool isDead = false;
-
         private float _slowUpdateRate = .5f;
         private float _lastUpdateTime;
 
@@ -262,7 +259,7 @@ namespace TanksMP
             }
             
             //don't continue if this bot is marked as dead
-            if(isDead) return;
+            if(!IsAlive) return;
 
             //stat visualization does not update automatically
             OnHealthChange(health);
@@ -366,7 +363,7 @@ namespace TanksMP
         {   
             
             //stop AI updates
-            isDead = true;
+            IsAlive = false;
             _enemiesInRange.Clear();
             agent.isStopped = true;
             killedBy = null;
@@ -416,7 +413,7 @@ namespace TanksMP
             transform.position = targetPoint;
             agent.Warp(targetPoint);
             agent.isStopped = false;
-            isDead = false;
+            IsAlive = true;
 
             if (PhotonNetwork.IsMasterClient)
             {

@@ -22,7 +22,7 @@ namespace Vashta.Entropy.GameMode
         // How many ticks the point currently has towards capture
         private int _captureTicks = 0; // SYNCED
         private int _ticksToCapture = 5;
-        private HashSet<Player> _playersInBounds;
+        private List<Player> _playersInBounds;
 
         private bool _hasInit;
         
@@ -31,7 +31,7 @@ namespace Vashta.Entropy.GameMode
             if (_hasInit)
                 return;
 
-            _playersInBounds = new HashSet<Player>();
+            _playersInBounds = new List<Player>();
             ControlPointGraphics.ChangeTeamColorControl(TeamDefinitionNeutral);
             
             _hasInit = true;
@@ -254,16 +254,16 @@ namespace Vashta.Entropy.GameMode
 
         private void CleanList()
         {
-            HashSet<Player> playersInBoundsCopy = new HashSet<Player>(_playersInBounds);
+            List<Player> playersInBoundsCopy = new List<Player>(_playersInBounds);
             
             foreach (Player player in playersInBoundsCopy)
             {
                 if (player == null)
                 {
-                } else if (!player.gameObject.activeInHierarchy)
+                } else if (!player.IsAlive)
                 {
-                    // Simulate OnTriggerExit
-                    OnTriggerExit(player.GetComponent<Collider>());
+                    // Remove player
+                    _playersInBounds.Remove(player);
                 }
             }
         }

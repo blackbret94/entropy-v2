@@ -236,10 +236,9 @@ namespace Vashta.Entropy.Spells
             {
                 if (player == null)
                 {
-                } else if (!player.gameObject.activeInHierarchy)
+                } else if (!player.IsAlive)
                 {
-                    // Simulate OnTriggerExit
-                    OnTriggerExit(player.GetComponent<Collider>());
+                    _playersInZone.Remove(player);
                 }
             }
         }

@@ -56,6 +56,8 @@ namespace Vashta.Entropy.GameMode
         public void SetElevation(float percentage)
         {
             Init();
+
+            percentage = Mathf.Abs(percentage);
             
             _targetY = Mathf.Lerp(_bottomY, _topY, percentage);
             // Vector3 flagPos = transform.position;

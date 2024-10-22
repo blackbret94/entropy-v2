@@ -105,6 +105,8 @@ namespace Vashta.Entropy.Spells
 
         private void Tick()
         {
+            CleanList();
+            
             // iterate over players
             foreach (Player player in _playersInZone)
             {
@@ -223,6 +225,22 @@ namespace Vashta.Entropy.Spells
             if ((player = other.gameObject.GetComponent<Player>()) != null)
             {
                 _playersInZone.Remove(player);
+            }
+        }
+        
+        private void CleanList()
+        {
+            HashSet<Player> playersInBoundsCopy = new HashSet<Player>(_playersInZone);
+            
+            foreach (Player player in playersInBoundsCopy)
+            {
+                if (player == null)
+                {
+                } else if (!player.gameObject.activeInHierarchy)
+                {
+                    // Simulate OnTriggerExit
+                    OnTriggerExit(player.GetComponent<Collider>());
+                }
             }
         }
     }

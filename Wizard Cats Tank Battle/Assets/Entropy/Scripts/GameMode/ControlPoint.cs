@@ -16,6 +16,9 @@ namespace Vashta.Entropy.GameMode
         public ControlPointGraphics ControlPointGraphics;
         public TeamDefinition TeamDefinitionNeutral;
 
+        public AudioClip CaptureUpAudioClip;
+        public AudioClip CaptureDownAudioClip;
+
         // How many ticks the point currently has towards capture
         private int _captureTicks = 0; // SYNCED
         private int _ticksToCapture = 5;
@@ -48,6 +51,8 @@ namespace Vashta.Entropy.GameMode
         {
             Init();
             
+            CleanList();
+            
             // ignore recalculation if no players are in bounds
             if (_playersInBounds.Count == 0)
             {
@@ -78,17 +83,29 @@ namespace Vashta.Entropy.GameMode
             // Alter the state of capture ticks
             if (teamIndex != -1)
             {
+                int lastCaptureTicks = _captureTicks;
+                
                 // Continue capturing
                 if (teamIndex == CaptureTeamIndex)
                 {
                     short numberOfTicks = (short)Mathf.Min(_captureTicks + 1, _ticksToCapture);
                     CmdSetCaptureTicks(numberOfTicks);
+
+                    if (numberOfTicks != lastCaptureTicks)
+                    {
+                        AudioManager.Play3D(CaptureUpAudioClip, transform.position);
+                    }
                 }
                 // Uncapture towards 0
                 else
                 {
                     short numberOfTicks = (short)Mathf.Max(_captureTicks - 1, 0);
                     CmdSetCaptureTicks(numberOfTicks);
+
+                    if (numberOfTicks != lastCaptureTicks)
+                    {
+                        AudioManager.Play3D(CaptureDownAudioClip, transform.position);
+                    }
                 }
             }
             
@@ -113,11 +130,6 @@ namespace Vashta.Entropy.GameMode
                     }
                 }
             }
-        }
-
-        protected void RewardPointForHolding()
-        {
-            
         }
         
         // RPC
@@ -147,7 +159,7 @@ namespace Vashta.Entropy.GameMode
             if (team != null)
             {
                 ControlPointGraphics.ChangeTeamColorControl(team.teamDefinition);
-                ControlPointGraphics.SetFlagPosition(1);
+                // ControlPointGraphics.SetFlagPosition(1);
             }
             else
             {
@@ -216,12 +228,8 @@ namespace Vashta.Entropy.GameMode
             }
         }
 
-        // SERVER ONLY
         private void OnTriggerEnter(Collider other)
         {
-            if (!PhotonNetwork.IsMasterClient)
-                return;
-            
             Init();
             
             Player player = other.GetComponent<Player>();
@@ -232,12 +240,8 @@ namespace Vashta.Entropy.GameMode
             _playersInBounds.Add(player);
         }
 
-        // SERVER ONLY
         private void OnTriggerExit(Collider other)
         {
-            if (!PhotonNetwork.IsMasterClient)
-                return;
-            
             Init();
             
             Player player = other.GetComponent<Player>();
@@ -246,6 +250,22 @@ namespace Vashta.Entropy.GameMode
                 return;
 
             _playersInBounds.Remove(player);
+        }
+
+        private void CleanList()
+        {
+            HashSet<Player> playersInBoundsCopy = new HashSet<Player>(_playersInBounds);
+            
+            foreach (Player player in playersInBoundsCopy)
+            {
+                if (player == null)
+                {
+                } else if (!player.gameObject.activeInHierarchy)
+                {
+                    // Simulate OnTriggerExit
+                    OnTriggerExit(player.GetComponent<Collider>());
+                }
+            }
         }
     }
 }

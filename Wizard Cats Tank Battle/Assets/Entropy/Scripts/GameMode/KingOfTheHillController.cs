@@ -12,13 +12,9 @@ namespace Vashta.Entropy.GameMode
         public GameManager GameManager;
 
         private float _lastTick;
-
-        // SERVER ONLY
+        
         private void Update()
         {
-            if (!PhotonNetwork.IsMasterClient)
-                return;
-            
             // Only run if game mode is KOTH
             if (GameManager.GetGameModeDefinition().GameMode == TanksMP.GameMode.KOTH)
             {
@@ -38,10 +34,14 @@ namespace Vashta.Entropy.GameMode
                     // Refresh state
                     controlPoint.OneTickCapture();
                     int teamControllingPoint = controlPoint.ControlledByTeamIndex;
-                    
-                    // Award points to teamControllingPoint
-                    if(teamControllingPoint != -1)
-                        GameManager.AddScore(ScoreType.HoldPoint, teamControllingPoint);
+
+                    // Server only
+                    if (PhotonNetwork.IsMasterClient)
+                    {
+                        // Award points to teamControllingPoint
+                        if (teamControllingPoint != -1)
+                            GameManager.AddScore(ScoreType.HoldPoint, teamControllingPoint);
+                    }
                 }
             }
 

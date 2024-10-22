@@ -13,6 +13,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Vashta.Entropy.Character;
 using EckTechGames.FloatingCombatText;
+using Entropy.Scripts.Audio;
 using TMPro;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.Spells;
@@ -184,8 +185,7 @@ namespace TanksMP
         private bool _hasLateInited = false;
         
         public bool IsVisible => Renderer.isVisible;
-
-        public AudioClip CantShootSound;
+        
         public StatusEffectDirectory StatusEffectDirectory;
         public PlayerAimGraphic PlayerAimGraphic;
         public StatusEffectData StatusEffectApplyOnSpawn;
@@ -733,11 +733,8 @@ namespace TanksMP
 
             if (StatusEffectController.DisableFiring)
             {
-                // Play sound if shooting is disabled
-                if (CantShootSound)
-                {
-                    AudioManager.Play2D(CantShootSound);
-                }
+                if(IsLocal)
+                    GameManager.GetInstance().SfxController.PlayCantShoot(1f);
             }
             else
             {

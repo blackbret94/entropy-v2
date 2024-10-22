@@ -77,6 +77,7 @@ namespace TanksMP
         public MusicController MusicController;
         public PlayerInputController PlayerInputController;
         public MatchTimer MatchTimer;
+        public SfxController SfxController;
         
         [FormerlySerializedAs("_mapDefinition")] [SerializeField]
         private MapDefinition mapDefinition;

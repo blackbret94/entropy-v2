@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Entropy.Scripts.Audio
@@ -13,9 +14,28 @@ namespace Entropy.Scripts.Audio
             NoCoins,
             TeammateKilled,
             UltimateReady,
-            UltimateNotReady;
+            UltimateNotReady,
+            CantShoot;
+
+        private Dictionary<AudioClip, float> _clipLastPlayedDict;
+        private bool _hasInit;
         
         public AudioSource Source;
+
+        private void Start()
+        {
+            Init();
+        }
+
+        private void Init()
+        {
+            if (_hasInit)
+                return;
+
+            _clipLastPlayedDict = new Dictionary<AudioClip, float>();
+
+            _hasInit = true;
+        }
 
         public void PlaySound(AudioClip clip)
         {
@@ -65,6 +85,38 @@ namespace Entropy.Scripts.Audio
         public void PlayUltimateNotReady()
         {
             PlaySound(UltimateNotReady);
+        }
+
+        public void PlayCantShoot(float minTimeSinceLastPlayed = 0f)
+        {
+            if (ShouldPlay(CantShoot, minTimeSinceLastPlayed))
+            {
+                PlaySound(CantShoot);
+                
+                SetLastPlayed(CantShoot);
+            }
+        }
+
+        private void SetLastPlayed(AudioClip audioClip)
+        {
+            Init();
+
+            _clipLastPlayedDict[audioClip] = Time.time;
+        }
+
+        private bool ShouldPlay(AudioClip audioClip, float minTimeSinceLastPlayed)
+        {
+            Init();
+            
+            if (minTimeSinceLastPlayed < .01)
+                return true;
+
+            if (!_clipLastPlayedDict.ContainsKey(audioClip))
+                return false;
+
+            float lastPlayedTime = _clipLastPlayedDict[audioClip];
+
+            return (Time.time - lastPlayedTime) > minTimeSinceLastPlayed;
         }
     }
 }

@@ -12,13 +12,14 @@ namespace Vashta.Entropy.GameMode
         public GameManager GameManager;
 
         private float _lastTick;
+        private bool _timerIsRunning = true;
         
         private void Update()
         {
             // Only run if game mode is KOTH
             if (GameManager.GetGameModeDefinition().GameMode == TanksMP.GameMode.KOTH)
             {
-                if (_lastTick + TickTimeS < Time.time)
+                if (_timerIsRunning && _lastTick + TickTimeS < Time.time)
                 {
                     OneTick();
                 }
@@ -44,8 +45,23 @@ namespace Vashta.Entropy.GameMode
                     }
                 }
             }
-
+            
             _lastTick = Time.time;
+            
+            // SERVER ONLY check for game over
+            if (PhotonNetwork.IsMasterClient)
+            {
+                if (GameManager.GetInstance().IsGameOver())
+                {
+                    PhotonNetwork.CurrentRoom.IsOpen = false;
+
+                    int teamWithHighestScore = GameManager.GetTeamWithHighestScore();
+                    
+                    Player.GetLocalPlayer().photonView.RPC("RpcGameOver", RpcTarget.All, (byte)teamWithHighestScore);
+        
+                    _timerIsRunning = false;
+                }
+            }
         }
     }
 }

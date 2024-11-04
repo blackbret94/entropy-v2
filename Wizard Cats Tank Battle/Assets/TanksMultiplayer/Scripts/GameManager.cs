@@ -452,7 +452,6 @@ namespace TanksMP
             localPlayer.CmdRespawn();
         }
         
-        
         /// <summary>
         /// Only for this player: sets game over text stating the winning team.
         /// Disables player movement so no updates are sent through the network.

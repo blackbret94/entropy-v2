@@ -18,6 +18,8 @@ namespace Vashta.Entropy.GameMode
 
         public AudioClip CaptureUpAudioClip;
         public AudioClip CaptureDownAudioClip;
+        public AudioClip PointCaptured;
+        public AudioClip PointLost;
 
         // How many ticks the point currently has towards capture
         private int _captureTicks = 0; // SYNCED
@@ -25,6 +27,7 @@ namespace Vashta.Entropy.GameMode
         private List<Player> _playersInBounds;
 
         private bool _hasInit;
+        private bool _wasRecentlyCaptured; // Use to determine if Lost sfx should be played
         
         private void Init()
         {
@@ -116,8 +119,15 @@ namespace Vashta.Entropy.GameMode
             // Check if the state should change back to neutral
             if (_captureTicks == 0)
             {
+                // Set to neutral
                 CmdSetCaptureTeamIndex((short)teamIndex);
                 CmdSetControlledByTeamIndex(-1);
+
+                if (_wasRecentlyCaptured)
+                {
+                    AudioManager.Play3D(PointLost, transform.position);
+                    _wasRecentlyCaptured = false;
+                }
             }
             else
             {
@@ -128,6 +138,8 @@ namespace Vashta.Entropy.GameMode
                     if (teamIndex != -1 && ControlledByTeamIndex != teamIndex)
                     {
                         CmdSetControlledByTeamIndex((short)teamIndex);
+                        AudioManager.Play3D(PointCaptured, transform.position);
+                        _wasRecentlyCaptured = true;
                     }
                 }
             }
@@ -160,7 +172,6 @@ namespace Vashta.Entropy.GameMode
             if (team != null)
             {
                 ControlPointGraphics.ChangeTeamColorControl(team.teamDefinition);
-                // ControlPointGraphics.SetFlagPosition(1);
             }
             else
             {

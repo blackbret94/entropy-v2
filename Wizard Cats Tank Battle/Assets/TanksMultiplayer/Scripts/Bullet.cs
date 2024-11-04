@@ -353,7 +353,7 @@ namespace TanksMP
             //in case this bullet can hit more than 1 target, perform the additional physics area check
             if (_modifiedMaxTargets > 1)
             {
-                Debug.Log("Checking for targets: " + _modifiedMaxTargets + " with range " + _modifiedExplosionRange);
+                // Debug.Log("Checking for targets: " + _modifiedMaxTargets + " with range " + _modifiedExplosionRange);
                 //find all colliders in the specified range around this bullet, on the Player layer
                 Collider[] others = Physics.OverlapSphere(transform.position, _modifiedExplosionRange, 1 << 8);
 

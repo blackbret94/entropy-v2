@@ -1115,22 +1115,14 @@ namespace TanksMP
                     GameManager.GetInstance().AddScore(ScoreType.Kill, otherTeam);
                     other.GetView().IncrementKills();
                 }
-                // else
-                // killer is self (respawn)
-                // {
-                    // if (!canRespawnFreely)
-                    // {
-                    //     GameManager.GetInstance().RemoveScore(ScoreType.Kill, otherTeam);
-                    // }
-                // }
-
+                
                 //the maximum score has been reached now
                 if (GameManager.GetInstance().IsGameOver())
                 {
                     //close room for joining players
                     PhotonNetwork.CurrentRoom.IsOpen = false;
                     //tell all clients the winning team
-                    this.photonView.RPC("RpcGameOver", RpcTarget.All, (byte)otherTeam);
+                    GameManager.GetInstance().photonView.RPC("RpcGameOver", RpcTarget.All, (byte)otherTeam);
                     return;
                 }
             }

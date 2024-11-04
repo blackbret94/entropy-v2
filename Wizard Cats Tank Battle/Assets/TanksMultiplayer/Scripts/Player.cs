@@ -1352,14 +1352,14 @@ namespace TanksMP
             GameManager.GetInstance().ui.SfxController.PlayCoinEarnedSound();
         }
 
-        public void CmdRewardForCapture()
+        public void CmdRewardForFlagCapture()
         {
             GetView().IncrementKills(10);
-            photonView.RPC("RpcRewardForCapture", RpcTarget.All);
+            photonView.RPC("RpcRewardForFlagCapture", RpcTarget.All);
         }
         
         [PunRPC]
-        protected virtual void RpcRewardForCapture()
+        protected virtual void RpcRewardForFlagCapture()
         {
             if (!IsLocal)
                 return;
@@ -1367,6 +1367,21 @@ namespace TanksMP
             GameManager.GetInstance().ui.DropCollectiblesButton.gameObject.SetActive(false);
 
             RewardCoins(_playerCurrencyRewarder.RewardForFlagCapture());
+        }
+
+        public void CmdRewardForControlPointCapture()
+        {
+            GetView().IncrementKills(10);
+            photonView.RPC("RpcRewardForControlPointCapture", RpcTarget.All);
+        }
+
+        [PunRPC]
+        protected virtual void RpcRewardForControlPointCapture()
+        {
+            if (!IsLocal)
+                return;
+
+            RewardCoins(_playerCurrencyRewarder.RewardForPointCapture());
         }
 
         /// <summary>

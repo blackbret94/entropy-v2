@@ -10,6 +10,7 @@ namespace Entropy.Scripts.Player
         private const int SECOND_PLACE_BONUS = 50;
         private const int THIRD_PLACE_BONUS = 25;
         private const int FLAG_CAPTURE_REWARD = 50;
+        private const int CONTROL_POINT_CAPTURE_REWARD = 50;
 
         public int RewardForKill()
         {
@@ -45,6 +46,12 @@ namespace Entropy.Scripts.Player
         {
             Reward(FLAG_CAPTURE_REWARD);
             return FLAG_CAPTURE_REWARD;
+        }
+
+        public int RewardForPointCapture()
+        {
+            Reward(CONTROL_POINT_CAPTURE_REWARD);
+            return CONTROL_POINT_CAPTURE_REWARD;
         }
         
         private void Reward(int value)

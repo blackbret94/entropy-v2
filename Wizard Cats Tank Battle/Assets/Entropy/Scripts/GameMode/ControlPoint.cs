@@ -140,8 +140,22 @@ namespace Vashta.Entropy.GameMode
                         CmdSetControlledByTeamIndex((short)teamIndex);
                         AudioManager.Play3D(PointCaptured, transform.position);
                         _wasRecentlyCaptured = true;
+                        
+                        // award points
+                        AwardPointsToPlayersOnCapture();
                     }
                 }
+            }
+        }
+        
+        protected void AwardPointsToPlayersOnCapture()
+        {
+            foreach (Player player in _playersInBounds)
+            {
+                if (player == null)
+                    continue;
+                
+                player.CmdRewardForControlPointCapture();
             }
         }
         

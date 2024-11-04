@@ -73,7 +73,7 @@ namespace TanksMP
                 // reward player for capture
                 if (colReq != null && colReq.CarriedBy != null)
                 {
-                    colReq.CarriedBy.CmdRewardForCapture();
+                    colReq.CarriedBy.CmdRewardForFlagCapture();
                 }
 
                 //add points for this score type to the correct team

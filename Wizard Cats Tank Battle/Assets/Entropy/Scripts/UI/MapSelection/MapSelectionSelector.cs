@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.UI.MatchCreation;
 
 namespace Vashta.Entropy.UI.MapSelection
 {
@@ -8,6 +9,7 @@ namespace Vashta.Entropy.UI.MapSelection
     {
         public MapDefinitionDictionary MapDefinitionDictionary;
         public List<MapSelectionCheckbox> MapSelectionCheckboxes;
+        public GameModeSelector GameModeSelector;
 
         private MapSelectionCheckbox _activeSelection;
 
@@ -25,6 +27,8 @@ namespace Vashta.Entropy.UI.MapSelection
 
             string mapIdToSave = checkbox.mapDefinition ? checkbox.mapDefinition.Id : "-1";
             PlayerPrefs.SetString(PrefsKeys.selectedMap, mapIdToSave);
+            
+            GameModeSelector.SetCheckboxesToMap(checkbox.mapDefinition);
         }
         
         private void ResetCheckboxes()

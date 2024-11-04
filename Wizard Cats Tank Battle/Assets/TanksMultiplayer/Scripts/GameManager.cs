@@ -595,6 +595,11 @@ namespace TanksMP
         /// <summary>
         /// Capture The Flags
         /// </summary>
-        CTFS
+        CTFS,
+        
+        /// <summary>
+        /// King of the Hills
+        /// </summary>
+        KOTHS
     }
 }

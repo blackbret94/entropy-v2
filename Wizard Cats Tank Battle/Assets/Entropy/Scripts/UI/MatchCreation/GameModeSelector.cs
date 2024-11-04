@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TanksMP;
 using UnityEngine;
 using Vashta.Entropy.ScriptableObject;
+using Vashta.Entropy.UI.MapSelection;
 
 namespace Vashta.Entropy.UI.MatchCreation
 {
@@ -25,6 +26,15 @@ namespace Vashta.Entropy.UI.MatchCreation
 
             int idToSave = checkbox.GameModeDefinition ? (int)checkbox.GameModeDefinition.GameMode : (int)TanksMP.GameMode.TDM;
             PlayerPrefs.SetInt(PrefsKeys.gameMode, idToSave);
+        }
+
+        // Null implies random
+        public void SetCheckboxesToMap(MapDefinition mapDefinition)
+        {
+            foreach (GameModeCheckbox checkbox in GameModeCheckboxes)
+            {
+                checkbox.SetToMap(mapDefinition);
+            }
         }
         
         private void ResetCheckboxes()

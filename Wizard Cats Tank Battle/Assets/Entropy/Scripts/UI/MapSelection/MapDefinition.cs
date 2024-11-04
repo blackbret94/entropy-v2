@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Vashta.Entropy.ScriptableObject;
@@ -21,11 +22,7 @@ namespace Vashta.Entropy.UI.MapSelection
         public AudioClip DefeatMusic;
 
         [Header("Supported Game Modes")]
-        public bool TeamDeathmatch;
-        public bool CaptureTheFlag;
-        public bool CaptureTheFlagMulti;
-        public bool KingOfTheHill;
-        public bool MouseHunt;
+        public List<TanksMP.GameMode> SupportedGameModes;
 
         public int SceneIndex()
         {

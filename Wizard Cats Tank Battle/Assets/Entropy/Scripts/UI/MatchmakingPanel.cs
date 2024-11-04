@@ -1,8 +1,5 @@
-using TanksMP;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using Vashta.Entropy.UI.MapSelection;
 using Vashta.Entropy.UI.MatchBrowser;
 using Vashta.Entropy.UI.MatchCreation;
 
@@ -10,12 +7,10 @@ namespace Vashta.Entropy.UI
 {
     public class MatchmakingPanel : GamePanel
     {
-        public QuickplayPanel QuickplayPanel;
         public MatchBrowserPanel BrowsePanel;
         public MatchCreationPanel CreatePanel;
         public PracticePanel PracticePanel;
-
-        public TextMeshProUGUI QuickplayButtonText;
+        
         public TextMeshProUGUI BrowseButtonText;
         public TextMeshProUGUI CreateButtonText;
         public TextMeshProUGUI PracticeButtonText;
@@ -25,12 +20,10 @@ namespace Vashta.Entropy.UI
         
         private void HideAll()
         {
-            QuickplayPanel.ClosePanel();
             BrowsePanel.ClosePanel();
             CreatePanel.ClosePanel();
             PracticePanel.ClosePanel();
 
-            QuickplayButtonText.color = UnselectedColor;
             BrowseButtonText.color = UnselectedColor;
             CreateButtonText.color = UnselectedColor;
             PracticeButtonText.color = UnselectedColor;
@@ -40,9 +33,6 @@ namespace Vashta.Entropy.UI
         {
             OpenPanel();
             HideAll();
-            
-            QuickplayPanel.OpenPanel();
-            QuickplayButtonText.color = SelectedColor;
         }
 
         public void ShowBrowse()

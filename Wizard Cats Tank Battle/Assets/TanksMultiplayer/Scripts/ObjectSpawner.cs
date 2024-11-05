@@ -3,10 +3,12 @@
  * 	You shall not license, sublicense, sell, resell, transfer, assign, distribute or
  * 	otherwise make available to any third party the Service or the Content. */
 
+using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
+using Random = UnityEngine.Random;
 
 namespace TanksMP
 {
@@ -325,6 +327,18 @@ namespace TanksMP
             else
                 nextSpawn = (float)PhotonNetwork.Time + respawnTime;
         }
+
+
+        /// -- EDITOR --
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            Color gizmoColor = Color.green;
+            gizmoColor.a = .5f;
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(transform.position, 1);
+        }
+#endif
 	}
 
 

@@ -47,5 +47,14 @@ namespace Vashta.Entropy.UI.MapSelection
 
             return sceneIndex;
         }
+        
+        public TanksMP.GameMode GetRandomGamemode()
+        {
+            if (SupportedGameModes.Count == 0)
+                return TanksMP.GameMode.TDM;
+
+            int rand = Random.Range(0, SupportedGameModes.Count);
+            return SupportedGameModes[rand];
+        }
     }
 }

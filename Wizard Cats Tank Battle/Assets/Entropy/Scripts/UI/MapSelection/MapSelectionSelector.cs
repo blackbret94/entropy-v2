@@ -29,6 +29,7 @@ namespace Vashta.Entropy.UI.MapSelection
             PlayerPrefs.SetString(PrefsKeys.selectedMap, mapIdToSave);
             
             GameModeSelector.SetCheckboxesToMap(checkbox.mapDefinition);
+            GameModeSelector.SetToRandom();
         }
         
         private void ResetCheckboxes()

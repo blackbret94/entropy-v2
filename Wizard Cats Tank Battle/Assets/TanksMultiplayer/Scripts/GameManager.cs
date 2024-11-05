@@ -312,7 +312,7 @@ namespace TanksMP
                     }
                 break;
                 
-                case GameMode.KOTH:
+                case GameMode.KOTH: case GameMode.KOTHS:
                     switch (scoreType)
                     {
                         case ScoreType.Kill:

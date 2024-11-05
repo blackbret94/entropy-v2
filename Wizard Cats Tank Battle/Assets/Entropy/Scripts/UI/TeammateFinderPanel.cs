@@ -76,7 +76,7 @@ namespace Vashta.Entropy.UI
             // Show game mode specific icons
             TanksMP.GameMode gameMode = GameManager.GetInstance().gameMode;
 
-            if (gameMode == TanksMP.GameMode.CTF)
+            if (gameMode == TanksMP.GameMode.CTF || gameMode == TanksMP.GameMode.CTFS)
             {
                 List<CollectibleCaptureTheFlag> flags = CollectibleCaptureTheFlag.GetAllFlags();
 
@@ -89,7 +89,7 @@ namespace Vashta.Entropy.UI
                     if (!flag.gameObject.activeInHierarchy)
                         continue;
 
-                    GameModeDefinition gameModeDefinition = GameModeDictionary[TanksMP.GameMode.CTF];
+                    GameModeDefinition gameModeDefinition = GameModeDictionary[gameMode];
 
                     if (!gameModeDefinition)
                     {

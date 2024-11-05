@@ -9,6 +9,7 @@ namespace Vashta.Entropy.GameMode
         public GameObject CtfRoot;
         public GameObject CtfsRoot;
         public GameObject KothRoot;
+        public GameObject KothsRoot;
 
         private RoomOptionsReader _roomOptionsReader;
 
@@ -38,6 +39,10 @@ namespace Vashta.Entropy.GameMode
                 case TanksMP.GameMode.KOTH:
                     SetGameModeKOTH();
                     break;
+                
+                case TanksMP.GameMode.KOTHS:
+                    SetGameModeKOTHS();
+                    break;
             }
         }
 
@@ -54,6 +59,9 @@ namespace Vashta.Entropy.GameMode
             
             if(KothRoot != null)
                 KothRoot.SetActive(false);
+            
+            if(KothsRoot != null)
+                KothsRoot.SetActive(false);
         }
         
         private void SetGameModeTDM()
@@ -88,6 +96,14 @@ namespace Vashta.Entropy.GameMode
             
             if(KothRoot != null)
                 KothRoot.SetActive(true);
+        }
+
+        private void SetGameModeKOTHS()
+        {
+            DeactivateAll();
+            
+            if(KothsRoot != null)
+                KothsRoot.SetActive(true);
         }
     }
 }

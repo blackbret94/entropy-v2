@@ -8,6 +8,7 @@ namespace Vashta.Entropy.UI.MatchCreation
 {
     public class GameModeSelector : MonoBehaviour
     {
+        public MapSelectionSelector MapSelectionSelector;
         public GameModeDictionary GameModeDictionary;
         public List<GameModeCheckbox> GameModeCheckboxes;
         private GameModeCheckbox _activeSelection;
@@ -23,8 +24,14 @@ namespace Vashta.Entropy.UI.MatchCreation
             ResetCheckboxes();
             checkbox.Toggle(true);
             _activeSelection = checkbox;
+            MapDefinition mapDefinition = MapSelectionSelector.SelectedMapDefinition();
 
-            int idToSave = checkbox.GameModeDefinition ? (int)checkbox.GameModeDefinition.GameMode : (int)TanksMP.GameMode.TDM;
+            int idToSave = checkbox.GameModeDefinition ? 
+                // Use selected game mode
+                (int)checkbox.GameModeDefinition.GameMode :
+                // Choose random game mode supported by map, or default TDM
+                (int)(mapDefinition ? mapDefinition.GetRandomGamemode() : TanksMP.GameMode.TDM);
+            
             PlayerPrefs.SetInt(PrefsKeys.gameMode, idToSave);
         }
 
@@ -34,6 +41,17 @@ namespace Vashta.Entropy.UI.MatchCreation
             foreach (GameModeCheckbox checkbox in GameModeCheckboxes)
             {
                 checkbox.SetToMap(mapDefinition);
+            }
+        }
+
+        public void SetToRandom()
+        {
+            ResetCheckboxes();
+
+            if (GameModeCheckboxes.Count > 0)
+            {
+                _activeSelection = GameModeCheckboxes[0];
+                GameModeCheckboxes[0].Toggle(true);
             }
         }
         

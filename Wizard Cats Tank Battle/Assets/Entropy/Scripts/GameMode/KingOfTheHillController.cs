@@ -7,17 +7,43 @@ namespace Vashta.Entropy.GameMode
 {
     public class KingOfTheHillController : MonoBehaviour
     {
-        public List<ControlPoint> ControlPoints;
+        public List<ControlPoint> ControlPointsSingle;
+        public List<ControlPoint> ControlPointsMulti;
+        
+        private List<ControlPoint> ControlPoints;
         public float TickTimeS = 1f;
         public GameManager GameManager;
 
         private float _lastTick;
         private bool _timerIsRunning = true;
+
+        private bool _hasInit;
+        
+        private void Init()
+        {
+            if (_hasInit) return;
+            
+            TanksMP.GameMode gameMode = GameManager.GetGameModeDefinition().GameMode;
+
+            if (gameMode == TanksMP.GameMode.KOTH)
+            {
+                ControlPoints = ControlPointsSingle;
+            } else if (gameMode == TanksMP.GameMode.KOTHS)
+            {
+                ControlPoints = ControlPointsMulti;
+            }
+
+            _hasInit = true;
+        }
         
         private void Update()
         {
+            Init();
+            
             // Only run if game mode is KOTH
-            if (GameManager.GetGameModeDefinition().GameMode == TanksMP.GameMode.KOTH)
+            TanksMP.GameMode gameMode = GameManager.GetGameModeDefinition().GameMode;
+            
+            if (gameMode == TanksMP.GameMode.KOTH || gameMode == TanksMP.GameMode.KOTHS)
             {
                 if (_timerIsRunning && _lastTick + TickTimeS < Time.time)
                 {

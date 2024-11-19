@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Vashta.Entropy.Character;
 
 namespace Vashta.Entropy.ScriptableObject
 {
@@ -9,6 +10,7 @@ namespace Vashta.Entropy.ScriptableObject
         public string BodyTypeName;
         public Mesh BodyMesh;
         public List<Skin> SkinOptions;
+        public override WardrobeCategory Category => WardrobeCategory.BODY_TYPE;
 
         public Skin GetRandomSkin()
         {

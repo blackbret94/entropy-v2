@@ -29,7 +29,6 @@ namespace Vashta.Entropy.ScriptableObject
             Init();
         }
 
-        // The issue here is that this is a scriptable object
         private void Init()
         {
             if (_indexedHats != null)

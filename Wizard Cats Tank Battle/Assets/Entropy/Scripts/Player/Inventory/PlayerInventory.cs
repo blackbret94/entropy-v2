@@ -101,6 +101,11 @@ namespace Entropy.Scripts.Player.Inventory
             return 0;
         }
 
+        public Hat GetHatById(string id)
+        {
+            return GetHatByIndex(GetHatIndexById(id));
+        }
+
         public Hat GetHatByIndex(int index)
         {
             if (index >= Hats.Count)
@@ -123,7 +128,6 @@ namespace Entropy.Scripts.Player.Inventory
                     return i;
             }
 
-            // Debug.Log("Could not find BodyType with ID: " + id);
             return 0;
         }
 
@@ -133,6 +137,11 @@ namespace Entropy.Scripts.Player.Inventory
                 return BodyTypes[0];
 
             return BodyTypes[index];
+        }
+
+        public BodyType GetBodyTypeById(string id)
+        {
+            return GetBodyTypeByIndex(GetBodyTypeIndexById(id));
         }
 
         public Skin GetSkinByIndex(int bodyTypeIndex, int skinIndex)
@@ -159,6 +168,11 @@ namespace Entropy.Scripts.Player.Inventory
             
             // Debug.Log("Could not find Skin with ID: " + id);
             return 0;
+        }
+
+        public Skin GetSkinById(int bodyIndex, string id)
+        {
+            return GetSkinByIndex(bodyIndex, GetSkinIndexById(bodyIndex, id));
         }
         
         public int GetCartIndexById(string id)
@@ -196,6 +210,11 @@ namespace Entropy.Scripts.Player.Inventory
             }
 
             return false;
+        }
+
+        public Cart GetCartById(string id)
+        {
+            return GetCartByIndex(GetCartIndexById(id));
         }
         
         public void AddCart(Cart cart){
@@ -248,6 +267,11 @@ namespace Entropy.Scripts.Player.Inventory
 
             return false;
         }
+
+        public Turret GetTurretById(string id)
+        {
+            return GetTurretByIndex(GetTurretIndexById(id));
+        }
         
         public void AddTurret(Turret turret){
             Turrets.Add(turret);
@@ -299,6 +323,11 @@ namespace Entropy.Scripts.Player.Inventory
 
             return false;
         }
+
+        public Meow GetMeowById(string id)
+        {
+            return GetMeowByIndex(GetMeowIndexById(id));
+        }
         
         public void AddMeow(Meow meow){
             Meows.Add(meow);
@@ -333,6 +362,23 @@ namespace Entropy.Scripts.Player.Inventory
                 default:
                     throw new ArgumentOutOfRangeException(nameof(category), category, null);
             }
+        }
+
+        public bool OwnsItemById(string id)
+        {
+            if (OwnsHatById(id))
+                return true;
+
+            if (OwnsCartById(id))
+                return true;
+
+            if (OwnsMeowById(id))
+                return true;
+
+            if (OwnsTurretById(id))
+                return true;
+            
+            return false;
         }
     }
 }

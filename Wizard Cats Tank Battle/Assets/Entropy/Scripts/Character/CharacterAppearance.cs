@@ -35,6 +35,8 @@ namespace Vashta.Entropy.Character
         public Meow Meow;
         public Material DefaultTeamMaterial;
 
+        private CharacterAppearanceSerializable _lastSavedAppearance;
+
         [HideInInspector] public Team Team;
         
         // Inventory Indexes
@@ -91,6 +93,11 @@ namespace Vashta.Entropy.Character
             _meowIndex = PlayerInventory.GetMeowIndexById(Meow.Id);
         }
 
+        public void RefreshAppearance()
+        {
+            LoadFromSerialized(_lastSavedAppearance);
+        }
+
         private void InitSfxController()
         {
             if (SfxController == null)
@@ -108,6 +115,7 @@ namespace Vashta.Entropy.Character
         {
             CharacterAppearanceSerializable appearanceSerializable = Serialize();
             SaveLoad.Save(appearanceSerializable);
+            _lastSavedAppearance = appearanceSerializable;
         }
 
         public void ApplyOutfit()
@@ -146,6 +154,12 @@ namespace Vashta.Entropy.Character
             return new CharacterWardrobeSelectorData(_hatIndex+1, hatCount);
         }
 
+        public void SetHat(string id)
+        {
+            Hat = PlayerCharacterWardrobe.GetHatById(id);
+            ReplaceHat();
+        }
+
         // NEED TO UPDATE
         public CharacterWardrobeSelectorData NextBodyType()
         {
@@ -167,6 +181,12 @@ namespace Vashta.Entropy.Character
             ReplaceCatBody();
             
             return new CharacterWardrobeSelectorData(_bodyIndex+1, count);
+        }
+
+        public void SetBodyType(string id)
+        {
+            Body = PlayerCharacterWardrobe.GetBodyTypeById(id);
+            ReplaceCatBody();
         }
 
         // NEED TO UPDATE
@@ -193,6 +213,12 @@ namespace Vashta.Entropy.Character
             return new CharacterWardrobeSelectorData(_skinIndex+1, count);
         }
 
+        public void SetSkin(string id)
+        {
+            Skin = PlayerCharacterWardrobe.GetSkinById(id);
+            ReplaceCatFur();
+        }
+
         public CharacterWardrobeSelectorData NextCart()
         {
             int count = PlayerInventory.Carts.Count;
@@ -213,6 +239,12 @@ namespace Vashta.Entropy.Character
             ReplaceCart();
             
             return new CharacterWardrobeSelectorData(_cartIndex+1, count);
+        }
+
+        public void SetCart(string id)
+        {
+            Cart = PlayerCharacterWardrobe.GetCartById(id);
+            ReplaceCart();
         }
 
         public CharacterWardrobeSelectorData NextTurret()
@@ -237,6 +269,12 @@ namespace Vashta.Entropy.Character
             return new CharacterWardrobeSelectorData(_turretIndex+1, count);
         }
 
+        public void SetTurret(string id)
+        {
+            Turret = PlayerCharacterWardrobe.GetTurretById(id);
+            ReplaceTurret();
+        }
+
         public CharacterWardrobeSelectorData NextMeow()
         {
             int count = PlayerInventory.Meows.Count;
@@ -256,15 +294,35 @@ namespace Vashta.Entropy.Character
             
             return new CharacterWardrobeSelectorData(_meowIndex+1, count);
         }
+
+        public void SetMeow(string id)
+        {
+            Meow = PlayerCharacterWardrobe.GetMeowById(id);
+        }
         
         public CharacterAppearanceSerializable Serialize()
         {
-            return new CharacterAppearanceSerializable(Hat.Id, Body.Id, Skin.Id, Cart.Id, Turret.Id, Meow.Id);
+            // Load current save
+            string hatId = PlayerInventory.OwnsHatById(Hat.Id) ? Hat.Id : _lastSavedAppearance.HatId;
+            string bodyId = Body.Id;
+            string skinId = Skin.Id;
+            string cartId = PlayerInventory.OwnsCartById(Cart.Id) ? Cart.Id : _lastSavedAppearance.CartId;
+            string turretId = PlayerInventory.OwnsTurretById(Turret.Id) ? Turret.Id : _lastSavedAppearance.TurretId;
+            string meowId = PlayerInventory.OwnsMeowById(Meow.Id) ? Meow.Id : _lastSavedAppearance.MeowId;
+            
+            // verify each piece and merge
+            
+            return new CharacterAppearanceSerializable(hatId, bodyId, skinId, cartId, turretId, meowId);
         }
 
         public void LoadFromSerialized(CharacterAppearanceSerializable characterAppearanceSerializable)
         {
+            _lastSavedAppearance = characterAppearanceSerializable;
+            
             PlayerInventory.Init();
+
+            if (characterAppearanceSerializable == null)
+                return;
             
             string hatId = characterAppearanceSerializable.HatId;
             Hat = PlayerCharacterWardrobe.GetHatById(hatId);

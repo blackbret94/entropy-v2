@@ -1,4 +1,5 @@
 using UnityEngine;
+using Vashta.Entropy.Character;
 
 namespace Vashta.Entropy.ScriptableObject
 {
@@ -13,5 +14,7 @@ namespace Vashta.Entropy.ScriptableObject
         public string ItemDescription;
         public Sprite Icon;
         public Rarity Rarity;
+
+        public virtual WardrobeCategory Category => WardrobeCategory.HAT;
     }
 }

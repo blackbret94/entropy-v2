@@ -1,4 +1,5 @@
 using UnityEngine;
+using Vashta.Entropy.Character;
 
 namespace Vashta.Entropy.ScriptableObject
 {
@@ -6,5 +7,7 @@ namespace Vashta.Entropy.ScriptableObject
     public class Meow: ScriptableWardrobeItem
     {
         public AudioClip AudioClip;
+        public override WardrobeCategory Category => WardrobeCategory.MEOW;
+
     }
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using Vashta.Entropy.Character;
 
 namespace Vashta.Entropy.ScriptableObject
 {
@@ -7,5 +8,6 @@ namespace Vashta.Entropy.ScriptableObject
     {
         public string SkinName;
         public Material SkinMaterial;
+        public override WardrobeCategory Category => WardrobeCategory.SKIN;
     }
 }

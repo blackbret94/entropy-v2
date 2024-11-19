@@ -26,7 +26,6 @@ namespace Vashta.Entropy.UI
             wardrobeItemGrid.DeselectAllItemBoxes();
 
             string id = scriptableWardrobeItem.Id;
-            Debug.Log("Category: " + scriptableWardrobeItem.Category.ToString());
 
             switch (scriptableWardrobeItem.Category)
             {
@@ -44,6 +43,7 @@ namespace Vashta.Entropy.UI
                     break;
                 case WardrobeCategory.MEOW:
                     CharacterAppearance.SetMeow(id);
+                    SfxController.PlaySound(((Meow)scriptableWardrobeItem).AudioClip);
                     break;
                 case WardrobeCategory.TURRET:
                     CharacterAppearance.SetTurret(id);

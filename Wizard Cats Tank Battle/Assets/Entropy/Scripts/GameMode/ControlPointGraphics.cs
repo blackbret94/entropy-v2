@@ -10,10 +10,16 @@ namespace Vashta.Entropy.GameMode
         public List<TeamColorChangingProp> PropsForControl; // These show who CONTROLS the point
         public List<TeamColorChangingProp> PropsForCapturing; // These show the CAPTURE STATUS of the point
         public ElevationChangingProp FlagRoot;
+        public SpriteRenderer ProgressRadialRenderer;
+        private Material _progressRadialMaterial;
+        private static readonly int ArcValue = Shader.PropertyToID("_ArcValue");
+        private static readonly int Color1 = Shader.PropertyToID("_Color");
 
         private void Start()
         {
             FlagRoot.SetElevation(0);
+            _progressRadialMaterial = ProgressRadialRenderer.material;
+            _progressRadialMaterial.SetFloat(ArcValue, 0);
         }
 
         // Has the CONTROL changed?
@@ -47,11 +53,14 @@ namespace Vashta.Entropy.GameMode
             {
                 prop.SetTeamColors(team);
             }
+            
+            _progressRadialMaterial.SetColor(Color1, team.TeamColorPrim);
         }
 
         public void SetFlagPosition(float percentage)
         {
             FlagRoot.SetElevation(percentage);
+            _progressRadialMaterial.SetFloat(ArcValue, percentage);
         }
     }
 }

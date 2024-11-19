@@ -18,6 +18,7 @@ namespace Vashta.Entropy.GameMode
         private bool _timerIsRunning = true;
 
         private bool _hasInit;
+        private bool _hasCalledGameOver = false;
         
         private void Init()
         {
@@ -54,6 +55,9 @@ namespace Vashta.Entropy.GameMode
 
         private void OneTick()
         {
+            if (_hasCalledGameOver)
+                return;
+            
             foreach (ControlPoint controlPoint in ControlPoints)
             {
                 if (controlPoint != null)
@@ -86,6 +90,7 @@ namespace Vashta.Entropy.GameMode
                     Player.GetLocalPlayer().photonView.RPC("RpcGameOver", RpcTarget.All, (byte)teamWithHighestScore);
         
                     _timerIsRunning = false;
+                    _hasCalledGameOver = true;
                 }
             }
         }

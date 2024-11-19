@@ -12,6 +12,7 @@ namespace Entropy.Scripts.ItemStore
         public HatItemStoreCategory HatItemStoreCategory;
         public TankItemStoreCategory TankItemStoreCategory;
         public WandItemStoreCategory WandItemStoreCategory;
+        public MeowItemStoreCategory MeowItemStoreCategory;
         public PlayerGoldPanel PlayerGoldPanel;
         public ItemCollectedCounterPanel ItemCollectedCounterPanel;
 
@@ -38,6 +39,11 @@ namespace Entropy.Scripts.ItemStore
         public void SetCategoryTurrets()
         {
             SetCategory(WandItemStoreCategory);
+        }
+
+        public void SetCategoryMeows()
+        {
+            SetCategory(MeowItemStoreCategory);
         }
 
         private void SetCategory(AbstractItemStoreCategory category)

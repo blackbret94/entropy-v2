@@ -51,6 +51,7 @@ namespace Entropy.Scripts.Player.Inventory
             SaveHats(_playerInventory.Hats);
             SaveCart(_playerInventory.Carts);
             SaveTurret(_playerInventory.Turrets);
+            SaveMeow(_playerInventory.Meows);
         }
 
         private List<string> DeserializeInventoryResults(CBSGetProfileDataResult result, string key)
@@ -238,6 +239,17 @@ namespace Entropy.Scripts.Player.Inventory
             {
                 Debug.LogError("Error loading meows: " + result.Error.Message);
             }
+        }
+        
+        private void SaveMeow(List<Meow> meows)
+        {
+            List<string> ids = new List<string>();
+            foreach (var meow in meows)
+            {
+                ids.Add(meow.Id);
+            }
+            
+            ProfileModule.SaveProfileData(MeowsKey, JsonConvert.SerializeObject(ids), OnSaveData);
         }
     }
 }

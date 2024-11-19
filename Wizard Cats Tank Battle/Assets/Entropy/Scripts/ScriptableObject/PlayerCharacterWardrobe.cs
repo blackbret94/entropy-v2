@@ -22,6 +22,8 @@ namespace Vashta.Entropy.ScriptableObject
         private Dictionary<string, Turret> _indexedTurrets;
         private Dictionary<string, Meow> _indexedMeows;
 
+        private HashSet<string> _idList;
+
         private void Awake()
         {
             Init();
@@ -38,32 +40,56 @@ namespace Vashta.Entropy.ScriptableObject
 
         private void IndexWardrobe()
         {
-            // Debug.Log("Indexing wardrobe");
+            _idList = new HashSet<string>();
+            
             _indexedHats = new Dictionary<string, Hat>();
             foreach (var hat in Hats)
+            {
                 _indexedHats[hat.Id] = hat;
-            
+                _idList.Add(hat.Id);
+            }
+
             _indexedBodyTypes = new Dictionary<string, BodyType>();
             foreach (var bt in BodyTypes)
+            {
                 _indexedBodyTypes[bt.Id] = bt;
+                _idList.Add(bt.Id);
+            }
 
             _indexedSkins = new Dictionary<string, Skin>();
             foreach (var skin in BodyTypes[0].SkinOptions)
             {
                 _indexedSkins[skin.Id] = skin;
+                _idList.Add(skin.Id);
             }
             
             _indexedCarts = new Dictionary<string, Cart>();
             foreach (var cart in Carts)
+            {
                 _indexedCarts[cart.Id] = cart;
-            
+                _idList.Add(cart.Id);
+            }
+
             _indexedTurrets = new Dictionary<string, Turret>();
             foreach (var turret in Turrets)
+            {
                 _indexedTurrets[turret.Id] = turret;
+                _idList.Add(turret.Id);
+            }
 
             _indexedMeows = new Dictionary<string, Meow>();
             foreach (var meow in Meows)
+            {
                 _indexedMeows[meow.Id] = meow;
+                _idList.Add(meow.Id);
+            }
+        }
+
+        public bool ContainsId(string id)
+        {
+            Init();
+            
+            return _idList.Contains(id);
         }
 
         public Hat GetRandomHat()

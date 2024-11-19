@@ -288,6 +288,31 @@ namespace Entropy.Scripts.Player.Inventory
             // Debug.Log("Could not find meow with ID: " + id);
             return 0;
         }
+        
+        public bool OwnsMeowById(string id)
+        {
+            foreach (var meow in Meows)
+            {
+                if (meow.Id == id)
+                    return true;
+            }
+
+            return false;
+        }
+        
+        public void AddMeow(Meow meow){
+            Meows.Add(meow);
+            Save();
+        }
+        
+        public void AddMeowById(string id)
+        {
+            Meow meow = PlayerCharacterWardrobe.GetMeowById(id);
+            if (meow != null)
+            {
+                AddMeow(meow);
+            }
+        }
 
         public int GetItemCountByCategory(WardrobeCategory category)
         {

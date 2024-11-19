@@ -1,5 +1,8 @@
+using System;
+
 namespace Vashta.Entropy.Character
 {
+    [Serializable]
     public enum WardrobeCategory
     {
         HAT,

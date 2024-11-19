@@ -10,5 +10,8 @@ namespace Vashta.Entropy.ScriptableObject
         public bool InBotWardrobe = true;
         public GameObject ItemObject;
         public string ItemName;
+        public string ItemDescription;
+        public Sprite Icon;
+        public Rarity Rarity;
     }
 }

@@ -5,7 +5,7 @@ namespace Vashta.Entropy.UI.Minimap
     [RequireComponent(typeof(bl_MiniMapEntity))]
     public class MinimapEntityController : MonoBehaviour
     {
-        private bl_MiniMapEntity _entity;
+        protected bl_MiniMapEntity _entity;
         private bool _hasInit;
         
         private void Start()
@@ -13,7 +13,7 @@ namespace Vashta.Entropy.UI.Minimap
             Init();
         }
 
-        private void Init()
+        protected virtual void Init()
         {
             if (_hasInit)
                 return;
@@ -39,14 +39,14 @@ namespace Vashta.Entropy.UI.Minimap
         {
             Init();
             
-            _entity.IconColor = color;
+            _entity.SetIconColor(color);
         }
 
-        protected void SetDeathIcon(Sprite newIcon)
+        protected void SetOffscreenVisible(bool visibleOffscreen)
         {
             Init();
 
-            _entity.DeathIcon = newIcon;
+            _entity.OffScreen = visibleOffscreen;
         }
     }
 }

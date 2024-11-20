@@ -19,6 +19,7 @@ using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.Spells;
 using Vashta.Entropy.StatusEffects;
 using Vashta.Entropy.UI;
+using Vashta.Entropy.UI.Minimap;
 
 namespace TanksMP
 {
@@ -164,6 +165,7 @@ namespace TanksMP
         public BulletDictionary BulletDictionary;
         public PowerupDirectory PowerupDirectory;
         public VisualEffectDirectory VisualEffectDirectory;
+        public MinimapEntityControllerPlayer MinimapEntityControllerPlayer;
 
         // Lag compensation
         private Vector3 networkVelocity;
@@ -1242,6 +1244,7 @@ namespace TanksMP
                 
                 SpawnDeathFx(deathFxId);
                 StatusEffectController.ClearStatusEffects();
+                // MarkDeadOnMinimap();
 
                 //play sound clip on player death
                 // play killer's death cry
@@ -1392,6 +1395,11 @@ namespace TanksMP
         {
             this.photonView.RPC("RpcRespawn", RpcTarget.AllViaServer, (short)0, null);
         }
+
+        // protected void MarkDeadOnMinimap()
+        // {
+        //     MinimapEntityControllerPlayer.RenderAsDead();
+        // }
         
         /// <summary>
         /// Repositions in team area and resets camera & input variables.

@@ -68,42 +68,72 @@ namespace Vashta.Entropy.GameMode
         {
             // Debug.Log("Setting game mode to TDM");
             DeactivateAll();
-            
-            if(TdmRoot != null)
+
+            if (TdmRoot != null)
+            {
                 TdmRoot.SetActive(true);
+                // Destroy(CtfRoot);
+                // Destroy(CtfsRoot);
+                // Destroy(KothRoot);
+                // Destroy(KothsRoot);
+            }
         }
 
         private void SetGameModeCTF()
         {
             // Debug.LogError("Setting game mode to CTF");
             DeactivateAll();
-            
-            if(CtfRoot != null)
+
+            if (CtfRoot != null)
+            {
                 CtfRoot.SetActive(true);
+                // Destroy(TdmRoot);
+                // Destroy(CtfsRoot);
+                // Destroy(KothRoot);
+                // Destroy(KothsRoot);
+            }
         }
 
         private void SetGameModeCTFS()
         {
             DeactivateAll();
-            
-            if(CtfsRoot != null)
+
+            if (CtfsRoot != null)
+            {
                 CtfsRoot.SetActive(true);
+                // Destroy(CtfRoot);
+                // Destroy(TdmRoot);
+                // Destroy(KothRoot);
+                // Destroy(KothsRoot);
+            }
         }
 
         private void SetGameModeKOTH()
         {
             DeactivateAll();
-            
-            if(KothRoot != null)
+
+            if (KothRoot != null)
+            {
                 KothRoot.SetActive(true);
+                // Destroy(CtfRoot);
+                // Destroy(CtfsRoot);
+                // Destroy(TdmRoot);
+                // Destroy(KothsRoot);
+            }
         }
 
         private void SetGameModeKOTHS()
         {
             DeactivateAll();
-            
-            if(KothsRoot != null)
+
+            if (KothsRoot != null)
+            {
                 KothsRoot.SetActive(true);
+                // Destroy(CtfRoot);
+                // Destroy(CtfsRoot);
+                // Destroy(KothRoot);
+                // Destroy(TdmRoot);
+            }
         }
     }
 }

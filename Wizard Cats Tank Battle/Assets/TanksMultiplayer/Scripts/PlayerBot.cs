@@ -389,6 +389,7 @@ namespace TanksMP
             }
             
             SpawnDeathFx(deathFxId);
+            // MarkDeadOnMinimap();
 
             //play sound clip on player death
             if (killedBy != null)

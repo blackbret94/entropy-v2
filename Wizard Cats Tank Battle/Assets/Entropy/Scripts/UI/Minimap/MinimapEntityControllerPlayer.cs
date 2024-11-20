@@ -48,23 +48,13 @@ namespace Vashta.Entropy.UI.Minimap
 
         private void UpdateImage()
         {
-            // if (!Player.IsAlive)
-            // {
-            //     // Is dead
-            //     if(!_renderedAsAlive)
-            //         RenderAsDead();
-            // }
-            // else
-            // {
-                // Is alive
-                int teamIndex = Player.GetTeam();
-                
-                if (teamIndex != _teamIndex)
-                {
-                    _teamIndex = teamIndex;
-                    RenderAsAlive();
-                }
-            // }
+            int teamIndex = Player.GetTeam();
+            
+            if (teamIndex != _teamIndex)
+            {
+                _teamIndex = teamIndex;
+                RenderAsAlive();
+            }
             
             SetOffscreenVisible(SameTeamAsLocalPlayer());
         }
@@ -75,7 +65,7 @@ namespace Vashta.Entropy.UI.Minimap
             return localPlayer.GetTeam() == Player.GetTeam();
         }
 
-        private void RenderAsAlive()
+        public void RenderAsAlive()
         {
             Team team = GameManager.GetTeamByIndex(_teamIndex);
 
@@ -85,14 +75,11 @@ namespace Vashta.Entropy.UI.Minimap
             TeamDefinition teamDefinition = team.teamDefinition;
 
             SetEntityColor(teamDefinition.TeamColorPrim);
-
-            // _renderedAsAlive = true;
         }
 
-        // public void RenderAsDead()
-        // {
-        //     SetEntityColor(DeadColor);
-        //     _renderedAsAlive = false;
-        // }
+        public void RenderAsDead()
+        {
+            SetEntityColor(Color.grey);
+        }
     }
 }

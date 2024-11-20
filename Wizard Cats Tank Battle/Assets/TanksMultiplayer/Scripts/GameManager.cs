@@ -409,10 +409,6 @@ namespace TanksMP
                     killedByName = other.GetView().GetName();
                 }
 
-                Text[] killCounter = ui.killCounter;
-                killCounter[1].text = localPlayer.GetView().GetDeaths().ToString();
-                killCounter[1].GetComponent<Animator>().Play("Animation");
-
                 //calculate if we should show a video ad
 #if UNITY_ADS
             if (!skipAd && UnityAdsManager.ShowAd())

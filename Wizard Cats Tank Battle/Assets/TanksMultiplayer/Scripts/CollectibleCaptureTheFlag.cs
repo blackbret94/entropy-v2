@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 using Vashta.Entropy.StatusEffects;
+using Vashta.Entropy.UI.Minimap;
 
 namespace TanksMP
 {
@@ -14,7 +15,8 @@ namespace TanksMP
          public Player CarriedBy => _carriedBy;
          
          private int _defaultTeamIndex = -1;
-
+         private MinimapEntityController _entityController;
+         
          private static List<CollectibleCaptureTheFlag> _allFlags = new();
          public static List<CollectibleCaptureTheFlag> GetAllFlags() => _allFlags;
 
@@ -22,6 +24,7 @@ namespace TanksMP
          {
              _defaultTeamIndex = teamIndex;
              _allFlags.Add(this);
+             _entityController = GetComponent<MinimapEntityController>();
          }
 
          private void OnDestroy()
@@ -155,6 +158,22 @@ namespace TanksMP
                     targetRenderer.material.color = GameManager.GetInstance().teams[teamIndex].material.color;
                 else
                     targetRenderer.material.color = Color.white;
+            }
+        }
+
+        private void OnEnable()
+        {
+            if (_entityController)
+            {
+                _entityController.ShowEntity();
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (_entityController)
+            {
+                _entityController.HideEntity();
             }
         }
     }

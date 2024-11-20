@@ -379,17 +379,18 @@ namespace TanksMP
             
             //detect whether the current user was responsible for the kill
             //yes, that's my kill: increase local kill counter
-            if (killedBy == GameManager.GetInstance().localPlayer.gameObject) // This might be a problem if it is run on EVERY device
+            if (killedBy == GetLocalPlayer().gameObject) // This might be a problem if it is run on EVERY device
             {
-                Text[] killCounter = GameManager.GetInstance().ui.killCounter;
-                killCounter[0].text = GetView().GetKills().ToString();
-                killCounter[0].GetComponent<Animator>().Play("Animation");
-                
                 RewardCoinsForKill();
             }
             
             SpawnDeathFx(deathFxId);
-            // MarkDeadOnMinimap();
+            
+            // Mark dead on minimap
+            if (MinimapEntityControllerPlayer)
+            {
+                MinimapEntityControllerPlayer.RenderAsDead();
+            }
 
             //play sound clip on player death
             if (killedBy != null)
@@ -408,6 +409,12 @@ namespace TanksMP
             yield return new WaitForSeconds(GameManager.GetInstance().respawnTime);
             //toggle visibility again (on)
             ToggleComponents(true);
+            
+            // Mark alive on minimap
+            if (MinimapEntityControllerPlayer)
+            {
+                MinimapEntityControllerPlayer.RenderAsAlive();
+            }
 
             //respawn and continue with pathfinding
             targetPoint = GameManager.GetInstance().GetSpawnPosition(GetView().GetTeam());

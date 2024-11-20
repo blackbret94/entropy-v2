@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TanksMP;
 using UnityEngine;
@@ -54,9 +55,16 @@ namespace Entropy.Scripts.Player
                 _teamIndex = teamIndex;
                 Team team = GameManager.GetInstance().GetTeamByIndex(_teamIndex + 1);
 
-                if (team != null && team.teamDefinition != null)
+                try
                 {
-                    MiniMap.SetPointerColor(team.teamDefinition.TeamColorPrim);
+                    if (team != null && team.teamDefinition != null)
+                    {
+                        MiniMap.SetPointerColor(team.teamDefinition.TeamColorPrim);
+                    }
+                }
+                catch (NullReferenceException e)
+                {
+                    Debug.LogWarning(e);
                 }
             }
         }

@@ -11,8 +11,11 @@ namespace Vashta.Entropy.UI.Minimap
         private void Start()
         {
             Init();
+            PostInit();
         }
 
+        // Called to make sure everything is set up correctly.
+        // Safety goes here, other logic should go in PostInit.
         protected virtual void Init()
         {
             if (_hasInit)
@@ -24,8 +27,15 @@ namespace Vashta.Entropy.UI.Minimap
             {
                 Debug.LogError("Missing connection to entity!");
             }
-
+            
             _hasInit = true;
+        }
+
+        // Can be safely called during Init without risk of recursion. 
+        // This is a good place to call setup code
+        protected virtual void PostInit()
+        {
+            
         }
 
         protected void SetEntitySprite(Sprite newIcon)
@@ -35,7 +45,7 @@ namespace Vashta.Entropy.UI.Minimap
             _entity.Icon = newIcon;
         }
 
-        protected void SetEntityColor(Color color)
+        public void SetEntityColor(Color color)
         {
             Init();
             
@@ -47,6 +57,20 @@ namespace Vashta.Entropy.UI.Minimap
             Init();
 
             _entity.OffScreen = visibleOffscreen;
+        }
+
+        public void ShowEntity()
+        {
+            Init();
+            
+            _entity.ShowItem();
+        }
+
+        public void HideEntity()
+        {
+            Init();
+            
+            _entity.HideItem();
         }
     }
 }

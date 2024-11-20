@@ -1232,19 +1232,15 @@ namespace TanksMP
                 PhotonView senderView = senderId > 0 ? PhotonView.Find(senderId) : null;
                 if (senderView != null && senderView.gameObject != null) killedBy = senderView.gameObject;
                 
-                //detect whether the current user was responsible for the kill, but not for suicide
-                //yes, that's my kill: increase local kill counter
-                Player localPlayer = GameManager.GetInstance().localPlayer;
-                if (this != localPlayer && killedBy == GameManager.GetInstance().localPlayer.gameObject)
+                SpawnDeathFx(deathFxId);
+                
+                // Mark as grey on minimap
+                if (MinimapEntityControllerPlayer)
                 {
-                    Text[] killCounter = GameManager.GetInstance().ui.killCounter;
-                    killCounter[0].text = GetView().GetKills().ToString();
-                    killCounter[0].GetComponent<Animator>().Play("Animation");
+                    MinimapEntityControllerPlayer.RenderAsDead();
                 }
                 
-                SpawnDeathFx(deathFxId);
                 StatusEffectController.ClearStatusEffects();
-                // MarkDeadOnMinimap();
 
                 //play sound clip on player death
                 // play killer's death cry
@@ -1281,6 +1277,12 @@ namespace TanksMP
                 StatusEffectController.RefreshCache();
                 ApplyClass();
                 ColorizePlayerForTeam();
+                
+                // Render as alive
+                if (MinimapEntityControllerPlayer)
+                {
+                    MinimapEntityControllerPlayer.RenderAsAlive();
+                }
                 
                 // Show ultimates button
                 if(IsLocal)
@@ -1395,11 +1397,6 @@ namespace TanksMP
         {
             this.photonView.RPC("RpcRespawn", RpcTarget.AllViaServer, (short)0, null);
         }
-
-        // protected void MarkDeadOnMinimap()
-        // {
-        //     MinimapEntityControllerPlayer.RenderAsDead();
-        // }
         
         /// <summary>
         /// Repositions in team area and resets camera & input variables.

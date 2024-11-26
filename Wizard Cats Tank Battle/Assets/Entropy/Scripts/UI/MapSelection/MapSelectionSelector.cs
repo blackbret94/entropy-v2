@@ -7,6 +7,7 @@ namespace Vashta.Entropy.UI.MapSelection
 {
     public class MapSelectionSelector : MonoBehaviour
     {
+        public MatchCreationPanel MatchCreationPanel;
         public MapDefinitionDictionary MapDefinitionDictionary;
         public List<MapSelectionCheckbox> MapSelectionCheckboxes;
         public GameModeSelector GameModeSelector;
@@ -24,6 +25,8 @@ namespace Vashta.Entropy.UI.MapSelection
             ResetCheckboxes();
             checkbox.Toggle(true);
             _activeSelection = checkbox;
+            
+            MatchCreationPanel.SetMapTitleText();
 
             string mapIdToSave = checkbox.mapDefinition ? checkbox.mapDefinition.Id : "-1";
             PlayerPrefs.SetString(PrefsKeys.selectedMap, mapIdToSave);
@@ -48,5 +51,9 @@ namespace Vashta.Entropy.UI.MapSelection
             return _activeSelection.mapDefinition;
         }
 
+        public bool IsRandom()
+        {
+            return !_activeSelection || _activeSelection.IsRandom;
+        }
     }
 }

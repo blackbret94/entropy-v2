@@ -1,6 +1,7 @@
 using Photon.Pun;
 using Photon.Realtime;
 using TanksMP;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Vashta.Entropy.PhotonExtensions;
@@ -19,19 +20,50 @@ namespace Vashta.Entropy.UI.MatchCreation
 
         public RoomOptionsFactory RoomOptionsFactory;
 
+        public Text MapTitleText;
+        public Text GameModeText;
+        public TextMeshProUGUI HeaderText;
+
+        public GameObject MultiplayerOnlyFieldsRoot;
+        public GameObject SingleplayerOnlyFieldsRoot;
+
+        private bool _isMultiplayer;
+
         private void Start()
         {
             Init();
         }
 
-        public override void OpenPanel()
+        public void ToggleMultiplayer(bool isMultiplayer)
         {
-            base.OpenPanel();
-            PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Online);
+            _isMultiplayer = isMultiplayer;
+            
+            MultiplayerOnlyFieldsRoot.SetActive(_isMultiplayer);
+            SingleplayerOnlyFieldsRoot.SetActive(!_isMultiplayer);
 
-            if (!PhotonNetwork.IsConnected)
+            if (_isMultiplayer)
             {
-                NetworkManagerCustom.GetInstance().Connect(NetworkMode.Online);
+                // Connect to server
+                PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Online);
+
+                if (!PhotonNetwork.IsConnected)
+                {
+                    NetworkManagerCustom.GetInstance().Connect(NetworkMode.Online);
+                }
+
+                HeaderText.text = "Create Match";
+            }
+            else
+            {
+                // Disconnect from server
+                PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Offline);
+            
+                if (PhotonNetwork.IsConnected)
+                {
+                    NetworkManagerCustom.GetInstance().DisconnectFromServer();
+                }
+
+                HeaderText.text = "Practice Against Bots";
             }
         }
 
@@ -45,9 +77,24 @@ namespace Vashta.Entropy.UI.MatchCreation
             {
                 NameInputField.text = RoomOptionsFactory.CreateRoomNameFromPlayerNickname(PhotonNetwork.NickName);
             }
+            
+            SetMapTitleText();
+            SetGameModeTitleText();
         }
         
         public void CreateMatch()
+        {
+            if (_isMultiplayer)
+            {
+                CreateMatchMultiplayer();
+            }
+            else
+            {
+                CreateMatchSingleplayer();
+            }
+        }
+
+        private void CreateMatchMultiplayer()
         {
             // Get info
             string roomName = GetRoomName();
@@ -62,6 +109,14 @@ namespace Vashta.Entropy.UI.MatchCreation
             
             // create room
             UIMain.GetInstance().RoomController.CreateRoom(roomOptions);
+        }
+
+        private void CreateMatchSingleplayer()
+        {
+            string mapName = GetMapName();
+            TanksMP.GameMode gameMode = GetGameMode();
+            
+            UIMain.GetInstance().RoomController.PlayOffline(mapName, (int)gameMode);
         }
         
         private string GetRoomName()
@@ -130,6 +185,16 @@ namespace Vashta.Entropy.UI.MatchCreation
             }
             
             return mapDefinition.Title;
+        }
+
+        public void SetMapTitleText()
+        {
+            MapTitleText.text = "Map: " + (MapSelector.IsRandom() ? "Random" : GetMapName());
+        }
+
+        public void SetGameModeTitleText()
+        {
+            GameModeText.text = "Game Mode: " + (GameModeSelector.IsRandom() ? "Random" : GameModeSelector.SelectedGameMode().Title);
         }
     }
 }

@@ -9,7 +9,6 @@ namespace Vashta.Entropy.UI
     {
         public MatchBrowserPanel BrowsePanel;
         public MatchCreationPanel CreatePanel;
-        public PracticePanel PracticePanel;
         
         public TextMeshProUGUI BrowseButtonText;
         public TextMeshProUGUI CreateButtonText;
@@ -22,17 +21,10 @@ namespace Vashta.Entropy.UI
         {
             BrowsePanel.ClosePanel();
             CreatePanel.ClosePanel();
-            PracticePanel.ClosePanel();
 
             BrowseButtonText.color = UnselectedColor;
             CreateButtonText.color = UnselectedColor;
             PracticeButtonText.color = UnselectedColor;
-        }
-
-        public void ShowQuickplay()
-        {
-            OpenPanel();
-            HideAll();
         }
 
         public void ShowBrowse()
@@ -50,6 +42,7 @@ namespace Vashta.Entropy.UI
             HideAll();
             
             CreatePanel.OpenPanel();
+            CreatePanel.ToggleMultiplayer(true);
             CreateButtonText.color = SelectedColor;
         }
 
@@ -58,7 +51,8 @@ namespace Vashta.Entropy.UI
             OpenPanel();
             HideAll();
             
-            PracticePanel.OpenPanel();
+            CreatePanel.OpenPanel();
+            CreatePanel.ToggleMultiplayer(false);
             PracticeButtonText.color = SelectedColor;
         }
     }

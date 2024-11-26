@@ -9,7 +9,8 @@ namespace Vashta.Entropy.UI
         private void Start()
         {
             _instance = this;
-            ClosePanel();
+            gameObject.SetActive(false);
+            // ClosePanel();
         }
 
     }

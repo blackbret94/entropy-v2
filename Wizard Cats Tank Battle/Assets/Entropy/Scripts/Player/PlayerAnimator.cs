@@ -52,5 +52,17 @@ namespace Entropy.Scripts.Player
             int animationChoice = Random.Range(0, optionCount) + 1;
             return baseName + animationChoice;
         }
+
+        public void PlayRandomAnimation()
+        {
+            int animationIndex = Random.Range(0, 3);
+
+            switch (animationIndex)
+            {
+                case 0: Attack(); break;
+                case 1: Heal(); break;
+                case 2: TakeDamage(); break;
+            }
+        }
     }
 }

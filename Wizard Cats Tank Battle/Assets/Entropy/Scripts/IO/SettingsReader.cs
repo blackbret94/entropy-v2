@@ -25,5 +25,15 @@ namespace Vashta.Entropy.IO
         {
             return Convert.ToBoolean(PlayerPrefs.GetInt(PrefsKeys.aimArrow, 0));
         }
+
+        public static bool GetShowMinimap()
+        {
+            return Convert.ToBoolean(PlayerPrefs.GetInt(PrefsKeys.showMinimap, 1));
+        }
+
+        public static int GetGraphicsSettings()
+        {
+            return PlayerPrefs.GetInt(PrefsKeys.graphicsSettings, QualitySettings.GetQualityLevel());
+        }
     }
 }

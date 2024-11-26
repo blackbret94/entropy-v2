@@ -10,6 +10,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 using UnityEngine.Serialization;
+using Vashta.Entropy.IO;
 using Vashta.Entropy.SceneNavigation;
 using Vashta.Entropy.UI;
 using Vashta.Entropy.UI.ClassSelectionPanel;
@@ -75,6 +76,7 @@ namespace TanksMP
         public ClassSelectionButton ClassSelectionButton;
         public MatchTimerPanel MatchTimer;
         public PlayerInputController PlayerInputController;
+        public GameObject Minimap;
 
         private static UIGame _instance;
         public static UIGame GetInstance() => _instance;
@@ -101,6 +103,7 @@ namespace TanksMP
 
             //play background music
             MusicController.PlayMusic();
+            Minimap.SetActive(SettingsReader.GetShowMinimap());
         }
 
 

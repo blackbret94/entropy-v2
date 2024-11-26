@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Entropy.Scripts.Audio;
 using Entropy.Scripts.Player.Inventory;
 using UnityEngine;
 using Vashta.Entropy.Character;
@@ -16,6 +17,8 @@ namespace Vashta.Entropy.UI
         public PlayerInventory PlayerInventory;
         public CharacterAppearance CharacterAppearance;
         public WardrobeOptionsPanel WardrobeOptionsPanel;
+        public SfxController SfxController;
+        
         private WardrobeCategory _activeCategory;
         private List<WardrobeItemUI> _itemBoxes;
 
@@ -129,7 +132,7 @@ namespace Vashta.Entropy.UI
                     isOwned = PlayerInventory.OwnsItemById(wardrobeItem.Id);
                 }
                 
-                wardrobeItemUI.Inflate(wardrobeItem, isOwned, WardrobeOptionsPanel);
+                wardrobeItemUI.Inflate(wardrobeItem, isOwned, WardrobeOptionsPanel, SfxController);
                 _itemBoxes.Add(wardrobeItemUI);
                 
                 // check if this is the selected item

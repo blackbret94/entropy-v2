@@ -1,29 +1,22 @@
-using System;
 using Entropy.Scripts.Audio;
 using TanksMP;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Vashta.Entropy.IO;
-using Vashta.Entropy.ScriptableObject;
-using Vashta.Entropy.UI.MapSelection;
 
 namespace Vashta.Entropy.UI
 {
     public class SettingsPanel : GamePanel
     {
-        /// <summary>
-        /// Settings: checkbox for playing background music.
-        /// </summary>
-        public Toggle musicToggle;
-
-        /// <summary>
-        /// Settings: slider for adjusting game sound volume.
-        /// </summary>
+        public bool isOnMainMenu;
+        
         public Slider volumeSlider;
+        public Slider graphicsSlider;
 
+        public Toggle musicToggle;
         public Toggle leftHandedModeToggle;
-
+        public Toggle showMinimapToggle;
+        
         public JoystickPlacementController joystickPlacementController;
 
         public MusicController MusicController;
@@ -31,55 +24,39 @@ namespace Vashta.Entropy.UI
         public Toggle FullscreenToggle;
         public Toggle AimArrowToggle;
         
-        public TextMeshProUGUI MapNameText;
-        public TextMeshProUGUI GameModeText;
-        public TextMeshProUGUI GameModeDescription;
+        public string WebsiteUrl = "https://wizardcatstankbattle.com";
+        public string PrivacyPolicyUrl = "https://vashtaentertainment.com/privacy_policy.html";
         
         public override void OpenPanel()
         {
             base.OpenPanel();
             ReadSettings();
-            UpdateGameModeText();
-            UpdateMapNameText();
-            HUDPanel.Get().ClosePanel();
+            
+            if(!isOnMainMenu)
+                HUDPanel.Get().ClosePanel();
         }
         
         public override void ClosePanel()
         {
             base.ClosePanel();
             ApplySettings();
-            HUDPanel.Get().OpenPanel();
-        }
-
-        private void UpdateGameModeText()
-        {
-            if (GameModeText == null)
-                return;
-
-            GameModeDefinition gameModeDefinition = GameManager.GetInstance().GetGameModeDefinition();
-            GameModeText.text = gameModeDefinition.Title;
-
-            if (GameModeDescription == null)
-                return;
-
-            GameModeDescription.text = gameModeDefinition.Description;
-        }
-
-        private void UpdateMapNameText()
-        {
-            if (MapNameText == null)
-                return;
             
-            MapDefinition gameModeDefinition = GameManager.GetInstance().GetMap();
-            MapNameText.text = gameModeDefinition.Title;
+            if(!isOnMainMenu)
+                HUDPanel.Get().OpenPanel();
         }
 
         private void ReadSettings()
         {
             musicToggle.isOn = SettingsReader.GetMusicIsOn();
+            
             volumeSlider.value = SettingsReader.GetVolume();
+            
             leftHandedModeToggle.isOn = SettingsReader.GetLeftHandedMode();
             AimArrowToggle.isOn = SettingsReader.GetAimArrow();
+            showMinimapToggle.isOn = SettingsReader.GetShowMinimap();
+            
+            if(FullscreenToggle)
+                FullscreenToggle.isOn = Screen.fullScreen;
         }
 
         public void ApplySettings()
@@ -88,9 +65,21 @@ namespace Vashta.Entropy.UI
             PlayerPrefs.SetFloat(PrefsKeys.appVolume, volumeSlider.value);
             PlayerPrefs.SetInt(PrefsKeys.lefthandedMode, leftHandedModeToggle.isOn ? 1 : 0);
             PlayerPrefs.SetInt(PrefsKeys.aimArrow, AimArrowToggle.isOn ? 1 : 0);
-            
-            UIGame.GetInstance().RefreshAimArrow();
-            
+            PlayerPrefs.SetInt(PrefsKeys.showMinimap, showMinimapToggle.isOn ? 1 : 0);
+
+            if (!isOnMainMenu)
+            {
+                UIGame.GetInstance().RefreshAimArrow();
+                UIGame.GetInstance().Minimap.SetActive(showMinimapToggle.isOn);
+            }
+
+            if (graphicsSlider)
+            {
+                int qualityLevel = Mathf.RoundToInt(graphicsSlider.value);
+                QualitySettings.SetQualityLevel(qualityLevel);
+                PlayerPrefs.SetInt(PrefsKeys.graphicsSettings, qualityLevel);
+            }
+
             PlayerPrefs.Save();
         }
 
@@ -105,18 +94,39 @@ namespace Vashta.Entropy.UI
             MusicController.PlayMusic();
         }
 
+        public void OnToggleMinimap(bool value)
+        {
+            if(!isOnMainMenu)
+                UIGame.GetInstance().Minimap.SetActive(value);
+        }
+
         public void OnAimArrowChanged(bool value)
         {
+            if (!isOnMainMenu)
+            {
+                UIGame.GetInstance().RefreshAimArrow();
+            }
+        }
+
+        public void SetFullscreen(bool b)
+        {
+            Screen.fullScreen = b;
         }
         
-        /// <summary>
-        /// Modify global game volume based on player selection.
-        /// Called by Slider onValueChanged event.
-        /// </summary>
         public void OnVolumeChanged(float value)
         {
             volumeSlider.value = value;
             AudioListener.volume = value;
+        }
+        
+        public void OpenWebsite()
+        {
+            Application.OpenURL(WebsiteUrl);
+        }
+
+        public void OpenPrivacyPolicy()
+        {
+            Application.OpenURL(PrivacyPolicyUrl);
         }
     }
 }

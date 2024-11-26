@@ -22,8 +22,14 @@ namespace Entropy.Scripts.Audio
         
         public AudioSource Source;
 
+        private static SfxController _instance;
+
+        public static SfxController GetInstance() => _instance;
+
         private void Start()
         {
+            _instance = this;
+            
             Init();
         }
 

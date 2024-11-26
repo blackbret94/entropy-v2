@@ -52,5 +52,9 @@ namespace TanksMP
         public const string selectedMap = "WCTB_SelectedMap";
 
         public const string aimArrow = "WCTB_AimArrow";
+
+        public const string showMinimap = "WCTB_ShowMinimap";
+
+        public const string graphicsSettings = "WCTB_GraphicsSettings";
     }
 }

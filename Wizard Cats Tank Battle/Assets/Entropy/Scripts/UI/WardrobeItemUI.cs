@@ -1,3 +1,4 @@
+using Entropy.Scripts.Audio;
 using UnityEngine;
 using UnityEngine.UI;
 using Vashta.Entropy.ScriptableObject;
@@ -16,12 +17,15 @@ namespace Vashta.Entropy.UI
         private ScriptableWardrobeItem _scriptableWardrobeItem;
         private bool _isOwned;
         private WardrobeOptionsPanel _wardrobeOptionsPanel;
-
-        public void Inflate(ScriptableWardrobeItem scriptableWardrobeItem, bool isOwned, WardrobeOptionsPanel wardrobeOptionsPanel)
+        private SfxController _sfxController;
+        
+        public void Inflate(ScriptableWardrobeItem scriptableWardrobeItem, bool isOwned, WardrobeOptionsPanel wardrobeOptionsPanel,
+            SfxController sfxController)
         {
             _scriptableWardrobeItem = scriptableWardrobeItem;
             _isOwned = isOwned;
             _wardrobeOptionsPanel = wardrobeOptionsPanel;
+            _sfxController = sfxController;
 
             if (isOwned)
             {
@@ -48,6 +52,8 @@ namespace Vashta.Entropy.UI
             
             _wardrobeOptionsPanel.SelectItem(_scriptableWardrobeItem);
             Select();
+            
+            _sfxController.PlayBasicButtonClick();
         }
 
         public void Select()

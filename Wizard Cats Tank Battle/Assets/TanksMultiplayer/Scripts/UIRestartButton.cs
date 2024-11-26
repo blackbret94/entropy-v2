@@ -7,6 +7,7 @@ using System.Collections;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Vashta.Entropy.PhotonExtensions;
 
 namespace TanksMP
 {
@@ -84,7 +85,7 @@ namespace TanksMP
         public override void OnConnectedToMaster()
         {
             // Right now it goes to random map/mode.  Can save conditions later
-            FindObjectOfType<UIMain>().Play();
+            FindObjectOfType<RoomController>().Play();
             
             Destroy(gameObject);
         }

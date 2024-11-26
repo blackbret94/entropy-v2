@@ -29,7 +29,7 @@ namespace Vashta.Entropy.UI.MatchCreation
             string mapName = GetMapName();
             TanksMP.GameMode gameMode = GetGameMode();
             
-            UIMain.GetInstance().PlayOffline(mapName, (int)gameMode);
+            UIMain.GetInstance().RoomController.PlayOffline(mapName, (int)gameMode);
         }
 
         private TanksMP.GameMode GetGameMode()

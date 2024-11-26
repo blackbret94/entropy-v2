@@ -61,7 +61,7 @@ namespace Vashta.Entropy.UI.MatchCreation
             RoomOptions roomOptions = RoomOptionsFactory.InitRoomOptions(roomName, mapName, maxPlayers, gameMode);
             
             // create room
-            UIMain.GetInstance().CreateRoom(roomOptions);
+            UIMain.GetInstance().RoomController.CreateRoom(roomOptions);
         }
         
         private string GetRoomName()

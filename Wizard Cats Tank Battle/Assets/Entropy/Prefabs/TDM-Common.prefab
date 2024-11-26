@@ -19112,6 +19112,18 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4821216873846161923, guid: 02b9f8c1f9c54ff4984a34f784a3e63c,
+        type: 3}
+      propertyPath: PointerPrefab
+      value: 
+      objectReference: {fileID: 592182094934580008, guid: 239e1d99a6553e641becaf881abb5be4,
+        type: 3}
+    - target: {fileID: 4821216873846161923, guid: 02b9f8c1f9c54ff4984a34f784a3e63c,
+        type: 3}
+      propertyPath: TeamDefinitionDictionary
+      value: 
+      objectReference: {fileID: 11400000, guid: ef07b78dc4c20ea498711a9e413ac626,
+        type: 2}
     - target: {fileID: 5618594755431016210, guid: 02b9f8c1f9c54ff4984a34f784a3e63c,
         type: 3}
       propertyPath: viewAreaUI
@@ -19134,7 +19146,11 @@ PrefabInstance:
         type: 3}
       insertIndex: 1
       addedObject: {fileID: 3604662209097830141}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 604728848714261406, guid: 02b9f8c1f9c54ff4984a34f784a3e63c,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8100693482154440696}
   m_SourcePrefab: {fileID: 100100000, guid: 02b9f8c1f9c54ff4984a34f784a3e63c, type: 3}
 --- !u!1 &8254575179304387329 stripped
 GameObject:
@@ -19142,6 +19158,29 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 8856972753458864287}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8100693482154440696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8254575179304387329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  observableSearch: 0
+  ObservedComponents:
+  - {fileID: 0}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!4 &8254575179304603295 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 604728848714542592, guid: 02b9f8c1f9c54ff4984a34f784a3e63c,

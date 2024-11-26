@@ -2,6 +2,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Entropy.Scripts.Player;
+using TanksMP;
 using UnityEngine;
 
 public sealed class bl_MiniMap : MonoBehaviour
@@ -97,6 +99,8 @@ public sealed class bl_MiniMap : MonoBehaviour
     public Canvas m_Canvas = null;
     public GameObject ItemPrefabSimple = null;
     public Transform minimapRig;
+
+    public MinimapController MinimapController;
     #endregion
 
     #region Public properties
@@ -200,6 +204,8 @@ public sealed class bl_MiniMap : MonoBehaviour
             }
             minimapZoom = Zoom;
         }
+
+        MinimapController = GetComponent<MinimapController>();
 
         MiniMapUI.DoStartFade(0, () => { isAlphaComplete = true; });
         m_initialized = true;
@@ -649,8 +655,19 @@ public sealed class bl_MiniMap : MonoBehaviour
         {
             Destroy(mapPointer);
         }
-        mapPointer = Instantiate(MapPointerPrefab, Position, Quaternion.identity) as GameObject;
-        mapPointer.GetComponent<bl_MapPointerBase>().SetColor(playerColor);
+
+        Player localPlayer = Player.GetLocalPlayer();
+
+        if (!localPlayer)
+        {
+            Debug.LogError("Could not find local player!");
+            return;
+        }
+        
+        int localPlayerTeam = localPlayer.GetTeam();
+        MinimapController.CmdSpawnPing(Position, localPlayerTeam);
+        // mapPointer = Instantiate(MapPointerPrefab, Position, Quaternion.identity) as GameObject;
+        // mapPointer.GetComponent<bl_MapPointerBase>().SetColor(playerColor);
     }
 
     public void SetPointerColor(Color color)

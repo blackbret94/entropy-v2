@@ -8,6 +8,8 @@ namespace Lovatto.MiniMap
         public string PlayerTag = "Player";
         public AudioClip SpawnSound;
         public MeshRenderer m_Render;
+        public SpriteRenderer SpriteRenderer;
+        
         private AudioSource ASource;
 
         /// <summary>
@@ -29,11 +31,15 @@ namespace Lovatto.MiniMap
         /// <param name="c"></param>
         public override void SetColor(Color c)
         {
-            if (m_Render == null) return;
+            if (m_Render != null)
+            {
 
-            GetComponent<bl_MiniMapEntityBase>().SetIconColor(c);
-            c.a = 0.25f;
-            m_Render.material.SetColor("_TintColor", c);
+                GetComponent<bl_MiniMapEntityBase>().SetIconColor(c);
+                c.a = 0.25f;
+                m_Render.material.SetColor("_TintColor", c);
+            }
+
+            SpriteRenderer.color = c;
         }
 
         /// <summary>

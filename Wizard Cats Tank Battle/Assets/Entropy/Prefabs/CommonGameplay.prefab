@@ -1240,11 +1240,22 @@ MonoBehaviour:
   respawnMask:
     serializedVersion: 2
     m_Bits: 512
-  distance: 15
-  distanceDeathCam: 10
-  height: 30
-  heightDeathCam: 8
+  distance: 10
+  distanceDeathCam: 6
+  height: 10
+  heightDeathCam: 7
   camMode: 0
+  PlayerInputController: {fileID: 814139332491763589}
+  zoomTime: 1
+  minHeight: 6
+  maxHeight: 15
+  minDistance: 6
+  maxDistance: 8
+  smoothingSpeed: 10
+  minClampDistance: 6
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 1
   cam: {fileID: 0}
   camTransform: {fileID: 0}
 --- !u!114 &1934922644525356947
@@ -3180,7 +3191,7 @@ GameObject:
   - component: {fileID: 5213473459048028826}
   - component: {fileID: 6632494633603839058}
   m_Layer: 0
-  m_Name: TDM-Common
+  m_Name: CommonGameplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

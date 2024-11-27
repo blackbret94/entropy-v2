@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Vashta.Entropy.UI;
 
 namespace Entropy.Scripts.Player
@@ -33,6 +34,13 @@ namespace Entropy.Scripts.Player
         public abstract Vector2 GetTurretRotation(Vector3 pos);
         
         public abstract bool ShouldShoot();
+        
+        // Zoom
+        public Vector2 GetZoomVector()
+        {
+            InputAction iaZoom = PlayerInputActions.UI.Zoom;
+            return iaZoom.ReadValue<Vector2>();
+        }
         
         // UI Directions
         public abstract bool DetectUI_Up();

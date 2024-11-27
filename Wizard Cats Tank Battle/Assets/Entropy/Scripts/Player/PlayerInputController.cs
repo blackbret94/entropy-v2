@@ -72,6 +72,10 @@ namespace Entropy.Scripts.Player
             InputAction secondaryMenu = PlayerInputActions.UI.MenuSecondaryAction;
             secondaryMenu.Enable();
             secondaryMenu.performed += MenuSecondary;
+
+            InputAction zoom = PlayerInputActions.UI.Zoom;
+            zoom.Enable();
+            zoom.performed += Zoom;
         }
 
         private void OnDisable()
@@ -114,6 +118,9 @@ namespace Entropy.Scripts.Player
             
             PlayerInputActions.UI.MenuSecondaryAction.Disable();
             PlayerInputActions.UI.MenuSecondaryAction.performed -= MenuSecondary;
+            
+            PlayerInputActions.UI.Zoom.Disable();
+            PlayerInputActions.UI.Zoom.performed -= Zoom;
         }
 
         private void Start()
@@ -378,6 +385,11 @@ namespace Entropy.Scripts.Player
                 CancelMenu(context);
                 UIGame.GetInstance().ScoreboardPanel.TogglePanel();
             }
+        }
+
+        protected void Zoom(InputAction.CallbackContext context)
+        {
+            
         }
     }
 }

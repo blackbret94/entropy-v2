@@ -500,6 +500,15 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Zoom"",
+                    ""type"": ""Value"",
+                    ""id"": ""0919f737-07f4-4fe1-8885-037b2df10150"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -953,6 +962,127 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
                     ""action"": ""MenuSecondaryAction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f8bebd0e-e3fe-4105-bd78-3986d215a2e7"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": ""ScaleVector2(x=4,y=4)"",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Keyboard"",
+                    ""id"": ""1e39b2dd-4054-4225-8a04-7b15abdafd8f"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""be2d2c7b-a12d-4202-a47a-7ddf52cc9c51"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""6a49025b-0436-4d3a-82e2-650abedd5c00"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""0ce8e20f-b732-4b2e-9b4e-cd93e3d667a9"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""43f47622-fd45-4240-bad0-0e8c41a4e275"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Virtual Mouse"",
+                    ""id"": ""275c94c4-da2d-490c-b5ab-81c2ed566bca"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""b4fb5ef7-3ec5-4f12-9530-6e6b05a0e5e9"",
+                    ""path"": ""<VirtualMouse>/scroll/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""959f20c7-dc27-4b35-bdb3-fe91fb2a9aab"",
+                    ""path"": ""<VirtualMouse>/scroll/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""8c25e314-59bb-4d3e-b518-f00a340e91cf"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""f4f9b774-45ed-4b2a-948b-a0cf4e2d0dad"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -1044,6 +1174,7 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
         m_UI_ToggleChangeClass = m_UI.FindAction("ToggleChangeClass", throwIfNotFound: true);
         m_UI_ToggleScoreboard = m_UI.FindAction("ToggleScoreboard", throwIfNotFound: true);
         m_UI_MenuSecondaryAction = m_UI.FindAction("MenuSecondaryAction", throwIfNotFound: true);
+        m_UI_Zoom = m_UI.FindAction("Zoom", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1205,6 +1336,7 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
     private readonly InputAction m_UI_ToggleChangeClass;
     private readonly InputAction m_UI_ToggleScoreboard;
     private readonly InputAction m_UI_MenuSecondaryAction;
+    private readonly InputAction m_UI_Zoom;
     public struct UIActions
     {
         private @PlayerInputActionsWCTB m_Wrapper;
@@ -1223,6 +1355,7 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
         public InputAction @ToggleChangeClass => m_Wrapper.m_UI_ToggleChangeClass;
         public InputAction @ToggleScoreboard => m_Wrapper.m_UI_ToggleScoreboard;
         public InputAction @MenuSecondaryAction => m_Wrapper.m_UI_MenuSecondaryAction;
+        public InputAction @Zoom => m_Wrapper.m_UI_Zoom;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1274,6 +1407,9 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
             @MenuSecondaryAction.started += instance.OnMenuSecondaryAction;
             @MenuSecondaryAction.performed += instance.OnMenuSecondaryAction;
             @MenuSecondaryAction.canceled += instance.OnMenuSecondaryAction;
+            @Zoom.started += instance.OnZoom;
+            @Zoom.performed += instance.OnZoom;
+            @Zoom.canceled += instance.OnZoom;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -1320,6 +1456,9 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
             @MenuSecondaryAction.started -= instance.OnMenuSecondaryAction;
             @MenuSecondaryAction.performed -= instance.OnMenuSecondaryAction;
             @MenuSecondaryAction.canceled -= instance.OnMenuSecondaryAction;
+            @Zoom.started -= instance.OnZoom;
+            @Zoom.performed -= instance.OnZoom;
+            @Zoom.canceled -= instance.OnZoom;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -1407,5 +1546,6 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
         void OnToggleChangeClass(InputAction.CallbackContext context);
         void OnToggleScoreboard(InputAction.CallbackContext context);
         void OnMenuSecondaryAction(InputAction.CallbackContext context);
+        void OnZoom(InputAction.CallbackContext context);
     }
 }

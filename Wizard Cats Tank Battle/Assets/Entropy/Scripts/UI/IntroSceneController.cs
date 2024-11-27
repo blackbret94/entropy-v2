@@ -5,12 +5,10 @@ namespace Vashta.Entropy.UI
     public class IntroSceneController: MonoBehaviour
     {
         public GameObject MainMenuParent,
-            CharacterEditorParent,
-            ItemStoreParent;
+            CharacterEditorParent;
 
         public GamePanel MainMenuGamePanel,
-            CharacterEditorGamePanel,
-            ItemStoreGamePanel;
+            CharacterEditorGamePanel;
 
         public void GoToMainMenu()
         {
@@ -29,25 +27,14 @@ namespace Vashta.Entropy.UI
             CharacterEditorGamePanel.SetActive(true);
             CharacterEditorGamePanel.Refresh();
         }
-
-        public void GoToItemStore()
-        {
-            DisableAll();
-            
-            ItemStoreParent.SetActive(true);
-            ItemStoreGamePanel.SetActive(true);
-            ItemStoreGamePanel.Refresh();
-        }
-
+        
         private void DisableAll()
         {
             MainMenuParent.SetActive(false);
             CharacterEditorParent.SetActive(false);
-            ItemStoreParent.SetActive(false);
             
             MainMenuGamePanel.SetActive(false);
             CharacterEditorGamePanel.SetActive(false);
-            ItemStoreGamePanel.SetActive(false);
         }
     }
 }

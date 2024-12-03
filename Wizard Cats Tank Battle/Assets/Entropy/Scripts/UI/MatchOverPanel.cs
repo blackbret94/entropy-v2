@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Entropy.Scripts.Player;
 using TanksMP;
 using TMPro;
@@ -46,6 +45,7 @@ namespace Vashta.Entropy.UI
         {
             gameObject.SetActive(true);
             HUDPanel.Get().ClosePanel();
+            UIGame.GetInstance().Minimap.SetActive(false);
             _canvasGroup.alpha = 1;
             TeamWinnerText.text = $"{winningTeamName} Wins";
             TeamWinnerText.color = winningTeamColor;

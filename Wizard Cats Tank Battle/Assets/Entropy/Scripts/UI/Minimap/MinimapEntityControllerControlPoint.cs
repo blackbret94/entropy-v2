@@ -38,16 +38,19 @@ namespace Vashta.Entropy.UI.Minimap
             if (teamIndex != _teamIndex)
             {
                 _teamIndex = teamIndex;
-                Team team = GameManager.GetTeamByIndex(_teamIndex);
-
-                if (team != null && team.teamDefinition != null)
+                if (teamIndex == -1)
                 {
-                    TeamDefinition teamDefinition = team.teamDefinition;
-                    SetEntityColor(teamDefinition.TeamColorPrim);
+                    SetEntityColor(Color.white);
                 }
                 else
                 {
-                    SetEntityColor(Color.white);
+                    Team team = GameManager.GetTeamByIndex(_teamIndex);
+
+                    if (team != null && team.teamDefinition != null)
+                    {
+                        TeamDefinition teamDefinition = team.teamDefinition;
+                        SetEntityColor(teamDefinition.TeamColorPrim);
+                    }
                 }
             }
         }

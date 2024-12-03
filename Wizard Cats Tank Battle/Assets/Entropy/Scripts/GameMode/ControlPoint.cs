@@ -274,11 +274,8 @@ namespace Vashta.Entropy.GameMode
                 {
                     UpdateCaptureTeamIndex(newCaptureTicks);
                 }
-
-                if (newCaptureTicks != _captureTicks)
-                {
-                    _captureTicks = newCaptureTicks;
-                }
+                
+                _captureTicks = newCaptureTicks;
             }
         }
     }

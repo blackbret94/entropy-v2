@@ -11,6 +11,7 @@ namespace Vashta.Entropy.UI
         public bool isOnMainMenu;
         
         public Slider volumeSlider;
+        public Slider musicSlider;
         public Slider graphicsSlider;
 
         public Toggle musicToggle;
@@ -50,6 +51,7 @@ namespace Vashta.Entropy.UI
             musicToggle.isOn = SettingsReader.GetMusicIsOn();
             
             volumeSlider.value = SettingsReader.GetVolume();
+            musicSlider.value = SettingsReader.GetMusicVolume();
             
             leftHandedModeToggle.isOn = SettingsReader.GetLeftHandedMode();
             AimArrowToggle.isOn = SettingsReader.GetAimArrow();
@@ -63,6 +65,7 @@ namespace Vashta.Entropy.UI
         {
             PlayerPrefs.SetString(PrefsKeys.playMusic, musicToggle.isOn.ToString());
             PlayerPrefs.SetFloat(PrefsKeys.appVolume, volumeSlider.value);
+            PlayerPrefs.SetFloat(PrefsKeys.musicVolume, musicSlider.value);
             PlayerPrefs.SetInt(PrefsKeys.lefthandedMode, leftHandedModeToggle.isOn ? 1 : 0);
             PlayerPrefs.SetInt(PrefsKeys.aimArrow, AimArrowToggle.isOn ? 1 : 0);
             PlayerPrefs.SetInt(PrefsKeys.showMinimap, showMinimapToggle.isOn ? 1 : 0);
@@ -117,6 +120,12 @@ namespace Vashta.Entropy.UI
         {
             volumeSlider.value = value;
             AudioListener.volume = value;
+        }
+
+        public void OnMusicVolumeChanged(float value)
+        {
+            musicSlider.value = value;
+            MusicController.AudioSource.volume = value;
         }
         
         public void OpenWebsite()

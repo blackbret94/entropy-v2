@@ -37,6 +37,8 @@ namespace TanksMP
         /// </summary>
         public const string playMusic = "TM_playMusic";
 
+        public const string musicVolume = "WCTB_musicVolume";
+        
         /// <summary>
         /// PlayerPrefs key for global audio volume: 0-1 range
         /// </summary>

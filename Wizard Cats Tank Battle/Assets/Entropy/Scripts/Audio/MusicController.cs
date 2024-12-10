@@ -1,6 +1,7 @@
 using TanksMP;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Vashta.Entropy.IO;
 using Vashta.Entropy.UI.MapSelection;
 
 namespace Entropy.Scripts.Audio
@@ -18,7 +19,7 @@ namespace Entropy.Scripts.Audio
             AudioSource.clip = MapDefinition.MusicTracks[_currentTrackIndex];
             SceneManager.sceneLoaded += OnSceneLoaded;
 
-            AudioSource.enabled = bool.Parse(PlayerPrefs.GetString(PrefsKeys.playMusic));
+            AudioSource.enabled = SettingsReader.GetMusicIsOn();
         }
         
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -42,8 +43,10 @@ namespace Entropy.Scripts.Audio
 
         public void PlayMusic()
         {
-            if(AudioSource.enabled)
+            if (AudioSource.enabled)
+            {
                 AudioSource.Play();
+            }
         }
 
         public void PlayVictoryMusic()

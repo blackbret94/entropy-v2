@@ -15,6 +15,7 @@ using Vashta.Entropy.GameMode;
 using Vashta.Entropy.PhotonExtensions;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.UI.ClassSelectionPanel;
+using Vashta.Entropy.UI.GameLog;
 using Vashta.Entropy.UI.MapSelection;
 #if UNITY_ADS
 using UnityEngine.Advertisements;

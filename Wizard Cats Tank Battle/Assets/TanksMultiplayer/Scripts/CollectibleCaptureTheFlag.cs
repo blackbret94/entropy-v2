@@ -123,6 +123,9 @@ namespace TanksMP
                 // remove status effect
                 _carriedBy.StatusEffectController.RemoveStatusEffect(StatusEffectToApply.Id);
             }
+            
+            // notify
+            GameManager.GetInstance().ui.GameLogPanel.EventSpoonDropped(_carriedBy.GetName(), _carriedBy.GetTeamDefinition());
 
             ResetFlag();
         }
@@ -136,6 +139,12 @@ namespace TanksMP
             {
                 // remove status effect
                 _carriedBy.StatusEffectController.RemoveStatusEffect(StatusEffectToApply.Id);
+            }
+
+            if (_carriedBy != null)
+            {
+                // Notify
+                GameManager.GetInstance().ui.GameLogPanel.EventSpoonCaptured(_carriedBy.GetName(), _carriedBy.GetTeamDefinition());
             }
 
             ResetFlag();

@@ -14,6 +14,7 @@ using Vashta.Entropy.IO;
 using Vashta.Entropy.SceneNavigation;
 using Vashta.Entropy.UI;
 using Vashta.Entropy.UI.ClassSelectionPanel;
+using Vashta.Entropy.UI.GameLog;
 using Vashta.Entropy.UI.TeamScore;
 
 namespace TanksMP
@@ -77,6 +78,7 @@ namespace TanksMP
         public MatchTimerPanel MatchTimer;
         public PlayerInputController PlayerInputController;
         public GameObject Minimap;
+        public GameLogPanel GameLogPanel;
 
         private static UIGame _instance;
         public static UIGame GetInstance() => _instance;
@@ -87,12 +89,12 @@ namespace TanksMP
             _instance = this;
             
             //on non-mobile devices hide joystick controls, except in editor
-            #if !UNITY_EDITOR && (UNITY_STANDALONE || UNITY_WEBGL)
+            #if (UNITY_STANDALONE || UNITY_WEBGL)
                 ToggleControls(false);
             #endif
             
             //on mobile devices enable additional aiming indicator
-            #if !UNITY_EDITOR && !UNITY_STANDALONE && !UNITY_WEBGL
+            #if !UNITY_STANDALONE && !UNITY_WEBGL
             if (aimIndicator != null)
             {
                 Transform indicator = Instantiate(aimIndicator).transform;

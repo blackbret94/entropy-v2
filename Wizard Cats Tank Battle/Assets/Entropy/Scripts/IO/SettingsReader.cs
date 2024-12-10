@@ -15,6 +15,12 @@ namespace Vashta.Entropy.IO
         {
             return PlayerPrefs.GetFloat(PrefsKeys.appVolume);
         }
+        
+        public static float GetMusicVolume()
+        {
+            return 0f;
+            //return 
+        }
 
         public static bool GetLeftHandedMode()
         {
@@ -35,5 +41,7 @@ namespace Vashta.Entropy.IO
         {
             return PlayerPrefs.GetInt(PrefsKeys.graphicsSettings, QualitySettings.GetQualityLevel());
         }
+
+        
     }
 }

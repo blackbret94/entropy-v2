@@ -26,6 +26,7 @@ namespace Vashta.Entropy.GameMode
         private sbyte _captureTicks = 0; // SYNCED
         private int _ticksToCapture = 5;
         private List<Player> _playersInBounds;
+        private GameManager _gameManager;
 
         private bool _hasInit;
         private bool _wasRecentlyCaptured; // Use to determine if Lost sfx should be played
@@ -37,6 +38,7 @@ namespace Vashta.Entropy.GameMode
 
             _playersInBounds = new List<Player>();
             ControlPointGraphics.ChangeTeamColorControl(TeamDefinitionNeutral);
+            _gameManager = GameManager.GetInstance();
             
             _hasInit = true;
         }
@@ -125,6 +127,9 @@ namespace Vashta.Entropy.GameMode
                 if (_wasRecentlyCaptured)
                 {
                     AudioManager.Play3D(PointLost, transform.position);
+                    
+                    _gameManager.ui.GameLogPanel.EventCapturePointContested();
+                    
                     _wasRecentlyCaptured = false;
                 }
             }
@@ -142,6 +147,10 @@ namespace Vashta.Entropy.GameMode
                         
                         // award points
                         AwardPointsToPlayersOnCapture();
+                        
+                        // notify
+                        Team team = GameManager.GetInstance().GetTeamByIndex(teamIndex);
+                        _gameManager.ui.GameLogPanel.EventCapturePointCaptured(team.teamDefinition);
                     }
                 }
             }

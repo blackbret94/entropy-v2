@@ -94,6 +94,7 @@ namespace TanksMP
             label.color = team.material.color;
             HealthbarHUD.SetTeam(team.teamDefinition);
             
+            GameManager.ui.GameLogPanel.EventPlayerJoined(GetName());
             rb = GetComponent<Rigidbody>();
            
             
@@ -158,7 +159,11 @@ namespace TanksMP
                 yield return new WaitForSeconds(1);
             }
         }
-        
+
+        public override string GetName()
+        {
+            return myName;
+        }
         
         //calculate random point for movement on navigation mesh
         private void RandomPoint(Vector3 center, float range, out Vector3 result)
@@ -373,10 +378,13 @@ namespace TanksMP
             if (senderView != null && senderView.gameObject != null) killedBy = senderView.gameObject;
             
             Player killedByPlayer = killedBy.GetComponent<Player>();
-            
-            if(killedByPlayer)
+
+            if (killedByPlayer)
+            {
                 killedByPlayer.RewardUltimateForKill();
-            
+                GameManager.ui.GameLogPanel.EventPlayerKilled(GetName(), GetTeamDefinition(), killedByPlayer.GetName(), killedByPlayer.GetTeamDefinition());
+            }
+
             //detect whether the current user was responsible for the kill
             //yes, that's my kill: increase local kill counter
             if (killedBy == GetLocalPlayer().gameObject) // This might be a problem if it is run on EVERY device
@@ -441,6 +449,11 @@ namespace TanksMP
 
             for (int i = 0; i < transform.childCount; i++)
                 transform.GetChild(i).gameObject.SetActive(state);
+        }
+
+        private void OnDestroy()
+        {
+            GameManager.ui.GameLogPanel.EventPlayerLeft(GetName());
         }
     }
 }

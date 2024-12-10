@@ -147,7 +147,7 @@ namespace TanksMP
 		protected Rigidbody rb;
 		#pragma warning restore 0649
         
-        public bool IsLocal => (GameManager.GetInstance().localPlayer == this && !isBot);
+        public bool IsLocal => (GameManager.localPlayer == this && !isBot);
         public ClassDefinition defaultClassDefinition;
         public ClassList classList;
 
@@ -191,20 +191,25 @@ namespace TanksMP
         public StatusEffectDirectory StatusEffectDirectory;
         public PlayerAimGraphic PlayerAimGraphic;
         public StatusEffectData StatusEffectApplyOnSpawn;
+
+        public GameManager GameManager;
         
         protected bool isBot = false;
         
         //initialize server values for this player
         void Awake()
         {
+            GameManager = GameManager.GetInstance();
+            
             _playersByViewId.Add(GetId(), this);
 
             ClassDefinition classDefinition = defaultClassDefinition ? defaultClassDefinition : classList.RandomClass();
 
             StartCoroutine(RefreshHudCoroutine());
+            
             if (IsLocal)
             {
-                GameManager.GetInstance().ui.CastPowerupButton.gameObject.SetActive(false);
+                GameManager.ui.CastPowerupButton.gameObject.SetActive(false);
             }
 
             //only let the master do initialization
@@ -249,6 +254,7 @@ namespace TanksMP
         private void OnDestroy()
         {
             _playersByViewId.Remove(GetId());
+            GameManager.ui.GameLogPanel.EventPlayerLeft(GetName());
         }
 
         /// <summary>
@@ -277,7 +283,7 @@ namespace TanksMP
             return null;
         }
 
-        public string GetName()
+        public virtual string GetName()
         {
             return GetView().GetName();
         }
@@ -288,22 +294,25 @@ namespace TanksMP
         /// </summary>
         void Start()
         {
-            InputController = GameManager.GetInstance().PlayerInputController;
+            InputController = GameManager.PlayerInputController;
             
             if (photonView.IsMine && !isBot)
             {
                 //set a global reference to the local player
-                GameManager.GetInstance().localPlayer = this;
+                GameManager.localPlayer = this;
                 // InputController.PlayerFired += OnFire;
             }
 
-            if (GameManager.GetInstance().UsesTeams)
+            if (GameManager.UsesTeams)
             {
                 ColorizePlayerForTeam();
+                GameManager.ui.GameLogPanel.EventPlayerChangedTeam(GetName(), GetTeamDefinition());
             }
             
             //set name in label
             label.text = GetView().GetName();
+            
+            GameManager.ui.GameLogPanel.EventPlayerJoined(GetName());
             
             //call hooks manually to update
             OnHealthChange(GetView().GetHealth());
@@ -327,16 +336,16 @@ namespace TanksMP
                 //initialize input controls for mobile devices
                 //[0]=left joystick for movement, [1]=right joystick for shooting
 #if !UNITY_STANDALONE && !UNITY_WEBGL
-            GameManager.GetInstance().ui.controls[0].onDrag += Move;
-            GameManager.GetInstance().ui.controls[0].onDragEnd += MoveEnd;
+            GameManager.ui.controls[0].onDrag += Move;
+            GameManager.ui.controls[0].onDragEnd += MoveEnd;
 
-            // GameManager.GetInstance().ui.controls[1].onClick += Shoot;
-            GameManager.GetInstance().ui.controls[1].onDragBegin += ShootBegin;
-            GameManager.GetInstance().ui.controls[1].onDrag += RotateTurret;
-            GameManager.GetInstance().ui.controls[1].onDrag += Shoot;
+            // GameManager.ui.controls[1].onClick += Shoot;
+            GameManager.ui.controls[1].onDragBegin += ShootBegin;
+            GameManager.ui.controls[1].onDrag += RotateTurret;
+            GameManager.ui.controls[1].onDrag += Shoot;
 #endif
 
-                GameManager.GetInstance().ui.fireButton.Player = this;
+                GameManager.ui.fireButton.Player = this;
             }
 
             if (PhotonNetwork.IsMasterClient)
@@ -358,7 +367,7 @@ namespace TanksMP
         private void ColorizePlayerForTeam(Team team = null)
         {
             if(team == null)
-                team = GameManager.GetInstance().teams[GetView().GetTeam()];
+                team = GameManager.teams[GetView().GetTeam()];
             
             //get corresponding team and colorize renderers in team color
             CharacterAppearance.Team = team;
@@ -403,7 +412,7 @@ namespace TanksMP
             }
 
             if (preferredTeamIndex == PlayerExtensions.RANDOM_TEAM_INDEX || preferredTeamIndex == GetView().GetTeam() ||
-                !GameManager.GetInstance().TeamHasVacancy(preferredTeamIndex))
+                !GameManager.TeamHasVacancy(preferredTeamIndex))
             {
                 return;
             }
@@ -433,10 +442,10 @@ namespace TanksMP
             if (prefersDifferentTeam)
             {
                 Debug.Log("Prefers a different team");
-                if (GameManager.GetInstance().TeamHasVacancy(preferredTeamIndex))
+                if (GameManager.TeamHasVacancy(preferredTeamIndex))
                 {
                     // Handle game over
-                    if (GameManager.GetInstance().IsGameOver())
+                    if (GameManager.IsGameOver())
                         return;
 
                     AttemptToChangeTeams(respawn);
@@ -449,6 +458,9 @@ namespace TanksMP
         protected void RpcChangeTeams()
         {
             ColorizePlayerForTeam();
+            
+            // Notify
+            GameManager.ui.GameLogPanel.EventPlayerChangedTeam(GetName(), GetTeamDefinition());
         }
         
         /// <summary>
@@ -647,8 +659,8 @@ namespace TanksMP
 
 			//replicate input to mobile controls for illustration purposes
 			#if UNITY_EDITOR
-				GameManager.GetInstance().ui.controls[0].position = moveDir;
-				GameManager.GetInstance().ui.controls[1].position = turnDir;
+				GameManager.ui.controls[0].position = moveDir;
+				GameManager.ui.controls[1].position = turnDir;
 			#endif
 #endif
         }
@@ -736,7 +748,7 @@ namespace TanksMP
             if (StatusEffectController.DisableFiring)
             {
                 if(IsLocal)
-                    GameManager.GetInstance().SfxController.PlayCantShoot(1f);
+                    GameManager.SfxController.PlayCantShoot(1f);
             }
             else
             {
@@ -1099,7 +1111,7 @@ namespace TanksMP
                 GetView().IncrementDeaths();
             
             //the game is already over so don't do anything
-            if(GameManager.GetInstance().IsGameOver()) return;
+            if(GameManager.IsGameOver()) return;
 
             OnePassCheckChangeTeams(false);
             
@@ -1114,24 +1126,24 @@ namespace TanksMP
                 // killer is other team
                 if (GetView().GetTeam() != otherTeam)
                 {
-                    GameManager.GetInstance().AddScore(ScoreType.Kill, otherTeam);
+                    GameManager.AddScore(ScoreType.Kill, otherTeam);
                     other.GetView().IncrementKills();
                 }
                 
                 //the maximum score has been reached now
-                if (GameManager.GetInstance().IsGameOver())
+                if (GameManager.IsGameOver())
                 {
                     //close room for joining players
                     PhotonNetwork.CurrentRoom.IsOpen = false;
                     //tell all clients the winning team
-                    GameManager.GetInstance().photonView.RPC("RpcGameOver", RpcTarget.All, (byte)otherTeam);
+                    GameManager.photonView.RPC("RpcGameOver", RpcTarget.All, (byte)otherTeam);
                     return;
                 }
             }
             else
             {
                 // Killed by environment
-                GameManager.GetInstance().RemoveScore(ScoreType.Kill, GetView().GetTeam());
+                GameManager.RemoveScore(ScoreType.Kill, GetView().GetTeam());
             }
 
             //the game is not over yet, reset runtime values
@@ -1180,7 +1192,7 @@ namespace TanksMP
             // }
 
             // Check all potential team colliders
-            GameManager gameManager = GameManager.GetInstance();
+            GameManager gameManager = GameManager;
             foreach (var team in gameManager.teams)
             {
                 Collider col = team.freeClassChange.GetComponent<Collider>();
@@ -1223,9 +1235,9 @@ namespace TanksMP
                 if (IsLocal)
                 {
                     // Hide "Drop Flag" button if local player
-                    GameManager.GetInstance().ui.DropCollectiblesButton.gameObject.SetActive(false);
-                    GameManager.GetInstance().ui.CastUltimateButton.gameObject.SetActive(false);
-                    GameManager.GetInstance().ui.CastPowerupButton.gameObject.SetActive(false);
+                    GameManager.ui.DropCollectiblesButton.gameObject.SetActive(false);
+                    GameManager.ui.CastUltimateButton.gameObject.SetActive(false);
+                    GameManager.ui.CastPowerupButton.gameObject.SetActive(false);
                 }
                 
                 //find original sender game object (killedBy)
@@ -1246,13 +1258,16 @@ namespace TanksMP
                 // play killer's death cry
                 if (killedBy != null)
                 {
-                    Player player = killedBy.GetComponent<Player>();
+                    Player otherPlayer = killedBy.GetComponent<Player>();
                     
-                    player.RewardUltimateForKill();
+                    otherPlayer.RewardUltimateForKill();
+                    
+                    // log
+                    GameManager.ui.GameLogPanel.EventPlayerKilled(GetName(), GetTeamDefinition(), otherPlayer.GetName(), otherPlayer.GetTeamDefinition());
                 
-                    if (player != null && player != this)
+                    if (otherPlayer != null && otherPlayer != this)
                     {
-                        AudioManager.Play3D(player.CharacterAppearance.Meow.AudioClip, transform.position);
+                        AudioManager.Play3D(otherPlayer.CharacterAppearance.Meow.AudioClip, transform.position);
                     }
                 }
             }
@@ -1262,7 +1277,7 @@ namespace TanksMP
                 //send player back to the team area, this will get overwritten by the exact position from the client itself later on
                 //we just do this to avoid players "popping up" from the position they died and then teleporting to the team area instantly
                 //this is manipulating the internal PhotonTransformView cache to update the networkPosition variable
-                GetComponent<PhotonTransformView>().OnPhotonSerializeView(new PhotonStream(false, new object[] { GameManager.GetInstance().GetSpawnPosition(GetView().GetTeam()),
+                GetComponent<PhotonTransformView>().OnPhotonSerializeView(new PhotonStream(false, new object[] { GameManager.GetSpawnPosition(GetView().GetTeam()),
                                                                                                                  Vector3.zero, Quaternion.identity }), new PhotonMessageInfo());
             }
 
@@ -1286,7 +1301,7 @@ namespace TanksMP
                 
                 // Show ultimates button
                 if(IsLocal)
-                    GameManager.GetInstance().ui.CastUltimateButton.gameObject.SetActive(true);
+                    GameManager.ui.CastUltimateButton.gameObject.SetActive(true);
 
                 // Server only
                 if (PhotonNetwork.IsMasterClient)
@@ -1321,7 +1336,7 @@ namespace TanksMP
                 //hide input controls and other HUD elements
                 camFollow.HideMask(true);
                 //display respawn window (only for local player)
-                GameManager.GetInstance().DisplayDeath();
+                GameManager.DisplayDeath();
             }
         }
 
@@ -1354,7 +1369,7 @@ namespace TanksMP
             OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.CoinReward, "+"+amount);
 
             // play coin reward sound
-            GameManager.GetInstance().ui.SfxController.PlayCoinEarnedSound();
+            GameManager.ui.SfxController.PlayCoinEarnedSound();
         }
 
         public void CmdRewardForFlagCapture()
@@ -1369,7 +1384,7 @@ namespace TanksMP
             if (!IsLocal)
                 return;
             
-            GameManager.GetInstance().ui.DropCollectiblesButton.gameObject.SetActive(false);
+            GameManager.ui.DropCollectiblesButton.gameObject.SetActive(false);
 
             RewardCoins(_playerCurrencyRewarder.RewardForFlagCapture());
         }
@@ -1410,15 +1425,15 @@ namespace TanksMP
             camFollow.HideMask(false);
 
             //get team area and reposition it there
-            // transform.position = GameManager.GetInstance().GetSpawnPosition(GetView().GetTeam());
+            // transform.position = GameManager.GetSpawnPosition(GetView().GetTeam());
 
             //reset forces modified by input
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
             transform.rotation = Quaternion.identity;
             //reset input left over
-            GameManager.GetInstance().ui.controls[0].OnEndDrag(null);
-            GameManager.GetInstance().ui.controls[1].OnEndDrag(null);
+            GameManager.ui.controls[0].OnEndDrag(null);
+            GameManager.ui.controls[1].OnEndDrag(null);
         }
 
         /// <summary>
@@ -1426,7 +1441,7 @@ namespace TanksMP
         /// </summary>
         private void MovePlayerToSpawn()
         {
-            transform.position = GameManager.GetInstance().GetSpawnPosition(GetView().GetTeam());
+            transform.position = GameManager.GetSpawnPosition(GetView().GetTeam());
         }
 
 
@@ -1444,7 +1459,7 @@ namespace TanksMP
                 teamIndexInt = -1;
             
             //display game over window
-            GameManager.GetInstance().DisplayGameOver(teamIndexInt);
+            GameManager.DisplayGameOver(teamIndexInt);
         }
 
         public void OnPhotonInstantiate(PhotonMessageInfo info)
@@ -1514,7 +1529,7 @@ namespace TanksMP
             ReplaceClassMissile();
             
             if(IsLocal)
-                GameManager.GetInstance().ui.CastUltimateButton.UpdateSpellIcon(classDefinition.ultimateIcon);
+                GameManager.ui.CastUltimateButton.UpdateSpellIcon(classDefinition.ultimateIcon);
         }
 
         private void ReplaceClassMissile()
@@ -1545,7 +1560,7 @@ namespace TanksMP
             if (!IsLocal)
                 return;
 
-            UIGame uiGame = GameManager.GetInstance().ui;
+            UIGame uiGame = GameManager.ui;
             uiGame.bulletIcon.SetLoadout(bulletId, ammoValue);
         }
 
@@ -1593,7 +1608,7 @@ namespace TanksMP
             if (!IsLocal || powerup == null)
                 return;
 
-            UIGame uiGame = GameManager.GetInstance().ui;
+            UIGame uiGame = GameManager.ui;
             uiGame.PowerUpPanel.SetText(powerup.DisplayText,powerup.DisplaySubtext, powerup.Color, powerup.Icon);
         }
 
@@ -1751,6 +1766,11 @@ namespace TanksMP
         public int GetTeam()
         {
             return photonView.GetTeam();
+        }
+
+        public TeamDefinition GetTeamDefinition()
+        {
+            return CharacterAppearance.Team.teamDefinition;
         }
     }
 }

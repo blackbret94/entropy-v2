@@ -75,7 +75,8 @@ namespace TanksMP
         {
             isBot = true;
             _playerCurrencyRewarder = new PlayerCurrencyRewarder();
-            
+            GameManager = GameManager.GetInstance();
+   
             //get components and set camera target
             camFollow = Camera.main.GetComponent<FollowTarget>();
             agent = GetComponent<NavMeshAgent>();
@@ -96,7 +97,6 @@ namespace TanksMP
             
             GameManager.ui.GameLogPanel.EventPlayerJoined(GetName());
             rb = GetComponent<Rigidbody>();
-           
             
             //call hooks manually to update
             OnHealthChange(GetView().GetHealth());

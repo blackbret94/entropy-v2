@@ -1136,7 +1136,7 @@ namespace TanksMP
                     //close room for joining players
                     PhotonNetwork.CurrentRoom.IsOpen = false;
                     //tell all clients the winning team
-                    GameManager.photonView.RPC("RpcGameOver", RpcTarget.All, (byte)otherTeam);
+                    GameManager.GetInstance().photonView.RPC("RpcGameOver", RpcTarget.All, (byte)otherTeam);
                     return;
                 }
             }

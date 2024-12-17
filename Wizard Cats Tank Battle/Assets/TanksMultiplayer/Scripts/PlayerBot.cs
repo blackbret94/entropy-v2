@@ -77,8 +77,6 @@ namespace TanksMP
             _playerCurrencyRewarder = new PlayerCurrencyRewarder();
             GameManager = GameManager.GetInstance();
    
-            //get components and set camera target
-            camFollow = Camera.main.GetComponent<FollowTarget>();
             agent = GetComponent<NavMeshAgent>();
             agent.speed = moveSpeed;
 
@@ -89,11 +87,11 @@ namespace TanksMP
             Team team = GameManager.GetInstance().teams[GetView().GetTeam()];
             CharacterAppearance.Team = team;
             CharacterAppearance.ColorizeCart();
-
-            //set name in label
-            label.text = myName = CatNameGenerator.GetRandomName();
-            label.color = team.material.color;
-            HealthbarHUD.SetTeam(team.teamDefinition);
+            
+            myName = CatNameGenerator.GetRandomName();
+            PlayerViewController.SetName(myName);
+            
+            PlayerViewController.SetTeam(team.teamDefinition);
             
             GameManager.ui.GameLogPanel.EventPlayerJoined(GetName());
             rb = GetComponent<Rigidbody>();
@@ -105,7 +103,7 @@ namespace TanksMP
             // add to player bot list
             GameManager.GetInstance().AddBot(this);
 
-            RefreshSlider();
+            PlayerViewController.RefreshHealthSlider();
             
             //start enemy detection routine
             StartCoroutine(DetectPlayers());
@@ -387,7 +385,7 @@ namespace TanksMP
 
             //detect whether the current user was responsible for the kill
             //yes, that's my kill: increase local kill counter
-            if (killedBy == GetLocalPlayer().gameObject) // This might be a problem if it is run on EVERY device
+            if (killedBy == PlayerList.GetLocalPlayer().gameObject) // This might be a problem if it is run on EVERY device
             {
                 RewardCoinsForKill();
             }

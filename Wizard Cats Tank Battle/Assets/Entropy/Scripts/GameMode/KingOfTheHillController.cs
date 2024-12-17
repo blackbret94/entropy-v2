@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Entropy.Scripts.Player;
 using Photon.Pun;
 using TanksMP;
 using UnityEngine;
@@ -87,7 +88,7 @@ namespace Vashta.Entropy.GameMode
 
                     int teamWithHighestScore = GameManager.GetTeamWithHighestScore();
                     
-                    Player.GetLocalPlayer().photonView.RPC("RpcGameOver", RpcTarget.All, (byte)teamWithHighestScore);
+                    PlayerList.GetLocalPlayer().photonView.RPC("RpcGameOver", RpcTarget.All, (byte)teamWithHighestScore);
         
                     _timerIsRunning = false;
                     _hasCalledGameOver = true;

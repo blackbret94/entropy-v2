@@ -1,3 +1,4 @@
+using Entropy.Scripts.Player;
 using TanksMP;
 using UnityEngine;
 using Vashta.Entropy.ScriptableObject;
@@ -61,7 +62,7 @@ namespace Vashta.Entropy.UI.Minimap
 
         private bool SameTeamAsLocalPlayer()
         {
-            Player localPlayer = Player.GetLocalPlayer();
+            Player localPlayer = PlayerList.GetLocalPlayer();
             return localPlayer.GetTeam() == Player.GetTeam();
         }
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Entropy.Scripts.Player;
 using Photon.Pun;
 using TanksMP;
 using UnityEngine;
@@ -108,7 +109,7 @@ namespace Vashta.Entropy.StatusEffects
         [PunRPC]
         public void RPCAddStatusEffect(string statusEffectId, int playerId)
         {
-            Player owner = Player.GetPlayerById(playerId);
+            Player owner = PlayerList.GetPlayerById(playerId);
             StatusEffect statusEffect = new StatusEffect(this, statusEffectId, owner);
             
             // Check if status effect already exists

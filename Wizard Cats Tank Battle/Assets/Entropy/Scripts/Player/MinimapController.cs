@@ -46,7 +46,7 @@ namespace Entropy.Scripts.Player
         {
             while (_localPlayer == null)
             {
-                _localPlayer = TanksMP.Player.GetLocalPlayer();
+                _localPlayer = PlayerList.GetLocalPlayer();
                 yield return null;
             }
 
@@ -96,7 +96,7 @@ namespace Entropy.Scripts.Player
         [PunRPC]
         public void RpcSpawnPing(short[] position, short teamIndex)
         {
-            TanksMP.Player localPlayer = TanksMP.Player.GetLocalPlayer();
+            TanksMP.Player localPlayer = PlayerList.GetLocalPlayer();
 
             // Only spawn if for this player's team
             if (localPlayer != null && localPlayer.GetTeam() == teamIndex)

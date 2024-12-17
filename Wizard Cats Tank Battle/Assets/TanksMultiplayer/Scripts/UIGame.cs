@@ -79,6 +79,7 @@ namespace TanksMP
         public PlayerInputController PlayerInputController;
         public GameObject Minimap;
         public GameLogPanel GameLogPanel;
+        public JoystickController JoystickController; //  TODO
 
         private static UIGame _instance;
         public static UIGame GetInstance() => _instance;

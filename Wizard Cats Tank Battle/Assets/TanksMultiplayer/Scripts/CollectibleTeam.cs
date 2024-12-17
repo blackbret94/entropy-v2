@@ -3,6 +3,7 @@
  * 	You shall not license, sublicense, sell, resell, transfer, assign, distribute or
  * 	otherwise make available to any third party the Service or the Content. */
 
+using Entropy.Scripts.Player;
 using UnityEngine;
 using Photon.Pun;
 
@@ -122,7 +123,7 @@ namespace TanksMP
         
         public override void OnPickup()
         {
-            Player localPlayer = Player.GetLocalPlayer();
+            Player localPlayer = PlayerList.GetLocalPlayer();
 
             if (!localPlayer)
             {

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5470280}
   - component: {fileID: 114000011901014096}
   - component: {fileID: 114000013996810128}
+  - component: {fileID: 4180604625767847630}
   - component: {fileID: 114000013810182620}
   - component: {fileID: 4797552529484202075}
   - component: {fileID: 6748233522558695934}
@@ -21,6 +22,7 @@ GameObject:
   - component: {fileID: 5699472348154182382}
   - component: {fileID: 2695113032983889765}
   - component: {fileID: 7636866592782098713}
+  - component: {fileID: 1361573124951763280}
   m_Layer: 8
   m_Name: PlayerCharacter
   m_TagString: Untagged
@@ -83,7 +85,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0a5fa8dc87825e4f87e00cac1db08b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  label: {fileID: 4203007501589506220}
   maxHealth: 10
   maxShield: 5
   counterDamageMod: 2
@@ -93,9 +94,6 @@ MonoBehaviour:
   turretRotation: 0
   fireRate: 0.75
   moveSpeed: 7
-  healthSlider: {fileID: 4738908579127511574}
-  shieldSlider: {fileID: 7220985147578495427}
-  classIcon: {fileID: 4011357851466573602}
   shotFX: {fileID: 1000011513120438, guid: f70d27f5cf28c8941bbfd6febd74797f, type: 3}
   turret: {fileID: 4305748445454077326}
   shotPos: {fileID: 6046886275116361424}
@@ -106,10 +104,7 @@ MonoBehaviour:
   CharacterAppearance: {fileID: 2386344821364946175}
   handicapModifier: 1
   PlayerAnimator: {fileID: 6748233522558695934}
-  HealthbarText: {fileID: 1270671750754739478}
-  HealthbarHUD: {fileID: 8539441206212331302}
   killedBy: {fileID: 0}
-  camFollow: {fileID: 0}
   StatusEffectController: {fileID: 7300910866357486322}
   Renderer: {fileID: 7640551074577506615}
   defaultClassDefinition: {fileID: 11400000, guid: 74fed74e4e8ccee43a4a18a91ca80171,
@@ -152,6 +147,27 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: -1
   isRuntimeInstantiated: 0
+--- !u!114 &4180604625767847630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85524ff3f86643b9818d4871f91f141e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerNameText: {fileID: 4203007501589506220}
+  healthSlider: {fileID: 4738908579127511574}
+  shieldSlider: {fileID: 7220985147578495427}
+  classIcon: {fileID: 4011357851466573602}
+  HealthbarText: {fileID: 1270671750754739478}
+  HealthbarHUD: {fileID: 8539441206212331302}
+  StatusEffectDirectory: {fileID: 11400000, guid: 06185a77b443ee54b8ce18ae4e7db647,
+    type: 2}
+  PowerupDirectory: {fileID: 11400000, guid: 8447b6afb9e4bee4b94cfa4fcf00bc0d, type: 2}
 --- !u!114 &114000013810182620
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -351,6 +367,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 114000011901014096}
+--- !u!114 &1361573124951763280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 338efad7ca04448dbe4137fecf59966d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &160484769436647168
 GameObject:
   m_ObjectHideFlags: 0

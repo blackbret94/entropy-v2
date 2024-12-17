@@ -1,3 +1,4 @@
+using Entropy.Scripts.Player;
 using TanksMP;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace Vashta.Entropy.UI
     {
         public void DropCollectiblesLocalPlayer()
         {
-            Player localPlayer = Player.GetLocalPlayer();
+            Player localPlayer = PlayerList.GetLocalPlayer();
 
             if (!localPlayer)
             {

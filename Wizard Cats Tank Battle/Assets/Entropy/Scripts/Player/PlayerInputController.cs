@@ -282,7 +282,7 @@ namespace Entropy.Scripts.Player
             if (GameplayActionsBlocked())
                 return;
             
-            TanksMP.Player player = TanksMP.Player.GetLocalPlayer();
+            TanksMP.Player player = PlayerList.GetLocalPlayer();
 
             if (player != null)
             {
@@ -295,7 +295,7 @@ namespace Entropy.Scripts.Player
             if (GameplayActionsBlocked())
                 return;
             
-            TanksMP.Player player = TanksMP.Player.GetLocalPlayer();
+            TanksMP.Player player = PlayerList.GetLocalPlayer();
             
             if (player != null)
             {
@@ -311,7 +311,7 @@ namespace Entropy.Scripts.Player
             if (GameplayActionsBlocked())
                 return;
             
-            TanksMP.Player player = TanksMP.Player.GetLocalPlayer();
+            TanksMP.Player player = PlayerList.GetLocalPlayer();
             
             if (player != null)
             {

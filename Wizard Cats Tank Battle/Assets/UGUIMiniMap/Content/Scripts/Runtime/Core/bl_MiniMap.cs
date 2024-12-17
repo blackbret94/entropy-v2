@@ -656,7 +656,7 @@ public sealed class bl_MiniMap : MonoBehaviour
             Destroy(mapPointer);
         }
 
-        Player localPlayer = Player.GetLocalPlayer();
+        Player localPlayer = PlayerList.GetLocalPlayer();
 
         if (!localPlayer)
         {

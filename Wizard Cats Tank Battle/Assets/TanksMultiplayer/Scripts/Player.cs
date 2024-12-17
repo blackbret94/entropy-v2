@@ -5,20 +5,14 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Entropy.Scripts.Player;
 using UnityEngine;
-using UnityEngine.UI;
 using Photon.Pun;
 using Vashta.Entropy.Character;
 using EckTechGames.FloatingCombatText;
-using Entropy.Scripts.Audio;
-using TMPro;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.Spells;
 using Vashta.Entropy.StatusEffects;
-using Vashta.Entropy.UI;
 using Vashta.Entropy.UI.Minimap;
 
 namespace TanksMP
@@ -28,24 +22,18 @@ namespace TanksMP
     /// Contains both server and client logic in an authoritative approach.
     /// </summary>
     [RequireComponent(typeof(StatusEffectController))]
+    [RequireComponent(typeof(PlayerCameraController))]
+    [RequireComponent(typeof(PlayerViewController))]
     public class Player : MonoBehaviourPunCallbacks, IPunObservable, IPunInstantiateMagicCallback
     {
-        /// <summary>
-        /// UI Text displaying the player name.
-        /// </summary>    
-        public Text label;
-
-        /// <summary>
-        /// Maximum health value at game start.
-        /// </summary>
+        [Header("Stats")]
         public int maxHealth = 10;
         public int maxShield = 5;
-
         public int counterDamageMod = 2;
         public int sameClassDamageMod = -1;
-
         public float acceleration = 30f;
-
+        public float fireRate = 0.75f;
+        public float moveSpeed = 8f;
         public float defaultMass = 1;
 
         /// <summary>
@@ -53,31 +41,6 @@ namespace TanksMP
         /// </summary>
         [HideInInspector]
         public short turretRotation;
-
-        /// <summary>
-        /// Delay between shots.
-        /// </summary>
-        public float fireRate = 0.75f;
-
-        /// <summary>
-        /// Movement speed in all directions.
-        /// </summary>
-        public float moveSpeed = 8f;
-
-        /// <summary>
-        /// UI Slider visualizing health value.
-        /// </summary>
-        public Slider healthSlider;
-
-        /// <summary>
-        /// UI Slider visualizing shield value.
-        /// </summary>
-        public Slider shieldSlider;
-
-        /// <summary>
-        /// Icon next to the slider displaying the player class
-        /// </summary>
-        public Image classIcon;
         
         /// <summary>
         /// Object to spawn on shooting.
@@ -90,14 +53,9 @@ namespace TanksMP
         public Transform turret;
 
         /// <summary>
-        /// Position to spawn new bullets at.
+        /// Position to spawn new projectiles.
         /// </summary>
         public Transform shotPos;
-
-        /// <summary>
-        /// Array of available bullets for shooting.
-        /// </summary>
-        public GameObject[] bullets;
 
         /// <summary>
         /// Character appearance reference, stores information about the model.
@@ -112,25 +70,13 @@ namespace TanksMP
         public PlayerAnimator PlayerAnimator;
 
         /// <summary>
-        /// Shows the amount of health the player has
-        /// </summary>
-        public TextMeshProUGUI HealthbarText;
-
-        public PlayerHealthbarHUD HealthbarHUD;
-
-        /// <summary>
         /// Last player gameobject that killed this one.
         /// </summary>
         [HideInInspector]
         public GameObject killedBy;
-
-        /// <summary>
-        /// Reference to the camera following component.
-        /// </summary>
+        
         [HideInInspector]
-        public FollowTarget camFollow;
         public StatusEffectController StatusEffectController;
-        public Renderer Renderer;
 
         //timestamp when next shot should happen
         private float nextFire;
@@ -139,8 +85,11 @@ namespace TanksMP
         public float FractionFireReady => Mathf.Min(1-(TimeToNextFire / fireRate), 1);
 
         protected PlayerCurrencyRewarder _playerCurrencyRewarder;
+        protected ProjectileFactory _projectileFactory;
 
-        private PlayerInputController InputController;
+        public PlayerInputController InputController { get; private set; }
+        public PlayerCameraController CameraController { get; private set; }
+        public PlayerViewController PlayerViewController { get; private set; }
 
         //reference to this rigidbody
         #pragma warning disable 0649
@@ -149,7 +98,6 @@ namespace TanksMP
         
         public bool IsLocal => (GameManager.localPlayer == this && !isBot);
         public ClassDefinition defaultClassDefinition;
-        public ClassList classList;
 
         private Vector3 _lastMousePos;
 
@@ -157,14 +105,7 @@ namespace TanksMP
         private float _secondUpdateTime = 1f;
 
         private float _initTime;
-
-        private static Dictionary<int, Player> _playersByViewId = new ();
-        public static List<Player> GetAllPlayers => _playersByViewId.Values.ToList();
-
-        // Data tables
-        public BulletDictionary BulletDictionary;
-        public PowerupDirectory PowerupDirectory;
-        public VisualEffectDirectory VisualEffectDirectory;
+        
         public MinimapEntityControllerPlayer MinimapEntityControllerPlayer;
 
         // Lag compensation
@@ -183,25 +124,32 @@ namespace TanksMP
         public float lastDeathTime = 0f;
 
         public bool IsAlive = true;
-        public bool IsDead => !IsAlive;
         private bool _hasLateInited = false;
         
-        public bool IsVisible => Renderer.isVisible;
-        
+        [Header("Data")]
+        public ClassList classList;
+        public VisualEffectDirectory VisualEffectDirectory;
         public StatusEffectDirectory StatusEffectDirectory;
         public PlayerAimGraphic PlayerAimGraphic;
         public StatusEffectData StatusEffectApplyOnSpawn;
 
         public GameManager GameManager;
         
-        protected bool isBot = false;
+        public bool isBot = false;
         
         //initialize server values for this player
+        // Called on both Player and PlayerBot
         void Awake()
         {
             GameManager = GameManager.GetInstance();
+            CameraController = GetComponent<PlayerCameraController>();
+            PlayerViewController = GetComponent<PlayerViewController>();
+            InputController = GameManager.PlayerInputController;
+            rb = GetComponent<Rigidbody>();
+            _playerCurrencyRewarder = new PlayerCurrencyRewarder();
+            _projectileFactory = new ProjectileFactory(gameObject, StatusEffectController);
             
-            _playersByViewId.Add(GetId(), this);
+            PlayerList.Add(GetId(), this);
 
             ClassDefinition classDefinition = defaultClassDefinition ? defaultClassDefinition : classList.RandomClass();
 
@@ -228,10 +176,11 @@ namespace TanksMP
             lastTransformUpdate = Time.time;
         }
 
+        // TODO: Check if this does anything
         private IEnumerator RefreshHudCoroutine()
         {
             yield return new WaitForSeconds(.1f);
-            RefreshSlider();
+            PlayerViewController.RefreshHealthSlider();
         }
 
         private void SetMaxHealth()
@@ -241,51 +190,10 @@ namespace TanksMP
             OnHealthChange(maxHealth);
         }
 
-        /// <summary>
-        /// Get the ID of this player
-        /// </summary>
-        /// <returns></returns>
-        public int GetId()
-        {
-            // Need to verify this is the right way to do it
-            return photonView.ViewID;
-        }
-
         private void OnDestroy()
         {
-            _playersByViewId.Remove(GetId());
+            PlayerList.Remove(GetId());
             GameManager.ui.GameLogPanel.EventPlayerLeft(GetName());
-        }
-
-        /// <summary>
-        /// Attempt to get a player from an ID.  Returns null if player does not exist
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public static Player GetPlayerById(int id)
-        {
-            if (_playersByViewId.ContainsKey(id))
-                return _playersByViewId[id];
-
-            return null;
-        }
-
-        public static Player GetLocalPlayer()
-        {
-            foreach (KeyValuePair<int,Player> keyValuePair in _playersByViewId)
-            {
-                Player kvpPlayer = keyValuePair.Value;
-
-                if (kvpPlayer != null && kvpPlayer.IsLocal && !kvpPlayer.isBot)
-                    return kvpPlayer;
-            }
-
-            return null;
-        }
-
-        public virtual string GetName()
-        {
-            return GetView().GetName();
         }
 
         /// <summary>
@@ -294,8 +202,6 @@ namespace TanksMP
         /// </summary>
         void Start()
         {
-            InputController = GameManager.PlayerInputController;
-            
             if (photonView.IsMine && !isBot)
             {
                 //set a global reference to the local player
@@ -309,8 +215,7 @@ namespace TanksMP
                 GameManager.ui.GameLogPanel.EventPlayerChangedTeam(GetName(), GetTeamDefinition());
             }
             
-            //set name in label
-            label.text = GetView().GetName();
+            PlayerViewController.SetName(GetName());
             
             GameManager.ui.GameLogPanel.EventPlayerJoined(GetName());
             
@@ -318,20 +223,14 @@ namespace TanksMP
             OnHealthChange(GetView().GetHealth());
             OnShieldChange(GetView().GetShield());
             ApplyClass();
-
-            _playerCurrencyRewarder = new PlayerCurrencyRewarder();
-
-            //get components and set camera target
-            rb = GetComponent<Rigidbody>();
             
             // refresh slider to fix render issues
-            RefreshSlider();
+            PlayerViewController.RefreshHealthSlider();
             
             //called only for this client 
             if (photonView.IsMine)
             {
-                camFollow = Camera.main.GetComponent<FollowTarget>();
-                camFollow.target = turret;
+                CameraController.SetTarget(turret);
 
                 //initialize input controls for mobile devices
                 //[0]=left joystick for movement, [1]=right joystick for shooting
@@ -357,12 +256,6 @@ namespace TanksMP
                 }
             }
         }
-
-        protected void RefreshSlider()
-        {
-            healthSlider.gameObject.SetActive(false);
-            healthSlider.gameObject.SetActive(true);
-        }
         
         private void ColorizePlayerForTeam(Team team = null)
         {
@@ -373,8 +266,7 @@ namespace TanksMP
             CharacterAppearance.Team = team;
             CharacterAppearance.ColorizeCart();
             
-            label.color = team.teamDefinition.TeamColorPrim;
-            HealthbarHUD.SetTeam(team.teamDefinition);
+            PlayerViewController.SetTeam(team.teamDefinition);   
 
             if (IsLocal)
             {
@@ -528,7 +420,6 @@ namespace TanksMP
                 if (PhotonNetwork.IsMasterClient)
                 {
                     StatusEffectTick();
-                    // OnePassCheckChangeTeams();
                 }
             }
         }
@@ -658,7 +549,7 @@ namespace TanksMP
                 Shoot();
 
 			//replicate input to mobile controls for illustration purposes
-			#if UNITY_EDITOR
+			#if UNITY_EDITOR && (UNITY_IPHONE || UNITY_ANDROID)
 				GameManager.ui.controls[0].position = moveDir;
 				GameManager.ui.controls[1].position = turnDir;
 			#endif
@@ -686,7 +577,7 @@ namespace TanksMP
             if (direction != Vector2.zero)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.y))
-                                            * Quaternion.Euler(0, camFollow.camTransform.eulerAngles.y, 0);
+                                            * Quaternion.Euler(0, CameraController.camTransform.eulerAngles.y, 0);
 
                 float rotationSpeed = Time.deltaTime * 450;
                 transform.rotation = Quaternion.RotateTowards(
@@ -830,18 +721,18 @@ namespace TanksMP
             Quaternion syncedRot = turret.rotation = Quaternion.Euler(0, angle, 0);
 
             //spawn bullet using pooling
-            SpawnProjectile(shotCenter, syncedRot);
+            _projectileFactory.SpawnProjectile(shotCenter, syncedRot, GetClass());
 
             // Spray.  Only handles 3 projectiles right now
             if (StatusEffectController.AdditionalProjectilesSpray > 0)
             {
                 // shoot left
                 Quaternion leftProjectile = Quaternion.Euler(0, angle - 5, 0);
-                SpawnProjectile(shotCenter, leftProjectile, .66f);
+                _projectileFactory.SpawnProjectile(shotCenter, leftProjectile, GetClass(), .66f);
                 
                 // shoot right
                 Quaternion rightProjectile = Quaternion.Euler(0, angle + 5, 0);
-                SpawnProjectile(shotCenter, rightProjectile, .66f);
+                _projectileFactory.SpawnProjectile(shotCenter, rightProjectile, GetClass(), .66f);
             }
             
             // animate
@@ -859,42 +750,7 @@ namespace TanksMP
         {
             if (shotFX) PoolManager.Spawn(shotFX, shotPos.position, Quaternion.identity);
         }
-
-        private void SpawnProjectile(Vector3 shotCenter, Quaternion syncedRot, float DamageModifier = 1)
-        {
-            GameObject obj = PoolManager.Spawn(bullets[0], shotCenter, syncedRot);
-            Bullet bullet = obj.GetComponent<Bullet>();
-            
-            bullet.SpawnNewBullet();
-            bullet.owner = gameObject;
-            bullet.ClassDefinition = classList[photonView.GetClassId()];
-            bullet.SetDamage(Mathf.CeilToInt(bullet.GetRawDamage() * StatusEffectController.DamageOutputModifier * DamageModifier));
-            bullet.canBuff = !StatusEffectController.BlocksCastingBuffs;
-            bullet.canDebuff = !StatusEffectController.BlocksCastingDebuffs;
-
-            if (StatusEffectController.ProjectileExplodes)
-            {
-                bullet.SetExplosionRange(3);
-                bullet.SetMaxTargets(3);
-            }
-
-            if (StatusEffectController.ProjectileReflects)
-            {
-                bullet.SetMaxBounce(10);
-            }
-
-            if (StatusEffectController.ProjectileLifeExtended > 0)
-            {
-                bullet.IncreaseDespawnDelay(StatusEffectController.ProjectileLifeExtended);
-            }
-
-            if (StatusEffectController.Pierces)
-            {
-                bullet.SetPiercing(true);
-            }
-        }
-
-
+        
         //hook for updating turret rotation locally
         //never called in PlayerBot
         void OnTurretRotation()
@@ -909,8 +765,7 @@ namespace TanksMP
         //(the actual value updates via player properties)
         protected void OnHealthChange(int value)
         {
-            healthSlider.value = Mathf.Max(0f,(float)value / maxHealth);
-            HealthbarText.text = $"{value} / {maxHealth}";
+            PlayerViewController.SetHealth(value, maxHealth);
         }
 
 
@@ -918,11 +773,7 @@ namespace TanksMP
         //(the actual value updates via player properties)
         protected void OnShieldChange(int value)
         {
-            float val = Mathf.Max(0f, (float)value / maxShield);
-            
-            shieldSlider.value = val;
-            shieldSlider.gameObject.SetActive(val > .001f);
-
+            PlayerViewController.SetOvershield(value, maxShield);
         }
 
         /// <summary>
@@ -1183,14 +1034,6 @@ namespace TanksMP
 
         public bool PlayerCanRespawnFreely()
         {
-            // Check timer
-            // float countdownMax = ClassSelectionPanel.Instance.TimerLength;
-
-            // if (Time.time <= photonView.GetJoinTime() + countdownMax)
-            // {
-                // return true;
-            // }
-
             // Check all potential team colliders
             GameManager gameManager = GameManager;
             foreach (var team in gameManager.teams)
@@ -1328,13 +1171,15 @@ namespace TanksMP
             else
             {
                 //local player was killed, set camera to follow the killer
-                if (killedBy != null)
+                if (killedBy != null && CameraController)
                 {
-                    camFollow.target = killedBy.transform;
-                    camFollow.SetDeathCam();
+                    CameraController.SetTarget(killedBy.transform);
+                    CameraController.SetDeathCam();
                 }
+                
                 //hide input controls and other HUD elements
-                camFollow.HideMask(true);
+                CameraController.HideMask(true);
+                
                 //display respawn window (only for local player)
                 GameManager.DisplayDeath();
             }
@@ -1420,10 +1265,10 @@ namespace TanksMP
         private void ResetTransform()
         {
             //start following the local player again
-            camFollow.target = turret;
-            camFollow.SetNormalCam();
-            camFollow.HideMask(false);
-
+            CameraController.SetTarget(turret);
+            CameraController.SetNormalCam();
+            CameraController.HideMask(false);
+            
             //get team area and reposition it there
             // transform.position = GameManager.GetSpawnPosition(GetView().GetTeam());
 
@@ -1526,25 +1371,14 @@ namespace TanksMP
 
             ClassApplier.ApplyClass(this, playerCollisionHandler, classDefinition, handicapModifier);
             SetMaxHealth();
-            ReplaceClassMissile();
             
             if(IsLocal)
                 GameManager.ui.CastUltimateButton.UpdateSpellIcon(classDefinition.ultimateIcon);
         }
-
-        private void ReplaceClassMissile()
-        {
-            ClassDefinition classDefinition = classList[photonView.GetClassId()];
-            
-            if (classDefinition.Missile == null)
-                return;
-
-            bullets[0] = classDefinition.Missile;
-        }
-
+        
         public void ApplyStatusEffect(string statusEffectId, int ownerId)
         {
-            Player owner = GetPlayerById(ownerId);
+            Player owner = PlayerList.GetPlayerById(ownerId);
 
             if (owner == null)
             {
@@ -1579,16 +1413,7 @@ namespace TanksMP
             if (!IsLocal)
                 return;
             
-            StatusEffectData statusEffectData = StatusEffectDirectory.GetBySessionId(powerupSessionId);
-
-            if (statusEffectData)
-            {
-                UIGame.GetInstance().CastPowerupButton.UpdateIcon(statusEffectData.EffectIcon);
-            }
-            else
-            {
-                Debug.LogError("Could not show powerup icon for powerup with session ID: " + powerupSessionId);
-            }
+            PlayerViewController.ShowPowerupIcon(powerupSessionId);
         }
 
         /// <summary>
@@ -1603,17 +1428,13 @@ namespace TanksMP
         [PunRPC]
         public void RpcShowPowerupUI(int powerupId)
         {
-            Powerup powerup = PowerupDirectory[powerupId];
-
-            if (!IsLocal || powerup == null)
+            if (!IsLocal)
                 return;
-
-            UIGame uiGame = GameManager.ui;
-            uiGame.PowerUpPanel.SetText(powerup.DisplayText,powerup.DisplaySubtext, powerup.Color, powerup.Icon);
+            
+            PlayerViewController.ShowPowerupUI(powerupId);
         }
 
         /// Section: ULTIMATES
-
         // Server only
         public void IncreaseUltimate()
         {
@@ -1695,8 +1516,7 @@ namespace TanksMP
         [PunRPC]
         public void RpcCastUltimate()
         {
-            ClassDefinition classDefinition = GetClass();
-            SpellData ultimateSpell = classDefinition.ultimateSpell;
+            SpellData ultimateSpell = GetClass().ultimateSpell;
 
             if (!ultimateSpell)
             {
@@ -1758,6 +1578,12 @@ namespace TanksMP
             GetView().SetPowerup(0);
         }
 
+        /// SECTION: HELPERS
+        public virtual string GetName()
+        {
+            return GetView().GetName();
+        }
+        
         public ClassDefinition GetClass()
         {
             return classList[photonView.GetClassId()];
@@ -1771,6 +1597,12 @@ namespace TanksMP
         public TeamDefinition GetTeamDefinition()
         {
             return CharacterAppearance.Team.teamDefinition;
+        }
+        
+        public int GetId()
+        {
+            // Need to verify this is the right way to do it
+            return photonView.ViewID;
         }
     }
 }

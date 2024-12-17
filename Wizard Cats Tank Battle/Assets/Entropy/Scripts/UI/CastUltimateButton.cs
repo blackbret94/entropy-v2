@@ -1,3 +1,4 @@
+using Entropy.Scripts.Player;
 using TanksMP;
 using UnityEngine;
 using UnityEngine.UI;
@@ -102,7 +103,7 @@ namespace Vashta.Entropy.UI
 
         private void FindLocalPlayer()
         {
-            _localPlayer = Player.GetLocalPlayer();
+            _localPlayer = PlayerList.GetLocalPlayer();
         }
     }
 }

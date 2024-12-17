@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Entropy.Scripts.Player;
 using TanksMP;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -128,7 +129,7 @@ namespace Vashta.Entropy.Spells
             alliesList = new List<Player>();
             enemiesList = new List<Player>();
             
-            List<Player> allPlayers = Player.GetAllPlayers;
+            List<Player> allPlayers = PlayerList.GetAllPlayers;
             int casterTeamIndex = caster.GetView().GetTeam();
             
             // DrawWireSphere(caster.transform.position, Radius, Color.red, 5f);

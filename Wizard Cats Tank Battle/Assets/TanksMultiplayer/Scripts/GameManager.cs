@@ -461,7 +461,10 @@ namespace TanksMP
             MatchTimer.StopTimer();
             //PhotonNetwork.isMessageQueueRunning = false;
             localPlayer.enabled = false;
-            localPlayer.camFollow.HideMask(true);
+            if (localPlayer.CameraController)
+            {
+                localPlayer.CameraController.HideMask(true);
+            }
             
             if (teamIndex != -1)
             {

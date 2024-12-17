@@ -406,10 +406,10 @@ namespace TanksMP
                     }
 
                     // apply damage
-                    target.TakeDamage(this);
+                    target.PlayerCombatController.TakeDamage(this);
                     
                     // increase ultimate for player
-                    origin.IncreaseUltimate();
+                    origin.UltimateController.IncreaseUltimate();
                 }
             }
         }

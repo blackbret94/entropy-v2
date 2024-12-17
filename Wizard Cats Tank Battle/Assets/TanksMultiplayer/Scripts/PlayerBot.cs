@@ -243,7 +243,7 @@ namespace TanksMP
 
             if (_enemiesInRange.Count > 0)
             {
-                TryCastUltimate();
+                UltimateController.TryCastUltimate();
             }
 
             _lastUpdateTime = Time.time;
@@ -309,7 +309,7 @@ namespace TanksMP
                         // Vector3 shotDir = lookPos - shotPos.position;
                         // Vector3 shotDirError = new Vector2(shotDir.x /*+ CalculateAccuracyError()*/,
                         //     shotDir.z/* + CalculateAccuracyError()*/);
-                        Shoot();
+                        PlayerCombatController.AttemptToShoot();
                         return;
                     }
                 }
@@ -334,7 +334,7 @@ namespace TanksMP
                         // Vector3 shotDir = lookPos - shotPos.position;
                         // Vector3 shotDirError = new Vector2(shotDir.x + CalculateAccuracyError(),
                         //     shotDir.z + CalculateAccuracyError());
-                        Shoot();
+                        PlayerCombatController.AttemptToShoot();
                         _lastBuffS = Time.time;
                         return;
                     }
@@ -379,7 +379,7 @@ namespace TanksMP
 
             if (killedByPlayer)
             {
-                killedByPlayer.RewardUltimateForKill();
+                killedByPlayer.UltimateController.RewardUltimateForKill();
                 GameManager.ui.GameLogPanel.EventPlayerKilled(GetName(), GetTeamDefinition(), killedByPlayer.GetName(), killedByPlayer.GetTeamDefinition());
             }
 
@@ -390,7 +390,7 @@ namespace TanksMP
                 RewardCoinsForKill();
             }
             
-            SpawnDeathFx(deathFxId);
+            PlayerViewController.SpawnDeathFx(deathFxId);
             
             // Mark dead on minimap
             if (MinimapEntityControllerPlayer)

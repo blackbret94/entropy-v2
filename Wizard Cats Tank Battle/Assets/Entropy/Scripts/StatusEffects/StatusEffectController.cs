@@ -160,7 +160,7 @@ namespace Vashta.Entropy.StatusEffects
                     }
                     else if (healthPerSecond < 0)
                     {
-                        _player.TakeDamage(healthPerSecond, statusEffect.OriginPlayer());
+                        _player.PlayerCombatController.TakeDamage(healthPerSecond, statusEffect.OriginPlayer());
                     }
                 }
 
@@ -434,7 +434,7 @@ namespace Vashta.Entropy.StatusEffects
             if (_leechingPerSecondCached <= 0 || (_leechingAppliedByCached != null && !_leechingAppliedByCached.IsAlive))
                 return;
             
-            _player.TakeDamage(_leechingPerSecondCached, _leechingAppliedByCached);
+            _player.PlayerCombatController.TakeDamage(_leechingPerSecondCached, _leechingAppliedByCached);
             _leechingAppliedByCached.Heal(_leechingPerSecondCached);
         }
 

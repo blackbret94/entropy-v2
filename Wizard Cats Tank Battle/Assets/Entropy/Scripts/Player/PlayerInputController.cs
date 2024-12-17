@@ -299,7 +299,7 @@ namespace Entropy.Scripts.Player
             
             if (player != null)
             {
-                bool couldCast = player.TryCastUltimate();
+                bool couldCast = player.UltimateController.TryCastUltimate();
             
                 if (!couldCast)
                     GameManager.GetInstance().ui.SfxController.PlayUltimateNotReady();

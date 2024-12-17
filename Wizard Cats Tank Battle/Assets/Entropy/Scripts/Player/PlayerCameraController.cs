@@ -21,6 +21,18 @@ namespace Entropy.Scripts.Player
             }
         }
 
+        public void FollowKiller(GameObject killedBy)
+        {
+            if (killedBy != null)
+            {
+                SetTarget(killedBy.transform);
+                SetDeathCam();
+            }
+                
+            //hide input controls and other HUD elements
+            HideMask(true);
+        }
+
         public void SetTarget(Transform target)
         {
             camFollow.target = target;

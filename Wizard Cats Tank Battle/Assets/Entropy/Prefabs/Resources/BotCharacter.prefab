@@ -1510,6 +1510,8 @@ GameObject:
   - component: {fileID: 904047617638554894}
   - component: {fileID: 8814309887499864025}
   - component: {fileID: 7832800269976863104}
+  - component: {fileID: 9211731162699355234}
+  - component: {fileID: 7571687306469954801}
   m_Layer: 8
   m_Name: BotCharacter
   m_TagString: Untagged
@@ -1574,41 +1576,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 10
   maxShield: 5
-  counterDamageMod: 2
-  sameClassDamageMod: -1
   acceleration: 30
-  defaultMass: 1
-  turretRotation: 0
   fireRate: 0.75
   moveSpeed: 7
-  shotFX: {fileID: 1000011513120438, guid: f70d27f5cf28c8941bbfd6febd74797f, type: 3}
+  defaultMass: 1
+  turretRotation: 0
   turret: {fileID: 7764713437238784532}
   shotPos: {fileID: 2287832152565130358}
-  bullets:
-  - {fileID: 1000010310479910, guid: 39507aaad9e78494f81bea135cb37a24, type: 3}
-  - {fileID: 1000010310479910, guid: b1dee7e96a2dde84daab24234aeb2dd3, type: 3}
-  - {fileID: 1000010310479910, guid: 73a8dce5258b4ab45980cb442e56b5c6, type: 3}
   CharacterAppearance: {fileID: 8423563394307992586}
   handicapModifier: 0.75
-  PlayerAnimator: {fileID: 7904873436139118149}
   killedBy: {fileID: 0}
   StatusEffectController: {fileID: 17881755486394314}
-  Renderer: {fileID: 6161855955479839386}
   defaultClassDefinition: {fileID: 0}
-  classList: {fileID: 11400000, guid: 7d8bbf25c3319e2428b905b7f07fbe8b, type: 2}
-  BulletDictionary: {fileID: 11400000, guid: cb820bff8f12bf24e85b73b2e02f11ae, type: 2}
-  PowerupDirectory: {fileID: 11400000, guid: 8447b6afb9e4bee4b94cfa4fcf00bc0d, type: 2}
-  VisualEffectDirectory: {fileID: 11400000, guid: 907eecd40d7e32f47ae3c50ac7f9873b,
-    type: 2}
   MinimapEntityControllerPlayer: {fileID: 8814309887499864025}
   lastDeathTime: 0
   IsAlive: 1
+  classList: {fileID: 11400000, guid: 7d8bbf25c3319e2428b905b7f07fbe8b, type: 2}
   StatusEffectDirectory: {fileID: 11400000, guid: 06185a77b443ee54b8ce18ae4e7db647,
     type: 2}
-  PlayerAimGraphic: {fileID: 0}
   StatusEffectApplyOnSpawn: {fileID: 11400000, guid: bfc8e71ecafd3f44382045d0241b7ed3,
     type: 2}
   GameManager: {fileID: 0}
+  isBot: 0
   myName: 
   teamIndex: 0
   health: 0
@@ -1644,9 +1633,9 @@ MonoBehaviour:
   classIcon: {fileID: 57896130004166471}
   HealthbarText: {fileID: 301257562763696086}
   HealthbarHUD: {fileID: 6663878824608157515}
-  StatusEffectDirectory: {fileID: 11400000, guid: 06185a77b443ee54b8ce18ae4e7db647,
+  PlayerAimGraphic: {fileID: 0}
+  VisualEffectDirectory: {fileID: 11400000, guid: 907eecd40d7e32f47ae3c50ac7f9873b,
     type: 2}
-  PowerupDirectory: {fileID: 11400000, guid: 8447b6afb9e4bee4b94cfa4fcf00bc0d, type: 2}
 --- !u!195 &7345902104007818426
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1899,6 +1888,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 338efad7ca04448dbe4137fecf59966d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &9211731162699355234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4388435187269524573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08699b07fdf5444897269095f47c577f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  counterDamageMod: 2
+  sameClassDamageMod: -1
+--- !u!114 &7571687306469954801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4388435187269524573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72de5f28a379450181794a56261f9d15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4497364272883642154

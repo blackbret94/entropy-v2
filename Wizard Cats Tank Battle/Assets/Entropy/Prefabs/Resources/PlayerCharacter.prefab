@@ -23,6 +23,8 @@ GameObject:
   - component: {fileID: 2695113032983889765}
   - component: {fileID: 7636866592782098713}
   - component: {fileID: 1361573124951763280}
+  - component: {fileID: 6810560899934130049}
+  - component: {fileID: 308017525818048101}
   m_Layer: 8
   m_Name: PlayerCharacter
   m_TagString: Untagged
@@ -87,42 +89,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 10
   maxShield: 5
-  counterDamageMod: 2
-  sameClassDamageMod: -1
   acceleration: 30
-  defaultMass: 1
-  turretRotation: 0
   fireRate: 0.75
   moveSpeed: 7
-  shotFX: {fileID: 1000011513120438, guid: f70d27f5cf28c8941bbfd6febd74797f, type: 3}
+  defaultMass: 1
+  turretRotation: 0
   turret: {fileID: 4305748445454077326}
   shotPos: {fileID: 6046886275116361424}
-  bullets:
-  - {fileID: 1000010310479910, guid: 39507aaad9e78494f81bea135cb37a24, type: 3}
-  - {fileID: 1000010310479910, guid: b1dee7e96a2dde84daab24234aeb2dd3, type: 3}
-  - {fileID: 1000010310479910, guid: 73a8dce5258b4ab45980cb442e56b5c6, type: 3}
   CharacterAppearance: {fileID: 2386344821364946175}
   handicapModifier: 1
-  PlayerAnimator: {fileID: 6748233522558695934}
   killedBy: {fileID: 0}
   StatusEffectController: {fileID: 7300910866357486322}
-  Renderer: {fileID: 7640551074577506615}
   defaultClassDefinition: {fileID: 11400000, guid: 74fed74e4e8ccee43a4a18a91ca80171,
-    type: 2}
-  classList: {fileID: 11400000, guid: 7d8bbf25c3319e2428b905b7f07fbe8b, type: 2}
-  BulletDictionary: {fileID: 11400000, guid: cb820bff8f12bf24e85b73b2e02f11ae, type: 2}
-  PowerupDirectory: {fileID: 11400000, guid: 8447b6afb9e4bee4b94cfa4fcf00bc0d, type: 2}
-  VisualEffectDirectory: {fileID: 11400000, guid: 907eecd40d7e32f47ae3c50ac7f9873b,
     type: 2}
   MinimapEntityControllerPlayer: {fileID: 7636866592782098713}
   lastDeathTime: 0
   IsAlive: 1
+  classList: {fileID: 11400000, guid: 7d8bbf25c3319e2428b905b7f07fbe8b, type: 2}
   StatusEffectDirectory: {fileID: 11400000, guid: 06185a77b443ee54b8ce18ae4e7db647,
     type: 2}
-  PlayerAimGraphic: {fileID: 3869905314932566427}
   StatusEffectApplyOnSpawn: {fileID: 11400000, guid: bfc8e71ecafd3f44382045d0241b7ed3,
     type: 2}
   GameManager: {fileID: 0}
+  isBot: 0
 --- !u!114 &114000013996810128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,9 +154,9 @@ MonoBehaviour:
   classIcon: {fileID: 4011357851466573602}
   HealthbarText: {fileID: 1270671750754739478}
   HealthbarHUD: {fileID: 8539441206212331302}
-  StatusEffectDirectory: {fileID: 11400000, guid: 06185a77b443ee54b8ce18ae4e7db647,
+  PlayerAimGraphic: {fileID: 3869905314932566427}
+  VisualEffectDirectory: {fileID: 11400000, guid: 907eecd40d7e32f47ae3c50ac7f9873b,
     type: 2}
-  PowerupDirectory: {fileID: 11400000, guid: 8447b6afb9e4bee4b94cfa4fcf00bc0d, type: 2}
 --- !u!114 &114000013810182620
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -377,6 +366,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 338efad7ca04448dbe4137fecf59966d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6810560899934130049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08699b07fdf5444897269095f47c577f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  counterDamageMod: 2
+  sameClassDamageMod: -1
+--- !u!114 &308017525818048101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72de5f28a379450181794a56261f9d15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &160484769436647168

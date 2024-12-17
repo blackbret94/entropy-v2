@@ -1,8 +1,11 @@
+using EckTechGames.FloatingCombatText;
+using Photon.Pun;
 using TanksMP;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Vashta.Entropy.Character;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.StatusEffects;
 using Vashta.Entropy.UI;
@@ -11,7 +14,6 @@ namespace Entropy.Scripts.Player
 {
     public class PlayerViewController : MonoBehaviour
     {
-        // UI Elements
         [Header("UI Elements")]
         [FormerlySerializedAs("label")] public Text playerNameText;
         public Slider healthSlider;
@@ -19,16 +21,28 @@ namespace Entropy.Scripts.Player
         public Image classIcon;
         public TextMeshProUGUI HealthbarText;
         public PlayerHealthbarHUD HealthbarHUD;
+        public PlayerAimGraphic PlayerAimGraphic;
 
-        // Data sources
+        [Header("Controllers")] 
+        private TanksMP.Player _player;
+        private PlayerAnimator _playerAnimator;
+        private StatusEffectController _statusEffectController;
+        private CharacterAppearance _characterAppearance;
+        
         [Header("Data Sources")]
-        public StatusEffectDirectory StatusEffectDirectory;
-        public PowerupDirectory PowerupDirectory;
+        public VisualEffectDirectory VisualEffectDirectory;
 
+        [Header("Cached references")]
         protected GameManager GameManager;
+        private PhotonView _view;
 
         private void Awake()
         {
+            _player = GetComponent<TanksMP.Player>();
+            _view = _player.GetView();
+            _playerAnimator = GetComponent<PlayerAnimator>();
+            _statusEffectController = GetComponent<StatusEffectController>();
+            _characterAppearance = _player.CharacterAppearance;
             GameManager = GameManager.GetInstance();
         }
         
@@ -68,29 +82,86 @@ namespace Entropy.Scripts.Player
             classIcon.sprite = icon;
         }
 
-        public void ShowPowerupIcon(int powerupSessionId)
+        public void ShowDamageText(int damage, bool attackerIsCounter, bool attackerIsSame)
         {
-            StatusEffectData statusEffectData = StatusEffectDirectory.GetBySessionId(powerupSessionId);
-
-            if (statusEffectData)
+            if (damage == 0)
+                return;
+            
+            // Show damage
+            if (damage > 0)
             {
-                UIGame.GetInstance().CastPowerupButton.UpdateIcon(statusEffectData.EffectIcon);
+                if (attackerIsCounter)
+                {
+                    OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.CriticalHit,
+                        damage);
+                }
+                else if (attackerIsSame)
+                {
+                    OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.Miss, damage);
+                }
+                else
+                {
+                    OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.Hit, damage);
+                }
             }
             else
             {
-                Debug.LogError("Could not show powerup icon for powerup with session ID: " + powerupSessionId);
+                // Show heals
+                OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.Heal, Mathf.Abs(damage));
+            }
+
+            // animate
+            if (damage > 0)
+                _playerAnimator.TakeDamage();
+            else
+                _playerAnimator.Heal();
+        }
+        
+        public void SpawnDeathFx(string killingBlowDeathFx)
+        {
+            string deathFx = "";
+            
+            if(killingBlowDeathFx != "")
+                deathFx = killingBlowDeathFx;
+                
+            if (deathFx == "")
+                deathFx = _statusEffectController.GetDeathFx();
+
+            if (deathFx != null)
+            {
+                VisualEffect deathFxData = VisualEffectDirectory[deathFx];
+                PoolManager.Spawn(deathFxData.VisualEffectPrefab, transform.position, transform.rotation);
+            }
+        }
+        
+        public void ColorizePlayerForTeam(Team team = null)
+        {
+            if (team == null)
+            {
+                team = GameManager.teams[_view.GetTeam()];
+            }
+
+            //get corresponding team and colorize renderers in team color
+            _characterAppearance.Team = team;
+            _characterAppearance.ColorizeCart();
+            
+            SetTeam(team.teamDefinition);   
+
+            if (_player.IsLocal)
+            {
+                if (PlayerAimGraphic)
+                {
+                    PlayerAimGraphic.SetColor(team.teamDefinition.GetPrimaryColorLight());
+                }
+            }
+            else
+            {
+                if (PlayerAimGraphic)
+                {
+                    PlayerAimGraphic.Disable();
+                }
             }
         }
 
-        public void ShowPowerupUI(int powerupId)
-        {
-            Powerup powerup = PowerupDirectory[powerupId];
-
-            if (powerup == null)
-                return;
-
-            UIGame uiGame = GameManager.ui;
-            uiGame.PowerUpPanel.SetText(powerup.DisplayText,powerup.DisplaySubtext, powerup.Color, powerup.Icon);
-        }
     }
 }

@@ -35,7 +35,7 @@ namespace Vashta.Entropy.UI
                 return;
             }
             
-            bool couldCast = _localPlayer.TryCastUltimate();
+            bool couldCast = _localPlayer.UltimateController.TryCastUltimate();
 
             if (!couldCast)
             {
@@ -67,7 +67,7 @@ namespace Vashta.Entropy.UI
             }
 
             // Get perun and INVERT
-            float newUltimateValue = 1 - _localPlayer.GetUltimatePerun();
+            float newUltimateValue = 1 - _localPlayer.UltimateController.GetUltimatePerun();
 
             // Play sfx
             if (newUltimateValue > .01)

@@ -25,7 +25,7 @@ namespace Vashta.Entropy.GameMode
         {
             if (_hasInit) return;
             
-            TanksMP.GameMode gameMode = GameManager.GetGameModeDefinition().GameMode;
+            TanksMP.GameMode gameMode = GameManager.GameModeDefinition.GameMode;
 
             if (gameMode == TanksMP.GameMode.KOTH)
             {
@@ -43,7 +43,7 @@ namespace Vashta.Entropy.GameMode
             Init();
             
             // Only run if game mode is KOTH
-            TanksMP.GameMode gameMode = GameManager.GetGameModeDefinition().GameMode;
+            TanksMP.GameMode gameMode = GameManager.GameModeDefinition.GameMode;
             
             if (gameMode == TanksMP.GameMode.KOTH || gameMode == TanksMP.GameMode.KOTHS)
             {
@@ -72,7 +72,7 @@ namespace Vashta.Entropy.GameMode
                     {
                         // Award points to teamControllingPoint
                         if (teamControllingPoint != -1)
-                            GameManager.AddScore(ScoreType.HoldPoint, teamControllingPoint);
+                            GameManager.ScoreController.AddScore(ScoreType.HoldPoint, teamControllingPoint);
                     }
                 }
             }
@@ -82,11 +82,11 @@ namespace Vashta.Entropy.GameMode
             // SERVER ONLY check for game over
             if (PhotonNetwork.IsMasterClient)
             {
-                if (GameManager.GetInstance().IsGameOver())
+                if (GameManager.GetInstance().ScoreController.IsGameOver())
                 {
                     PhotonNetwork.CurrentRoom.IsOpen = false;
 
-                    int teamWithHighestScore = GameManager.GetTeamWithHighestScore();
+                    int teamWithHighestScore = GameManager.ScoreController.GetTeamWithHighestScore();
                     
                     PlayerList.GetLocalPlayer().photonView.RPC("RpcGameOver", RpcTarget.All, (byte)teamWithHighestScore);
         

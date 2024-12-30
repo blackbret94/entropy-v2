@@ -5,7 +5,7 @@ using Vashta.Entropy.StatusEffects;
 
 namespace Entropy.Scripts.Player
 {
-    public class PlayerCombatController : MonoBehaviour
+    public class CombatController : MonoBehaviour
     {
         [Header("Modifiers")]
         public int counterDamageMod = 2;
@@ -19,6 +19,8 @@ namespace Entropy.Scripts.Player
         private float nextFire;
         public float TimeToNextFire => nextFire - Time.time;
         public float FractionFireReady => Mathf.Min(1-(TimeToNextFire / _player.fireRate), 1);
+        // death loop protections
+        private const float minTimeBetweenDeaths = .5f;
         
         [Header("Cached references")]
         private StatusEffectController _statusEffectController;
@@ -37,7 +39,7 @@ namespace Entropy.Scripts.Player
         private void Start()
         {
             _statusEffectController = _player.StatusEffectController;
-            GameManager.GetInstance();
+            _gameManager = GameManager.GetInstance();
             
             _projectileFactory = new ProjectileFactory(gameObject, _statusEffectController);
 
@@ -177,7 +179,7 @@ namespace Entropy.Scripts.Player
             
             if (health <= 0)
                 // killed the player
-                _player.PlayerDeath(other, deathFxId);
+                _player.CombatController.PlayerDeath(other, deathFxId);
             else
             {
                 //we didn't die, set health to new value
@@ -218,13 +220,83 @@ namespace Entropy.Scripts.Player
             
             if (health <= 0)
                 //bullet killed the player
-                _player.PlayerDeath(bullet.owner.GetComponent<TanksMP.Player>(), bullet.deathFxData.Id);
+                _player.CombatController.PlayerDeath(bullet.owner.GetComponent<TanksMP.Player>(), bullet.deathFxData.Id);
             else
             {
                 //we didn't die, set health to new value
                 _photonView.SetHealth(health);
                 _photonView.RPC("RpcTakeDamage", RpcTarget.AllViaServer, damage, attackerIsCounter, attackerIsSame);
             }
+        }
+        
+        /// <summary>
+        /// Server-only.  Handles player death
+        /// </summary>
+        /// <param name="other"></param>
+        public void PlayerDeath(TanksMP.Player other, string deathFxId)
+        {
+            if (_player.lastDeathTime + minTimeBetweenDeaths >= Time.time)
+            {
+                Debug.LogWarning("Attempted to respawn within the min time between spawns");
+                return;
+            }
+            
+            _player.lastDeathTime = Time.time;
+            _photonView.SetIsAlive(false);
+            
+            if(!_player.PlayerCanRespawnFreely())
+                _photonView.IncrementDeaths();
+            
+            //the game is already over so don't do anything
+            if(_gameManager.ScoreController.IsGameOver()) return;
+
+            _gameManager.RoomController.OnePassCheckChangeTeams(_player, false);
+            
+            //get killer and increase score for that enemy team
+            if (other != null)
+            {
+                // Reflect damage on killer if blood pact is active
+                _statusEffectController.BloodPact(other);
+                
+                int otherTeam = other.photonView.GetTeam();
+                
+                // killer is other team
+                if (_photonView.GetTeam() != otherTeam)
+                {
+                    _gameManager.ScoreController.AddScore(ScoreType.Kill, otherTeam);
+                    other.photonView.IncrementKills();
+                }
+                
+                //the maximum score has been reached now
+                if (_gameManager.ScoreController.IsGameOver())
+                {
+                    //tell all clients the winning team
+                    _gameManager.photonView.RPC("RpcGameOver", RpcTarget.All, (byte)otherTeam);
+                    return;
+                }
+            }
+            else
+            {
+                // Killed by environment
+                _gameManager.ScoreController.RemoveScore(ScoreType.Kill, _photonView.GetTeam());
+            }
+
+            //the game is not over yet, reset runtime values
+            //also tell all clients to despawn this player
+            _photonView.SetHealth(_player.maxHealth);
+            _photonView.SetShield(0);
+            _photonView.SetBullet(0);
+            _photonView.SetUltimate(0);
+
+            // bypass RPC because we are already on the server
+            _player.CommandDropCollectibles();
+
+            //tell the dead player who killed them (owner of the bullet)
+            short senderId = 0;
+            if (other != null)
+                senderId = (short)other.GetComponent<PhotonView>().ViewID;
+
+            _photonView.RPC("RpcRespawn", RpcTarget.All, senderId, deathFxId);
         }
     }
 }

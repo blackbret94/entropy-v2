@@ -69,7 +69,7 @@ namespace Vashta.Entropy.TanksExtensions
             }
             
             // bots
-            List<PlayerBot> bots = GameManager.GetInstance().GetBotList();
+            List<PlayerBot> bots = GameManager.GetInstance().BotController.GetBotList();
             foreach (PlayerBot bot in bots)
             {
                 if (bot.teamIndex == TeamId)

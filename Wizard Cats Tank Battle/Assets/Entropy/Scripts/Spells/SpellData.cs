@@ -98,7 +98,7 @@ namespace Vashta.Entropy.Spells
             string deathFxId = EnemyDeathEffect ? EnemyDeathEffect.Id : "";
             foreach (Player player in enemiesList)
             {
-                player.PlayerCombatController.TakeDamage(DamageEnemiesOnCast, caster, true, deathFxId);
+                player.CombatController.TakeDamage(DamageEnemiesOnCast, caster, true, deathFxId);
 
                 if (CastStatusEffectEnemies)
                 {

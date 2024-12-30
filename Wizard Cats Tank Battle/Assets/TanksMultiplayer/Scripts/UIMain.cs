@@ -5,6 +5,7 @@
 
 using Entropy.Scripts.Audio;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Vashta.Entropy.IO;
 using Vashta.Entropy.PhotonExtensions;
@@ -28,7 +29,7 @@ namespace TanksMP
         public IntroductionPanel IntroductionPanel;
         public MusicController MusicController;
         public SceneNavigator SceneNavigator;
-        public RoomController RoomController;
+        [FormerlySerializedAs("RoomController")] public RoomConnectionController roomConnectionController;
 
         private PlayerNameVerification _playerNameVerification;
 
@@ -67,7 +68,7 @@ namespace TanksMP
             QualitySettings.SetQualityLevel(SettingsReader.GetGraphicsSettings());
 
             //listen to network connection and IAP billing errors
-            NetworkManagerCustom.connectionFailedEvent += RoomController.OnConnectionError;
+            NetworkManagerCustom.connectionFailedEvent += roomConnectionController.OnConnectionError;
             
             IntroductionPanel.Init();
         }

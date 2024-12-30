@@ -138,7 +138,7 @@ namespace Entropy.Scripts.Player
         {
             if (team == null)
             {
-                team = GameManager.teams[_view.GetTeam()];
+                team = GameManager.TeamController.teams[_view.GetTeam()];
             }
 
             //get corresponding team and colorize renderers in team color
@@ -162,6 +162,13 @@ namespace Entropy.Scripts.Player
                 }
             }
         }
+        
+        public void RewardCoins(int amount)
+        {
+            OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.CoinReward, "+"+amount);
 
+            // play coin reward sound
+            GameManager.ui.SfxController.PlayCoinEarnedSound();
+        }
     }
 }

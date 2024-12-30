@@ -58,7 +58,7 @@ namespace Vashta.Entropy.GameMode
                         // End match
                         _matchTimerIsRunning = false;
                         GameManager gameManager = GameManager.GetInstance();
-                        int teamWithHighestScore = gameManager.GetTeamWithHighestScore();
+                        int teamWithHighestScore = gameManager.ScoreController.GetTeamWithHighestScore();
                         gameManager.localPlayer.photonView.RPC("RpcGameOver", RpcTarget.All,
                             (byte)teamWithHighestScore);
                     }

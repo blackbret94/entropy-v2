@@ -11,5 +11,10 @@ namespace Vashta.Entropy.ScriptableObject
         public Sprite IconSmall;
         public TanksMP.GameMode GameMode;
         public int ScoreToWin = 20;
+
+        [Header("Scoring")] 
+        public int KillPoints = 1;
+        public int CapturePoints = 10;
+        public int HoldPointPoints = 1;
     }
 }

@@ -115,7 +115,7 @@ namespace TanksMP
             if (targetRenderer != null)
             {
                 if (teamIndex >= 0)
-                    targetRenderer.material = GameManager.GetInstance().teams[teamIndex].material;
+                    targetRenderer.material = GameManager.GetInstance().TeamController.teams[teamIndex].material;
                 else
                     targetRenderer.material = baseMaterial;
             }

@@ -103,7 +103,7 @@ namespace Entropy.Scripts.Player
 
             TanksMP.Player otherPlayer = colPlayer.GetComponent<TanksMP.Player>();
 
-            player.PlayerCombatController.TakeDamage(CalculateDamage(colPlayer, otherPlayer), otherPlayer);
+            player.CombatController.TakeDamage(CalculateDamage(colPlayer, otherPlayer), otherPlayer);
         }
 
         private int CalculateDamage(PlayerCollisionHandler colPlayer, TanksMP.Player otherPlayer)

@@ -55,5 +55,16 @@ namespace Vashta.Entropy.UI
             uiGame.PowerUpPanel.SetText(powerup.DisplayText,powerup.DisplaySubtext, powerup.Color, powerup.Icon);
         }
 
+        public void PlayerDied()
+        {
+            GameManager.ui.DropCollectiblesButton.gameObject.SetActive(false);
+            GameManager.ui.CastUltimateButton.gameObject.SetActive(false);
+            GameManager.ui.CastPowerupButton.gameObject.SetActive(false);
+        }
+
+        public void PlayerRespawned()
+        {
+            GameManager.ui.CastUltimateButton.gameObject.SetActive(true);
+        }
     }
 }

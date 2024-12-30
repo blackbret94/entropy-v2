@@ -4,17 +4,19 @@ using Photon.Pun;
 using TanksMP;
 using UnityEngine;
 using Vashta.Entropy.Character;
-using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.UI;
 
 namespace Vashta.Entropy.StatusEffects
 {
     public class StatusEffectController : MonoBehaviour
     {
+        [Header("Data Sources")]
         public StatusEffectDirectory StatusEffectDirectory;
         public StatusEffectPanel StatusEffectPanel;
         
+        [Header("Cached references")]
         private Player _player;
+        private PhotonView _photonView;
         private PlayerStatusEffectVisualizer _visualizer;
         
         private List<StatusEffect> _statusEffects = new();
@@ -86,6 +88,54 @@ namespace Vashta.Entropy.StatusEffects
         {
             _player = GetComponent<Player>();
             _visualizer = GetComponent<PlayerStatusEffectVisualizer>();
+            _photonView = _player.photonView;
+        }
+        
+        public virtual void StatusEffectTick()
+        {
+            // leech
+            Leech();
+            
+            // handle health changes from DoTs/HoTs
+            int health = _photonView.GetHealth();
+            int healthPerSecond = Mathf.RoundToInt(HealthPerSecond);
+            
+            if (healthPerSecond != 0)
+            {
+                int shield = _photonView.GetShield();
+                if (shield > 0 && healthPerSecond < 0)
+                {
+                    _photonView.DecreaseShield(1);
+                }
+                else
+                {
+                    health += healthPerSecond;
+                    health = _player.CapHealth(health);
+                    _photonView.SetHealth(health);
+                }
+            }
+            
+            if(healthPerSecond != 0 && (healthPerSecond < 0 || health < _player.maxHealth))
+                _photonView.RPC("RpcTakeDamage", RpcTarget.AllViaServer, -healthPerSecond, false, false);
+
+            if (health <= 0)
+            {
+                string deathFx = GetDeathFx();
+                
+                // killed the player
+                _player.CombatController.PlayerDeath(LastDotAppliedBy, deathFx);
+            }
+            
+            // Bot specific logic
+            PlayerBot playerBot = _player as PlayerBot;
+
+            if (playerBot != null)
+            {
+                // adjust speed
+                float speed = ((playerBot.moveSpeed + MovementSpeedModifier) *
+                               MovementSpeedMultiplier);
+                playerBot.agent.speed = speed;
+            }
         }
         
         /// <summary>
@@ -160,7 +210,7 @@ namespace Vashta.Entropy.StatusEffects
                     }
                     else if (healthPerSecond < 0)
                     {
-                        _player.PlayerCombatController.TakeDamage(healthPerSecond, statusEffect.OriginPlayer());
+                        _player.CombatController.TakeDamage(healthPerSecond, statusEffect.OriginPlayer());
                     }
                 }
 
@@ -434,7 +484,7 @@ namespace Vashta.Entropy.StatusEffects
             if (_leechingPerSecondCached <= 0 || (_leechingAppliedByCached != null && !_leechingAppliedByCached.IsAlive))
                 return;
             
-            _player.PlayerCombatController.TakeDamage(_leechingPerSecondCached, _leechingAppliedByCached);
+            _player.CombatController.TakeDamage(_leechingPerSecondCached, _leechingAppliedByCached);
             _leechingAppliedByCached.Heal(_leechingPerSecondCached);
         }
 

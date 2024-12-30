@@ -1,19 +1,13 @@
-/*  This file is part of the "Tanks Multiplayer" project by FLOBUK.
- *  You are only allowed to use these resources if you've bought them from the Unity Asset Store.
- * 	You shall not license, sublicense, sell, resell, transfer, assign, distribute or
- * 	otherwise make available to any third party the Service or the Content. */
-
 using System.Collections;
-using UnityEngine;
+using System.Collections.Generic;
 using Photon.Pun;
+using TanksMP;
+using UnityEngine;
 
-namespace TanksMP
-{          
-    /// <summary>
-    /// Responsible for spawning AI bots when in offline mode, otherwise gets disabled.
-    /// </summary>
-	public class BotSpawner : MonoBehaviour
-    {                
+namespace Vashta.Entropy.GameState
+{
+    public class BotController : MonoBehaviour
+    {
         /// <summary>
         /// Amount of bots to spawn across all teams.
         /// </summary>
@@ -24,22 +18,25 @@ namespace TanksMP
         /// </summary>
         public GameObject[] prefabs;
         
-        
-        void Awake()
+        public List<GameObject> BotTargetList;
+        private List<PlayerBot> _botList;
+
+        private void Awake()
         {
+            _botList = new List<PlayerBot>();
+            
             //disabled when not in offline mode
             if ((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode) != NetworkMode.Offline)
                 this.enabled = false;
         }
-
-
+        
         IEnumerator Start()
         {
             //wait a second for all script to initialize
             yield return new WaitForSeconds(1);
 
             //loop over bot count
-			for(int i = 0; i < maxBots; i++)
+            for(int i = 0; i < maxBots; i++)
             {
                 //randomly choose bot from array of bot prefabs
                 //spawn bot across the simulated private network
@@ -48,13 +45,28 @@ namespace TanksMP
 
                 //let the local host determine the team assignment
                 Player p = obj.GetComponent<Player>();
-                p.GetView().SetTeam(GameManager.GetInstance().GetTeamFill());
+                p.GetView().SetTeam(GameManager.GetInstance().TeamController.GetTeamFill());
 
                 //increase corresponding team size
                 PhotonNetwork.CurrentRoom.AddSize(p.GetView().GetTeam(), +1);
 
                 yield return new WaitForSeconds(0.25f);
             }
+        }
+        
+        public void AddBot(PlayerBot bot)
+        {
+            _botList.Add(bot);
+        }
+
+        public void ClearBots()
+        {
+            _botList.Clear();
+        }
+
+        public List<PlayerBot> GetBotList()
+        {
+            return _botList;
         }
     }
 }

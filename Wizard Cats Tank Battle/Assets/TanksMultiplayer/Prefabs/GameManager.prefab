@@ -10,8 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 4000012160439120}
   - component: {fileID: 114000011365822250}
-  - component: {fileID: 114000010886265526}
   - component: {fileID: 8396695766144529577}
+  - component: {fileID: 3511852511809456301}
+  - component: {fileID: 7770444178506496997}
+  - component: {fileID: 7764882698486297933}
+  - component: {fileID: 3938620412626201777}
+  - component: {fileID: 6801212261942881887}
+  - component: {fileID: 6354279513259406700}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -48,7 +53,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   localPlayer: {fileID: 0}
   gameMode: 0
-  ui: {fileID: 0}
   teams:
   - name: RED
     material: {fileID: 2100000, guid: bd77ec7e7c2bcec498601902e4b6e28d, type: 2}
@@ -70,35 +74,18 @@ MonoBehaviour:
     spawn: {fileID: 0}
     freeClassChange: {fileID: 0}
     teamDefinition: {fileID: 0}
-  respawnTime: 8
-  friendlyFire: 0
+  ui: {fileID: 0}
+  MusicController: {fileID: 0}
+  PlayerInputController: {fileID: 0}
+  SfxController: {fileID: 0}
   BotTargetList:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  MusicController: {fileID: 0}
-  PlayerInputController: {fileID: 0}
   MatchTimer: {fileID: 8396695766144529577}
-  MapDefinitionDictionary: {fileID: 0}
+  mapDefinition: {fileID: 0}
   GameModeDictionary: {fileID: 0}
---- !u!114 &114000010886265526
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1000013481812936}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09cf73e5ab70f4048b5c65dc1f5679e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxBots: 7
-  prefabs:
-  - {fileID: 4388435187269524573, guid: c2ea8a2999a8dc94a9c822b0ff72b92c, type: 3}
-  - {fileID: 1000013952619036, guid: 7c5bc23e033f3ec4982442db246e19c9, type: 2}
-  - {fileID: 1000011908511644, guid: 8be7517548c45f04e94cf617523cc394, type: 2}
 --- !u!114 &8396695766144529577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,3 +99,80 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxTime: 600
+--- !u!114 &3511852511809456301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000013481812936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59b579c6a0664a7188681c72ba8db0d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7770444178506496997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000013481812936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc59223e912242bfb98e177f9bce31b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxBots: 0
+  prefabs: []
+  BotTargetList: []
+--- !u!114 &7764882698486297933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000013481812936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60a79c1e8f60489fbf772c19eac3b961, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3938620412626201777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000013481812936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fe3e9f194fa46fd83f8fe1fbaa908b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teams: []
+--- !u!114 &6801212261942881887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000013481812936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cd4f9ed127344c29858b5a73f77b06c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6354279513259406700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000013481812936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cae6339ea13c4a6c9ae98cb7c69cbd2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  respawnTime: 5

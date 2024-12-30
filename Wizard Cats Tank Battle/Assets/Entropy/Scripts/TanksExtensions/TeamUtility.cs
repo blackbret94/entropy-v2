@@ -9,7 +9,7 @@ namespace Vashta.Entropy.TanksExtensions
     {
         public static List<TeamState> GetTeamStates(bool includeLocalPlayer = true)
         {
-            Team[] teams = GameManager.GetInstance().teams;
+            Team[] teams = GameManager.GetInstance().TeamController.teams;
             int[] scores = PhotonNetwork.CurrentRoom.GetScore();
 
             if (teams.Length != scores.Length)
@@ -30,7 +30,7 @@ namespace Vashta.Entropy.TanksExtensions
 
         public static TeamState GetTeamState(int teamIndex, bool includeLocalPlayer = true)
         {
-            Team[] teams = GameManager.GetInstance().teams;
+            Team[] teams = GameManager.GetInstance().TeamController.teams;
             int[] scores = PhotonNetwork.CurrentRoom.GetScore();
 
             if (teams.Length != scores.Length || teamIndex >= teams.Length || teamIndex >= scores.Length)

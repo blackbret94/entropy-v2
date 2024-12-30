@@ -85,7 +85,7 @@ namespace TanksMP
         public override void OnConnectedToMaster()
         {
             // Right now it goes to random map/mode.  Can save conditions later
-            FindObjectOfType<RoomController>().Play();
+            FindObjectOfType<RoomConnectionController>().Play();
             
             Destroy(gameObject);
         }

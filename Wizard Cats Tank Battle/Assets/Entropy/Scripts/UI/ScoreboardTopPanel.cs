@@ -21,7 +21,7 @@ namespace Vashta.Entropy.UI
         private void Init()
         {
             // Adjust for number of teams
-            int numOfTeams = GameManager.GetInstance().teams.Length;
+            int numOfTeams = GameManager.GetInstance().TeamController.teams.Length;
             
             ToggleAllInList(Team3GameObjects, numOfTeams >= 3);
             ToggleAllInList(Team4GameObjects, numOfTeams >= 4);

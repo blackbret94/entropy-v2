@@ -32,7 +32,7 @@ namespace Vashta.Entropy.UI.ObjectivesPanel
 
         private void Init()
         {
-            ObjectiveText.text = GameManager.GetInstance().GetGameModeDefinition().Description;
+            ObjectiveText.text = GameManager.GetInstance().GameModeDefinition.Description;
         }
         
         // None of this can be cached, as it may change in between refreshes

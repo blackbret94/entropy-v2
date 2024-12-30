@@ -19,7 +19,7 @@ namespace Vashta.Entropy.UI
             if (Player == null)
                 return;
 
-            Slider.value = Player.PlayerCombatController.FractionFireReady;
+            Slider.value = Player.CombatController.FractionFireReady;
         }
     }
 }

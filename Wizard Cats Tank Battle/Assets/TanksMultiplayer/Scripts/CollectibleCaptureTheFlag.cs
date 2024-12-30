@@ -164,7 +164,7 @@ namespace TanksMP
             if (targetRenderer != null)
             {
                 if (teamIndex >= 0)
-                    targetRenderer.material.color = GameManager.GetInstance().teams[teamIndex].material.color;
+                    targetRenderer.material.color = GameManager.GetInstance().TeamController.teams[teamIndex].material.color;
                 else
                     targetRenderer.material.color = Color.white;
             }

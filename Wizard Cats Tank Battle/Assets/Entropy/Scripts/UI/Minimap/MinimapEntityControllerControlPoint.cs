@@ -44,7 +44,7 @@ namespace Vashta.Entropy.UI.Minimap
                 }
                 else
                 {
-                    Team team = GameManager.GetTeamByIndex(_teamIndex);
+                    Team team = GameManager.TeamController.GetTeamByIndex(_teamIndex);
 
                     if (team != null && team.teamDefinition != null)
                     {

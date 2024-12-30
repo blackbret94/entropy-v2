@@ -1512,6 +1512,7 @@ GameObject:
   - component: {fileID: 7832800269976863104}
   - component: {fileID: 9211731162699355234}
   - component: {fileID: 7571687306469954801}
+  - component: {fileID: 7746889400414041907}
   m_Layer: 8
   m_Name: BotCharacter
   m_TagString: Untagged
@@ -1583,10 +1584,10 @@ MonoBehaviour:
   turretRotation: 0
   turret: {fileID: 7764713437238784532}
   shotPos: {fileID: 2287832152565130358}
-  CharacterAppearance: {fileID: 8423563394307992586}
   handicapModifier: 0.75
   killedBy: {fileID: 0}
   StatusEffectController: {fileID: 17881755486394314}
+  CharacterAppearance: {fileID: 8423563394307992586}
   defaultClassDefinition: {fileID: 0}
   MinimapEntityControllerPlayer: {fileID: 8814309887499864025}
   lastDeathTime: 0
@@ -1615,6 +1616,7 @@ MonoBehaviour:
   buffFrequencyS: 1
   accuracyError: 3.05
   CatNameGenerator: {fileID: 3290240462513967561}
+  agent: {fileID: 0}
 --- !u!114 &9042423296827168902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1914,6 +1916,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72de5f28a379450181794a56261f9d15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7746889400414041907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4388435187269524573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 642f2490e1884fa88d237762c5c1c4a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4497364272883642154

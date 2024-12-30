@@ -64,7 +64,7 @@ namespace Entropy.Scripts.Player
             if (teamIndex != _teamIndex)
             {
                 _teamIndex = teamIndex;
-                Team team = GameManager.GetInstance().GetTeamByIndex(_teamIndex + 1);
+                Team team = GameManager.GetInstance().TeamController.GetTeamByIndex(_teamIndex + 1);
 
                 try
                 {
@@ -111,7 +111,7 @@ namespace Entropy.Scripts.Player
                 bl_MapPointer mapPointer = _spawnedPointer.GetComponent<bl_MapPointer>();
                 if (mapPointer)
                 {
-                    Team team = GameManager.GetInstance().teams[teamIndex];
+                    Team team = GameManager.GetInstance().TeamController.teams[teamIndex];
 
                     if (team != null)
                     {

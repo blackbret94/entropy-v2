@@ -29,7 +29,7 @@ namespace Vashta.Entropy.UI.MapSelection
             string mapName = GetMapName();
             int gameMode = GetGameMode();
             
-            UIMain.GetInstance().RoomController.Play(mapName, gameMode);
+            UIMain.GetInstance().roomConnectionController.Play(mapName, gameMode);
         }
 
         private string GetMapName()

@@ -7,7 +7,7 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace Vashta.Entropy.PhotonExtensions
 {
-    public class RoomController : MonoBehaviour
+    public class RoomConnectionController : MonoBehaviour
     {
         /// <summary>
         /// Tries to enter the game scene. Sets the loading screen active while connecting to the

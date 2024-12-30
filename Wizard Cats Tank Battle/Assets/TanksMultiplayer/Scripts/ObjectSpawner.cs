@@ -237,7 +237,7 @@ namespace TanksMP
             if (colItem is CollectibleCaptureTheFlag)
             {
                 GameManager gameManager = GameManager.GetInstance();
-                gameManager.ui.GameLogPanel.EventSpoonPickedUp(view.GetName(), gameManager.GetTeamByIndex(view.GetTeam()).teamDefinition);
+                gameManager.ui.GameLogPanel.EventSpoonPickedUp(view.GetName(), gameManager.TeamController.GetTeamByIndex(view.GetTeam()).teamDefinition);
             }
             
             //cancel return timer as this object is now being carried around

@@ -362,7 +362,7 @@ namespace TanksMP
         public override void OnJoinedRoom()
         {
             //we've joined a finished room, disconnect immediately
-            if (GameManager.GetInstance() != null && GameManager.GetInstance().IsGameOver())
+            if (GameManager.GetInstance() != null && GameManager.GetInstance().ScoreController.IsGameOver())
             {
                 PhotonNetwork.Disconnect();
                 return;
@@ -404,7 +404,7 @@ namespace TanksMP
 
             //get the next team index which the player should belong to
             //assign it to the player and update player properties
-            int teamIndex = GameManager.GetInstance().GetTeamFill();
+            int teamIndex = GameManager.GetInstance().TeamController.GetTeamFill();
             PhotonNetwork.CurrentRoom.AddSize(teamIndex, +1);
             player.SetTeam(teamIndex);
 
@@ -429,7 +429,7 @@ namespace TanksMP
             
             //get the spawn position where our player prefab should be instantiated at, depending on the team assigned
             //if we cannot get a position, spawn it in the center of that team area - otherwise use the calculated position
-			Transform startPos = GameManager.GetInstance().teams[PhotonNetwork.LocalPlayer.GetTeam()].spawn;
+			Transform startPos = GameManager.GetInstance().TeamController.teams[PhotonNetwork.LocalPlayer.GetTeam()].spawn;
             
 			if (startPos != null) 
                 PhotonNetwork.Instantiate(playerPrefabs[prefabId].name, startPos.position, startPos.rotation, 0);

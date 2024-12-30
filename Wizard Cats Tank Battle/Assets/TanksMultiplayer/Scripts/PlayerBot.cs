@@ -9,7 +9,6 @@ using Entropy.Scripts.Player;
 using UnityEngine;
 using UnityEngine.AI;
 using Photon.Pun;
-using UnityEngine.UI;
 using Vashta.Entropy.UI;
 using Vashta.Entropy.World;
 
@@ -58,7 +57,7 @@ namespace TanksMP
         private List<GameObject> _alliesInRange = new List<GameObject>();
 
         //reference to the agent component
-        private NavMeshAgent agent;
+        public NavMeshAgent agent;
 
         //current destination on the navigation mesh
         private Vector3 targetPoint;
@@ -81,10 +80,10 @@ namespace TanksMP
             agent.speed = moveSpeed;
 
             //get corresponding team and colorize renderers in team color
-            targetPoint = GameManager.GetInstance().GetSpawnPosition(GetView().GetTeam());
+            targetPoint = GameManager.GetInstance().TeamController.GetSpawnPosition(GetView().GetTeam());
             agent.Warp(targetPoint);
 
-            Team team = GameManager.GetInstance().teams[GetView().GetTeam()];
+            Team team = GameManager.GetInstance().TeamController.teams[GetView().GetTeam()];
             CharacterAppearance.Team = team;
             CharacterAppearance.ColorizeCart();
             
@@ -101,7 +100,7 @@ namespace TanksMP
             OnShieldChange(GetView().GetShield());
             
             // add to player bot list
-            GameManager.GetInstance().AddBot(this);
+            GameManager.GetInstance().BotController.AddBot(this);
 
             PlayerViewController.RefreshHealthSlider();
             
@@ -193,16 +192,6 @@ namespace TanksMP
             //set the target point as the new destination
             agent.SetDestination(result);
         }
-        
-        protected override void StatusEffectTick()
-        {
-            base.StatusEffectTick();
-            
-            // adjust speed
-            float speed = ((moveSpeed + StatusEffectController.MovementSpeedModifier) *
-                           StatusEffectController.MovementSpeedMultiplier);
-            agent.speed = speed;
-        }
 
         protected override void Update()
         {
@@ -253,7 +242,7 @@ namespace TanksMP
         {
             //don't execute anything if the game is over already,
             //but termine the agent and path finding routines
-            if(GameManager.GetInstance().IsGameOver())
+            if(GameManager.GetInstance().ScoreController.IsGameOver())
             {
                 agent.isStopped = true;
                 StopAllCoroutines();
@@ -277,7 +266,7 @@ namespace TanksMP
                 // EXPERIMENTAL UPDATE to seek out specific spots instead
                 if(Vector3.Distance(transform.position, targetPoint) < agent.stoppingDistance)
                 {
-                    List<GameObject> possibleTargets = GameManager.GetInstance().BotTargetList;
+                    List<GameObject> possibleTargets = GameManager.GetInstance().BotController.BotTargetList;
                     RandomPoint(possibleTargets[Random.Range(0, possibleTargets.Count)].transform.position, range, out targetPoint);
                     // int teamCount = GameManager.GetInstance().teams.Length;
                     // RandomPoint(GameManager.GetInstance().teams[Random.Range(0, teamCount)].spawn.position, range, out targetPoint);
@@ -309,7 +298,7 @@ namespace TanksMP
                         // Vector3 shotDir = lookPos - shotPos.position;
                         // Vector3 shotDirError = new Vector2(shotDir.x /*+ CalculateAccuracyError()*/,
                         //     shotDir.z/* + CalculateAccuracyError()*/);
-                        PlayerCombatController.AttemptToShoot();
+                        CombatController.AttemptToShoot();
                         return;
                     }
                 }
@@ -334,7 +323,7 @@ namespace TanksMP
                         // Vector3 shotDir = lookPos - shotPos.position;
                         // Vector3 shotDirError = new Vector2(shotDir.x + CalculateAccuracyError(),
                         //     shotDir.z + CalculateAccuracyError());
-                        PlayerCombatController.AttemptToShoot();
+                        CombatController.AttemptToShoot();
                         _lastBuffS = Time.time;
                         return;
                     }
@@ -412,7 +401,7 @@ namespace TanksMP
             //toggle visibility for all rendering parts (off)
             ToggleComponents(false);
             //wait global respawn delay until reactivation
-            yield return new WaitForSeconds(GameManager.GetInstance().respawnTime);
+            yield return new WaitForSeconds(GameManager.GetInstance().SpawnController.respawnTime);
             //toggle visibility again (on)
             ToggleComponents(true);
             
@@ -423,7 +412,7 @@ namespace TanksMP
             }
 
             //respawn and continue with pathfinding
-            targetPoint = GameManager.GetInstance().GetSpawnPosition(GetView().GetTeam());
+            targetPoint = GameManager.GetInstance().TeamController.GetSpawnPosition(GetView().GetTeam());
             transform.position = targetPoint;
             agent.Warp(targetPoint);
             agent.isStopped = false;

@@ -65,7 +65,7 @@ namespace Vashta.Entropy.UI.MatchBrowser
                 return;
             }
             
-            UIMain.GetInstance().RoomController.JoinRoom(roomNameId);
+            UIMain.GetInstance().roomConnectionController.JoinRoom(roomNameId);
         }
 
         private void ShowButton(bool show)

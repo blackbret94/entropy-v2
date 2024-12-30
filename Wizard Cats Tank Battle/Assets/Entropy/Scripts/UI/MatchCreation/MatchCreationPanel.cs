@@ -108,7 +108,7 @@ namespace Vashta.Entropy.UI.MatchCreation
             RoomOptions roomOptions = RoomOptionsFactory.InitRoomOptions(roomName, mapName, maxPlayers, gameMode);
             
             // create room
-            UIMain.GetInstance().RoomController.CreateRoom(roomOptions);
+            UIMain.GetInstance().roomConnectionController.CreateRoom(roomOptions);
         }
 
         private void CreateMatchSingleplayer()
@@ -116,7 +116,7 @@ namespace Vashta.Entropy.UI.MatchCreation
             string mapName = GetMapName();
             TanksMP.GameMode gameMode = GetGameMode();
             
-            UIMain.GetInstance().RoomController.PlayOffline(mapName, (int)gameMode);
+            UIMain.GetInstance().roomConnectionController.PlayOffline(mapName, (int)gameMode);
         }
         
         private string GetRoomName()

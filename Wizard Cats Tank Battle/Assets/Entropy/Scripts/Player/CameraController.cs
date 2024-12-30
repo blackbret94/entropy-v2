@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Entropy.Scripts.Player
 {
-    public class PlayerCameraController : MonoBehaviour
+    public class CameraController : MonoBehaviour
     {
         public FollowTarget camFollow { get; set; }
 
@@ -33,6 +33,13 @@ namespace Entropy.Scripts.Player
             HideMask(true);
         }
 
+        public void FollowPlayer(Transform target)
+        {
+            SetTarget(target);
+            SetNormalCam();
+            HideMask(false);
+        }
+        
         public void SetTarget(Transform target)
         {
             camFollow.target = target;

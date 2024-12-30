@@ -68,7 +68,7 @@ namespace Vashta.Entropy.UI.Minimap
 
         public void RenderAsAlive()
         {
-            Team team = GameManager.GetTeamByIndex(_teamIndex);
+            Team team = GameManager.TeamController.GetTeamByIndex(_teamIndex);
 
             if (team == null)
                 return;

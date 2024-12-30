@@ -9,7 +9,6 @@ using Entropy.Scripts.Player;
 using UnityEngine;
 using Photon.Pun;
 using Vashta.Entropy.Character;
-using EckTechGames.FloatingCombatText;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.Spells;
 using Vashta.Entropy.StatusEffects;
@@ -23,10 +22,11 @@ namespace TanksMP
     /// Contains both server and client logic in an authoritative approach.
     /// </summary>
     [RequireComponent(typeof(StatusEffectController))]
-    [RequireComponent(typeof(PlayerCameraController))]
+    [RequireComponent(typeof(CameraController))]
     [RequireComponent(typeof(PlayerViewController))]
-    [RequireComponent(typeof(PlayerCombatController))]
+    [RequireComponent(typeof(CombatController))]
     [RequireComponent(typeof(UltimateController))]
+    [RequireComponent(typeof(MovementController))]
     public class Player : MonoBehaviourPunCallbacks, IPunObservable, IPunInstantiateMagicCallback
     {
         [Header("Stats")]
@@ -54,11 +54,6 @@ namespace TanksMP
         public Transform shotPos;
 
         /// <summary>
-        /// Character appearance reference, stores information about the model.
-        /// </summary>
-        public CharacterAppearance CharacterAppearance;
-
-        /// <summary>
         /// Alters some stats to make the player more or less powerful.  Higher means more power.
         /// </summary>
         public float handicapModifier = 1f;
@@ -69,16 +64,17 @@ namespace TanksMP
         [HideInInspector]
         public GameObject killedBy;
         
+        [Header("Controllers")]
         [HideInInspector]
         public StatusEffectController StatusEffectController;
-
         protected PlayerCurrencyRewarder _playerCurrencyRewarder;
-
         public PlayerInputController InputController { get; private set; }
-        public PlayerCameraController CameraController { get; private set; }
+        public CameraController CameraController { get; private set; }
         public PlayerViewController PlayerViewController { get; private set; }
-        public PlayerCombatController PlayerCombatController { get; private set; }
+        public CombatController CombatController { get; private set; }
         public UltimateController UltimateController { get; private set; }
+        public MovementController MovementController { get; private set; }
+        public CharacterAppearance CharacterAppearance;
 
         //reference to this rigidbody
         #pragma warning disable 0649
@@ -105,9 +101,6 @@ namespace TanksMP
         private float lastTransformUpdate;
         private const float _maxTransformLerp = .15f; 
         
-        // death loop protections
-        private const float minTimeBetweenDeaths = .5f;
-        
         // Spawn timer
         [HideInInspector]
         public float lastDeathTime = 0f;
@@ -129,10 +122,11 @@ namespace TanksMP
         void Awake()
         {
             GameManager = GameManager.GetInstance();
-            CameraController = GetComponent<PlayerCameraController>();
+            CameraController = GetComponent<CameraController>();
             PlayerViewController = GetComponent<PlayerViewController>();
-            PlayerCombatController = GetComponent<PlayerCombatController>();
+            CombatController = GetComponent<CombatController>();
             UltimateController = GetComponent<UltimateController>();
+            MovementController = GetComponent<MovementController>();
             
             InputController = GameManager.PlayerInputController;
             rb = GetComponent<Rigidbody>();
@@ -153,13 +147,13 @@ namespace TanksMP
             if (PhotonNetwork.IsMasterClient)
             {
                 _lastSecondUpdate = Time.time + .1f;
-                GetView().SetJoinTime(Time.time);
-                GetView().SetKills(0);
-                GetView().SetDeaths(0);
-                GetView().SetIsAlive(true);
-                GetView().SetClassId(classDefinition.classId);
+                photonView.SetJoinTime(Time.time);
+                photonView.SetKills(0);
+                photonView.SetDeaths(0);
+                photonView.SetIsAlive(true);
+                photonView.SetClassId(classDefinition.classId);
                 
-                GetView().RPC("RpcApplyClass", RpcTarget.All);
+                photonView.RPC("RpcApplyClass", RpcTarget.All);
             }
 
             lastTransformUpdate = Time.time;
@@ -175,7 +169,7 @@ namespace TanksMP
         private void SetMaxHealth()
         {
             //set players current health value after joining
-            GetView().SetHealth(maxHealth);
+            photonView.SetHealth(maxHealth);
             OnHealthChange(maxHealth);
         }
 
@@ -198,7 +192,7 @@ namespace TanksMP
                 // InputController.PlayerFired += OnFire;
             }
 
-            if (GameManager.UsesTeams)
+            if (GameManager.TeamController.UsesTeams)
             {
                 PlayerViewController.ColorizePlayerForTeam();
                 GameManager.ui.GameLogPanel.EventPlayerChangedTeam(GetName(), GetTeamDefinition());
@@ -209,8 +203,8 @@ namespace TanksMP
             GameManager.ui.GameLogPanel.EventPlayerJoined(GetName());
             
             //call hooks manually to update
-            OnHealthChange(GetView().GetHealth());
-            OnShieldChange(GetView().GetShield());
+            OnHealthChange(photonView.GetHealth());
+            OnShieldChange(photonView.GetShield());
             ApplyClass();
             
             // refresh slider to fix render issues
@@ -224,13 +218,13 @@ namespace TanksMP
                 //initialize input controls for mobile devices
                 //[0]=left joystick for movement, [1]=right joystick for shooting
 #if !UNITY_STANDALONE && !UNITY_WEBGL
-            GameManager.ui.controls[0].onDrag += Move;
-            GameManager.ui.controls[0].onDragEnd += MoveEnd;
+            GameManager.ui.controls[0].onDrag += MovementController.Move;
+            GameManager.ui.controls[0].onDragEnd += MovementController.MoveEnd;
 
             // GameManager.ui.controls[1].onClick += Shoot;
-            GameManager.ui.controls[1].onDragBegin += PlayerCombatController.ShootBegin;
+            GameManager.ui.controls[1].onDragBegin += CombatController.ShootBegin;
             GameManager.ui.controls[1].onDrag += RotateTurret;
-            GameManager.ui.controls[1].onDrag += Shoot;
+            GameManager.ui.controls[1].onDrag += CombatController.AttemptToShoot;
 #endif
 
                 GameManager.ui.fireButton.Player = this;
@@ -251,68 +245,10 @@ namespace TanksMP
             photonView.SetPreferredTeamIndex(preferredTeamIndex);
         }
 
-        /// <summary>
-        /// Server only
-        /// </summary>
-        private void AttemptToChangeTeams(bool respawn)
-        {
-            int preferredTeamIndex = GetView().GetPreferredTeamIndex();
-            int currentTeam = GetView().GetTeam();
-
-            if (preferredTeamIndex == PlayerExtensions.RANDOM_TEAM_INDEX && preferredTeamIndex != currentTeam)
-            {
-                GetView().SetPreferredTeamIndex(currentTeam);
-                return;
-            }
-
-            if (preferredTeamIndex == PlayerExtensions.RANDOM_TEAM_INDEX || preferredTeamIndex == GetView().GetTeam() ||
-                !GameManager.TeamHasVacancy(preferredTeamIndex))
-            {
-                return;
-            }
-
-            Debug.Log("Changing teams to: " + preferredTeamIndex);
-
-            PhotonNetwork.CurrentRoom.AddSize(GetView().GetTeam(), -1);
-            GetView().SetTeam(preferredTeamIndex);
-            PhotonNetwork.CurrentRoom.AddSize(GetView().GetTeam(), 1);
-            
-            // Force respawn
-            if(respawn)
-                CmdRespawn();
-            
-            this.photonView.RPC("RpcChangeTeams", RpcTarget.All);
-        }
-
-        // Server-only
-        protected void OnePassCheckChangeTeams(bool respawn)
-        {
-            if (!PhotonNetwork.IsMasterClient)
-                return;
-            
-            int preferredTeamIndex = GetView().GetPreferredTeamIndex();
-            bool prefersDifferentTeam = preferredTeamIndex != GetView().GetTeam();
-
-            if (prefersDifferentTeam)
-            {
-                Debug.Log("Prefers a different team");
-                if (GameManager.TeamHasVacancy(preferredTeamIndex))
-                {
-                    // Handle game over
-                    if (GameManager.IsGameOver())
-                        return;
-
-                    AttemptToChangeTeams(respawn);
-                }
-            }
-        }
-
         [PunRPC]
         protected void RpcChangeTeams()
         {
             PlayerViewController.ColorizePlayerForTeam();
-            
-            // Notify
             GameManager.ui.GameLogPanel.EventPlayerChangedTeam(GetName(), GetTeamDefinition());
         }
         
@@ -352,7 +288,7 @@ namespace TanksMP
             {
                 //here we receive the turret rotation angle from others and apply it
                 networkTurretRotation = (short)stream.ReceiveNext();
-                OnTurretRotation();
+                MovementController.OnTurretRotation();
                 
                 // lag compensation
                 networkPosition = (Vector3)stream.ReceiveNext();
@@ -380,50 +316,10 @@ namespace TanksMP
 
                 if (PhotonNetwork.IsMasterClient)
                 {
-                    StatusEffectTick();
+                    StatusEffectController.StatusEffectTick();
+                    _lastSecondUpdate = Time.time;
                 }
             }
-        }
-
-        /// <summary>
-        /// Server only, one status effect tick
-        /// </summary>
-        protected virtual void StatusEffectTick()
-        {
-            // leech
-            StatusEffectController.Leech();
-            
-            // handle health changes from DoTs/HoTs
-            int health = GetView().GetHealth();
-            int healthPerSecond = Mathf.RoundToInt(StatusEffectController.HealthPerSecond);
-            
-            if (healthPerSecond != 0)
-            {
-                int shield = GetView().GetShield();
-                if (shield > 0 && healthPerSecond < 0)
-                {
-                    GetView().DecreaseShield(1);
-                }
-                else
-                {
-                    health += healthPerSecond;
-                    health = CapHealth(health);
-                    GetView().SetHealth(health);
-                }
-            }
-            
-            if(healthPerSecond != 0 && (healthPerSecond < 0 || health < maxHealth))
-                this.photonView.RPC("RpcTakeDamage", RpcTarget.AllViaServer, -healthPerSecond, false, false);
-
-            if (health <= 0)
-            {
-                string deathFx = StatusEffectController.GetDeathFx();
-                
-                // killed the player
-                PlayerDeath(StatusEffectController.LastDotAppliedBy, deathFx);
-            }
-
-            _lastSecondUpdate = Time.time;
         }
 
         private void LateInit()
@@ -480,7 +376,7 @@ namespace TanksMP
                     turretRotation = networkTurretRotation;
                 }
 
-                OnTurretRotation();
+                MovementController.OnTurretRotation();
 
                 return;
             }
@@ -494,7 +390,7 @@ namespace TanksMP
 
             if (isMoving)
             {
-                Move(moveDir);
+                MovementController.Move(moveDir);
             }
             else
             {
@@ -503,11 +399,11 @@ namespace TanksMP
             }
             
             //rotate turret to look at the mouse direction
-            RotateTurret(turnDir);
+            MovementController.RotateTurret(turnDir);
             
             //shoot bullet on left mouse click
             if(InputController.GetAdapter().ShouldShoot())
-                PlayerCombatController.AttemptToShoot();
+                CombatController.AttemptToShoot();
 
 			//replicate input to mobile controls for illustration purposes
 			#if UNITY_EDITOR && (UNITY_IPHONE || UNITY_ANDROID)
@@ -529,53 +425,6 @@ namespace TanksMP
         {
             return this.photonView;
         }
-        
-        //moves rigidbody in the direction passed in
-        void Move(Vector2 direction = default(Vector2))
-        {
-            //if direction is not zero, rotate player in the moving direction relative to camera
-            if (direction != Vector2.zero)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.y))
-                                            * Quaternion.Euler(0, CameraController.camTransform.eulerAngles.y, 0);
-
-                float rotationSpeed = Time.deltaTime * 450;
-                transform.rotation = Quaternion.RotateTowards(
-                    transform.rotation, targetRotation,
-                    rotationSpeed);
-            }
-
-            //create movement vector based on current rotation and speed
-            float movementSpeed = ((moveSpeed + StatusEffectController.MovementSpeedModifier) *
-                                   StatusEffectController.MovementSpeedMultiplier);
-            // Vector3 velocity = transform.forward * movementSpeed;
-            Vector3 velocity = new Vector3(direction.x, 0, direction.y) * movementSpeed;
-
-            //apply vector to rigidbody position
-            rb.velocity = Vector3.MoveTowards(rb.velocity, velocity, acceleration);
-        }
-
-
-        //on movement drag ended
-        void MoveEnd()
-        {
-            //reset rigidbody physics values
-            // rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-        }
-
-        //rotates turret to the direction passed in
-        // Never called in PlayerBot
-        private void RotateTurret(Vector2 direction = default(Vector2))
-        {
-            //don't rotate without values
-            if (direction == Vector2.zero)
-                return;
-
-            //get rotation value as angle out of the direction we received
-            turretRotation = (short)Quaternion.LookRotation(new Vector3(direction.x, 0, direction.y)).eulerAngles.y;
-            OnTurretRotation();
-        }
 
         public void CmdTryChangeTeams(bool respawn)
         {
@@ -588,7 +437,7 @@ namespace TanksMP
         [PunRPC]
         protected void RpcTryChangeTeams(bool respawn)
         {
-            OnePassCheckChangeTeams(respawn);
+            GameManager.RoomController.OnePassCheckChangeTeams(this, respawn);
         }
         
 
@@ -603,16 +452,7 @@ namespace TanksMP
         [PunRPC]
         protected void CmdShoot(short[] position, short angle)
         {   
-            PlayerCombatController.Shoot(position, angle);
-        }
-        
-        //hook for updating turret rotation locally
-        //never called in PlayerBot
-        void OnTurretRotation()
-        {
-            //we don't need to check for local ownership when setting the turretRotation,
-            //because OnPhotonSerializeView PhotonStream.isWriting == true only applies to the owner
-            turret.rotation = Quaternion.Euler(0, turretRotation, 0);
+            CombatController.Shoot(position, angle);
         }
 
         //hook for updating health locally
@@ -635,7 +475,7 @@ namespace TanksMP
         public void Heal(int healAmount)
         {
             // handle health changes from DoTs/HoTs
-            int health = GetView().GetHealth();
+            int health = photonView.GetHealth();
 
             if (healAmount == 0)
                 return;
@@ -643,7 +483,7 @@ namespace TanksMP
             health += healAmount;
 
             health = CapHealth(health);
-            GetView().SetHealth(health);
+            photonView.SetHealth(health);
             
             if(healAmount < 0 || health < maxHealth)
                 this.photonView.RPC("RpcTakeDamage", RpcTarget.AllViaServer, -healAmount, false, false);
@@ -677,80 +517,7 @@ namespace TanksMP
         protected void RpcKillPlayer()
         {
             // PlayerDeath
-            PlayerDeath(this, null);
-        }
-
-        /// <summary>
-        /// Server-only.  Handles player death
-        /// </summary>
-        /// <param name="other"></param>
-        public void PlayerDeath(Player other, string deathFxId)
-        {
-            if (lastDeathTime + minTimeBetweenDeaths >= Time.time)
-            {
-                Debug.LogWarning("Attempted to respawn within the min time between spawns");
-                return;
-            }
-            
-            bool canRespawnFreely = PlayerCanRespawnFreely();
-            lastDeathTime = Time.time;
-            
-            GetView().SetIsAlive(false);
-            
-            if(!canRespawnFreely)
-                GetView().IncrementDeaths();
-            
-            //the game is already over so don't do anything
-            if(GameManager.IsGameOver()) return;
-
-            OnePassCheckChangeTeams(false);
-            
-            //get killer and increase score for that enemy team
-            if (other != null)
-            {
-                // Reflect damage on killer if blood pact is active
-                StatusEffectController.BloodPact(other);
-                
-                int otherTeam = other.GetView().GetTeam();
-                
-                // killer is other team
-                if (GetView().GetTeam() != otherTeam)
-                {
-                    GameManager.AddScore(ScoreType.Kill, otherTeam);
-                    other.GetView().IncrementKills();
-                }
-                
-                //the maximum score has been reached now
-                if (GameManager.IsGameOver())
-                {
-                    //close room for joining players
-                    PhotonNetwork.CurrentRoom.IsOpen = false;
-                    //tell all clients the winning team
-                    GameManager.GetInstance().photonView.RPC("RpcGameOver", RpcTarget.All, (byte)otherTeam);
-                    return;
-                }
-            }
-            else
-            {
-                // Killed by environment
-                GameManager.RemoveScore(ScoreType.Kill, GetView().GetTeam());
-            }
-
-            //the game is not over yet, reset runtime values
-            //also tell all clients to despawn this player
-            GetView().SetHealth(maxHealth);
-            GetView().SetShield(0);
-            GetView().SetBullet(0);
-            GetView().SetUltimate(0);
-
-            DropCollectibles();
-
-            //tell the dead player who killed them (owner of the bullet)
-            short senderId = 0;
-            if (other != null)
-                senderId = (short)other.GetComponent<PhotonView>().ViewID;
-
-            this.photonView.RPC("RpcRespawn", RpcTarget.All, senderId, deathFxId);
+            CombatController.PlayerDeath(this, null);
         }
 
         public void CommandDropCollectibles()
@@ -775,7 +542,7 @@ namespace TanksMP
         {
             // Check all potential team colliders
             GameManager gameManager = GameManager;
-            foreach (var team in gameManager.teams)
+            foreach (var team in gameManager.TeamController.teams)
             {
                 Collider col = team.freeClassChange.GetComponent<Collider>();
                     
@@ -811,46 +578,7 @@ namespace TanksMP
             //the player has been killed
             if (!isActive)
             {
-                IsAlive = false;
-                
-                if (IsLocal)
-                {
-                    // Hide "Drop Flag" button if local player
-                    GameManager.ui.DropCollectiblesButton.gameObject.SetActive(false);
-                    GameManager.ui.CastUltimateButton.gameObject.SetActive(false);
-                    GameManager.ui.CastPowerupButton.gameObject.SetActive(false);
-                }
-                
-                //find original sender game object (killedBy)
-                PhotonView senderView = senderId > 0 ? PhotonView.Find(senderId) : null;
-                if (senderView != null && senderView.gameObject != null) killedBy = senderView.gameObject;
-                
-                PlayerViewController.SpawnDeathFx(deathFxId);
-                
-                // Mark as grey on minimap
-                if (MinimapEntityControllerPlayer)
-                {
-                    MinimapEntityControllerPlayer.RenderAsDead();
-                }
-                
-                StatusEffectController.ClearStatusEffects();
-
-                //play sound clip on player death
-                // play killer's death cry
-                if (killedBy != null)
-                {
-                    Player otherPlayer = killedBy.GetComponent<Player>();
-                    
-                    otherPlayer.UltimateController.RewardUltimateForKill();
-                    
-                    // log
-                    GameManager.ui.GameLogPanel.EventPlayerKilled(GetName(), GetTeamDefinition(), otherPlayer.GetName(), otherPlayer.GetTeamDefinition());
-                
-                    if (otherPlayer != null && otherPlayer != this)
-                    {
-                        AudioManager.Play3D(otherPlayer.CharacterAppearance.Meow.AudioClip, transform.position);
-                    }
-                }
+                HandleKilled(senderId, deathFxId);
             }
 
             if (PhotonNetwork.IsMasterClient)
@@ -858,82 +586,116 @@ namespace TanksMP
                 //send player back to the team area, this will get overwritten by the exact position from the client itself later on
                 //we just do this to avoid players "popping up" from the position they died and then teleporting to the team area instantly
                 //this is manipulating the internal PhotonTransformView cache to update the networkPosition variable
-                GetComponent<PhotonTransformView>().OnPhotonSerializeView(new PhotonStream(false, new object[] { GameManager.GetSpawnPosition(GetView().GetTeam()),
+                GetComponent<PhotonTransformView>().OnPhotonSerializeView(new PhotonStream(false, new object[] { GameManager.TeamController.GetSpawnPosition(photonView.GetTeam()),
                                                                                                                  Vector3.zero, Quaternion.identity }), new PhotonMessageInfo());
             }
 
             // Player is alive
             if (isActive)
             {
-                IsAlive = true;
-                
-                MovePlayerToSpawn();
+               HandleRespawned();
+            }
+        }
 
-                // apply class
-                StatusEffectController.RefreshCache();
-                ApplyClass();
-                PlayerViewController.ColorizePlayerForTeam();
+        protected void HandleKilled(short senderId, string deathFxId)
+        {
+            IsAlive = false;
                 
-                // Render as alive
-                if (MinimapEntityControllerPlayer)
-                {
-                    MinimapEntityControllerPlayer.RenderAsAlive();
-                }
+            if (IsLocal)
+            {
+                // Hide "Drop Flag" button if local player
+                GameManager.ui.HUD.PlayerDied();
+            }
                 
-                // Show ultimates button
-                if(IsLocal)
-                    GameManager.ui.CastUltimateButton.gameObject.SetActive(true);
-
-                // Server only
-                if (PhotonNetwork.IsMasterClient)
-                {
-                    GetView().SetIsAlive(true);
+            //find original sender game object (killedBy)
+            PhotonView senderView = senderId > 0 ? PhotonView.Find(senderId) : null;
+            if (senderView != null && senderView.gameObject != null) killedBy = senderView.gameObject;
+                
+            PlayerViewController.SpawnDeathFx(deathFxId);
+                
+            // Mark as grey on minimap
+            if (MinimapEntityControllerPlayer)
+            {
+                MinimapEntityControllerPlayer.RenderAsDead();
+            }
+                
+            StatusEffectController.ClearStatusEffects();
+                
+            if (killedBy != null)
+            {
+                Player otherPlayer = killedBy.GetComponent<Player>();
                     
-                    // Apply status effect
-                    if (StatusEffectApplyOnSpawn)
-                    {
-                        StatusEffectController.AddStatusEffect(StatusEffectApplyOnSpawn.Id, this);
-                    }
+                otherPlayer.UltimateController.RewardUltimateForKill();
+                    
+                // log
+                GameManager.ui.GameLogPanel.EventPlayerKilled(GetName(), GetTeamDefinition(), otherPlayer.GetName(), otherPlayer.GetTeamDefinition());
+                
+                if (otherPlayer != null && otherPlayer != this)
+                {
+                    // play killer's death cry
+                    AudioManager.Play3D(otherPlayer.CharacterAppearance.Meow.AudioClip, transform.position);
                 }
             }
 
-            //further changes only affect the local client
-            if (!photonView.IsMine)
-                return;
+            // Local only
+            if (photonView.IsMine)
+            {
+                CameraController.FollowKiller(killedBy);
+                GameManager.SpawnController.DisplayDeath();
+            }
+        }
 
-            //local player got respawned so reset states
-            if (isActive == true)
+        protected void HandleRespawned()
+        {
+            IsAlive = true;
+                
+            // Move player to spawn
+            transform.position = GameManager.TeamController.GetSpawnPosition(photonView.GetTeam());
+
+            // apply class
+            StatusEffectController.RefreshCache();
+            ApplyClass();
+            PlayerViewController.ColorizePlayerForTeam();
+                
+            // Render as alive
+            if (MinimapEntityControllerPlayer)
+            {
+                MinimapEntityControllerPlayer.RenderAsAlive();
+            }
+                
+            // Show ultimates button
+            if(IsLocal)
+                GameManager.ui.HUD.PlayerRespawned();
+
+            // Server only
+            if (PhotonNetwork.IsMasterClient)
+            {
+                photonView.SetIsAlive(true);
+                    
+                // Apply status effect
+                if (StatusEffectApplyOnSpawn)
+                {
+                    StatusEffectController.AddStatusEffect(StatusEffectApplyOnSpawn.Id, this);
+                }
+            }
+            
+            // Local Only
+            if (photonView.IsMine)
             {
                 ResetTransform();
-            }
-            else
-            {
-                //local player was killed, set camera to follow the killer
-                CameraController.FollowKiller(killedBy);
-                
-                //display respawn window (only for local player)
-                GameManager.DisplayDeath();
             }
         }
 
         protected void RewardCoinsForKill()
         {
             // reward coins if the player is on a different team
-            RewardCoins(_playerCurrencyRewarder.RewardForKill());
+            PlayerViewController.RewardCoins(_playerCurrencyRewarder.RewardForKill());
             
-        }
-
-        private void RewardCoins(int amount)
-        {
-            OverlayCanvasController.instance.ShowCombatText(gameObject, CombatTextType.CoinReward, "+"+amount);
-
-            // play coin reward sound
-            GameManager.ui.SfxController.PlayCoinEarnedSound();
         }
 
         public void CmdRewardForFlagCapture()
         {
-            GetView().IncrementKills(10);
+            photonView.IncrementKills(10);
             photonView.RPC("RpcRewardForFlagCapture", RpcTarget.All);
         }
         
@@ -945,12 +707,12 @@ namespace TanksMP
             
             GameManager.ui.DropCollectiblesButton.gameObject.SetActive(false);
 
-            RewardCoins(_playerCurrencyRewarder.RewardForFlagCapture());
+            PlayerViewController.RewardCoins(_playerCurrencyRewarder.RewardForFlagCapture());
         }
 
         public void CmdRewardForControlPointCapture()
         {
-            GetView().IncrementKills(10);
+            photonView.IncrementKills(10);
             photonView.RPC("RpcRewardForControlPointCapture", RpcTarget.All);
         }
 
@@ -960,7 +722,7 @@ namespace TanksMP
             if (!IsLocal)
                 return;
 
-            RewardCoins(_playerCurrencyRewarder.RewardForPointCapture());
+            PlayerViewController.RewardCoins(_playerCurrencyRewarder.RewardForPointCapture());
         }
 
         /// <summary>
@@ -979,45 +741,24 @@ namespace TanksMP
         private void ResetTransform()
         {
             //start following the local player again
-            CameraController.SetTarget(turret);
-            CameraController.SetNormalCam();
-            CameraController.HideMask(false);
+            CameraController.FollowPlayer(turret);
             
             //get team area and reposition it there
-            // transform.position = GameManager.GetSpawnPosition(GetView().GetTeam());
+            // transform.position = GameManager.GetSpawnPosition(photonView.GetTeam());
 
             //reset forces modified by input
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-            transform.rotation = Quaternion.identity;
+            MovementController.ResetTransform();
+            
             //reset input left over
             GameManager.ui.controls[0].OnEndDrag(null);
             GameManager.ui.controls[1].OnEndDrag(null);
-        }
-
-        /// <summary>
-        /// Repositions the player in the team area, called by all clients to prevent "ghost" cats
-        /// </summary>
-        private void MovePlayerToSpawn()
-        {
-            transform.position = GameManager.GetSpawnPosition(GetView().GetTeam());
         }
         
         //called on all clients on game end providing the winning team
         [PunRPC]
         protected void RpcGameOver(byte teamIndex)
         {
-            if (PhotonNetwork.IsMasterClient)
-            {
-                PhotonNetwork.CurrentRoom.IsOpen = false;
-            }
-            
-            int teamIndexInt = teamIndex;
-            if (teamIndexInt == 255)
-                teamIndexInt = -1;
-            
-            //display game over window
-            GameManager.DisplayGameOver(teamIndexInt);
+            GameManager.RoomController.GameOver(teamIndex);
         }
 
         public void OnPhotonInstantiate(PhotonMessageInfo info)
@@ -1053,7 +794,7 @@ namespace TanksMP
 
         public int GetClassId()
         {
-            return GetView().GetClassId();
+            return photonView.GetClassId();
         }
 
         /// <summary>
@@ -1079,7 +820,7 @@ namespace TanksMP
 
             if (classDefinition == null)
             {
-                Debug.LogError("Could not find class definition for class " + GetView().GetClassId());
+                Debug.LogError("Could not find class definition for class " + photonView.GetClassId());
             }
 
             ClassApplier.ApplyClass(this, playerCollisionHandler, classDefinition, handicapModifier);
@@ -1177,20 +918,20 @@ namespace TanksMP
         /// </summary>
         public void TryCastPowerup()
         {
-            if (GetView().GetPowerup() > 0)
+            if (photonView.GetPowerup() > 0)
             {
-                GetView().RPC("RpcCastPowerup", RpcTarget.All);
+                photonView.RPC("RpcCastPowerup", RpcTarget.All);
             }
             else
             {
-                Debug.LogWarning("Tried to cast powerup with ID <=0: "+ GetView().GetPowerup());
+                Debug.LogWarning("Tried to cast powerup with ID <=0: "+ photonView.GetPowerup());
             }
         }
 
         [PunRPC]
         public void RpcCastPowerup()
         {
-            int sessionId = GetView().GetPowerup();
+            int sessionId = photonView.GetPowerup();
 
             if (sessionId < 1)
             {
@@ -1220,13 +961,13 @@ namespace TanksMP
             if (!PhotonNetwork.IsMasterClient)
                 return;
             
-            GetView().SetPowerup(0);
+            photonView.SetPowerup(0);
         }
 
-        /// SECTION: HELPERS
+        /// SECTION: HELPFUL GETTERS
         public virtual string GetName()
         {
-            return GetView().GetName();
+            return photonView.GetName();
         }
         
         public ClassDefinition GetClass()

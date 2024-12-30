@@ -43,7 +43,7 @@ namespace TanksMP
                 return;
 
             //the game is already over so don't do anything
-            if (GameManager.GetInstance().IsGameOver()) return;
+            if (GameManager.GetInstance().ScoreController.IsGameOver()) return;
 
             //check for the required object
             //continue, if it is not assigned to begin with
@@ -77,9 +77,9 @@ namespace TanksMP
                 }
 
                 //add points for this score type to the correct team
-                GameManager.GetInstance().AddScore(ScoreType.Capture, teamIndex);
+                GameManager.GetInstance().ScoreController.AddScore(ScoreType.Capture, teamIndex);
                 //the maximum score has been reached now
-                if (GameManager.GetInstance().IsGameOver())
+                if (GameManager.GetInstance().ScoreController.IsGameOver())
                 {
                     //close room for joining players
                     PhotonNetwork.CurrentRoom.IsOpen = false;

@@ -26,7 +26,7 @@ namespace Vashta.Entropy.UI.TeamScore
         private IEnumerator Init()
         {
             yield return new WaitForSeconds(.1f);
-            TeamScoreSlider.maxValue = GameManager.GetInstance().maxScore;
+            TeamScoreSlider.maxValue = GameManager.GetInstance().ScoreController.maxScore;
         }
         
         public void UpdateScore(int score)
@@ -50,7 +50,7 @@ namespace Vashta.Entropy.UI.TeamScore
             if (TextAnimator != null)
                 TextAnimator.Play("Animation");
 
-            TeamScoreSlider.maxValue = GameManager.GetInstance().maxScore;
+            TeamScoreSlider.maxValue = GameManager.GetInstance().ScoreController.maxScore;
             TeamScoreSlider.value = score;
         }
 

@@ -49,7 +49,7 @@ namespace Vashta.Entropy.UI.Minimap
 
         private void UpdateImage()
         {
-            int teamIndex = Player.GetTeam();
+            int teamIndex = Player.TeamIndex;
             
             if (teamIndex != _teamIndex)
             {
@@ -63,7 +63,7 @@ namespace Vashta.Entropy.UI.Minimap
         private bool SameTeamAsLocalPlayer()
         {
             Player localPlayer = PlayerList.GetLocalPlayer();
-            return localPlayer.GetTeam() == Player.GetTeam();
+            return localPlayer.TeamIndex == Player.TeamIndex;
         }
 
         public void RenderAsAlive()

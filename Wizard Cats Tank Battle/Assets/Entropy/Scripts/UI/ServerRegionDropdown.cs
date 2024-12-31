@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Photon.Pun;
 using TanksMP;
 using TMPro;
 using UnityEngine;
@@ -54,7 +53,7 @@ namespace Vashta.Entropy.UI
             NetworkManagerCustom.SaveRegion(region.Token);
 
             // Reconnect
-            if (PhotonNetwork.IsConnected)
+            if (UIMain.GetInstance().Runner.IsRunning)
             {
                 NetworkManagerCustom.GetInstance().Reconnect();
             }

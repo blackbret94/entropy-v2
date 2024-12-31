@@ -6,6 +6,8 @@ namespace Vashta.Entropy.GameState
 {
     public class TeamController : MonoBehaviour
     {
+        public const int RANDOM_TEAM_INDEX = 100;
+        
         /// <summary>
         /// Definition of playing teams with additional properties.
         /// </summary>

@@ -1,7 +1,5 @@
-using System;
 using UnityEngine;
 using System.Collections.Generic;
-using Photon.Pun;
 using TanksMP;
 
 namespace Entropy.Scripts.Player
@@ -69,13 +67,15 @@ namespace Entropy.Scripts.Player
                 return;
 
             // ignore team mates
-            if (player.GetView().GetTeam() == colPlayer.player.GetView().GetTeam())
+            if (player.TeamIndex == colPlayer.player.TeamIndex)
                 return;
             
             _playersActivelyCollided.Add(colPlayer);
             PlayCollisionFx(col.contacts[0].point);
 
-            HandleCollisionServer(colPlayer);
+            TanksMP.Player otherPlayer = colPlayer.GetComponent<TanksMP.Player>();
+
+            player.CombatController.TakeDamage(CalculateDamage(colPlayer, otherPlayer), otherPlayer);
         }
 
         private void OnCollisionExit(Collision col)
@@ -96,16 +96,7 @@ namespace Entropy.Scripts.Player
             GameObject obj = col.gameObject;
             return obj.GetComponent<PlayerCollisionHandler>();
         }
-
-        private void HandleCollisionServer(PlayerCollisionHandler colPlayer)
-        {
-            if (!PhotonNetwork.IsMasterClient) return;
-
-            TanksMP.Player otherPlayer = colPlayer.GetComponent<TanksMP.Player>();
-
-            player.CombatController.TakeDamage(CalculateDamage(colPlayer, otherPlayer), otherPlayer);
-        }
-
+        
         private int CalculateDamage(PlayerCollisionHandler colPlayer, TanksMP.Player otherPlayer)
         {
             if (!colPlayer)

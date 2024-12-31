@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Fusion;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 
 namespace Vashta.Entropy.PhotonExtensions
 {
-    public class RoomListCache : MonoBehaviourPunCallbacks
+    public class RoomListCache : SimulationBehaviour
     {
         private TypedLobby customLobby = new TypedLobby("customLobby", LobbyType.Default);
 

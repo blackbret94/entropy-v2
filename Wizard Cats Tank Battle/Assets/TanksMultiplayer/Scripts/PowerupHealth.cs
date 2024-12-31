@@ -23,8 +23,8 @@ namespace TanksMP
         {
             if (p == null)
                 return false;
-            
-            p.GetView().SetHealth(p.maxHealth);
+
+            p.Health = p.maxHealth;
             p.CmdShowPowerupUI(Powerup.PowerupId);
 
             //return successful collection

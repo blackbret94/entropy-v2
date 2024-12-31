@@ -4,6 +4,7 @@
  * 	otherwise make available to any third party the Service or the Content. */
 
 using Entropy.Scripts.Audio;
+using Fusion;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -19,7 +20,7 @@ namespace TanksMP
     /// <summary>
     /// UI script for all elements, settings and user interactions in the menu scene.
     /// </summary>
-    public class UIMain : MonoBehaviour
+    public class UIMain : NetworkBehaviour
     {
         public CatNameGenerator CatNameGenerator;
         

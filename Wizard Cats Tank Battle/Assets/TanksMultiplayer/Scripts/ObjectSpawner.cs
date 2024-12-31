@@ -7,6 +7,7 @@ using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Fusion;
 using Photon.Pun;
 using Random = UnityEngine.Random;
 
@@ -16,7 +17,7 @@ namespace TanksMP
     /// Manages network-synced spawning of prefabs, in this case collectibles and powerups.
     /// With the respawn time synced on all clients it supports host migration too.
     /// </summary>
-    public class ObjectSpawner : MonoBehaviourPunCallbacks
+    public class ObjectSpawner : NetworkBehaviour
 	{
         /// <summary>
         /// Prefab to sync the instantiation for over the network.
@@ -55,8 +56,7 @@ namespace TanksMP
         //the master should spawn the object in the scene for all other clients
         void Start()
         {
-            if(PhotonNetwork.IsMasterClient)
-                OnMasterClientSwitched(PhotonNetwork.LocalPlayer);
+            OnMasterClientSwitched(PhotonNetwork.LocalPlayer);
         }
         
         
@@ -141,7 +141,7 @@ namespace TanksMP
             float delay = Mathf.Clamp(nextSpawn - (float)PhotonNetwork.Time, 0, respawnTime);
 			yield return new WaitForSeconds(delay);
 
-            if (PhotonNetwork.IsConnected)
+            if (UIMain.GetInstance().Runner.IsRunning)
             {
                 //differ between CollectionType
                 if(colType == CollectionType.Pickup && obj != null)

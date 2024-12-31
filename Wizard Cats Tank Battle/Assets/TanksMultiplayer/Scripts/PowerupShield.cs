@@ -24,9 +24,11 @@ namespace TanksMP
                 return false;
 
             //assign absolute shield points to player
-            p.GetView().SetShield(p.maxShield);
-            p.GetView().SetHealth(p.maxHealth);
-            p.CmdShowPowerupUI(Powerup.PowerupId);
+            p.Shield = p.maxShield;
+            p.Health = p.maxHealth;
+            
+            if(p.HasInputAuthority)
+                p.CmdShowPowerupUI(Powerup.PowerupId);
             
             //return successful collection
             return true;

@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using Entropy.Scripts.Player;
 using UnityEngine;
 using UnityEngine.AI;
-using Photon.Pun;
 using Vashta.Entropy.UI;
 using Vashta.Entropy.World;
 
@@ -80,10 +79,10 @@ namespace TanksMP
             agent.speed = moveSpeed;
 
             //get corresponding team and colorize renderers in team color
-            targetPoint = GameManager.GetInstance().TeamController.GetSpawnPosition(GetView().GetTeam());
+            targetPoint = GameManager.GetInstance().TeamController.GetSpawnPosition(TeamIndex);
             agent.Warp(targetPoint);
 
-            Team team = GameManager.GetInstance().TeamController.teams[GetView().GetTeam()];
+            Team team = GameManager.GetInstance().TeamController.teams[TeamIndex];
             CharacterAppearance.Team = team;
             CharacterAppearance.ColorizeCart();
             
@@ -92,12 +91,10 @@ namespace TanksMP
             
             PlayerViewController.SetTeam(team.teamDefinition);
             
-            GameManager.ui.GameLogPanel.EventPlayerJoined(GetName());
+            GameManager.ui.GameLogPanel.EventPlayerJoined(PlayerName);
             rb = GetComponent<Rigidbody>();
             
             //call hooks manually to update
-            OnHealthChange(GetView().GetHealth());
-            OnShieldChange(GetView().GetShield());
             
             // add to player bot list
             GameManager.GetInstance().BotController.AddBot(this);
@@ -109,13 +106,10 @@ namespace TanksMP
 
             _slowUpdateRate += Random.Range(0f, .25f);
             
-            if (PhotonNetwork.IsMasterClient)
+            // Apply status effect
+            if (StatusEffectApplyOnSpawn)
             {
-                // Apply status effect
-                if (StatusEffectApplyOnSpawn)
-                {
-                    StatusEffectController.AddStatusEffect(StatusEffectApplyOnSpawn.Id, this);
-                }
+                StatusEffectController.AddStatusEffect(StatusEffectApplyOnSpawn.Id, this);
             }
         }
         
@@ -142,11 +136,11 @@ namespace TanksMP
                     Player p = cols[i].gameObject.GetComponent<Player>();
                     
                     // Add enemies to the list
-                    if(p.GetView().GetTeam() != GetView().GetTeam() && !_enemiesInRange.Contains(cols[i].gameObject))
+                    if(p.TeamIndex != TeamIndex && !_enemiesInRange.Contains(cols[i].gameObject))
                     {
                         _enemiesInRange.Add(cols[i].gameObject);   
                     // Add allies to the list
-                    } else if (p.GetView().GetTeam() == GetView().GetTeam() && p != this)
+                    } else if (p.TeamIndex == TeamIndex && p != this)
                     {
                         _alliesInRange.Add(cols[i].gameObject);
                     }
@@ -155,11 +149,6 @@ namespace TanksMP
                 //wait a second before doing the next range check
                 yield return new WaitForSeconds(1);
             }
-        }
-
-        public override string GetName()
-        {
-            return myName;
         }
         
         //calculate random point for movement on navigation mesh
@@ -220,11 +209,11 @@ namespace TanksMP
                 Player p = cols[i].gameObject.GetComponent<Player>();
                     
                 // Add enemies to the list
-                if(p.GetView().GetTeam() != GetView().GetTeam() && !_enemiesInRange.Contains(cols[i].gameObject))
+                if(p.TeamIndex != TeamIndex && !_enemiesInRange.Contains(cols[i].gameObject))
                 {
                     _enemiesInRange.Add(cols[i].gameObject);   
                     // Add allies to the list
-                } else if (p.GetView().GetTeam() == GetView().GetTeam() && p != this)
+                } else if (p.TeamIndex == TeamIndex && p != this)
                 {
                     _alliesInRange.Add(cols[i].gameObject);
                 }
@@ -252,10 +241,6 @@ namespace TanksMP
             
             //don't continue if this bot is marked as dead
             if(!IsAlive) return;
-
-            //stat visualization does not update automatically
-            OnHealthChange(health);
-            OnShieldChange(shield);
 
             //no enemy players are in range
             if(_enemiesInRange.Count == 0)
@@ -344,32 +329,24 @@ namespace TanksMP
         /// <summary>
         /// Override of the base method to handle bot respawn separately.
         /// </summary>
-        [PunRPC]
-        protected override void RpcRespawn(short senderId, string deathFxId)
+        public override void Respawn(Player player, string deathFxId)
         {
-            StartCoroutine(Respawn(senderId, deathFxId));
+            StartCoroutine(RespawnCR(player, deathFxId));
         }
 
         //the actual respawn routine
-        IEnumerator Respawn(short senderId, string deathFxId)
+        IEnumerator RespawnCR(Player killedByPlayer, string deathFxId)
         {   
-            
             //stop AI updates
             IsAlive = false;
             _enemiesInRange.Clear();
             agent.isStopped = true;
-            killedBy = null;
-
-            //find original sender game object (killedBy)
-            PhotonView senderView = senderId > 0 ? PhotonView.Find(senderId) : null;
-            if (senderView != null && senderView.gameObject != null) killedBy = senderView.gameObject;
-            
-            Player killedByPlayer = killedBy.GetComponent<Player>();
+            killedBy = killedByPlayer.gameObject;
 
             if (killedByPlayer)
             {
                 killedByPlayer.UltimateController.RewardUltimateForKill();
-                GameManager.ui.GameLogPanel.EventPlayerKilled(GetName(), GetTeamDefinition(), killedByPlayer.GetName(), killedByPlayer.GetTeamDefinition());
+                GameManager.ui.GameLogPanel.EventPlayerKilled(PlayerName, GetTeamDefinition(), killedByPlayer.PlayerName, killedByPlayer.GetTeamDefinition());
             }
 
             //detect whether the current user was responsible for the kill
@@ -390,11 +367,9 @@ namespace TanksMP
             //play sound clip on player death
             if (killedBy != null)
             {
-                Player player = killedBy.GetComponent<Player>();
-                
-                if (player != null)
+                if (killedByPlayer != null)
                 {
-                    AudioManager.Play3D(player.CharacterAppearance.Meow.AudioClip, transform.position);
+                    AudioManager.Play3D(killedByPlayer.CharacterAppearance.Meow.AudioClip, transform.position);
                 }
             }
 
@@ -412,19 +387,16 @@ namespace TanksMP
             }
 
             //respawn and continue with pathfinding
-            targetPoint = GameManager.GetInstance().TeamController.GetSpawnPosition(GetView().GetTeam());
+            targetPoint = GameManager.GetInstance().TeamController.GetSpawnPosition(TeamIndex);
             transform.position = targetPoint;
             agent.Warp(targetPoint);
             agent.isStopped = false;
             IsAlive = true;
-
-            if (PhotonNetwork.IsMasterClient)
+            
+            // Apply status effect
+            if (StatusEffectApplyOnSpawn)
             {
-                // Apply status effect
-                if (StatusEffectApplyOnSpawn)
-                {
-                    StatusEffectController.AddStatusEffect(StatusEffectApplyOnSpawn.Id, this);
-                }
+                StatusEffectController.AddStatusEffect(StatusEffectApplyOnSpawn.Id, this);
             }
         }
 
@@ -440,7 +412,7 @@ namespace TanksMP
 
         private void OnDestroy()
         {
-            GameManager.ui.GameLogPanel.EventPlayerLeft(GetName());
+            GameManager.ui.GameLogPanel.EventPlayerLeft(PlayerName);
         }
     }
 }

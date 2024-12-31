@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Photon.Pun;
 using TanksMP;
 using UnityEngine;
 
@@ -37,7 +36,7 @@ namespace Vashta.Entropy.Spells
             
             // set new values
             _caster = caster;
-            _teamIndex = caster.GetView().GetTeam();
+            _teamIndex = caster.TeamIndex;
             
             _spell = spellData;
             Collider.radius = _spell.Radius;
@@ -77,10 +76,6 @@ namespace Vashta.Entropy.Spells
                 Vector3 casterPos = _caster.transform.position;
                 transform.position = new Vector3(casterPos.x, transform.position.y, casterPos.z);
             }
-            
-            // Only execute on the server
-            if (!PhotonNetwork.IsMasterClient)
-                return;
 
             // Apply effects
             if (_lastTickS + _tickTimeS <= Time.time)
@@ -113,7 +108,7 @@ namespace Vashta.Entropy.Spells
                 if(!player.IsAlive)
                     continue;
                 
-                if (player.GetView().GetTeam() == _teamIndex)
+                if (player.TeamIndex == _teamIndex)
                 {
                     // add boon
                     if(_spell.ActiveStatusEffectAllies != null)
@@ -130,16 +125,13 @@ namespace Vashta.Entropy.Spells
         
         private void OnTriggerEnter(Collider other)
         {
-            if (!PhotonNetwork.IsMasterClient)
-                return;
-            
             // Check for player
             Player player;
             if ((player = other.gameObject.GetComponent<Player>()) != null)
             {
                 _playersInZone.Add(player);
                 
-                bool playerIsAlly = player.GetTeam() == _teamIndex;
+                bool playerIsAlly = player.TeamIndex == _teamIndex;
 
                 // VFX
                 if (_spell.FieldCollisionVfxCharacter)
@@ -217,9 +209,6 @@ namespace Vashta.Entropy.Spells
 
         private void OnTriggerExit(Collider other)
         {
-            if (!PhotonNetwork.IsMasterClient)
-                return;
-            
             // Check for player
             Player player;
             if ((player = other.gameObject.GetComponent<Player>()) != null)

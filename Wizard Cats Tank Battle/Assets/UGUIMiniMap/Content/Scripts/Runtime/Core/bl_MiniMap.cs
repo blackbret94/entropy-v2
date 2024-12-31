@@ -664,7 +664,7 @@ public sealed class bl_MiniMap : MonoBehaviour
             return;
         }
         
-        int localPlayerTeam = localPlayer.GetTeam();
+        int localPlayerTeam = localPlayer.TeamIndex;
         MinimapController.CmdSpawnPing(Position, localPlayerTeam);
         // mapPointer = Instantiate(MapPointerPrefab, Position, Quaternion.identity) as GameObject;
         // mapPointer.GetComponent<bl_MapPointerBase>().SetColor(playerColor);

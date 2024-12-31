@@ -46,7 +46,7 @@ namespace Vashta.Entropy.UI.MatchCreation
                 // Connect to server
                 PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Online);
 
-                if (!PhotonNetwork.IsConnected)
+                if (!UIMain.GetInstance().Runner.IsRunning)
                 {
                     NetworkManagerCustom.GetInstance().Connect(NetworkMode.Online);
                 }
@@ -58,7 +58,7 @@ namespace Vashta.Entropy.UI.MatchCreation
                 // Disconnect from server
                 PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Offline);
             
-                if (PhotonNetwork.IsConnected)
+                if (UIMain.GetInstance().Runner.IsRunning)
                 {
                     NetworkManagerCustom.GetInstance().DisconnectFromServer();
                 }

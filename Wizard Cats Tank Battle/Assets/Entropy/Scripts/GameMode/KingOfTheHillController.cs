@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using Entropy.Scripts.Player;
-using Photon.Pun;
 using TanksMP;
 using UnityEngine;
 
@@ -68,31 +66,24 @@ namespace Vashta.Entropy.GameMode
                     int teamControllingPoint = controlPoint.ControlledByTeamIndex;
 
                     // Server only
-                    if (PhotonNetwork.IsMasterClient)
-                    {
-                        // Award points to teamControllingPoint
-                        if (teamControllingPoint != -1)
-                            GameManager.ScoreController.AddScore(ScoreType.HoldPoint, teamControllingPoint);
-                    }
+                    // Award points to teamControllingPoint
+                    if (teamControllingPoint != -1)
+                        GameManager.ScoreController.AddScore(ScoreType.HoldPoint, teamControllingPoint);
                 }
             }
             
             _lastTick = Time.time;
             
-            // SERVER ONLY check for game over
-            if (PhotonNetwork.IsMasterClient)
+            if (GameManager.GetInstance().ScoreController.IsGameOver())
             {
-                if (GameManager.GetInstance().ScoreController.IsGameOver())
-                {
-                    PhotonNetwork.CurrentRoom.IsOpen = false;
+                GameManager.Runner.SessionInfo.IsOpen = false;
 
-                    int teamWithHighestScore = GameManager.ScoreController.GetTeamWithHighestScore();
-                    
-                    PlayerList.GetLocalPlayer().photonView.RPC("RpcGameOver", RpcTarget.All, (byte)teamWithHighestScore);
-        
-                    _timerIsRunning = false;
-                    _hasCalledGameOver = true;
-                }
+                int teamWithHighestScore = GameManager.ScoreController.GetTeamWithHighestScore();
+                
+                GameManager.RoomController.GameOver((byte)teamWithHighestScore);
+    
+                _timerIsRunning = false;
+                _hasCalledGameOver = true;
             }
         }
     }

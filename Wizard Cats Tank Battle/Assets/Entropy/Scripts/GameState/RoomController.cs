@@ -1,4 +1,3 @@
-using Photon.Pun;
 using TanksMP;
 using UnityEngine;
 
@@ -16,10 +15,7 @@ namespace Vashta.Entropy.GameState
         // Server only
         public void GameOver(byte teamIndex)
         {
-            if (PhotonNetwork.IsMasterClient)
-            {
-                PhotonNetwork.CurrentRoom.IsOpen = false;
-            }
+            PhotonNetwork.CurrentRoom.IsOpen = false;
             
             int teamIndexInt = teamIndex;
             if (teamIndexInt == 255)
@@ -32,20 +28,16 @@ namespace Vashta.Entropy.GameState
         // Server only
         private void AttemptToChangeToPreferredTeam(Player player, bool respawn)
         {
-            if (!PhotonNetwork.IsMasterClient)
-                return;
-            
-            PhotonView view = player.photonView;
-            int preferredTeamIndex = view.GetPreferredTeamIndex();
-            int currentTeam = view.GetTeam();
+            int preferredTeamIndex = player.PreferredTeamIndex;
+            int currentTeam = player.TeamIndex;
 
             if (preferredTeamIndex == PlayerExtensions.RANDOM_TEAM_INDEX && preferredTeamIndex != currentTeam)
             {
-                view.SetPreferredTeamIndex(currentTeam);
+                player.PreferredTeamIndex = currentTeam;
                 return;
             }
 
-            if (preferredTeamIndex == PlayerExtensions.RANDOM_TEAM_INDEX || preferredTeamIndex == view.GetTeam() ||
+            if (preferredTeamIndex == PlayerExtensions.RANDOM_TEAM_INDEX || preferredTeamIndex == currentTeam ||
                 !_gameManager.TeamController.TeamHasVacancy(preferredTeamIndex))
             {
                 return;
@@ -53,26 +45,25 @@ namespace Vashta.Entropy.GameState
 
             Debug.Log("Changing teams to: " + preferredTeamIndex);
 
-            PhotonNetwork.CurrentRoom.AddSize(view.GetTeam(), -1);
-            view.SetTeam(preferredTeamIndex);
-            PhotonNetwork.CurrentRoom.AddSize(view.GetTeam(), 1);
+            PhotonNetwork.CurrentRoom.AddSize(player.TeamIndex, -1);
+            player.TeamIndex = preferredTeamIndex;
+            PhotonNetwork.CurrentRoom.AddSize(player.TeamIndex, 1);
             
             // Force respawn
             if(respawn)
-                player.CmdRespawn();
+                player.Respawn(null);
             
-            view.RPC("RpcChangeTeams", RpcTarget.All);
+            player.ApplyTeamChange();
         }
         
         // Server-only
         public void OnePassCheckChangeTeams(Player player, bool respawn)
         {
-            if (!PhotonNetwork.IsMasterClient || !player)
+            if (!player)
                 return;
-
-            PhotonView view = player.photonView;
-            int preferredTeamIndex = view.GetPreferredTeamIndex();
-            bool prefersDifferentTeam = preferredTeamIndex != view.GetTeam();
+            
+            int preferredTeamIndex = player.PreferredTeamIndex;
+            bool prefersDifferentTeam = preferredTeamIndex != player.TeamIndex;
 
             if (prefersDifferentTeam)
             {

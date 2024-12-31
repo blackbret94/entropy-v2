@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Photon.Pun;
 using UnityEngine;
 using Vashta.Entropy.StatusEffects;
 using Vashta.Entropy.UI.Minimap;
@@ -38,9 +36,6 @@ namespace TanksMP
         /// </summary>
         public override void OnTriggerEnter(Collider col)
         {
-            if (!PhotonNetwork.IsMasterClient)
-                return;
-
             if (_carriedBy != null)
                 return;
 
@@ -74,7 +69,7 @@ namespace TanksMP
                 // Do not reset a neutral flag
                 if (teamIndex == -1) return;
                 
-                int playerTeam = player.GetView().GetTeam();
+                int playerTeam = player.TeamIndex;
                 
                 if (playerTeam != teamIndex)
                 {
@@ -90,7 +85,7 @@ namespace TanksMP
         /// </summary>
         public override bool Apply(Player p)
         {
-            int playerTeam = p.GetView().GetTeam();
+            int playerTeam = p.TeamIndex;
 
             // Ignore if player is not on the right team
             if(!CanBeGrabbedBy(playerTeam))
@@ -118,14 +113,11 @@ namespace TanksMP
         /// </summary>
         public override void OnDrop()
         {
-            if (PhotonNetwork.IsMasterClient)
-            {
-                // remove status effect
-                _carriedBy.StatusEffectController.RemoveStatusEffect(StatusEffectToApply.Id);
-            }
+            // remove status effect
+            _carriedBy.StatusEffectController.RemoveStatusEffect(StatusEffectToApply.Id);
             
             // notify
-            GameManager.GetInstance().ui.GameLogPanel.EventSpoonDropped(_carriedBy.GetName(), _carriedBy.GetTeamDefinition());
+            GameManager.GetInstance().ui.GameLogPanel.EventSpoonDropped(_carriedBy.PlayerName, _carriedBy.GetTeamDefinition());
 
             ResetFlag();
         }
@@ -135,16 +127,13 @@ namespace TanksMP
         /// </summary>
         public override void OnReturn()
         {
-            if (PhotonNetwork.IsMasterClient && _carriedBy != null)
+            if (_carriedBy != null)
             {
                 // remove status effect
                 _carriedBy.StatusEffectController.RemoveStatusEffect(StatusEffectToApply.Id);
-            }
 
-            if (_carriedBy != null)
-            {
                 // Notify
-                GameManager.GetInstance().ui.GameLogPanel.EventSpoonCaptured(_carriedBy.GetName(), _carriedBy.GetTeamDefinition());
+                GameManager.GetInstance().ui.GameLogPanel.EventSpoonCaptured(_carriedBy.PlayerName, _carriedBy.GetTeamDefinition());
             }
 
             ResetFlag();

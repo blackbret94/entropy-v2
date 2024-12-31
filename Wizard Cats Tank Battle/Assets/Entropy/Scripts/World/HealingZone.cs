@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Photon.Pun;
 using TanksMP;
 using UnityEngine;
 
@@ -24,10 +23,6 @@ namespace Vashta.Entropy.World
 
         private void Update()
         {
-            // only execute on the server
-            if (!PhotonNetwork.IsMasterClient)
-                return;
-
             if (!_collider)
             {
                 Debug.LogError("Missing collider connection!");
@@ -41,7 +36,7 @@ namespace Vashta.Entropy.World
                 
                 foreach (Player player in playersInZoneSafeCopy)
                 {
-                    if (player == null || !player.IsAlive || player.GetView().GetTeam() != HealTeamId || !_collider.bounds.Contains(player.transform.position))
+                    if (player == null || !player.IsAlive || player.TeamIndex != HealTeamId || !_collider.bounds.Contains(player.transform.position))
                         _playersInZone.Remove(player);
                     else
                         player.Heal(HealAmount);
@@ -53,11 +48,8 @@ namespace Vashta.Entropy.World
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!PhotonNetwork.IsMasterClient)
-                return;
-            
             Player player = other.gameObject.GetComponent<Player>();
-            if (player != null && player.GetView().GetTeam() == HealTeamId)
+            if (player != null && player.TeamIndex == HealTeamId)
             {
                 _playersInZone.Add(player);
             }
@@ -65,9 +57,6 @@ namespace Vashta.Entropy.World
 
         private void OnTriggerExit(Collider other)
         {
-            if (!PhotonNetwork.IsMasterClient)
-                return;
-            
             Player player = other.gameObject.GetComponent<Player>();
             _playersInZone.Remove(player);
         }

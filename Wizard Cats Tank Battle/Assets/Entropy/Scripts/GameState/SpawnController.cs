@@ -38,7 +38,7 @@ namespace Vashta.Entropy.GameState
                 //suicide or regular kill?
                 if (other != localPlayer)
                 {
-                    killedByName = other.GetView().GetName();
+                    killedByName = other.PlayerName;
                 }
 
                 //calculate if we should show a video ad
@@ -49,7 +49,7 @@ namespace Vashta.Entropy.GameState
 
                 //when no ad is being shown, set the death text
                 //and start waiting for the respawn delay immediately
-                _gameManager.ui.SetDeathText(killedByName, _gameManager.TeamController.teams[other.GetView().GetTeam()]);
+                _gameManager.ui.SetDeathText(killedByName, _gameManager.TeamController.teams[other.TeamIndex]);
             }
 
             StartCoroutine(SpawnRoutine());
@@ -77,7 +77,7 @@ namespace Vashta.Entropy.GameState
 
             //respawn now: send request to the server
             _gameManager.ui.DisableDeath();
-            _gameManager.localPlayer.CmdRespawn();
+            _gameManager.localPlayer.Respawn();
         }
     }
 }

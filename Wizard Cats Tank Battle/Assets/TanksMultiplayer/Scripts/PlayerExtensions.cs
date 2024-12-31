@@ -3,11 +3,12 @@
  * 	You shall not license, sublicense, sell, resell, transfer, assign, distribute or
  * 	otherwise make available to any third party the Service or the Content. */
 
-using Photon.Pun;
+
 using UnityEngine;
 using Vashta.Entropy.Character;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
+// CLASS KEPT FOR REFERENCE.  DELETE OR COMMENT OUT
 namespace TanksMP
 {
     /// <summary>

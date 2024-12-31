@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Photon.Pun;
 using TanksMP;
 using UnityEngine;
 
@@ -45,10 +44,10 @@ namespace Vashta.Entropy.GameState
 
                 //let the local host determine the team assignment
                 Player p = obj.GetComponent<Player>();
-                p.GetView().SetTeam(GameManager.GetInstance().TeamController.GetTeamFill());
+                p.TeamIndex = GameManager.GetInstance().TeamController.GetTeamFill();
 
                 //increase corresponding team size
-                PhotonNetwork.CurrentRoom.AddSize(p.GetView().GetTeam(), +1);
+                PhotonNetwork.CurrentRoom.AddSize(p.TeamIndex, +1);
 
                 yield return new WaitForSeconds(0.25f);
             }

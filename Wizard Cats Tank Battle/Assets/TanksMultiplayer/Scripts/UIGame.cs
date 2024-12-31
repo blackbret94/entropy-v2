@@ -5,10 +5,9 @@
 
 using Entropy.Scripts.Audio;
 using Entropy.Scripts.Player;
+using Fusion;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using Photon.Pun;
 using UnityEngine.Serialization;
 using Vashta.Entropy.IO;
 using Vashta.Entropy.SceneNavigation;
@@ -22,7 +21,7 @@ namespace TanksMP
     /// <summary>
     /// UI script for all elements, team events and user interactions in the game scene.
     /// </summary>
-    public class UIGame : MonoBehaviourPunCallbacks
+    public class UIGame : SimulationBehaviour
     {
         /// <summary>
         /// Joystick components controlling player movement and actions on mobile devices.
@@ -258,8 +257,9 @@ namespace TanksMP
         /// </summary>
         public void Disconnect()
         {
-            if (PhotonNetwork.IsConnected)
-                PhotonNetwork.Disconnect();
+            NetworkRunner runner = UIMain.GetInstance().Runner;
+            if (runner.IsRunning)
+                runner.Disconnect();
         }
 
 

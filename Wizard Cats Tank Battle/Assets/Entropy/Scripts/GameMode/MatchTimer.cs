@@ -1,10 +1,10 @@
-using Photon.Pun;
+using Fusion;
 using TanksMP;
 using UnityEngine;
 
 namespace Vashta.Entropy.GameMode
 {
-    public class MatchTimer : MonoBehaviour
+    public class MatchTimer : NetworkBehaviour
     {
         public int maxTime = 120;
         
@@ -16,10 +16,11 @@ namespace Vashta.Entropy.GameMode
         
         public void InitTimer()
         {
-            if (PhotonNetwork.IsMasterClient)
+            // Need to figure out how to handle this - the room start time needs to be saved
+            if (Runner.IsSharedModeMasterClient)
             {
                 ExitGames.Client.Photon.Hashtable CustomValue = new ExitGames.Client.Photon.Hashtable();
-                _startTime = PhotonNetwork.Time;
+                _startTime = Runner.SimulationTime;
                 CustomValue.Add("StartTime", _startTime);
                 PhotonNetwork.CurrentRoom.SetCustomProperties(CustomValue);
             }
@@ -31,7 +32,7 @@ namespace Vashta.Entropy.GameMode
         
         public int CurrentMatchTime()
         {
-            double time = PhotonNetwork.Time - _startTime;
+            double time = Runner.SimulationTime - _startTime;
             int timeRounded = System.Convert.ToInt32(System.Math.Floor(time));
             return Mathf.Max(0, maxTime - timeRounded);
         }
@@ -51,17 +52,13 @@ namespace Vashta.Entropy.GameMode
             // slow update
             if (Time.time > _lastUpdateTime + _timerRefreshRate)
             {
-                if (PhotonNetwork.IsMasterClient)
+                if (CurrentMatchTime() <= 0 && _matchTimerIsRunning)
                 {
-                    if (CurrentMatchTime() <= 0 && _matchTimerIsRunning)
-                    {
-                        // End match
-                        _matchTimerIsRunning = false;
-                        GameManager gameManager = GameManager.GetInstance();
-                        int teamWithHighestScore = gameManager.ScoreController.GetTeamWithHighestScore();
-                        gameManager.localPlayer.photonView.RPC("RpcGameOver", RpcTarget.All,
-                            (byte)teamWithHighestScore);
-                    }
+                    // End match
+                    _matchTimerIsRunning = false;
+                    GameManager gameManager = GameManager.GetInstance();
+                    int teamWithHighestScore = gameManager.ScoreController.GetTeamWithHighestScore();
+                    gameManager.RoomController.GameOver((byte)teamWithHighestScore);
                 }
 
                 _lastUpdateTime = Time.time;

@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using Entropy.Scripts.Player;
-using Photon.Pun;
 using TanksMP;
 using UnityEngine;
 using Vashta.Entropy.Character;
@@ -16,7 +14,6 @@ namespace Vashta.Entropy.StatusEffects
         
         [Header("Cached references")]
         private Player _player;
-        private PhotonView _photonView;
         private PlayerStatusEffectVisualizer _visualizer;
         
         private List<StatusEffect> _statusEffects = new();
@@ -88,7 +85,6 @@ namespace Vashta.Entropy.StatusEffects
         {
             _player = GetComponent<Player>();
             _visualizer = GetComponent<PlayerStatusEffectVisualizer>();
-            _photonView = _player.photonView;
         }
         
         public virtual void StatusEffectTick()
@@ -97,26 +93,25 @@ namespace Vashta.Entropy.StatusEffects
             Leech();
             
             // handle health changes from DoTs/HoTs
-            int health = _photonView.GetHealth();
+            int health = _player.Health;
             int healthPerSecond = Mathf.RoundToInt(HealthPerSecond);
             
             if (healthPerSecond != 0)
             {
-                int shield = _photonView.GetShield();
+                int shield = _player.Shield;
                 if (shield > 0 && healthPerSecond < 0)
                 {
-                    _photonView.DecreaseShield(1);
+                    _player.Shield--;
                 }
                 else
                 {
                     health += healthPerSecond;
-                    health = _player.CapHealth(health);
-                    _photonView.SetHealth(health);
+                    _player.Health = health;
                 }
             }
             
             if(healthPerSecond != 0 && (healthPerSecond < 0 || health < _player.maxHealth))
-                _photonView.RPC("RpcTakeDamage", RpcTarget.AllViaServer, -healthPerSecond, false, false);
+                _player.PlayerViewController.ShowDamageText(-healthPerSecond, false, false);
 
             if (health <= 0)
             {
@@ -145,21 +140,6 @@ namespace Vashta.Entropy.StatusEffects
         /// <param name="owner"></param>
         public void AddStatusEffect(string statusEffectId, Player owner)
         {
-            if (PhotonNetwork.IsMasterClient)
-            {
-                _player.photonView.RPC("RPCAddStatusEffect", RpcTarget.All, statusEffectId, owner?owner.GetId():null);
-            }
-        }
-        
-        /// <summary>
-        /// Called on all clients to add status effect
-        /// </summary>
-        /// <param name="statusEffectId"></param>
-        /// <param name="playerId"></param>
-        [PunRPC]
-        public void RPCAddStatusEffect(string statusEffectId, int playerId)
-        {
-            Player owner = PlayerList.GetPlayerById(playerId);
             StatusEffect statusEffect = new StatusEffect(this, statusEffectId, owner);
             
             // Check if status effect already exists
@@ -199,19 +179,15 @@ namespace Vashta.Entropy.StatusEffects
             // Apply effects instantly if configured to do so
             if (statusEffect.ApplyInstantly())
             {
-                // Only run on master player
-                if (PhotonNetwork.IsMasterClient)
-                {
-                    int healthPerSecond = Mathf.RoundToInt(statusEffect.HealthPerSecond());
+                int healthPerSecond = Mathf.RoundToInt(statusEffect.HealthPerSecond());
 
-                    if (healthPerSecond > 0)
-                    {
-                        _player.Heal(healthPerSecond);
-                    }
-                    else if (healthPerSecond < 0)
-                    {
-                        _player.CombatController.TakeDamage(healthPerSecond, statusEffect.OriginPlayer());
-                    }
+                if (healthPerSecond > 0)
+                {
+                    _player.Heal(healthPerSecond);
+                }
+                else if (healthPerSecond < 0)
+                {
+                    _player.CombatController.TakeDamage(healthPerSecond, statusEffect.OriginPlayer());
                 }
 
                 // Do NOT add as status effect if it is supposed to be instantly applied
@@ -276,28 +252,9 @@ namespace Vashta.Entropy.StatusEffects
             
             _lastRefresh = Time.time;
         }
-
-        /// <summary>
-        /// Server only, call RPC on all clients
-        /// </summary>
-        /// <param name="statusEffectId"></param>
-        /// <param name="owner"></param>
+        
         public void RemoveStatusEffect(string statusEffectId)
-        {
-            if (PhotonNetwork.IsMasterClient)
-            {
-                _player.photonView.RPC("RPCRemoveStatusEffect", RpcTarget.All, statusEffectId);
-            }
-        }
-
-        /// <summary>
-        /// Called on all clients to remove a status effect
-        /// </summary>
-        /// <param name="statusEffectId"></param>
-        /// <param name="playerId"></param>
-        [PunRPC]
-        public void RPCRemoveStatusEffect(string statusEffectId)
-        {
+        { 
             StatusEffect statusEffect = GetStatusEffectById(statusEffectId);
 
             if (statusEffect == null)
@@ -305,7 +262,6 @@ namespace Vashta.Entropy.StatusEffects
             
             RemoveStatusEffect(statusEffect);
         }
-
         private StatusEffect GetStatusEffectById(string id)
         {
             foreach (var statusEffect in _statusEffects)

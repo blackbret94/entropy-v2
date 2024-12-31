@@ -130,7 +130,7 @@ namespace Vashta.Entropy.Spells
             enemiesList = new List<Player>();
             
             List<Player> allPlayers = PlayerList.GetAllPlayers;
-            int casterTeamIndex = caster.GetView().GetTeam();
+            int casterTeamIndex = caster.TeamIndex;
             
             // DrawWireSphere(caster.transform.position, Radius, Color.red, 5f);
 
@@ -146,7 +146,7 @@ namespace Vashta.Entropy.Spells
                     continue;
                 
                 // check team id
-                if (casterTeamIndex == player.GetView().GetTeam())
+                if (casterTeamIndex == player.TeamIndex)
                 {
                     // Add to ally list
                     alliesList.Add(player);

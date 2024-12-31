@@ -7,7 +7,6 @@ using System;
 using UnityEngine;
 using System.Collections.Generic;
 using Entropy.Scripts.Player;
-using Photon.Pun;
 using UnityEngine.Serialization;
 using Vashta.Entropy.GameMode;
 using Vashta.Entropy.ScriptableObject;
@@ -20,7 +19,7 @@ namespace TanksMP
     /// <summary>
     /// Projectile script for player shots with collision/hit logic.
     /// </summary>
-    public class Bullet : MonoBehaviourPun
+    public class Bullet : MonoBehaviour
     {
         // Eventually break this out into a scriptable object
         public int bulletId = 0;
@@ -374,13 +373,6 @@ namespace TanksMP
                         break;
                 }
             }
-            
-            //the previous code is not synced to clients at all, because all that clients need is the
-            //initial position and direction of the bullet to calculate the exact same behavior on their end.
-            //at this point, continue with the critical game aspects only on the server
-            if (!PhotonNetwork.IsMasterClient) return;
-
-            // -- START SERVER ONLY --
 
             //apply damage and effects to the collided players
             if (owner != null)
@@ -420,7 +412,7 @@ namespace TanksMP
             if (!origin)
                 return -1;
 
-            return origin.GetTeam();
+            return origin.TeamIndex;
         }
 
         private void AttemptApplyEffectAlly(Player player, Player target)
@@ -498,7 +490,7 @@ namespace TanksMP
             if (target.gameObject == owner || target.gameObject == null) return true;
             
             //perform the actual friendly fire check on both team indices and see if they match
-            if (origin.GetView().GetTeam() == target.GetView().GetTeam()) return true;
+            if (origin.TeamIndex == target.TeamIndex) return true;
             
             return false;
         }

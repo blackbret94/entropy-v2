@@ -57,7 +57,7 @@ namespace Vashta.Entropy.GameState
                 Team winningTeam = _gameManager.TeamController.teams[teamIndex];
                 _gameManager.ui.ShowGameOver(teamIndex, winningTeam.name, winningTeam.material.color);
 
-                int playerTeamIndex = _gameManager.localPlayer.GetView().GetTeam();
+                int playerTeamIndex = _gameManager.localPlayer.TeamIndex;
                 if (playerTeamIndex == teamIndex)
                     _gameManager.MusicController.PlayVictoryMusic();
                 else

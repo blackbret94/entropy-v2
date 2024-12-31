@@ -16,7 +16,7 @@ namespace Vashta.Entropy.UI
                 return;
             }
             
-            localPlayer.CommandDropCollectibles();
+            localPlayer.DropCollectibles();
             gameObject.SetActive(false);
         }
     }

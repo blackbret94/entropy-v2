@@ -18,7 +18,7 @@ namespace Vashta.Entropy.UI.MapSelection
             base.OpenPanel();
             PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Online);
 
-            if (!PhotonNetwork.IsConnected)
+            if (!UIMain.GetInstance().Runner.IsRunning)
             {
                 NetworkManagerCustom.GetInstance().Connect(NetworkMode.Online);
             }

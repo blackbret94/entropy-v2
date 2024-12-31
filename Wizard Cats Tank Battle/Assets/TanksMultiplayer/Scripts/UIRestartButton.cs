@@ -4,7 +4,7 @@
  * 	otherwise make available to any third party the Service or the Content. */
 
 using System.Collections;
-using Photon.Pun;
+using Fusion;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Vashta.Entropy.PhotonExtensions;
@@ -15,7 +15,7 @@ namespace TanksMP
     /// This script is attached to a runtime-generated gameobject in the game scene,
     /// taken over to the intro scene to directly request starting a new multiplayer game.
     /// </summary>
-    public class UIRestartButton : MonoBehaviourPunCallbacks 
+    public class UIRestartButton : SimulationBehaviour 
     {
         //listen to scene changes
         void Awake()
@@ -42,7 +42,7 @@ namespace TanksMP
             {
                 // Handle online
             
-                if (!PhotonNetwork.IsConnected)
+                if (!UIMain.GetInstance().Runner.IsRunning)
                 {
                     NetworkManagerCustom.GetInstance().Connect(networkMode);
 
@@ -61,10 +61,10 @@ namespace TanksMP
                 // Handle offline
                 
                 // Clear connection
-                if (PhotonNetwork.IsConnected)
+                if (UIMain.GetInstance().Runner.IsRunning)
                 {
                     PhotonNetwork.Disconnect();
-                    while (PhotonNetwork.IsConnected)
+                    while (UIMain.GetInstance().Runner.IsRunning)
                     {
                         yield return null;
                     }

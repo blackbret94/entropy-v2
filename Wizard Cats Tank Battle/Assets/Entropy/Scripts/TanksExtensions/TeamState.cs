@@ -1,19 +1,21 @@
 using TanksMP;
 using UnityEngine;
-using Player = Photon.Realtime.Player;
 using System.Collections.Generic;
-using Photon.Pun;
 
 namespace Vashta.Entropy.TanksExtensions
 {
     public class TeamState
     {
+        private GameManager _gameManager;
+        
         public TeamState(Team team, int score, int teamId, bool includeLocalPlayer)
         {
             Team = team;
             Score = score;
             TeamId = teamId;
             PlayerRows = GetPlayerRows(includeLocalPlayer);
+            
+            _gameManager = GameManager.GetInstance();
         }
 
         public string Name => Team.name;

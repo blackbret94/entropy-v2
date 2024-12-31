@@ -38,9 +38,6 @@ namespace TanksMP
         /// </summary>
         public override void OnTriggerEnter(Collider col)
         {
-            if (!PhotonNetwork.IsMasterClient)
-                return;
-
             GameObject obj = col.gameObject;
             Player player = obj.GetComponent<Player>();
 
@@ -52,11 +49,13 @@ namespace TanksMP
                     Debug.LogError("Missing spawner connection!");
                 }
                 
+                // TODO: Re-write this fusion-style
+                
                 //clean up previous buffered RPCs so we only keep the most recent one
                 PhotonNetwork.RemoveRPCs(spawner.photonView);
 
                 //check if colliding player belongs to the same team as the item
-                if (teamIndex == player.GetView().GetTeam())
+                if (teamIndex == player.TeamIndex)
                 {
                     //player collected team item, return it to team home base
                     //we do not have to send this as buffered RPC because this is the default spawn position
@@ -80,11 +79,11 @@ namespace TanksMP
             //do not allow collection if the item is already carried around
             //but also skip any processing if our flag is on the home base already
             if (p == null || carrierId > 0 ||
-                teamIndex == p.GetView().GetTeam() && transform.position == spawner.transform.position)
+                teamIndex == p.TeamIndex && transform.position == spawner.transform.position)
                 return false;
 
             //if a target renderer is set, assign team material
-            Colorize(p.GetView().GetTeam());
+            Colorize(p.TeamIndex);
 
             //return successful collection
             return true;

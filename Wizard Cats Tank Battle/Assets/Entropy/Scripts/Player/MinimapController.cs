@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
+using Fusion;
 using Lovatto.MiniMap;
-using Photon.Pun;
 using TanksMP;
 using UnityEngine;
 using Vashta.Entropy.ScriptableObject;
@@ -11,7 +11,7 @@ namespace Entropy.Scripts.Player
     /// <summary>
     /// Extends functionality from Lovatto.Minimap, integrating it with PUN and other systems
     /// </summary>
-    public class MinimapController : MonoBehaviourPunCallbacks
+    public class MinimapController : NetworkBehaviour
     {
         private TanksMP.Player _localPlayer;
         public bl_MiniMap MiniMap;
@@ -59,7 +59,7 @@ namespace Entropy.Scripts.Player
             if (MiniMap == null)
                 return;
             
-            int teamIndex = _localPlayer.GetTeam();
+            int teamIndex = _localPlayer.TeamIndex;
 
             if (teamIndex != _teamIndex)
             {
@@ -86,20 +86,17 @@ namespace Entropy.Scripts.Player
         /// <param name="teamIndex"></param>
         public void CmdSpawnPing(Vector3 position, int teamIndex)
         {
-            // if (PhotonNetwork.IsMasterClient)
-            // {
-            short[] pos = new short[] { (short)(position.x * 10), (short)(position.y * 10), (short)(position.z * 10) };
-            this.photonView.RPC("RpcSpawnPing", RpcTarget.All, pos, (short)teamIndex);
-            // }
+            short[] pos = { (short)(position.x * 10), (short)(position.y * 10), (short)(position.z * 10) };
+            RpcSpawnPing(pos, (short) teamIndex);
         }
 
-        [PunRPC]
+        [Rpc(RpcSources.All, RpcTargets.All)]
         public void RpcSpawnPing(short[] position, short teamIndex)
         {
             TanksMP.Player localPlayer = PlayerList.GetLocalPlayer();
 
             // Only spawn if for this player's team
-            if (localPlayer != null && localPlayer.GetTeam() == teamIndex)
+            if (localPlayer != null && localPlayer.TeamIndex == teamIndex)
             {
                 if (_spawnedPointer)
                 {

@@ -1,19 +1,20 @@
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using Photon.Pun;
+using Fusion;
 using TanksMP;
 using UnityEngine;
 using Vashta.Entropy.ScriptableObject;
 
 namespace Vashta.Entropy.GameMode
 {
-    public class ControlPoint : MonoBehaviourPunCallbacks, IPunObservable
+    public class ControlPoint : NetworkBehaviour
     {
         // What team CONTROLS this (earns points/tick)
-        public sbyte ControlledByTeamIndex { get; private set; } = -1; // SYNCED
+        [Networked, OnChangedRender(nameof(OnControlledByTeamIndexChanged))]
+        public sbyte ControlledByTeamIndex { get; private set; } = -1;
 
         // What team is control LEANING TOWARDS (during capture)
-        public sbyte CaptureTeamIndex { get; private set; } = -1; // SYNCED
+        [Networked, OnChangedRender(nameof(OnCaptureTeamIndexChanged))]
+        public sbyte CaptureTeamIndex { get; private set; } = -1;
         public ControlPointGraphics ControlPointGraphics;
         public TeamDefinition TeamDefinitionNeutral;
 
@@ -23,7 +24,8 @@ namespace Vashta.Entropy.GameMode
         public AudioClip PointLost;
 
         // How many ticks the point currently has towards capture
-        private sbyte _captureTicks = 0; // SYNCED
+        [Networked, OnChangedRender(nameof(OnCaptureTicksChanged))]
+        private sbyte _captureTicks { get; set; }= 0;
         private int _ticksToCapture = 5;
         private List<Player> _playersInBounds;
         private GameManager _gameManager;
@@ -74,11 +76,11 @@ namespace Vashta.Entropy.GameMode
                 if (player.IsAlive)
                 {
                     if (teamIndex == -1)
-                        teamIndex = player.GetTeam();
+                        teamIndex = player.TeamIndex;
                     else
                     {
                         // if player is on a different team stop capturing
-                        if(teamIndex != player.GetTeam())
+                        if(teamIndex != player.TeamIndex)
                             teamIndex = -1;
                         
                         break;
@@ -121,8 +123,8 @@ namespace Vashta.Entropy.GameMode
             if (_captureTicks == 0)
             {
                 // Set to neutral
-                UpdateCaptureTeamIndex((sbyte)teamIndex);
-                UpdateControlledByTeamIndex(-1);
+                CaptureTeamIndex = (sbyte)teamIndex;
+                ControlledByTeamIndex = -1;
 
                 if (_wasRecentlyCaptured)
                 {
@@ -141,7 +143,7 @@ namespace Vashta.Entropy.GameMode
                     // Award the capture
                     if (teamIndex != -1 && ControlledByTeamIndex != teamIndex)
                     {
-                        UpdateControlledByTeamIndex((sbyte)teamIndex);
+                        ControlledByTeamIndex = (sbyte)teamIndex;
                         AudioManager.Play3D(PointCaptured, transform.position);
                         _wasRecentlyCaptured = true;
                         
@@ -163,58 +165,7 @@ namespace Vashta.Entropy.GameMode
                 if (player == null)
                     continue;
                 
-                player.CmdRewardForControlPointCapture();
-            }
-        }
-        
-        protected void UpdateControlledByTeamIndex(sbyte teamIndex)
-        {
-            sbyte oldIndex = (sbyte)ControlledByTeamIndex;
-
-            // Ignore if this is already the set team
-            if (oldIndex == teamIndex)
-                return;
-            
-            ControlledByTeamIndex = teamIndex;
-            
-            Team team = GameManager.GetInstance().TeamController.GetTeamByIndex(teamIndex);
-
-            if (team != null)
-            {
-                ControlPointGraphics.ChangeTeamColorControl(team.teamDefinition);
-            }
-            else
-            {
-                Debug.LogError("Could not find team with ID: " + teamIndex);
-            }
-
-            if (teamIndex == -1)
-            {
-                // Color neutral
-                ControlPointGraphics.ChangeTeamColorControl(TeamDefinitionNeutral);
-            }
-        }
-
-        [PunRPC]
-        protected void UpdateCaptureTeamIndex(sbyte teamIndex)
-        {
-            sbyte oldTeam = (sbyte)CaptureTeamIndex;
-
-            // Ignore if this is already the set team
-            if (oldTeam == teamIndex)
-                return;
-            
-            CaptureTeamIndex = teamIndex;
-            
-            Team team = GameManager.GetInstance().TeamController.GetTeamByIndex(CaptureTeamIndex);
-
-            if (team != null)
-            {
-                ControlPointGraphics.ChangeTeamColorCapturing(team.teamDefinition);
-            }
-            else
-            {
-                Debug.LogError("Could not find team with ID: " + teamIndex);
+                player.RewardForControlPointCapture();
             }
         }
 
@@ -257,35 +208,47 @@ namespace Vashta.Entropy.GameMode
                 }
             }
         }
-
-        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        
+        // --------------------------------
+        // Synced property render function
+        // --------------------------------
+        private void OnCaptureTeamIndexChanged()
         {
-            if (stream.IsWriting)
+            Team team = GameManager.GetInstance().TeamController.GetTeamByIndex(CaptureTeamIndex);
+
+            if (team != null)
             {
-                // We own this player: send the others our data
-                stream.SendNext(ControlledByTeamIndex);
-                stream.SendNext(CaptureTeamIndex);
-                stream.SendNext(_captureTicks);
+                ControlPointGraphics.ChangeTeamColorCapturing(team.teamDefinition);
             }
             else
             {
-                // Network player, receive data
-                sbyte newControlledByTeamIndex = (sbyte)stream.ReceiveNext();
-                sbyte newCaptureTeamIndex = (sbyte)stream.ReceiveNext();
-                sbyte newCaptureTicks = (sbyte)stream.ReceiveNext();
-
-                if (newControlledByTeamIndex != ControlledByTeamIndex)
-                {
-                    UpdateControlledByTeamIndex(newControlledByTeamIndex);
-                }
-
-                if (newCaptureTeamIndex != CaptureTeamIndex)
-                {
-                    UpdateCaptureTeamIndex(newCaptureTicks);
-                }
-                
-                _captureTicks = newCaptureTicks;
+                Debug.LogError("Could not find team with ID: " + CaptureTeamIndex);
             }
+        }
+
+        private void OnControlledByTeamIndexChanged()
+        {
+            Team team = GameManager.GetInstance().TeamController.GetTeamByIndex(ControlledByTeamIndex);
+
+            if (team != null)
+            {
+                ControlPointGraphics.ChangeTeamColorControl(team.teamDefinition);
+            }
+            else
+            {
+                Debug.LogError("Could not find team with ID: " + ControlledByTeamIndex);
+            }
+
+            if (ControlledByTeamIndex == -1)
+            {
+                // Color neutral
+                ControlPointGraphics.ChangeTeamColorControl(TeamDefinitionNeutral);
+            }
+        }
+        
+        private void OnCaptureTicksChanged()
+        {
+            
         }
     }
 }

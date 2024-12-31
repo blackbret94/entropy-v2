@@ -1,4 +1,3 @@
-using Photon.Pun;
 using TanksMP;
 using UnityEngine;
 using Vashta.Entropy.StatusEffects;
@@ -26,14 +25,12 @@ namespace Entropy.Scripts.Player
         private StatusEffectController _statusEffectController;
         private Transform _shotPos;
         private Transform _turret;
-        private PhotonView _photonView;
         private GameManager _gameManager;
         
         private void Awake()
         {
             _player = GetComponent<TanksMP.Player>();
             _playerAnimator = GetComponent<PlayerAnimator>();
-            _photonView = GetComponent<PhotonView>();
         }
 
         private void Start()
@@ -106,7 +103,7 @@ namespace Entropy.Scripts.Player
                     short[] pos = new short[] { (short)(_shotPos.position.x * 10), (short)(_shotPos.position.z * 10) };
                     //send shot request with origin to server
                     // Debug.Log(turretRotation);
-                    _photonView.RPC("CmdShoot", RpcTarget.AllViaServer, pos, _player.turretRotation);
+                    _player.CombatController.Shoot(pos, _player.turretRotation);
                 }
             }
         }
@@ -155,18 +152,17 @@ namespace Entropy.Scripts.Player
         /// </summary>
         public void TakeDamage(int damage, TanksMP.Player other, bool canKill = true, string deathFxId = "")
         {
-            int health = _photonView.GetHealth();
-            int shield = _photonView.GetShield();
+            int health = _player.Health;
+            int shield = _player.Shield;
 
             //reduce shield on hit
             if (shield > 0)
             {
-                _photonView.DecreaseShield(1);
+                _player.Shield--;
                 return;
             }
             
             health -= damage;
-            health = _player.CapHealth(health);
             
             // Don't kill the player if this only brings them down to 1HP
             if (!canKill)
@@ -183,8 +179,8 @@ namespace Entropy.Scripts.Player
             else
             {
                 //we didn't die, set health to new value
-                _photonView.SetHealth(health);
-                _photonView.RPC("RpcTakeDamage", RpcTarget.AllViaServer, damage, false, false);
+                _player.Health = health;
+                _player.PlayerViewController.ShowDamageText(damage, false, false);
             }
         }
 
@@ -195,17 +191,17 @@ namespace Entropy.Scripts.Player
         public void TakeDamage(Bullet bullet)
         {
             // ignore damage to team mates
-            if (_photonView.GetTeam() == bullet.owner.GetComponent<TanksMP.Player>().GetView().GetTeam())
+            if (_player.TeamIndex == bullet.owner.GetComponent<TanksMP.Player>().TeamIndex)
                 return;
             
             //store network variables temporary
-            int health = _photonView.GetHealth();
-            int shield = _photonView.GetShield();
+            int health = _player.Health;
+            int shield = _player.Shield;
 
             //reduce shield on hit
             if (shield > 0)
             {
-                _photonView.DecreaseShield(1);
+                _player.Shield -= 1;
                 return;
             }
 
@@ -216,7 +212,6 @@ namespace Entropy.Scripts.Player
             // Debug.Log("Taking damage from bullet: " + damage);
             
             health -= damage;
-            health = _player.CapHealth(health);
             
             if (health <= 0)
                 //bullet killed the player
@@ -224,8 +219,8 @@ namespace Entropy.Scripts.Player
             else
             {
                 //we didn't die, set health to new value
-                _photonView.SetHealth(health);
-                _photonView.RPC("RpcTakeDamage", RpcTarget.AllViaServer, damage, attackerIsCounter, attackerIsSame);
+                _player.Health = health;
+                _player.PlayerViewController.ShowDamageText(damage, attackerIsCounter, attackerIsSame);
             }
         }
         
@@ -242,10 +237,10 @@ namespace Entropy.Scripts.Player
             }
             
             _player.lastDeathTime = Time.time;
-            _photonView.SetIsAlive(false);
-            
-            if(!_player.PlayerCanRespawnFreely())
-                _photonView.IncrementDeaths();
+            _player.IsAlive = false;
+
+            if (!_player.PlayerCanRespawnFreely())
+                _player.Deaths++;
             
             //the game is already over so don't do anything
             if(_gameManager.ScoreController.IsGameOver()) return;
@@ -258,45 +253,33 @@ namespace Entropy.Scripts.Player
                 // Reflect damage on killer if blood pact is active
                 _statusEffectController.BloodPact(other);
                 
-                int otherTeam = other.photonView.GetTeam();
+                int otherTeam = other.TeamIndex;
                 
                 // killer is other team
-                if (_photonView.GetTeam() != otherTeam)
+                if (_player.TeamIndex != otherTeam)
                 {
                     _gameManager.ScoreController.AddScore(ScoreType.Kill, otherTeam);
-                    other.photonView.IncrementKills();
+                    other.Kills++;
                 }
                 
                 //the maximum score has been reached now
                 if (_gameManager.ScoreController.IsGameOver())
                 {
                     //tell all clients the winning team
-                    _gameManager.photonView.RPC("RpcGameOver", RpcTarget.All, (byte)otherTeam);
+                    _gameManager.RoomController.GameOver((byte)otherTeam);
                     return;
                 }
             }
             else
             {
                 // Killed by environment
-                _gameManager.ScoreController.RemoveScore(ScoreType.Kill, _photonView.GetTeam());
+                _gameManager.ScoreController.RemoveScore(ScoreType.Kill, _player.TeamIndex);
             }
-
-            //the game is not over yet, reset runtime values
-            //also tell all clients to despawn this player
-            _photonView.SetHealth(_player.maxHealth);
-            _photonView.SetShield(0);
-            _photonView.SetBullet(0);
-            _photonView.SetUltimate(0);
-
-            // bypass RPC because we are already on the server
-            _player.CommandDropCollectibles();
-
-            //tell the dead player who killed them (owner of the bullet)
-            short senderId = 0;
-            if (other != null)
-                senderId = (short)other.GetComponent<PhotonView>().ViewID;
-
-            _photonView.RPC("RpcRespawn", RpcTarget.All, senderId, deathFxId);
+            
+            // The game is not over
+            _player.ResetPlayerState();
+            _player.DropCollectibles();
+            _player.Respawn(other, null);
         }
     }
 }

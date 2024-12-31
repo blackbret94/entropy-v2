@@ -73,7 +73,7 @@ namespace TanksMP
                 // reward player for capture
                 if (colReq != null && colReq.CarriedBy != null)
                 {
-                    colReq.CarriedBy.CmdRewardForFlagCapture();
+                    colReq.CarriedBy.RewardForFlagCapture();
                 }
 
                 //add points for this score type to the correct team
@@ -84,7 +84,7 @@ namespace TanksMP
                     //close room for joining players
                     PhotonNetwork.CurrentRoom.IsOpen = false;
                     //tell all clients the winning team
-                    GameManager.GetInstance().localPlayer.photonView.RPC("RpcGameOver", RpcTarget.All, (byte)teamIndex);
+                    GameManager.GetInstance().RoomController.GameOver((byte)teamIndex);
                     return;
                 }
 

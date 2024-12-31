@@ -3,8 +3,10 @@
  * 	You shall not license, sublicense, sell, resell, transfer, assign, distribute or
  * 	otherwise make available to any third party the Service or the Content. */
 
+using UnityEngine;
 using Vashta.Entropy.ScriptableObject;
 
+// Probably obsolete, delete if it is
 namespace TanksMP
 {
     /// <summary>
@@ -35,7 +37,8 @@ namespace TanksMP
                 return false;
 
             //otherwise assign new bullet and refill ammo
-            p.GetView().SetAmmo(amount, bulletIndex);
+            Debug.LogError("Oops! I didn't think this was still in use!");
+            // p.GetView().SetAmmo(amount, bulletIndex);
             p.CmdShowPowerupUI(Powerup.PowerupId);
 
             //return successful collection

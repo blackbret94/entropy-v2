@@ -5,8 +5,8 @@
 
 using Entropy.Scripts.Audio;
 using Entropy.Scripts.Player;
+using Fusion;
 using UnityEngine;
-using Photon.Pun;
 using UnityEngine.Serialization;
 using Vashta.Entropy.GameMode;
 using Vashta.Entropy.PhotonExtensions;
@@ -30,7 +30,7 @@ namespace TanksMP
     [RequireComponent(typeof(TeamController))]
     [RequireComponent(typeof(GameOverController))]
     [RequireComponent(typeof(SpawnController))]
-    public class GameManager : MonoBehaviourPun
+    public class GameManager : NetworkBehaviour
     {
         //reference to this script instance
         private static GameManager instance;

@@ -6,6 +6,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Fusion;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
@@ -26,7 +27,7 @@ namespace TanksMP
     /// </summary>
     [RequireComponent(typeof(RoomOptionsFactory))]
     [RequireComponent(typeof(AddressableSceneManager))]
-	public class NetworkManagerCustom : MonoBehaviourPunCallbacks
+	public class NetworkManagerCustom : SimulationBehaviour
     {
         //reference to this script instance
         private static NetworkManagerCustom instance;
@@ -174,8 +175,10 @@ namespace TanksMP
         /// <returns></returns>
         private IEnumerator Disconnect()
         {
-            PhotonNetwork.Disconnect();
-            while (PhotonNetwork.IsConnected)
+            NetworkRunner runner = UIMain.GetInstance().Runner;
+            runner.Disconnect();
+            
+            while (runner.IsRunning)
             {
                 yield return null;
             }

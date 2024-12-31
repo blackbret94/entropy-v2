@@ -315,7 +315,7 @@ namespace Entropy.Scripts.Player
             
             if (player != null)
             {
-                player.CommandDropCollectibles();
+                player.DropCollectibles();
                 UIGame.GetInstance().DropCollectiblesButton.gameObject.SetActive(false);
             }
         }

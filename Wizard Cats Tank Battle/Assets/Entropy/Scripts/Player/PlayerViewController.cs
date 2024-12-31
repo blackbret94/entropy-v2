@@ -1,5 +1,4 @@
 using EckTechGames.FloatingCombatText;
-using Photon.Pun;
 using TanksMP;
 using TMPro;
 using UnityEngine;
@@ -34,12 +33,10 @@ namespace Entropy.Scripts.Player
 
         [Header("Cached references")]
         protected GameManager GameManager;
-        private PhotonView _view;
 
         private void Awake()
         {
             _player = GetComponent<TanksMP.Player>();
-            _view = _player.GetView();
             _playerAnimator = GetComponent<PlayerAnimator>();
             _statusEffectController = GetComponent<StatusEffectController>();
             _characterAppearance = _player.CharacterAppearance;
@@ -138,7 +135,7 @@ namespace Entropy.Scripts.Player
         {
             if (team == null)
             {
-                team = GameManager.TeamController.teams[_view.GetTeam()];
+                team = GameManager.TeamController.teams[_player.TeamIndex];
             }
 
             //get corresponding team and colorize renderers in team color

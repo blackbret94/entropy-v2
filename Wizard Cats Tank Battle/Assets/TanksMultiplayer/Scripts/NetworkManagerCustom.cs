@@ -51,11 +51,6 @@ namespace TanksMP
         public int maxPlayers = 12;
 
         /// <summary>
-        /// References to the available player prefabs located in a Resources folder.
-        /// </summary>
-        public GameObject[] playerPrefabs;
-
-        /// <summary>
         /// Event fired when a connection to the matchmaker service failed.
         /// </summary>
         public static event Action connectionFailedEvent;
@@ -389,7 +384,6 @@ namespace TanksMP
         public void OnConnectedToServer(NetworkRunner runner)
         {
             LocalPlayerInfo.Name = CBSIntegrator.Instance.ProfileState.CachedDisplayName;
-
         }
 
         public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) { }

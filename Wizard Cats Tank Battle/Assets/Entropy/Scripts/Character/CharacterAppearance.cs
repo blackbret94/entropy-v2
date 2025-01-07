@@ -429,7 +429,7 @@ namespace Vashta.Entropy.Character
             }
             
             Material material;
-            if (teamInstance.teamDefinition.Material != null)
+            if (teamInstance != null && teamInstance.teamDefinition != null && teamInstance.teamDefinition.Material != null)
             {
                 material = teamInstance.teamDefinition.Material;
             }

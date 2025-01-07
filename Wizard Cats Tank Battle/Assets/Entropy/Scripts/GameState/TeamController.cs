@@ -15,8 +15,9 @@ namespace Vashta.Entropy.GameState
         private int lastSpawnIndex = -1;
         public int maxScore { get; set; } = 30;
         // Networked properties.  Later re-factor into a INetworkStruct
-        [Networked] public List<int> ScoreByTeamIndex { get; private set; }
-        [Networked] public List<int> TeamSize { get; private set; }
+        // Array needs a fixed size set here, so it is always 4
+        [Networked, Capacity(4)] public NetworkArray<int> ScoreByTeamIndex { get; } = MakeInitializer(new int[4]);
+        [Networked, Capacity(4)] public NetworkArray<int> TeamSize { get; } = MakeInitializer(new int[4]);
 
         public bool UsesTeams => _gameManager.gameMode != TanksMP.GameMode.FFA;
         
@@ -24,8 +25,8 @@ namespace Vashta.Entropy.GameState
         private void Awake()
         {
             _gameManager = GetComponent<GameManager>();
-            ScoreByTeamIndex = new List<int>(teams.Length);
-            TeamSize = new List<int>(teams.Length);
+            // ScoreByTeamIndex = new NetworkArray<int>();
+            // TeamSize = new NetworkArray<int>();
         }
         
         public TeamInstance GetTeamByIndex(int index)
@@ -40,9 +41,9 @@ namespace Vashta.Entropy.GameState
 
         public void AddPlayerTeamTeam(Player player, int teamIndex)
         {
-            if (teamIndex < TeamSize.Count)
+            if (teamIndex < TeamSize.Length)
             {
-                TeamSize[teamIndex]++;
+                TeamSize.Set(teamIndex, TeamSize[teamIndex]+1);
             }
             else
             {
@@ -59,9 +60,9 @@ namespace Vashta.Entropy.GameState
             }
             int teamIndex = player.TeamIndex;
             
-            if (teamIndex < TeamSize.Count)
+            if (teamIndex < TeamSize.Length)
             {
-                TeamSize[teamIndex]--;
+                TeamSize.Set(teamIndex, TeamSize[teamIndex]-1);
             }
             else
             {
@@ -110,8 +111,8 @@ namespace Vashta.Entropy.GameState
 
             Debug.Log("Changing teams to: " + preferredTeamIndex);
 
-            TeamSize[player.TeamIndex]--;
-            TeamSize[preferredTeamIndex]++;
+            TeamSize.Set(player.TeamIndex, TeamSize[player.TeamIndex] - 1);
+            TeamSize.Set(preferredTeamIndex, TeamSize[preferredTeamIndex] + 1);
             player.TeamIndex = preferredTeamIndex;
             
             // Force respawn
@@ -158,7 +159,7 @@ namespace Vashta.Entropy.GameState
             // return size[teamIndex] < maxTeamSize;
         }
 
-        #region Spawnering
+        #region Spawning
         /// <summary>
         /// Returns a random spawn position within the team's spawn area.
         /// </summary>
@@ -215,36 +216,26 @@ namespace Vashta.Entropy.GameState
         public void AddScore(ScoreType scoreType, int teamIndex)
         {
             GameModeDefinition gameMode = _gameManager.GameModeDefinition;
-
-            if (!ScoreByTeamIndex.Contains(teamIndex))
-            {
-                ScoreByTeamIndex[teamIndex] = 0;
-            }
             
             switch(scoreType)
             {
                 case ScoreType.Kill:
-                    ScoreByTeamIndex[teamIndex] += gameMode.KillPoints;
+                    ScoreByTeamIndex.Set(teamIndex, ScoreByTeamIndex[teamIndex] + gameMode.KillPoints);
                     break;
                 
                 case ScoreType.Capture:
-                    ScoreByTeamIndex[teamIndex] += gameMode.CapturePoints;
+                    ScoreByTeamIndex.Set(teamIndex, ScoreByTeamIndex[teamIndex] + gameMode.CapturePoints);
                     break;
                 
                 case ScoreType.HoldPoint:
-                    ScoreByTeamIndex[teamIndex] += gameMode.HoldPointPoints;
+                    ScoreByTeamIndex.Set(teamIndex, ScoreByTeamIndex[teamIndex] + gameMode.HoldPointPoints);
                     break;
             }
         }
 
         public void RemoveScore(ScoreType scoreType, int teamIndex)
         {
-            if (!ScoreByTeamIndex.Contains(teamIndex))
-            {
-                ScoreByTeamIndex[teamIndex] = 0;
-            }
-
-            ScoreByTeamIndex[teamIndex]--;
+            ScoreByTeamIndex.Set(teamIndex, ScoreByTeamIndex[teamIndex]-1);
         }
         
         /// <summary>
@@ -278,7 +269,7 @@ namespace Vashta.Entropy.GameState
             int highestScoreFound = 0;
             
             //loop over teams to find the highest score
-            for (var index = 0; index < ScoreByTeamIndex.Count; index++)
+            for (var index = 0; index < ScoreByTeamIndex.Length; index++)
             {
                 var score = ScoreByTeamIndex[index];
                 if (score > highestScoreFound)
@@ -301,14 +292,14 @@ namespace Vashta.Entropy.GameState
 
         public List<TeamStateSnapshot> GetTeamStates(bool includeLocalPlayer = true)
         {
-            if (teams.Length != ScoreByTeamIndex.Count)
+            if (teams.Length != ScoreByTeamIndex.Length)
             {
-                Debug.LogWarning($"Team count ({teams.Length}) did not match score count({ScoreByTeamIndex.Count})!");
+                Debug.LogWarning($"Team count ({teams.Length}) did not match score count({ScoreByTeamIndex.Length})!");
             }
 
             List<TeamStateSnapshot> teamStates = new List<TeamStateSnapshot>();
             
-            for (int i = 0; i < teams.Length && i < ScoreByTeamIndex.Count; i++)
+            for (int i = 0; i < teams.Length && i < ScoreByTeamIndex.Length; i++)
             {
                 TeamStateSnapshot stateSnapshot = new TeamStateSnapshot(teams[i], ScoreByTeamIndex[i], i, includeLocalPlayer);
                 teamStates.Add(stateSnapshot);
@@ -319,9 +310,9 @@ namespace Vashta.Entropy.GameState
 
         public TeamStateSnapshot GetTeamState(int teamIndex, bool includeLocalPlayer = true)
         {
-            if (teams.Length != ScoreByTeamIndex.Count || teamIndex >= teams.Length || teamIndex >= ScoreByTeamIndex.Count)
+            if (teams.Length != ScoreByTeamIndex.Length || teamIndex >= teams.Length || teamIndex >= ScoreByTeamIndex.Length)
             {
-                Debug.LogWarning($"Team count ({teams.Length}) did not match score count({ScoreByTeamIndex.Count}), or team index {teamIndex} was too high!");
+                Debug.LogWarning($"Team count ({teams.Length}) did not match score count({ScoreByTeamIndex.Length}), or team index {teamIndex} was too high!");
             }
 
             return new TeamStateSnapshot(teams[teamIndex], ScoreByTeamIndex[teamIndex], teamIndex, includeLocalPlayer);

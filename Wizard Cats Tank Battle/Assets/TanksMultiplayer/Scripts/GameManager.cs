@@ -11,6 +11,7 @@ using UnityEngine.Serialization;
 using Vashta.Entropy.GameMode;
 using Vashta.Entropy.PhotonExtensions;
 using Vashta.Entropy.GameState;
+using Vashta.Entropy.Scoreboard;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.UI.MapSelection;
 #if UNITY_ADS
@@ -24,9 +25,7 @@ namespace TanksMP
     /// It manages functions such as team fill, scores and ending a game, but also video ad results.
     /// </summary>
     [RequireComponent(typeof(MatchTimer))]
-    [RequireComponent(typeof(RoomController))]
     [RequireComponent(typeof(BotController))]
-    [RequireComponent(typeof(ScoreController))]
     [RequireComponent(typeof(TeamController))]
     [RequireComponent(typeof(GameOverController))]
     [RequireComponent(typeof(SpawnController))]
@@ -44,12 +43,10 @@ namespace TanksMP
         
         [Header("Controllers")]
         public UIGame ui;
-        public RoomController RoomController { get; private set; }
         public BotController BotController { get; private set; }
         public MusicController MusicController;
         public PlayerInputController PlayerInputController;
         public SfxController SfxController;
-        public ScoreController ScoreController { get; private set; }
         public TeamController TeamController { get; private set; }
         public GameOverController GameOverController { get; private set; }
         public SpawnController SpawnController { get; private set; }
@@ -62,26 +59,25 @@ namespace TanksMP
         public GameModeDictionary GameModeDictionary;
         
         public GameModeDefinition GameModeDefinition { get; private set; }
-        private RoomOptionsReader _roomOptionsReader;
+
+        private NetworkManagerCustom _networkManager;
 
         //initialize variables
         void Awake()
         {
             instance = this;
+            _networkManager = NetworkManagerCustom.GetInstance();
 
-            _roomOptionsReader = new RoomOptionsReader();
-            gameMode = _roomOptionsReader.GetGameMode();
+            gameMode = _networkManager.LocalPlayerInfo.GameModeEnum;
             GameModeDefinition = GameModeDictionary[gameMode];
             
-            RoomController = GetComponent<RoomController>();
             BotController = GetComponent<BotController>();
-            ScoreController = GetComponent<ScoreController>();
             TeamController = GetComponent<TeamController>();
             GameOverController = GetComponent<GameOverController>();
             SpawnController = GetComponent<SpawnController>();
             MatchTimer = GetComponent<MatchTimer>();
 
-            ScoreController.maxScore = GameModeDefinition.ScoreToWin;
+            TeamController.maxScore = GameModeDefinition.ScoreToWin;
 
             MatchTimer.InitTimer();            
 
@@ -97,6 +93,14 @@ namespace TanksMP
         public static GameManager GetInstance()
         {
             return instance;
+        }
+
+        public bool IsGameOver()
+        {
+            if (!MatchTimer.MatchTimeIsRunning())
+                return true;
+
+            return TeamController.MaxScoreIsReached();
         }
         
         //implements what to do when an ad view completes

@@ -15,6 +15,18 @@ namespace Vashta.Entropy.GameState
             _gameManager = GetComponent<GameManager>();
         }
         
+        public void GameOver(byte teamIndex)
+        {
+            _gameManager.Runner.SessionInfo.IsOpen = false;
+            
+            int teamIndexInt = teamIndex;
+            if (teamIndexInt == 255)
+                teamIndexInt = -1;
+            
+            //display game over window
+            DisplayGameOver(teamIndexInt);
+        }
+        
         /// <summary>
         /// Only for this player: sets game over text stating the winning team.
         /// Disables player movement so no updates are sent through the network.
@@ -30,8 +42,8 @@ namespace Vashta.Entropy.GameState
             
             if (teamIndex != -1)
             {
-                Team winningTeam = _gameManager.TeamController.teams[teamIndex];
-                _gameManager.ui.SetGameOverText(winningTeam);
+                TeamInstance winningTeamInstance = _gameManager.TeamController.teams[teamIndex];
+                _gameManager.ui.SetGameOverText(winningTeamInstance);
             }
             else
             {
@@ -54,8 +66,8 @@ namespace Vashta.Entropy.GameState
             if (teamIndex != -1)
             {
                 // Handle victory
-                Team winningTeam = _gameManager.TeamController.teams[teamIndex];
-                _gameManager.ui.ShowGameOver(teamIndex, winningTeam.name, winningTeam.material.color);
+                TeamInstance winningTeamInstance = _gameManager.TeamController.teams[teamIndex];
+                _gameManager.ui.ShowGameOver(teamIndex, winningTeamInstance.teamDefinition.TeamNameDisplay, winningTeamInstance.teamDefinition.Material.color);
 
                 int playerTeamIndex = _gameManager.localPlayer.TeamIndex;
                 if (playerTeamIndex == teamIndex)

@@ -1,5 +1,4 @@
-using Photon.Pun;
-using Photon.Realtime;
+using Fusion;
 using TanksMP;
 using TMPro;
 using UnityEngine;
@@ -28,6 +27,7 @@ namespace Vashta.Entropy.UI.MatchCreation
         public GameObject SingleplayerOnlyFieldsRoot;
 
         private bool _isMultiplayer;
+        private NetworkManagerCustom _networkManagerCustom;
 
         private void Start()
         {
@@ -69,13 +69,15 @@ namespace Vashta.Entropy.UI.MatchCreation
 
         private void Init()
         {
+            _networkManagerCustom = NetworkManagerCustom.GetInstance();
+            
             if (NameInputField == null)
             {
                 Debug.LogError("Match creation panel is missing a name input field!");
             }
             else
             {
-                NameInputField.text = RoomOptionsFactory.CreateRoomNameFromPlayerNickname(PhotonNetwork.NickName);
+                NameInputField.text = RoomOptionsFactory.CreateRoomNameFromPlayerNickname(_networkManagerCustom.LocalPlayerInfo.Name);
             }
             
             SetMapTitleText();
@@ -105,10 +107,10 @@ namespace Vashta.Entropy.UI.MatchCreation
             
             // format
             roomName = RoomOptionsFactory.CreateRoomName(roomName);
-            RoomOptions roomOptions = RoomOptionsFactory.InitRoomOptions(roomName, mapName, maxPlayers, gameMode);
+            StartGameArgs startGameArgs = RoomOptionsFactory.CreateRoomOptions(roomName, mapName, maxPlayers, gameMode);
             
             // create room
-            UIMain.GetInstance().roomConnectionController.CreateRoom(roomOptions);
+            UIMain.GetInstance().roomConnectionController.CreateRoom(startGameArgs);
         }
 
         private void CreateMatchSingleplayer()

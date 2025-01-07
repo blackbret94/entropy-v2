@@ -112,13 +112,13 @@ namespace Vashta.Entropy.Spells
                 {
                     // add boon
                     if(_spell.ActiveStatusEffectAllies != null)
-                        player.ApplyStatusEffect(_spell.ActiveStatusEffectAllies.Id, _caster.GetId());
+                        player.ApplyStatusEffect(_spell.ActiveStatusEffectAllies.Id, _caster);
                 }
                 else
                 {
                     // add curse
                     if(_spell.ActiveStatusEffectEnemies != null)
-                        player.ApplyStatusEffect(_spell.ActiveStatusEffectEnemies.Id, _caster.GetId());
+                        player.ApplyStatusEffect(_spell.ActiveStatusEffectEnemies.Id, _caster);
                 }
             }
         }

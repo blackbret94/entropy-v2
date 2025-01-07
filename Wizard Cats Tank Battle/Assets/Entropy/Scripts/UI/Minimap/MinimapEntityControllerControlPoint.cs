@@ -44,11 +44,11 @@ namespace Vashta.Entropy.UI.Minimap
                 }
                 else
                 {
-                    Team team = GameManager.TeamController.GetTeamByIndex(_teamIndex);
+                    TeamInstance teamInstance = GameManager.TeamController.GetTeamByIndex(_teamIndex);
 
-                    if (team != null && team.teamDefinition != null)
+                    if (teamInstance != null && teamInstance.teamDefinition != null)
                     {
-                        TeamDefinition teamDefinition = team.teamDefinition;
+                        TeamDefinition teamDefinition = teamInstance.teamDefinition;
                         SetEntityColor(teamDefinition.TeamColorPrim);
                     }
                 }

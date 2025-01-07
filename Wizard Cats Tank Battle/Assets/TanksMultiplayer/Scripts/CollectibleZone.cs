@@ -4,7 +4,6 @@
  * 	otherwise make available to any third party the Service or the Content. */
 
 using UnityEngine;
-using Photon.Pun;
 
 namespace TanksMP
 {
@@ -39,11 +38,8 @@ namespace TanksMP
         /// </summary>
         public void OnTriggerEnter(Collider col)
         {
-            if (!PhotonNetwork.IsMasterClient)
-                return;
-
             //the game is already over so don't do anything
-            if (GameManager.GetInstance().ScoreController.IsGameOver()) return;
+            if (GameManager.GetInstance().IsGameOver()) return;
 
             //check for the required object
             //continue, if it is not assigned to begin with
@@ -77,20 +73,17 @@ namespace TanksMP
                 }
 
                 //add points for this score type to the correct team
-                GameManager.GetInstance().ScoreController.AddScore(ScoreType.Capture, teamIndex);
+                GameManager.GetInstance().TeamController.AddScore(ScoreType.Capture, teamIndex);
                 //the maximum score has been reached now
-                if (GameManager.GetInstance().ScoreController.IsGameOver())
+                if (GameManager.GetInstance().IsGameOver())
                 {
-                    //close room for joining players
-                    PhotonNetwork.CurrentRoom.IsOpen = false;
                     //tell all clients the winning team
-                    GameManager.GetInstance().RoomController.GameOver((byte)teamIndex);
+                    GameManager.GetInstance().GameOverController.GameOver((byte)teamIndex);
                     return;
                 }
 
                 //remove network messages about the Collectible since it is about to get destroyed 
-                PhotonNetwork.RemoveRPCs(colOther.spawner.photonView);
-                colOther.spawner.photonView.RPC("Destroy", RpcTarget.All);
+                colOther.spawner.Destroy();
                 
                 if(colReq != null)
                     colReq.OnReturn();

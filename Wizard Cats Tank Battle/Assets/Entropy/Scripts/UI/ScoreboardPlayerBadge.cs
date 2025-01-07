@@ -15,12 +15,12 @@ namespace Vashta.Entropy.UI
         public TextMeshProUGUI DeathsText;
         public Image ClassIcon;
 
-        private TeamState _teamState;
+        private TeamStateSnapshot _teamStateSnapshot;
 
         public void Setup(ScoreboardRowData row)
         {
-            if(row.Team != null)
-                PlayerNamesText.color = row.Team.material.color;
+            if(row.TeamInstance != null)
+                PlayerNamesText.color = row.TeamInstance.teamDefinition.Material.color;
             else
                 PlayerNamesText.color = Color.gray;
             

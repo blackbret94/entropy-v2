@@ -5,7 +5,6 @@
 
 using Entropy.Scripts.Player;
 using UnityEngine;
-using Photon.Pun;
 
 namespace TanksMP
 {
@@ -50,21 +49,18 @@ namespace TanksMP
                 }
                 
                 // TODO: Re-write this fusion-style
-                
-                //clean up previous buffered RPCs so we only keep the most recent one
-                PhotonNetwork.RemoveRPCs(spawner.photonView);
 
                 //check if colliding player belongs to the same team as the item
                 if (teamIndex == player.TeamIndex)
                 {
                     //player collected team item, return it to team home base
                     //we do not have to send this as buffered RPC because this is the default spawn position
-                    spawner.photonView.RPC("Return", RpcTarget.All);
+                    spawner.Return();
                 }
                 else
                 {
                     //player picked up item from other team, send out buffered RPC for it to be remembered
-                    spawner.photonView.RPC("Pickup", RpcTarget.AllBuffered, (short)player.GetView().ViewID);
+                    spawner.Pickup(player);
                 }
             }
         }
@@ -78,7 +74,7 @@ namespace TanksMP
         {
             //do not allow collection if the item is already carried around
             //but also skip any processing if our flag is on the home base already
-            if (p == null || carrierId > 0 ||
+            if (p == null || carrier != null ||
                 teamIndex == p.TeamIndex && transform.position == spawner.transform.position)
                 return false;
 
@@ -114,7 +110,7 @@ namespace TanksMP
             if (targetRenderer != null)
             {
                 if (teamIndex >= 0)
-                    targetRenderer.material = GameManager.GetInstance().TeamController.teams[teamIndex].material;
+                    targetRenderer.material = GameManager.GetInstance().TeamController.teams[teamIndex].teamDefinition.Material;
                 else
                     targetRenderer.material = baseMaterial;
             }
@@ -130,7 +126,7 @@ namespace TanksMP
                 return;
             }
 
-            if (carrierId == localPlayer.GetView().ViewID)
+            if (Runner)
             {
                 GameManager.GetInstance().ui.DropCollectiblesButton.gameObject.SetActive(true);
             }

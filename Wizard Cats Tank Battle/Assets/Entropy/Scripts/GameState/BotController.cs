@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Fusion;
 using TanksMP;
 using UnityEngine;
 
 namespace Vashta.Entropy.GameState
 {
-    public class BotController : MonoBehaviour
+    public class BotController : SimulationBehaviour
     {
         /// <summary>
         /// Amount of bots to spawn across all teams.
@@ -15,10 +16,11 @@ namespace Vashta.Entropy.GameState
         /// <summary>
         /// Selection of bot prefabs to choose from.
         /// </summary>
-        public GameObject[] prefabs;
+        public GameObject prefab;
         
         public List<GameObject> BotTargetList;
         private List<PlayerBot> _botList;
+        private GameManager _gameManager;
 
         private void Awake()
         {
@@ -31,6 +33,8 @@ namespace Vashta.Entropy.GameState
         
         IEnumerator Start()
         {
+            _gameManager = GameManager.GetInstance();
+            
             //wait a second for all script to initialize
             yield return new WaitForSeconds(1);
 
@@ -39,15 +43,14 @@ namespace Vashta.Entropy.GameState
             {
                 //randomly choose bot from array of bot prefabs
                 //spawn bot across the simulated private network
-                int randIndex = Random.Range(0, prefabs.Length);
-                GameObject obj = PhotonNetwork.Instantiate(prefabs[randIndex].name, Vector3.zero, Quaternion.identity, 0);
+                NetworkObject obj = Runner.Spawn(prefab, Vector3.zero, Quaternion.identity);
 
                 //let the local host determine the team assignment
                 Player p = obj.GetComponent<Player>();
                 p.TeamIndex = GameManager.GetInstance().TeamController.GetTeamFill();
 
                 //increase corresponding team size
-                PhotonNetwork.CurrentRoom.AddSize(p.TeamIndex, +1);
+                _gameManager.TeamController.AddPlayerTeamTeam(p, p.TeamIndex);
 
                 yield return new WaitForSeconds(0.25f);
             }

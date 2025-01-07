@@ -418,13 +418,13 @@ namespace TanksMP
         private void AttemptApplyEffectAlly(Player player, Player target)
         {
             if(Random.Range(0f, 1f) < StatusEffectOnAllyChance)
-                target.ApplyStatusEffect(StatusEffectOnAlly.Id, player.GetId());
+                target.ApplyStatusEffect(StatusEffectOnAlly.Id, player);
         }
 
         private void AttemptApplyEffectEnemy(Player player, Player target)
         {
             if(Random.Range(0f, 1f) < StatusEffectOnEnemyChance)
-                target.ApplyStatusEffect(StatusEffectOnEnemy.Id, player.GetId());
+                target.ApplyStatusEffect(StatusEffectOnEnemy.Id, player);
         }
         
         private void BounceOffReflectivePlayer(Player player)

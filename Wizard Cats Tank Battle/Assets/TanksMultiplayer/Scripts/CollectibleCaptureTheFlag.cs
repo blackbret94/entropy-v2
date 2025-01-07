@@ -57,11 +57,8 @@ namespace TanksMP
                     Debug.LogError("Missing spawner connection!");
                 }
                 
-                //clean up previous buffered RPCs so we only keep the most recent one
-                PhotonNetwork.RemoveRPCs(spawner.photonView);
-                
                 //player picked up item from other team, send out buffered RPC for it to be remembered
-                spawner.photonView.RPC("Pickup", RpcTarget.AllBuffered, (short)player.GetView().ViewID);
+                spawner.Pickup(player);
             }
             else
             {
@@ -73,7 +70,7 @@ namespace TanksMP
                 
                 if (playerTeam != teamIndex)
                 {
-                    spawner.photonView.RPC("Return", RpcTarget.All);
+                    spawner.Return();
                 }
             }
         }
@@ -96,7 +93,7 @@ namespace TanksMP
             
             //do not allow collection if the item is already carried around
             //but also skip any processing if our flag is on the home base already
-            if(carrierId > 0 || _carriedBy != null)
+            if(carrier != null || _carriedBy != null)
                 return false;
                 
             //return successful collection
@@ -142,7 +139,7 @@ namespace TanksMP
         private void ResetFlag()
         {
             _carriedBy = null;
-            carrierId = -1;
+            carrier = null; // duplicate?
             teamIndex = _defaultTeamIndex;
 
             Colorize();
@@ -153,7 +150,7 @@ namespace TanksMP
             if (targetRenderer != null)
             {
                 if (teamIndex >= 0)
-                    targetRenderer.material.color = GameManager.GetInstance().TeamController.teams[teamIndex].material.color;
+                    targetRenderer.material.color = GameManager.GetInstance().TeamController.teams[teamIndex].teamDefinition.Material.color;
                 else
                     targetRenderer.material.color = Color.white;
             }

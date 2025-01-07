@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Photon.Pun;
+using TanksMP;
 using Vashta.Entropy.TanksExtensions;
 
 namespace Vashta.Entropy.Scoreboard
@@ -11,12 +11,13 @@ namespace Vashta.Entropy.Scoreboard
         {
             List<ScoreboardRowData> rows = new List<ScoreboardRowData>();
             
-            if(includeOfflinePlayers)
-                rows = rows.Concat( GetOfflinePlayers()).ToList();
+            // TODO: Support offline players in scoreboard
+            // if(includeOfflinePlayers)
+                // rows = rows.Concat( GetOfflinePlayers()).ToList();
             
-            List<TeamState> teamStates = TeamUtility.GetTeamStates();
+            List<TeamStateSnapshot> teamStates = GameManager.GetInstance().TeamController.GetTeamStates();
 
-            foreach (TeamState teamState in teamStates)
+            foreach (TeamStateSnapshot teamState in teamStates)
             {
                 rows = rows.Concat(teamState.PlayerRows).ToList();
             }
@@ -27,7 +28,7 @@ namespace Vashta.Entropy.Scoreboard
         private List<ScoreboardRowData> GetOfflinePlayers()
         {
             List<ScoreboardRowData> rows = new List<ScoreboardRowData>();
-            ScoreboardRowDataSerializableList rowsSerialized = PhotonNetwork.CurrentRoom.ReadScoreboard();
+            ScoreboardRowDataSerializableList rowsSerialized = null;//PhotonNetwork.CurrentRoom.ReadScoreboard();
 
             foreach (ScoreboardRowDataSerializable serialized in rowsSerialized.list)
             {

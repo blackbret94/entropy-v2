@@ -63,7 +63,7 @@ namespace TanksMP
                 // Clear connection
                 if (UIMain.GetInstance().Runner.IsRunning)
                 {
-                    PhotonNetwork.Disconnect();
+                    Runner.Shutdown();
                     while (UIMain.GetInstance().Runner.IsRunning)
                     {
                         yield return null;
@@ -82,7 +82,7 @@ namespace TanksMP
         /// Called after the connection to the master is established.
         /// See the official Photon docs for more details.
         /// </summary>
-        public override void OnConnectedToMaster()
+        public void OnConnectedToMaster()
         {
             // Right now it goes to random map/mode.  Can save conditions later
             FindObjectOfType<RoomConnectionController>().Play();

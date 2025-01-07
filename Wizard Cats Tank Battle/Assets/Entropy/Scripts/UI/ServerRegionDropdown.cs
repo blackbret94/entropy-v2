@@ -32,7 +32,7 @@ namespace Vashta.Entropy.UI
 
         private void LoadRegion()
         {
-            string regionToken = NetworkManagerCustom.GetRegion();
+            string regionToken = NetworkManagerCustom.RegionController.Region;
 
             for (int i=0; i<Regions.Count; i++)
             {
@@ -50,7 +50,7 @@ namespace Vashta.Entropy.UI
         {
             ServerRegion region = Regions[regionIndex];
             
-            NetworkManagerCustom.SaveRegion(region.Token);
+            NetworkManagerCustom.RegionController.Region = region.Token;
 
             // Reconnect
             if (UIMain.GetInstance().Runner.IsRunning)

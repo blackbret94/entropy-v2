@@ -12,10 +12,10 @@ namespace Vashta.Entropy.UI
         public Text tipText;
         public ScriptableTextList tipList;
 
-        public void Set(string playerName, Team team)
+        public void Set(string playerName, TeamInstance teamInstance)
         {
             //show killer name and colorize the name converting its team color to an HTML RGB hex value for UI markup
-            deathText.text = "KNOCKED OUT BY \n<color=#" + ColorUtility.ToHtmlStringRGB(team.material.color) + ">" + playerName + "</color>";
+            deathText.text = "KNOCKED OUT BY \n<color=#" + ColorUtility.ToHtmlStringRGB(teamInstance.teamDefinition.Material.color) + ">" + playerName + "</color>";
 
             tipText.text = "TIP: " + tipList.getRandomString();
         }

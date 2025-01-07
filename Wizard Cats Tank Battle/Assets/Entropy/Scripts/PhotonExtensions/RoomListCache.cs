@@ -1,19 +1,21 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Fusion;
-using Photon.Pun;
-using Photon.Realtime;
+using Fusion.Sockets;
+using TanksMP;
 using UnityEngine;
 
 namespace Vashta.Entropy.PhotonExtensions
 {
-    public class RoomListCache : SimulationBehaviour
+    public class RoomListCache : SimulationBehaviour, INetworkRunnerCallbacks
     {
-        private TypedLobby customLobby = new TypedLobby("customLobby", LobbyType.Default);
+        public UIMain UIMain { get; private set; }
+        // private TypedLobby customLobby = new TypedLobby("customLobby", LobbyType.Default);
 
-        private Dictionary<string, RoomInfo> cachedRoomList = new Dictionary<string, RoomInfo>();
+        private Dictionary<string, SessionInfo> cachedRoomList = new Dictionary<string, SessionInfo>();
 
-        public Dictionary<string, RoomInfo> RoomList => cachedRoomList;
+        public Dictionary<string, SessionInfo> RoomList => cachedRoomList;
         
         public delegate void OnUpdatedCache();
 
@@ -23,20 +25,19 @@ namespace Vashta.Entropy.PhotonExtensions
 
         private void Start()
         {
+            UIMain = UIMain.GetInstance();
             JoinLobby();
         }
 
         public void JoinLobby()
         {
-            PhotonNetwork.ConnectUsingSettings();
-            bool joinedLobby = PhotonNetwork.JoinLobby();
+            // TODO: Pass in sessionName, scene
+            UIMain.Runner.StartGame(new StartGameArgs { GameMode = Fusion.GameMode.Shared });
             //
             // Debug.Log("Attempted to join lobby: " + joinedLobby);
 
-            if (!joinedLobby)
-            {
-                StartCoroutine(RetryConnection());
-            }
+            StartCoroutine(RetryConnection());
+            
         }
 
         public void RefreshLobbies()
@@ -56,12 +57,12 @@ namespace Vashta.Entropy.PhotonExtensions
             JoinLobby();
         }
 
-        private void UpdateCachedRoomList(List<RoomInfo> roomList)
+        private void UpdateCachedRoomList(List<SessionInfo> roomList)
         {
             for(int i=0; i<roomList.Count; i++)
             {
-                RoomInfo info = roomList[i];
-                if (info.RemovedFromList)
+                SessionInfo info = roomList[i];
+                if (!info.IsOpen || !info.IsVisible || !info.IsValid)
                 {
                     cachedRoomList.Remove(info.Name);
                 }
@@ -73,26 +74,50 @@ namespace Vashta.Entropy.PhotonExtensions
 
             if (onUpdatedCache != null) onUpdatedCache();
         }
-
-        public override void OnJoinedLobby()
-        {
+        
+        public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) 
+        { 
             cachedRoomList.Clear();
         }
-
-        public override void OnRoomListUpdate(List<RoomInfo> roomList)
+        
+        public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
         {
             Debug.Log("Getting list of lobbies!");
-            UpdateCachedRoomList(roomList);
+            UpdateCachedRoomList(sessionList);
         }
 
-        public override void OnLeftLobby()
-        {
-            cachedRoomList.Clear();
-        }
+        public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
 
-        public override void OnDisconnected(DisconnectCause cause)
-        {
-            cachedRoomList.Clear();
-        }
+        public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
+
+        public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) { }
+
+        public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) { }
+
+        public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason) { }
+
+        public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token) { }
+
+        public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason) { }
+
+        public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
+
+        public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data) { }
+
+        public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress) { }
+
+        public void OnInput(NetworkRunner runner, NetworkInput input) { }
+
+        public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
+
+        public void OnConnectedToServer(NetworkRunner runner) { }
+
+        public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }
+
+        public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
+
+        public void OnSceneLoadDone(NetworkRunner runner) { }
+
+        public void OnSceneLoadStart(NetworkRunner runner) { }
     }
 }

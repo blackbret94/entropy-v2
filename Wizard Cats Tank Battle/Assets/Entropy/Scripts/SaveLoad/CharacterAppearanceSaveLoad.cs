@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using CBS;
-using Photon.Pun;
+using TanksMP;
 using UnityEngine;
 using Vashta.Entropy.Character;
 
@@ -12,7 +12,7 @@ namespace Vashta.Entropy.SaveLoad
         
         private IProfile ProfileModule { get; set; }
         private const string CHAR_APPEARANCE_KEY = "active-outfit";
-
+        
         private void Start()
         {
             ProfileModule = CBSModule.Get<CBSProfile>();
@@ -83,17 +83,25 @@ namespace Vashta.Entropy.SaveLoad
             return new CharacterAppearanceSerializable().Encrypt();
         }
 
-
         public static void SetCurrentAppearanceAsCustomProperty()
         {
-            SetAppearanceAsCustomProperty(PlayerPrefs.GetString(PrefsKeys.characterAppearance, DefaultAppearanceStringEncrypted()));
+            string encrypted = PlayerPrefs.GetString(PrefsKeys.characterAppearance, DefaultAppearanceStringEncrypted());
+            SetAppearanceAsCustomProperty(encrypted);
         }
         
         private static void SetAppearanceAsCustomProperty(string encrypted)
         {
-            ExitGames.Client.Photon.Hashtable setPlayerAppearance = new ExitGames.Client.Photon.Hashtable();
-            setPlayerAppearance.Add(PrefsKeys.characterAppearance, encrypted);
-            PhotonNetwork.LocalPlayer.SetCustomProperties(setPlayerAppearance); 
+            GameManager gameManager = GameManager.GetInstance();
+
+            if (gameManager != null)
+            {
+                gameManager.localPlayer.CharacterAppearanceSerialized = encrypted;
+            }
+            else
+            {
+                // TODO: Handle for main menu
+            }
+            
         }
     }
 }

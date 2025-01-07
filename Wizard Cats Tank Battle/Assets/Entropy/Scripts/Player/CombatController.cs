@@ -243,9 +243,9 @@ namespace Entropy.Scripts.Player
                 _player.Deaths++;
             
             //the game is already over so don't do anything
-            if(_gameManager.ScoreController.IsGameOver()) return;
+            if(_gameManager.IsGameOver()) return;
 
-            _gameManager.RoomController.OnePassCheckChangeTeams(_player, false);
+            _gameManager.TeamController.OnePassPlayerCheckToChangeTeams(_player, false);
             
             //get killer and increase score for that enemy team
             if (other != null)
@@ -258,22 +258,22 @@ namespace Entropy.Scripts.Player
                 // killer is other team
                 if (_player.TeamIndex != otherTeam)
                 {
-                    _gameManager.ScoreController.AddScore(ScoreType.Kill, otherTeam);
+                    _gameManager.TeamController.AddScore(ScoreType.Kill, otherTeam);
                     other.Kills++;
                 }
                 
                 //the maximum score has been reached now
-                if (_gameManager.ScoreController.IsGameOver())
+                if (_gameManager.IsGameOver())
                 {
                     //tell all clients the winning team
-                    _gameManager.RoomController.GameOver((byte)otherTeam);
+                    _gameManager.GameOverController.GameOver((byte)otherTeam);
                     return;
                 }
             }
             else
             {
                 // Killed by environment
-                _gameManager.ScoreController.RemoveScore(ScoreType.Kill, _player.TeamIndex);
+                _gameManager.TeamController.RemoveScore(ScoreType.Kill, _player.TeamIndex);
             }
             
             // The game is not over

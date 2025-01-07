@@ -1,28 +1,34 @@
-using Photon.Pun;
+using System.Collections.Generic;
+using Fusion;
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.ScriptableObject;
+using Vashta.Entropy.TanksExtensions;
 
 namespace Vashta.Entropy.GameState
 {
-    public class TeamController : MonoBehaviour
+    public class TeamController : NetworkBehaviour
     {
         public const int RANDOM_TEAM_INDEX = 100;
-        
-        /// <summary>
-        /// Definition of playing teams with additional properties.
-        /// </summary>
-        public Team[] teams;
-        public bool UsesTeams => _gameManager.gameMode != TanksMP.GameMode.FFA;
-        
+        public TeamInstance[] teams; // This is set in the editor
         private GameManager _gameManager;
         private int lastSpawnIndex = -1;
+        public int maxScore { get; set; } = 30;
+        // Networked properties.  Later re-factor into a INetworkStruct
+        [Networked] public List<int> ScoreByTeamIndex { get; private set; }
+        [Networked] public List<int> TeamSize { get; private set; }
+
+        public bool UsesTeams => _gameManager.gameMode != TanksMP.GameMode.FFA;
+        
 
         private void Awake()
         {
             _gameManager = GetComponent<GameManager>();
+            ScoreByTeamIndex = new List<int>(teams.Length);
+            TeamSize = new List<int>(teams.Length);
         }
         
-        public Team GetTeamByIndex(int index)
+        public TeamInstance GetTeamByIndex(int index)
         {
             if (index < teams.Length && index >= 0)
             {
@@ -31,6 +37,89 @@ namespace Vashta.Entropy.GameState
 
             return teams[0];
         }
+
+        public void AddPlayerTeamTeam(Player player, int teamIndex)
+        {
+            if (teamIndex < TeamSize.Count)
+            {
+                TeamSize[teamIndex]++;
+            }
+            else
+            {
+                Debug.LogError("Tried to add player to invalid team: " + teamIndex);
+            }
+        }
+
+        public void RemovePlayerFromTeam(Player player)
+        {
+            if (!player)
+            {
+                Debug.LogError("Attempted to remove null player");
+                return;
+            }
+            int teamIndex = player.TeamIndex;
+            
+            if (teamIndex < TeamSize.Count)
+            {
+                TeamSize[teamIndex]--;
+            }
+            else
+            {
+                Debug.LogError("Tried to remove player with invalid team: " + teamIndex);
+            }
+        }
+        
+        public void OnePassPlayerCheckToChangeTeams(Player player, bool respawn)
+        {
+            if (!player)
+                return;
+            
+            int preferredTeamIndex = player.PreferredTeamIndex;
+            bool prefersDifferentTeam = preferredTeamIndex != player.TeamIndex;
+
+            if (prefersDifferentTeam)
+            {
+                Debug.Log("Prefers a different team");
+                if (_gameManager.TeamController.TeamHasVacancy(preferredTeamIndex))
+                {
+                    // Handle game over. Nested for efficiency
+                    if (_gameManager.IsGameOver())
+                        return;
+
+                    AttemptToChangePlayerToPreferredTeam(player, respawn);
+                }
+            }
+        }
+        
+        private void AttemptToChangePlayerToPreferredTeam(Player player, bool respawn)
+        {
+            int preferredTeamIndex = player.PreferredTeamIndex;
+            int currentTeam = player.TeamIndex;
+
+            if (preferredTeamIndex == RANDOM_TEAM_INDEX && preferredTeamIndex != currentTeam)
+            {
+                player.PreferredTeamIndex = currentTeam;
+                return;
+            }
+
+            if (preferredTeamIndex == RANDOM_TEAM_INDEX || preferredTeamIndex == currentTeam ||
+                !TeamHasVacancy(preferredTeamIndex))
+            {
+                return;
+            }
+
+            Debug.Log("Changing teams to: " + preferredTeamIndex);
+
+            TeamSize[player.TeamIndex]--;
+            TeamSize[preferredTeamIndex]++;
+            player.TeamIndex = preferredTeamIndex;
+            
+            // Force respawn
+            if(respawn)
+                player.Respawn(null);
+            
+            player.ApplyTeamChange();
+        }
         
         /// <summary>
         /// Returns the next team index a player should be assigned to.
@@ -38,18 +127,17 @@ namespace Vashta.Entropy.GameState
         public int GetTeamFill()
         {
             //init variables
-            int[] size = PhotonNetwork.CurrentRoom.GetSize();
             int teamNo = 0;
 
-            int min = size[0];
+            int min = TeamSize[0];
             //loop over teams to find the lowest fill
             for (int i = 0; i < teams.Length; i++)
             {
                 //if fill is lower than the previous value
                 //store new fill and team for next iteration
-                if (size[i] < min)
+                if (TeamSize[i] < min)
                 {
-                    min = size[i];
+                    min = TeamSize[i];
                     teamNo = i;
                 }
             }
@@ -65,11 +153,12 @@ namespace Vashta.Entropy.GameState
             // int teamNo = teamIndex - 1;
             int maxTeamSize = 3; // This should NOT be hardcoded here
             
-            int[] size = PhotonNetwork.CurrentRoom.GetSize();
+            // int[] size = PhotonNetwork.CurrentRoom.GetSize();
 
-            return size[teamIndex] < maxTeamSize;
+            // return size[teamIndex] < maxTeamSize;
         }
-        
+
+        #region Spawnering
         /// <summary>
         /// Returns a random spawn position within the team's spawn area.
         /// </summary>
@@ -81,8 +170,8 @@ namespace Vashta.Entropy.GameState
         private Vector3 GetSpawnTeams(int teamIndex)
         {
             //init variables
-            Vector3 pos = teams[teamIndex].spawn.position;
-            BoxCollider col = teams[teamIndex].spawn.GetComponent<BoxCollider>();
+            Vector3 pos = teams[teamIndex].spawnArea.position;
+            BoxCollider col = teams[teamIndex].spawnArea.GetComponent<BoxCollider>();
 
             if(col != null)
             {
@@ -116,5 +205,128 @@ namespace Vashta.Entropy.GameState
 
             return GetSpawnTeams(spawnIndex);
         }
+        #endregion
+
+        #region Score
+/// <summary>
+        /// Adds points to the target team depending on matching game mode and score type.
+        /// This allows us for granting different amount of points on different score actions.
+        /// </summary>
+        public void AddScore(ScoreType scoreType, int teamIndex)
+        {
+            GameModeDefinition gameMode = _gameManager.GameModeDefinition;
+
+            if (!ScoreByTeamIndex.Contains(teamIndex))
+            {
+                ScoreByTeamIndex[teamIndex] = 0;
+            }
+            
+            switch(scoreType)
+            {
+                case ScoreType.Kill:
+                    ScoreByTeamIndex[teamIndex] += gameMode.KillPoints;
+                    break;
+                
+                case ScoreType.Capture:
+                    ScoreByTeamIndex[teamIndex] += gameMode.CapturePoints;
+                    break;
+                
+                case ScoreType.HoldPoint:
+                    ScoreByTeamIndex[teamIndex] += gameMode.HoldPointPoints;
+                    break;
+            }
+        }
+
+        public void RemoveScore(ScoreType scoreType, int teamIndex)
+        {
+            if (!ScoreByTeamIndex.Contains(teamIndex))
+            {
+                ScoreByTeamIndex[teamIndex] = 0;
+            }
+
+            ScoreByTeamIndex[teamIndex]--;
+        }
+        
+        /// <summary>
+        /// Returns whether a team reached the maximum game score.
+        /// </summary>
+        public bool MaxScoreIsReached()
+        {
+            //init variables
+            bool isOver = false;
+            // int[] score = PhotonNetwork.CurrentRoom.GetScore();
+            
+            //loop over teams to find the highest score
+            foreach (int score in ScoreByTeamIndex)
+            {
+                //score is greater or equal to max score,
+                //which means the game is finished
+                if(score >= maxScore)
+                {
+                    isOver = true;
+                    break;
+                }
+            }
+            
+            //return the result
+            return isOver;
+        }
+
+        public int GetTeamWithHighestScore()
+        {
+            int teamWithHighestScore = -1;
+            int highestScoreFound = 0;
+            
+            //loop over teams to find the highest score
+            for (var index = 0; index < ScoreByTeamIndex.Count; index++)
+            {
+                var score = ScoreByTeamIndex[index];
+                if (score > highestScoreFound)
+                {
+                    highestScoreFound = score;
+                    teamWithHighestScore = index;
+                }
+                else if (score == highestScoreFound)
+                {
+                    teamWithHighestScore = -1;
+                }
+            }
+
+            return teamWithHighestScore;
+        }
+        
+        #endregion
+
+        #region TeamStateSnapshot
+
+        public List<TeamStateSnapshot> GetTeamStates(bool includeLocalPlayer = true)
+        {
+            if (teams.Length != ScoreByTeamIndex.Count)
+            {
+                Debug.LogWarning($"Team count ({teams.Length}) did not match score count({ScoreByTeamIndex.Count})!");
+            }
+
+            List<TeamStateSnapshot> teamStates = new List<TeamStateSnapshot>();
+            
+            for (int i = 0; i < teams.Length && i < ScoreByTeamIndex.Count; i++)
+            {
+                TeamStateSnapshot stateSnapshot = new TeamStateSnapshot(teams[i], ScoreByTeamIndex[i], i, includeLocalPlayer);
+                teamStates.Add(stateSnapshot);
+            }
+
+            return teamStates;
+        }
+
+        public TeamStateSnapshot GetTeamState(int teamIndex, bool includeLocalPlayer = true)
+        {
+            if (teams.Length != ScoreByTeamIndex.Count || teamIndex >= teams.Length || teamIndex >= ScoreByTeamIndex.Count)
+            {
+                Debug.LogWarning($"Team count ({teams.Length}) did not match score count({ScoreByTeamIndex.Count}), or team index {teamIndex} was too high!");
+            }
+
+            return new TeamStateSnapshot(teams[teamIndex], ScoreByTeamIndex[teamIndex], teamIndex, includeLocalPlayer);
+        }
+
+        #endregion
     }
 }

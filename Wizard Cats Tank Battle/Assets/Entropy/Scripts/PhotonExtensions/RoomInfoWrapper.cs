@@ -1,21 +1,21 @@
-using ExitGames.Client.Photon;
-using Photon.Realtime;
+using System.Collections.ObjectModel;
+using Fusion;
 using UnityEngine;
 
 namespace Vashta.Entropy.PhotonExtensions
 {
     public class RoomInfoWrapper
     {
-        private RoomInfo _roomInfo;
+        private SessionInfo _sessionInfo;
 
-        public RoomInfoWrapper(RoomInfo roomInfo)
+        public RoomInfoWrapper(SessionInfo sessionInfo)
         {
-            _roomInfo = roomInfo;
+            _sessionInfo = sessionInfo;
         }
 
         public string GetMapName()
         {
-            Hashtable customProperties = _roomInfo.CustomProperties;
+            ReadOnlyDictionary<string, SessionProperty> customProperties = _sessionInfo.Properties;
 
             if (customProperties.TryGetValue(RoomKeys.mapKey, out var property))
             {
@@ -27,7 +27,7 @@ namespace Vashta.Entropy.PhotonExtensions
 
         public TanksMP.GameMode GetGameMode()
         {
-            Hashtable customProperties = _roomInfo.CustomProperties;
+            ReadOnlyDictionary<string, SessionProperty> customProperties = _sessionInfo.Properties;
 
             if (customProperties.TryGetValue(RoomKeys.modeKey, out var property))
             {
@@ -40,12 +40,12 @@ namespace Vashta.Entropy.PhotonExtensions
 
         public string GetRoomNameId()
         {
-            return _roomInfo.Name;
+            return _sessionInfo.Name;
         }
 
         public string GetDisplayRoomName()
         {
-            Hashtable customProperties = _roomInfo.CustomProperties;
+            ReadOnlyDictionary<string, SessionProperty> customProperties = _sessionInfo.Properties;
 
             if (customProperties.TryGetValue(RoomKeys.roomNameKey, out var property))
             {
@@ -57,44 +57,44 @@ namespace Vashta.Entropy.PhotonExtensions
 
         public int GetMaxPlayers()
         {
-            return _roomInfo.MaxPlayers;
+            return _sessionInfo.MaxPlayers;
         }
 
         public bool IsOpen()
         {
-            return _roomInfo.IsOpen;
+            return _sessionInfo.IsOpen;
         }
 
         public bool IsVisible()
         {
-            return _roomInfo.IsVisible;
+            return _sessionInfo.IsVisible;
         }
         
         public string StringifyRoom()
         {
-            if (!_roomInfo.CustomProperties.ContainsKey(RoomKeys.mapKey))
+            if (!_sessionInfo.Properties.ContainsKey(RoomKeys.mapKey))
             {
                 Debug.LogError("Retrieved lobby that is missing a map!");
                 return null;
             }
 
-            string map = (string)_roomInfo.CustomProperties[RoomKeys.mapKey];
+            string map = (string)_sessionInfo.Properties[RoomKeys.mapKey];
             
-            if (!_roomInfo.CustomProperties.ContainsKey(RoomKeys.modeKey))
+            if (!_sessionInfo.Properties.ContainsKey(RoomKeys.modeKey))
             {
                 Debug.LogError("Retrieved lobby that is missing a mode!");
                 return null;
             }
 
-            if (!_roomInfo.CustomProperties.ContainsKey(RoomKeys.roomNameKey))
+            if (!_sessionInfo.Properties.ContainsKey(RoomKeys.roomNameKey))
             {
                 Debug.LogError("Retrieved lobby that is missing a room name!");
                 return null;
             }
 
-            string roomName = (string)_roomInfo.CustomProperties[RoomKeys.roomNameKey];
+            string roomName = (string)_sessionInfo.Properties[RoomKeys.roomNameKey];
 
-            return $"{roomName} | {map} ({_roomInfo.PlayerCount}/{_roomInfo.MaxPlayers})";
+            return $"{roomName} | {map} ({_sessionInfo.PlayerCount}/{_sessionInfo.MaxPlayers})";
         }
     }
 }

@@ -1,6 +1,5 @@
-using ExitGames.Client.Photon;
-using Photon.Realtime;
-using TanksMP;
+using System.Collections.Generic;
+using Fusion;
 using UnityEngine;
 using Vashta.Entropy.ScriptableObject;
 
@@ -37,24 +36,46 @@ namespace Vashta.Entropy.PhotonExtensions
             return CreateRoomName(nickName + "'s Room");
         }
         
-        public RoomOptions InitRoomOptions(string roomName, string mapName, int maxPlayers, TanksMP.GameMode gameMode)
+        public StartGameArgs CreateRoomOptions(string roomName, string mapName, int maxPlayers, TanksMP.GameMode gameMode, bool isVisible = true)
         {
-            RoomOptions roomOptions = new RoomOptions();
-            roomOptions.MaxPlayers = maxPlayers;
+            StartGameArgs startGameArgs = new StartGameArgs();
+            startGameArgs.SessionName = roomName;
+            startGameArgs.PlayerCount = maxPlayers;
+            startGameArgs.IsVisible = isVisible;
+            startGameArgs.GameMode = Fusion.GameMode.Shared;
             
-            roomOptions.CustomRoomPropertiesForLobby = new string[] { RoomKeys.modeKey, RoomKeys.mapKey, RoomKeys.roomNameKey };
-            roomOptions.CustomRoomProperties = new Hashtable()
-            {
-                { RoomKeys.roomNameKey, roomName},
-                { RoomKeys.modeKey, (byte)(int)gameMode}, 
-                { RoomKeys.mapKey, mapName}
-            };
+            // custom properties
+            Dictionary<string, SessionProperty> customProperties = new Dictionary<string, SessionProperty>();
+            customProperties[RoomKeys.modeKey] = (byte)(int)gameMode;
+            customProperties[RoomKeys.mapKey] = mapName;
+            startGameArgs.SessionProperties = customProperties;
 
-            roomOptions.MaxPlayers = (byte)maxPlayers;
-            roomOptions.CleanupCacheOnLeave = false;
-            roomOptions.BroadcastPropsChangeToAll = false;
+            return startGameArgs;
+        }
 
-            return roomOptions;
+        public StartGameArgs CreateRoomOptions(string mapName, byte gameMode)
+        {
+            Dictionary<string, SessionProperty> customProperties = new Dictionary<string, SessionProperty>();
+            customProperties[RoomKeys.modeKey] = gameMode;
+            customProperties[RoomKeys.mapKey] = mapName;
+            
+            StartGameArgs startGameArgs = new StartGameArgs();
+            startGameArgs.SessionProperties = customProperties;
+            startGameArgs.GameMode = Fusion.GameMode.Shared;
+
+            return startGameArgs;
+        }
+
+        public StartGameArgs CreateRoomOptionsGameMode(byte gameMode)
+        {
+            Dictionary<string, SessionProperty> customProperties = new Dictionary<string, SessionProperty>();
+            customProperties[RoomKeys.modeKey] = gameMode;
+            
+            StartGameArgs startGameArgs = new StartGameArgs();
+            startGameArgs.SessionProperties = customProperties;
+            startGameArgs.GameMode = Fusion.GameMode.Shared;
+
+            return startGameArgs;
         }
 
         private string GenerateRoomName()

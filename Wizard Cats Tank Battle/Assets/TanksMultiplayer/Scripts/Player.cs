@@ -52,7 +52,7 @@ namespace TanksMP
         }
 
         public int maxHealth = 10;
-        public bool IsAlive { get; set; } // This replaced another variable called "isAlive" - need to make sure they weren't competing
+        public bool IsAlive { get; set; } = true; // This replaced another variable called "isAlive" - need to make sure they weren't competing
 
         // Shield
         public int Shield
@@ -135,6 +135,9 @@ namespace TanksMP
         
         public MinimapEntityControllerPlayer MinimapEntityControllerPlayer;
 
+        public PlayerRef PlayerId { get; private set; } = PlayerRef.None;
+        public string CharacterAppearanceSerialized { get; set; }
+        
         // Lag compensation
         private Vector3 networkVelocity;
         private Vector3 networkPosition;
@@ -146,8 +149,6 @@ namespace TanksMP
         // Spawn timer
         [HideInInspector]
         public float lastDeathTime = 0f;
-
-        // public bool IsAlive = true;
         private bool _hasLateInited = false;
         
         [Header("Data")]
@@ -165,6 +166,7 @@ namespace TanksMP
         // Called on both Player and PlayerBot
         void Awake()
         {
+            // Load dependencies
             GameManager = GameManager.GetInstance();
             CameraController = GetComponent<CameraController>();
             PlayerViewController = GetComponent<PlayerViewController>();
@@ -172,12 +174,21 @@ namespace TanksMP
             UltimateController = GetComponent<UltimateController>();
             MovementController = GetComponent<MovementController>();
             ClassController = GetComponent<ClassController>();
-            
             InputController = GameManager.PlayerInputController;
             rb = GetComponent<Rigidbody>();
             _playerCurrencyRewarder = new PlayerCurrencyRewarder();
+
+            PlayerId = Object.InputAuthority; 
             
-            PlayerList.Add(GetId(), this);
+            // Local player logic
+            if (HasInputAuthority && !isBot)
+            {
+                //set a global reference to the local player
+                GameManager.localPlayer = this;
+                // InputController.PlayerFired += OnFire;
+            }
+            
+            PlayerList.Add(this);
 
             ClassDefinition classDefinition = defaultClassDefinition ? defaultClassDefinition : classList.RandomClass();
 
@@ -190,9 +201,6 @@ namespace TanksMP
 
             _lastSecondUpdate = Time.time + .1f;
             JoinTime = -Time.time;
-            Kills = 0;
-            Deaths = 0;
-            IsAlive = true;
             ClassId = classDefinition.classId;
             
             ApplyClass();
@@ -219,7 +227,7 @@ namespace TanksMP
 
         private void OnDestroy()
         {
-            PlayerList.Remove(GetId());
+            PlayerList.Remove(this);
             GameManager.ui.GameLogPanel.EventPlayerLeft(PlayerName);
         }
 
@@ -229,13 +237,6 @@ namespace TanksMP
         /// </summary>
         void Start()
         {
-            if (HasInputAuthority && !isBot)
-            {
-                //set a global reference to the local player
-                GameManager.localPlayer = this;
-                // InputController.PlayerFired += OnFire;
-            }
-
             if (GameManager.TeamController.UsesTeams)
             {
                 PlayerViewController.ColorizePlayerForTeam();
@@ -461,7 +462,7 @@ namespace TanksMP
         {
             if (PlayerCanRespawnFreely() || !IsAlive)
             {
-                GameManager.RoomController.OnePassCheckChangeTeams(this, respawn);
+                GameManager.TeamController.OnePassPlayerCheckToChangeTeams(this, respawn);
             }
         }
 
@@ -498,7 +499,7 @@ namespace TanksMP
             GameManager gameManager = GameManager;
             foreach (var team in gameManager.TeamController.teams)
             {
-                Collider col = team.freeClassChange.GetComponent<Collider>();
+                Collider col = team.freeClassChangeArea.GetComponent<Collider>();
                     
                 if (col == null)
                 {
@@ -514,7 +515,7 @@ namespace TanksMP
             return false;
         }
         
-        public virtual void Respawn(Player player, string deathFxId = null)
+        public virtual void Respawn(Player killedByPlayer, string deathFxId = null)
         {
             lastDeathTime = Time.time;
             
@@ -526,15 +527,16 @@ namespace TanksMP
             //the player has been killed
             if (!isActive)
             {
-                HandleKilled(player, deathFxId);
+                HandleKilled(killedByPlayer, deathFxId);
             }
             
             // TODO: Update for fusion
             //send player back to the team area, this will get overwritten by the exact position from the client itself later on
             //we just do this to avoid players "popping up" from the position they died and then teleporting to the team area instantly
             //this is manipulating the internal PhotonTransformView cache to update the networkPosition variable
-            GetComponent<PhotonTransformView>().OnPhotonSerializeView(new PhotonStream(false, new object[] { GameManager.TeamController.GetSpawnPosition(TeamIndex),
-                                                                                                             Vector3.zero, Quaternion.identity }), new PhotonMessageInfo());
+            transform.position = GameManager.TeamController.GetSpawnPosition(TeamIndex);
+            // GetComponent<PhotonTransformView>().OnPhotonSerializeView(new PhotonStream(false, new object[] { GameManager.TeamController.GetSpawnPosition(TeamIndex),
+                                                                                                             // Vector3.zero, Quaternion.identity }), new PhotonMessageInfo());
             
             // Player is alive
             if (isActive)
@@ -543,7 +545,7 @@ namespace TanksMP
             }
         }
 
-        protected void HandleKilled(Player player, string deathFxId)
+        protected void HandleKilled(Player killedByPlayer, string deathFxId)
         {
             IsAlive = false;
                 
@@ -554,7 +556,7 @@ namespace TanksMP
             }
                 
             //find original sender game object (killedBy)
-            if (player != null && player.gameObject != null) killedBy = player.gameObject;
+            if (killedByPlayer != null && killedByPlayer.gameObject != null) killedBy = killedByPlayer.gameObject;
                 
             PlayerViewController.SpawnDeathFx(deathFxId);
                 
@@ -652,9 +654,7 @@ namespace TanksMP
             Collectible[] collectibles = GetComponentsInChildren<Collectible>(true);
             for (int i = 0; i < collectibles.Length; i++)
             {
-                // TODO: Re-write using Fusion
-                PhotonNetwork.RemoveRPCs(collectibles[i].spawner.photonView);
-                collectibles[i].spawner.photonView.RPC("Drop", RpcTarget.AllBuffered, transform.position);
+                collectibles[i].spawner.Drop(transform.position);
             }
         }
 
@@ -689,24 +689,24 @@ namespace TanksMP
         }
         
         // Re-write in Fusion
-        public void OnPhotonInstantiate(PhotonMessageInfo info)
-        {
-            CharacterAppearanceSerializable characterAppearanceSerializable = null;
-            
-            try
-            {
-                characterAppearanceSerializable = CharacterAppearanceSerializable.Decrypt(
-                        (string)info.Sender.CustomProperties[Vashta.Entropy.SaveLoad.PrefsKeys.characterAppearance]);
-            }
-            catch (Exception e)
-            {
-                characterAppearanceSerializable = new CharacterAppearanceSerializable();
-                Debug.LogWarning("Warning!  Could not load character from Custom Properties. " + e);
-            }
-
-            CharacterAppearance characterAppearance = GetComponentInChildren<CharacterAppearance>();
-            characterAppearance.LoadFromSerialized(characterAppearanceSerializable);
-        }
+        // public void OnPhotonInstantiate(PhotonMessageInfo info)
+        // {
+        //     CharacterAppearanceSerializable characterAppearanceSerializable = null;
+        //     
+        //     try
+        //     {
+        //         characterAppearanceSerializable = CharacterAppearanceSerializable.Decrypt(
+        //                 (string)info.Sender.CustomProperties[Vashta.Entropy.SaveLoad.PrefsKeys.characterAppearance]);
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         characterAppearanceSerializable = new CharacterAppearanceSerializable();
+        //         Debug.LogWarning("Warning!  Could not load character from Custom Properties. " + e);
+        //     }
+        //
+        //     CharacterAppearance characterAppearance = GetComponentInChildren<CharacterAppearance>();
+        //     characterAppearance.LoadFromSerialized(characterAppearanceSerializable);
+        // }
 
         public void SetClass(ClassDefinition newClassDefinition, bool respawnPlayer, bool applyInstantly)
         {
@@ -744,17 +744,15 @@ namespace TanksMP
                 GameManager.ui.CastUltimateButton.UpdateSpellIcon(classDefinition.ultimateIcon);
         }
         
-        public void ApplyStatusEffect(string statusEffectId, int ownerId)
+        public void ApplyStatusEffect(string statusEffectId, Player effectOwnerPlayer)
         {
-            Player owner = PlayerList.GetPlayerById(ownerId);
-
-            if (owner == null)
+            if (effectOwnerPlayer == null)
             {
                 Debug.Log("Player is null!");
                 return;
             }
 
-            StatusEffectController.AddStatusEffect(statusEffectId, owner);
+            StatusEffectController.AddStatusEffect(statusEffectId, effectOwnerPlayer);
         }
 
         /// <summary>
@@ -844,13 +842,7 @@ namespace TanksMP
 
         public TeamDefinition GetTeamDefinition()
         {
-            return CharacterAppearance.Team.teamDefinition;
-        }
-        
-        public int GetId()
-        {
-            // Need to verify this is the right way to do it
-            return Object.Id;
+            return CharacterAppearance.teamInstance.teamDefinition;
         }
         
         public void ResetPlayerState()

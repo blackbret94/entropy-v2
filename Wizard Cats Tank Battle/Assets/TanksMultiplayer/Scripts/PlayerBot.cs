@@ -82,14 +82,14 @@ namespace TanksMP
             targetPoint = GameManager.GetInstance().TeamController.GetSpawnPosition(TeamIndex);
             agent.Warp(targetPoint);
 
-            Team team = GameManager.GetInstance().TeamController.teams[TeamIndex];
-            CharacterAppearance.Team = team;
+            TeamInstance teamInstance = GameManager.GetInstance().TeamController.teams[TeamIndex];
+            CharacterAppearance.teamInstance = teamInstance;
             CharacterAppearance.ColorizeCart();
             
             myName = CatNameGenerator.GetRandomName();
             PlayerViewController.SetName(myName);
             
-            PlayerViewController.SetTeam(team.teamDefinition);
+            PlayerViewController.SetTeam(teamInstance.teamDefinition);
             
             GameManager.ui.GameLogPanel.EventPlayerJoined(PlayerName);
             rb = GetComponent<Rigidbody>();
@@ -231,7 +231,7 @@ namespace TanksMP
         {
             //don't execute anything if the game is over already,
             //but termine the agent and path finding routines
-            if(GameManager.GetInstance().ScoreController.IsGameOver())
+            if(GameManager.IsGameOver())
             {
                 agent.isStopped = true;
                 StopAllCoroutines();
@@ -329,9 +329,9 @@ namespace TanksMP
         /// <summary>
         /// Override of the base method to handle bot respawn separately.
         /// </summary>
-        public override void Respawn(Player player, string deathFxId)
+        public override void Respawn(Player killedByPlayer, string deathFxId)
         {
-            StartCoroutine(RespawnCR(player, deathFxId));
+            StartCoroutine(RespawnCR(killedByPlayer, deathFxId));
         }
 
         //the actual respawn routine

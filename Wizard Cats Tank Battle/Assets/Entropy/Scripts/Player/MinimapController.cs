@@ -64,13 +64,13 @@ namespace Entropy.Scripts.Player
             if (teamIndex != _teamIndex)
             {
                 _teamIndex = teamIndex;
-                Team team = GameManager.GetInstance().TeamController.GetTeamByIndex(_teamIndex + 1);
+                TeamInstance teamInstance = GameManager.GetInstance().TeamController.GetTeamByIndex(_teamIndex + 1);
 
                 try
                 {
-                    if (team != null && team.teamDefinition != null)
+                    if (teamInstance != null && teamInstance.teamDefinition != null)
                     {
-                        MiniMap.SetPointerColor(team.teamDefinition.TeamColorPrim);
+                        MiniMap.SetPointerColor(teamInstance.teamDefinition.TeamColorPrim);
                     }
                 }
                 catch (NullReferenceException e)
@@ -108,11 +108,11 @@ namespace Entropy.Scripts.Player
                 bl_MapPointer mapPointer = _spawnedPointer.GetComponent<bl_MapPointer>();
                 if (mapPointer)
                 {
-                    Team team = GameManager.GetInstance().TeamController.teams[teamIndex];
+                    TeamInstance teamInstance = GameManager.GetInstance().TeamController.teams[teamIndex];
 
-                    if (team != null)
+                    if (teamInstance != null)
                     {
-                        mapPointer.SetColor(team.teamDefinition.TeamColorPrim);
+                        mapPointer.SetColor(teamInstance.teamDefinition.TeamColorPrim);
                     }
                 }
             }

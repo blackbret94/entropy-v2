@@ -1,14 +1,20 @@
 using System.Collections;
-using Photon.Pun;
-using Photon.Realtime;
+using Fusion;
 using TanksMP;
 using UnityEngine;
-using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace Vashta.Entropy.PhotonExtensions
 {
-    public class RoomConnectionController : MonoBehaviour
+    public class RoomConnectionController : SimulationBehaviour
     {
+        public RoomOptionsFactory RoomOptionsFactory;
+        private NetworkManagerCustom _networkManager;
+
+        private void Start()
+        {
+            _networkManager = NetworkManagerCustom.GetInstance();
+        }
+        
         /// <summary>
         /// Tries to enter the game scene. Sets the loading screen active while connecting to the
         /// Matchmaker and starts the timeout coroutine at the same time.
@@ -22,12 +28,12 @@ namespace Vashta.Entropy.PhotonExtensions
             if (networkMode == NetworkMode.Online)
             {
                 // Join online
-                NetworkManagerCustom.JoinRandomRoom();
+                _networkManager.JoinRandomRoom();
             }
             else
             {
                 // Join offline
-                NetworkManagerCustom.GetInstance().JoinRandomRoomOffline(new Hashtable());
+                _networkManager.JoinRandomRoomOffline(new StartGameArgs());
             }
             
             // NetworkManagerCustom.StartMatch((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode));
@@ -37,15 +43,9 @@ namespace Vashta.Entropy.PhotonExtensions
         public void Play(string mapName, int gameMode)
         {
             UIMain.GetInstance().ToggleLoadingWindow(true);
-            
-            Hashtable expectedCustomRoomProperties = 
-                new Hashtable()
-                {
-                    { RoomKeys.mapKey, mapName},
-                    { RoomKeys.modeKey, (byte)gameMode }
-                };
-            
-            PhotonNetwork.JoinRandomRoom(expectedCustomRoomProperties, 0);
+
+            StartGameArgs startGameArgs = RoomOptionsFactory.CreateRoomOptions(mapName, (byte)gameMode);
+            Runner.StartGame(startGameArgs);
             StartCoroutine(HandleTimeout());
         }
 
@@ -53,28 +53,22 @@ namespace Vashta.Entropy.PhotonExtensions
         {
             UIMain.GetInstance().ToggleLoadingWindow(true);
             
-            Hashtable expectedCustomRoomProperties = 
-                new Hashtable()
-                {
-                    { RoomKeys.mapKey, mapName},
-                    { RoomKeys.modeKey, (byte)gameMode }
-                };
-            
-            NetworkManagerCustom.GetInstance().JoinRandomRoomOffline(expectedCustomRoomProperties);
+            StartGameArgs startGameArgs = RoomOptionsFactory.CreateRoomOptions(mapName, (byte)gameMode);
+            NetworkManagerCustom.GetInstance().JoinRandomRoomOffline(startGameArgs);
         }
 
         public void JoinRoom(string roomName)
         {
             UIMain.GetInstance().ToggleLoadingWindow(true);
-            NetworkManagerCustom.JoinRoom(roomName);
+            NetworkManagerCustom.GetInstance().JoinRoom(roomName);
             // NetworkManagerCustom.StartMatch((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode));
             StartCoroutine(HandleTimeout());
         }
 
-        public void CreateRoom(RoomOptions roomOptions)
+        public void CreateRoom(StartGameArgs startGameArgs)
         {
             UIMain.GetInstance().ToggleLoadingWindow(true);
-            NetworkManagerCustom.CreateMatch(roomOptions);
+            NetworkManagerCustom.GetInstance().CreateMatch(startGameArgs);
             StartCoroutine(HandleTimeout());
         }
         
@@ -84,7 +78,7 @@ namespace Vashta.Entropy.PhotonExtensions
             yield return new WaitForSeconds(10);
 
             //timeout has passed, we would like to stop joining a game now
-            PhotonNetwork.Disconnect();
+            Runner.Shutdown();
             //display connection issue window
             OnConnectionError();
         }

@@ -68,19 +68,19 @@ namespace Vashta.Entropy.GameMode
                     // Server only
                     // Award points to teamControllingPoint
                     if (teamControllingPoint != -1)
-                        GameManager.ScoreController.AddScore(ScoreType.HoldPoint, teamControllingPoint);
+                        GameManager.TeamController.AddScore(ScoreType.HoldPoint, teamControllingPoint);
                 }
             }
             
             _lastTick = Time.time;
             
-            if (GameManager.GetInstance().ScoreController.IsGameOver())
+            if (GameManager.IsGameOver())
             {
                 GameManager.Runner.SessionInfo.IsOpen = false;
 
-                int teamWithHighestScore = GameManager.ScoreController.GetTeamWithHighestScore();
+                int teamWithHighestScore = GameManager.TeamController.GetTeamWithHighestScore();
                 
-                GameManager.RoomController.GameOver((byte)teamWithHighestScore);
+                GameManager.GameOverController.GameOver((byte)teamWithHighestScore);
     
                 _timerIsRunning = false;
                 _hasCalledGameOver = true;

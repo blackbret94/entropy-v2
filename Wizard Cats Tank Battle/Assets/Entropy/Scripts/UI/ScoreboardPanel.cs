@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TanksMP;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Vashta.Entropy.Scoreboard;
@@ -11,11 +12,17 @@ namespace Vashta.Entropy.UI
         public bool ControlsHUD = true;
         [FormerlySerializedAs("TeamPanel")] public List<ScoreboardPlayerBadge> PlayerRows;
         private ScoreboardCalculator _scoreboardCalculator;
-
+        private GameManager _gameManager;
         private bool _hasInit = false;
+
+        private void Awake()
+        {
+            _scoreboardCalculator = new ScoreboardCalculator();
+        }
         
         private void Start()
         {
+            _gameManager = GameManager.GetInstance();
             Init();
         }
 
@@ -23,8 +30,7 @@ namespace Vashta.Entropy.UI
         {
             if (_hasInit)
                 return;
-
-            _scoreboardCalculator = new ScoreboardCalculator();
+            
             Inflate();
 
             _hasInit = true;
@@ -61,7 +67,7 @@ namespace Vashta.Entropy.UI
         private void Inflate()
         {
             List<ScoreboardRowData> rows = _scoreboardCalculator.GetScores(true);
-            List<TeamState> teamStates = TeamUtility.GetTeamStates();
+            List<TeamStateSnapshot> teamStates = _gameManager.TeamController.GetTeamStates();
 
             if(rows.Count > PlayerRows.Count)
                 Debug.LogWarning($"There are more rows ({teamStates.Count}) than panels ({PlayerRows.Count})");

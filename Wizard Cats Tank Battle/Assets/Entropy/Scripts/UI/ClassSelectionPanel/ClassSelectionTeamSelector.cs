@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.GameState;
 
 namespace Vashta.Entropy.UI.ClassSelectionPanel
 {
@@ -36,7 +36,7 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
         public int SelectedTeamIndex()
         {
             if (_activeSelection.IsAutoAssign)
-                return PlayerExtensions.RANDOM_TEAM_INDEX;
+                return TeamController.RANDOM_TEAM_INDEX;
 
             return _activeSelection.TeamIndex;
         }

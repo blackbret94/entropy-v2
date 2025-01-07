@@ -1,6 +1,6 @@
 using TanksMP;
 using UnityEngine;
-using Player = Photon.Realtime.Player;
+using Vashta.Entropy.Scoreboard;
 
 namespace Vashta.Entropy.TanksExtensions
 {
@@ -9,38 +9,24 @@ namespace Vashta.Entropy.TanksExtensions
         public string Name { get; }
         public int Kills { get; }
         public int Deaths { get; }
-        public Team Team { get; }
-        public Material Material => Team.material;
+        public TeamInstance TeamInstance { get; }
+        public Material Material => TeamInstance.teamDefinition.Material;
         public bool IsLocalPlayer { get; }
 
         public Player Player { get; }
 
         public int ClassId { get; }
         public bool PlayerIsOnline { get; }
-        
-        public PlayerBot Bot { get; }
 
-        public ScoreboardRowData(Player player, Team team, bool isLocalPlayer)
+        public ScoreboardRowData(Player player, TeamInstance teamInstance, bool isLocalPlayer)
         {
             Player = player;
-            Name = player.NickName;
-            Kills = player.GetKills();
-            Deaths = player.GetDeaths();
-            Team = team;
+            Name = player.PlayerName;
+            Kills = player.Kills;
+            Deaths = player.Deaths;
+            TeamInstance = teamInstance;
             IsLocalPlayer = isLocalPlayer;
-            ClassId = player.GetClassId();
-            PlayerIsOnline = true;
-        }
-
-        public ScoreboardRowData(PlayerBot bot, Team team)
-        {
-            Bot = bot;
-            Name = bot.myName;
-            Kills = bot.kills;
-            Deaths = bot.deaths;
-            Team = team;
-            IsLocalPlayer = false;
-            ClassId = bot.classId;
+            ClassId = player.ClassId;
             PlayerIsOnline = true;
         }
 
@@ -64,21 +50,15 @@ namespace Vashta.Entropy.TanksExtensions
 
             return serializable;
         }
-
+        
         public bool IsAlive()
         {
             if (Player != null)
             {
-                // Get player health
-                return Player.GetIsAlive();
-            }
-
-            if (Bot != null)
-            {
-                return Bot.IsAlive;
+                return Player.IsAlive;
             }
             
-            Debug.LogError("Row is not attached to a player OR a bot!");
+            Debug.LogError("Row is not attached to a player!");
             return false;
         }
     }

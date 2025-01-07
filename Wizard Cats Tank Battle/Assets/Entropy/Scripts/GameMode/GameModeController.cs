@@ -1,5 +1,5 @@
+using TanksMP;
 using UnityEngine;
-using Vashta.Entropy.PhotonExtensions;
 
 namespace Vashta.Entropy.GameMode
 {
@@ -11,13 +11,14 @@ namespace Vashta.Entropy.GameMode
         public GameObject KothRoot;
         public GameObject KothsRoot;
 
-        private RoomOptionsReader _roomOptionsReader;
+        private NetworkManagerCustom _networkManager;
+        // private RoomOptionsReader _roomOptionsReader;
 
         private void Start()
         {
-            _roomOptionsReader = new RoomOptionsReader();
+            _networkManager = NetworkManagerCustom.GetInstance();
             
-            SetGameMode(_roomOptionsReader.GetGameMode());
+            SetGameMode(_networkManager.LocalPlayerInfo.GameModeEnum);
         }
 
         public void SetGameMode(TanksMP.GameMode gameMode)

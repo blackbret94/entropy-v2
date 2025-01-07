@@ -131,24 +131,24 @@ namespace Entropy.Scripts.Player
             }
         }
         
-        public void ColorizePlayerForTeam(Team team = null)
+        public void ColorizePlayerForTeam(TeamInstance teamInstance = null)
         {
-            if (team == null)
+            if (teamInstance == null)
             {
-                team = GameManager.TeamController.teams[_player.TeamIndex];
+                teamInstance = GameManager.TeamController.teams[_player.TeamIndex];
             }
 
             //get corresponding team and colorize renderers in team color
-            _characterAppearance.Team = team;
+            _characterAppearance.teamInstance = teamInstance;
             _characterAppearance.ColorizeCart();
             
-            SetTeam(team.teamDefinition);   
+            SetTeam(teamInstance.teamDefinition);   
 
             if (_player.IsLocal)
             {
                 if (PlayerAimGraphic)
                 {
-                    PlayerAimGraphic.SetColor(team.teamDefinition.GetPrimaryColorLight());
+                    PlayerAimGraphic.SetColor(teamInstance.teamDefinition.GetPrimaryColorLight());
                 }
             }
             else

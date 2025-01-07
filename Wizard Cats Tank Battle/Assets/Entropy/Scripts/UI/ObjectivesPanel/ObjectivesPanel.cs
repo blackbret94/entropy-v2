@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Photon.Pun;
 using TanksMP;
 using TMPro;
 using UnityEngine;
@@ -15,9 +14,11 @@ namespace Vashta.Entropy.UI.ObjectivesPanel
 
         private const float RefreshRateS = .33f;
         private float _lastRefreshTime;
+        private GameManager _gameManager;
         
         private void Start()
         {
+            _gameManager = GameManager.GetInstance();
             _lastRefreshTime = Time.time;
             Invoke(nameof(Init), .1f);
         }
@@ -38,20 +39,20 @@ namespace Vashta.Entropy.UI.ObjectivesPanel
         // None of this can be cached, as it may change in between refreshes
         private void RefreshContent()
         {
-            int teamIndex = PhotonNetwork.LocalPlayer.GetTeam();
+            int teamIndex = _gameManager.localPlayer.TeamIndex;
             
             // Get team mates
-            TeamState teamState = TeamUtility.GetTeamState(teamIndex);
+            TeamStateSnapshot teamStateSnapshot = _gameManager.TeamController.GetTeamState(teamIndex);
             
             // inflate based on team mates
             for (int i = 0; i < TeamPlayerRows.Count; i++)
             {
                 TeamPlayerRow uiRow = TeamPlayerRows[i];
                 
-                if (i < teamState.Size())
+                if (i < teamStateSnapshot.Size())
                 {
                     // Update row content
-                    ScoreboardRowData rowData = teamState.GetRow(i);
+                    ScoreboardRowData rowData = teamStateSnapshot.GetRow(i);
 
                     if (rowData == null)
                     {
@@ -60,7 +61,7 @@ namespace Vashta.Entropy.UI.ObjectivesPanel
                     }
                     
                     uiRow.OpenPanel();
-                    uiRow.Set(rowData.Name, rowData.ClassId, teamState.Color, rowData.IsAlive());
+                    uiRow.Set(rowData.Name, rowData.ClassId, teamStateSnapshot.Color, rowData.IsAlive());
                 }
                 else
                 {

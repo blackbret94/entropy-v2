@@ -3,8 +3,8 @@
  * 	You shall not license, sublicense, sell, resell, transfer, assign, distribute or
  * 	otherwise make available to any third party the Service or the Content. */
 
+using Fusion;
 using UnityEngine;
-using Photon.Pun;
 
 namespace TanksMP
 {
@@ -12,7 +12,7 @@ namespace TanksMP
     /// Base class for all derived Collectibles (health, shields, etc.) consumed or carried around.
     /// Extend this to create highly customized Collectible with specific functionality.
     /// </summary>
-	public class Collectible : MonoBehaviour
+	public class Collectible : SimulationBehaviour
 	{	    
         /// <summary>
         /// Clip to play when this Collectible is consumed by a player.
@@ -26,10 +26,10 @@ namespace TanksMP
         public ObjectSpawner spawner;
 
         /// <summary>
-        /// Persistent network (PhotonView) ID of the Player that picked up this Collectible.
+        /// Player that picked up this Collectible.
         /// </summary>
         [HideInInspector]
-        public int carrierId = -1;
+        public Player carrier;
         
                   
         /// <summary>
@@ -38,17 +38,13 @@ namespace TanksMP
         /// </summary>
         public virtual void OnTriggerEnter(Collider col)
 		{
-            if (!PhotonNetwork.IsMasterClient)
-                return;
-            
     		GameObject obj = col.gameObject;
 			Player player = obj.GetComponent<Player>();
 
             //try to apply collectible to player, the result should be true
             if (Apply(player))
             {
-                //destroy after use
-                spawner.photonView.RPC("Destroy", RpcTarget.All);           
+                spawner.Destroy();        
             }
 		}
 
@@ -99,7 +95,7 @@ namespace TanksMP
         void OnDespawn()
         {
             if (useClip) AudioManager.Play3D(useClip, transform.position);
-            carrierId = -1;
+            carrier = null;
             spawner.SetRespawn();
         }
     }

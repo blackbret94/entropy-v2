@@ -25,33 +25,23 @@ namespace Vashta.Entropy.UI
             PlayerName.color = color;
             
             Tagline.text = $"{points} {(points == 1 ? " Point" : " Points")}";
-            
-            GameObject playerGo = NetworkManagerCustom.GetInstance().GetPlayerGameObject(playerScoreData.Player);
 
-            // TODO: Handle copying bot outfits
-            if (playerGo == null)
-            {
-                Debug.LogWarning("Warning: Could not find game object for player for Game Over screen!");
-                Randomize(appearance, playerScoreData.Team);
-                return;
-            }
-
-            Player player = playerGo.GetComponent<Player>();
+            Player player = playerScoreData.Player;
             
             if (player == null)
             {
                 Debug.LogWarning("Warning: Player game object did not have Player component for Game Over screen!");
-                Randomize(appearance, playerScoreData.Team);
+                Randomize(appearance, playerScoreData.TeamInstance);
                 return;
             }
             
             Debug.Log("Copying outfit from player");
-            appearance.CopyFromOtherPlayer(player.CharacterAppearance, playerScoreData.Team);
+            appearance.CopyFromOtherPlayer(player.CharacterAppearance, playerScoreData.TeamInstance);
         }
 
-        private void Randomize(CharacterAppearance appearance, Team team)
+        private void Randomize(CharacterAppearance appearance, TeamInstance teamInstance)
         {
-            appearance.Team = team;
+            appearance.teamInstance = teamInstance;
             appearance.GetComponent<CharacterRandomAppearance>().Randomize(false);
             appearance.ColorizeCart();
 

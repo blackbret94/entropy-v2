@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using Entropy.Scripts.Audio;
 using Entropy.Scripts.Player.Inventory;
+using Fusion;
 using TanksMP;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Vashta.Entropy.Character.Prop;
 using Vashta.Entropy.SaveLoad;
 using Vashta.Entropy.ScriptableObject;
@@ -11,7 +13,7 @@ using Vashta.Entropy.UI;
 
 namespace Vashta.Entropy.Character
 {
-    public class CharacterAppearance : MonoBehaviour
+    public class CharacterAppearance : NetworkBehaviour
     {
         [Header("Dependencies")] 
         public Player Player;
@@ -37,7 +39,7 @@ namespace Vashta.Entropy.Character
 
         private CharacterAppearanceSerializable _lastSavedAppearance;
 
-        [HideInInspector] public Team Team;
+        [FormerlySerializedAs("Team")] [HideInInspector] public TeamInstance teamInstance;
         
         // Inventory Indexes
         private int
@@ -356,10 +358,10 @@ namespace Vashta.Entropy.Character
             ApplyOutfit();
         }
 
-        public void CopyFromOtherPlayer(CharacterAppearance source, Team team)
+        public void CopyFromOtherPlayer(CharacterAppearance source, TeamInstance teamInstance)
         {
             // Colorize
-            Team = team;
+            this.teamInstance = teamInstance;
             ColorizeCart();
             
             // Copy outfit
@@ -427,9 +429,9 @@ namespace Vashta.Entropy.Character
             }
             
             Material material;
-            if (Team.material != null)
+            if (teamInstance.teamDefinition.Material != null)
             {
-                material = Team.material;
+                material = teamInstance.teamDefinition.Material;
             }
             else
             {

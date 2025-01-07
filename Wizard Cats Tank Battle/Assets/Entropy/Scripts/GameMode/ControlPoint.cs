@@ -151,8 +151,8 @@ namespace Vashta.Entropy.GameMode
                         AwardPointsToPlayersOnCapture();
                         
                         // notify
-                        Team team = GameManager.GetInstance().TeamController.GetTeamByIndex(teamIndex);
-                        _gameManager.ui.GameLogPanel.EventCapturePointCaptured(team.teamDefinition);
+                        TeamInstance teamInstance = GameManager.GetInstance().TeamController.GetTeamByIndex(teamIndex);
+                        _gameManager.ui.GameLogPanel.EventCapturePointCaptured(teamInstance.teamDefinition);
                     }
                 }
             }
@@ -214,11 +214,11 @@ namespace Vashta.Entropy.GameMode
         // --------------------------------
         private void OnCaptureTeamIndexChanged()
         {
-            Team team = GameManager.GetInstance().TeamController.GetTeamByIndex(CaptureTeamIndex);
+            TeamInstance teamInstance = GameManager.GetInstance().TeamController.GetTeamByIndex(CaptureTeamIndex);
 
-            if (team != null)
+            if (teamInstance != null)
             {
-                ControlPointGraphics.ChangeTeamColorCapturing(team.teamDefinition);
+                ControlPointGraphics.ChangeTeamColorCapturing(teamInstance.teamDefinition);
             }
             else
             {
@@ -228,11 +228,11 @@ namespace Vashta.Entropy.GameMode
 
         private void OnControlledByTeamIndexChanged()
         {
-            Team team = GameManager.GetInstance().TeamController.GetTeamByIndex(ControlledByTeamIndex);
+            TeamInstance teamInstance = GameManager.GetInstance().TeamController.GetTeamByIndex(ControlledByTeamIndex);
 
-            if (team != null)
+            if (teamInstance != null)
             {
-                ControlPointGraphics.ChangeTeamColorControl(team.teamDefinition);
+                ControlPointGraphics.ChangeTeamColorControl(teamInstance.teamDefinition);
             }
             else
             {

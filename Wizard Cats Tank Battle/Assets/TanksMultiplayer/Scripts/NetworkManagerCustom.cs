@@ -7,17 +7,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Fusion;
+using Fusion.Sockets;
 using UnityEngine;
-using Photon.Pun;
-using Photon.Realtime;
 using UnityEngine.SceneManagement;
+using Vashta.Entropy.Network;
 using Vashta.Entropy.PhotonExtensions;
-using Vashta.Entropy.SaveLoad;
 using Vashta.Entropy.SceneNavigation;
 using Vashta.Entropy.Scripts.CBSIntegration;
-using Vashta.Entropy.TanksExtensions;
 using Vashta.Entropy.UI.MapSelection;
-using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace TanksMP
 {
@@ -27,10 +24,15 @@ namespace TanksMP
     /// </summary>
     [RequireComponent(typeof(RoomOptionsFactory))]
     [RequireComponent(typeof(AddressableSceneManager))]
-	public class NetworkManagerCustom : SimulationBehaviour
+    [RequireComponent(typeof(PlayerConnectionHandler))]
+	public class NetworkManagerCustom : SimulationBehaviour, IPlayerJoined, INetworkRunnerCallbacks
     {
         //reference to this script instance
         private static NetworkManagerCustom instance;
+        
+        public RegionController RegionController { get; private set; }
+        public UIMain UIMain { get; private set; }
+        public LocalPlayerInfo LocalPlayerInfo;
 
         /// <summary>
         /// Scene index that gets loaded when disconnecting from a game.
@@ -58,13 +60,11 @@ namespace TanksMP
         /// </summary>
         public static event Action connectionFailedEvent;
         
-        public string DefaultRegion = "us";
-        
-        private const string REGION_PREFS_KEY = "wctb_regionIndex";
         private RoomOptionsFactory _roomOptionsFactory;
 
         public MapDefinitionDictionary MapDefinitionDictionary;
         private AddressableSceneManager _addressableSceneManager;
+        private PlayerConnectionHandler _playerConnectionHandler;
 
         //initialize network view
         void Awake()
@@ -79,55 +79,29 @@ namespace TanksMP
                 Destroy(gameObject);
                 return;
             }
-
+            
             //adding a view to this gameobject with a unique viewID
             //this is to avoid having the same ID in a scene
-            PhotonView view = gameObject.AddComponent<PhotonView>();
-            view.ViewID = 999;
+            // PhotonView view = gameObject.AddComponent<PhotonView>();
+            // view.ViewID = 999;
             
             // Get components
             _roomOptionsFactory = GetComponent<RoomOptionsFactory>();
+            _addressableSceneManager = GetComponent<AddressableSceneManager>();
+            _playerConnectionHandler = GetComponent<PlayerConnectionHandler>();
+            RegionController = new RegionController();
 
             if (_roomOptionsFactory == null)
             {
                 Debug.LogError("Missing room options factory!");
             }
+        }
 
-            LoadRegion();
+        private void Start()
+        {
+            UIMain = UIMain.GetInstance();
         }
         
-        private AddressableSceneManager GetSceneManager()
-        {
-            if (!_addressableSceneManager)
-                _addressableSceneManager = GetComponent<AddressableSceneManager>();
-
-            if (!_addressableSceneManager)
-            {
-                Debug.LogError("A SceneNavigator is missing an AddressableSceneManager component!");
-            }
-
-            return _addressableSceneManager;
-        }
-        
-        public void SaveRegion(string region)
-        {
-            PlayerPrefs.SetString(REGION_PREFS_KEY, region);
-            PhotonNetwork.PhotonServerSettings.AppSettings.FixedRegion = region;
-        }
-
-        public string LoadRegion()
-        {
-            string region = PlayerPrefs.GetString(REGION_PREFS_KEY, DefaultRegion);
-            
-            PhotonNetwork.PhotonServerSettings.AppSettings.FixedRegion = region;
-            return region;
-        }
-
-        public string GetRegion()
-        {
-            return PhotonNetwork.PhotonServerSettings.AppSettings.FixedRegion;
-        }
-
         /// <summary>
         /// Returns a reference to this script instance.
         /// </summary>
@@ -142,19 +116,15 @@ namespace TanksMP
         /// </summary>
         public void Connect(NetworkMode mode)
         {
-            PhotonNetwork.AutomaticallySyncScene = true;
-            PhotonNetwork.NickName = CBSIntegrator.Instance.ProfileState.CachedDisplayName;
+            // PhotonNetwork.AutomaticallySyncScene = true;
+            LocalPlayerInfo.Name = CBSIntegrator.Instance.ProfileState.CachedDisplayName;
 
             switch (mode)
             {
                 //connects to a cloud game available on the Photon servers
                 case NetworkMode.Online:
-                    PhotonNetwork.ConnectUsingSettings();
-                    break;
-
-                //search for open LAN games on the current network, otherwise open a new one
-                case NetworkMode.LAN:
-                    PhotonNetwork.ConnectToMaster(PlayerPrefs.GetString(PrefsKeys.serverAddress), 5055, PhotonNetwork.PhotonServerSettings.AppSettings.AppIdRealtime);
+                    Runner.StartGame(new StartGameArgs { GameMode = Fusion.GameMode.Shared });
+                    // TODO: Pass in sessionName, scene
                     break;
 
                 //enable Photon offline mode to not send any network messages at all
@@ -175,10 +145,9 @@ namespace TanksMP
         /// <returns></returns>
         private IEnumerator Disconnect()
         {
-            NetworkRunner runner = UIMain.GetInstance().Runner;
-            runner.Disconnect();
+            Runner.Shutdown();
             
-            while (runner.IsRunning)
+            while (Runner.IsRunning)
             {
                 yield return null;
             }
@@ -198,20 +167,161 @@ namespace TanksMP
             Connect(NetworkMode.Online);
         }
 
-        public static void CreateMatch(RoomOptions roomOptions)
+        public void CreateMatch(StartGameArgs startGameArgs)
         {
-            PhotonNetwork.CreateRoom(null, roomOptions);
+            Runner.StartGame(startGameArgs);
         }
+
+        /// <summary>
+        /// Joins a random room, will eventually take parameters.  This is for "Quickplay"
+        /// </summary>
+        public void JoinRandomRoom()
+        {
+            StartGameArgs startGameArgs = _roomOptionsFactory.CreateRoomOptionsGameMode((byte)PlayerPrefs.GetInt(PrefsKeys.gameMode));
+            Runner.StartGame(startGameArgs);
+        }
+
+        public void JoinRandomRoom(string mapName, int gameMode)
+        {
+            StartGameArgs startGameArgs = _roomOptionsFactory.CreateRoomOptions(mapName, (byte)gameMode);
+            Runner.StartGame(startGameArgs);
+        }
+
+        public void JoinRandomRoomOffline(StartGameArgs startGameArgs)
+        {
+            StartCoroutine(DisconnectAndJoinRoom(startGameArgs));
+        }
+
+        private IEnumerator DisconnectAndJoinRoom(StartGameArgs startGameArgs)
+        {
+            yield return StartCoroutine(Disconnect());
+            startGameArgs.GameMode = Fusion.GameMode.Single;
+            Runner.StartGame(startGameArgs);
+        }
+
+        /// <summary>
+        /// Join a specific room by name
+        /// </summary>
+        public void JoinRoom(string roomName)
+        {
+            StartGameArgs startGameArgs = new StartGameArgs();
+            startGameArgs.SessionName = roomName;
+            Runner.StartGame(startGameArgs);
+        }
+
+        /// <summary>
+        /// Called when a creating a room failed. 
+        /// See the official Photon docs for more details.
+        /// </summary>
+        // public override void OnCreateRoomFailed(short returnCode, string message)
+        // {
+        //     Debug.LogError("Error creating room: " + returnCode + " : " + message);
+        //     
+        //     if (connectionFailedEvent != null)
+        //         connectionFailedEvent();
+        // }
 
 
         /// <summary>
-        /// Called if a connect call to the Photon server failed before or after the connection was established.
+        /// Called when this client created a room and entered it.
         /// See the official Photon docs for more details.
         /// </summary>
-        public override void OnDisconnected(DisconnectCause cause)
+        // public void OnSessionCreate(SessionInfo sessionInfo)
+        // {
+        //     string mapId = PlayerPrefs.GetString(PrefsKeys.selectedMap, "-1");
+        //     MapDefinition mapDefinition = MapDefinitionDictionary[mapId];
+        //     
+        //     //the initial team size of the game for the server creating a new room.
+        //     //unfortunately this cannot be set via the GameManager because it does not exist at that point
+        //     short initialArrayLength = mapDefinition.TeamCount;
+        //
+        //     //we created a room so we have to set the initial room properties for this room,
+        //     //such as populating the team fill and score arrays
+        //     Hashtable roomProps = new Hashtable();
+        //     roomProps.Add(RoomExtensions.size, new int[initialArrayLength]);
+        //     roomProps.Add(RoomExtensions.score, new int[initialArrayLength]);
+        //     PhotonNetwork.CurrentRoom.SetCustomProperties(roomProps);
+        //
+        //     // Load scene
+        //     onlineSceneIndex = mapDefinition.SceneName;
+        //     PhotonNetwork.LoadLevelFromBundle(onlineSceneIndex);
+        // }
+        
+        //this wait routine is needed on offline mode for waiting on completed scene change,
+        //because in offline mode Photon does not pause network messages. But it doesn't hurt
+        //leaving this in for all other network modes too
+        IEnumerator WaitForSceneChange()
         {
-            if (cause != DisconnectCause.DisconnectByClientLogic &&
-                cause != DisconnectCause.DisconnectByServerLogic &&
+            while (SceneManager.GetActiveScene().name != onlineSceneIndex)
+            {
+                yield return null;
+            }
+
+            //we connected ourselves
+            OnPlayerJoined(Runner, Runner.LocalPlayer);
+        }
+
+        /// <summary>
+        /// Finds the remotely controlled Player game object of a specific player,
+        /// by iterating over all Player components and searching for the matching creator.
+        /// </summary>
+        public Player GetPlayerGameObject(PlayerRef playerRef)
+        {
+            if (Runner.TryGetPlayerObject(playerRef, out NetworkObject playerObject))
+            {
+                Player player = playerObject.GetComponent<Player>();
+
+                if (player == null)
+                {
+                    Debug.LogError("PlayerRef: " + playerRef.PlayerId + " does not contain Player component!");
+                    return null;
+                }
+
+                return player;
+
+            }
+            else
+            {
+                Debug.LogError("Could not find PlayerRef: " + playerRef.PlayerId);
+                return null;
+            }
+        }
+
+        public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
+
+        public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
+
+        public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
+        {
+            //we've joined a finished room, disconnect immediately
+            if (GameManager.GetInstance() != null && GameManager.GetInstance().IsGameOver())
+            {
+                Runner.Shutdown();
+                return;
+            }
+
+            //add ourselves to the game. This is only called for the master client
+            //because other clients will trigger the OnPhotonPlayerConnected callback directly
+            StartCoroutine(WaitForSceneChange());
+        }
+
+        public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
+        {
+            UIGame uiGame = UIGame.GetInstance();
+            if (uiGame != null)
+            {
+                uiGame.SceneNavigator.GoToMainMenu();
+            }
+        }
+
+        public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
+        {
+            if (reason != NetDisconnectReason.Requested &&
                 connectionFailedEvent != null)
             {
                 connectionFailedEvent();
@@ -224,362 +334,89 @@ namespace TanksMP
                 return;
 
             //switch from the online to the offline scene after connection is closed
-            if (!GetSceneManager().IsMainMenu())
-                GetSceneManager().GoToScene("MainMenu");
+            if (!_addressableSceneManager.IsMainMenu())
+                _addressableSceneManager.GoToScene("MainMenu");
         }
 
-
-        /// <summary>
-        /// Called after the connection to the master is established.
-        /// See the official Photon docs for more details.
-        /// </summary>
-        public override void OnConnectedToMaster()
+        public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token)
         {
-            //set my own name and try joining a game
-            PhotonNetwork.NickName = CBSIntegrator.Instance.ProfileState.CachedDisplayName;
-
-            //use this to define per-mode matchmaking selections instead of joining random rooms (also see OnPhotonRandomJoinFailed() method)
-            //https://doc.photonengine.com/en-us/realtime/current/reference/matchmaking-and-lobby#not_so_random_matchmaking
-            // Hashtable expectedCustomRoomProperties = new Hashtable() { { "mode", (byte)PlayerPrefs.GetInt(PrefsKeys.gameMode) } };
-
-            //for truly random matchmaking you would use this call without properties
-            // PhotonNetwork.JoinRandomRoom(expectedCustomRoomProperties, (byte)0);
+            throw new NotImplementedException();
         }
 
-
-        /// <summary>
-        /// Joins a random room, will eventually take parameters.  This is for "Quickplay"
-        /// </summary>
-        public static void JoinRandomRoom()
+        public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
         {
-            Hashtable expectedCustomRoomProperties = new Hashtable() { { RoomKeys.modeKey, (byte)PlayerPrefs.GetInt(PrefsKeys.gameMode) } };
-            PhotonNetwork.JoinRandomRoom(expectedCustomRoomProperties, (byte)0);
-        }
-
-        public static void JoinRandomRoom(string mapName, int gameMode)
-        {
-            Hashtable expectedCustomRoomProperties = new Hashtable()
-            {
-                { RoomKeys.mapKey, mapName },
-                { RoomKeys.modeKey, (byte) gameMode }
-            };
-            PhotonNetwork.JoinRandomRoom(expectedCustomRoomProperties, (byte)0);
-        }
-
-        public void JoinRandomRoomOffline(Hashtable expectedCustomRoomProperties)
-        {
-            StartCoroutine(DisconnectAndJoinRoom(expectedCustomRoomProperties));
-        }
-
-        private IEnumerator DisconnectAndJoinRoom(Hashtable expectedCustomRoomProperties)
-        {
-            yield return StartCoroutine(Disconnect());
-            PhotonNetwork.OfflineMode = true;
-            PhotonNetwork.JoinRandomRoom(expectedCustomRoomProperties, (byte)0);
-        }
-
-        /// <summary>
-        /// Join a specific room by name
-        /// </summary>
-        public static void JoinRoom(string roomName)
-        {
-            PhotonNetwork.JoinRoom(roomName);
-        }
-
-
-        /// <summary>
-        /// Called when a joining a random room failed.
-        /// See the official Photon docs for more details.
-        /// </summary>
-        public override void OnJoinRandomFailed(short returnCode, string message)
-        {
+            // TODO: This is dated, a room should be created automatically if all else failed
             Debug.Log("Photon did not find any matches on the Master Client we are connected to. Creating our own room...");
 
             //joining failed so try to create our own room
             string mapId = PlayerPrefs.GetString(PrefsKeys.selectedMap, "-1");
             MapDefinition mapDefinition = MapDefinitionDictionary[mapId];
 
-            string roomName = _roomOptionsFactory.CreateRoomNameFromPlayerNickname(PhotonNetwork.NickName);
+            string roomName = _roomOptionsFactory.CreateRoomNameFromPlayerNickname(LocalPlayerInfo.Name);
             byte maxPlayersForMap = (byte)mapDefinition.PlayerCount;
             string mapName = mapDefinition.Title;
             GameMode gameMode = (GameMode)PlayerPrefs.GetInt(PrefsKeys.gameMode, (int)GameMode.TDM);
 
-            RoomOptions roomOptions = _roomOptionsFactory.InitRoomOptions(roomName, mapName, maxPlayersForMap, gameMode);
-            PhotonNetwork.CreateRoom(null, roomOptions, null);
+            StartGameArgs startGameArgs = _roomOptionsFactory.CreateRoomOptions(roomName, mapName, maxPlayersForMap, gameMode);
+            Runner.StartGame(startGameArgs);
         }
 
-
-        /// <summary>
-        /// Called when a creating a room failed. 
-        /// See the official Photon docs for more details.
-        /// </summary>
-        public override void OnCreateRoomFailed(short returnCode, string message)
+        public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message)
         {
-            Debug.LogError("Error creating room: " + returnCode + " : " + message);
-            
-            if (connectionFailedEvent != null)
-                connectionFailedEvent();
+            throw new NotImplementedException();
         }
 
-
-        /// <summary>
-        /// Called when this client created a room and entered it.
-        /// See the official Photon docs for more details.
-        /// </summary>
-        public override void OnCreatedRoom()
+        public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data)
         {
-            string mapId = PlayerPrefs.GetString(PrefsKeys.selectedMap, "-1");
-            MapDefinition mapDefinition = MapDefinitionDictionary[mapId];
-            
-            //the initial team size of the game for the server creating a new room.
-            //unfortunately this cannot be set via the GameManager because it does not exist at that point
-            short initialArrayLength = mapDefinition.TeamCount;
-
-            //we created a room so we have to set the initial room properties for this room,
-            //such as populating the team fill and score arrays
-            Hashtable roomProps = new Hashtable();
-            roomProps.Add(RoomExtensions.size, new int[initialArrayLength]);
-            roomProps.Add(RoomExtensions.score, new int[initialArrayLength]);
-            PhotonNetwork.CurrentRoom.SetCustomProperties(roomProps);
-
-            // Load scene
-            onlineSceneIndex = mapDefinition.SceneName;
-            PhotonNetwork.LoadLevelFromBundle(onlineSceneIndex);
+            throw new NotImplementedException();
         }
-        
-        /// <summary>
-        /// Called on entering a lobby on the Master Server.
-        /// See the official Photon docs for more details.
-        /// </summary>
-        public override void OnJoinedLobby()
+
+        public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress)
         {
-            //when connecting to the master, try joining a room
-            // PhotonNetwork.JoinRandomRoom();
+            throw new NotImplementedException();
         }
 
-
-        /// <summary>
-        /// Called when entering a room (by creating or joining it).
-        /// See the official Photon docs for more details.
-        /// </summary>
-        public override void OnJoinedRoom()
+        public void OnInput(NetworkRunner runner, NetworkInput input)
         {
-            //we've joined a finished room, disconnect immediately
-            if (GameManager.GetInstance() != null && GameManager.GetInstance().ScoreController.IsGameOver())
-            {
-                PhotonNetwork.Disconnect();
-                return;
-            }
-
-            if (!PhotonNetwork.IsMasterClient)
-                return;
-
-            //add ourselves to the game. This is only called for the master client
-            //because other clients will trigger the OnPhotonPlayerConnected callback directly
-            StartCoroutine(WaitForSceneChange());
+            throw new NotImplementedException();
         }
 
-
-        //this wait routine is needed on offline mode for waiting on completed scene change,
-        //because in offline mode Photon does not pause network messages. But it doesn't hurt
-        //leaving this in for all other network modes too
-        IEnumerator WaitForSceneChange()
+        public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
         {
-            while (SceneManager.GetActiveScene().name != onlineSceneIndex)
-            {
-                yield return null;
-            }
-
-            //we connected ourselves
-            OnPlayerEnteredRoom(PhotonNetwork.LocalPlayer);
+            throw new NotImplementedException();
         }
 
-
-        /// <summary>
-        /// Called when a remote player entered the room. 
-        /// See the official Photon docs for more details.
-        /// </summary>
-        public override void OnPlayerEnteredRoom(Photon.Realtime.Player player)
+        public void OnConnectedToServer(NetworkRunner runner)
         {
-            //only let the master client handle this connection
-            if (!PhotonNetwork.IsMasterClient)
-                return;
+            LocalPlayerInfo.Name = CBSIntegrator.Instance.ProfileState.CachedDisplayName;
 
-            //get the next team index which the player should belong to
-            //assign it to the player and update player properties
-            int teamIndex = GameManager.GetInstance().TeamController.GetTeamFill();
-            PhotonNetwork.CurrentRoom.AddSize(teamIndex, +1);
-            player.SetTeam(teamIndex);
-
-            //also player properties are not cleared when disconnecting and connecting
-            //automatically, so we have to set all existing properties to null
-            //these default values will get overriden by correct data soon
-            player.Clear();
-
-            //the master client sends an instruction to this player for adding him to the game
-            this.photonView.RPC("AddPlayer", player);
         }
 
+        public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) { }
 
-        //received from the master client, for this player, after successfully joining a game
-		[PunRPC]
-		void AddPlayer()
-		{
-            CharacterAppearanceSaveLoad.SetCurrentAppearanceAsCustomProperty();
-
-            //get our selected player prefab index
-            int prefabId = 0;
-            
-            //get the spawn position where our player prefab should be instantiated at, depending on the team assigned
-            //if we cannot get a position, spawn it in the center of that team area - otherwise use the calculated position
-			Transform startPos = GameManager.GetInstance().TeamController.teams[PhotonNetwork.LocalPlayer.GetTeam()].spawn;
-            
-			if (startPos != null) 
-                PhotonNetwork.Instantiate(playerPrefabs[prefabId].name, startPos.position, startPos.rotation, 0);
-			else 
-                PhotonNetwork.Instantiate(playerPrefabs[prefabId].name, Vector3.zero, Quaternion.identity, 0);
-            
-        }
-
-
-        /// <summary>
-        /// Called when a remote player left the room.
-        /// See the official Photon docs for more details.
-        /// </summary>
-        public override void OnPlayerLeftRoom(Photon.Realtime.Player player)
+        public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data)
         {
-            //only let the master client handle this connection
-            if (!PhotonNetwork.IsMasterClient)
-				return;
-
-            //get player-controlled game object from disconnected player
-            GameObject targetPlayer = GetPlayerGameObject(player);
-
-            //process any collectibles assigned to that player
-            if(targetPlayer != null)
-            {
-                Collectible[] collectibles = targetPlayer.GetComponentsInChildren<Collectible>(true);
-                for (int i = 0; i < collectibles.Length; i++)
-                {
-                    //let the player drop the Collectible
-                    PhotonNetwork.RemoveRPCs(collectibles[i].spawner.photonView);
-                    collectibles[i].spawner.photonView.RPC("Drop", RpcTarget.AllBuffered, targetPlayer.transform.position);
-                }
-            }
-            
-            // remove player from Scoreboard
-            PhotonNetwork.CurrentRoom.AddOfflinePlayerToScoreboard(player);
-
-            //clean up instances after processing leaving player
-            PhotonNetwork.DestroyPlayerObjects(player);
-            //decrease the team fill for the team of the leaving player and update room properties
-            PhotonNetwork.CurrentRoom.AddSize(player.GetTeam(), -1);
+            throw new NotImplementedException();
         }
 
-
-        /// <summary>
-        /// Finds the remotely controlled Player game object of a specific player,
-        /// by iterating over all Player components and searching for the matching creator.
-        /// </summary>
-        public GameObject GetPlayerGameObject(Photon.Realtime.Player player)
+        public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
         {
-            if (player == null)
-                return null;
-            
-            GameObject[] rootObjs = SceneManager.GetActiveScene().GetRootGameObjects();
-            List<Player> playerList = new List<Player>();
-
-            //get all Player components from root objects
-            for (int i = 0; i < rootObjs.Length; i++)
-            {
-                Player p = rootObjs[i].GetComponentInChildren<Player>(true);
-                if (p != null) playerList.Add(p);
-            }
-
-            //find the game object where the creator matches this specific player ID
-            for (int i = 0; i < playerList.Count; i++)
-            {
-                if (playerList[i] == null || playerList[i].photonView == null)
-                    return null;
-                
-                if (playerList[i].photonView.CreatorActorNr == player.ActorNumber)
-                {
-                    return playerList[i].gameObject;
-                }
-            }
-
-            return null;
+            throw new NotImplementedException();
         }
-    }
 
-
-    /// <summary>
-    /// Network Mode selection for preferred network type.
-    /// </summary>
-    public enum NetworkMode
-    {
-        Online = 0,
-        LAN = 1,
-        Offline = 2
-    }
-
-
-    /// <summary>
-    /// This class extends Photon's Room object by custom properties.
-    /// Provides several methods for setting and getting variables out of them.
-    /// </summary>
-    public static class RoomExtensions
-    {       
-        /// <summary>
-        /// The key for accessing team fill per team out of the room properties.
-        /// </summary>
-        public const string size = "size";
-        
-        /// <summary>
-        /// The key for accessing player scores per team out of the room properties.
-        /// </summary>
-        public const string score = "score";
-        
-        
-        /// <summary>
-        /// Returns the networked team fill for all teams out of properties.
-        /// </summary>
-        public static int[] GetSize(this Room room)
+        public void OnSceneLoadDone(NetworkRunner runner)
         {
-            return (int[])room.CustomProperties[size];
+            throw new NotImplementedException();
         }
-        
-        /// <summary>
-        /// Increases the team fill for a team by one when a new player joined the game.
-        /// This is also being used on player disconnect by using a negative value.
-        /// </summary>
-        public static int[] AddSize(this Room room, int teamIndex, int value)
-        {
-            int[] sizes = room.GetSize();
-            sizes[teamIndex] += value;
 
-            room.SetCustomProperties(new Hashtable() {{size, sizes}});
-            return sizes;
-        }
-        
-        /// <summary>
-        /// Returns the networked team scores for all teams out of properties.
-        /// </summary>
-        public static int[] GetScore(this Room room)
+        public void OnSceneLoadStart(NetworkRunner runner)
         {
-            return (int[])room.CustomProperties[score];
+            throw new NotImplementedException();
         }
-        
-        /// <summary>
-        /// Increase the score for a team by one when a new player scored a point for his team.
-        /// </summary>
-        public static int[] AddScore(this Room room, int teamIndex, int value)
+
+        public void PlayerJoined(PlayerRef player)
         {
-            int[] scores = room.GetScore();
-            scores[teamIndex] += value;
-            
-            room.SetCustomProperties(new Hashtable() {{score, scores}});
-            return scores;
+            throw new NotImplementedException();
         }
     }
 }

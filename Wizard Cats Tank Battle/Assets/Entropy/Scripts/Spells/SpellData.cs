@@ -89,7 +89,7 @@ namespace Vashta.Entropy.Spells
 
                 if (CastStatusEffectAllies)
                 {
-                    player.ApplyStatusEffect(CastStatusEffectAllies.Id, caster.GetId());
+                    player.ApplyStatusEffect(CastStatusEffectAllies.Id, caster);
                     PoolManager.Spawn(HealAlliesEffect, player.transform.position + Vector3.up, rotation);
                 }
             }
@@ -102,7 +102,7 @@ namespace Vashta.Entropy.Spells
 
                 if (CastStatusEffectEnemies)
                 {
-                    player.ApplyStatusEffect(CastStatusEffectEnemies.Id, caster.GetId());
+                    player.ApplyStatusEffect(CastStatusEffectEnemies.Id, caster);
                     PoolManager.Spawn(DamageEnemiesEffect, player.transform.position + Vector3.up, rotation);
                 }
             }

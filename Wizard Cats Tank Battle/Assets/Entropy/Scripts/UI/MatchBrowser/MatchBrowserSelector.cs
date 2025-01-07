@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
-using Photon.Pun;
-using Photon.Realtime;
+using Fusion;
+using TanksMP;
 using UnityEngine;
 using Vashta.Entropy.PhotonExtensions;
 
@@ -31,14 +30,14 @@ namespace Vashta.Entropy.UI.MatchBrowser
             Clear();
             
             // Get cache
-            Dictionary<string, RoomInfo> roomList = RoomListCache.RoomList;
+            Dictionary<string, SessionInfo> roomList = RoomListCache.RoomList;
 
             int validRooms = 0;
             
             // Create new lobby rows
-            foreach (KeyValuePair<string,RoomInfo> kvp in roomList)
+            foreach (KeyValuePair<string,SessionInfo> kvp in roomList)
             {
-                RoomInfo room = kvp.Value;
+                SessionInfo room = kvp.Value;
                 
                 if(!room.IsVisible)
                     continue;

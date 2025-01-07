@@ -14,7 +14,6 @@ using Vashta.Entropy.SceneNavigation;
 using Vashta.Entropy.UI;
 using Vashta.Entropy.UI.ClassSelectionPanel;
 using Vashta.Entropy.UI.GameLog;
-using Vashta.Entropy.UI.TeamScore;
 
 namespace TanksMP
 {
@@ -107,39 +106,6 @@ namespace TanksMP
             MusicController.PlayMusic();
             Minimap.SetActive(SettingsReader.GetShowMinimap());
         }
-
-
-        /// <summary>
-        /// This method gets called whenever room properties have been changed on the network.
-        /// Updating our team size and score UI display during the game.
-        /// See the official Photon docs for more details.
-        /// </summary>
-        public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
-		{
-			OnTeamSizeChanged(PhotonNetwork.CurrentRoom.GetSize());
-			OnTeamScoreChanged(PhotonNetwork.CurrentRoom.GetScore());
-		}
-
-
-        /// <summary>
-        /// This is an implementation for changes to the team fill,
-        /// updating the slider values (updates UI display of team fill).
-        /// </summary>
-        public void OnTeamSizeChanged(int[] size)
-        {
-            if(TeamScoreController.GetInstance())
-                TeamScoreController.GetInstance().UpdateTeamSizes(size);
-        }
-        
-        /// <summary>
-        /// This is an implementation for changes to the team score,
-        /// updating the text values (updates UI display of team scores).
-        /// </summary>
-        public void OnTeamScoreChanged(int[] score)
-        {
-            if(TeamScoreController.GetInstance())
-                TeamScoreController.GetInstance().UpdateScores(score);
-        }
         
         /// <summary>
         /// Enables or disables visibility of joystick controls.
@@ -155,7 +121,7 @@ namespace TanksMP
         /// Sets death text showing who killed the player in its team color.
         /// Parameters: killer's name, killer's team
         /// </summary>
-        public void SetDeathText(string playerName, Team team)
+        public void SetDeathText(string playerName, TeamInstance teamInstance)
         {
             //hide joystick controls while displaying death text
             #if UNITY_EDITOR || (!UNITY_STANDALONE && !UNITY_WEBGL)
@@ -163,7 +129,7 @@ namespace TanksMP
                 bulletIcon.SetActive(false);
             #endif
             
-            DeathPanel.Set(playerName, team);
+            DeathPanel.Set(playerName, teamInstance);
             MatchTimer.Hide();
         }
         
@@ -194,7 +160,7 @@ namespace TanksMP
         /// <summary>
         /// Set game end text and display winning team in its team color.
         /// </summary>
-        public void SetGameOverText(Team team)
+        public void SetGameOverText(TeamInstance teamInstance)
         {
             //hide joystick controls while displaying game end text
             #if UNITY_EDITOR || (!UNITY_STANDALONE && !UNITY_WEBGL)
@@ -202,11 +168,11 @@ namespace TanksMP
                 bulletIcon.SetActive(false);
             #endif
 
-            if (team != null)
+            if (teamInstance != null)
             {
                 //show winning team and colorize it by converting the team color to an HTML RGB hex value for UI markup
-                gameOverText.text = "TEAM <color=#" + ColorUtility.ToHtmlStringRGB(team.material.color) + ">" +
-                                    team.name + "</color> WINS!";
+                gameOverText.text = "TEAM <color=#" + ColorUtility.ToHtmlStringRGB(teamInstance.teamDefinition.Material.color) + ">" +
+                                    teamInstance.teamDefinition.TeamNameDisplay + "</color> WINS!";
             }
             else
             {
@@ -235,7 +201,6 @@ namespace TanksMP
             #endif
         }
 
-
         /// <summary>
         /// Returns to the starting scene and immediately requests another game session.
         /// In the starting scene we have the loading screen and disconnect handling set up already,
@@ -259,16 +224,7 @@ namespace TanksMP
         {
             NetworkRunner runner = UIMain.GetInstance().Runner;
             if (runner.IsRunning)
-                runner.Disconnect();
-        }
-
-
-        /// <summary>
-        /// Loads the starting scene. Disconnecting already happened when presenting the GameOver screen.
-        /// </summary>
-        public override void OnLeftRoom()
-        {
-            SceneNavigator.GoToMainMenu();
+                runner.Shutdown();
         }
 
         public void RefreshAimArrow()

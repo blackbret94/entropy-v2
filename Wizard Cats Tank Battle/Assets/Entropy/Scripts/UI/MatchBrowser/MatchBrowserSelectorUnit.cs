@@ -1,4 +1,4 @@
-using Photon.Realtime;
+using Fusion;
 using TanksMP;
 using TMPro;
 using UnityEngine;
@@ -20,7 +20,7 @@ namespace Vashta.Entropy.UI.MatchBrowser
         private string _roomName = "";
         private RoomInfoWrapper _roomInfoWrapper;
         
-        public void InitUnit(RoomInfo room)
+        public void InitUnit(SessionInfo room)
         {
             if (room == null) return;
 

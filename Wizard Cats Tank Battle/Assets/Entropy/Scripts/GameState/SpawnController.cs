@@ -77,7 +77,7 @@ namespace Vashta.Entropy.GameState
 
             //respawn now: send request to the server
             _gameManager.ui.DisableDeath();
-            _gameManager.localPlayer.Respawn();
+            _gameManager.localPlayer.Respawn(null);
         }
     }
 }

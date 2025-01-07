@@ -1,53 +1,34 @@
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Entropy.Scripts.Player
 {
     public class PlayerList
     {
-        private static Dictionary<int, TanksMP.Player> _playersByViewId = new ();
-        
-        public static List<TanksMP.Player> GetAllPlayers => _playersByViewId.Values.ToList();
+        private static List<TanksMP.Player> _players = new ();
 
-        public static void Add(int viewId, TanksMP.Player player)
+        public static List<TanksMP.Player> GetAllPlayers => _players;
+
+        public static void Add(TanksMP.Player player)
         {
-            _playersByViewId[viewId] = player;
+            _players.Add(player);
         }
 
-        public static void Remove(int viewId)
+        public static void Remove(TanksMP.Player player)
         {
-            _playersByViewId.Remove(viewId);
-        }
-        
-        /// <summary>
-        /// Attempt to get a player from an ID.  Returns null if player does not exist
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public static TanksMP.Player GetPlayerById(int id)
-        {
-            if (_playersByViewId.ContainsKey(id))
-                return _playersByViewId[id];
-
-            return null;
+            _players.Remove(player);
         }
 
         public static TanksMP.Player GetLocalPlayer()
         {
-            foreach (KeyValuePair<int, TanksMP.Player> keyValuePair in _playersByViewId)
+            foreach (var player in _players)
             {
-                TanksMP.Player kvpPlayer = keyValuePair.Value;
-
-                if (kvpPlayer != null && kvpPlayer.IsLocal && !kvpPlayer.isBot)
-                    return kvpPlayer;
+                if (player != null && player.IsLocal && !player.isBot)
+                {
+                    return player;
+                }
             }
 
             return null;
-        }
-
-        public static void Clear()
-        {
-            _playersByViewId.Clear();
         }
     }
 }

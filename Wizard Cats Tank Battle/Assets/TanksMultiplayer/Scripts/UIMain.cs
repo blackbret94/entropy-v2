@@ -5,9 +5,10 @@
 
 using Entropy.Scripts.Audio;
 using Fusion;
+using FusionHelpers;
 using UnityEngine;
 using UnityEngine.Serialization;
-using UnityEngine.UI;
+using Vashta.Entropy.GameState;
 using Vashta.Entropy.IO;
 using Vashta.Entropy.PhotonExtensions;
 using Vashta.Entropy.SaveLoad;
@@ -26,14 +27,17 @@ namespace TanksMP
         
         public GameObject loadingWindow;
         public GameObject connectionErrorWindow;
-
+        public WCTBSession WCTBSessionPrefab;
+        
         public IntroductionPanel IntroductionPanel;
         public MusicController MusicController;
         public SceneNavigator SceneNavigator;
+        public INetworkSceneManager NetworkSceneManager;
         [FormerlySerializedAs("RoomController")] public RoomConnectionController roomConnectionController;
 
         private PlayerNameVerification _playerNameVerification;
-
+        private FusionLauncher.ConnectionStatus _status = FusionLauncher.ConnectionStatus.Disconnected;
+        
         private static UIMain _instance;
         public static UIMain GetInstance() => _instance;
         
@@ -74,6 +78,40 @@ namespace TanksMP
             IntroductionPanel.Init();
         }
 
+        public void TempNetworkStart()
+        {
+            FusionLauncher.Launch(Fusion.GameMode.Shared, "us", "WCTB", WCTBSessionPrefab, NetworkSceneManager, OnConnectionStatusUpdate);
+        }
+        
+        private void OnConnectionStatusUpdate(NetworkRunner runner, FusionLauncher.ConnectionStatus status, string reason)
+        {
+            if (!this)
+                return;
+
+            Debug.Log(status);
+
+            if (status != _status)
+            {
+                switch (status)
+                {
+                    case FusionLauncher.ConnectionStatus.Disconnected:
+                        Debug.LogError("Disconnected!");
+                        break;
+                    case FusionLauncher.ConnectionStatus.Failed:
+                        Debug.LogError("Error");
+                        break;
+                }
+            }
+
+            _status = status;
+        }
+
+        public override void Render()
+        {
+            base.Render();
+            Debug.Log("Runner is available: " + Runner != null);
+        }
+        
         public void ShowConnectionErrorWindow()
         {
             loadingWindow.SetActive(false);

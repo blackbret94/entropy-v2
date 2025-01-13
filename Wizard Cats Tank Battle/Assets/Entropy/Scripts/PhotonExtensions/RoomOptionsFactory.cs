@@ -5,12 +5,19 @@ using Vashta.Entropy.ScriptableObject;
 
 namespace Vashta.Entropy.PhotonExtensions
 {
+    [RequireComponent(typeof(NetworkSceneManagerDefault))]
     public class RoomOptionsFactory : MonoBehaviour
     {
         public CatNameList CatNameList;
+        public NetworkSceneManagerDefault NetworkSceneManagerDefault;
 
         private const int MaxRoomNameLength = 30;
 
+        private void Awake()
+        {
+            NetworkSceneManagerDefault = GetComponent<NetworkSceneManagerDefault>();
+        }
+        
         /// <summary>
         /// Catches issues in room name, generates a name if empty
         /// </summary>
@@ -43,6 +50,7 @@ namespace Vashta.Entropy.PhotonExtensions
             startGameArgs.PlayerCount = maxPlayers;
             startGameArgs.IsVisible = isVisible;
             startGameArgs.GameMode = Fusion.GameMode.Shared;
+            startGameArgs.SceneManager = NetworkSceneManagerDefault;
             
             // custom properties
             Dictionary<string, SessionProperty> customProperties = new Dictionary<string, SessionProperty>();
@@ -62,6 +70,7 @@ namespace Vashta.Entropy.PhotonExtensions
             StartGameArgs startGameArgs = new StartGameArgs();
             startGameArgs.SessionProperties = customProperties;
             startGameArgs.GameMode = Fusion.GameMode.Shared;
+            startGameArgs.SceneManager = NetworkSceneManagerDefault;
 
             return startGameArgs;
         }
@@ -74,6 +83,7 @@ namespace Vashta.Entropy.PhotonExtensions
             StartGameArgs startGameArgs = new StartGameArgs();
             startGameArgs.SessionProperties = customProperties;
             startGameArgs.GameMode = Fusion.GameMode.Shared;
+            startGameArgs.SceneManager = NetworkSceneManagerDefault;
 
             return startGameArgs;
         }

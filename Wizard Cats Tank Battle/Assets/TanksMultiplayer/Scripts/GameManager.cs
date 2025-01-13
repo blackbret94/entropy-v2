@@ -79,14 +79,13 @@ namespace TanksMP
 
             TeamController.maxScore = GameModeDefinition.ScoreToWin;
 
-            MatchTimer.InitTimer();            
 
             //if Unity Ads is enabled, hook up its result callback
 #if UNITY_ADS
                 UnityAdsManager.adResultEvent += HandleAdResult;
 #endif
         }
-        
+
         /// <summary>
         /// Returns a reference to this script instance.
         /// </summary>

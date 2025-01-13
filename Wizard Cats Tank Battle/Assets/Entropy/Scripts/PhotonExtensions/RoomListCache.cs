@@ -32,7 +32,8 @@ namespace Vashta.Entropy.PhotonExtensions
         public void JoinLobby()
         {
             // TODO: Pass in sessionName, scene
-            UIMain.Runner.StartGame(new StartGameArgs { GameMode = Fusion.GameMode.Shared });
+            NetworkRunner runner = FindAnyObjectByType<NetworkRunner>();
+            runner.StartGame(new StartGameArgs { GameMode = Fusion.GameMode.Shared });
             //
             // Debug.Log("Attempted to join lobby: " + joinedLobby);
 

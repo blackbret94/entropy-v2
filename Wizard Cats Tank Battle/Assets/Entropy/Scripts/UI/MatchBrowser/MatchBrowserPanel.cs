@@ -1,3 +1,4 @@
+using Fusion;
 using TanksMP;
 using UnityEngine;
 
@@ -9,8 +10,10 @@ namespace Vashta.Entropy.UI.MatchBrowser
         {
             base.OpenPanel();
             PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Online);
+            
+            NetworkRunner runner = FindAnyObjectByType<NetworkRunner>();
 
-            if (!UIMain.GetInstance().Runner.IsRunning)
+            if (!runner.IsRunning)
             {
                 NetworkManagerCustom.GetInstance().Connect(NetworkMode.Online);
             }

@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using Entropy.Scripts.Player;
 using Fusion;
+using FusionHelpers;
 using UnityEngine;
 using Vashta.Entropy.Character;
 using Vashta.Entropy.GameState;
@@ -29,7 +30,7 @@ namespace TanksMP
     [RequireComponent(typeof(UltimateController))]
     [RequireComponent(typeof(MovementController))]
     [RequireComponent(typeof(ClassController))]
-    public class Player : NetworkBehaviour
+    public class Player : FusionPlayer
     {
         [Header("Stats")]
         public float acceleration = 30f;
@@ -135,7 +136,12 @@ namespace TanksMP
         
         public MinimapEntityControllerPlayer MinimapEntityControllerPlayer;
 
-        public PlayerRef PlayerId { get; private set; } = PlayerRef.None;
+        // public PlayerRef PlayerId { get; private set; } = PlayerRef.None;
+        public override void InitNetworkState()
+        {
+            throw new NotImplementedException();
+        }
+
         public string CharacterAppearanceSerialized { get; set; }
         
         // Lag compensation
@@ -178,7 +184,7 @@ namespace TanksMP
             rb = GetComponent<Rigidbody>();
             _playerCurrencyRewarder = new PlayerCurrencyRewarder();
 
-            PlayerId = Object.InputAuthority; 
+            // PlayerId = Object.InputAuthority; 
             
             // Local player logic
             if (HasInputAuthority && !isBot)

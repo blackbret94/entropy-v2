@@ -321,16 +321,20 @@ namespace TanksMP
             {
                 connectionFailedEvent();
             }
-            
+
             // Debug.LogError("Disconnect cause: " + cause);
-            
+
             //do not switch scenes automatically when the game over screen is being shown already
             if (GameManager.GetInstance() != null && GameManager.GetInstance().ui.gameOverMenu.activeInHierarchy)
                 return;
 
             //switch from the online to the offline scene after connection is closed
-            if (!_addressableSceneManager.IsMainMenu())
-                _addressableSceneManager.GoToScene("MainMenu");
+            UIGame uiGame = UIGame.GetInstance();
+            
+            if (!uiGame.SceneNavigator.IsMainMenu())
+            {
+                uiGame.SceneNavigator.GoToMainMenu();
+            }
         }
 
         public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token)

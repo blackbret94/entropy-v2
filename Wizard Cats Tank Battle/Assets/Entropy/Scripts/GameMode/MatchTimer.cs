@@ -6,19 +6,28 @@ namespace Vashta.Entropy.GameMode
 {
     public class MatchTimer : NetworkBehaviour
     {
-        [Networked] public double StartTime { get; private set; }
+        [Networked] public double StartTime { get; set; }
         public int maxTime = 120;
         
         private float _timerRefreshRate = .25f;
         private float _lastUpdateTime;
         private bool _matchTimerIsRunning = true;
-        
-        public void InitTimer()
+
+        private void Awake()
         {
+            // NetworkRunner networkRunner = FindFirstObjectByType<NetworkRunner>();
+            // networkRunner.RegisterSceneObjects();
+        }
+        
+        public override void Spawned()
+        {
+            Debug.Log("Spawned MatchTimer");
+            
             // If the room was just created, save the start time
-            if (Runner.IsSharedModeMasterClient)
+            NetworkRunner networkRunner = FindFirstObjectByType<NetworkRunner>();
+            if (networkRunner.IsSharedModeMasterClient)
             {
-                StartTime = Runner.SimulationTime;
+                StartTime = networkRunner.SimulationTime;
             }
         }
         
@@ -38,8 +47,8 @@ namespace Vashta.Entropy.GameMode
         {
             _matchTimerIsRunning = false;
         }
-        
-        private void Update()
+
+        public override void Render()
         {
             // slow update
             if (Time.time > _lastUpdateTime + _timerRefreshRate)

@@ -6,12 +6,10 @@ namespace Vashta.Entropy.GameState
     {
         protected override void OnPlayerAvatarAdded(FusionPlayer fusionPlayer)
         {
-            throw new System.NotImplementedException();
         }
 
         protected override void OnPlayerAvatarRemoved(FusionPlayer fusionPlayer)
         {
-            throw new System.NotImplementedException();
         }
     }
 }

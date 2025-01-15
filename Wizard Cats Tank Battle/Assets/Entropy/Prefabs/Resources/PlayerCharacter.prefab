@@ -11,9 +11,7 @@ GameObject:
   - component: {fileID: 488270}
   - component: {fileID: 5470280}
   - component: {fileID: 114000011901014096}
-  - component: {fileID: 114000013996810128}
   - component: {fileID: 4180604625767847630}
-  - component: {fileID: 114000013810182620}
   - component: {fileID: 4797552529484202075}
   - component: {fileID: 6748233522558695934}
   - component: {fileID: 2179171765462643800}
@@ -26,6 +24,8 @@ GameObject:
   - component: {fileID: 6810560899934130049}
   - component: {fileID: 308017525818048101}
   - component: {fileID: 8070046318466681018}
+  - component: {fileID: 8434275092302296597}
+  - component: {fileID: 5500810941453073650}
   m_Layer: 8
   m_Name: PlayerCharacter
   m_TagString: Untagged
@@ -88,12 +88,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0a5fa8dc87825e4f87e00cac1db08b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 10
-  maxShield: 5
+  _eventRelayPrefab: {fileID: 977658165655936267, guid: b0c6ee1da1e039f4ba312da784766343,
+    type: 3}
   acceleration: 30
   fireRate: 0.75
   moveSpeed: 7
   defaultMass: 1
+  _PlayerName: 
+  _TeamIndex: 0
+  maxHealth: 10
+  maxShield: 5
+  _Ammo: 0
+  _Bullet: 0
+  _JoinTime: 0
   turretRotation: 0
   turret: {fileID: 4305748445454077326}
   shotPos: {fileID: 6046886275116361424}
@@ -105,7 +112,6 @@ MonoBehaviour:
     type: 2}
   MinimapEntityControllerPlayer: {fileID: 7636866592782098713}
   lastDeathTime: 0
-  IsAlive: 1
   classList: {fileID: 11400000, guid: 7d8bbf25c3319e2428b905b7f07fbe8b, type: 2}
   StatusEffectDirectory: {fileID: 11400000, guid: 06185a77b443ee54b8ce18ae4e7db647,
     type: 2}
@@ -113,30 +119,8 @@ MonoBehaviour:
     type: 2}
   GameManager: {fileID: 0}
   isBot: 0
---- !u!114 &114000013996810128
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 112386}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 1
-  observableSearch: 0
-  ObservedComponents:
-  - {fileID: 114000013810182620}
-  - {fileID: 114000011901014096}
-  sceneViewId: 0
-  InstantiationId: -1
-  isRuntimeInstantiated: 0
+  _health: 0
+  _shield: 0
 --- !u!114 &4180604625767847630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,22 +142,6 @@ MonoBehaviour:
   PlayerAimGraphic: {fileID: 3869905314932566427}
   VisualEffectDirectory: {fileID: 11400000, guid: 907eecd40d7e32f47ae3c50ac7f9873b,
     type: 2}
---- !u!114 &114000013810182620
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 112386}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 0
 --- !u!114 &4797552529484202075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -407,6 +375,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 642f2490e1884fa88d237762c5c1c4a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8434275092302296597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fac291ca1c614ca5a80cda66d6bc4e52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5500810941453073650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 3000520799
+  ObjectInterest: 1
+  Flags: 131073
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 114000011901014096}
+  ForceRemoteRenderTimeframe: 0
 --- !u!1 &160484769436647168
 GameObject:
   m_ObjectHideFlags: 0
@@ -6286,12 +6285,10 @@ MonoBehaviour:
   Turret: {fileID: 11400000, guid: 0826967a79a5cb74482768e20312f93e, type: 2}
   Meow: {fileID: 11400000, guid: afc4034006af75f4699ab8fe35e0712b, type: 2}
   DefaultTeamMaterial: {fileID: 2100000, guid: c97449f961d124745bc2d7c5972ddd91, type: 2}
-  Team:
-    name: 
-    material: {fileID: 0}
-    spawn: {fileID: 0}
-    freeClassChange: {fileID: 0}
+  teamInstance:
     teamDefinition: {fileID: 0}
+    spawnArea: {fileID: 0}
+    freeClassChangeArea: {fileID: 0}
 --- !u!114 &4582838855916475694
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -24,6 +24,8 @@ namespace Vashta.Entropy.Network
         
         public void PlayerJoined(PlayerRef playerRef)
         {
+            // TODO: IS this causing the spam?
+            return;
             // Spawn player if local player
             if (Runner.LocalPlayer == playerRef)
             {

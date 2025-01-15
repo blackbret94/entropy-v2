@@ -24,17 +24,17 @@ namespace TanksMP
         //setting custom player properties would apply to all objects)
         [HideInInspector] public string myName;
         [HideInInspector] public int teamIndex;
-        [HideInInspector] public int health;
-        [HideInInspector] public int shield;
-        [HideInInspector] public int ammo;
-        [HideInInspector] public int currentBullet;
-        [HideInInspector] public int kills;
-        [HideInInspector] public int deaths;
-        [HideInInspector] public float joinTime;
-        [HideInInspector] public int classId;
-        [HideInInspector] public int classIdQueued;
-        [HideInInspector] public int ultimate;
-        [HideInInspector] public int powerup;
+        // [HideInInspector] public int health;
+        // [HideInInspector] public int shield;
+        // [HideInInspector] public int ammo;
+        // [HideInInspector] public int currentBullet;
+        // [HideInInspector] public int kills;
+        // [HideInInspector] public int deaths;
+        // [HideInInspector] public float joinTime;
+        // [HideInInspector] public int classId;
+        // [HideInInspector] public int classIdQueued;
+        // [HideInInspector] public int ultimate;
+        // [HideInInspector] public int powerup;
         
         /// <summary>
         /// Radius in units for detecting other players.
@@ -69,8 +69,24 @@ namespace TanksMP
 
 
         //called before SyncVar updates
-        void Start()
+        public override void Spawned()
         {
+            // TODO: This needs to inherit from base, but might conflict with Player
+            
+            ClassDefinition classDefinition = defaultClassDefinition ? defaultClassDefinition : classList.RandomClass();
+
+            _lastSecondUpdate = Time.time + .1f;
+            JoinTime = -Time.time;
+            ClassId = classDefinition.classId;
+            
+            ApplyClass();
+            
+            if (GameManager.TeamController.UsesTeams)
+            {
+                PlayerViewController.ColorizePlayerForTeam();
+                GameManager.ui.GameLogPanel.EventPlayerChangedTeam(PlayerName, GetTeamDefinition());
+            }
+            
             isBot = true;
             _playerCurrencyRewarder = new PlayerCurrencyRewarder();
             GameManager = GameManager.GetInstance();

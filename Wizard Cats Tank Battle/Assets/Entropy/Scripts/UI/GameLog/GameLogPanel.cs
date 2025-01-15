@@ -41,6 +41,12 @@ namespace Vashta.Entropy.UI.GameLog
 
         public void EventPlayerChangedTeam(string playerName, TeamDefinition playerTeamDefinition)
         {
+            if (!playerTeamDefinition)
+            {
+                Debug.LogError("Player joined invalid team!");
+                return;
+            }
+            
             string color = ColorUtility.ToHtmlStringRGB(playerTeamDefinition.TeamColorPrim);
             
             AddEvent($"<color=#{color}>{playerName}</color> joined Team <color=#{color}>{playerTeamDefinition.TeamNameDisplay}</color>");

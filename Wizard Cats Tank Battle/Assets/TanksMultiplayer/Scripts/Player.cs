@@ -3,14 +3,12 @@
  * 	You shall not license, sublicense, sell, resell, transfer, assign, distribute or
  * 	otherwise make available to any third party the Service or the Content. */
 
-using System;
 using System.Collections;
 using Entropy.Scripts.Player;
 using Fusion;
 using FusionHelpers;
 using UnityEngine;
 using Vashta.Entropy.Character;
-using Vashta.Entropy.GameState;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.Spells;
 using Vashta.Entropy.StatusEffects;
@@ -129,7 +127,7 @@ namespace TanksMP
 
         private Vector3 _lastMousePos;
 
-        private float _lastSecondUpdate;
+        protected float _lastSecondUpdate;
         private float _secondUpdateTime = 1f;
 
         private float _initTime;
@@ -139,18 +137,10 @@ namespace TanksMP
         // public PlayerRef PlayerId { get; private set; } = PlayerRef.None;
         public override void InitNetworkState()
         {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
 
         public string CharacterAppearanceSerialized { get; set; }
-        
-        // Lag compensation
-        private Vector3 networkVelocity;
-        private Vector3 networkPosition;
-
-        private short networkTurretRotation;
-        private float lastTransformUpdate;
-        private const float _maxTransformLerp = .15f; 
         
         // Spawn timer
         [HideInInspector]
@@ -167,11 +157,11 @@ namespace TanksMP
         public bool isBot = false;
         [SerializeField] private int _health;
         [SerializeField] private int _shield;
-
-        //initialize server values for this player
-        // Called on both Player and PlayerBot
-        void Awake()
+        
+        public override void Spawned()
         {
+            base.Spawned();
+            
             // Load dependencies
             GameManager = GameManager.GetInstance();
             CameraController = GetComponent<CameraController>();
@@ -183,8 +173,6 @@ namespace TanksMP
             InputController = GameManager.PlayerInputController;
             rb = GetComponent<Rigidbody>();
             _playerCurrencyRewarder = new PlayerCurrencyRewarder();
-
-            // PlayerId = Object.InputAuthority; 
             
             // Local player logic
             if (HasInputAuthority && !isBot)
@@ -195,65 +183,30 @@ namespace TanksMP
             }
             
             PlayerList.Add(this);
-
-            ClassDefinition classDefinition = defaultClassDefinition ? defaultClassDefinition : classList.RandomClass();
-
+            
             StartCoroutine(RefreshHudCoroutine());
             
             if (IsLocal)
             {
                 GameManager.ui.CastPowerupButton.gameObject.SetActive(false);
             }
+            
+            ClassDefinition classDefinition = defaultClassDefinition ? defaultClassDefinition : classList.RandomClass();
 
             _lastSecondUpdate = Time.time + .1f;
             JoinTime = -Time.time;
             ClassId = classDefinition.classId;
             
             ApplyClass();
-
-            lastTransformUpdate = Time.time;
-        }
-
-        // TODO: Check if this does anything
-        private IEnumerator RefreshHudCoroutine()
-        {
-            yield return new WaitForSeconds(.1f);
-            PlayerViewController.RefreshHealthSlider();
-        }
-
-        public void SetMaxHealth()
-        {
-            Health = maxHealth;
-        }
-
-        public void SetMaxShield()
-        {
-            Shield = maxShield;
-        }
-
-        private void OnDestroy()
-        {
-            PlayerList.Remove(this);
-            GameManager.ui.GameLogPanel.EventPlayerLeft(PlayerName);
-        }
-
-        /// <summary>
-        /// Initialize synced values on every client.
-        /// Initialize camera and input for this local client.
-        /// </summary>
-        void Start()
-        {
-            if (GameManager.TeamController.UsesTeams)
+            
+            if (IsLocal)
             {
-                PlayerViewController.ColorizePlayerForTeam();
-                GameManager.ui.GameLogPanel.EventPlayerChangedTeam(PlayerName, GetTeamDefinition());
+                CharacterAppearance.SaveLoad.Load();
             }
             
             PlayerViewController.SetName(PlayerName);
-            
             GameManager.ui.GameLogPanel.EventPlayerJoined(PlayerName);
-
-            ApplyClass();
+            GameManager.ui.GameLogPanel.EventPlayerChangedTeam(PlayerName, GetTeamDefinition());
             
             // refresh slider to fix render issues
             PlayerViewController.RefreshHealthSlider();
@@ -283,6 +236,29 @@ namespace TanksMP
             {
                 StatusEffectController.AddStatusEffect(StatusEffectApplyOnSpawn.Id, this);
             }
+        }
+        
+        // TODO: Check if this does anything
+        private IEnumerator RefreshHudCoroutine()
+        {
+            yield return new WaitForSeconds(.1f);
+            PlayerViewController.RefreshHealthSlider();
+        }
+
+        public void SetMaxHealth()
+        {
+            Health = maxHealth;
+        }
+
+        public void SetMaxShield()
+        {
+            Shield = maxShield;
+        }
+
+        private void OnDestroy()
+        {
+            PlayerList.Remove(this);
+            GameManager.ui.GameLogPanel.EventPlayerLeft(PlayerName);
         }
         
         public void ApplyTeamChange()
@@ -433,7 +409,7 @@ namespace TanksMP
             else
             {
                 // Stop network velocity if not moving
-                networkVelocity = Vector3.zero;
+                // networkVelocity = Vector3.zero;
             }
             
             //rotate turret to look at the mouse direction
@@ -726,7 +702,7 @@ namespace TanksMP
                 KillPlayer();
         }
         
-        private void ApplyClass()
+        protected void ApplyClass()
         {
             PlayerCollisionHandler playerCollisionHandler = GetComponent<PlayerCollisionHandler>();
 

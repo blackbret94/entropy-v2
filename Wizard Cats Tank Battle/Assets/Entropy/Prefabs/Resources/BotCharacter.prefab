@@ -1499,7 +1499,6 @@ GameObject:
   - component: {fileID: 5128119020115832740}
   - component: {fileID: 9042423296827168902}
   - component: {fileID: 7345902104007818426}
-  - component: {fileID: 8508617483650680493}
   - component: {fileID: 5307864634498360066}
   - component: {fileID: 7904873436139118149}
   - component: {fileID: 313655135951200484}
@@ -1513,6 +1512,8 @@ GameObject:
   - component: {fileID: 9211731162699355234}
   - component: {fileID: 7571687306469954801}
   - component: {fileID: 7746889400414041907}
+  - component: {fileID: 5294441234163762721}
+  - component: {fileID: 4385678458074626077}
   m_Layer: 8
   m_Name: BotCharacter
   m_TagString: Untagged
@@ -1575,12 +1576,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00797a65fce19114e9869756f1cd8724, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 10
-  maxShield: 5
+  _eventRelayPrefab: {fileID: 977658165655936267, guid: b0c6ee1da1e039f4ba312da784766343,
+    type: 3}
   acceleration: 30
   fireRate: 0.75
   moveSpeed: 7
   defaultMass: 1
+  _PlayerName: 
+  _TeamIndex: 0
+  maxHealth: 10
+  maxShield: 5
+  _Ammo: 0
+  _Bullet: 0
+  _JoinTime: 0
   turretRotation: 0
   turret: {fileID: 7764713437238784532}
   shotPos: {fileID: 2287832152565130358}
@@ -1591,7 +1599,6 @@ MonoBehaviour:
   defaultClassDefinition: {fileID: 0}
   MinimapEntityControllerPlayer: {fileID: 8814309887499864025}
   lastDeathTime: 0
-  IsAlive: 1
   classList: {fileID: 11400000, guid: 7d8bbf25c3319e2428b905b7f07fbe8b, type: 2}
   StatusEffectDirectory: {fileID: 11400000, guid: 06185a77b443ee54b8ce18ae4e7db647,
     type: 2}
@@ -1599,19 +1606,10 @@ MonoBehaviour:
     type: 2}
   GameManager: {fileID: 0}
   isBot: 0
+  _health: 0
+  _shield: 0
   myName: 
   teamIndex: 0
-  health: 0
-  shield: 0
-  ammo: 0
-  currentBullet: 0
-  kills: 0
-  deaths: 0
-  joinTime: 0
-  classId: 0
-  classIdQueued: 0
-  ultimate: 0
-  powerup: 0
   range: 6
   buffFrequencyS: 1
   accuracyError: 3.05
@@ -1660,29 +1658,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &8508617483650680493
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4388435187269524573}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 0
-  OwnershipTransfer: 0
-  observableSearch: 0
-  ObservedComponents:
-  - {fileID: 5128119020115832740}
-  sceneViewId: 0
-  InstantiationId: -1
-  isRuntimeInstantiated: 0
 --- !u!114 &5307864634498360066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1930,6 +1905,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 642f2490e1884fa88d237762c5c1c4a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5294441234163762721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4388435187269524573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fac291ca1c614ca5a80cda66d6bc4e52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4385678458074626077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4388435187269524573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 3311687514
+  ObjectInterest: 1
+  Flags: 131073
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 5128119020115832740}
+  ForceRemoteRenderTimeframe: 0
 --- !u!1 &4497364272883642154
 GameObject:
   m_ObjectHideFlags: 0
@@ -8256,12 +8262,10 @@ MonoBehaviour:
   Turret: {fileID: 11400000, guid: 0826967a79a5cb74482768e20312f93e, type: 2}
   Meow: {fileID: 11400000, guid: afc4034006af75f4699ab8fe35e0712b, type: 2}
   DefaultTeamMaterial: {fileID: 2100000, guid: c97449f961d124745bc2d7c5972ddd91, type: 2}
-  Team:
-    name: 
-    material: {fileID: 0}
-    spawn: {fileID: 0}
-    freeClassChange: {fileID: 0}
+  teamInstance:
     teamDefinition: {fileID: 0}
+    spawnArea: {fileID: 0}
+    freeClassChangeArea: {fileID: 0}
 --- !u!114 &2425203863067720665
 MonoBehaviour:
   m_ObjectHideFlags: 0

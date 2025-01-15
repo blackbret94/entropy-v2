@@ -13,7 +13,7 @@ using Vashta.Entropy.UI;
 
 namespace Vashta.Entropy.Character
 {
-    public class CharacterAppearance : NetworkBehaviour
+    public class CharacterAppearance : MonoBehaviour
     {
         [Header("Dependencies")] 
         public Player Player;
@@ -67,20 +67,27 @@ namespace Vashta.Entropy.Character
             if (Player == null)
                 // Wardrobe
                 StartCoroutine(LoadAppearanceWhenInventoryIsLoaded());
-            else if (SaveLoad && (Player != null && Player.IsLocal))
+            // else if (SaveLoad && (Player != null && Player.IsLocal))
                 // Gameplay, local player vs. other players
-                StartCoroutine(LoadAppearanceWhenInventoryIsLoaded());
+                // StartCoroutine(LoadAppearanceWhenInventoryIsLoaded());
         }
 
-        private IEnumerator LoadAppearanceWhenInventoryIsLoaded()
+        public IEnumerator LoadAppearanceWhenInventoryIsLoaded()
         {
+            if (PlayerInventory.PlayerInventorySaveLoad == null)
+                PlayerInventory.Init();
+            
             while (PlayerInventory.PlayerInventorySaveLoad == null)
+            {
                 yield return null;
-
+            }
+            
             PlayerInventorySaveLoad playerInventorySaveLoad = PlayerInventory.PlayerInventorySaveLoad;
-
+            
             while (!playerInventorySaveLoad.IsLoaded())
+            {
                 yield return null;
+            }
             
             SaveLoad.Load();
         }
@@ -111,6 +118,9 @@ namespace Vashta.Entropy.Character
         public void LoadAppearanceCallback(CharacterAppearanceSerializable appearance)
         {
             LoadFromSerialized(appearance);
+            
+            if(Player && Player.PlayerViewController)
+                Player.PlayerViewController.ColorizePlayerForTeam();
         }
 
         public void SaveAppearance()

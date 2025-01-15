@@ -38,6 +38,7 @@ namespace Vashta.Entropy.Character
         public Material DefaultTeamMaterial;
 
         private CharacterAppearanceSerializable _lastSavedAppearance;
+        private GameManager _gameManager;
 
         [FormerlySerializedAs("Team")] [HideInInspector] public TeamInstance teamInstance;
         
@@ -56,6 +57,11 @@ namespace Vashta.Entropy.Character
         public int CartIndex => _cartIndex;
         public int TurretIndex => _turretIndex;
         public int MeowIndex => _meowIndex;
+
+        private void Awake()
+        {
+            _gameManager = GameManager.GetInstance();
+        }
         
         public void Start()
         {
@@ -105,6 +111,15 @@ namespace Vashta.Entropy.Character
         public void RefreshAppearance()
         {
             LoadFromSerialized(_lastSavedAppearance);
+        }
+
+        public TeamInstance GetTeamInstance()
+        {
+            if (teamInstance != null)
+                return teamInstance;
+            
+            teamInstance = _gameManager.TeamController.teams[Player.TeamIndex];
+            return teamInstance;
         }
 
         private void InitSfxController()

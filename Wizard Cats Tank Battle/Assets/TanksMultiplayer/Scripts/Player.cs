@@ -206,7 +206,6 @@ namespace TanksMP
             
             PlayerViewController.SetName(PlayerName);
             GameManager.ui.GameLogPanel.EventPlayerJoined(PlayerName);
-            GameManager.ui.GameLogPanel.EventPlayerChangedTeam(PlayerName, GetTeamDefinition());
             
             // refresh slider to fix render issues
             PlayerViewController.RefreshHealthSlider();
@@ -266,63 +265,6 @@ namespace TanksMP
             PlayerViewController.ColorizePlayerForTeam();
             GameManager.ui.GameLogPanel.EventPlayerChangedTeam(PlayerName, GetTeamDefinition());
         }
-        
-        /// <summary>
-        /// OBSOLETE in Fusion
-        /// This method gets called whenever player properties have been changed on the network.
-        /// </summary>
-        // public override void OnPlayerPropertiesUpdate(Photon.Realtime.Player player, ExitGames.Client.Photon.Hashtable playerAndUpdatedProps)
-        // {
-        //     //only react on property changes for this player
-        //     if(player != photonView.Owner)
-        //         return;
-        //
-        //     //update values that could change any time for visualization to stay up to date
-        //     OnHealthChange(player.GetHealth());
-        //     OnShieldChange(player.GetShield());
-        //     
-        //     OnAmmoChange(player.GetBullet(), player.GetAmmo());
-        // }
-
-        
-        // OBSOLETE IN FUSION.  Re-write this
-        //this method gets called multiple times per second, at least 10 times or more
-        // void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-        // {        
-        //     if (stream.IsWriting)
-        //     {             
-        //         if (rb == null)
-        //             return;
-        //         
-        //         //here we send the turret rotation angle to other clients
-        //         stream.SendNext(turretRotation);
-        //         
-        //         // lag compensation
-        //         stream.SendNext(rb.position);
-        //         stream.SendNext(rb.velocity);
-        //     }
-        //     else
-        //     {
-        //         //here we receive the turret rotation angle from others and apply it
-        //         networkTurretRotation = (short)stream.ReceiveNext();
-        //         MovementController.OnTurretRotation();
-        //         
-        //         // lag compensation
-        //         networkPosition = (Vector3)stream.ReceiveNext();
-        //         networkVelocity = (Vector3)stream.ReceiveNext();
-        //         
-        //         if (rb == null)
-        //             return;
-        //         
-        //         rb.velocity = networkVelocity;
-        //         
-        //         float lag = Mathf.Abs((float) (PhotonNetwork.Time - info.timestamp));
-        //
-        //         float lagMultiplier = 2f;
-        //         networkPosition += (networkVelocity * lag * lagMultiplier);
-        //         lastTransformUpdate = Time.time;
-        //     }
-        // }
         
         protected virtual void Update()
         {
@@ -824,7 +766,7 @@ namespace TanksMP
 
         public TeamDefinition GetTeamDefinition()
         {
-            return CharacterAppearance.teamInstance.teamDefinition;
+            return CharacterAppearance.GetTeamInstance().teamDefinition;
         }
         
         public void ResetPlayerState()

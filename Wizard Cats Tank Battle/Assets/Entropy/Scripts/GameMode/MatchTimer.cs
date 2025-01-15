@@ -12,12 +12,6 @@ namespace Vashta.Entropy.GameMode
         private float _timerRefreshRate = .25f;
         private float _lastUpdateTime;
         private bool _matchTimerIsRunning = true;
-
-        private void Awake()
-        {
-            // NetworkRunner networkRunner = FindFirstObjectByType<NetworkRunner>();
-            // networkRunner.RegisterSceneObjects();
-        }
         
         public override void Spawned()
         {

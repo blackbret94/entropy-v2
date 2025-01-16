@@ -11,18 +11,18 @@ GameObject:
   - component: {fileID: 4000012160439120}
   - component: {fileID: 114000011365822250}
   - component: {fileID: 8396695766144529577}
-  - component: {fileID: 3511852511809456301}
   - component: {fileID: 7770444178506496997}
-  - component: {fileID: 7764882698486297933}
   - component: {fileID: 3938620412626201777}
   - component: {fileID: 6801212261942881887}
   - component: {fileID: 6354279513259406700}
+  - component: {fileID: 3431854093683024209}
+  - component: {fileID: 3517538556051977338}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &4000012160439120
 Transform:
@@ -53,39 +53,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   localPlayer: {fileID: 0}
   gameMode: 0
-  teams:
-  - name: RED
-    material: {fileID: 2100000, guid: bd77ec7e7c2bcec498601902e4b6e28d, type: 2}
-    spawn: {fileID: 0}
-    freeClassChange: {fileID: 0}
-    teamDefinition: {fileID: 0}
-  - name: BLUE
-    material: {fileID: 2100000, guid: c97449f961d124745bc2d7c5972ddd91, type: 2}
-    spawn: {fileID: 0}
-    freeClassChange: {fileID: 0}
-    teamDefinition: {fileID: 0}
-  - name: GREEN
-    material: {fileID: 2100000, guid: 5942ca0d18e9eeb47b312e51dec49088, type: 2}
-    spawn: {fileID: 0}
-    freeClassChange: {fileID: 0}
-    teamDefinition: {fileID: 0}
-  - name: YELLOW
-    material: {fileID: 2100000, guid: c4d04e17f416e5748ad3b305797df88b, type: 2}
-    spawn: {fileID: 0}
-    freeClassChange: {fileID: 0}
-    teamDefinition: {fileID: 0}
   ui: {fileID: 0}
   MusicController: {fileID: 0}
   PlayerInputController: {fileID: 0}
   SfxController: {fileID: 0}
-  BotTargetList:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  MatchTimer: {fileID: 8396695766144529577}
   mapDefinition: {fileID: 0}
-  GameModeDictionary: {fileID: 0}
+  GameModeDictionary: {fileID: 11400000, guid: df65c41f7b31fae40add89502279b5aa, type: 2}
 --- !u!114 &8396695766144529577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98,19 +71,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d76005541ae64685882fb13cbc064397, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _StartTime: 0
   maxTime: 600
---- !u!114 &3511852511809456301
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1000013481812936}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59b579c6a0664a7188681c72ba8db0d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &7770444178506496997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,21 +85,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc59223e912242bfb98e177f9bce31b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxBots: 0
-  prefabs: []
-  BotTargetList: []
---- !u!114 &7764882698486297933
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1000013481812936}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60a79c1e8f60489fbf772c19eac3b961, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  maxBots: 5
+  prefab: {fileID: 4388435187269524573, guid: c2ea8a2999a8dc94a9c822b0ff72b92c, type: 3}
+  BotTargetList:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &3938620412626201777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,7 +104,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fe3e9f194fa46fd83f8fe1fbaa908b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teams: []
+  teams:
+  - teamDefinition: {fileID: 11400000, guid: ab1c7d333a5d20e488f50a354eeea484, type: 2}
+    spawnArea: {fileID: 0}
+    freeClassChangeArea: {fileID: 0}
+  - teamDefinition: {fileID: 11400000, guid: 5d535f28dbbb1a74d8c837590e7fe762, type: 2}
+    spawnArea: {fileID: 0}
+    freeClassChangeArea: {fileID: 0}
+  _ScoreByTeamIndex: 00000000000000000000000000000000
+  _TeamSize: 00000000000000000000000000000000
 --- !u!114 &6801212261942881887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,4 +137,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cae6339ea13c4a6c9ae98cb7c69cbd2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  respawnTime: 5
+  respawnTime: 8
+--- !u!114 &3431854093683024209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000013481812936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87cd8ea999eb4d03ac10c2991bb4aef8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ControlPointsSingle: []
+  ControlPointsMulti: []
+  TickTimeS: 1
+  GameManager: {fileID: 114000011365822250}
+--- !u!114 &3517538556051977338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000013481812936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 734874360
+  ObjectInterest: 1
+  Flags: 131073
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 114000011365822250}
+  - {fileID: 8396695766144529577}
+  - {fileID: 3938620412626201777}
+  ForceRemoteRenderTimeframe: 0

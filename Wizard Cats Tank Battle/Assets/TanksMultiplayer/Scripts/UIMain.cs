@@ -1,14 +1,7 @@
-/*  This file is part of the "Tanks Multiplayer" project by FLOBUK.
- *  You are only allowed to use these resources if you've bought them from the Unity Asset Store.
- * 	You shall not license, sublicense, sell, resell, transfer, assign, distribute or
- * 	otherwise make available to any third party the Service or the Content. */
-
 using Entropy.Scripts.Audio;
 using Fusion;
-using FusionHelpers;
 using UnityEngine;
 using UnityEngine.Serialization;
-using Vashta.Entropy.GameState;
 using Vashta.Entropy.IO;
 using Vashta.Entropy.PhotonExtensions;
 using Vashta.Entropy.SaveLoad;
@@ -21,22 +14,19 @@ namespace TanksMP
     /// <summary>
     /// UI script for all elements, settings and user interactions in the menu scene.
     /// </summary>
-    public class UIMain : NetworkBehaviour
+    public class UIMain : SimulationBehaviour
     {
         public CatNameGenerator CatNameGenerator;
         
         public GameObject loadingWindow;
         public GameObject connectionErrorWindow;
-        public WCTBSession WCTBSessionPrefab;
         
         public IntroductionPanel IntroductionPanel;
         public MusicController MusicController;
         public SceneNavigator SceneNavigator;
-        public INetworkSceneManager NetworkSceneManager;
         [FormerlySerializedAs("RoomController")] public RoomConnectionController roomConnectionController;
 
         private PlayerNameVerification _playerNameVerification;
-        private FusionLauncher.ConnectionStatus _status = FusionLauncher.ConnectionStatus.Disconnected;
         
         private static UIMain _instance;
         public static UIMain GetInstance() => _instance;
@@ -76,40 +66,6 @@ namespace TanksMP
             NetworkManagerCustom.connectionFailedEvent += roomConnectionController.OnConnectionError;
             
             IntroductionPanel.Init();
-        }
-
-        public void TempNetworkStart()
-        {
-            FusionLauncher.Launch(Fusion.GameMode.Shared, "us", "WCTB", WCTBSessionPrefab, NetworkSceneManager, OnConnectionStatusUpdate);
-        }
-        
-        private void OnConnectionStatusUpdate(NetworkRunner runner, FusionLauncher.ConnectionStatus status, string reason)
-        {
-            if (!this)
-                return;
-
-            Debug.Log(status);
-
-            if (status != _status)
-            {
-                switch (status)
-                {
-                    case FusionLauncher.ConnectionStatus.Disconnected:
-                        Debug.LogError("Disconnected!");
-                        break;
-                    case FusionLauncher.ConnectionStatus.Failed:
-                        Debug.LogError("Error");
-                        break;
-                }
-            }
-
-            _status = status;
-        }
-
-        public override void Render()
-        {
-            base.Render();
-            Debug.Log("Runner is available: " + Runner != null);
         }
         
         public void ShowConnectionErrorWindow()

@@ -1,18 +1,14 @@
-/*  This file is part of the "Tanks Multiplayer" project by FLOBUK.
- *  You are only allowed to use these resources if you've bought them from the Unity Asset Store.
- * 	You shall not license, sublicense, sell, resell, transfer, assign, distribute or
- * 	otherwise make available to any third party the Service or the Content. */
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using Fusion;
 using Fusion.Sockets;
+using FusionHelpers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Vashta.Entropy.GameState;
 using Vashta.Entropy.Network;
 using Vashta.Entropy.PhotonExtensions;
-using Vashta.Entropy.SceneNavigation;
 using Vashta.Entropy.Scripts.CBSIntegration;
 using Vashta.Entropy.UI.MapSelection;
 
@@ -23,9 +19,8 @@ namespace TanksMP
     /// responsible for connecting to Photon's Cloud, spawning players and handling disconnects.
     /// </summary>
     [RequireComponent(typeof(RoomOptionsFactory))]
-    [RequireComponent(typeof(AddressableSceneManager))]
     [RequireComponent(typeof(PlayerConnectionHandler))]
-	public class NetworkManagerCustom : SimulationBehaviour, IPlayerJoined, INetworkRunnerCallbacks
+	public class NetworkManagerCustom : NetworkBehaviour, IPlayerJoined, INetworkRunnerCallbacks
     {
         //reference to this script instance
         private static NetworkManagerCustom instance;
@@ -33,6 +28,8 @@ namespace TanksMP
         public RegionController RegionController { get; private set; }
         public UIMain UIMain { get; private set; }
         public LocalPlayerInfo LocalPlayerInfo;
+        public WCTBSession WCTBSessionPrefab;
+        private INetworkSceneManager _networkSceneManager;
 
         /// <summary>
         /// Scene index that gets loaded when disconnecting from a game.
@@ -58,8 +55,8 @@ namespace TanksMP
         private RoomOptionsFactory _roomOptionsFactory;
 
         public MapDefinitionDictionary MapDefinitionDictionary;
-        private AddressableSceneManager _addressableSceneManager;
         private PlayerConnectionHandler _playerConnectionHandler;
+        private FusionLauncher.ConnectionStatus _status = FusionLauncher.ConnectionStatus.Disconnected;
 
         //initialize network view
         void Awake()
@@ -82,8 +79,8 @@ namespace TanksMP
             
             // Get components
             _roomOptionsFactory = GetComponent<RoomOptionsFactory>();
-            _addressableSceneManager = GetComponent<AddressableSceneManager>();
             _playerConnectionHandler = GetComponent<PlayerConnectionHandler>();
+            _networkSceneManager = GetComponent<INetworkSceneManager>(); 
             RegionController = new RegionController();
 
             if (_roomOptionsFactory == null)
@@ -95,6 +92,34 @@ namespace TanksMP
         private void Start()
         {
             UIMain = UIMain.GetInstance();
+        }
+        
+        public void TempNetworkStart()
+        {
+            FusionLauncher.Launch(Fusion.GameMode.Shared, "us", "WCTB", WCTBSessionPrefab, _networkSceneManager, OnConnectionStatusUpdate);
+        }
+        
+        private void OnConnectionStatusUpdate(NetworkRunner runner, FusionLauncher.ConnectionStatus status, string reason)
+        {
+            if (!this)
+                return;
+
+            Debug.Log(status);
+
+            if (status != _status)
+            {
+                switch (status)
+                {
+                    case FusionLauncher.ConnectionStatus.Disconnected:
+                        Debug.LogError("Disconnected!");
+                        break;
+                    case FusionLauncher.ConnectionStatus.Failed:
+                        Debug.LogError("Error");
+                        break;
+                }
+            }
+
+            _status = status;
         }
         
         /// <summary>

@@ -452,7 +452,6 @@ GameObject:
   - component: {fileID: 96511439}
   - component: {fileID: 96511438}
   - component: {fileID: 96511440}
-  - component: {fileID: 96511441}
   m_Layer: 0
   m_Name: UI
   m_TagString: Untagged
@@ -475,8 +474,6 @@ MonoBehaviour:
   CatNameGenerator: {fileID: 1105116849}
   loadingWindow: {fileID: 1516152654}
   connectionErrorWindow: {fileID: 1466157128}
-  WCTBSessionPrefab: {fileID: 5362442237197413631, guid: dd567080f4fb5564c85525d028ad3a30,
-    type: 3}
   IntroductionPanel: {fileID: 263119294}
   MusicController: {fileID: 1872291149}
   SceneNavigator: {fileID: 798326669}
@@ -509,25 +506,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RoomOptionsFactory: {fileID: 798326666}
---- !u!114 &96511441
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 96511437}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SortKey: 1191579045
-  ObjectInterest: 1
-  Flags: 131073
-  NestedObjects: []
-  NetworkedBehaviours:
-  - {fileID: 96511438}
-  ForceRemoteRenderTimeframe: 0
 --- !u!114 &109603139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1500,7 +1478,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 96511438}
+      objectReference: {fileID: 290476927}
     - target: {fileID: 8549020023456407612, guid: e3525f16adc1c744eaa650082e1483a3,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -1559,7 +1537,7 @@ PrefabInstance:
     - target: {fileID: 8549020023456407612, guid: e3525f16adc1c744eaa650082e1483a3,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: TanksMP.UIMain, Assembly-CSharp
+      value: TanksMP.NetworkManagerCustom, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 8549020023456407612, guid: e3525f16adc1c744eaa650082e1483a3,
         type: 3}
@@ -2512,6 +2490,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 114000012352245564, guid: a32e604ef2b6ef44aba370e493eff18b,
         type: 3}
+      propertyPath: WCTBSessionPrefab
+      value: 
+      objectReference: {fileID: 5362442237197413631, guid: dd567080f4fb5564c85525d028ad3a30,
+        type: 3}
+    - target: {fileID: 114000012352245564, guid: a32e604ef2b6ef44aba370e493eff18b,
+        type: 3}
       propertyPath: offlineSceneIndex
       value: MainMenu
       objectReference: {fileID: 0}
@@ -2527,6 +2511,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 30c179925a308d949b38e995f48c338a,
         type: 2}
+    - target: {fileID: 1363164014264861076, guid: a32e604ef2b6ef44aba370e493eff18b,
+        type: 3}
+      propertyPath: NetworkSceneManagerDefault
+      value: 
+      objectReference: {fileID: 798326670}
     - target: {fileID: 2144572899236054770, guid: a32e604ef2b6ef44aba370e493eff18b,
         type: 3}
       propertyPath: PlayerPrefab
@@ -2580,6 +2569,7 @@ MonoBehaviour:
   Flags: 131073
   NestedObjects: []
   NetworkedBehaviours:
+  - {fileID: 290476927}
   - {fileID: 798326669}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &798326669
@@ -2592,6 +2582,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20859f02afb449cb94be5c75e7ec3231, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &798326670 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2305170377924537170, guid: a32e604ef2b6ef44aba370e493eff18b,
+    type: 3}
+  m_PrefabInstance: {fileID: 798326665}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 798326667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90a93abf1a391964a94e5c139605105b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &819928015

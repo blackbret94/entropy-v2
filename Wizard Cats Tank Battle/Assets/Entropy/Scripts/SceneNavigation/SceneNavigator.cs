@@ -4,15 +4,12 @@ using UnityEngine.SceneManagement;
 
 namespace Vashta.Entropy.SceneNavigation
 {
-    [RequireComponent(typeof(AddressableSceneManager))]
     public class SceneNavigator: NetworkBehaviour
     {
         private const string SceneBasePath = "Assets/Entropy/Scenes/";
         private const string MainMenuSceneName = "MainMenu";
         private const string LoginSceneName = "Login";
         private const string InitSceneName = "Init";
-
-        private AddressableSceneManager _addressableSceneManager;
         
         public void GoToMainMenu()
         {

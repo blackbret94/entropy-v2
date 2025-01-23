@@ -5,6 +5,7 @@
 
 using System.Collections;
 using Entropy.Scripts.Player;
+using ExitGames.Client.Photon.StructWrapping;
 using Fusion;
 using FusionHelpers;
 using UnityEngine;
@@ -116,6 +117,7 @@ namespace TanksMP
         public MovementController MovementController { get; private set; }
         public ClassController ClassController { get; private set; }
         public CharacterAppearance CharacterAppearance;
+        public NetworkManagerCustom NetworkManagerCustom { get; private set; }
 
         //reference to this rigidbody
         #pragma warning disable 0649
@@ -173,6 +175,10 @@ namespace TanksMP
             InputController = GameManager.PlayerInputController;
             rb = GetComponent<Rigidbody>();
             _playerCurrencyRewarder = new PlayerCurrencyRewarder();
+            NetworkManagerCustom = NetworkManagerCustom.GetInstance();
+
+            PlayerName = NetworkManagerCustom.LocalPlayerInfo.Name;
+            Debug.Log("Setting player name: " + PlayerName);
             
             // Local player logic
             if (HasInputAuthority && !isBot)

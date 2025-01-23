@@ -96,6 +96,7 @@ namespace TanksMP
         
         public void TempNetworkStart()
         {
+            LocalPlayerInfo.Name = CBSIntegrator.Instance.ProfileState.CachedDisplayName;
             FusionLauncher.Launch(Fusion.GameMode.Shared, "us", "WCTB", WCTBSessionPrefab, _networkSceneManager, OnConnectionStatusUpdate);
         }
         

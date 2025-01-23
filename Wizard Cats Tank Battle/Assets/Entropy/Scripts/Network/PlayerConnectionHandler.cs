@@ -24,8 +24,6 @@ namespace Vashta.Entropy.Network
         
         public void PlayerJoined(PlayerRef playerRef)
         {
-            // TODO: IS this causing the spam?
-            return;
             // Spawn player if local player
             if (Runner.LocalPlayer == playerRef)
             {
@@ -33,19 +31,21 @@ namespace Vashta.Entropy.Network
                 int teamIndex = _gameManager.TeamController.GetTeamFill();
                 
                 // Spawn TODO: Improve so x and y are random
-                Transform spawnTransform = _gameManager.TeamController.teams[teamIndex].spawnArea;
-                Vector3 startPos = spawnTransform != null ? spawnTransform.position : Vector3.zero;
-                NetworkObject playerNetworkObject = Runner.Spawn(PlayerPrefab, startPos, Quaternion.identity);
+                // Transform spawnTransform = _gameManager.TeamController.teams[teamIndex].spawnArea;
+                // Vector3 startPos = spawnTransform != null ? spawnTransform.position : Vector3.zero;
+                // NetworkObject playerNetworkObject = Runner.Spawn(PlayerPrefab, startPos, Quaternion.identity);
                 
                 // Link player to network object
-                Runner.SetPlayerObject(playerRef, playerNetworkObject);
+                // Runner.SetPlayerObject(playerRef, playerNetworkObject);
                 
-                Player player = playerNetworkObject.GetComponent<Player>();
-
+                // Player player = playerNetworkObject.GetComponent<Player>();
+                Player player = _networkManagerCustom.GetPlayerGameObject(playerRef);
+                
                 if (player != null)
                 {
                     player.TeamIndex = teamIndex;
                     CharacterAppearanceSaveLoad.SetCurrentAppearanceAsCustomProperty();
+                    player.ApplyTeamChange();
                 }
                 else
                 {

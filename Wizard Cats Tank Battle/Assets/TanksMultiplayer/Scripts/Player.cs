@@ -235,6 +235,23 @@ namespace TanksMP
             {
                 StatusEffectController.AddStatusEffect(StatusEffectApplyOnSpawn.Id, this);
             }
+
+            StartCoroutine(FirstSpawnCoroutine());
+        }
+
+        protected virtual IEnumerator FirstSpawnCoroutine()
+        {
+            // This works for now: TODO: replace with real entry screen where the player can pick teams 
+            yield return new WaitForSeconds(4f);
+            if (HasInputAuthority)
+            {
+                // Move player
+                Vector3 startPos = GameManager.TeamController.GetSpawnPosition(TeamIndex);
+                // transform.position = startPos;
+                
+                Debug.Log("Setting position: " + startPos + " for team index " + TeamIndex);
+                // KillPlayer();
+            }
         }
         
         // TODO: Check if this does anything

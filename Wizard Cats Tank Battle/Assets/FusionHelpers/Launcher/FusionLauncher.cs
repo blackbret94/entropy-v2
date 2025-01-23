@@ -75,7 +75,7 @@ namespace FusionHelpers
 			runner.ProvideInput = mode != GameMode.Server;
 
 			NetworkSceneInfo scene = new NetworkSceneInfo();
-			scene.AddSceneRef(SceneRef.FromIndex(4));
+			scene.AddSceneRef(SceneRef.FromIndex(6));
 			// scene.AddSceneRef(SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex));
 
 			// An empty region will use the best region.

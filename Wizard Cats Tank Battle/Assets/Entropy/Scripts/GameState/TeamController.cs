@@ -310,9 +310,9 @@ namespace Vashta.Entropy.GameState
 
         public TeamStateSnapshot GetTeamState(int teamIndex, bool includeLocalPlayer = true)
         {
-            if (teams.Length != ScoreByTeamIndex.Length || teamIndex >= teams.Length || teamIndex >= ScoreByTeamIndex.Length)
+            if (teamIndex >= teams.Length || teamIndex >= ScoreByTeamIndex.Length)
             {
-                Debug.LogWarning($"Team count ({teams.Length}) did not match score count({ScoreByTeamIndex.Length}), or team index {teamIndex} was too high!");
+                Debug.LogWarning($"Team index {teamIndex} was too high!");
             }
 
             return new TeamStateSnapshot(teams[teamIndex], ScoreByTeamIndex[teamIndex], teamIndex, includeLocalPlayer);

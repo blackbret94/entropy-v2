@@ -32,16 +32,6 @@ namespace Entropy.Scripts.Player
             InputAction iaAim = PlayerInputActions.Player.Aim;
             return iaAim.ReadValue<Vector2>();
         }
-
-        public override bool ShouldShoot()
-        {
-            if (PlayerInputController.GameplayActionsBlocked())
-            {
-                return false;
-            }
-
-            return PlayerInputController.GetFireIsHeldDown();
-        }
         
         public override bool DetectUI_Up()
         {

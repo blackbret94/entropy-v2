@@ -18,11 +18,6 @@ namespace Entropy.Scripts.Player
             throw new System.NotImplementedException();
         }
 
-        public override bool ShouldShoot()
-        {
-            return false;
-        }
-
         public override bool DetectUI_Up()
         {
             return false;

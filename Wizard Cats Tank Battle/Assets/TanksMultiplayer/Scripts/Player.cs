@@ -5,16 +5,18 @@
 
 using System.Collections;
 using Entropy.Scripts.Player;
-using ExitGames.Client.Photon.StructWrapping;
 using Fusion;
 using FusionHelpers;
 using UnityEngine;
 using Vashta.Entropy.Character;
+using Vashta.Entropy.Network;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.Spells;
 using Vashta.Entropy.StatusEffects;
 using Vashta.Entropy.UI;
 using Vashta.Entropy.UI.Minimap;
+
+using NetworkInputData = Vashta.Entropy.Network.NetworkInputController.NetworkInputData;
 
 namespace TanksMP
 {
@@ -29,6 +31,7 @@ namespace TanksMP
     [RequireComponent(typeof(UltimateController))]
     [RequireComponent(typeof(MovementController))]
     [RequireComponent(typeof(ClassController))]
+    [RequireComponent(typeof(NetworkInputController))]
     public class Player : FusionPlayer
     {
         [Header("Stats")]
@@ -110,6 +113,7 @@ namespace TanksMP
         public StatusEffectController StatusEffectController;
         protected PlayerCurrencyRewarder _playerCurrencyRewarder;
         public PlayerInputController InputController { get; private set; }
+        public NetworkInputController NetworkInputController { get; private set; }
         public CameraController CameraController { get; private set; }
         public PlayerViewController PlayerViewController { get; private set; }
         public CombatController CombatController { get; private set; }
@@ -133,14 +137,11 @@ namespace TanksMP
         private float _secondUpdateTime = 1f;
 
         private float _initTime;
+        private NetworkInputData _oldInput;
         
         public MinimapEntityControllerPlayer MinimapEntityControllerPlayer;
-
-        // public PlayerRef PlayerId { get; private set; } = PlayerRef.None;
-        public override void InitNetworkState()
-        {
-            // throw new NotImplementedException();
-        }
+        
+        public override void InitNetworkState() {}
 
         public string CharacterAppearanceSerialized { get; set; }
         
@@ -173,6 +174,7 @@ namespace TanksMP
             MovementController = GetComponent<MovementController>();
             ClassController = GetComponent<ClassController>();
             InputController = GameManager.PlayerInputController;
+            NetworkInputController = GetComponent<NetworkInputController>();
             rb = GetComponent<Rigidbody>();
             _playerCurrencyRewarder = new PlayerCurrencyRewarder();
             NetworkManagerCustom = NetworkManagerCustom.GetInstance();
@@ -185,7 +187,6 @@ namespace TanksMP
             {
                 //set a global reference to the local player
                 GameManager.localPlayer = this;
-                // InputController.PlayerFired += OnFire;
             }
             
             PlayerList.Add(this);
@@ -312,97 +313,59 @@ namespace TanksMP
                 rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
         }
 
-        // Overriden in PlayerBot
-        void FixedUpdate()
-		{
+        public override void FixedUpdateNetwork()
+        {
             UpdateMass();
             
-            // Re-write using Fusion API
-			//skip further calls for remote clients    
-            
-            // lag compensation
-            // movement
-            // rb.position = Vector3.MoveTowards(rb.position, networkPosition, Time.fixedDeltaTime);
-            // rb.velocity = networkVelocity;
-            //
-            // // rotation
-            // short targetRotation = networkTurretRotation;
-            //
-            // float diff = Mathf.Abs(turretRotation - targetRotation); 
-            //
-            // if (diff > 1f)
-            // {
-            //     // normalize direction
-            //     if (turretRotation < 90 && targetRotation > 270)
-            //         targetRotation -= 360;
-            //
-            //     if (turretRotation > 270 && targetRotation < 90)
-            //     {
-            //         targetRotation += 360;
-            //     }
-            //     
-            //     // rotate
-            //     float maxLerpTime = _maxTransformLerp * Mathf.Ceil(diff / 90);
-            //     
-            //     float time = (Time.time - lastTransformUpdate) / maxLerpTime;
-            //     turretRotation = (short)(Mathf.RoundToInt(Mathf.Lerp(turretRotation, targetRotation, time)));
-            //
-            //     if (turretRotation > targetRotation)
-            //         turretRotation = targetRotation;
-            // }
-            // else
-            // {
-            //     turretRotation = networkTurretRotation;
-            // }
-            //
-            // MovementController.OnTurretRotation();
-            //
-            // return;
-            
-            
-            //continously check for input on desktop platforms
-#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL
-            
-            //movement variables
-            Vector2 moveDir = InputController.GetAdapter().GetMovementVector(out bool isMoving);
-            Vector2 turnDir = InputController.GetAdapter().GetTurretRotation(transform.position);
-
-            if (isMoving)
+            if (NetworkInputController.fetchInput)
             {
-                MovementController.Move(moveDir);
-            }
-            else
-            {
-                // Stop network velocity if not moving
-                // networkVelocity = Vector3.zero;
-            }
-            
-            //rotate turret to look at the mouse direction
-            MovementController.RotateTurret(turnDir);
-            
-            //shoot bullet on left mouse click
-            if(InputController.GetAdapter().ShouldShoot())
-                CombatController.AttemptToShoot();
+                if (GetInput(out NetworkInputData inputData))
+                {
+                    MovementController.Move(inputData.moveDirection.normalized);
+                    MovementController.RotateTurret(inputData.aimDirection.normalized);
+                    
+                    // FIRE
+                    if (inputData.IsDown(NetworkInputData.BUTTON_FIRE_PRIMARY))
+                        CombatController.AttemptToShoot();
+                    
+                    // POWERUP
+                    if(inputData.IsDown(NetworkInputData.BUTTON_FIRE_POWERUP))
+                        TryCastPowerup();
+                        
+                    
+                    // ULTIMATE
+                    if (inputData.IsDown(NetworkInputData.BUTTON_FIRE_ULTIMATE))
+                    {
+                        bool couldCast = UltimateController.TryCastUltimate();
 
-			//replicate input to mobile controls for illustration purposes
-			#if UNITY_EDITOR && (UNITY_IPHONE || UNITY_ANDROID)
+                        if (!couldCast)
+                        {
+                            GameManager.ui.SfxController.PlayUltimateNotReady();
+                        }
+                    }
+                        
+                    
+                    // DROP FLAG
+                    if (inputData.IsDown(NetworkInputData.BUTTON_DROP_FLAG))
+                    {
+                        DropCollectibles();
+                        UIGame.GetInstance().DropCollectiblesButton.gameObject.SetActive(false);
+                    }
+                    
+#if UNITY_EDITOR && (UNITY_IPHONE || UNITY_ANDROID)
+// Move dir and turn dir are from inputData
 				GameManager.ui.controls[0].position = moveDir;
 				GameManager.ui.controls[1].position = turnDir;
-			#endif
 #endif
+
+                    _oldInput = inputData;
+                }
+            }
         }
 
         private void UpdateMass()
         {
             rb.mass = defaultMass * StatusEffectController.MassMultiplier;
-        }
-      
-        /// <summary>
-        /// Obsolete.  This should be naturally eliminated as the rest of the code base is refactored
-        /// </summary>
-        public NetworkObject GetView()
-        {
-            return Object;
         }
 
         public void CmdTryChangeTeams(bool respawn)
@@ -477,7 +440,6 @@ namespace TanksMP
                 HandleKilled(killedByPlayer, deathFxId);
             }
             
-            // TODO: Update for fusion
             //send player back to the team area, this will get overwritten by the exact position from the client itself later on
             //we just do this to avoid players "popping up" from the position they died and then teleporting to the team area instantly
             //this is manipulating the internal PhotonTransformView cache to update the networkPosition variable
@@ -635,7 +597,7 @@ namespace TanksMP
             GameManager.ui.controls[1].OnEndDrag(null);
         }
         
-        // Re-write in Fusion
+        // Move to OnSpawned()
         // public void OnPhotonInstantiate(PhotonMessageInfo info)
         // {
         //     CharacterAppearanceSerializable characterAppearanceSerializable = null;
@@ -792,6 +754,7 @@ namespace TanksMP
             return CharacterAppearance.GetTeamInstance().teamDefinition;
         }
         
+        // Reset on death
         public void ResetPlayerState()
         {
             Bullet = 0;

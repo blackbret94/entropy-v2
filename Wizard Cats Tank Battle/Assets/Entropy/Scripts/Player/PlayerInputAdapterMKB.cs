@@ -38,11 +38,6 @@ namespace Entropy.Scripts.Player
             return new Vector2(hitPos.x, hitPos.z);
         }
 
-        public override bool ShouldShoot()
-        {
-            return PlayerInputController.GetFireIsHeldDown() && !EventSystem.current.IsPointerOverGameObject();
-        }
-
         public override bool DetectUI_Up()
         {
             if (!UIMovementIsValid())

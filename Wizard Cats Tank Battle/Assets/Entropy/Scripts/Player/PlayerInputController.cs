@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using InputIcons;
 using TanksMP;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -20,7 +19,11 @@ namespace Entropy.Scripts.Player
         private Vector3 _lastMousePosition;
         private GamePanel _selectedPanel;
 
-        private bool _fireIsHeldDown = false;
+        // Buttons held
+        public PlayerInputButton FireButton = new();
+        public PlayerInputButton PowerupButton = new();
+        public PlayerInputButton UltimateButton = new();
+        public PlayerInputButton DropSpoonButton = new();
 
         private void OnEnable()
         {
@@ -30,20 +33,23 @@ namespace Entropy.Scripts.Player
 
             InputAction iaFire = PlayerInputActions.Player.Fire;
             iaFire.Enable();
-            iaFire.performed += Fire;
-            iaFire.canceled += ReleaseFire;
+            iaFire.performed += FireButton.OnPress;
+            iaFire.canceled += FireButton.OnRelease;
 
             InputAction iaCastPowerup = PlayerInputActions.Player.CastPowerup;
             iaCastPowerup.Enable();
-            iaCastPowerup.performed += CastPowerup;
+            iaCastPowerup.performed += PowerupButton.OnPress;
+            iaCastPowerup.canceled += PowerupButton.OnRelease;
 
             InputAction iaCastUltimate = PlayerInputActions.Player.CastUltimate;
             iaCastUltimate.Enable();
-            iaCastUltimate.performed += CastUltimate;
+            iaCastUltimate.performed += UltimateButton.OnPress;
+            iaCastUltimate.canceled += UltimateButton.OnRelease;
 
             InputAction iaDropSpoon = PlayerInputActions.Player.DropSpoon;
             iaDropSpoon.Enable();
-            iaDropSpoon.performed += DropSpoon;
+            iaDropSpoon.performed += DropSpoonButton.OnPress;
+            iaDropSpoon.canceled += DropSpoonButton.OnRelease;
 
             // UI
             InputAction iaClosePanel = PlayerInputActions.UI.Cancel;
@@ -84,19 +90,22 @@ namespace Entropy.Scripts.Player
             PlayerInputActions.Player.Move.Disable();
             
             PlayerInputActions.Player.Fire.Disable();
-            PlayerInputActions.Player.Fire.performed -= Fire;
-            PlayerInputActions.Player.Fire.canceled -= ReleaseFire;
+            PlayerInputActions.Player.Fire.performed -= FireButton.OnPress;
+            PlayerInputActions.Player.Fire.canceled -= FireButton.OnRelease;
             
             PlayerInputActions.Player.Aim.Disable();
             
             PlayerInputActions.Player.CastPowerup.Disable();
-            PlayerInputActions.Player.CastPowerup.performed -= CastPowerup;
+            PlayerInputActions.Player.CastPowerup.performed -= PowerupButton.OnPress;
+            PlayerInputActions.Player.CastPowerup.canceled -= PowerupButton.OnRelease;
             
             PlayerInputActions.Player.CastUltimate.Disable();
-            PlayerInputActions.Player.CastUltimate.performed -= CastUltimate;
+            PlayerInputActions.Player.CastUltimate.performed -= UltimateButton.OnPress;
+            PlayerInputActions.Player.CastUltimate.canceled -= UltimateButton.OnRelease;
             
             PlayerInputActions.Player.DropSpoon.Disable();
-            PlayerInputActions.Player.DropSpoon.performed -= DropSpoon;
+            PlayerInputActions.Player.DropSpoon.performed -= DropSpoonButton.OnPress;
+            PlayerInputActions.Player.DropSpoon.canceled -= DropSpoonButton.OnRelease;
             
             // UI
             PlayerInputActions.UI.Cancel.Disable();
@@ -258,68 +267,15 @@ namespace Entropy.Scripts.Player
 
             return _selectedPanel.BlockGameplayWhenSelected;
         }
-
-        private void Fire(InputAction.CallbackContext context)
-        {
-            _fireIsHeldDown = true;
-        }
-
-        private void ReleaseFire(InputAction.CallbackContext context)
-        {
-            _fireIsHeldDown = false;
-        }
-
+        
         public bool GetFireIsHeldDown()
         {
             if (GameplayActionsBlocked())
                 return false;
             
-            return _fireIsHeldDown;
+            return false;
         }
-
-        private void CastPowerup(InputAction.CallbackContext context)
-        {
-            if (GameplayActionsBlocked())
-                return;
-            
-            TanksMP.Player player = PlayerList.GetLocalPlayer();
-
-            if (player != null)
-            {
-                player.TryCastPowerup();
-            }
-        }
-
-        private void CastUltimate(InputAction.CallbackContext context)
-        {
-            if (GameplayActionsBlocked())
-                return;
-            
-            TanksMP.Player player = PlayerList.GetLocalPlayer();
-            
-            if (player != null)
-            {
-                bool couldCast = player.UltimateController.TryCastUltimate();
-            
-                if (!couldCast)
-                    GameManager.GetInstance().ui.SfxController.PlayUltimateNotReady();
-            }
-        }
-
-        private void DropSpoon(InputAction.CallbackContext context)
-        {
-            if (GameplayActionsBlocked())
-                return;
-            
-            TanksMP.Player player = PlayerList.GetLocalPlayer();
-            
-            if (player != null)
-            {
-                player.DropCollectibles();
-                UIGame.GetInstance().DropCollectiblesButton.gameObject.SetActive(false);
-            }
-        }
-
+        
         protected void SubmitMenu(InputAction.CallbackContext context)
         {
             GamePanel selectedPanel = GetSelectedGamePanel();

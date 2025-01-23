@@ -33,8 +33,6 @@ namespace Entropy.Scripts.Player
 
         public abstract Vector2 GetTurretRotation(Vector3 pos);
         
-        public abstract bool ShouldShoot();
-        
         // Zoom
         public Vector2 GetZoomVector()
         {

@@ -77,8 +77,6 @@ namespace Vashta.Entropy.Network
                 _moveDelta = _playerInputController.GetAdapter().GetMovementVector(out bool isMoving);
                 _aimDelta = _playerInputController.GetAdapter().GetTurretRotation(_player.transform.position);
             }
-            
-            
         }
         
         public struct NetworkInputData : INetworkInput

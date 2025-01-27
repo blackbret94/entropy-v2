@@ -6,9 +6,10 @@ namespace Entropy.Scripts.Player
 {
     public class MovementController : MonoBehaviour
     {
+        private const float ROTATION_SPEED = 300; // max degree/second 
+        
         // Cached fields
         private TanksMP.Player _player;
-        private GameManager _gameManager;
         private CameraController _cameraController;
         private StatusEffectController _statusEffectController;
         private Rigidbody _rigidbody;
@@ -16,27 +17,20 @@ namespace Entropy.Scripts.Player
         private void Awake()
         {
             _player = GetComponent<TanksMP.Player>();
-            _gameManager = GameManager.GetInstance();
             _cameraController = GetComponent<CameraController>();
             _statusEffectController = GetComponent<StatusEffectController>();
             _rigidbody = GetComponent<Rigidbody>();
         }
         
         //moves rigidbody in the direction passed in
-        public void Move(Vector2 direction = default(Vector2))
+        public void Move(float deltaTime, Vector2 direction)
         {
-            //if direction is not zero, rotate player in the moving direction relative to camera
-            if (direction != Vector2.zero)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.y))
-                                            * Quaternion.Euler(0, _cameraController.camTransform.eulerAngles.y, 0);
+            Rotate(deltaTime, direction);
+            MoveRigidBody(direction);
+        }
 
-                float rotationSpeed = Time.deltaTime * 450;
-                transform.rotation = Quaternion.RotateTowards(
-                    transform.rotation, targetRotation,
-                    rotationSpeed);
-            }
-
+        private void MoveRigidBody(Vector2 direction)
+        {
             //create movement vector based on current rotation and speed
             float movementSpeed = ((_player.moveSpeed + _statusEffectController.MovementSpeedModifier) *
                                    _statusEffectController.MovementSpeedMultiplier);
@@ -47,7 +41,21 @@ namespace Entropy.Scripts.Player
             _rigidbody.velocity = Vector3.MoveTowards(_rigidbody.velocity, velocity, _player.acceleration);
         }
 
+        private void Rotate(float deltaTime, Vector2 direction)
+        {
+            //if direction is not zero, rotate player in the moving direction relative to camera
+            if (direction != Vector2.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.y))
+                                            * Quaternion.Euler(0, _cameraController.camTransform.eulerAngles.y, 0);
 
+                float rotationSpeed = deltaTime * ROTATION_SPEED;
+                transform.rotation = Quaternion.RotateTowards(
+                    transform.rotation, targetRotation,
+                    rotationSpeed);
+            }
+        }
+        
         //on movement drag ended
         public void MoveEnd()
         {

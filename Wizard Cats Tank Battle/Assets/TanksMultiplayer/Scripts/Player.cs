@@ -249,12 +249,12 @@ namespace TanksMP
         protected virtual IEnumerator FirstSpawnCoroutine()
         {
             // This works for now: TODO: replace with real entry screen where the player can pick teams 
-            yield return new WaitForSeconds(4f);
+            yield return new WaitForSeconds(4f); // Not sure why times less than this keep the player in the second
             if (HasInputAuthority)
             {
                 // Move player
                 Vector3 startPos = GameManager.TeamController.GetSpawnPosition(TeamIndex);
-                // transform.position = startPos;
+                transform.position = startPos;
                 
                 Debug.Log("Setting position: " + startPos + " for team index " + TeamIndex);
                 // KillPlayer();
@@ -321,7 +321,7 @@ namespace TanksMP
             {
                 if (GetInput(out NetworkInputData inputData))
                 {
-                    MovementController.Move(inputData.moveDirection.normalized);
+                    MovementController.Move(Runner.DeltaTime, inputData.moveDirection.normalized);
                     MovementController.RotateTurret(inputData.aimDirection.normalized);
                     
                     // FIRE
@@ -343,7 +343,6 @@ namespace TanksMP
                             GameManager.ui.SfxController.PlayUltimateNotReady();
                         }
                     }
-                        
                     
                     // DROP FLAG
                     if (inputData.IsDown(NetworkInputData.BUTTON_DROP_FLAG))

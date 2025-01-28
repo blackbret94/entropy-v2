@@ -57,6 +57,9 @@ namespace Vashta.Entropy.UI
 
         public void PlayerDied()
         {
+            if (!GameManager)
+                GameManager = GameManager.GetInstance();
+            
             GameManager.ui.DropCollectiblesButton.gameObject.SetActive(false);
             GameManager.ui.CastUltimateButton.gameObject.SetActive(false);
             GameManager.ui.CastPowerupButton.gameObject.SetActive(false);
@@ -64,6 +67,9 @@ namespace Vashta.Entropy.UI
 
         public void PlayerRespawned()
         {
+            if (!GameManager)
+                GameManager = GameManager.GetInstance();
+            
             GameManager.ui.CastUltimateButton.gameObject.SetActive(true);
         }
     }

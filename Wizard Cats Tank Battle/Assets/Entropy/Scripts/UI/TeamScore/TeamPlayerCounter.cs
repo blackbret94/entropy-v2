@@ -6,7 +6,7 @@ namespace Vashta.Entropy.UI.TeamScore
     {
         public GameObject[] PlayerMarkers;
 
-        private void Start()
+        private void Awake()
         {
             foreach (var playerMarker in PlayerMarkers)
             {

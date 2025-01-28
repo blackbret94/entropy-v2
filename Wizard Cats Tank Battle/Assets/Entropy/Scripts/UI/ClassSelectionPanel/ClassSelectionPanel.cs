@@ -148,7 +148,7 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
             player.PreferredTeamIndex = ClassSelectionTeamSelector.SelectedTeamIndex();
 
             player.SetClass(ClassSelectionSelectorMultipanel.SelectedClassDefinition(), respawnPlayer, applyNow);
-            player.CmdTryChangeTeams(respawnPlayer);
+            player.TryChangeTeams(respawnPlayer);
             ClosePanel();
         }
 

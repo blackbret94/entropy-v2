@@ -10,6 +10,7 @@ using FusionHelpers;
 using UnityEngine;
 using Vashta.Entropy.Character;
 using Vashta.Entropy.Network;
+using Vashta.Entropy.SaveLoad;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.Spells;
 using Vashta.Entropy.StatusEffects;
@@ -221,6 +222,7 @@ namespace TanksMP
             if (HasInputAuthority)
             {
                 CameraController.SetTarget(turret);
+                // CharacterAppearanceSaveLoad.SetCurrentAppearanceAsCustomProperty();
 
                 //initialize input controls for mobile devices
                 //[0]=left joystick for movement, [1]=right joystick for shooting
@@ -237,19 +239,19 @@ namespace TanksMP
                 GameManager.ui.fireButton.Player = this;
             }
             
+            PreferredTeamIndex = GameManager.TeamController.GetTeamFill();
+            IsAlive = false;
+            TeamIndex = -1;
+            
             // Apply status effect
             if (StatusEffectApplyOnSpawn)
             {
                 StatusEffectController.AddStatusEffect(StatusEffectApplyOnSpawn.Id, this);
             }
 
-            StartCoroutine(FirstSpawnCoroutine());
-        }
-
-        protected virtual IEnumerator FirstSpawnCoroutine()
-        {
-            // This works for now: TODO: replace with real entry screen where the player can pick teams 
-            yield return new WaitForSeconds(4f); // Not sure why times less than this keep the player in the second
+            TryChangeTeams(true);
+            
+            Respawn(null);
             if (HasInputAuthority)
             {
                 // Move player
@@ -367,7 +369,7 @@ namespace TanksMP
             rb.mass = defaultMass * StatusEffectController.MassMultiplier;
         }
 
-        public void CmdTryChangeTeams(bool respawn)
+        public void TryChangeTeams(bool respawn)
         {
             if (PlayerCanRespawnFreely() || !IsAlive)
             {
@@ -456,6 +458,8 @@ namespace TanksMP
         protected void HandleKilled(Player killedByPlayer, string deathFxId)
         {
             IsAlive = false;
+            
+            GameManager.TeamController.OnePassPlayerCheckToChangeTeams(this, false);
                 
             if (HasInputAuthority)
             {
@@ -502,6 +506,7 @@ namespace TanksMP
 
         protected void HandleRespawned()
         {
+            GameManager.TeamController.OnePassPlayerCheckToChangeTeams(this, false);
             IsAlive = true;
                 
             // Move player to spawn
@@ -583,7 +588,8 @@ namespace TanksMP
         private void ResetTransform()
         {
             //start following the local player again
-            CameraController.FollowPlayer(turret);
+            if(HasInputAuthority)
+                CameraController.FollowPlayer(turret);
             
             //get team area and reposition it there
             // transform.position = GameManager.GetSpawnPosition(TeamId);

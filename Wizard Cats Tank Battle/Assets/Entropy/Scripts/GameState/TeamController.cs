@@ -4,6 +4,7 @@ using TanksMP;
 using UnityEngine;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.TanksExtensions;
+using Vashta.Entropy.UI.TeamScore;
 
 namespace Vashta.Entropy.GameState
 {
@@ -21,6 +22,7 @@ namespace Vashta.Entropy.GameState
 
         public bool UsesTeams => _gameManager.gameMode != TanksMP.GameMode.FFA;
         
+        TeamScoreDisplayController TeamScoreDisplayController => TeamScoreDisplayController.GetInstance();
 
         private void Awake()
         {
@@ -111,9 +113,16 @@ namespace Vashta.Entropy.GameState
 
             Debug.Log("Changing teams to: " + preferredTeamIndex);
 
-            TeamSize.Set(player.TeamIndex, TeamSize[player.TeamIndex] - 1);
-            TeamSize.Set(preferredTeamIndex, TeamSize[preferredTeamIndex] + 1);
+            if(player.TeamIndex != -1)
+                TeamSize.Set(player.TeamIndex, TeamSize[player.TeamIndex] - 1);
+            
+            if(preferredTeamIndex != -1)
+                TeamSize.Set(preferredTeamIndex, TeamSize[preferredTeamIndex] + 1);
+            
             player.TeamIndex = preferredTeamIndex;
+            Debug.Log("Setting player team: " + player.TeamIndex);
+            
+            TeamScoreDisplayController.UpdateTeamSizes(TeamSize.ToArray());
             
             // Force respawn
             if(respawn)
@@ -231,11 +240,14 @@ namespace Vashta.Entropy.GameState
                     ScoreByTeamIndex.Set(teamIndex, ScoreByTeamIndex[teamIndex] + gameMode.HoldPointPoints);
                     break;
             }
+            
+            TeamScoreDisplayController.UpdateScores(ScoreByTeamIndex.ToArray());
         }
 
         public void RemoveScore(ScoreType scoreType, int teamIndex)
         {
             ScoreByTeamIndex.Set(teamIndex, ScoreByTeamIndex[teamIndex]-1);
+            TeamScoreDisplayController.UpdateScores(ScoreByTeamIndex.ToArray());
         }
         
         /// <summary>

@@ -449,7 +449,7 @@ namespace Vashta.Entropy.Character
 
             if (cartProp == null)
             {
-                Debug.LogError("Cart is missing a 'CartProp' component");
+                Debug.LogWarning("Cart is missing a 'CartProp' component");
                 return;
             }
             

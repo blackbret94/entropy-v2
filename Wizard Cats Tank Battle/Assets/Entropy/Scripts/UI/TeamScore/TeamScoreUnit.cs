@@ -57,8 +57,11 @@ namespace Vashta.Entropy.UI.TeamScore
         public void UpdateNumberOfPlayers(int newSize)
         {
             if (PlayerCounter == null)
+            {
+                Debug.LogError("PlayerCounter is null!");
                 return;
-            
+            }
+
             PlayerCounter.SetPlayerCount(newSize);
         }
     }

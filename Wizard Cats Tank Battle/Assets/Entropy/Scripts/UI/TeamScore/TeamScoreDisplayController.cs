@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace Vashta.Entropy.UI.TeamScore
 {
-    public class TeamScoreController : MonoBehaviour
+    public class TeamScoreDisplayController : MonoBehaviour
     {
-        private static TeamScoreController _instance;
+        private static TeamScoreDisplayController _instance;
         public List<TeamScoreUnit> Scores = new();
 
-        public static TeamScoreController GetInstance()
+        public static TeamScoreDisplayController GetInstance()
         {
             return _instance;
         }
@@ -40,8 +40,11 @@ namespace Vashta.Entropy.UI.TeamScore
 
                 foreach (var scoreUnit in Scores)
                 {
-                    if(teamIndex == scoreUnit.TeamIndex)
+                    if (teamIndex == scoreUnit.TeamIndex)
+                    {
+                        Debug.Log("Updating counts for team " + teamIndex + " to " + sizes[i] + ".");
                         scoreUnit.UpdateNumberOfPlayers(sizes[i]);
+                    }
                 }
             }
         }

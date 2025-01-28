@@ -48,7 +48,7 @@ public class II_PlayerMovement : MonoBehaviour
         if (currentJumpCooldown > 0)
             return;
 
-        body.linearVelocity = Vector2.zero;
+        body.velocity = Vector2.zero;
         body.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         currentJumpCooldown = jumpCooldown;
     }

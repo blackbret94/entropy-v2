@@ -38,7 +38,7 @@ namespace Entropy.Scripts.Player
             Vector3 velocity = new Vector3(direction.x, 0, direction.y) * movementSpeed;
 
             //apply vector to rigidbody position
-            _rigidbody.linearVelocity = Vector3.MoveTowards(_rigidbody.linearVelocity, velocity, _player.acceleration);
+            _rigidbody.velocity = Vector3.MoveTowards(_rigidbody.velocity, velocity, _player.acceleration);
         }
 
         private void Rotate(float deltaTime, Vector2 direction)
@@ -94,7 +94,7 @@ namespace Entropy.Scripts.Player
 
         public void ResetTransform()
         {
-            _rigidbody.linearVelocity = Vector3.zero;
+            _rigidbody.velocity = Vector3.zero;
             _rigidbody.angularVelocity = Vector3.zero;
             transform.rotation = Quaternion.identity;
         }

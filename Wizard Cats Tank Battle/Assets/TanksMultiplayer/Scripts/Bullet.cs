@@ -153,7 +153,7 @@ namespace TanksMP
         
         public void SetSpeed(float newSpeed)
         {
-            myRigidbody.linearVelocity = newSpeed * transform.forward;
+            myRigidbody.velocity = newSpeed * transform.forward;
         }
         
         public int GetId()
@@ -195,7 +195,7 @@ namespace TanksMP
                 if(BounceSfx) AudioManager.Play3D(BounceSfx.GetRandomClip(), transform.position);
             }
 
-            myRigidbody.linearVelocity = baseSpeed * transform.forward;
+            myRigidbody.velocity = baseSpeed * transform.forward;
         }
         
         public void IncreaseDespawnDelay(float delay)
@@ -478,7 +478,7 @@ namespace TanksMP
             }
 
             //reset modified variables to the initial state
-            myRigidbody.linearVelocity = Vector3.zero;
+            myRigidbody.velocity = Vector3.zero;
             myRigidbody.angularVelocity = Vector3.zero;
             bounce = _maxBounceBase;
         }

@@ -435,7 +435,7 @@ namespace StylizedWaterShader
         {
             EditorGUILayout.Space();
 
-            if (UnityEngine.Rendering.GraphicsSettings.defaultRenderPipeline)
+            if (UnityEngine.Rendering.GraphicsSettings.renderPipelineAsset)
             {
                 EditorGUILayout.HelpBox("A scriptable render pipeline is in use, this is not supported", MessageType.Error);
             }

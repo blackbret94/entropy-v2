@@ -19,7 +19,7 @@ namespace CBS.Context
         private AuthData AuthData { get; set; }
         private IAuth Auth { get; set; }
 
-        private AsyncOperationHandle<SceneInstance> _handle;
+        private AsyncOperation _handle;
 
         private void Start()
         {
@@ -77,13 +77,14 @@ namespace CBS.Context
                 {
                     LoginForm.OnLogined -= OnLoginComplete;
                 }
-                _handle = Addressables.LoadSceneAsync(LobbyScene);
+
+                _handle = SceneManager.LoadSceneAsync(LobbyScene);
             }
         }
 
         private void OnDestroy()
         {
-            Addressables.Release(_handle);
+            // SceneManager.Release(_handle);
         }
     }
 }

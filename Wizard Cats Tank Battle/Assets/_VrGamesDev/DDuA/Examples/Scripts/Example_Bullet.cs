@@ -92,7 +92,7 @@ public class Example_Bullet : MonoBehaviour
     public void Stop()
     {
         this.m_Rigidbody.useGravity = false;
-        this.m_Rigidbody.velocity = Vector3.zero;
+        this.m_Rigidbody.linearVelocity = Vector3.zero;
         this.m_Rigidbody.angularVelocity = Vector3.zero;
     }
 }

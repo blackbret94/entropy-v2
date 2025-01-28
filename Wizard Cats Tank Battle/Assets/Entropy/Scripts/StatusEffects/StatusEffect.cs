@@ -158,12 +158,12 @@ namespace Vashta.Entropy.StatusEffects
             return !StatusEffectData().IsDebuff;
         }
 
-        public VisualEffect ApplyFxData()
+        public VisualEffectData ApplyFxData()
         {
             return _data.ApplyFxData;
         }
         
-        public VisualEffect DeathFxData()
+        public VisualEffectData DeathFxData()
         {
             return _data.DeathFxData;
         }

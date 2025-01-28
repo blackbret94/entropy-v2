@@ -126,7 +126,7 @@ namespace Entropy.Scripts.Player
 
             if (deathFx != null)
             {
-                VisualEffect deathFxData = VisualEffectDirectory[deathFx];
+                VisualEffectData deathFxData = VisualEffectDirectory[deathFx];
                 PoolManager.Spawn(deathFxData.VisualEffectPrefab, transform.position, transform.rotation);
             }
         }

@@ -79,37 +79,37 @@ namespace Vashta.Entropy.Character
             }
         }
         
-        public void AddEffect(VisualEffect effect)
+        public void AddEffect(VisualEffectData effectData)
         {
             Init();
 
-            if (effect == null)
+            if (effectData == null)
                 return;
 
-            if (_visualizerBySlot.ContainsKey(effect.slot))
+            if (_visualizerBySlot.ContainsKey(effectData.slot))
             {
-                _visualizerBySlot[effect.slot].AddEffect(effect);
+                _visualizerBySlot[effectData.slot].AddEffect(effectData);
             }
             else
             {
-                Debug.Log("No slot for: " + effect.slot);
+                Debug.Log("No slot for: " + effectData.slot);
             }
         }
 
-        public void RemoveEffect(VisualEffect effect)
+        public void RemoveEffect(VisualEffectData effectData)
         {
             Init();
 
-            if (effect == null)
+            if (effectData == null)
                 return;
 
-            if (_visualizerBySlot.ContainsKey(effect.slot))
+            if (_visualizerBySlot.ContainsKey(effectData.slot))
             {
-                _visualizerBySlot[effect.slot].RemoveEffect(effect);
+                _visualizerBySlot[effectData.slot].RemoveEffect(effectData);
             }
             else
             {
-                Debug.Log("No slot for: " + effect.slot);
+                Debug.Log("No slot for: " + effectData.slot);
             }
         }
     }

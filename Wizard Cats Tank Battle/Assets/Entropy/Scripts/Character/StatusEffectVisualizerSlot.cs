@@ -11,14 +11,14 @@ namespace Vashta.Entropy.Character
         public Slot slot;
         private Dictionary<string, GameObject> _activeEffects = new Dictionary<string, GameObject>();
 
-        public void AddEffect(VisualEffect effect)
+        public void AddEffect(VisualEffectData effectData)
         {
             ParticleSystem thisParticleSystem;
             
-            if (_activeEffects.ContainsKey(effect.Id) && _activeEffects[effect.Id] != null)
+            if (_activeEffects.ContainsKey(effectData.Id) && _activeEffects[effectData.Id] != null)
             {
                 // Refresh
-                thisParticleSystem = _activeEffects[effect.Id].GetComponent<ParticleSystem>();
+                thisParticleSystem = _activeEffects[effectData.Id].GetComponent<ParticleSystem>();
                 
                 if (thisParticleSystem != null)
                 {
@@ -27,11 +27,11 @@ namespace Vashta.Entropy.Character
             }
             else
             {
-                GameObject effectGo = PoolManager.Spawn(effect.VisualEffectPrefab, transform.position, transform.rotation);
+                GameObject effectGo = PoolManager.Spawn(effectData.VisualEffectPrefab, transform.position, transform.rotation);
                 effectGo.transform.parent = transform;
                 effectGo.transform.localPosition = Vector3.zero;
                 effectGo.transform.localScale = new Vector3(1,1,1);
-                _activeEffects.Add(effect.Id, effectGo);
+                _activeEffects.Add(effectData.Id, effectGo);
                 
                 thisParticleSystem = effectGo.GetComponent<ParticleSystem>();
 
@@ -52,17 +52,17 @@ namespace Vashta.Entropy.Character
             
         }
 
-        public void RemoveEffect(VisualEffect effect)
+        public void RemoveEffect(VisualEffectData effectData)
         {
-            if (_activeEffects.ContainsKey(effect.Id) && _activeEffects[effect.Id] != null)
+            if (_activeEffects.ContainsKey(effectData.Id) && _activeEffects[effectData.Id] != null)
             {
                 try
                 {
-                    PoolManager.Despawn(_activeEffects[effect.Id]);
+                    PoolManager.Despawn(_activeEffects[effectData.Id]);
                 }
                 catch (NullReferenceException e) { }
                 
-                _activeEffects.Remove(effect.Id);
+                _activeEffects.Remove(effectData.Id);
 
             }
         }

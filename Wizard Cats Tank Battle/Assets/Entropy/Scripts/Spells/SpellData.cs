@@ -44,7 +44,7 @@ namespace Vashta.Entropy.Spells
         public int DamageEnemiesOnCast = 0;
         public GameObject DamageEnemiesEffect;
         [FormerlySerializedAs("CastStatusEffectToApplyToEnemies")] public StatusEffectData CastStatusEffectEnemies;
-        public VisualEffect EnemyDeathEffect;
+        [FormerlySerializedAs("EnemyDeathEffect")] public VisualEffectData enemyDeathEffectData;
         
         [FormerlySerializedAs("ActiveStatusEffectToApplyToAllies")]
         [Header("While Active")]
@@ -95,7 +95,7 @@ namespace Vashta.Entropy.Spells
             }
             
             // Apply effects to enemies
-            string deathFxId = EnemyDeathEffect ? EnemyDeathEffect.Id : "";
+            string deathFxId = enemyDeathEffectData ? enemyDeathEffectData.Id : "";
             foreach (Player player in enemiesList)
             {
                 player.CombatController.TakeDamage(DamageEnemiesOnCast, caster, true, deathFxId);

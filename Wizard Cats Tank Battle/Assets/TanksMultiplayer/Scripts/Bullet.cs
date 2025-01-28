@@ -73,7 +73,7 @@ namespace TanksMP
         /// </summary>
         public GameObject explosionFX;
         public GameObject explosionFxLarge;
-        public VisualEffect deathFxData;
+        public VisualEffectData deathFxData;
 
         public bool bounceInf;
 

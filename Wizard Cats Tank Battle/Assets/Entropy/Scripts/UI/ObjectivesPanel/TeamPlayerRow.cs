@@ -1,13 +1,14 @@
 using Entropy.Scripts.Player;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Vashta.Entropy.UI.ObjectivesPanel
 {
     public class TeamPlayerRow : GamePanel
     {
-        public ClassList ClassList;
+        [FormerlySerializedAs("ClassList")] public ClassDirectory classDirectory;
         
         public TextMeshProUGUI PlayerNameText;
         public Color PlayerIsDeadColor = Color.gray;
@@ -24,7 +25,7 @@ namespace Vashta.Entropy.UI.ObjectivesPanel
             RefreshContent();
 
             // set class icon
-            ClassDefinition classDefinition = ClassList[classId];
+            ClassDefinition classDefinition = classDirectory[classId];
 
             if(classDefinition != null)
                 ClassIcon.sprite = classDefinition.classIcon;

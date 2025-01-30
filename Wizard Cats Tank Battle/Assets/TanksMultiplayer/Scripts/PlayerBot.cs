@@ -73,7 +73,7 @@ namespace TanksMP
         {
             // TODO: This needs to inherit from base, but might conflict with Player
             
-            ClassDefinition classDefinition = defaultClassDefinition ? defaultClassDefinition : classList.RandomClass();
+            ClassDefinition classDefinition = defaultClassDefinition ? defaultClassDefinition : classDirectory.RandomClass();
 
             _lastSecondUpdate = Time.time + .1f;
             JoinTime = -Time.time;

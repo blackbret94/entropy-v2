@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace Entropy.Scripts.Player
 {
-    [CreateAssetMenu(fileName = "Class List", menuName = "Entropy/ClassList", order = 1)]
-    public class ClassList: ScriptableObject
+    [CreateAssetMenu(fileName = "Class Directory", menuName = "Entropy/Class Directory", order = 1)]
+    public class ClassDirectory: ScriptableObject
     {
         public List<ClassDefinition> Classes;
         private Dictionary<int, ClassDefinition> _dictionary;

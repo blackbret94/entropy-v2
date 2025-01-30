@@ -38,12 +38,12 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 77340729}
-  m_IndirectSpecularColor: {r: 0.053277086, g: 0.19821602, b: 0.55684865, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 12
+  serializedVersion: 13
+  m_BakeOnSceneLoad: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -1127,10 +1127,11 @@ MeshRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c22777d6e868e4f2fb421913386b154e, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1961,6 +1962,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SerializedVersion: 0
   m_AgentTypeID: 0
   m_CollectObjects: 0
   m_Size: {x: 10, y: 10, z: 10}
@@ -2506,6 +2508,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Control Point
+      objectReference: {fileID: 0}
+    - target: {fileID: 9166919958523409234, guid: e3f0d365a3c7d384eb922cf94be33968,
+        type: 3}
+      propertyPath: SortKey
+      value: 3759250524
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6217,6 +6224,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Control Point (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9166919958523409234, guid: e3f0d365a3c7d384eb922cf94be33968,
+        type: 3}
+      propertyPath: SortKey
+      value: 1787777250
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -14360,6 +14372,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Control Point (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 9166919958523409234, guid: e3f0d365a3c7d384eb922cf94be33968,
+        type: 3}
+      propertyPath: SortKey
+      value: 25178653
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -21459,10 +21476,11 @@ MeshRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c22777d6e868e4f2fb421913386b154e, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -21498,14 +21516,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Shape:
     rid: 2078097408351535170
-  m_Size: {x: 11, y: 1, z: -11.999999}
-  m_Rotation: {x: 0, y: -0.99999994, z: 0, w: 0}
-  m_PivotLocation: 1
-  m_PivotPosition: {x: 0, y: 0, z: 0}
+  m_ShapeRotation: {x: 0, y: 0, z: 0, w: 1}
   m_UnmodifiedMeshVersion: 4910
-  m_ShapeBox:
-    m_Center: {x: 3.4499998, y: 0.5, z: -3.9700003}
-    m_Extent: {x: 5.5, y: 0.5, z: -5.9999995}
+  m_Size: {x: 11, y: 1, z: -11.999999}
+  m_LocalCenter: {x: 0, y: 0, z: 0}
   references:
     version: 2
     RefIds:
@@ -22849,10 +22863,11 @@ MeshRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c22777d6e868e4f2fb421913386b154e, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -25731,10 +25746,11 @@ MeshRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c22777d6e868e4f2fb421913386b154e, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -25770,14 +25786,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Shape:
     rid: 2078097408351535170
-  m_Size: {x: 11, y: 1, z: -11.999999}
-  m_Rotation: {x: 0, y: -0.99999994, z: 0, w: 0}
-  m_PivotLocation: 1
-  m_PivotPosition: {x: 0, y: 0, z: 0}
+  m_ShapeRotation: {x: 0, y: 0, z: 0, w: 1}
   m_UnmodifiedMeshVersion: 4910
-  m_ShapeBox:
-    m_Center: {x: 3.4499998, y: 0.5, z: -3.9700003}
-    m_Extent: {x: 5.5, y: 0.5, z: -5.9999995}
+  m_Size: {x: 11, y: 1, z: -11.999999}
+  m_LocalCenter: {x: 0, y: 0, z: 0}
   references:
     version: 2
     RefIds:
@@ -32649,10 +32661,11 @@ MeshRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c22777d6e868e4f2fb421913386b154e, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -32688,14 +32701,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Shape:
     rid: 2078097408351535170
-  m_Size: {x: 11, y: 1, z: -11.999999}
-  m_Rotation: {x: 0, y: -0.99999994, z: 0, w: 0}
-  m_PivotLocation: 1
-  m_PivotPosition: {x: 0, y: 0, z: 0}
+  m_ShapeRotation: {x: 0, y: 0, z: 0, w: 1}
   m_UnmodifiedMeshVersion: 4910
-  m_ShapeBox:
-    m_Center: {x: 3.4499998, y: 0.5, z: -3.9700003}
-    m_Extent: {x: 5.5, y: 0.5, z: -5.9999995}
+  m_Size: {x: 11, y: 1, z: -11.999999}
+  m_LocalCenter: {x: 0, y: 0, z: 0}
   references:
     version: 2
     RefIds:
@@ -33826,6 +33835,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Control Point
       objectReference: {fileID: 0}
+    - target: {fileID: 9166919958523409234, guid: e3f0d365a3c7d384eb922cf94be33968,
+        type: 3}
+      propertyPath: SortKey
+      value: 1180847996
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -34580,10 +34594,11 @@ MeshRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c22777d6e868e4f2fb421913386b154e, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -34619,14 +34634,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Shape:
     rid: 2078097408351535170
-  m_Size: {x: 11, y: 1, z: -11.999999}
-  m_Rotation: {x: 0, y: -0.99999994, z: 0, w: 0}
-  m_PivotLocation: 1
-  m_PivotPosition: {x: 0, y: 0, z: 0}
+  m_ShapeRotation: {x: 0, y: 0, z: 0, w: 1}
   m_UnmodifiedMeshVersion: 4910
-  m_ShapeBox:
-    m_Center: {x: 3.4499998, y: 0.5, z: -3.9700003}
-    m_Extent: {x: 5.5, y: 0.5, z: -5.9999995}
+  m_Size: {x: 11, y: 1, z: -11.999999}
+  m_LocalCenter: {x: 0, y: 0, z: 0}
   references:
     version: 2
     RefIds:
@@ -36842,6 +36853,42 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1660368404}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1667110906 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1285101897523846397, guid: e4a53bbfdd13b6545a92577342c00d64,
+    type: 3}
+  m_PrefabInstance: {fileID: 137415513683796524}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7107ec45aac37b44c9394c4e4d0cc5d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1667110907 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6734966296189389159, guid: e4a53bbfdd13b6545a92577342c00d64,
+    type: 3}
+  m_PrefabInstance: {fileID: 137415513683796524}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7107ec45aac37b44c9394c4e4d0cc5d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1667110908 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 35238002789219714, guid: e4a53bbfdd13b6545a92577342c00d64,
+    type: 3}
+  m_PrefabInstance: {fileID: 137415513683796524}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7107ec45aac37b44c9394c4e4d0cc5d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1685800028
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44861,10 +44908,11 @@ MeshRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c22777d6e868e4f2fb421913386b154e, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -50255,6 +50303,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 137415512431350458, guid: e4a53bbfdd13b6545a92577342c00d64,
+        type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 1919
+      objectReference: {fileID: 0}
     - target: {fileID: 137415512518353544, guid: e4a53bbfdd13b6545a92577342c00d64,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -51603,6 +51656,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMin.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3546861785511652775, guid: e4a53bbfdd13b6545a92577342c00d64,
+        type: 3}
+      propertyPath: SortKey
+      value: 3167973384
       objectReference: {fileID: 0}
     - target: {fileID: 3558220138047777448, guid: e4a53bbfdd13b6545a92577342c00d64,
         type: 3}
@@ -52997,6 +53055,36 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -6.23
       objectReference: {fileID: 0}
+    - target: {fileID: 7172045402229482541, guid: e4a53bbfdd13b6545a92577342c00d64,
+        type: 3}
+      propertyPath: SortKey
+      value: 2031166013
+      objectReference: {fileID: 0}
+    - target: {fileID: 7172045402229482541, guid: e4a53bbfdd13b6545a92577342c00d64,
+        type: 3}
+      propertyPath: NetworkedBehaviours.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7172045402229482541, guid: e4a53bbfdd13b6545a92577342c00d64,
+        type: 3}
+      propertyPath: 'NetworkedBehaviours.Array.data[3]'
+      value: 
+      objectReference: {fileID: 1667110908}
+    - target: {fileID: 7172045402229482541, guid: e4a53bbfdd13b6545a92577342c00d64,
+        type: 3}
+      propertyPath: 'NetworkedBehaviours.Array.data[4]'
+      value: 
+      objectReference: {fileID: 578490577}
+    - target: {fileID: 7172045402229482541, guid: e4a53bbfdd13b6545a92577342c00d64,
+        type: 3}
+      propertyPath: 'NetworkedBehaviours.Array.data[5]'
+      value: 
+      objectReference: {fileID: 1667110907}
+    - target: {fileID: 7172045402229482541, guid: e4a53bbfdd13b6545a92577342c00d64,
+        type: 3}
+      propertyPath: 'NetworkedBehaviours.Array.data[6]'
+      value: 
+      objectReference: {fileID: 1667110906}
     - target: {fileID: 7241225597721487522, guid: e4a53bbfdd13b6545a92577342c00d64,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -53281,6 +53369,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7915861732292747603, guid: e4a53bbfdd13b6545a92577342c00d64,
+        type: 3}
+      propertyPath: SortKey
+      value: 699966800
       objectReference: {fileID: 0}
     - target: {fileID: 7965301282975330281, guid: e4a53bbfdd13b6545a92577342c00d64,
         type: 3}

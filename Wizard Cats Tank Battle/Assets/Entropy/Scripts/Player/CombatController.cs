@@ -1,14 +1,27 @@
+using Fusion;
+using FusionHelpers;
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.Spells;
 using Vashta.Entropy.StatusEffects;
 
 namespace Entropy.Scripts.Player
 {
-    public class CombatController : MonoBehaviour
+    public class CombatController : NetworkBehaviourWithState<CombatController.NetworkState>
     {
+        [Networked] public override ref NetworkState State => ref MakeRef<NetworkState>();
+        public struct NetworkState : INetworkStruct
+        {
+            [Networked, Capacity(24)] 
+            public NetworkArray<ProjectileState> projectileStates => default;
+        }
+        
         [Header("Modifiers")]
         public int counterDamageMod = 2;
         public int sameClassDamageMod = -1;
+
+        [Header("References")] 
+        [SerializeField] private Projectile ProjectilePrefab;
         
         [Header("Controllers")]
         private TanksMP.Player _player;
@@ -20,6 +33,7 @@ namespace Entropy.Scripts.Player
         public float FractionFireReady => Mathf.Min(1-(TimeToNextFire / _player.fireRate), 1);
         // death loop protections
         private const float minTimeBetweenDeaths = .5f;
+        private SparseCollection<ProjectileState, Projectile> Projectiles;
         
         [Header("Cached references")]
         private StatusEffectController _statusEffectController;
@@ -43,13 +57,30 @@ namespace Entropy.Scripts.Player
             _shotPos = _player.shotPos;
             _turret = _player.turret;
         }
-        
-        public int CalculateDamageTaken(Bullet bullet, out bool attackerIsCounter, out bool attackerIsSame)
+
+        public override void Spawned()
         {
-            float calculatedDamage = bullet.GetDamage();
+            Projectiles = new SparseCollection<ProjectileState, Projectile>(State.projectileStates, ProjectilePrefab);
+        }
+
+        public override void Render()
+        {
+            if (TryGetStateChanges(out var from, out var to))
+            {
+                // OnFireTickChanged(); // Not sure what this does? Reloads?
+            }
+            else
+                TryGetStateSnapshots(out from, out _, out _, out _, out _);
+            
+            Projectiles.Render(this, from.projectileStates);
+        }
+        
+        public int CalculateDamageTaken(Projectile projectile, out bool attackerIsCounter, out bool attackerIsSame)
+        {
+            float calculatedDamage = projectile.GetDamage();
 
             // Check class modifiers
-            if (bullet.ClassDefinition == null)
+            if (projectile.ClassDefinition == null)
             {
                 Debug.LogWarning("Warning! No class definition assigned to bullet");
             }
@@ -103,7 +134,7 @@ namespace Entropy.Scripts.Player
                     short[] pos = new short[] { (short)(_shotPos.position.x * 10), (short)(_shotPos.position.z * 10) };
                     //send shot request with origin to server
                     // Debug.Log(turretRotation);
-                    _player.CombatController.Shoot(pos, _player.turretRotation);
+                    Shoot(pos, _player.turretRotation);
                 }
             }
         }
@@ -118,7 +149,7 @@ namespace Entropy.Scripts.Player
                 nextFire = Time.time + 0.1f;
         }
         
-        public void Shoot(short[] position, short angle)
+        private void Shoot(short[] position, short angle)
         {
             //calculate center between shot position sent and current server position (factor 0.6f = 40% client, 60% server)
             //this is done to compensate network lag and smoothing it out between both client/server positions
@@ -128,18 +159,21 @@ namespace Entropy.Scripts.Player
             ClassDefinition playerClass = _player.GetClass();
             
             //spawn bullet using pooling
-            _projectileFactory.SpawnProjectile(shotCenter, syncedRot, playerClass);
+            // _projectileFactory.SpawnProjectile(shotCenter, syncedRot, playerClass);
+            Projectiles.Add(Runner, new ProjectileState(shotCenter, syncedRot.eulerAngles, playerClass.classId), 5);
 
             // Spray.  Only handles 3 projectiles right now
             if (_statusEffectController.AdditionalProjectilesSpray > 0)
             {
                 // shoot left
                 Quaternion leftProjectile = Quaternion.Euler(0, angle - 5, 0);
-                _projectileFactory.SpawnProjectile(shotCenter, leftProjectile, playerClass, .66f);
+                Projectiles.Add(Runner, new ProjectileState(shotCenter, leftProjectile.eulerAngles, playerClass.classId, .66f), 0);
+                // _projectileFactory.SpawnProjectile(shotCenter, leftProjectile, playerClass, .66f);
                 
                 // shoot right
                 Quaternion rightProjectile = Quaternion.Euler(0, angle + 5, 0);
-                _projectileFactory.SpawnProjectile(shotCenter, rightProjectile, playerClass, .66f);
+                Projectiles.Add(Runner, new ProjectileState(shotCenter, rightProjectile.eulerAngles, playerClass.classId, .66f), 0);
+                // _projectileFactory.SpawnProjectile(shotCenter, rightProjectile, playerClass, .66f);
             }
             
             // animate
@@ -188,10 +222,10 @@ namespace Entropy.Scripts.Player
         /// Server only: calculate damage to be taken by the Player,
 		/// triggers score increase and respawn workflow on death.
         /// </summary>
-        public void TakeDamage(Bullet bullet)
+        public void TakeDamage(Projectile projectile)
         {
             // ignore damage to team mates
-            if (_player.TeamIndex == bullet.owner.GetComponent<TanksMP.Player>().TeamIndex)
+            if (_player.TeamIndex == projectile.owner.GetComponent<TanksMP.Player>().TeamIndex)
                 return;
             
             //store network variables temporary
@@ -207,7 +241,7 @@ namespace Entropy.Scripts.Player
 
             //substract health by damage
             //locally for now, to only have one update later on
-            int damage = CalculateDamageTaken(bullet, out bool attackerIsCounter, out bool attackerIsSame);
+            int damage = CalculateDamageTaken(projectile, out bool attackerIsCounter, out bool attackerIsSame);
             
             // Debug.Log("Taking damage from bullet: " + damage);
             
@@ -215,7 +249,9 @@ namespace Entropy.Scripts.Player
             
             if (health <= 0)
                 //bullet killed the player
-                _player.CombatController.PlayerDeath(bullet.owner.GetComponent<TanksMP.Player>(), bullet.deathFxData.Id);
+                _player.CombatController.PlayerDeath(
+                    projectile.owner.GetComponent<TanksMP.Player>(), 
+                    projectile.DeathFx.Id);
             else
             {
                 //we didn't die, set health to new value

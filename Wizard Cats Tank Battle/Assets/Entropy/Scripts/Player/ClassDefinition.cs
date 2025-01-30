@@ -1,6 +1,7 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
+using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.Spells;
 
 namespace Entropy.Scripts.Player
@@ -39,8 +40,9 @@ namespace Entropy.Scripts.Player
         [Range(0f, 7f)]
         public int armor = 2;
         public GameObject Missile;
+        public ProjectileData ProjectileData;
 
-        public ClassList classList;
+        [FormerlySerializedAs("classList")] public ClassDirectory classDirectory;
 
         [Header("Ultimates")]
         public Sprite ultimateIcon;
@@ -82,7 +84,7 @@ namespace Entropy.Scripts.Player
         {
             List<ClassDefinition> counteredBy = new();
 
-            foreach (var classDefinition in classList.Classes)
+            foreach (var classDefinition in classDirectory.Classes)
             {
                 if(classDefinition.IsCounter(classId))
                     counteredBy.Add(classDefinition);

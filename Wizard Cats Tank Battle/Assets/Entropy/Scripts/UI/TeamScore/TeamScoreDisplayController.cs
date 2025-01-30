@@ -42,7 +42,6 @@ namespace Vashta.Entropy.UI.TeamScore
                 {
                     if (teamIndex == scoreUnit.TeamIndex)
                     {
-                        Debug.Log("Updating counts for team " + teamIndex + " to " + sizes[i] + ".");
                         scoreUnit.UpdateNumberOfPlayers(sizes[i]);
                     }
                 }

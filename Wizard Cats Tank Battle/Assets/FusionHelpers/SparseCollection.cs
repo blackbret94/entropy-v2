@@ -135,7 +135,9 @@ namespace FusionHelpers
 					}
 
 					if (isFirstRender)
-						ApplyState( state, e,0, true, false);
+					{
+						ApplyState(state, e, 0, true, false);
+					}
 
 					if(!isFirstRender && !isLastRender)
 						ApplyState( state, e, t, false, false);

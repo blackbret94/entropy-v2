@@ -34,11 +34,13 @@ namespace Vashta.Entropy.Network
             {
                 Runner.AddCallbacks(this);
             }
+            
+            Debug.Log("Spawned [" + this + "] IsClient=" + Runner.IsClient + " IsServer=" + Runner.IsServer + " IsInputSrc=" + Object.HasInputAuthority + " IsStateSrc=" + Object.HasStateAuthority);
         }
 
         public void OnInput(NetworkRunner runner, NetworkInput input)
         {
-            if (_player!=null && _player.Object!=null && _player.IsAlive)
+            if (_player!=null && _player.IsAlive)
             {
                 _inputData.aimDirection = _aimDelta.normalized;
                 _inputData.moveDirection = _moveDelta.normalized;
@@ -53,8 +55,16 @@ namespace Vashta.Entropy.Network
 
         private void Update()
         {
+            // if (!Object.HasInputAuthority)
+            // {
+            //     return;
+            // }
+
             if (!_playerInputController)
+            {
+                Debug.Log("PlayerInputController not found!");
                 return;
+            }
             
             // Resets sample values
             _buttonSample &= ~_buttonReset;

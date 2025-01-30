@@ -1,12 +1,9 @@
-﻿/*  This file is part of the "Tanks Multiplayer" project by FLOBUK.
- *  You are only allowed to use these resources if you've bought them from the Unity Asset Store.
- * 	You shall not license, sublicense, sell, resell, transfer, assign, distribute or
- * 	otherwise make available to any third party the Service or the Content. */
-
-using System;
+﻿using System;
 using UnityEngine;
 using System.Collections.Generic;
 using Entropy.Scripts.Player;
+using Fusion;
+using FusionHelpers;
 using UnityEngine.Serialization;
 using Vashta.Entropy.GameMode;
 using Vashta.Entropy.ScriptableObject;
@@ -19,15 +16,19 @@ namespace TanksMP
     /// <summary>
     /// Projectile script for player shots with collision/hit logic.
     /// </summary>
-    public class Bullet : MonoBehaviour
+    public class Projectile : MonoBehaviour, ISparseVisual<ProjectileState, Projectile>
     {
         // Eventually break this out into a scriptable object
-        public int bulletId = 0;
+        [FormerlySerializedAs("bulletId")] public int projectileId = 0;
         
         /// <summary>
         /// Projectile travel speed in units.
         /// </summary>
         public float baseSpeed = 10;
+
+        public float Speed { get; private set; }
+        // need to check this to make sure it is accurate
+        public Vector3 Gravity = Vector3.zero;
 
         /// <summary>
         /// Damage to cause on a player that gets hit.
@@ -58,23 +59,6 @@ namespace TanksMP
         /// </summary>
         [FormerlySerializedAs("explosionRange")] 
         public float explosionRangeBase = 1;
-
-        public ScriptableAudioClipList HitSfx;
-        public ScriptableAudioClipList CastSfx;
-        public ScriptableAudioClipList BounceSfx;
-        
-        /// <summary>
-        /// Object to spawn when a player gets hit.
-        /// </summary>
-        public GameObject hitFX;
-
-        /// <summary>
-        /// Object to spawn when this projectile gets despawned.
-        /// </summary>
-        public GameObject explosionFX;
-        public GameObject explosionFxLarge;
-        public VisualEffectData deathFxData;
-
         public bool bounceInf;
 
         [Header("Class Mechanics")] // Eventually this will be broken out into specific skills
@@ -95,7 +79,10 @@ namespace TanksMP
         //the current bullet position on collision, calculating the bounce off the previous
         //bullet position improves the result for high speed bullets which could skip colliders
         private Vector3 lastBouncePos;
+        private ProjectileData _projectileData;
         public ClassDefinition ClassDefinition { set; get; }
+        public ClassDirectory classDirectory;
+        public VisualEffectData DeathFx => _projectileData ? _projectileData.deathFxData : null;
 
         /// <summary>
         /// Player gameobject that spawned this projectile.
@@ -158,7 +145,7 @@ namespace TanksMP
         
         public int GetId()
         {
-            return bulletId;
+            return projectileId;
         }
 
         public void SpawnNewBullet()
@@ -188,11 +175,18 @@ namespace TanksMP
                 lastBouncePos = pos;
                 
                 //play cast sound
-                AudioManager.Play3D(CastSfx.GetRandomClip(), pos);
+                if (_projectileData != null)
+                {
+                    AudioManager.Play3D(_projectileData.CastSfx.GetRandomClip(), pos);
+                }
             }
             else
             {
-                if(BounceSfx) AudioManager.Play3D(BounceSfx.GetRandomClip(), transform.position);
+                if (_projectileData != null)
+                {
+                    if(_projectileData.BounceSfx) 
+                        AudioManager.Play3D(_projectileData.BounceSfx.GetRandomClip(), transform.position);
+                }
             }
 
             myRigidbody.linearVelocity = baseSpeed * transform.forward;
@@ -298,9 +292,13 @@ namespace TanksMP
                 }
 
                 //create clips and particles on hit
-                if (hitFX) PoolManager.Spawn(hitFX, transform.position, Quaternion.identity);
-                
-                AudioManager.Play3D(HitSfx.GetRandomClip(), transform.position);
+                if (_projectileData && _projectileData.HitFx) 
+                    PoolManager.Spawn(_projectileData.HitFx, transform.position, Quaternion.identity);
+
+                if (_projectileData != null)
+                {
+                    AudioManager.Play3D(_projectileData.HitSfx.GetRandomClip(), transform.position);
+                }
             }
             else
             {
@@ -334,7 +332,11 @@ namespace TanksMP
                         OnSpawn();
 
                         //play clip at the collided position
-                        AudioManager.Play3D(HitSfx.GetRandomClip(), transform.position);
+                        if (_projectileData != null)
+                        {
+                            AudioManager.Play3D(_projectileData.HitSfx.GetRandomClip(), transform.position);
+                        }
+
                         //exit execution until next collision
                         return;
                     }
@@ -366,8 +368,11 @@ namespace TanksMP
                     //add this Player component to the list
                     //cancel in case we do reach the maximum count now
                     targets.Add(other);
-                    
-                    PoolManager.Spawn(explosionFX, other.transform.position, transform.rotation);
+
+                    if (_projectileData != null)
+                    {
+                        PoolManager.Spawn(_projectileData.ExplosionFx, other.transform.position, transform.rotation);
+                    }
 
                     if (targets.Count == _modifiedMaxTargets)
                         break;
@@ -459,7 +464,10 @@ namespace TanksMP
                 OnSpawn();
 
                 //play clip at the collided position
-                AudioManager.Play3D(HitSfx.GetRandomClip(), transform.position);
+                if (_projectileData != null)
+                {
+                    AudioManager.Play3D(_projectileData.HitSfx.GetRandomClip(), transform.position);
+                }
                 //exit execution until next collision
             }
         }
@@ -469,12 +477,12 @@ namespace TanksMP
         void OnDespawn()
         {
             //create clips and particles on despawn
-            if (explosionFxLarge && _modifiedExplosionRange > 1)
+            if (_projectileData && _projectileData.ExplosionFxLarge && _modifiedExplosionRange > 1)
             {
-                PoolManager.Spawn(explosionFxLarge, transform.position, transform.rotation);
-            } else if (explosionFX)
+                PoolManager.Spawn(_projectileData.ExplosionFxLarge, transform.position, transform.rotation);
+            } else if (_projectileData && _projectileData.ExplosionFx)
             {
-                PoolManager.Spawn(explosionFX, transform.position, transform.rotation);
+                PoolManager.Spawn(_projectileData.ExplosionFx, transform.position, transform.rotation);
             }
 
             //reset modified variables to the initial state
@@ -503,6 +511,57 @@ namespace TanksMP
         private bool HasAlreadyHitPlayer(Player player)
         {
             return _playerCollidedWith.Contains(player);
+        }
+
+        public void ApplyStateToVisual(NetworkBehaviour owner, ProjectileState state, float t, bool isFirstRender, bool isLastRender)
+        {
+            // Projectile is about to be destroyed
+            if (isLastRender)
+            {
+                // Render explosion
+            }
+
+            // Projectile was just spawned
+            if (isFirstRender)
+            {
+                if (!classDirectory)
+                {
+                    Debug.LogError("Projectile is missing link to ClassDirectory");
+                }
+                else
+                {
+                    ClassDefinition = classDirectory[state.ClassId];
+                    if (ClassDefinition != null)
+                    {
+                        _projectileData = ClassDefinition.ProjectileData;
+
+                        // Load visuals
+                        
+                        // Apply data
+                        if (_projectileData != null)
+                        {
+                            // Set base values
+                            _damage = Mathf.RoundToInt(_projectileData.BaseDamage * state.DamageModifier);
+                            baseSpeed = _projectileData.BaseSpeed;
+                            Speed = baseSpeed;
+                            bounce = _projectileData.BaseBounces;
+                            despawnDelay = _projectileData.BaseLifetime;
+                            this.owner = owner.gameObject;
+                        }
+                        else
+                        {
+                            Debug.Log("Projectile missing projectiledata!");
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log("Projectile missing class definition!");
+                    }
+                }
+            }
+            
+            transform.forward = state.Direction;
+            transform.position = state.Position;
         }
     }
 }

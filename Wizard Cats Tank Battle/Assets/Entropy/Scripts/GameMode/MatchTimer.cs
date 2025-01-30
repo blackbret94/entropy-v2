@@ -15,8 +15,6 @@ namespace Vashta.Entropy.GameMode
         
         public override void Spawned()
         {
-            Debug.Log("Spawned MatchTimer");
-            
             // If the room was just created, save the start time
             NetworkRunner networkRunner = FindFirstObjectByType<NetworkRunner>();
             if (networkRunner.IsSharedModeMasterClient)

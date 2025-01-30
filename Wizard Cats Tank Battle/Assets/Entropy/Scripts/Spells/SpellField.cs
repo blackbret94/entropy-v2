@@ -155,12 +155,12 @@ namespace Vashta.Entropy.Spells
             }
             
             // Check for bullet
-            Bullet bullet;
-            if ((bullet = other.gameObject.GetComponent<Bullet>()) != null)
+            Projectile projectile;
+            if ((projectile = other.gameObject.GetComponent<Projectile>()) != null)
             {
-                HandleBulletTriggerEnter(bullet);
+                HandleBulletTriggerEnter(projectile);
                 
-                bool bulletIsAlly = bullet.GetTeam() == _teamIndex;
+                bool bulletIsAlly = projectile.GetTeam() == _teamIndex;
                 
                 // VFX
                 if (_spell.FieldCollisionVfxProjectile)
@@ -178,22 +178,22 @@ namespace Vashta.Entropy.Spells
                 {
                     if ((bulletIsAlly && _spell.AudioPlayForAllies) || (!bulletIsAlly && _spell.AudioPlayForEnemies))
                     {
-                        AudioManager.Play3D(_spell.FieldHitSfxProjectile, bullet.transform.position);
+                        AudioManager.Play3D(_spell.FieldHitSfxProjectile, projectile.transform.position);
                     }
                 }
             }
         }
 
-        private void HandleBulletTriggerEnter(Bullet bullet)
+        private void HandleBulletTriggerEnter(Projectile projectile)
         {
-            if (bullet.owner != null)
+            if (projectile.owner != null)
             {
-                if (bullet.GetTeam() == _teamIndex)
+                if (projectile.GetTeam() == _teamIndex)
                 {
                     if (_spell.IncreaseAlliedProjectileSpeedWhileActive > 0)
                     {
                         // Increase speed of allies projectiles
-                        bullet.SetSpeed(bullet.GetBaseSpeed() + _spell.IncreaseAlliedProjectileSpeedWhileActive);
+                        projectile.SetSpeed(projectile.GetBaseSpeed() + _spell.IncreaseAlliedProjectileSpeedWhileActive);
                     }
                 }
                 else
@@ -201,7 +201,7 @@ namespace Vashta.Entropy.Spells
                     if (_spell.DestroyEnemyProjectilesWhileActive)
                     {
                         // Destroy enemy projectiles
-                        PoolManager.Despawn(bullet.gameObject);
+                        PoolManager.Despawn(projectile.gameObject);
                     }
                 }
             }

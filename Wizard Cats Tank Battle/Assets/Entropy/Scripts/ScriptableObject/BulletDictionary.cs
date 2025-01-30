@@ -7,8 +7,8 @@ namespace Vashta.Entropy.ScriptableObject
     [CreateAssetMenu(fileName = "BulletDictionary", menuName = "Entropy/BulletDictionary", order = 1)]
     public class BulletDictionary : UnityEngine.ScriptableObject
     {
-        public Bullet[] Directory;
-        private Dictionary<int, Bullet> _dictionary;
+        public Projectile[] Directory;
+        private Dictionary<int, Projectile> _dictionary;
 
         private void OnEnable()
         {
@@ -20,10 +20,10 @@ namespace Vashta.Entropy.ScriptableObject
             if (_dictionary != null) 
                 return;
             
-            _dictionary = new Dictionary<int, Bullet>();
+            _dictionary = new Dictionary<int, Projectile>();
          
-            foreach (Bullet go in Directory)
-                _dictionary.Add(go.bulletId,go);
+            foreach (Projectile go in Directory)
+                _dictionary.Add(go.projectileId,go);
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Vashta.Entropy.ScriptableObject
         /// audioDirectory["shoot"]
         /// </summary>
         /// <param name="key"></param>
-        public Bullet this[int key]
+        public Projectile this[int key]
         {
             get
             {

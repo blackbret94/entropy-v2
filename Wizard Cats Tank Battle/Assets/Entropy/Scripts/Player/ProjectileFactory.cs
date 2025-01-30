@@ -24,34 +24,34 @@ namespace Entropy.Scripts.Player
                 return;
             }
             GameObject obj = PoolManager.Spawn(playerClass.Missile, shotCenter, syncedRot);
-            Bullet newBullet = obj.GetComponent<Bullet>();
+            Projectile newProjectile = obj.GetComponent<Projectile>();
             
-            newBullet.SpawnNewBullet();
-            newBullet.owner = _playerGameObject;
-            newBullet.ClassDefinition = playerClass;
-            newBullet.SetDamage(Mathf.CeilToInt(newBullet.GetRawDamage() * _statusEffectController.DamageOutputModifier * damageModifier));
-            newBullet.canBuff = !_statusEffectController.BlocksCastingBuffs;
-            newBullet.canDebuff = !_statusEffectController.BlocksCastingDebuffs;
+            newProjectile.SpawnNewBullet();
+            newProjectile.owner = _playerGameObject;
+            newProjectile.ClassDefinition = playerClass;
+            newProjectile.SetDamage(Mathf.CeilToInt(newProjectile.GetRawDamage() * _statusEffectController.DamageOutputModifier * damageModifier));
+            newProjectile.canBuff = !_statusEffectController.BlocksCastingBuffs;
+            newProjectile.canDebuff = !_statusEffectController.BlocksCastingDebuffs;
 
             if (_statusEffectController.ProjectileExplodes)
             {
-                newBullet.SetExplosionRange(3);
-                newBullet.SetMaxTargets(3);
+                newProjectile.SetExplosionRange(3);
+                newProjectile.SetMaxTargets(3);
             }
 
             if (_statusEffectController.ProjectileReflects)
             {
-                newBullet.SetMaxBounce(10);
+                newProjectile.SetMaxBounce(10);
             }
 
             if (_statusEffectController.ProjectileLifeExtended > 0)
             {
-                newBullet.IncreaseDespawnDelay(_statusEffectController.ProjectileLifeExtended);
+                newProjectile.IncreaseDespawnDelay(_statusEffectController.ProjectileLifeExtended);
             }
 
             if (_statusEffectController.Pierces)
             {
-                newBullet.SetPiercing(true);
+                newProjectile.SetPiercing(true);
             }
         }
     }

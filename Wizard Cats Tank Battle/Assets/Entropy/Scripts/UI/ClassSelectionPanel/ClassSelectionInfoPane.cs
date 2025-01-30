@@ -78,14 +78,14 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
                 ClassCounteredByGO.SetActive(false);
             }
             
-            Bullet bullet = definition.Missile.GetComponent<Bullet>();
+            Projectile projectile = definition.Missile.GetComponent<Projectile>();
             
             // SKILLS
             // On enemy hit
-            if (bullet.StatusEffectOnEnemy)
+            if (projectile.StatusEffectOnEnemy)
             {
                 Skill1.OpenPanel();
-                Skill1.Set(bullet.StatusEffectOnEnemy, definition.colorPrimary, definition.colorSecondary);
+                Skill1.Set(projectile.StatusEffectOnEnemy, definition.colorPrimary, definition.colorSecondary);
             }
             else
             {
@@ -93,10 +93,10 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
             }
 
             // On ally hit
-            if (bullet.StatusEffectOnAlly)
+            if (projectile.StatusEffectOnAlly)
             {
                 Skill2.OpenPanel();
-                Skill2.Set(bullet.StatusEffectOnAlly, definition.colorPrimary, definition.colorSecondary);
+                Skill2.Set(projectile.StatusEffectOnAlly, definition.colorPrimary, definition.colorSecondary);
             }
             else
             {

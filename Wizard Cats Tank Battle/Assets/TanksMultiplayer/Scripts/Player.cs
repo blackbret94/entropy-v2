@@ -1,16 +1,11 @@
-﻿/*  This file is part of the "Tanks Multiplayer" project by FLOBUK.
- *  You are only allowed to use these resources if you've bought them from the Unity Asset Store.
- * 	You shall not license, sublicense, sell, resell, transfer, assign, distribute or
- * 	otherwise make available to any third party the Service or the Content. */
-
-using System.Collections;
+﻿using System.Collections;
 using Entropy.Scripts.Player;
 using Fusion;
 using FusionHelpers;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Vashta.Entropy.Character;
 using Vashta.Entropy.Network;
-using Vashta.Entropy.SaveLoad;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.Spells;
 using Vashta.Entropy.StatusEffects;
@@ -151,8 +146,8 @@ namespace TanksMP
         public float lastDeathTime = 0f;
         private bool _hasLateInited = false;
         
-        [Header("Data")]
-        public ClassList classList;
+        [FormerlySerializedAs("classList")] [Header("Data")]
+        public ClassDirectory classDirectory;
         public StatusEffectDirectory StatusEffectDirectory;
         public StatusEffectData StatusEffectApplyOnSpawn;
 
@@ -199,7 +194,7 @@ namespace TanksMP
                 GameManager.ui.CastPowerupButton.gameObject.SetActive(false);
             }
             
-            ClassDefinition classDefinition = defaultClassDefinition ? defaultClassDefinition : classList.RandomClass();
+            ClassDefinition classDefinition = defaultClassDefinition ? defaultClassDefinition : classDirectory.RandomClass();
 
             _lastSecondUpdate = Time.time + .1f;
             JoinTime = -Time.time;
@@ -360,6 +355,10 @@ namespace TanksMP
 #endif
 
                     _oldInput = inputData;
+                }
+                else
+                {
+                    Debug.Log("No input data");
                 }
             }
         }
@@ -644,7 +643,7 @@ namespace TanksMP
                 return;
             }
 
-            ClassDefinition classDefinition = classList[ClassId];
+            ClassDefinition classDefinition = classDirectory[ClassId];
 
             if (classDefinition == null)
             {
@@ -746,7 +745,7 @@ namespace TanksMP
         /// SECTION: HELPFUL GETTERS
         public ClassDefinition GetClass()
         {
-            return classList[ClassId];
+            return classDirectory[ClassId];
         }
 
         public int GetTeam() // Deprecated, remove

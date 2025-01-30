@@ -16,19 +16,12 @@ namespace TanksMP
     /// <summary>
     /// Projectile script for player shots with collision/hit logic.
     /// </summary>
-    public class Projectile : MonoBehaviour, ISparseVisual<ProjectileState, Projectile>
+    public class Projectile : MonoBehaviour
     {
         // Eventually break this out into a scriptable object
         [FormerlySerializedAs("bulletId")] public int projectileId = 0;
-        
-        /// <summary>
-        /// Projectile travel speed in units.
-        /// </summary>
-        public float baseSpeed = 10;
 
         public float Speed { get; private set; }
-        // need to check this to make sure it is accurate
-        public Vector3 Gravity = Vector3.zero;
 
         /// <summary>
         /// Damage to cause on a player that gets hit.
@@ -43,7 +36,7 @@ namespace TanksMP
         public float despawnDelay = 1f;
 
         /// <summary>
-        /// Bounce count of walls and other environment obstactles.
+        /// Bounce count of walls and other environment obstactles.  How many left until destruction
         /// </summary>
         public int bounce = 0;
 
@@ -73,16 +66,15 @@ namespace TanksMP
         private Rigidbody myRigidbody;
         //reference to collider component
         private SphereCollider sphereCol;
-        //caching maximum count of bounces for restore
-        private int _maxBounceBase;
+
         //caching last bounce position for calculating next direction. Instead of using
         //the current bullet position on collision, calculating the bounce off the previous
         //bullet position improves the result for high speed bullets which could skip colliders
         private Vector3 lastBouncePos;
-        private ProjectileData _projectileData;
+        public ProjectileData ProjectileData;
         public ClassDefinition ClassDefinition { set; get; }
         public ClassDirectory classDirectory;
-        public VisualEffectData DeathFx => _projectileData ? _projectileData.deathFxData : null;
+        public VisualEffectData DeathFx => ProjectileData ? ProjectileData.deathFxData : null;
 
         /// <summary>
         /// Player gameobject that spawned this projectile.
@@ -115,7 +107,6 @@ namespace TanksMP
         {
             myRigidbody = GetComponent<Rigidbody>();
             sphereCol = GetComponent<SphereCollider>();
-            _maxBounceBase = bounce;
         }
 
         public int GetRawDamage()
@@ -135,7 +126,7 @@ namespace TanksMP
 
         public float GetBaseSpeed()
         {
-            return baseSpeed;
+            return ProjectileData.BaseSpeed;
         }
         
         public void SetSpeed(float newSpeed)
@@ -155,7 +146,7 @@ namespace TanksMP
             // Reset modifiers
             _modifiedExplosionRange = explosionRangeBase;
             _modifiedDespawnDelay = despawnDelay;
-            _modifiedMaxBounce = _maxBounceBase;
+            _modifiedMaxBounce = ProjectileData.BaseBounces;
             _modifiedMaxTargets = maxTargetsBase;
             _damage = _damageRaw;
             _isPiercing = false;
@@ -175,21 +166,21 @@ namespace TanksMP
                 lastBouncePos = pos;
                 
                 //play cast sound
-                if (_projectileData != null)
+                if (ProjectileData != null)
                 {
-                    AudioManager.Play3D(_projectileData.CastSfx.GetRandomClip(), pos);
+                    AudioManager.Play3D(ProjectileData.CastSfx.GetRandomClip(), pos);
                 }
             }
             else
             {
-                if (_projectileData != null)
+                if (ProjectileData != null)
                 {
-                    if(_projectileData.BounceSfx) 
-                        AudioManager.Play3D(_projectileData.BounceSfx.GetRandomClip(), transform.position);
+                    if(ProjectileData.BounceSfx) 
+                        AudioManager.Play3D(ProjectileData.BounceSfx.GetRandomClip(), transform.position);
                 }
             }
 
-            myRigidbody.linearVelocity = baseSpeed * transform.forward;
+            myRigidbody.linearVelocity = ProjectileData.BaseSpeed * transform.forward;
         }
         
         public void IncreaseDespawnDelay(float delay)
@@ -292,12 +283,12 @@ namespace TanksMP
                 }
 
                 //create clips and particles on hit
-                if (_projectileData && _projectileData.HitFx) 
-                    PoolManager.Spawn(_projectileData.HitFx, transform.position, Quaternion.identity);
+                if (ProjectileData && ProjectileData.HitFx) 
+                    PoolManager.Spawn(ProjectileData.HitFx, transform.position, Quaternion.identity);
 
-                if (_projectileData != null)
+                if (ProjectileData != null)
                 {
-                    AudioManager.Play3D(_projectileData.HitSfx.GetRandomClip(), transform.position);
+                    AudioManager.Play3D(ProjectileData.HitSfx.GetRandomClip(), transform.position);
                 }
             }
             else
@@ -332,9 +323,9 @@ namespace TanksMP
                         OnSpawn();
 
                         //play clip at the collided position
-                        if (_projectileData != null)
+                        if (ProjectileData != null)
                         {
-                            AudioManager.Play3D(_projectileData.HitSfx.GetRandomClip(), transform.position);
+                            AudioManager.Play3D(ProjectileData.HitSfx.GetRandomClip(), transform.position);
                         }
 
                         //exit execution until next collision
@@ -369,9 +360,9 @@ namespace TanksMP
                     //cancel in case we do reach the maximum count now
                     targets.Add(other);
 
-                    if (_projectileData != null)
+                    if (ProjectileData != null)
                     {
-                        PoolManager.Spawn(_projectileData.ExplosionFx, other.transform.position, transform.rotation);
+                        PoolManager.Spawn(ProjectileData.ExplosionFx, other.transform.position, transform.rotation);
                     }
 
                     if (targets.Count == _modifiedMaxTargets)
@@ -464,9 +455,9 @@ namespace TanksMP
                 OnSpawn();
 
                 //play clip at the collided position
-                if (_projectileData != null)
+                if (ProjectileData != null)
                 {
-                    AudioManager.Play3D(_projectileData.HitSfx.GetRandomClip(), transform.position);
+                    AudioManager.Play3D(ProjectileData.HitSfx.GetRandomClip(), transform.position);
                 }
                 //exit execution until next collision
             }
@@ -477,18 +468,18 @@ namespace TanksMP
         void OnDespawn()
         {
             //create clips and particles on despawn
-            if (_projectileData && _projectileData.ExplosionFxLarge && _modifiedExplosionRange > 1)
+            if (ProjectileData && ProjectileData.ExplosionFxLarge && _modifiedExplosionRange > 1)
             {
-                PoolManager.Spawn(_projectileData.ExplosionFxLarge, transform.position, transform.rotation);
-            } else if (_projectileData && _projectileData.ExplosionFx)
+                PoolManager.Spawn(ProjectileData.ExplosionFxLarge, transform.position, transform.rotation);
+            } else if (ProjectileData && ProjectileData.ExplosionFx)
             {
-                PoolManager.Spawn(_projectileData.ExplosionFx, transform.position, transform.rotation);
+                PoolManager.Spawn(ProjectileData.ExplosionFx, transform.position, transform.rotation);
             }
 
             //reset modified variables to the initial state
             myRigidbody.linearVelocity = Vector3.zero;
             myRigidbody.angularVelocity = Vector3.zero;
-            bounce = _maxBounceBase;
+            bounce = ProjectileData.BaseBounces;
         }
         
         //method to check for friendly fire (same team index).
@@ -511,57 +502,6 @@ namespace TanksMP
         private bool HasAlreadyHitPlayer(Player player)
         {
             return _playerCollidedWith.Contains(player);
-        }
-
-        public void ApplyStateToVisual(NetworkBehaviour owner, ProjectileState state, float t, bool isFirstRender, bool isLastRender)
-        {
-            // Projectile is about to be destroyed
-            if (isLastRender)
-            {
-                // Render explosion
-            }
-
-            // Projectile was just spawned
-            if (isFirstRender)
-            {
-                if (!classDirectory)
-                {
-                    Debug.LogError("Projectile is missing link to ClassDirectory");
-                }
-                else
-                {
-                    ClassDefinition = classDirectory[state.ClassId];
-                    if (ClassDefinition != null)
-                    {
-                        _projectileData = ClassDefinition.ProjectileData;
-
-                        // Load visuals
-                        
-                        // Apply data
-                        if (_projectileData != null)
-                        {
-                            // Set base values
-                            _damage = Mathf.RoundToInt(_projectileData.BaseDamage * state.DamageModifier);
-                            baseSpeed = _projectileData.BaseSpeed;
-                            Speed = baseSpeed;
-                            bounce = _projectileData.BaseBounces;
-                            despawnDelay = _projectileData.BaseLifetime;
-                            this.owner = owner.gameObject;
-                        }
-                        else
-                        {
-                            Debug.Log("Projectile missing projectiledata!");
-                        }
-                    }
-                    else
-                    {
-                        Debug.Log("Projectile missing class definition!");
-                    }
-                }
-            }
-            
-            transform.forward = state.Direction;
-            transform.position = state.Position;
         }
     }
 }

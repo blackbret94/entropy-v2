@@ -40,7 +40,7 @@ namespace Vashta.Entropy.SaveLoad
             }
         }
 
-        public void Load()
+        public void LoadLocal()
         {
             if(ProfileModule == null)
                 ProfileModule = CBSModule.Get<CBSProfile>();
@@ -57,6 +57,9 @@ namespace Vashta.Entropy.SaveLoad
                 try
                 {
                     data = result.Data[CHAR_APPEARANCE_KEY];
+                    
+                    if(CharacterAppearance.Player != null)
+                        CharacterAppearance.Player.CharacterAppearanceSerialized = data;
                 }
                 catch (KeyNotFoundException e)
                 {

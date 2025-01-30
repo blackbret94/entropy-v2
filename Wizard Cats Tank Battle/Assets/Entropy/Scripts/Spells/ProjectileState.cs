@@ -41,7 +41,7 @@ namespace Vashta.Entropy.Spells
 
         public Vector3 GetTargetPosition(Projectile prefab)
         {
-            float a = 0.5f * prefab.Gravity.y;
+            float a = 1;//0.5f * prefab.Gravity.y;
             float b = prefab.Speed * Direction.y;
             float c = Position.y;
             float d = b * b - 4 * a * c;
@@ -51,7 +51,7 @@ namespace Vashta.Entropy.Spells
             return p;
         }
 
-        private Vector3 GetPositionAt(float t, Projectile prefab) => Position + t * (prefab.Speed * Direction + 0.5f * t * prefab.Gravity);
-        private Vector3 GetDirectionAt(float t, Projectile prefab) => prefab.Speed==0 ? Direction : (prefab.Speed * Direction + t * prefab.Gravity).normalized;
+        private Vector3 GetPositionAt(float t, Projectile prefab) => Position + t * (prefab.Speed * Direction + 0.5f * t * Vector3.zero);
+        private Vector3 GetDirectionAt(float t, Projectile prefab) => prefab.Speed==0 ? Direction : (prefab.Speed * Direction + t * Vector3.zero).normalized;
     }
 }

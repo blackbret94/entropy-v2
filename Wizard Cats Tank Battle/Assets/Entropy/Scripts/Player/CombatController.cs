@@ -7,15 +7,16 @@ using Vashta.Entropy.StatusEffects;
 
 namespace Entropy.Scripts.Player
 {
-    public class CombatController : NetworkBehaviourWithState<CombatController.NetworkState>
+    public class CombatController : NetworkBehaviour
     {
-        [Networked] public override ref NetworkState State => ref MakeRef<NetworkState>();
-        public struct NetworkState : INetworkStruct
-        {
-            [Networked, Capacity(24)] 
-            public NetworkArray<ProjectileState> projectileStates => default;
-        }
-        
+        // : NetworkBehaviourWithState<CombatController.NetworkState>
+        // [Networked] public override ref NetworkState State => ref MakeRef<NetworkState>();
+        // public struct NetworkState : INetworkStruct
+        // {
+        //     [Networked, Capacity(24)] 
+        //     public NetworkArray<ProjectileState> projectileStates => default;
+        // }
+        //
         [Header("Modifiers")]
         public int counterDamageMod = 2;
         public int sameClassDamageMod = -1;
@@ -33,7 +34,7 @@ namespace Entropy.Scripts.Player
         public float FractionFireReady => Mathf.Min(1-(TimeToNextFire / _player.fireRate), 1);
         // death loop protections
         private const float minTimeBetweenDeaths = .5f;
-        private SparseCollection<ProjectileState, Projectile> Projectiles;
+        // private SparseCollection<ProjectileState, Projectile> Projectiles;
         
         [Header("Cached references")]
         private StatusEffectController _statusEffectController;
@@ -60,19 +61,19 @@ namespace Entropy.Scripts.Player
 
         public override void Spawned()
         {
-            Projectiles = new SparseCollection<ProjectileState, Projectile>(State.projectileStates, ProjectilePrefab);
+            // Projectiles = new SparseCollection<ProjectileState, Projectile>(State.projectileStates, ProjectilePrefab);
         }
 
         public override void Render()
         {
-            if (TryGetStateChanges(out var from, out var to))
-            {
-                // OnFireTickChanged(); // Not sure what this does? Reloads?
-            }
-            else
-                TryGetStateSnapshots(out from, out _, out _, out _, out _);
-            
-            Projectiles.Render(this, from.projectileStates);
+            // if (TryGetStateChanges(out var from, out var to))
+            // {
+            //     // OnFireTickChanged(); // Not sure what this does? Reloads?
+            // }
+            // else
+            //     TryGetStateSnapshots(out from, out _, out _, out _, out _);
+            //
+            // Projectiles.Render(this, from.projectileStates);
         }
         
         public int CalculateDamageTaken(Projectile projectile, out bool attackerIsCounter, out bool attackerIsSame)
@@ -112,7 +113,7 @@ namespace Entropy.Scripts.Player
         //shoots a bullet in the direction passed in
         //we do not rely on the current turret rotation here, because we send the direction
         //along with the shot request to the server to absolutely ensure a synced shot position
-        public void AttemptToShoot(Vector2 direction = default(Vector2))
+        public void AttemptToShoot()
         {
             float fireRateMod = _player.fireRate * _statusEffectController.AttackRateModifier;
 
@@ -134,7 +135,7 @@ namespace Entropy.Scripts.Player
                     short[] pos = new short[] { (short)(_shotPos.position.x * 10), (short)(_shotPos.position.z * 10) };
                     //send shot request with origin to server
                     // Debug.Log(turretRotation);
-                    Shoot(pos, _player.turretRotation);
+                    RPC_Shoot(_player.turretRotation);
                 }
             }
         }
@@ -148,36 +149,37 @@ namespace Entropy.Scripts.Player
             if(Time.time > nextFire)
                 nextFire = Time.time + 0.1f;
         }
-        
-        private void Shoot(short[] position, short angle)
+
+        [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.All)]
+        public void RPC_Shoot(short angle)
         {
+            // animate
+            _playerAnimator.Attack();
+            
             //calculate center between shot position sent and current server position (factor 0.6f = 40% client, 60% server)
             //this is done to compensate network lag and smoothing it out between both client/server positions
-            Vector3 shotCenter = Vector3.Lerp(_shotPos.position, new Vector3(position[0]/10f, _shotPos.position.y, position[1]/10f), 0.6f);
+            Vector3 shotCenter = _shotPos.position;
             Quaternion syncedRot = _turret.rotation = Quaternion.Euler(0, angle, 0);
 
             ClassDefinition playerClass = _player.GetClass();
             
             //spawn bullet using pooling
-            // _projectileFactory.SpawnProjectile(shotCenter, syncedRot, playerClass);
-            Projectiles.Add(Runner, new ProjectileState(shotCenter, syncedRot.eulerAngles, playerClass.classId), 5);
+            _projectileFactory.SpawnProjectile(shotCenter, syncedRot, playerClass);
+            // Projectiles.Add(Runner, new ProjectileState(shotCenter, syncedRot.eulerAngles, playerClass.classId), 5);
 
             // Spray.  Only handles 3 projectiles right now
             if (_statusEffectController.AdditionalProjectilesSpray > 0)
             {
                 // shoot left
                 Quaternion leftProjectile = Quaternion.Euler(0, angle - 5, 0);
-                Projectiles.Add(Runner, new ProjectileState(shotCenter, leftProjectile.eulerAngles, playerClass.classId, .66f), 0);
-                // _projectileFactory.SpawnProjectile(shotCenter, leftProjectile, playerClass, .66f);
+                // Projectiles.Add(Runner, new ProjectileState(shotCenter, leftProjectile.eulerAngles, playerClass.classId, .66f), 0);
+                _projectileFactory.SpawnProjectile(shotCenter, leftProjectile, playerClass, .66f);
                 
                 // shoot right
                 Quaternion rightProjectile = Quaternion.Euler(0, angle + 5, 0);
-                Projectiles.Add(Runner, new ProjectileState(shotCenter, rightProjectile.eulerAngles, playerClass.classId, .66f), 0);
-                // _projectileFactory.SpawnProjectile(shotCenter, rightProjectile, playerClass, .66f);
+                // Projectiles.Add(Runner, new ProjectileState(shotCenter, rightProjectile.eulerAngles, playerClass.classId, .66f), 0);
+                _projectileFactory.SpawnProjectile(shotCenter, rightProjectile, playerClass, .66f);
             }
-            
-            // animate
-            _playerAnimator.Attack();
         }
         
         /// <summary>

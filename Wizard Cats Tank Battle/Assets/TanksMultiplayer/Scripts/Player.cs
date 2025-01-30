@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Entropy.Scripts.Player;
 using Fusion;
 using FusionHelpers;
@@ -81,7 +82,7 @@ namespace TanksMP
         /// Current turret rotation and shooting direction.
         /// </summary>
         [HideInInspector]
-        public short turretRotation;
+        [Networked] public short turretRotation { get; set; }
         
         /// <summary>
         /// Turret to rotate with look direction.
@@ -139,6 +140,7 @@ namespace TanksMP
         
         public override void InitNetworkState() {}
 
+        [Networked, OnChangedRender(nameof(OnAppearanceChanged))] 
         public string CharacterAppearanceSerialized { get; set; }
         
         // Spawn timer
@@ -175,8 +177,6 @@ namespace TanksMP
             _playerCurrencyRewarder = new PlayerCurrencyRewarder();
             NetworkManagerCustom = NetworkManagerCustom.GetInstance();
 
-            PlayerName = NetworkManagerCustom.LocalPlayerInfo.Name;
-            Debug.Log("Setting player name: " + PlayerName);
             
             // Local player logic
             if (HasInputAuthority && !isBot)
@@ -204,7 +204,12 @@ namespace TanksMP
             
             if (IsLocal)
             {
-                CharacterAppearance.SaveLoad.Load();
+                PlayerName = NetworkManagerCustom.LocalPlayerInfo.Name;
+                CharacterAppearance.SaveLoad.LoadLocal();
+            }
+            else
+            {
+                OnAppearanceChanged();
             }
             
             PlayerViewController.SetName(PlayerName);
@@ -252,9 +257,29 @@ namespace TanksMP
                 // Move player
                 Vector3 startPos = GameManager.TeamController.GetSpawnPosition(TeamIndex);
                 transform.position = startPos;
-                
-                Debug.Log("Setting position: " + startPos + " for team index " + TeamIndex);
-                // KillPlayer();
+            }
+        }
+
+        public override void Render()
+        {
+            if (HasInputAuthority)
+            {
+                // rotate to cursor position
+                Vector3 aimDelta = InputController.GetAdapter().GetTurretRotation(transform.position);
+                MovementController.RotateTurret(aimDelta.normalized);
+            }
+            else
+            {
+                // Smoothly rotate towards networked rotation
+                // float currentTurretRotation = turret.rotation.y;
+                // float adjustedTurretRotation = turretRotation;
+                //
+                // if ((turretRotation > 260 && currentTurretRotation < 90) || (turretRotation < 90 && currentTurretRotation > 260))
+                //     adjustedTurretRotation -= 360;
+                //
+                // float lerpedRotation = Mathf.Lerp(adjustedTurretRotation, currentTurretRotation, .5f);
+                // // Debug.Log("Setting turret rotation: " + lerpedRotation);
+                turret.rotation = Quaternion.Euler(0, turretRotation, 0);
             }
         }
         
@@ -323,8 +348,10 @@ namespace TanksMP
                     
                     // FIRE
                     if (inputData.IsDown(NetworkInputData.BUTTON_FIRE_PRIMARY))
+                    {
                         CombatController.AttemptToShoot();
-                    
+                    }
+
                     // POWERUP
                     if(inputData.IsDown(NetworkInputData.BUTTON_FIRE_POWERUP))
                         TryCastPowerup();
@@ -361,6 +388,29 @@ namespace TanksMP
                     Debug.Log("No input data");
                 }
             }
+        }
+        
+        private void OnAppearanceChanged()
+        {
+            Debug.Log("Appearance changed: " + CharacterAppearanceSerialized);
+            
+            if (HasInputAuthority)
+                return;
+            
+            CharacterAppearanceSerializable characterAppearanceSerializable = null;
+            
+            try
+            {
+                characterAppearanceSerializable = CharacterAppearanceSerializable.Decrypt(CharacterAppearanceSerialized);
+            }
+            catch (Exception e)
+            {
+                characterAppearanceSerializable = new CharacterAppearanceSerializable();
+                Debug.LogWarning("Warning!  Could not load character from Custom Properties. " + e);
+            }
+        
+            CharacterAppearance.LoadFromSerialized(characterAppearanceSerializable);
+            Debug.Log("Loaded appearance");
         }
 
         private void UpdateMass()
@@ -601,26 +651,6 @@ namespace TanksMP
             GameManager.ui.controls[1].OnEndDrag(null);
         }
         
-        // Move to OnSpawned()
-        // public void OnPhotonInstantiate(PhotonMessageInfo info)
-        // {
-        //     CharacterAppearanceSerializable characterAppearanceSerializable = null;
-        //     
-        //     try
-        //     {
-        //         characterAppearanceSerializable = CharacterAppearanceSerializable.Decrypt(
-        //                 (string)info.Sender.CustomProperties[Vashta.Entropy.SaveLoad.PrefsKeys.characterAppearance]);
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         characterAppearanceSerializable = new CharacterAppearanceSerializable();
-        //         Debug.LogWarning("Warning!  Could not load character from Custom Properties. " + e);
-        //     }
-        //
-        //     CharacterAppearance characterAppearance = GetComponentInChildren<CharacterAppearance>();
-        //     characterAppearance.LoadFromSerialized(characterAppearanceSerializable);
-        // }
-
         public void SetClass(ClassDefinition newClassDefinition, bool respawnPlayer, bool applyInstantly)
         {
             ClassId = newClassDefinition.classId;

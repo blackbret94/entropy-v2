@@ -95,7 +95,7 @@ namespace Vashta.Entropy.Character
                 yield return null;
             }
             
-            SaveLoad.Load();
+            SaveLoad.LoadLocal();
         }
 
         public void RefreshIndexes()

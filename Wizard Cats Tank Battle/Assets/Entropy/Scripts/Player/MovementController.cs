@@ -76,21 +76,24 @@ namespace Entropy.Scripts.Player
                 return;
 
             //get rotation value as angle out of the direction we received
-            _player.turretRotation = (short)Quaternion.LookRotation(new Vector3(direction.x, 0, direction.y)).eulerAngles.y;
-            OnTurretRotation();
+            if(_player.HasInputAuthority)
+                _player.turretRotation = (short)Quaternion.LookRotation(new Vector3(direction.x, 0, direction.y)).eulerAngles.y;
+            
+            if (_player is PlayerBot)
+                return;
+            
+            _player.turret.rotation = Quaternion.Euler(0, _player.turretRotation, 0);
         }
         
         //hook for updating turret rotation locally
         //never called in PlayerBot
-        public void OnTurretRotation()
-        {
-            if (_player is PlayerBot)
-                return;
-            
-            //we don't need to check for local ownership when setting the turretRotation,
-            //because OnPhotonSerializeView PhotonStream.isWriting == true only applies to the owner
-            _player.turret.rotation = Quaternion.Euler(0, _player.turretRotation, 0);
-        }
+        // public void OnTurretRotation()
+        // {
+        //     if (_player is PlayerBot)
+        //         return;
+        //     
+        //     _player.turret.rotation = Quaternion.Euler(0, _player.turretRotation, 0);
+        // }
 
         public void ResetTransform()
         {

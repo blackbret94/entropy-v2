@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Fusion;
 using UnityEngine;
 using Vashta.Entropy.Character;
 using Random = UnityEngine.Random;
@@ -14,7 +15,7 @@ namespace Vashta.Entropy.ScriptableObject
         public List<Cart> Carts;
         public List<Turret> Turrets;
         public List<Meow> Meows;
-
+        
         private Dictionary<string, Hat> _indexedHats;
         private Dictionary<string, BodyType> _indexedBodyTypes;
         private Dictionary<string, Skin> _indexedSkins; // This will need to be updated if unique body type+skin combos are ever added
@@ -23,7 +24,7 @@ namespace Vashta.Entropy.ScriptableObject
         private Dictionary<string, Meow> _indexedMeows;
 
         private HashSet<string> _idList;
-
+        
         private void Awake()
         {
             Init();
@@ -83,7 +84,7 @@ namespace Vashta.Entropy.ScriptableObject
                 _idList.Add(meow.Id);
             }
         }
-
+        
         public bool ContainsId(string id)
         {
             Init();

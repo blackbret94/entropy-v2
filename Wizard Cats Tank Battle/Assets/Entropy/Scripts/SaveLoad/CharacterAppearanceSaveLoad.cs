@@ -25,7 +25,6 @@ namespace Vashta.Entropy.SaveLoad
             
             PlayerPrefs.SetString(PrefsKeys.characterAppearance, encrypted);
             ProfileModule.SaveProfileData(CHAR_APPEARANCE_KEY, encrypted, OnSaveData);
-            SetAppearanceAsCustomProperty(encrypted);
         }
         
         private void OnSaveData(CBSSaveProfileDataResult result)
@@ -57,9 +56,6 @@ namespace Vashta.Entropy.SaveLoad
                 try
                 {
                     data = result.Data[CHAR_APPEARANCE_KEY];
-                    
-                    if(CharacterAppearance.Player != null)
-                        CharacterAppearance.Player.CharacterAppearanceSerialized = data;
                 }
                 catch (KeyNotFoundException e)
                 {
@@ -84,27 +80,6 @@ namespace Vashta.Entropy.SaveLoad
         public static string DefaultAppearanceStringEncrypted()
         {
             return new CharacterAppearanceSerializable().Encrypt();
-        }
-
-        public static void SetCurrentAppearanceAsCustomProperty()
-        {
-            string encrypted = PlayerPrefs.GetString(PrefsKeys.characterAppearance, DefaultAppearanceStringEncrypted());
-            SetAppearanceAsCustomProperty(encrypted);
-        }
-        
-        private static void SetAppearanceAsCustomProperty(string encrypted)
-        {
-            GameManager gameManager = GameManager.GetInstance();
-
-            if (gameManager != null)
-            {
-                gameManager.localPlayer.CharacterAppearanceSerialized = encrypted;
-            }
-            else
-            {
-                // TODO: Handle for main menu
-            }
-            
         }
     }
 }

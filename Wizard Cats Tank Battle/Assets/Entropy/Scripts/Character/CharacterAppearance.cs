@@ -13,7 +13,7 @@ using Vashta.Entropy.UI;
 
 namespace Vashta.Entropy.Character
 {
-    public class CharacterAppearance : MonoBehaviour
+    public class CharacterAppearance : NetworkBehaviour
     {
         [Header("Dependencies")] 
         public Player Player;
@@ -36,8 +36,23 @@ namespace Vashta.Entropy.Character
         public Turret Turret;
         public Meow Meow;
         public Material DefaultTeamMaterial;
+        
+        // UUIDs, synced for networking
+        [Networked, Capacity(36), OnChangedRender(nameof(LoadFromUUIDs))]
+        private string HatId { get; set;}
+        [Networked, Capacity(36), OnChangedRender(nameof(LoadFromUUIDs))]
+        private string BodyId { get; set;}
+        [Networked, Capacity(36), OnChangedRender(nameof(LoadFromUUIDs))]
+        private string SkinId { get; set;}
+        [Networked, Capacity(36), OnChangedRender(nameof(LoadFromUUIDs))]
+        private string CartId { get; set;}
+        [Networked, Capacity(36), OnChangedRender(nameof(LoadFromUUIDs))]
+        private string TurretId { get; set;}
+        [Networked, Capacity(36), OnChangedRender(nameof(LoadFromUUIDs))]
+        private string MeowId { get; set;}
 
         private CharacterAppearanceSerializable _lastSavedAppearance;
+        
         private GameManager _gameManager;
 
         [FormerlySerializedAs("Team")] [HideInInspector] public TeamInstance teamInstance;
@@ -66,16 +81,20 @@ namespace Vashta.Entropy.Character
         public void Start()
         {
             InitSfxController();
+            
+            // else if (SaveLoad && (Player != null && Player.IsLocal))
+                // Gameplay, local player vs. other players
+                // StartCoroutine(LoadAppearanceWhenInventoryIsLoaded());
+        }
 
+        public override void Spawned()
+        {
             if (SaveLoad == null)
                 return;
             
             if (Player == null)
                 // Wardrobe
                 StartCoroutine(LoadAppearanceWhenInventoryIsLoaded());
-            // else if (SaveLoad && (Player != null && Player.IsLocal))
-                // Gameplay, local player vs. other players
-                // StartCoroutine(LoadAppearanceWhenInventoryIsLoaded());
         }
 
         public IEnumerator LoadAppearanceWhenInventoryIsLoaded()
@@ -96,6 +115,15 @@ namespace Vashta.Entropy.Character
             }
             
             SaveLoad.LoadLocal();
+        }
+
+        public void LoadFromUUIDs()
+        {
+            CharacterAppearanceSerializable appearance = new CharacterAppearanceSerializable(HatId, BodyId, SkinId, CartId, TurretId, MeowId);
+            LoadFromSerialized(appearance);
+            
+            if(Player && Player.PlayerViewController)
+                Player.PlayerViewController.ColorizePlayerForTeam();
         }
 
         public void RefreshIndexes()
@@ -132,6 +160,13 @@ namespace Vashta.Entropy.Character
         
         public void LoadAppearanceCallback(CharacterAppearanceSerializable appearance)
         {
+            HatId = appearance.HatId;
+            BodyId = appearance.BodyId;
+            SkinId = appearance.SkinId;
+            CartId = appearance.CartId;
+            TurretId = appearance.TurretId;
+            MeowId = appearance.MeowId;
+            
             LoadFromSerialized(appearance);
             
             if(Player && Player.PlayerViewController)
@@ -142,6 +177,7 @@ namespace Vashta.Entropy.Character
         {
             CharacterAppearanceSerializable appearanceSerializable = Serialize();
             SaveLoad.Save(appearanceSerializable);
+            
             _lastSavedAppearance = appearanceSerializable;
         }
 

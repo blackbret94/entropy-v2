@@ -139,9 +139,6 @@ namespace TanksMP
         public MinimapEntityControllerPlayer MinimapEntityControllerPlayer;
         
         public override void InitNetworkState() {}
-
-        [Networked, OnChangedRender(nameof(OnAppearanceChanged))] 
-        public string CharacterAppearanceSerialized { get; set; }
         
         // Spawn timer
         [HideInInspector]
@@ -209,7 +206,7 @@ namespace TanksMP
             }
             else
             {
-                OnAppearanceChanged();
+                CharacterAppearance.LoadFromUUIDs();
             }
             
             PlayerViewController.SetName(PlayerName);
@@ -388,29 +385,6 @@ namespace TanksMP
                     Debug.Log("No input data");
                 }
             }
-        }
-        
-        private void OnAppearanceChanged()
-        {
-            Debug.Log("Appearance changed: " + CharacterAppearanceSerialized);
-            
-            if (HasInputAuthority)
-                return;
-            
-            CharacterAppearanceSerializable characterAppearanceSerializable = null;
-            
-            try
-            {
-                characterAppearanceSerializable = CharacterAppearanceSerializable.Decrypt(CharacterAppearanceSerialized);
-            }
-            catch (Exception e)
-            {
-                characterAppearanceSerializable = new CharacterAppearanceSerializable();
-                Debug.LogWarning("Warning!  Could not load character from Custom Properties. " + e);
-            }
-        
-            CharacterAppearance.LoadFromSerialized(characterAppearanceSerializable);
-            Debug.Log("Loaded appearance");
         }
 
         private void UpdateMass()

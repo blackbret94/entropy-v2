@@ -1,5 +1,6 @@
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.Player;
 using Vashta.Entropy.StatusEffects;
 
 namespace Entropy.Scripts.Player
@@ -9,14 +10,14 @@ namespace Entropy.Scripts.Player
         private const float ROTATION_SPEED = 300; // max degree/second 
         
         // Cached fields
-        private TanksMP.Player _player;
+        private PlayerController _playerController;
         private CameraController _cameraController;
         private StatusEffectController _statusEffectController;
         private Rigidbody _rigidbody;
 
         private void Awake()
         {
-            _player = GetComponent<TanksMP.Player>();
+            _playerController = GetComponent<PlayerController>();
             _cameraController = GetComponent<CameraController>();
             _statusEffectController = GetComponent<StatusEffectController>();
             _rigidbody = GetComponent<Rigidbody>();
@@ -32,13 +33,13 @@ namespace Entropy.Scripts.Player
         private void MoveRigidBody(Vector2 direction)
         {
             //create movement vector based on current rotation and speed
-            float movementSpeed = ((_player.moveSpeed + _statusEffectController.MovementSpeedModifier) *
+            float movementSpeed = ((_playerController.moveSpeed + _statusEffectController.MovementSpeedModifier) *
                                    _statusEffectController.MovementSpeedMultiplier);
             // Vector3 velocity = transform.forward * movementSpeed;
             Vector3 velocity = new Vector3(direction.x, 0, direction.y) * movementSpeed;
 
             //apply vector to rigidbody position
-            _rigidbody.linearVelocity = Vector3.MoveTowards(_rigidbody.linearVelocity, velocity, _player.acceleration);
+            _rigidbody.linearVelocity = Vector3.MoveTowards(_rigidbody.linearVelocity, velocity, _playerController.acceleration);
         }
 
         private void Rotate(float deltaTime, Vector2 direction)
@@ -68,7 +69,7 @@ namespace Entropy.Scripts.Player
         // Never called in PlayerBot
         public void RotateTurret(Vector2 direction = default(Vector2))
         {
-            if (_player is PlayerBot)
+            if (_playerController is PlayerControllerBot)
                 return;
             
             //don't rotate without values
@@ -76,13 +77,13 @@ namespace Entropy.Scripts.Player
                 return;
 
             //get rotation value as angle out of the direction we received
-            if(_player.HasInputAuthority)
-                _player.turretRotation = (short)Quaternion.LookRotation(new Vector3(direction.x, 0, direction.y)).eulerAngles.y;
+            if(_playerController.HasInputAuthority)
+                _playerController.turretRotation = (short)Quaternion.LookRotation(new Vector3(direction.x, 0, direction.y)).eulerAngles.y;
             
-            if (_player is PlayerBot)
+            if (_playerController is PlayerControllerBot)
                 return;
             
-            _player.turret.rotation = Quaternion.Euler(0, _player.turretRotation, 0);
+            _playerController.turret.rotation = Quaternion.Euler(0, _playerController.turretRotation, 0);
         }
         
         //hook for updating turret rotation locally

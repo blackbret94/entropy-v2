@@ -1,4 +1,5 @@
 using UnityEngine;
+using Vashta.Entropy.Player;
 
 namespace Entropy.Scripts.Player
 {
@@ -7,21 +8,21 @@ namespace Entropy.Scripts.Player
         public int Ultimate { get; private set; }
         
         [Header("Cached references")] 
-        private TanksMP.Player _player;
+        private PlayerController _playerController;
 
         private void Awake()
         {
-            _player = GetComponent<TanksMP.Player>();
+            _playerController = GetComponent<PlayerController>();
         }
         
         // Server only
         public void IncreaseUltimate()
         {
             // Only give to living players
-            if (!_player.IsAlive)
+            if (!_playerController.IsAlive)
                 return;
 
-            int ultimateCost = _player.GetClass().ultimateCost;
+            int ultimateCost = _playerController.GetClass().ultimateCost;
             if (Ultimate < ultimateCost)
                 Ultimate++;
         }
@@ -30,11 +31,11 @@ namespace Entropy.Scripts.Player
         public void RewardUltimateForKill()
         {
             // Only give to living players
-            if (!_player.IsAlive)
+            if (!_playerController.IsAlive)
                 return;
 
             int ultimateIncrease = 5;
-            int ultimateCost = _player.GetClass().ultimateCost;
+            int ultimateCost = _playerController.GetClass().ultimateCost;
 
             if (Ultimate < ultimateCost)
             {
@@ -50,7 +51,7 @@ namespace Entropy.Scripts.Player
 
         public float GetUltimatePerun()
         {
-            int ultimateCost = _player.GetClass().ultimateCost;
+            int ultimateCost = _playerController.GetClass().ultimateCost;
             return (float)Ultimate / ultimateCost;
         }
 
@@ -60,11 +61,11 @@ namespace Entropy.Scripts.Player
         /// <returns></returns>
         public bool TryCastUltimate()
         {
-            int ultimateCost = _player.GetClass().ultimateCost;
+            int ultimateCost = _playerController.GetClass().ultimateCost;
             
             if (Ultimate >= ultimateCost)
             {
-                _player.CastUltimate();
+                _playerController.CastUltimate();
                 return true;
             }
             else

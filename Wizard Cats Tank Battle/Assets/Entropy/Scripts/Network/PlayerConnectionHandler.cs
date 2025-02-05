@@ -2,6 +2,7 @@ using Fusion;
 using TanksMP;
 using UnityEngine;
 using Vashta.Entropy.GameState;
+using Vashta.Entropy.Player;
 using Vashta.Entropy.SaveLoad;
 
 namespace Vashta.Entropy.Network
@@ -62,24 +63,24 @@ namespace Vashta.Entropy.Network
         public void PlayerLeft(PlayerRef player)
         {
             //get player-controlled game object from disconnected player
-            Player targetPlayer = _networkManagerCustom.GetPlayerGameObject(player);
+            PlayerController targetPlayerController = _networkManagerCustom.GetPlayerGameObject(player);
 
             //process any collectibles assigned to that player
-            if(targetPlayer != null)
+            if(targetPlayerController != null)
             {
-                Collectible[] collectibles = targetPlayer.GetComponentsInChildren<Collectible>(true);
+                Collectible[] collectibles = targetPlayerController.GetComponentsInChildren<Collectible>(true);
                 for (int i = 0; i < collectibles.Length; i++)
                 {
                     //let the player drop the Collectible
-                    targetPlayer.DropCollectibles();
+                    targetPlayerController.DropCollectibles();
                 }
             }
 
-            _gameManager.TeamController.RemovePlayerFromTeam(targetPlayer);
+            _gameManager.TeamController.RemovePlayerFromTeam(targetPlayerController);
             
             if (!Runner.IsShutdown)
             {
-                Runner.Despawn(targetPlayer.Object);
+                Runner.Despawn(targetPlayerController.Object);
             }
             
             // remove player from Scoreboard

@@ -73,6 +73,8 @@ namespace Vashta.Entropy.Character
 
         public void Clear()
         {
+            Init();
+            
             foreach (var slot in _visualizerBySlot)
             {
                 slot.Value.Clear();

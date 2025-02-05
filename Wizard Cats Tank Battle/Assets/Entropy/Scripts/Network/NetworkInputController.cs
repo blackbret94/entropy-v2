@@ -5,6 +5,7 @@ using Fusion;
 using Fusion.Sockets;
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.Player;
 
 namespace Vashta.Entropy.Network
 {
@@ -15,7 +16,7 @@ namespace Vashta.Entropy.Network
         
         private GameManager _gameManager;
         private PlayerInputController _playerInputController;
-        private Player _player;
+        private PlayerController _playerController;
         private NetworkInputData _inputData;
         private Vector2 _moveDelta;
         private Vector2 _aimDelta;
@@ -27,7 +28,7 @@ namespace Vashta.Entropy.Network
         {
             // Load dependencies
             _gameManager = GameManager.GetInstance();
-            _player = GetComponent<Player>();
+            _playerController = GetComponent<PlayerController>();
             _playerInputController = _gameManager.PlayerInputController;
 
             if (Object.HasInputAuthority)
@@ -40,7 +41,7 @@ namespace Vashta.Entropy.Network
 
         public void OnInput(NetworkRunner runner, NetworkInput input)
         {
-            if (_player!=null && _player.IsAlive)
+            if (_playerController!=null && _playerController.IsAlive)
             {
                 _inputData.aimDirection = _aimDelta.normalized;
                 _inputData.moveDirection = _moveDelta.normalized;
@@ -85,7 +86,7 @@ namespace Vashta.Entropy.Network
                     _buttonSample |= NetworkInputData.BUTTON_DROP_FLAG;
                 
                 _moveDelta = _playerInputController.GetAdapter().GetMovementVector(out bool isMoving);
-                _aimDelta = _playerInputController.GetAdapter().GetTurretRotation(_player.transform.position);
+                _aimDelta = _playerInputController.GetAdapter().GetTurretRotation(_playerController.transform.position);
             }
         }
         

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Fusion;
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.Player;
 
 namespace Vashta.Entropy.GameState
 {
@@ -19,7 +20,7 @@ namespace Vashta.Entropy.GameState
         public GameObject prefab;
         
         public List<GameObject> BotTargetList;
-        private List<PlayerBot> _botList;
+        private List<PlayerControllerBot> _botList;
         private GameManager _gameManager;
 
         private void Awake()
@@ -27,7 +28,7 @@ namespace Vashta.Entropy.GameState
             //temporarily disable
             this.enabled = false;
             
-            _botList = new List<PlayerBot>();
+            _botList = new List<PlayerControllerBot>();
             
             //disabled when not in offline mode
             if ((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode) != NetworkMode.Offline)
@@ -52,8 +53,8 @@ namespace Vashta.Entropy.GameState
                     NetworkObject obj = Runner.Spawn(prefab, Vector3.zero, Quaternion.identity);
 
                     //let the local host determine the team assignment
-                    Player p = obj.GetComponent<Player>();
-                    p.TeamIndex = GameManager.GetInstance().TeamController.GetTeamFill();
+                    PlayerController p = obj.GetComponent<PlayerController>();
+                    p.PlayerTeam.TeamIndex = GameManager.GetInstance().TeamController.GetTeamFill();
 
                     //increase corresponding team size
                     _gameManager.TeamController.AddPlayerTeamTeam(p, p.TeamIndex);
@@ -63,9 +64,9 @@ namespace Vashta.Entropy.GameState
             }
         }
         
-        public void AddBot(PlayerBot bot)
+        public void AddBot(PlayerControllerBot controllerBot)
         {
-            _botList.Add(bot);
+            _botList.Add(controllerBot);
         }
 
         public void ClearBots()
@@ -73,7 +74,7 @@ namespace Vashta.Entropy.GameState
             _botList.Clear();
         }
 
-        public List<PlayerBot> GetBotList()
+        public List<PlayerControllerBot> GetBotList()
         {
             return _botList;
         }

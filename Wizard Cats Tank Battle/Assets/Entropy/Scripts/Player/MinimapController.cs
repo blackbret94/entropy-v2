@@ -4,6 +4,7 @@ using Fusion;
 using Lovatto.MiniMap;
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.Player;
 using Vashta.Entropy.ScriptableObject;
 
 namespace Entropy.Scripts.Player
@@ -13,7 +14,7 @@ namespace Entropy.Scripts.Player
     /// </summary>
     public class MinimapController : NetworkBehaviour
     {
-        private TanksMP.Player _localPlayer;
+        private PlayerController _localPlayerController;
         public bl_MiniMap MiniMap;
         private float _refreshRate = .5f;
         private float _lastRefreshTime;
@@ -32,7 +33,7 @@ namespace Entropy.Scripts.Player
 
         private void Update()
         {
-            if (!_localPlayer)
+            if (!_localPlayerController)
                 return;
             
             if (Time.time >= _lastRefreshTime + _refreshRate)
@@ -44,13 +45,13 @@ namespace Entropy.Scripts.Player
 
         private IEnumerator AttachToPlayerCoroutine()
         {
-            while (_localPlayer == null)
+            while (_localPlayerController == null)
             {
-                _localPlayer = PlayerList.GetLocalPlayer();
+                _localPlayerController = PlayerList.GetLocalPlayer();
                 yield return null;
             }
 
-            MiniMap.Target = _localPlayer.transform;
+            MiniMap.Target = _localPlayerController.transform;
             Debug.Log("Player attached!");
         }
 
@@ -59,7 +60,7 @@ namespace Entropy.Scripts.Player
             if (MiniMap == null)
                 return;
             
-            int teamIndex = _localPlayer.TeamIndex;
+            int teamIndex = _localPlayerController.TeamIndex;
 
             if (teamIndex != _teamIndex)
             {
@@ -93,10 +94,10 @@ namespace Entropy.Scripts.Player
         [Rpc(RpcSources.All, RpcTargets.All)]
         public void RpcSpawnPing(short[] position, short teamIndex)
         {
-            TanksMP.Player localPlayer = PlayerList.GetLocalPlayer();
+            PlayerController localPlayerController = PlayerList.GetLocalPlayer();
 
             // Only spawn if for this player's team
-            if (localPlayer != null && localPlayer.TeamIndex == teamIndex)
+            if (localPlayerController != null && localPlayerController.TeamIndex == teamIndex)
             {
                 if (_spawnedPointer)
                 {

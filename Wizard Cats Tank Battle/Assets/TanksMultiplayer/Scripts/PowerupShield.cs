@@ -3,6 +3,7 @@
  * 	You shall not license, sublicense, sell, resell, transfer, assign, distribute or
  * 	otherwise make available to any third party the Service or the Content. */
 
+using Vashta.Entropy.Player;
 using Vashta.Entropy.ScriptableObject;
 
 namespace TanksMP
@@ -18,7 +19,7 @@ namespace TanksMP
         /// Overrides the default behavior with a custom implementation.
         /// Check for the current shield and adds additional shield points.
         /// </summary>
-        public override bool Apply(Player p)
+        public override bool Apply(PlayerController p)
         {
             if (p == null)
                 return false;

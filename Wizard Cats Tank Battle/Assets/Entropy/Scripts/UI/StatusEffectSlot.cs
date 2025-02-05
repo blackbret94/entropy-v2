@@ -28,7 +28,7 @@ namespace Vashta.Entropy.UI
         [SerializeField]
         private string _debugStatusEffectName;
 
-        private void Start()
+        private void Awake()
         {
             _canvasGroup = GetComponent<CanvasGroup>();
             _canvasGroup.alpha = 0;

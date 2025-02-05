@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using TanksMP;
 using UnityEngine;
+using UnityEngine.Serialization;
+using Vashta.Entropy.Player;
 using Vashta.Entropy.StatusEffects;
 
 namespace Vashta.Entropy.UI
@@ -9,7 +11,7 @@ namespace Vashta.Entropy.UI
     public class StatusEffectPanel : GamePanel
     {
         public List<StatusEffectSlot> StatusEffectBlocks;
-        public Player Player;
+        [FormerlySerializedAs("Player")] public PlayerController playerController;
         private float _lastRefreshTime;
         private float _refreshRate = .15f;
         
@@ -20,7 +22,7 @@ namespace Vashta.Entropy.UI
         
         private void Update()
         {
-            if (Player == null)
+            if (playerController == null)
                 return;
 
             // Refresh effects
@@ -39,7 +41,7 @@ namespace Vashta.Entropy.UI
 
         private void RefreshStatusEffects()
         {
-            List<StatusEffect> statusEffects = new List<StatusEffect>(Player.StatusEffectController.StatusEffects);
+            List<StatusEffect> statusEffects = new List<StatusEffect>(playerController.StatusEffectController.StatusEffects);
             statusEffects.Sort(CompareStatusEffects);
             SortSlots();
 

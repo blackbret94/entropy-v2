@@ -2,6 +2,7 @@ using TanksMP;
 using UnityEngine;
 using System.Collections.Generic;
 using Entropy.Scripts.Player;
+using Vashta.Entropy.Player;
 
 namespace Vashta.Entropy.TanksExtensions
 {
@@ -60,11 +61,11 @@ namespace Vashta.Entropy.TanksExtensions
             List<ScoreboardRowData> data = new List<ScoreboardRowData>();
 
             // players
-            List<Player> players = PlayerList.GetAllPlayers;
+            List<PlayerController> players = PlayerList.GetAllPlayers;
 
             foreach (var player in players)
             {
-                if (player.GetTeam() == TeamId)
+                if (player.TeamIndex == TeamId)
                 {
                     if (player.IsLocal && !includeLocalPlayer)
                         continue;
@@ -75,8 +76,8 @@ namespace Vashta.Entropy.TanksExtensions
             }
             
             // bots
-            List<PlayerBot> bots = GameManager.GetInstance().BotController.GetBotList();
-            foreach (PlayerBot bot in bots)
+            List<PlayerControllerBot> bots = GameManager.GetInstance().BotController.GetBotList();
+            foreach (PlayerControllerBot bot in bots)
             {
                 if (bot.teamIndex == TeamId)
                 {

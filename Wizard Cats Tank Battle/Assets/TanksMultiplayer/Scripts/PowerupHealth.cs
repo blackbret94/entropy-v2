@@ -4,6 +4,7 @@
  * 	otherwise make available to any third party the Service or the Content. */
 
 using UnityEngine;
+using Vashta.Entropy.Player;
 using Vashta.Entropy.ScriptableObject;
 
 namespace TanksMP
@@ -19,7 +20,7 @@ namespace TanksMP
         /// Overrides the default behavior with a custom implementation.
         /// Check for the current health and adds additional health.
         /// </summary>
-        public override bool Apply(Player p)
+        public override bool Apply(PlayerController p)
         {
             if (p == null)
                 return false;

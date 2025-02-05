@@ -3,6 +3,7 @@ using Entropy.Scripts.Player;
 using TanksMP;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Vashta.Entropy.Player;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.StatusEffects;
 
@@ -73,17 +74,17 @@ namespace Vashta.Entropy.Spells
         public bool AudioPlayForEnemies = true;
         public bool AudioPlayForAllies = true;
 
-        public void Cast(Player caster)
+        public void Cast(PlayerController caster)
         {
-            List<Player> alliesList;
-            List<Player> enemiesList;
+            List<PlayerController> alliesList;
+            List<PlayerController> enemiesList;
             
             GetPlayers(caster, out alliesList, out enemiesList);
             
             Quaternion rotation = Quaternion.Euler(-90, 0, 0);
 
             //Apply effects to allies
-            foreach (Player player in alliesList)
+            foreach (PlayerController player in alliesList)
             {
                 player.Heal(HealAlliesOnCast);
 
@@ -96,7 +97,7 @@ namespace Vashta.Entropy.Spells
             
             // Apply effects to enemies
             string deathFxId = enemyDeathEffectData ? enemyDeathEffectData.Id : "";
-            foreach (Player player in enemiesList)
+            foreach (PlayerController player in enemiesList)
             {
                 player.CombatController.TakeDamage(DamageEnemiesOnCast, caster, true, deathFxId);
 
@@ -124,17 +125,17 @@ namespace Vashta.Entropy.Spells
             }
         }
 
-        private void GetPlayers(Player caster, out List<Player> alliesList, out List<Player> enemiesList)
+        private void GetPlayers(PlayerController caster, out List<PlayerController> alliesList, out List<PlayerController> enemiesList)
         {
-            alliesList = new List<Player>();
-            enemiesList = new List<Player>();
+            alliesList = new List<PlayerController>();
+            enemiesList = new List<PlayerController>();
             
-            List<Player> allPlayers = PlayerList.GetAllPlayers;
+            List<PlayerController> allPlayers = PlayerList.GetAllPlayers;
             int casterTeamIndex = caster.TeamIndex;
             
             // DrawWireSphere(caster.transform.position, Radius, Color.red, 5f);
 
-            foreach (Player player in allPlayers)
+            foreach (PlayerController player in allPlayers)
             {
                 // check if alive
                 if (!player.IsAlive)

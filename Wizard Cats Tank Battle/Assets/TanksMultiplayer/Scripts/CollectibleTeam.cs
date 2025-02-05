@@ -5,6 +5,7 @@
 
 using Entropy.Scripts.Player;
 using UnityEngine;
+using Vashta.Entropy.Player;
 
 namespace TanksMP
 {
@@ -38,10 +39,10 @@ namespace TanksMP
         public override void OnTriggerEnter(Collider col)
         {
             GameObject obj = col.gameObject;
-            Player player = obj.GetComponent<Player>();
+            PlayerController playerController = obj.GetComponent<PlayerController>();
 
             //try to apply collectible to player, the result should be true
-            if (Apply(player))
+            if (Apply(playerController))
             {
                 if (spawner == null)
                 {
@@ -51,7 +52,7 @@ namespace TanksMP
                 // TODO: Re-write this fusion-style
 
                 //check if colliding player belongs to the same team as the item
-                if (teamIndex == player.TeamIndex)
+                if (teamIndex == playerController.TeamIndex)
                 {
                     //player collected team item, return it to team home base
                     //we do not have to send this as buffered RPC because this is the default spawn position
@@ -60,7 +61,7 @@ namespace TanksMP
                 else
                 {
                     //player picked up item from other team, send out buffered RPC for it to be remembered
-                    spawner.Pickup(player);
+                    spawner.Pickup(playerController);
                 }
             }
         }
@@ -70,7 +71,7 @@ namespace TanksMP
         /// Overrides the default behavior with a custom implementation.
         /// Check for the carrier and item position to decide valid pickup.
         /// </summary>
-        public override bool Apply(Player p)
+        public override bool Apply(PlayerController p)
         {
             //do not allow collection if the item is already carried around
             //but also skip any processing if our flag is on the home base already
@@ -118,9 +119,9 @@ namespace TanksMP
         
         public override void OnPickup()
         {
-            Player localPlayer = PlayerList.GetLocalPlayer();
+            PlayerController localPlayerController = PlayerList.GetLocalPlayer();
 
-            if (!localPlayer)
+            if (!localPlayerController)
             {
                 Debug.LogError("Local player not found!");
                 return;

@@ -1,6 +1,7 @@
 using Entropy.Scripts.Player;
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.Player;
 
 namespace Vashta.Entropy.UI
 {
@@ -8,15 +9,15 @@ namespace Vashta.Entropy.UI
     {
         public void DropCollectiblesLocalPlayer()
         {
-            Player localPlayer = PlayerList.GetLocalPlayer();
+            PlayerController localPlayerController = PlayerList.GetLocalPlayer();
 
-            if (!localPlayer)
+            if (!localPlayerController)
             {
                 Debug.LogError("Could not find local player!");
                 return;
             }
             
-            localPlayer.DropCollectibles();
+            localPlayerController.DropCollectibles();
             gameObject.SetActive(false);
         }
     }

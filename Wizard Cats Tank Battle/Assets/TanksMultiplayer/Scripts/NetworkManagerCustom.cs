@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 using Vashta.Entropy.GameState;
 using Vashta.Entropy.Network;
 using Vashta.Entropy.PhotonExtensions;
+using Vashta.Entropy.Player;
 using Vashta.Entropy.Scripts.CBSIntegration;
 using Vashta.Entropy.UI.MapSelection;
 
@@ -286,19 +287,19 @@ namespace TanksMP
         /// Finds the remotely controlled Player game object of a specific player,
         /// by iterating over all Player components and searching for the matching creator.
         /// </summary>
-        public Player GetPlayerGameObject(PlayerRef playerRef)
+        public PlayerController GetPlayerGameObject(PlayerRef playerRef)
         {
             if (Runner.TryGetPlayerObject(playerRef, out NetworkObject playerObject))
             {
-                Player player = playerObject.GetComponent<Player>();
+                PlayerController playerController = playerObject.GetComponent<PlayerController>();
 
-                if (player == null)
+                if (playerController == null)
                 {
                     Debug.LogError("PlayerRef: " + playerRef.PlayerId + " does not contain Player component!");
                     return null;
                 }
 
-                return player;
+                return playerController;
 
             }
             else

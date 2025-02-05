@@ -11,6 +11,7 @@ using UnityEngine.Serialization;
 using Vashta.Entropy.GameMode;
 using Vashta.Entropy.PhotonExtensions;
 using Vashta.Entropy.GameState;
+using Vashta.Entropy.Player;
 using Vashta.Entropy.Scoreboard;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.UI.MapSelection;
@@ -37,8 +38,8 @@ namespace TanksMP
         /// <summary>
         /// The local player instance spawned for this client.
         /// </summary>
-        [HideInInspector]
-        public Player localPlayer;
+        [FormerlySerializedAs("localPlayer")] [HideInInspector]
+        public PlayerController localPlayerController;
         public GameMode gameMode = GameMode.TDM;
         
         [Header("Controllers")]

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Entropy.Scripts.Player;
 using UnityEngine;
 using UnityEngine.AI;
+using Vashta.Entropy.Player;
 using Vashta.Entropy.UI;
 using Vashta.Entropy.World;
 
@@ -16,7 +17,7 @@ namespace TanksMP
     /// <summary>
     /// Implementation of AI bots by overriding methods of the Player class.
     /// </summary>
-	public class PlayerBot : Player
+	public class PlayerControllerBot : PlayerController
     {
         //custom properties per PhotonPlayer do not work in offline mode
         //(actually they do, but for objects spawned by the master client,
@@ -149,7 +150,7 @@ namespace TanksMP
                 for (int i = 0; i < cols.Length; i++)
                 {
                     //get other Player component
-                    Player p = cols[i].gameObject.GetComponent<Player>();
+                    PlayerController p = cols[i].gameObject.GetComponent<PlayerController>();
                     
                     // Add enemies to the list
                     if(p.TeamIndex != TeamIndex && !_enemiesInRange.Contains(cols[i].gameObject))
@@ -222,7 +223,7 @@ namespace TanksMP
             for (int i = 0; i < cols.Length; i++)
             {
                 //get other Player component
-                Player p = cols[i].gameObject.GetComponent<Player>();
+                PlayerController p = cols[i].gameObject.GetComponent<PlayerController>();
                     
                 // Add enemies to the list
                 if(p.TeamIndex != TeamIndex && !_enemiesInRange.Contains(cols[i].gameObject))
@@ -345,24 +346,24 @@ namespace TanksMP
         /// <summary>
         /// Override of the base method to handle bot respawn separately.
         /// </summary>
-        public override void Respawn(Player killedByPlayer, string deathFxId)
+        public override void Respawn(PlayerController killedByPlayerController, string deathFxId)
         {
-            StartCoroutine(RespawnCR(killedByPlayer, deathFxId));
+            StartCoroutine(RespawnCR(killedByPlayerController, deathFxId));
         }
 
         //the actual respawn routine
-        IEnumerator RespawnCR(Player killedByPlayer, string deathFxId)
+        IEnumerator RespawnCR(PlayerController killedByPlayerController, string deathFxId)
         {   
             //stop AI updates
             IsAlive = false;
             _enemiesInRange.Clear();
             agent.isStopped = true;
-            killedBy = killedByPlayer.gameObject;
+            killedBy = killedByPlayerController.gameObject;
 
-            if (killedByPlayer)
+            if (killedByPlayerController)
             {
-                killedByPlayer.UltimateController.RewardUltimateForKill();
-                GameManager.ui.GameLogPanel.EventPlayerKilled(PlayerName, GetTeamDefinition(), killedByPlayer.PlayerName, killedByPlayer.GetTeamDefinition());
+                killedByPlayerController.UltimateController.RewardUltimateForKill();
+                GameManager.ui.GameLogPanel.EventPlayerKilled(PlayerName, GetTeamDefinition(), killedByPlayerController.PlayerName, killedByPlayerController.GetTeamDefinition());
             }
 
             //detect whether the current user was responsible for the kill
@@ -383,9 +384,9 @@ namespace TanksMP
             //play sound clip on player death
             if (killedBy != null)
             {
-                if (killedByPlayer != null)
+                if (killedByPlayerController != null)
                 {
-                    AudioManager.Play3D(killedByPlayer.CharacterAppearance.Meow.AudioClip, transform.position);
+                    AudioManager.Play3D(killedByPlayerController.CharacterAppearance.Meow.AudioClip, transform.position);
                 }
             }
 

@@ -7,6 +7,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Fusion;
+using Vashta.Entropy.Player;
 using Random = UnityEngine.Random;
 
 namespace TanksMP
@@ -62,7 +63,7 @@ namespace TanksMP
         /// Synchronizes current active state of the object to joining players.
         /// TODO: Re-write for fusion
         /// </summary>
-        public void OnPlayerEnteredRoom(Player player)
+        public void OnPlayerEnteredRoom(PlayerController playerController)
         {
             //don't execute as a non-master, but also don't execute it for the master itself
             // if(!PhotonNetwork.IsMasterClient || player.IsMasterClient)
@@ -105,7 +106,7 @@ namespace TanksMP
         /// Here the new master has to decide whether to enable the object in the scene.
         /// TODO: Handle in Fusion
         /// </summary>
-		public void OnMasterClientSwitched(Player newMaster)
+		public void OnMasterClientSwitched(PlayerController newMaster)
 		{         
             //only execute on the new master client
             // if(PhotonNetwork.LocalPlayer != newMaster)
@@ -206,7 +207,7 @@ namespace TanksMP
         /// <summary>
         /// Collects the object and assigns it to the player with the corresponding view.
         /// </summary>
-        public void Pickup(Player player)
+        public void Pickup(PlayerController playerController)
         {
             //in case this method call is received over the network earlier than the
             //spawner instantiation, here we make sure to catch up and instantiate it directly
@@ -214,14 +215,14 @@ namespace TanksMP
                 SpawnObject(true);
 
             //get target view transform to parent to
-            obj.transform.parent = player.transform;
+            obj.transform.parent = playerController.transform;
             obj.transform.localPosition = Vector3.zero + new Vector3(0, 2, 0);
             
             //assign carrier to Collectible
             Collectible colItem = obj.GetComponent<Collectible>();
             if (colItem != null)
             {
-                colItem.carrier = player;
+                colItem.carrier = playerController;
                 colItem.OnPickup();
             }
 
@@ -229,7 +230,7 @@ namespace TanksMP
             if (colItem is CollectibleCaptureTheFlag)
             {
                 GameManager gameManager = GameManager.GetInstance();
-                gameManager.ui.GameLogPanel.EventSpoonPickedUp(player.PlayerName, gameManager.TeamController.GetTeamByIndex(player.TeamIndex).teamDefinition);
+                gameManager.ui.GameLogPanel.EventSpoonPickedUp(playerController.PlayerName, gameManager.TeamController.GetTeamByIndex(playerController.TeamIndex).teamDefinition);
             }
             
             //cancel return timer as this object is now being carried around

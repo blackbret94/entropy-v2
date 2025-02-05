@@ -1,12 +1,14 @@
 using TanksMP;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Vashta.Entropy.Player;
 
 namespace Vashta.Entropy.UI
 {
     public class FireButton : MonoBehaviour
     {
-        public Player Player;
+        [FormerlySerializedAs("Player")] public PlayerController playerController;
         public Slider Slider;
 
         public void Start()
@@ -16,10 +18,10 @@ namespace Vashta.Entropy.UI
 
         private void Update()
         {
-            if (Player == null)
+            if (playerController == null)
                 return;
 
-            Slider.value = Player.CombatController.FractionFireReady;
+            Slider.value = playerController.CombatController.FractionFireReady;
         }
     }
 }

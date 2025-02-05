@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Entropy.Scripts.Player;
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.Player;
 
 public sealed class bl_MiniMap : MonoBehaviour
 {
@@ -656,15 +657,15 @@ public sealed class bl_MiniMap : MonoBehaviour
             Destroy(mapPointer);
         }
 
-        Player localPlayer = PlayerList.GetLocalPlayer();
+        PlayerController localPlayerController = PlayerList.GetLocalPlayer();
 
-        if (!localPlayer)
+        if (!localPlayerController)
         {
             Debug.LogError("Could not find local player!");
             return;
         }
         
-        int localPlayerTeam = localPlayer.TeamIndex;
+        int localPlayerTeam = localPlayerController.TeamIndex;
         MinimapController.CmdSpawnPing(Position, localPlayerTeam);
         // mapPointer = Instantiate(MapPointerPrefab, Position, Quaternion.identity) as GameObject;
         // mapPointer.GetComponent<bl_MapPointerBase>().SetColor(playerColor);

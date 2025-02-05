@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Fusion;
 using UnityEngine;
 
 namespace Vashta.Entropy.UI.TeamScore

@@ -1,5 +1,6 @@
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.Player;
 
 namespace Vashta.Entropy.GameMode
 {
@@ -10,8 +11,8 @@ namespace Vashta.Entropy.GameMode
 
         private void OnTriggerEnter(Collider col)
         {
-            Player player = col.gameObject.GetComponent<Player>();
-            if (player != null)
+            PlayerController playerController = col.gameObject.GetComponent<PlayerController>();
+            if (playerController != null)
             {
                 if (CollisionEffect)
                     PoolManager.Spawn(CollisionEffect, col.transform.position, Quaternion.identity);

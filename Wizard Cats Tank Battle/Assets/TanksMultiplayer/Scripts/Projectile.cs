@@ -6,6 +6,7 @@ using Fusion;
 using FusionHelpers;
 using UnityEngine.Serialization;
 using Vashta.Entropy.GameMode;
+using Vashta.Entropy.Player;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.Spells;
 using Vashta.Entropy.StatusEffects;
@@ -98,7 +99,7 @@ namespace TanksMP
         private int _modifiedMaxTargets;
         private bool _isPiercing;
 
-        private List<Player> _playerCollidedWith = new List<Player>();
+        private List<PlayerController> _playerCollidedWith = new List<PlayerController>();
 
         private bool OwnerIsProtected => Time.time - _timeCreated < OwnerProtectionTime;
 
@@ -246,34 +247,34 @@ namespace TanksMP
                 return;
             
             //try to get a player component out of the collided gameobject
-            Player player = obj.GetComponent<Player>();
+            PlayerController playerController = obj.GetComponent<PlayerController>();
 
             //we actually hit a player
             //do further checks
-            if (player != null)
+            if (playerController != null)
             {
-                if (HasHitProtectedOwner(player))
+                if (HasHitProtectedOwner(playerController))
                 {
                     return;
                 }
 
                 // Handle reflection
-                if (player.StatusEffectController.IsReflective)
+                if (playerController.StatusEffectController.IsReflective)
                 {
-                    BounceOffReflectivePlayer(player);
+                    BounceOffReflectivePlayer(playerController);
                     return;
                 }
 
                 // Handle piercing
                 if (_isPiercing)
                 {
-                    if (HasAlreadyHitPlayer(player))
+                    if (HasAlreadyHitPlayer(playerController))
                     {
                         return;
                     }
                     else
                     {
-                        _playerCollidedWith.Add(player);
+                        _playerCollidedWith.Add(playerController);
                     }
                 }
                 else
@@ -339,8 +340,8 @@ namespace TanksMP
             
             //create list for affected players by this bullet and add the collided player immediately,
             //we have done validation & friendly fire checks above already
-            List<Player> targets = new List<Player>();
-            if(player != null) targets.Add(player);
+            List<PlayerController> targets = new List<PlayerController>();
+            if(playerController != null) targets.Add(playerController);
 
             //in case this bullet can hit more than 1 target, perform the additional physics area check
             if (_modifiedMaxTargets > 1)
@@ -353,7 +354,7 @@ namespace TanksMP
                 for (int i = 0; i < others.Length; i++)
                 {
                     //get Player component from that collision
-                    Player other = others[i].GetComponent<Player>();
+                    PlayerController other = others[i].GetComponent<PlayerController>();
                     if (other == null || targets.Contains(other)) continue;
 
                     //add this Player component to the list
@@ -373,10 +374,10 @@ namespace TanksMP
             //apply damage and effects to the collided players
             if (owner != null)
             {
-                Player origin = owner.GetComponent<Player>();
+                PlayerController origin = owner.GetComponent<PlayerController>();
                 for (int i = 0; i < targets.Count; i++)
                 {
-                    Player target = targets[i];
+                    PlayerController target = targets[i];
                     if (HasHitProtectedOwner(target) || target.gameObject == null)
                         continue;
 
@@ -404,26 +405,26 @@ namespace TanksMP
 
         public int GetTeam()
         {
-            Player origin = owner.GetComponent<Player>();
+            PlayerController origin = owner.GetComponent<PlayerController>();
             if (!origin)
                 return -1;
 
             return origin.TeamIndex;
         }
 
-        private void AttemptApplyEffectAlly(Player player, Player target)
+        private void AttemptApplyEffectAlly(PlayerController playerController, PlayerController target)
         {
             if(Random.Range(0f, 1f) < StatusEffectOnAllyChance)
-                target.ApplyStatusEffect(StatusEffectOnAlly.Id, player);
+                target.ApplyStatusEffect(StatusEffectOnAlly.Id, playerController);
         }
 
-        private void AttemptApplyEffectEnemy(Player player, Player target)
+        private void AttemptApplyEffectEnemy(PlayerController playerController, PlayerController target)
         {
             if(Random.Range(0f, 1f) < StatusEffectOnEnemyChance)
-                target.ApplyStatusEffect(StatusEffectOnEnemy.Id, player);
+                target.ApplyStatusEffect(StatusEffectOnEnemy.Id, playerController);
         }
         
-        private void BounceOffReflectivePlayer(Player player)
+        private void BounceOffReflectivePlayer(PlayerController playerController)
         {
             //a player was not hit but something else, and we still have some bounces left
             //create a ray that points in the direction this bullet is currently flying to
@@ -439,7 +440,7 @@ namespace TanksMP
                     return;
                 }
 
-                owner = player.gameObject;
+                owner = playerController.gameObject;
 
                 //cache latest collision point
                 lastBouncePos = hit.point;
@@ -483,7 +484,7 @@ namespace TanksMP
         }
         
         //method to check for friendly fire (same team index).
-        private bool IsFriendlyFire(Player origin, Player target)
+        private bool IsFriendlyFire(PlayerController origin, PlayerController target)
         {
             //do not trigger damage for colliding with our own bullet
             if (target.gameObject == owner || target.gameObject == null) return true;
@@ -494,14 +495,14 @@ namespace TanksMP
             return false;
         }
 
-        private bool HasHitProtectedOwner(Player target)
+        private bool HasHitProtectedOwner(PlayerController target)
         {
             return target.gameObject == owner && OwnerIsProtected;
         }
 
-        private bool HasAlreadyHitPlayer(Player player)
+        private bool HasAlreadyHitPlayer(PlayerController playerController)
         {
-            return _playerCollidedWith.Contains(player);
+            return _playerCollidedWith.Contains(playerController);
         }
     }
 }

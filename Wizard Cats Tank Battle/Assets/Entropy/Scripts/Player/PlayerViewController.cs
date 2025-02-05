@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Vashta.Entropy.Character;
+using Vashta.Entropy.Player;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.StatusEffects;
 using Vashta.Entropy.UI;
@@ -23,7 +24,7 @@ namespace Entropy.Scripts.Player
         public PlayerAimGraphic PlayerAimGraphic;
 
         [Header("Controllers")] 
-        private TanksMP.Player _player;
+        private PlayerController _playerController;
         private PlayerAnimator _playerAnimator;
         private StatusEffectController _statusEffectController;
         private CharacterAppearance _characterAppearance;
@@ -36,10 +37,10 @@ namespace Entropy.Scripts.Player
 
         private void Awake()
         {
-            _player = GetComponent<TanksMP.Player>();
+            _playerController = GetComponent<PlayerController>();
             _playerAnimator = GetComponent<PlayerAnimator>();
             _statusEffectController = GetComponent<StatusEffectController>();
-            _characterAppearance = _player.CharacterAppearance;
+            _characterAppearance = _playerController.CharacterAppearance;
             GameManager = GameManager.GetInstance();
         }
         
@@ -135,8 +136,11 @@ namespace Entropy.Scripts.Player
         {
             if (teamInstance == null)
             {
-                teamInstance = GameManager.TeamController.teams[_player.TeamIndex];
+                teamInstance = GameManager.TeamController.teams[_playerController.TeamIndex];
             }
+
+            if (teamInstance == null)
+                return;
 
             //get corresponding team and colorize renderers in team color
             _characterAppearance.teamInstance = teamInstance;
@@ -144,7 +148,7 @@ namespace Entropy.Scripts.Player
             
             SetTeam(teamInstance.teamDefinition);   
 
-            if (_player.IsLocal)
+            if (_playerController.IsLocal)
             {
                 if (PlayerAimGraphic)
                 {

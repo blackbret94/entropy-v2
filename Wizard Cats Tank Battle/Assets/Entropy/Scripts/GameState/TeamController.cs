@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using Entropy.Scripts.Player;
 using Fusion;
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.Player;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.TanksExtensions;
 using Vashta.Entropy.UI.TeamScore;
@@ -15,10 +17,14 @@ namespace Vashta.Entropy.GameState
         private GameManager _gameManager;
         private int lastSpawnIndex = -1;
         public int maxScore { get; set; } = 30;
+        
         // Networked properties.  Later re-factor into a INetworkStruct
         // Array needs a fixed size set here, so it is always 4
-        [Networked, Capacity(4)] public NetworkArray<int> ScoreByTeamIndex { get; } = MakeInitializer(new int[4]);
-        [Networked, Capacity(4)] public NetworkArray<int> TeamSize { get; } = MakeInitializer(new int[4]);
+        [Networked, Capacity(4), OnChangedRender(nameof(RefreshDisplay))]
+        public NetworkArray<int> ScoreByTeamIndex => default;
+
+        [Networked, Capacity(4), OnChangedRender(nameof(RefreshDisplay))]
+        public NetworkArray<int> TeamSize => default;
 
         public bool UsesTeams => _gameManager.gameMode != TanksMP.GameMode.FFA;
         
@@ -27,8 +33,6 @@ namespace Vashta.Entropy.GameState
         private void Awake()
         {
             _gameManager = GetComponent<GameManager>();
-            // ScoreByTeamIndex = new NetworkArray<int>();
-            // TeamSize = new NetworkArray<int>();
         }
         
         public TeamInstance GetTeamByIndex(int index)
@@ -41,7 +45,7 @@ namespace Vashta.Entropy.GameState
             return teams[0];
         }
 
-        public void AddPlayerTeamTeam(Player player, int teamIndex)
+        public void AddPlayerTeamTeam(PlayerController playerController, int teamIndex)
         {
             if (teamIndex < TeamSize.Length)
             {
@@ -53,14 +57,14 @@ namespace Vashta.Entropy.GameState
             }
         }
 
-        public void RemovePlayerFromTeam(Player player)
+        public void RemovePlayerFromTeam(PlayerController playerController)
         {
-            if (!player)
+            if (!playerController)
             {
                 Debug.LogError("Attempted to remove null player");
                 return;
             }
-            int teamIndex = player.TeamIndex;
+            int teamIndex = playerController.TeamIndex;
             
             if (teamIndex < TeamSize.Length)
             {
@@ -71,37 +75,48 @@ namespace Vashta.Entropy.GameState
                 Debug.LogError("Tried to remove player with invalid team: " + teamIndex);
             }
         }
-        
-        public void OnePassPlayerCheckToChangeTeams(Player player, bool respawn)
+
+        public void ChooseInitialTeamForPlayer(PlayerController playerController)
         {
-            if (!player)
+            int teamIndex = GetTeamFill();
+            
+            TeamSize.Set(teamIndex, TeamSize[teamIndex] + 1);
+            
+            playerController.PlayerTeam.PreferredTeamIndex = teamIndex;
+            playerController.PlayerTeam.TeamIndex = teamIndex;
+            
+            RefreshDisplay();
+        }
+        
+        public void OnePassPlayerCheckToChangeTeams(PlayerController playerController, bool respawn)
+        {
+            if (!playerController)
                 return;
             
-            int preferredTeamIndex = player.PreferredTeamIndex;
-            bool prefersDifferentTeam = preferredTeamIndex != player.TeamIndex;
+            int preferredTeamIndex = playerController.PreferredTeamIndex;
+            bool prefersDifferentTeam = preferredTeamIndex != playerController.TeamIndex;
 
             if (prefersDifferentTeam)
             {
-                Debug.Log("Prefers a different team");
                 if (_gameManager.TeamController.TeamHasVacancy(preferredTeamIndex))
                 {
                     // Handle game over. Nested for efficiency
                     if (_gameManager.IsGameOver())
                         return;
 
-                    AttemptToChangePlayerToPreferredTeam(player, respawn);
+                    AttemptToChangePlayerToPreferredTeam(playerController, respawn);
                 }
             }
         }
         
-        private void AttemptToChangePlayerToPreferredTeam(Player player, bool respawn)
+        private void AttemptToChangePlayerToPreferredTeam(PlayerController playerController, bool respawn)
         {
-            int preferredTeamIndex = player.PreferredTeamIndex;
-            int currentTeam = player.TeamIndex;
+            int preferredTeamIndex = playerController.PreferredTeamIndex;
+            int currentTeam = playerController.TeamIndex;
 
             if (preferredTeamIndex == RANDOM_TEAM_INDEX && preferredTeamIndex != currentTeam)
             {
-                player.PreferredTeamIndex = currentTeam;
+                playerController.PlayerTeam.PreferredTeamIndex = currentTeam;
                 return;
             }
 
@@ -113,22 +128,48 @@ namespace Vashta.Entropy.GameState
 
             Debug.Log("Changing teams to: " + preferredTeamIndex);
 
-            if(player.TeamIndex != -1)
-                TeamSize.Set(player.TeamIndex, TeamSize[player.TeamIndex] - 1);
+            if(playerController.TeamIndex != -1)
+                TeamSize.Set(playerController.TeamIndex, TeamSize[playerController.TeamIndex] - 1);
             
             if(preferredTeamIndex != -1)
                 TeamSize.Set(preferredTeamIndex, TeamSize[preferredTeamIndex] + 1);
             
-            player.TeamIndex = preferredTeamIndex;
-            Debug.Log("Setting player team: " + player.TeamIndex);
-            
-            TeamScoreDisplayController.UpdateTeamSizes(TeamSize.ToArray());
+            playerController.PlayerTeam.TeamIndex = preferredTeamIndex;
+            Debug.Log("Setting player team: " + playerController.TeamIndex);
             
             // Force respawn
             if(respawn)
-                player.Respawn(null);
-            
-            player.ApplyTeamChange();
+                playerController.Respawn(null);
+        }
+
+        public void RefreshDisplay()
+        {
+            // ReCalculateTeams();
+            TeamScoreDisplayController.UpdateTeamSizes(TeamSize.ToArray());
+            TeamScoreDisplayController.UpdateScores(ScoreByTeamIndex.ToArray());
+        }
+
+        public void ReCalculateTeams()
+        {
+            List<int> teamScores = new List<int> { 0, 0, 0, 0 };
+
+            // Iterate over players
+            List<PlayerController> players = PlayerList.GetAllPlayers;
+
+            foreach (PlayerController player in players)
+            {
+                int teamIndex = player.TeamIndex;
+
+                if (teamIndex != -1 && teamIndex != RANDOM_TEAM_INDEX)
+                {
+                    teamScores[teamIndex]++;
+                }
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                TeamSize.Set(i, teamScores[i]);
+            }
         }
         
         /// <summary>

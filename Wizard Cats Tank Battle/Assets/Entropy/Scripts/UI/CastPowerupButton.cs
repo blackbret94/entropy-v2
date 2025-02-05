@@ -2,6 +2,7 @@ using Entropy.Scripts.Player;
 using TanksMP;
 using UnityEngine;
 using UnityEngine.UI;
+using Vashta.Entropy.Player;
 
 namespace Vashta.Entropy.UI
 {
@@ -9,7 +10,7 @@ namespace Vashta.Entropy.UI
     {
         public Image PowerupIcon;
 
-        private Player _localPlayer;
+        private PlayerController _localPlayerController;
 
         private void Start()
         {
@@ -19,7 +20,7 @@ namespace Vashta.Entropy.UI
         
         private void FindLocalPlayer()
         {
-            _localPlayer = PlayerList.GetLocalPlayer();
+            _localPlayerController = PlayerList.GetLocalPlayer();
         }
 
         public void UpdateIcon(Sprite sprite)
@@ -30,16 +31,16 @@ namespace Vashta.Entropy.UI
 
         public void CastPowerup()
         {
-            if(!_localPlayer)
+            if(!_localPlayerController)
                 FindLocalPlayer();
 
-            if (!_localPlayer)
+            if (!_localPlayerController)
             {
                 Debug.LogError("Could not find local player!");
                 return;
             }
             
-            _localPlayer.TryCastPowerup();
+            _localPlayerController.TryCastPowerup();
         }
 
         public void ResetPowerup()

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Vashta.Entropy.Player;
 using Vashta.Entropy.StatusEffects;
 using Vashta.Entropy.UI.Minimap;
 
@@ -8,9 +9,9 @@ namespace TanksMP
     public class CollectibleCaptureTheFlag : CollectibleTeam
     {
          public StatusEffectData StatusEffectToApply;
-         private Player _carriedBy;
+         private PlayerController _carriedBy;
 
-         public Player CarriedBy => _carriedBy;
+         public PlayerController CarriedBy => _carriedBy;
          
          private int _defaultTeamIndex = -1;
          private MinimapEntityController _entityController;
@@ -40,16 +41,16 @@ namespace TanksMP
                 return;
 
             GameObject obj = col.gameObject;
-            Player player = obj.GetComponent<Player>();
+            PlayerController playerController = obj.GetComponent<PlayerController>();
 
-            if (player == null) return;
+            if (playerController == null) return;
 
             //try to apply collectible to player, the result should be true
-            if (Apply(player))
+            if (Apply(playerController))
             {
                 // Attach
-                _carriedBy = player;
-                _carriedBy.StatusEffectController.AddStatusEffect(StatusEffectToApply.Id, player);
+                _carriedBy = playerController;
+                _carriedBy.StatusEffectController.AddStatusEffect(StatusEffectToApply.Id, playerController);
                 Colorize();
                 
                 if (spawner == null)
@@ -58,7 +59,7 @@ namespace TanksMP
                 }
                 
                 //player picked up item from other team, send out buffered RPC for it to be remembered
-                spawner.Pickup(player);
+                spawner.Pickup(playerController);
             }
             else
             {
@@ -66,7 +67,7 @@ namespace TanksMP
                 // Do not reset a neutral flag
                 if (teamIndex == -1) return;
                 
-                int playerTeam = player.TeamIndex;
+                int playerTeam = playerController.TeamIndex;
                 
                 if (playerTeam != teamIndex)
                 {
@@ -80,7 +81,7 @@ namespace TanksMP
         /// Overrides the default behavior with a custom implementation.
         /// Check for the carrier and item position to decide valid pickup.
         /// </summary>
-        public override bool Apply(Player p)
+        public override bool Apply(PlayerController p)
         {
             int playerTeam = p.TeamIndex;
 

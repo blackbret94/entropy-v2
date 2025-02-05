@@ -1,12 +1,14 @@
 using UnityEngine;
 using System.Collections.Generic;
 using TanksMP;
+using UnityEngine.Serialization;
+using Vashta.Entropy.Player;
 
 namespace Entropy.Scripts.Player
 {
     public class PlayerCollisionHandler: MonoBehaviour
     {
-        public TanksMP.Player player;
+        [FormerlySerializedAs("player")] public PlayerController playerController;
         
         /// <summary>
         /// the amount of damage done by this tank when it hits another tank
@@ -58,7 +60,7 @@ namespace Entropy.Scripts.Player
 
             // Ignore if player does not have spikes
             // bool playerHasSpikes = player.StatusEffectController.SpikeDamageModifier > 0;
-            bool otherPlayerHasSpikes = colPlayer.player.StatusEffectController.SpikeDamageModifier > 0;
+            bool otherPlayerHasSpikes = colPlayer.playerController.StatusEffectController.SpikeDamageModifier > 0;
             if (!otherPlayerHasSpikes)
                 return;
             
@@ -67,15 +69,15 @@ namespace Entropy.Scripts.Player
                 return;
 
             // ignore team mates
-            if (player.TeamIndex == colPlayer.player.TeamIndex)
+            if (playerController.TeamIndex == colPlayer.playerController.TeamIndex)
                 return;
             
             _playersActivelyCollided.Add(colPlayer);
             PlayCollisionFx(col.contacts[0].point);
 
-            TanksMP.Player otherPlayer = colPlayer.GetComponent<TanksMP.Player>();
+            PlayerController otherPlayerController = colPlayer.GetComponent<PlayerController>();
 
-            player.CombatController.TakeDamage(CalculateDamage(colPlayer, otherPlayer), otherPlayer);
+            playerController.CombatController.TakeDamage(CalculateDamage(colPlayer, otherPlayerController), otherPlayerController);
         }
 
         private void OnCollisionExit(Collision col)
@@ -97,7 +99,7 @@ namespace Entropy.Scripts.Player
             return obj.GetComponent<PlayerCollisionHandler>();
         }
         
-        private int CalculateDamage(PlayerCollisionHandler colPlayer, TanksMP.Player otherPlayer)
+        private int CalculateDamage(PlayerCollisionHandler colPlayer, PlayerController otherPlayerController)
         {
             if (!colPlayer)
             {
@@ -105,7 +107,7 @@ namespace Entropy.Scripts.Player
                 return 0;
             }
 
-            int damage = damageAmtOnCollision + Mathf.RoundToInt(otherPlayer.StatusEffectController.SpikeDamageModifier);
+            int damage = damageAmtOnCollision + Mathf.RoundToInt(otherPlayerController.StatusEffectController.SpikeDamageModifier);
             int otherArmor = colPlayer.armor;
 
             return Mathf.Max(0, damage - otherArmor);

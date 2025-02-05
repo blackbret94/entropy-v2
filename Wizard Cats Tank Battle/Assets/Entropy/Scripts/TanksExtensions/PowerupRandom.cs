@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.Player;
 using Vashta.Entropy.StatusEffects;
 
 namespace Vashta.Entropy.TanksExtensions
@@ -10,7 +11,7 @@ namespace Vashta.Entropy.TanksExtensions
         public List<StatusEffectData> PossibleStatusEffects;
         public StatusEffectDirectory StatusEffectDirectory;
 
-        public override bool Apply(Player p)
+        public override bool Apply(PlayerController p)
         {
             if (p == null)
                 return false;
@@ -37,7 +38,7 @@ namespace Vashta.Entropy.TanksExtensions
             return PossibleStatusEffects[index];
         }
 
-        private bool ApplyStatusEffect(Player p, StatusEffectData statusEffectData)
+        private bool ApplyStatusEffect(PlayerController p, StatusEffectData statusEffectData)
         {
             int statusEffectSessionId = StatusEffectDirectory.GetSessionId(statusEffectData);
 

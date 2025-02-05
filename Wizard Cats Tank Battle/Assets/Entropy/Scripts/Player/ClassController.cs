@@ -1,15 +1,16 @@
 using UnityEngine;
+using Vashta.Entropy.Player;
 
 namespace Entropy.Scripts.Player
 {
     public class ClassController : MonoBehaviour
     {
-        public void ApplyClass(TanksMP.Player player, PlayerCollisionHandler playerCollisionHandler, ClassDefinition classDefinition, float modifier = 1f)
+        public void ApplyClass(PlayerController playerController, PlayerCollisionHandler playerCollisionHandler, ClassDefinition classDefinition, float modifier = 1f)
         {
-            player.maxHealth = (int)(classDefinition.maxHealth * modifier);
-            player.fireRate = classDefinition.fireRate*(1/modifier);
-            player.moveSpeed = classDefinition.moveSpeed * modifier;
-            player.PlayerViewController.SetClassIcon(classDefinition.classIcon);
+            playerController.maxHealth = (int)(classDefinition.maxHealth * modifier);
+            playerController.fireRate = classDefinition.fireRate*(1/modifier);
+            playerController.moveSpeed = classDefinition.moveSpeed * modifier;
+            playerController.PlayerViewController.SetClassIcon(classDefinition.classIcon);
             playerCollisionHandler.armor = classDefinition.armor;
             playerCollisionHandler.damageAmtOnCollision = classDefinition.damageAmtOnCollision;
         }

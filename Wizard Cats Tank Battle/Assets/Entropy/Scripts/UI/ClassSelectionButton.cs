@@ -14,7 +14,7 @@ namespace Vashta.Entropy.UI
             if (!Icon)
                 return;
             
-            ClassDefinition playerClass = GameManager.GetInstance().localPlayer.GetClass();
+            ClassDefinition playerClass = GameManager.GetInstance().localPlayerController.GetClass();
 
             if (!playerClass)
                 return;

@@ -2,6 +2,7 @@ using Entropy.Scripts.Player;
 using TanksMP;
 using UnityEngine;
 using UnityEngine.UI;
+using Vashta.Entropy.Player;
 
 namespace Vashta.Entropy.UI
 {
@@ -10,7 +11,7 @@ namespace Vashta.Entropy.UI
         public Image SpellIcon;
         public Slider UltimateSlider;
         
-        private Player _localPlayer;
+        private PlayerController _localPlayerController;
         
         private const float LERP_RATE = 20f;
         private const float LERP_CLAMP = .1f;
@@ -26,16 +27,16 @@ namespace Vashta.Entropy.UI
         
         public void CastUltimateLocalPlayer()
         {
-            if(!_localPlayer)
+            if(!_localPlayerController)
                 FindLocalPlayer();
 
-            if (!_localPlayer)
+            if (!_localPlayerController)
             {
                 Debug.LogError("Could not find local player!");
                 return;
             }
             
-            bool couldCast = _localPlayer.UltimateController.TryCastUltimate();
+            bool couldCast = _localPlayerController.UltimateController.TryCastUltimate();
 
             if (!couldCast)
             {
@@ -57,17 +58,17 @@ namespace Vashta.Entropy.UI
 
         private void Update()
         {
-            if(!_localPlayer)
+            if(!_localPlayerController)
                 FindLocalPlayer();
             
-            if (!_localPlayer)
+            if (!_localPlayerController)
             {
                 Debug.LogError("Could not find local player!");
                 return;
             }
 
             // Get perun and INVERT
-            float newUltimateValue = 1 - _localPlayer.UltimateController.GetUltimatePerun();
+            float newUltimateValue = 1 - _localPlayerController.UltimateController.GetUltimatePerun();
 
             // Play sfx
             if (newUltimateValue > .01)
@@ -103,7 +104,7 @@ namespace Vashta.Entropy.UI
 
         private void FindLocalPlayer()
         {
-            _localPlayer = PlayerList.GetLocalPlayer();
+            _localPlayerController = PlayerList.GetLocalPlayer();
         }
     }
 }

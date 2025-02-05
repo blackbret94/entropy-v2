@@ -1,5 +1,6 @@
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.Player;
 using Vashta.Entropy.StatusEffects;
 
 namespace Vashta.Entropy.TanksExtensions
@@ -14,7 +15,7 @@ namespace Vashta.Entropy.TanksExtensions
         /// Overrides the default behavior with a custom implementation.
         /// Check for the current buff and refills its time.
         /// </summary>
-        public override bool Apply(Player p)
+        public override bool Apply(PlayerController p)
         {
             if (p == null)
                 return false;
@@ -28,7 +29,7 @@ namespace Vashta.Entropy.TanksExtensions
             return false;
         }
 
-        private bool ApplyStatusEffect(Player p)
+        private bool ApplyStatusEffect(PlayerController p)
         {
             int statusEffectSessionId = StatusEffectDirectory.GetSessionId(StatusEffectData);
 

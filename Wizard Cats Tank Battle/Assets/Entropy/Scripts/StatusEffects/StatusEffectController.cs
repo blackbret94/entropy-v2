@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TanksMP;
 using UnityEngine;
 using Vashta.Entropy.Character;
+using Vashta.Entropy.Player;
 using Vashta.Entropy.UI;
 
 namespace Vashta.Entropy.StatusEffects
@@ -13,7 +14,7 @@ namespace Vashta.Entropy.StatusEffects
         public StatusEffectPanel StatusEffectPanel;
         
         [Header("Cached references")]
-        private Player _player;
+        private PlayerController _playerController;
         private PlayerStatusEffectVisualizer _visualizer;
         
         private List<StatusEffect> _statusEffects = new();
@@ -22,7 +23,7 @@ namespace Vashta.Entropy.StatusEffects
         
         private const float _refreshRateS = .5f;
         private float _lastRefresh = 0;
-        private Player _lastDotAppliedBy;
+        private PlayerController _lastDotAppliedBy;
         
         // effects
         private float _massMultiplierCashed = 1f;
@@ -47,7 +48,7 @@ namespace Vashta.Entropy.StatusEffects
         private bool _blocksDebuffsCached = false;
         private bool _blocksCastingBuffsCached = false;
         private bool _blocksCastingDebuffsCached = false;
-        private Player _leechingAppliedByCached;
+        private PlayerController _leechingAppliedByCached;
         private bool _buffsLastForeverCached = false;
 
         private StatusEffectData _bloodVengeanceChainedEffect;
@@ -70,7 +71,7 @@ namespace Vashta.Entropy.StatusEffects
         public bool BuffsLastForever => _buffsLastForeverCached;
         public bool BlocksCastingBuffs => _blocksCastingBuffsCached;
         public bool BlocksCastingDebuffs => _blocksCastingDebuffsCached;
-        public Player LeechingAppliedBy => _leechingAppliedByCached;
+        public PlayerController LeechingAppliedBy => _leechingAppliedByCached;
 
         public bool ProjectileExplodes => _projectileExplodesCached;
         public bool ProjectileReflects => _projectileReflectsCached;
@@ -79,11 +80,11 @@ namespace Vashta.Entropy.StatusEffects
         public bool Pierces => _piercesCached;
         
         
-        public Player LastDotAppliedBy => _lastDotAppliedBy;
+        public PlayerController LastDotAppliedBy => _lastDotAppliedBy;
 
         private void Awake()
         {
-            _player = GetComponent<Player>();
+            _playerController = GetComponent<PlayerController>();
             _visualizer = GetComponent<PlayerStatusEffectVisualizer>();
         }
         
@@ -93,43 +94,43 @@ namespace Vashta.Entropy.StatusEffects
             Leech();
             
             // handle health changes from DoTs/HoTs
-            int health = _player.Health;
+            int health = _playerController.Health;
             int healthPerSecond = Mathf.RoundToInt(HealthPerSecond);
             
             if (healthPerSecond != 0)
             {
-                int shield = _player.Shield;
+                int shield = _playerController.Shield;
                 if (shield > 0 && healthPerSecond < 0)
                 {
-                    _player.Shield--;
+                    _playerController.Shield--;
                 }
                 else
                 {
                     health += healthPerSecond;
-                    _player.Health = health;
+                    _playerController.Health = health;
                 }
             }
             
-            if(healthPerSecond != 0 && (healthPerSecond < 0 || health < _player.maxHealth))
-                _player.PlayerViewController.ShowDamageText(-healthPerSecond, false, false);
+            if(healthPerSecond != 0 && (healthPerSecond < 0 || health < _playerController.maxHealth))
+                _playerController.PlayerViewController.ShowDamageText(-healthPerSecond, false, false);
 
             if (health <= 0)
             {
                 string deathFx = GetDeathFx();
                 
                 // killed the player
-                _player.CombatController.PlayerDeath(LastDotAppliedBy, deathFx);
+                _playerController.CombatController.PlayerDeath(LastDotAppliedBy, deathFx);
             }
             
             // Bot specific logic
-            PlayerBot playerBot = _player as PlayerBot;
+            PlayerControllerBot playerControllerBot = _playerController as PlayerControllerBot;
 
-            if (playerBot != null)
+            if (playerControllerBot != null)
             {
                 // adjust speed
-                float speed = ((playerBot.moveSpeed + MovementSpeedModifier) *
+                float speed = ((playerControllerBot.moveSpeed + MovementSpeedModifier) *
                                MovementSpeedMultiplier);
-                playerBot.agent.speed = speed;
+                playerControllerBot.agent.speed = speed;
             }
         }
         
@@ -138,7 +139,7 @@ namespace Vashta.Entropy.StatusEffects
         /// </summary>
         /// <param name="statusEffectId"></param>
         /// <param name="owner"></param>
-        public void AddStatusEffect(string statusEffectId, Player owner)
+        public void AddStatusEffect(string statusEffectId, PlayerController owner)
         {
             StatusEffect statusEffect = new StatusEffect(this, statusEffectId, owner);
             
@@ -165,7 +166,7 @@ namespace Vashta.Entropy.StatusEffects
             _visualizer.AddEffect(statusEffect.ApplyFxData());
 
             // Alert if local player
-            if (_player.IsLocal && existingEffect == null)
+            if (_playerController.IsLocal && existingEffect == null)
             {
                 // Show panel
                 GameManager.GetInstance().ui.PowerUpPanel.SetText(statusEffect.Title(), statusEffect.Description(),
@@ -183,11 +184,11 @@ namespace Vashta.Entropy.StatusEffects
 
                 if (healthPerSecond > 0)
                 {
-                    _player.Heal(healthPerSecond);
+                    _playerController.Heal(healthPerSecond);
                 }
                 else if (healthPerSecond < 0)
                 {
-                    _player.CombatController.TakeDamage(healthPerSecond, statusEffect.OriginPlayer());
+                    _playerController.CombatController.TakeDamage(healthPerSecond, statusEffect.OriginPlayer());
                 }
 
                 // Do NOT add as status effect if it is supposed to be instantly applied
@@ -440,17 +441,17 @@ namespace Vashta.Entropy.StatusEffects
             if (_leechingPerSecondCached <= 0 || (_leechingAppliedByCached != null && !_leechingAppliedByCached.IsAlive))
                 return;
             
-            _player.CombatController.TakeDamage(_leechingPerSecondCached, _leechingAppliedByCached);
+            _playerController.CombatController.TakeDamage(_leechingPerSecondCached, _leechingAppliedByCached);
             _leechingAppliedByCached.Heal(_leechingPerSecondCached);
         }
 
         // Server-only, trigger blood pact
-        public void BloodPact(Player killer)
+        public void BloodPact(PlayerController killer)
         {
             if (_bloodVengeanceChainedEffect == null || !killer.IsAlive)
                 return;
             
-            killer.StatusEffectController.AddStatusEffect(_bloodVengeanceChainedEffect.Id, _player);
+            killer.StatusEffectController.AddStatusEffect(_bloodVengeanceChainedEffect.Id, _playerController);
 
             Transform killerTransform = killer.transform;
             PoolManager.Spawn(_bloodVengeanceChainedEffect.DeathFxData.VisualEffectPrefab, killerTransform.position, killerTransform.rotation);

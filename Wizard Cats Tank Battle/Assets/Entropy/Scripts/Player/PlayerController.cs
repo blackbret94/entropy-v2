@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using Entropy.Scripts.Player;
 using Fusion;
 using FusionHelpers;
+using TanksMP;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Vashta.Entropy.Character;
@@ -15,7 +15,7 @@ using Vashta.Entropy.UI.Minimap;
 
 using NetworkInputData = Vashta.Entropy.Network.NetworkInputController.NetworkInputData;
 
-namespace TanksMP
+namespace Vashta.Entropy.Player
 {
     /// <summary>
     /// Networked player class implementing movement control and shooting.
@@ -29,7 +29,8 @@ namespace TanksMP
     [RequireComponent(typeof(MovementController))]
     [RequireComponent(typeof(ClassController))]
     [RequireComponent(typeof(NetworkInputController))]
-    public class Player : FusionPlayer
+    [RequireComponent(typeof(PlayerTeam))]
+    public class PlayerController : FusionPlayer
     {
         [Header("Stats")]
         public float acceleration = 30f;
@@ -38,7 +39,7 @@ namespace TanksMP
         public float defaultMass = 1;
         
         [Networked] public string PlayerName { get; private set; }
-        [Networked] public int TeamIndex { get; set; }
+        public int TeamIndex => PlayerTeam.TeamIndex;
 
         // Health
         public int Health
@@ -75,7 +76,7 @@ namespace TanksMP
         [Networked] public float JoinTime { get; protected set; }
         public int ClassId { get; protected set; } // Move to class Controller
         public int ClassIdQueued { get; protected set; }
-        public int PreferredTeamIndex { get; set; }
+        public int PreferredTeamIndex => PlayerTeam.PreferredTeamIndex;
         public int PowerupId { get; set; }
 
         /// <summary>
@@ -119,6 +120,7 @@ namespace TanksMP
         public ClassController ClassController { get; private set; }
         public CharacterAppearance CharacterAppearance;
         public NetworkManagerCustom NetworkManagerCustom { get; private set; }
+        public PlayerTeam PlayerTeam { get; private set; }
 
         //reference to this rigidbody
         #pragma warning disable 0649
@@ -145,7 +147,8 @@ namespace TanksMP
         public float lastDeathTime = 0f;
         private bool _hasLateInited = false;
         
-        [FormerlySerializedAs("classList")] [Header("Data")]
+        [Header("Data")]
+        [FormerlySerializedAs("classList")] 
         public ClassDirectory classDirectory;
         public StatusEffectDirectory StatusEffectDirectory;
         public StatusEffectData StatusEffectApplyOnSpawn;
@@ -172,54 +175,31 @@ namespace TanksMP
             NetworkInputController = GetComponent<NetworkInputController>();
             rb = GetComponent<Rigidbody>();
             _playerCurrencyRewarder = new PlayerCurrencyRewarder();
+            PlayerTeam = GetComponent<PlayerTeam>();
             NetworkManagerCustom = NetworkManagerCustom.GetInstance();
 
-            
-            // Local player logic
-            if (HasInputAuthority && !isBot)
-            {
-                //set a global reference to the local player
-                GameManager.localPlayer = this;
-            }
-            
-            PlayerList.Add(this);
-            
-            StartCoroutine(RefreshHudCoroutine());
-            
-            if (IsLocal)
-            {
-                GameManager.ui.CastPowerupButton.gameObject.SetActive(false);
-            }
-            
-            ClassDefinition classDefinition = defaultClassDefinition ? defaultClassDefinition : classDirectory.RandomClass();
+            // Setup coroutine
+            StartCoroutine(SetupCR());
+        }
 
+        protected IEnumerator SetupCR()
+        {
+            // Join time
             _lastSecondUpdate = Time.time + .1f;
             JoinTime = -Time.time;
-            ClassId = classDefinition.classId;
             
-            ApplyClass();
-            
-            if (IsLocal)
+            // Will eventually need to move this into another method that is overriden by bots
+            if (HasInputAuthority && !isBot)
             {
+                // Local player logic
+                GameManager.localPlayerController = this;
+                
+                GameManager.ui.CastPowerupButton.gameObject.SetActive(false);
+                
                 PlayerName = NetworkManagerCustom.LocalPlayerInfo.Name;
                 CharacterAppearance.SaveLoad.LoadLocal();
-            }
-            else
-            {
-                CharacterAppearance.LoadFromUUIDs();
-            }
-            
-            PlayerViewController.SetName(PlayerName);
-            GameManager.ui.GameLogPanel.EventPlayerJoined(PlayerName);
-            
-            // refresh slider to fix render issues
-            PlayerViewController.RefreshHealthSlider();
-            
-            //called only for this client 
-            if (HasInputAuthority)
-            {
+                
                 CameraController.SetTarget(turret);
-                // CharacterAppearanceSaveLoad.SetCurrentAppearanceAsCustomProperty();
 
                 //initialize input controls for mobile devices
                 //[0]=left joystick for movement, [1]=right joystick for shooting
@@ -233,27 +213,44 @@ namespace TanksMP
             GameManager.ui.controls[1].onDrag += CombatController.AttemptToShoot;
 #endif
 
-                GameManager.ui.fireButton.Player = this;
+                GameManager.ui.fireButton.playerController = this;
+            }
+            else
+            {
+                // Remote player logic
+                CharacterAppearance.LoadFromUUIDs();
             }
             
-            PreferredTeamIndex = GameManager.TeamController.GetTeamFill();
-            IsAlive = false;
-            TeamIndex = -1;
+            PlayerViewController.SetName(PlayerName);
+            GameManager.ui.GameLogPanel.EventPlayerJoined(PlayerName);
+            
+            PlayerList.Add(this);
+            StartCoroutine(RefreshHudCoroutine());
+            
+            // Set up class
+            ClassDefinition classDefinition = defaultClassDefinition ? defaultClassDefinition : classDirectory.RandomClass();
+            ClassId = classDefinition.classId;
+            ApplyClass();
+            
+            // refresh slider to fix render issues
+            PlayerViewController.RefreshHealthSlider();
+            
+            // Set up team
+            while (!PlayerTeam.Object.IsValid) yield return null;
+            
+            PlayerTeam.Setup();
+            
+            // Move player to start position
+            if (HasInputAuthority)
+            {
+                Vector3 startPos = GameManager.TeamController.GetSpawnPosition(TeamIndex);
+                transform.position = startPos;
+            }
             
             // Apply status effect
             if (StatusEffectApplyOnSpawn)
             {
                 StatusEffectController.AddStatusEffect(StatusEffectApplyOnSpawn.Id, this);
-            }
-
-            TryChangeTeams(true);
-            
-            Respawn(null);
-            if (HasInputAuthority)
-            {
-                // Move player
-                Vector3 startPos = GameManager.TeamController.GetSpawnPosition(TeamIndex);
-                transform.position = startPos;
             }
         }
 
@@ -301,12 +298,6 @@ namespace TanksMP
         {
             PlayerList.Remove(this);
             GameManager.ui.GameLogPanel.EventPlayerLeft(PlayerName);
-        }
-        
-        public void ApplyTeamChange()
-        {
-            PlayerViewController.ColorizePlayerForTeam();
-            GameManager.ui.GameLogPanel.EventPlayerChangedTeam(PlayerName, GetTeamDefinition());
         }
         
         protected virtual void Update()
@@ -391,15 +382,7 @@ namespace TanksMP
         {
             rb.mass = defaultMass * StatusEffectController.MassMultiplier;
         }
-
-        public void TryChangeTeams(bool respawn)
-        {
-            if (PlayerCanRespawnFreely() || !IsAlive)
-            {
-                GameManager.TeamController.OnePassPlayerCheckToChangeTeams(this, respawn);
-            }
-        }
-
+        
         /// <summary>
         /// Server only.  Heal the player a specified amount
         /// </summary>
@@ -449,7 +432,7 @@ namespace TanksMP
             return false;
         }
         
-        public virtual void Respawn(Player killedByPlayer, string deathFxId = null)
+        public virtual void Respawn(PlayerController killedByPlayerController, string deathFxId = null)
         {
             lastDeathTime = Time.time;
             
@@ -461,7 +444,7 @@ namespace TanksMP
             //the player has been killed
             if (!isActive)
             {
-                HandleKilled(killedByPlayer, deathFxId);
+                HandleKilled(killedByPlayerController, deathFxId);
             }
             
             //send player back to the team area, this will get overwritten by the exact position from the client itself later on
@@ -478,7 +461,7 @@ namespace TanksMP
             }
         }
 
-        protected void HandleKilled(Player killedByPlayer, string deathFxId)
+        protected void HandleKilled(PlayerController killedByPlayerController, string deathFxId)
         {
             IsAlive = false;
             
@@ -491,7 +474,7 @@ namespace TanksMP
             }
                 
             //find original sender game object (killedBy)
-            if (killedByPlayer != null && killedByPlayer.gameObject != null) killedBy = killedByPlayer.gameObject;
+            if (killedByPlayerController != null && killedByPlayerController.gameObject != null) killedBy = killedByPlayerController.gameObject;
                 
             PlayerViewController.SpawnDeathFx(deathFxId);
                 
@@ -505,17 +488,17 @@ namespace TanksMP
                 
             if (killedBy != null)
             {
-                Player otherPlayer = killedBy.GetComponent<Player>();
+                PlayerController otherPlayerController = killedBy.GetComponent<PlayerController>();
                     
-                otherPlayer.UltimateController.RewardUltimateForKill();
+                otherPlayerController.UltimateController.RewardUltimateForKill();
                     
                 // log
-                GameManager.ui.GameLogPanel.EventPlayerKilled(PlayerName, GetTeamDefinition(), otherPlayer.PlayerName, otherPlayer.GetTeamDefinition());
+                GameManager.ui.GameLogPanel.EventPlayerKilled(PlayerName, GetTeamDefinition(), otherPlayerController.PlayerName, otherPlayerController.GetTeamDefinition());
                 
-                if (otherPlayer != null && otherPlayer != this)
+                if (otherPlayerController != null && otherPlayerController != this)
                 {
                     // play killer's death cry
-                    AudioManager.Play3D(otherPlayer.CharacterAppearance.Meow.AudioClip, transform.position);
+                    AudioManager.Play3D(otherPlayerController.CharacterAppearance.Meow.AudioClip, transform.position);
                 }
             }
 
@@ -661,15 +644,15 @@ namespace TanksMP
                 GameManager.ui.CastUltimateButton.UpdateSpellIcon(classDefinition.ultimateIcon);
         }
         
-        public void ApplyStatusEffect(string statusEffectId, Player effectOwnerPlayer)
+        public void ApplyStatusEffect(string statusEffectId, PlayerController effectOwnerPlayerController)
         {
-            if (effectOwnerPlayer == null)
+            if (effectOwnerPlayerController == null)
             {
                 Debug.Log("Player is null!");
                 return;
             }
 
-            StatusEffectController.AddStatusEffect(statusEffectId, effectOwnerPlayer);
+            StatusEffectController.AddStatusEffect(statusEffectId, effectOwnerPlayerController);
         }
 
         /// <summary>
@@ -751,14 +734,10 @@ namespace TanksMP
         {
             return classDirectory[ClassId];
         }
-
-        public int GetTeam() // Deprecated, remove
-        {
-            return TeamIndex;
-        }
-
+        
         public TeamDefinition GetTeamDefinition()
         {
+            // Should probably move this to PlayerTeam
             return CharacterAppearance.GetTeamInstance().teamDefinition;
         }
         

@@ -1,6 +1,7 @@
 using System.Collections;
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.Player;
 using Vashta.Entropy.UI.ClassSelectionPanel;
 
 namespace Vashta.Entropy.GameState
@@ -28,15 +29,15 @@ namespace Vashta.Entropy.GameState
         {
             if (!ClassSelectionPanel.Instance.CountdownIsActive())
             {
-                Player localPlayer = _gameManager.localPlayer;
+                PlayerController localPlayerController = _gameManager.localPlayerController;
                 //get the player component that killed us
-                Player other = localPlayer;
+                PlayerController other = localPlayerController;
                 string killedByName = "YOURSELF";
-                if (localPlayer.killedBy != null)
-                    other = localPlayer.killedBy.GetComponent<Player>();
+                if (localPlayerController.killedBy != null)
+                    other = localPlayerController.killedBy.GetComponent<PlayerController>();
 
                 //suicide or regular kill?
-                if (other != localPlayer)
+                if (other != localPlayerController)
                 {
                     killedByName = other.PlayerName;
                 }
@@ -77,7 +78,7 @@ namespace Vashta.Entropy.GameState
 
             //respawn now: send request to the server
             _gameManager.ui.DisableDeath();
-            _gameManager.localPlayer.Respawn(null);
+            _gameManager.localPlayerController.Respawn(null);
         }
     }
 }

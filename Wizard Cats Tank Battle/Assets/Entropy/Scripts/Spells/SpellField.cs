@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.Player;
 
 namespace Vashta.Entropy.Spells
 {
@@ -9,12 +10,12 @@ namespace Vashta.Entropy.Spells
         public CapsuleCollider Collider;
         public AudioSource AudioSource;
         
-        private List<Player> _playersInZone = new ();
+        private List<PlayerController> _playersInZone = new ();
         
         private float _tickTimeS = 1f;
         private float _lastTickS;
 
-        private Player _caster;
+        private PlayerController _caster;
         private SpellData _spell;
         private int _teamIndex;
 
@@ -24,7 +25,7 @@ namespace Vashta.Entropy.Spells
 
         private bool _setToDespawn;
         
-        public void Init(Player caster, SpellData spellData)
+        public void Init(PlayerController caster, SpellData spellData)
         {
             // clear
             if (_spawnedParticleEffect != null)
@@ -103,7 +104,7 @@ namespace Vashta.Entropy.Spells
             CleanList();
             
             // iterate over players
-            foreach (Player player in _playersInZone)
+            foreach (PlayerController player in _playersInZone)
             {
                 if(!player.IsAlive)
                     continue;
@@ -126,12 +127,12 @@ namespace Vashta.Entropy.Spells
         private void OnTriggerEnter(Collider other)
         {
             // Check for player
-            Player player;
-            if ((player = other.gameObject.GetComponent<Player>()) != null)
+            PlayerController playerController;
+            if ((playerController = other.gameObject.GetComponent<PlayerController>()) != null)
             {
-                _playersInZone.Add(player);
+                _playersInZone.Add(playerController);
                 
-                bool playerIsAlly = player.TeamIndex == _teamIndex;
+                bool playerIsAlly = playerController.TeamIndex == _teamIndex;
 
                 // VFX
                 if (_spell.FieldCollisionVfxCharacter)
@@ -149,7 +150,7 @@ namespace Vashta.Entropy.Spells
                 {
                     if ((playerIsAlly && _spell.AudioPlayForAllies) || (!playerIsAlly && _spell.AudioPlayForEnemies))
                     {
-                        AudioManager.Play3D(_spell.FieldHitSfxCharacter, player.transform.position);
+                        AudioManager.Play3D(_spell.FieldHitSfxCharacter, playerController.transform.position);
                     }
                 }
             }
@@ -210,18 +211,18 @@ namespace Vashta.Entropy.Spells
         private void OnTriggerExit(Collider other)
         {
             // Check for player
-            Player player;
-            if ((player = other.gameObject.GetComponent<Player>()) != null)
+            PlayerController playerController;
+            if ((playerController = other.gameObject.GetComponent<PlayerController>()) != null)
             {
-                _playersInZone.Remove(player);
+                _playersInZone.Remove(playerController);
             }
         }
         
         private void CleanList()
         {
-            HashSet<Player> playersInBoundsCopy = new HashSet<Player>(_playersInZone);
+            HashSet<PlayerController> playersInBoundsCopy = new HashSet<PlayerController>(_playersInZone);
             
-            foreach (Player player in playersInBoundsCopy)
+            foreach (PlayerController player in playersInBoundsCopy)
             {
                 if (player == null)
                 {

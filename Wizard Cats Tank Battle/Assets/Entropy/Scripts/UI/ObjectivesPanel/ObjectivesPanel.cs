@@ -39,7 +39,7 @@ namespace Vashta.Entropy.UI.ObjectivesPanel
         // None of this can be cached, as it may change in between refreshes
         private void RefreshContent()
         {
-            int teamIndex = _gameManager.localPlayer.TeamIndex;
+            int teamIndex = _gameManager.localPlayerController.TeamIndex;
             
             // Get team mates
             TeamStateSnapshot teamStateSnapshot = _gameManager.TeamController.GetTeamState(teamIndex);

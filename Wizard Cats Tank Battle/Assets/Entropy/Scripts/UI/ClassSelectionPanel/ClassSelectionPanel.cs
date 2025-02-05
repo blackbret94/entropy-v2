@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TanksMP;
 using TMPro;
 using UnityEngine;
+using Vashta.Entropy.Player;
 
 namespace Vashta.Entropy.UI.ClassSelectionPanel
 {
@@ -51,8 +52,8 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
         private void UpdateCheckboxes()
         {
             // update top selection
-            Player player = GameManager.GetInstance().localPlayer;
-            int teamIndex = player.PreferredTeamIndex;
+            PlayerController playerController = GameManager.GetInstance().localPlayerController;
+            int teamIndex = playerController.PreferredTeamIndex;
 
             foreach (ClassSelectionTeamCheckbox checkbox in CheckboxList)
             {
@@ -144,11 +145,16 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
 
         private void ApplyChanges(bool respawnPlayer, bool applyNow)
         {
-            Player player = GameManager.GetInstance().localPlayer;
-            player.PreferredTeamIndex = ClassSelectionTeamSelector.SelectedTeamIndex();
+            PlayerController playerController = GameManager.GetInstance().localPlayerController;
 
-            player.SetClass(ClassSelectionSelectorMultipanel.SelectedClassDefinition(), respawnPlayer, applyNow);
-            player.TryChangeTeams(respawnPlayer);
+            int selectedTeamIndex = ClassSelectionTeamSelector.SelectedTeamIndex();
+            if (selectedTeamIndex != -1)
+            {
+                playerController.PlayerTeam.PreferredTeamIndex = selectedTeamIndex;
+                playerController.PlayerTeam.TryChangeTeams(respawnPlayer);
+            }
+
+            playerController.SetClass(ClassSelectionSelectorMultipanel.SelectedClassDefinition(), respawnPlayer, applyNow);
             ClosePanel();
         }
 
@@ -159,8 +165,8 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
 
         public void RespawnPlayerIfTeamChangedButton()
         {
-            Player player = GameManager.GetInstance().localPlayer;
-            int teamIndex = player.TeamIndex;
+            PlayerController playerController = GameManager.GetInstance().localPlayerController;
+            int teamIndex = playerController.TeamIndex;
 
             bool teamChanged = teamIndex != ClassSelectionTeamSelector.SelectedTeamIndex();
             
@@ -174,7 +180,7 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
 
         private bool IsInRespawnZone()
         {
-            return GameManager.GetInstance().localPlayer.PlayerCanRespawnFreely();
+            return GameManager.GetInstance().localPlayerController.PlayerCanRespawnFreely();
         }
         
         // UI

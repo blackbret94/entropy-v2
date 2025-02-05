@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Fusion;
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.Player;
 using Vashta.Entropy.ScriptableObject;
 
 namespace Vashta.Entropy.GameMode
@@ -27,7 +28,7 @@ namespace Vashta.Entropy.GameMode
         [Networked, OnChangedRender(nameof(OnCaptureTicksChanged))]
         private sbyte _captureTicks { get; set; }= 0;
         private int _ticksToCapture = 5;
-        private List<Player> _playersInBounds;
+        private List<PlayerController> _playersInBounds;
         private GameManager _gameManager;
 
         private bool _hasInit;
@@ -38,7 +39,7 @@ namespace Vashta.Entropy.GameMode
             if (_hasInit)
                 return;
 
-            _playersInBounds = new List<Player>();
+            _playersInBounds = new List<PlayerController>();
             ControlPointGraphics.ChangeTeamColorControl(TeamDefinitionNeutral);
             _gameManager = GameManager.GetInstance();
             
@@ -71,7 +72,7 @@ namespace Vashta.Entropy.GameMode
             // if multiple teams are present, put it into a neutral capture state
             int teamIndex = -1;
 
-            foreach (Player player in _playersInBounds)
+            foreach (PlayerController player in _playersInBounds)
             {
                 if (player.IsAlive)
                 {
@@ -160,7 +161,7 @@ namespace Vashta.Entropy.GameMode
         
         protected void AwardPointsToPlayersOnCapture()
         {
-            foreach (Player player in _playersInBounds)
+            foreach (PlayerController player in _playersInBounds)
             {
                 if (player == null)
                     continue;
@@ -173,31 +174,31 @@ namespace Vashta.Entropy.GameMode
         {
             Init();
             
-            Player player = other.GetComponent<Player>();
+            PlayerController playerController = other.GetComponent<PlayerController>();
 
-            if (!player)
+            if (!playerController)
                 return;
             
-            _playersInBounds.Add(player);
+            _playersInBounds.Add(playerController);
         }
 
         private void OnTriggerExit(Collider other)
         {
             Init();
             
-            Player player = other.GetComponent<Player>();
+            PlayerController playerController = other.GetComponent<PlayerController>();
 
-            if (!player)
+            if (!playerController)
                 return;
 
-            _playersInBounds.Remove(player);
+            _playersInBounds.Remove(playerController);
         }
 
         private void CleanList()
         {
-            List<Player> playersInBoundsCopy = new List<Player>(_playersInBounds);
+            List<PlayerController> playersInBoundsCopy = new List<PlayerController>(_playersInBounds);
             
-            foreach (Player player in playersInBoundsCopy)
+            foreach (PlayerController player in playersInBoundsCopy)
             {
                 if (player == null)
                 {

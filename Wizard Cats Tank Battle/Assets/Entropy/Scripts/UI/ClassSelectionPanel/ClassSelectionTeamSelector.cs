@@ -14,7 +14,7 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
         {
             if (ClassSelectionTeamCheckboxes.Count > 0)
             {
-                _activeSelection = ClassSelectionTeamCheckboxes[0];
+                _activeSelection = null;
             }
         }
 
@@ -35,6 +35,10 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
 
         public int SelectedTeamIndex()
         {
+            // Handle no selection was made
+            if (!_activeSelection)
+                return -1;
+            
             if (_activeSelection.IsAutoAssign)
                 return TeamController.RANDOM_TEAM_INDEX;
 

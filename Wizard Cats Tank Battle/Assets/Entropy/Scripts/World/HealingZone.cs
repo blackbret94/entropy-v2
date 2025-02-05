@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.Player;
 
 namespace Vashta.Entropy.World
 {
     public class HealingZone : MonoBehaviour
     {
-        private List<Player> _playersInZone;
+        private List<PlayerController> _playersInZone;
         
         public int HealTeamId = 0;
         public int HealAmount = 2;
@@ -17,7 +18,7 @@ namespace Vashta.Entropy.World
         
         private void Start()
         {
-            _playersInZone = new List<Player>();
+            _playersInZone = new List<PlayerController>();
             _collider = GetComponent<Collider>();
         }
 
@@ -32,9 +33,9 @@ namespace Vashta.Entropy.World
             if (_lastHeal + HealRateS <= Time.time)
             {
                 // Allow safe mutation of collection
-                List<Player> playersInZoneSafeCopy = new List<Player>(_playersInZone);
+                List<PlayerController> playersInZoneSafeCopy = new List<PlayerController>(_playersInZone);
                 
-                foreach (Player player in playersInZoneSafeCopy)
+                foreach (PlayerController player in playersInZoneSafeCopy)
                 {
                     if (player == null || !player.IsAlive || player.TeamIndex != HealTeamId || !_collider.bounds.Contains(player.transform.position))
                         _playersInZone.Remove(player);
@@ -48,17 +49,17 @@ namespace Vashta.Entropy.World
 
         private void OnTriggerEnter(Collider other)
         {
-            Player player = other.gameObject.GetComponent<Player>();
-            if (player != null && player.TeamIndex == HealTeamId)
+            PlayerController playerController = other.gameObject.GetComponent<PlayerController>();
+            if (playerController != null && playerController.TeamIndex == HealTeamId)
             {
-                _playersInZone.Add(player);
+                _playersInZone.Add(playerController);
             }
         }
 
         private void OnTriggerExit(Collider other)
         {
-            Player player = other.gameObject.GetComponent<Player>();
-            _playersInZone.Remove(player);
+            PlayerController playerController = other.gameObject.GetComponent<PlayerController>();
+            _playersInZone.Remove(playerController);
         }
     }
 }

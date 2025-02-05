@@ -1,5 +1,6 @@
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.Player;
 using Vashta.Entropy.Scoreboard;
 
 namespace Vashta.Entropy.TanksExtensions
@@ -13,20 +14,20 @@ namespace Vashta.Entropy.TanksExtensions
         public Material Material => TeamInstance.teamDefinition.Material;
         public bool IsLocalPlayer { get; }
 
-        public Player Player { get; }
+        public PlayerController PlayerController { get; }
 
         public int ClassId { get; }
         public bool PlayerIsOnline { get; }
 
-        public ScoreboardRowData(Player player, TeamInstance teamInstance, bool isLocalPlayer)
+        public ScoreboardRowData(PlayerController playerController, TeamInstance teamInstance, bool isLocalPlayer)
         {
-            Player = player;
-            Name = player.PlayerName;
-            Kills = player.Kills;
-            Deaths = player.Deaths;
+            PlayerController = playerController;
+            Name = playerController.PlayerName;
+            Kills = playerController.Kills;
+            Deaths = playerController.Deaths;
             TeamInstance = teamInstance;
             IsLocalPlayer = isLocalPlayer;
-            ClassId = player.ClassId;
+            ClassId = playerController.ClassId;
             PlayerIsOnline = true;
         }
 
@@ -53,9 +54,9 @@ namespace Vashta.Entropy.TanksExtensions
         
         public bool IsAlive()
         {
-            if (Player != null)
+            if (PlayerController != null)
             {
-                return Player.IsAlive;
+                return PlayerController.IsAlive;
             }
             
             Debug.LogError("Row is not attached to a player!");

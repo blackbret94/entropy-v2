@@ -1,5 +1,6 @@
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.Player;
 
 namespace Vashta.Entropy.World
 {
@@ -16,8 +17,8 @@ namespace Vashta.Entropy.World
         private void OnTriggerEnter(Collider col)
         {
             // if it is a player, check the team
-            Player player = col.gameObject.GetComponent<Player>();
-            if (player != null)
+            PlayerController playerController = col.gameObject.GetComponent<PlayerController>();
+            if (playerController != null)
             {
                 if(CollisionEffectAlly)
                     PoolManager.Spawn(CollisionEffectAlly, col.transform.position, Quaternion.identity);

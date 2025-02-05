@@ -7,6 +7,7 @@ using TanksMP;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Vashta.Entropy.Character.Prop;
+using Vashta.Entropy.Player;
 using Vashta.Entropy.SaveLoad;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.UI;
@@ -15,8 +16,8 @@ namespace Vashta.Entropy.Character
 {
     public class CharacterAppearance : NetworkBehaviour
     {
-        [Header("Dependencies")] 
-        public Player Player;
+        [FormerlySerializedAs("Player")] [Header("Dependencies")] 
+        public PlayerController playerController;
         public PlayerCharacterWardrobe PlayerCharacterWardrobe;
         public PlayerInventory PlayerInventory;
         public CharacterAppearanceSaveLoad SaveLoad;
@@ -92,7 +93,7 @@ namespace Vashta.Entropy.Character
             if (SaveLoad == null)
                 return;
             
-            if (Player == null)
+            if (playerController == null)
                 // Wardrobe
                 StartCoroutine(LoadAppearanceWhenInventoryIsLoaded());
         }
@@ -122,8 +123,8 @@ namespace Vashta.Entropy.Character
             CharacterAppearanceSerializable appearance = new CharacterAppearanceSerializable(HatId, BodyId, SkinId, CartId, TurretId, MeowId);
             LoadFromSerialized(appearance);
             
-            if(Player && Player.PlayerViewController)
-                Player.PlayerViewController.ColorizePlayerForTeam();
+            if(playerController && playerController.PlayerViewController)
+                playerController.PlayerViewController.ColorizePlayerForTeam();
         }
 
         public void RefreshIndexes()
@@ -146,7 +147,7 @@ namespace Vashta.Entropy.Character
             if (teamInstance != null)
                 return teamInstance;
             
-            teamInstance = _gameManager.TeamController.teams[Player.TeamIndex];
+            teamInstance = _gameManager.TeamController.teams[playerController.TeamIndex];
             return teamInstance;
         }
 
@@ -169,8 +170,8 @@ namespace Vashta.Entropy.Character
             
             LoadFromSerialized(appearance);
             
-            if(Player && Player.PlayerViewController)
-                Player.PlayerViewController.ColorizePlayerForTeam();
+            if(playerController && playerController.PlayerViewController)
+                playerController.PlayerViewController.ColorizePlayerForTeam();
         }
 
         public void SaveAppearance()

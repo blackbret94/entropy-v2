@@ -5,6 +5,7 @@
 
 using Fusion;
 using UnityEngine;
+using Vashta.Entropy.Player;
 
 namespace TanksMP
 {
@@ -29,7 +30,7 @@ namespace TanksMP
         /// Player that picked up this Collectible.
         /// </summary>
         [HideInInspector]
-        public Player carrier;
+        public PlayerController carrier;
         
                   
         /// <summary>
@@ -39,10 +40,10 @@ namespace TanksMP
         public virtual void OnTriggerEnter(Collider col)
 		{
     		GameObject obj = col.gameObject;
-			Player player = obj.GetComponent<Player>();
+			PlayerController playerController = obj.GetComponent<PlayerController>();
 
             //try to apply collectible to player, the result should be true
-            if (Apply(player))
+            if (Apply(playerController))
             {
                 spawner.Destroy();        
             }
@@ -53,7 +54,7 @@ namespace TanksMP
         /// Tries to apply the Collectible to a colliding player. Returns 'true' if consumed.
         /// Override this method in your own Collectible script to implement custom behavior.
         /// </summary>
-        public virtual bool Apply(Player p)
+        public virtual bool Apply(PlayerController p)
 		{
             //do something to the player
             if (p == null)

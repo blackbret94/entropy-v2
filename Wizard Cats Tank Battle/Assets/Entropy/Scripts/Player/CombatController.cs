@@ -2,6 +2,7 @@ using Fusion;
 using FusionHelpers;
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.Player;
 using Vashta.Entropy.Spells;
 using Vashta.Entropy.StatusEffects;
 
@@ -25,13 +26,13 @@ namespace Entropy.Scripts.Player
         [SerializeField] private Projectile ProjectilePrefab;
         
         [Header("Controllers")]
-        private TanksMP.Player _player;
+        private PlayerController _playerController;
         private ProjectileFactory _projectileFactory;
         private PlayerAnimator _playerAnimator;
         
         private float nextFire;
         public float TimeToNextFire => nextFire - Time.time;
-        public float FractionFireReady => Mathf.Min(1-(TimeToNextFire / _player.fireRate), 1);
+        public float FractionFireReady => Mathf.Min(1-(TimeToNextFire / _playerController.fireRate), 1);
         // death loop protections
         private const float minTimeBetweenDeaths = .5f;
         // private SparseCollection<ProjectileState, Projectile> Projectiles;
@@ -44,19 +45,19 @@ namespace Entropy.Scripts.Player
         
         private void Awake()
         {
-            _player = GetComponent<TanksMP.Player>();
+            _playerController = GetComponent<PlayerController>();
             _playerAnimator = GetComponent<PlayerAnimator>();
         }
 
         private void Start()
         {
-            _statusEffectController = _player.StatusEffectController;
+            _statusEffectController = _playerController.StatusEffectController;
             _gameManager = GameManager.GetInstance();
             
             _projectileFactory = new ProjectileFactory(gameObject, _statusEffectController);
 
-            _shotPos = _player.shotPos;
-            _turret = _player.turret;
+            _shotPos = _playerController.shotPos;
+            _turret = _playerController.turret;
         }
 
         public override void Spawned()
@@ -115,11 +116,11 @@ namespace Entropy.Scripts.Player
         //along with the shot request to the server to absolutely ensure a synced shot position
         public void AttemptToShoot()
         {
-            float fireRateMod = _player.fireRate * _statusEffectController.AttackRateModifier;
+            float fireRateMod = _playerController.fireRate * _statusEffectController.AttackRateModifier;
 
             if (_statusEffectController.DisableFiring)
             {
-                if(_player.IsLocal)
+                if(_playerController.IsLocal)
                     _gameManager.SfxController.PlayCantShoot(1f);
             }
             else
@@ -135,7 +136,7 @@ namespace Entropy.Scripts.Player
                     short[] pos = new short[] { (short)(_shotPos.position.x * 10), (short)(_shotPos.position.z * 10) };
                     //send shot request with origin to server
                     // Debug.Log(turretRotation);
-                    RPC_Shoot(_player.turretRotation);
+                    RPC_Shoot(_playerController.turretRotation);
                 }
             }
         }
@@ -161,7 +162,7 @@ namespace Entropy.Scripts.Player
             Vector3 shotCenter = _shotPos.position;
             Quaternion syncedRot = _turret.rotation = Quaternion.Euler(0, angle, 0);
 
-            ClassDefinition playerClass = _player.GetClass();
+            ClassDefinition playerClass = _playerController.GetClass();
             
             //spawn bullet using pooling
             _projectileFactory.SpawnProjectile(shotCenter, syncedRot, playerClass);
@@ -186,15 +187,15 @@ namespace Entropy.Scripts.Player
         /// Server only: calculate damage to be taken by the Player,
         /// triggers score increase and respawn workflow on death.
         /// </summary>
-        public void TakeDamage(int damage, TanksMP.Player other, bool canKill = true, string deathFxId = "")
+        public void TakeDamage(int damage, PlayerController other, bool canKill = true, string deathFxId = "")
         {
-            int health = _player.Health;
-            int shield = _player.Shield;
+            int health = _playerController.Health;
+            int shield = _playerController.Shield;
 
             //reduce shield on hit
             if (shield > 0)
             {
-                _player.Shield--;
+                _playerController.Shield--;
                 return;
             }
             
@@ -211,12 +212,12 @@ namespace Entropy.Scripts.Player
             
             if (health <= 0)
                 // killed the player
-                _player.CombatController.PlayerDeath(other, deathFxId);
+                _playerController.CombatController.PlayerDeath(other, deathFxId);
             else
             {
                 //we didn't die, set health to new value
-                _player.Health = health;
-                _player.PlayerViewController.ShowDamageText(damage, false, false);
+                _playerController.Health = health;
+                _playerController.PlayerViewController.ShowDamageText(damage, false, false);
             }
         }
 
@@ -227,17 +228,17 @@ namespace Entropy.Scripts.Player
         public void TakeDamage(Projectile projectile)
         {
             // ignore damage to team mates
-            if (_player.TeamIndex == projectile.owner.GetComponent<TanksMP.Player>().TeamIndex)
+            if (_playerController.TeamIndex == projectile.owner.GetComponent<PlayerController>().TeamIndex)
                 return;
             
             //store network variables temporary
-            int health = _player.Health;
-            int shield = _player.Shield;
+            int health = _playerController.Health;
+            int shield = _playerController.Shield;
 
             //reduce shield on hit
             if (shield > 0)
             {
-                _player.Shield -= 1;
+                _playerController.Shield -= 1;
                 return;
             }
 
@@ -251,14 +252,14 @@ namespace Entropy.Scripts.Player
             
             if (health <= 0)
                 //bullet killed the player
-                _player.CombatController.PlayerDeath(
-                    projectile.owner.GetComponent<TanksMP.Player>(), 
+                _playerController.CombatController.PlayerDeath(
+                    projectile.owner.GetComponent<PlayerController>(), 
                     projectile.DeathFx.Id);
             else
             {
                 //we didn't die, set health to new value
-                _player.Health = health;
-                _player.PlayerViewController.ShowDamageText(damage, attackerIsCounter, attackerIsSame);
+                _playerController.Health = health;
+                _playerController.PlayerViewController.ShowDamageText(damage, attackerIsCounter, attackerIsSame);
             }
         }
         
@@ -266,24 +267,24 @@ namespace Entropy.Scripts.Player
         /// Server-only.  Handles player death
         /// </summary>
         /// <param name="other"></param>
-        public void PlayerDeath(TanksMP.Player other, string deathFxId)
+        public void PlayerDeath(PlayerController other, string deathFxId)
         {
-            if (_player.lastDeathTime + minTimeBetweenDeaths >= Time.time)
+            if (_playerController.lastDeathTime + minTimeBetweenDeaths >= Time.time)
             {
                 Debug.LogWarning("Attempted to respawn within the min time between spawns");
                 return;
             }
             
-            _player.lastDeathTime = Time.time;
-            _player.IsAlive = false;
+            _playerController.lastDeathTime = Time.time;
+            _playerController.IsAlive = false;
 
-            if (!_player.PlayerCanRespawnFreely())
-                _player.Deaths++;
+            if (!_playerController.PlayerCanRespawnFreely())
+                _playerController.Deaths++;
             
             //the game is already over so don't do anything
             if(_gameManager.IsGameOver()) return;
 
-            _gameManager.TeamController.OnePassPlayerCheckToChangeTeams(_player, false);
+            _gameManager.TeamController.OnePassPlayerCheckToChangeTeams(_playerController, false);
             
             //get killer and increase score for that enemy team
             if (other != null)
@@ -294,7 +295,7 @@ namespace Entropy.Scripts.Player
                 int otherTeam = other.TeamIndex;
                 
                 // killer is other team
-                if (_player.TeamIndex != otherTeam)
+                if (_playerController.TeamIndex != otherTeam)
                 {
                     _gameManager.TeamController.AddScore(ScoreType.Kill, otherTeam);
                     other.Kills++;
@@ -311,13 +312,13 @@ namespace Entropy.Scripts.Player
             else
             {
                 // Killed by environment
-                _gameManager.TeamController.RemoveScore(ScoreType.Kill, _player.TeamIndex);
+                _gameManager.TeamController.RemoveScore(ScoreType.Kill, _playerController.TeamIndex);
             }
             
             // The game is not over
-            _player.ResetPlayerState();
-            _player.DropCollectibles();
-            _player.Respawn(other, null);
+            _playerController.ResetPlayerState();
+            _playerController.DropCollectibles();
+            _playerController.Respawn(other, null);
         }
     }
 }

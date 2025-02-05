@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using Vashta.Entropy.TanksExtensions;
 using Vashta.Entropy.Character;
+using Vashta.Entropy.Player;
 
 namespace Vashta.Entropy.UI
 {
@@ -26,9 +27,9 @@ namespace Vashta.Entropy.UI
             
             Tagline.text = $"{points} {(points == 1 ? " Point" : " Points")}";
 
-            Player player = playerScoreData.Player;
+            PlayerController playerController = playerScoreData.PlayerController;
             
-            if (player == null)
+            if (playerController == null)
             {
                 Debug.LogWarning("Warning: Player game object did not have Player component for Game Over screen!");
                 Randomize(appearance, playerScoreData.TeamInstance);
@@ -36,7 +37,7 @@ namespace Vashta.Entropy.UI
             }
             
             Debug.Log("Copying outfit from player");
-            appearance.CopyFromOtherPlayer(player.CharacterAppearance, playerScoreData.TeamInstance);
+            appearance.CopyFromOtherPlayer(playerController.CharacterAppearance, playerScoreData.TeamInstance);
         }
 
         private void Randomize(CharacterAppearance appearance, TeamInstance teamInstance)

@@ -30,7 +30,7 @@ namespace FusionHelpers
 		
 		public override void Spawned()
 		{
-      Debug.Log($"Spawned Network Session for Runner: {Runner}");
+      // Debug.Log($"Spawned Network Session for Runner: {Runner}");
       Runner.RegisterSingleton(this);
 		}
 
@@ -66,14 +66,12 @@ namespace FusionHelpers
 
 		public void AddPlayerAvatar(FusionPlayer fusionPlayer)
 		{
-			Debug.Log($"Adding PlayerRef {fusionPlayer.PlayerId}");
 			_players[fusionPlayer.PlayerId] = fusionPlayer;
 			OnPlayerAvatarAdded(fusionPlayer);
 		}
 
 		public void RemovePlayerAvatar(FusionPlayer fusionPlayer)
 		{
-			Debug.Log($"Removing PlayerRef {fusionPlayer.PlayerId}");
 			_players.Remove(fusionPlayer.PlayerId);
 			if(Object!=null && Object.IsValid)
 				playerRefByIndex.Remove(fusionPlayer.PlayerIndex);

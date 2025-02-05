@@ -1,6 +1,8 @@
 using Entropy.Scripts.Player;
 using TanksMP;
 using UnityEngine;
+using UnityEngine.Serialization;
+using Vashta.Entropy.Player;
 using Vashta.Entropy.ScriptableObject;
 
 namespace Vashta.Entropy.UI.Minimap
@@ -9,7 +11,7 @@ namespace Vashta.Entropy.UI.Minimap
     {
         // public Color DeadColor = Color.gray;
         
-        public Player Player;
+        [FormerlySerializedAs("Player")] public PlayerController playerController;
         private float _refreshRate = .5f;
         private float _lastRefreshTime;
 
@@ -49,7 +51,7 @@ namespace Vashta.Entropy.UI.Minimap
 
         private void UpdateImage()
         {
-            int teamIndex = Player.TeamIndex;
+            int teamIndex = playerController.TeamIndex;
             
             if (teamIndex != _teamIndex)
             {
@@ -62,8 +64,8 @@ namespace Vashta.Entropy.UI.Minimap
 
         private bool SameTeamAsLocalPlayer()
         {
-            Player localPlayer = PlayerList.GetLocalPlayer();
-            return localPlayer.TeamIndex == Player.TeamIndex;
+            PlayerController localPlayerController = PlayerList.GetLocalPlayer();
+            return localPlayerController.TeamIndex == playerController.TeamIndex;
         }
 
         public void RenderAsAlive()

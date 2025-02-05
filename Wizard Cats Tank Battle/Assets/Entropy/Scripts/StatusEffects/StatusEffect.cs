@@ -1,5 +1,6 @@
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.Player;
 using Vashta.Entropy.ScriptableObject;
 
 namespace Vashta.Entropy.StatusEffects
@@ -8,7 +9,7 @@ namespace Vashta.Entropy.StatusEffects
     {
         private StatusEffectController _statusEffectController;
         private string ID { get; }
-        private Player _originPlayer { get; }
+        private PlayerController OriginPlayerController { get; }
         private float _expiration;
         private bool _isFresh = false;
         private bool _forceExpire = false;
@@ -16,11 +17,11 @@ namespace Vashta.Entropy.StatusEffects
 
         private StatusEffectData _data = null;
 
-        public StatusEffect(StatusEffectController statusEffectController, string id, Player originPlayer)
+        public StatusEffect(StatusEffectController statusEffectController, string id, PlayerController originPlayerController)
         {
             _statusEffectController = statusEffectController;
             ID = id;
-            _originPlayer = originPlayer;
+            OriginPlayerController = originPlayerController;
             SetExpiration();
             _isFresh = true;
             _timeCreated = Time.time;
@@ -36,9 +37,9 @@ namespace Vashta.Entropy.StatusEffects
             _forceExpire = true;
         }
 
-        public Player OriginPlayer()
+        public PlayerController OriginPlayer()
         {
-            return _originPlayer;
+            return OriginPlayerController;
         }
 
         public void SetExpiration()

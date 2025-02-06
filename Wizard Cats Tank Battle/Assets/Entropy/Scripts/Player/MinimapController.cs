@@ -14,6 +14,7 @@ namespace Entropy.Scripts.Player
     /// </summary>
     public class MinimapController : NetworkBehaviour
     {
+        private GameManager _gameManager;
         private PlayerController _localPlayerController;
         public bl_MiniMap MiniMap;
         private float _refreshRate = .5f;
@@ -28,31 +29,30 @@ namespace Entropy.Scripts.Player
         
         private void Start()
         {
-            StartCoroutine(AttachToPlayerCoroutine());
+            _gameManager = GameManager.GetInstance();
         }
 
         private void Update()
         {
             if (!_localPlayerController)
-                return;
+            {
+                if ((_localPlayerController = _gameManager.localPlayerController) != null)
+                {
+                    MiniMap.Target = _localPlayerController.transform;
+                    Debug.Log("Player attached!");
+                }
+                else
+                {
+                    Debug.Log("Player is null");
+                    return;
+                }
+            }
             
             if (Time.time >= _lastRefreshTime + _refreshRate)
             {
                 UpdateImage();
                 _lastRefreshTime = Time.time;
             }
-        }
-
-        private IEnumerator AttachToPlayerCoroutine()
-        {
-            while (_localPlayerController == null)
-            {
-                _localPlayerController = PlayerList.GetLocalPlayer();
-                yield return null;
-            }
-
-            MiniMap.Target = _localPlayerController.transform;
-            Debug.Log("Player attached!");
         }
 
         private void UpdateImage()

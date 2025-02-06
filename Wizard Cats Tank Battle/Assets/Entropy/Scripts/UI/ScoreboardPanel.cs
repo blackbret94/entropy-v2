@@ -14,15 +14,9 @@ namespace Vashta.Entropy.UI
         private ScoreboardCalculator _scoreboardCalculator;
         private GameManager _gameManager;
         private bool _hasInit = false;
-
-        private void Awake()
-        {
-            _scoreboardCalculator = new ScoreboardCalculator();
-        }
         
         private void Start()
         {
-            _gameManager = GameManager.GetInstance();
             Init();
         }
 
@@ -30,6 +24,9 @@ namespace Vashta.Entropy.UI
         {
             if (_hasInit)
                 return;
+            
+            _scoreboardCalculator = new ScoreboardCalculator();
+            _gameManager = GameManager.GetInstance();
             
             Inflate();
 

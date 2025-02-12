@@ -346,12 +346,13 @@ namespace TanksMP
         /// <summary>
         /// Override of the base method to handle bot respawn separately.
         /// </summary>
-        public override void Respawn(PlayerController killedByPlayerController, string deathFxId)
-        {
-            StartCoroutine(RespawnCR(killedByPlayerController, deathFxId));
-        }
+        // public override void Respawn(PlayerController killedByPlayerController, string deathFxId)
+        // {
+        //     StartCoroutine(RespawnCR(killedByPlayerController, deathFxId));
+        // }
 
         //the actual respawn routine
+        // Need to update this, right now it's not called anywhere
         IEnumerator RespawnCR(PlayerController killedByPlayerController, string deathFxId)
         {   
             //stop AI updates

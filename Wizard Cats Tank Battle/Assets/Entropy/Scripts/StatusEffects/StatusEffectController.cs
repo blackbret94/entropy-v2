@@ -119,7 +119,7 @@ namespace Vashta.Entropy.StatusEffects
                 string deathFx = GetDeathFx();
                 
                 // killed the player
-                _playerController.CombatController.PlayerDeath(LastDotAppliedBy, deathFx);
+                _playerController.CombatController.KillPlayer(LastDotAppliedBy, deathFx);
             }
             
             // Bot specific logic

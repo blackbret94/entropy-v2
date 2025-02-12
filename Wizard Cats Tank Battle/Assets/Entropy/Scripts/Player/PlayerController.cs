@@ -186,8 +186,12 @@ namespace Vashta.Entropy.Player
         {
             // Join time
             _lastSecondUpdate = Time.time + .1f;
-            JoinTime = -Time.time;
-            
+
+            if (HasStateAuthority)
+            {
+                JoinTime = Runner.SimulationTime;
+            }
+
             // Will eventually need to move this into another method that is overriden by bots
             if (HasInputAuthority && !isBot)
             {
@@ -402,67 +406,28 @@ namespace Vashta.Entropy.Player
                 PlayerViewController.ShowDamageText(-healAmount, false, false);
         }
         
-        public void KillPlayer()
+        public virtual void Respawn(PlayerController killedByPlayerController, string deathFxId = null)
         {
-            if (!IsAlive)
-                return;
-            
-            CombatController.PlayerDeath(this, null);
+            if (IsAlive)
+            {
+                CombatController.KillPlayer(killedByPlayerController, deathFxId);
+            }
+            else
+            {
+                HandleRespawned();
+            }
         }
 
-        public bool PlayerCanRespawnFreely()
-        {
-            // Check all potential team colliders
-            GameManager gameManager = GameManager;
-            foreach (var team in gameManager.TeamController.teams)
-            {
-                Collider col = team.freeClassChangeArea.GetComponent<Collider>();
-                    
-                if (col == null)
-                {
-                    Debug.LogError("Team is missing a free respawn collider! " + TeamIndex);
-                }
-                else
-                {
-                    if (col.bounds.Contains(transform.position))
-                        return true;
-                }
-            }
-            
-            return false;
-        }
-        
-        public virtual void Respawn(PlayerController killedByPlayerController, string deathFxId = null)
+        // This should ONLY be called from CombatController.  CombatController.KillPlayer() should be used instead as
+        // this method handles all of the game controller logic.  This method handles ONLY the player's response to dying.
+        public void HandleKilled(PlayerController killedByPlayerController, string deathFxId = null)
         {
             lastDeathTime = Time.time;
             
             //toggle visibility for player gameobject (on/off)
-            gameObject.SetActive(!gameObject.activeInHierarchy);
-            bool isActive = gameObject.activeInHierarchy;
+            gameObject.SetActive(false);
             killedBy = null;
-
-            //the player has been killed
-            if (!isActive)
-            {
-                HandleKilled(killedByPlayerController, deathFxId);
-            }
             
-            //send player back to the team area, this will get overwritten by the exact position from the client itself later on
-            //we just do this to avoid players "popping up" from the position they died and then teleporting to the team area instantly
-            //this is manipulating the internal PhotonTransformView cache to update the networkPosition variable
-            transform.position = GameManager.TeamController.GetSpawnPosition(TeamIndex);
-            // GetComponent<PhotonTransformView>().OnPhotonSerializeView(new PhotonStream(false, new object[] { GameManager.TeamController.GetSpawnPosition(TeamIndex),
-                                                                                                             // Vector3.zero, Quaternion.identity }), new PhotonMessageInfo());
-            
-            // Player is alive
-            if (isActive)
-            {
-               HandleRespawned();
-            }
-        }
-
-        protected void HandleKilled(PlayerController killedByPlayerController, string deathFxId)
-        {
             IsAlive = false;
             
             GameManager.TeamController.OnePassPlayerCheckToChangeTeams(this, false);
@@ -508,12 +473,18 @@ namespace Vashta.Entropy.Player
                 CameraController.FollowKiller(killedBy);
                 GameManager.SpawnController.DisplayDeath();
             }
+            
+            //send player back to the team area, this will get overwritten by the exact position from the client itself later on
+            //we just do this to avoid players "popping up" from the position they died and then teleporting to the team area instantly
+            //this is manipulating the internal PhotonTransformView cache to update the networkPosition variable
+            transform.position = GameManager.TeamController.GetSpawnPosition(TeamIndex);
         }
 
-        protected void HandleRespawned()
+        public void HandleRespawned()
         {
             GameManager.TeamController.OnePassPlayerCheckToChangeTeams(this, false);
             IsAlive = true;
+            gameObject.SetActive(true);
                 
             // Move player to spawn
             transform.position = GameManager.TeamController.GetSpawnPosition(TeamIndex);
@@ -616,8 +587,11 @@ namespace Vashta.Entropy.Player
             if(applyInstantly)
                 ApplyClass();
 
-            if(respawnPlayer && !PlayerCanRespawnFreely())
-                KillPlayer();
+            if (respawnPlayer && !GameManager.SpawnController.PlayerCanRespawnFreely(this))
+            {
+                Debug.Log("Killing player for class");
+                CombatController.KillPlayer(null);
+            }
         }
         
         protected void ApplyClass()

@@ -212,7 +212,7 @@ namespace Entropy.Scripts.Player
             
             if (health <= 0)
                 // killed the player
-                _playerController.CombatController.PlayerDeath(other, deathFxId);
+                _playerController.CombatController.KillPlayer(other, deathFxId);
             else
             {
                 //we didn't die, set health to new value
@@ -252,7 +252,7 @@ namespace Entropy.Scripts.Player
             
             if (health <= 0)
                 //bullet killed the player
-                _playerController.CombatController.PlayerDeath(
+                _playerController.CombatController.KillPlayer(
                     projectile.owner.GetComponent<PlayerController>(), 
                     projectile.DeathFx.Id);
             else
@@ -263,11 +263,7 @@ namespace Entropy.Scripts.Player
             }
         }
         
-        /// <summary>
-        /// Server-only.  Handles player death
-        /// </summary>
-        /// <param name="other"></param>
-        public void PlayerDeath(PlayerController other, string deathFxId)
+        public void KillPlayer(PlayerController other, string deathFxId = null)
         {
             if (_playerController.lastDeathTime + minTimeBetweenDeaths >= Time.time)
             {
@@ -278,7 +274,7 @@ namespace Entropy.Scripts.Player
             _playerController.lastDeathTime = Time.time;
             _playerController.IsAlive = false;
 
-            if (!_playerController.PlayerCanRespawnFreely())
+            if (!_gameManager.SpawnController.PlayerCanRespawnFreely(_playerController))
                 _playerController.Deaths++;
             
             //the game is already over so don't do anything
@@ -318,7 +314,7 @@ namespace Entropy.Scripts.Player
             // The game is not over
             _playerController.ResetPlayerState();
             _playerController.DropCollectibles();
-            _playerController.Respawn(other, null);
+            _playerController.HandleKilled(other, null);
         }
     }
 }

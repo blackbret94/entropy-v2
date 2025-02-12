@@ -27,6 +27,7 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
         private CanvasGroup _canvasGroup;
 
         private static ClassSelectionPanel _instance;
+        private GameManager _gameManager;
 
         public static ClassSelectionPanel Instance => _instance;
         
@@ -35,6 +36,7 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
             _instance = this;
             _canvasGroup = GetComponent<CanvasGroup>();
             _canvasGroup.alpha = 1;
+            _gameManager = GameManager.GetInstance();
             
             ShowFreeRespawnButtons();
             _counterEndTime = Time.time + TimerLength;
@@ -180,7 +182,7 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
 
         private bool IsInRespawnZone()
         {
-            return GameManager.GetInstance().localPlayerController.PlayerCanRespawnFreely();
+            return _gameManager.SpawnController.PlayerCanRespawnFreely(_gameManager.localPlayerController);
         }
         
         // UI

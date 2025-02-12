@@ -73,7 +73,7 @@ namespace Vashta.Entropy.Player
         {
             Init();
             
-            if (PlayerController.PlayerCanRespawnFreely() || !PlayerController.IsAlive)
+            if (GameManager.SpawnController.PlayerCanRespawnFreely(PlayerController) || !PlayerController.IsAlive)
             {
                 TeamController.OnePassPlayerCheckToChangeTeams(PlayerController, respawn);
             }

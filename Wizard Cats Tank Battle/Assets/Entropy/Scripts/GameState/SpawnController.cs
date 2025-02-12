@@ -1,7 +1,9 @@
 using System.Collections;
+using Mono.Cecil.Cil;
 using TanksMP;
 using UnityEngine;
 using Vashta.Entropy.Player;
+using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.UI.ClassSelectionPanel;
 
 namespace Vashta.Entropy.GameState
@@ -78,7 +80,35 @@ namespace Vashta.Entropy.GameState
 
             //respawn now: send request to the server
             _gameManager.ui.DisableDeath();
-            _gameManager.localPlayerController.Respawn(null);
+            _gameManager.localPlayerController.HandleRespawned();
+        }
+        
+        public bool PlayerCanRespawnFreely(PlayerController player)
+        {
+            TeamDefinition playerTeamDefinition = player.GetTeamDefinition();
+
+            // Check all potential team colliders
+            foreach (var team in _gameManager.TeamController.teams)
+            {
+                Debug.Log("Checking collider: " + team.teamDefinition.TeamId);
+                if (playerTeamDefinition && team.teamDefinition.TeamId == playerTeamDefinition.TeamId)
+                {
+
+                    Collider col = team.freeClassChangeArea.GetComponent<Collider>();
+
+                    if (col == null)
+                    {
+                        Debug.LogError("Team is missing a free respawn collider! " + player.TeamIndex);
+                    }
+                    else
+                    {
+                        if (col.bounds.Contains(player.transform.position))
+                            return true;
+                    }
+                }
+            }
+            
+            return false;
         }
     }
 }

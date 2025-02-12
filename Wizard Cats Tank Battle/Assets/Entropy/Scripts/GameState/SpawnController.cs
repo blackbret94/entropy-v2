@@ -24,10 +24,8 @@ namespace Vashta.Entropy.GameState
         
         /// <summary>
         /// Only for this player: sets the death text stating the killer on death.
-        /// If Unity Ads is enabled, tries to show an ad during the respawn delay.
-        /// By using the 'skipAd' parameter is it possible to force skipping ads.
         /// </summary>
-        public void DisplayDeath(bool skipAd = false)
+        public void DisplayDeath()
         {
             if (!ClassSelectionPanel.Instance.CountdownIsActive())
             {
@@ -44,13 +42,6 @@ namespace Vashta.Entropy.GameState
                     killedByName = other.PlayerName;
                 }
 
-                //calculate if we should show a video ad
-#if UNITY_ADS
-            if (!skipAd && UnityAdsManager.ShowAd())
-                return;
-#endif
-
-                //when no ad is being shown, set the death text
                 //and start waiting for the respawn delay immediately
                 _gameManager.ui.SetDeathText(killedByName, _gameManager.TeamController.teams[other.TeamIndex]);
             }
@@ -60,6 +51,7 @@ namespace Vashta.Entropy.GameState
 
 
         //coroutine spawning the player after a respawn delay
+        // This is run on the local player's game
         public IEnumerator SpawnRoutine()
         {
             //calculate point in time for respawn
@@ -80,7 +72,7 @@ namespace Vashta.Entropy.GameState
 
             //respawn now: send request to the server
             _gameManager.ui.DisableDeath();
-            _gameManager.localPlayerController.HandleRespawned();
+            _gameManager.localPlayerController.RPC_Respawn();
         }
         
         public bool PlayerCanRespawnFreely(PlayerController player)

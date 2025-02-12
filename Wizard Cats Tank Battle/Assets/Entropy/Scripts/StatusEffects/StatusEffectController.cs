@@ -102,12 +102,12 @@ namespace Vashta.Entropy.StatusEffects
                 int shield = _playerController.Shield;
                 if (shield > 0 && healthPerSecond < 0)
                 {
-                    _playerController.Shield--;
+                    _playerController.SetShield(shield-1);
                 }
                 else
                 {
                     health += healthPerSecond;
-                    _playerController.Health = health;
+                    _playerController.SetHealth(health);
                 }
             }
             

@@ -24,27 +24,28 @@ namespace Vashta.Entropy.World
 
         private void Update()
         {
-            if (!_collider)
-            {
-                Debug.LogError("Missing collider connection!");
-                return;
-            }
-            
-            if (_lastHeal + HealRateS <= Time.time)
-            {
-                // Allow safe mutation of collection
-                List<PlayerController> playersInZoneSafeCopy = new List<PlayerController>(_playersInZone);
-                
-                foreach (PlayerController player in playersInZoneSafeCopy)
-                {
-                    if (player == null || !player.IsAlive || player.TeamIndex != HealTeamId || !_collider.bounds.Contains(player.transform.position))
-                        _playersInZone.Remove(player);
-                    else
-                        player.Heal(HealAmount);
-                }
-                
-                _lastHeal = Time.time;
-            }
+            // temp disable
+            // if (!_collider)
+            // {
+            //     Debug.LogError("Missing collider connection!");
+            //     return;
+            // }
+            //
+            // if (_lastHeal + HealRateS <= Time.time)
+            // {
+            //     // Allow safe mutation of collection
+            //     List<PlayerController> playersInZoneSafeCopy = new List<PlayerController>(_playersInZone);
+            //     
+            //     foreach (PlayerController player in playersInZoneSafeCopy)
+            //     {
+            //         if (player == null || !player.IsAlive || player.TeamIndex != HealTeamId || !_collider.bounds.Contains(player.transform.position))
+            //             _playersInZone.Remove(player);
+            //         else
+            //             player.Heal(HealAmount);
+            //     }
+            //     
+            //     _lastHeal = Time.time;
+            // }
         }
 
         private void OnTriggerEnter(Collider other)

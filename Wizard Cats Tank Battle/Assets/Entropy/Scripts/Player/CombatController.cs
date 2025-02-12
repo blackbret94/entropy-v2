@@ -195,7 +195,7 @@ namespace Entropy.Scripts.Player
             //reduce shield on hit
             if (shield > 0)
             {
-                _playerController.Shield--;
+                _playerController.SetShield(shield-1);
                 return;
             }
             
@@ -216,7 +216,7 @@ namespace Entropy.Scripts.Player
             else
             {
                 //we didn't die, set health to new value
-                _playerController.Health = health;
+                _playerController.SetHealth(health);
                 _playerController.PlayerViewController.ShowDamageText(damage, false, false);
             }
         }
@@ -238,7 +238,7 @@ namespace Entropy.Scripts.Player
             //reduce shield on hit
             if (shield > 0)
             {
-                _playerController.Shield -= 1;
+                _playerController.SetShield(1);
                 return;
             }
 
@@ -258,24 +258,18 @@ namespace Entropy.Scripts.Player
             else
             {
                 //we didn't die, set health to new value
-                _playerController.Health = health;
+                _playerController.SetHealth(health);
                 _playerController.PlayerViewController.ShowDamageText(damage, attackerIsCounter, attackerIsSame);
             }
         }
         
         public void KillPlayer(PlayerController other, string deathFxId = null)
         {
-            if (_playerController.lastDeathTime + minTimeBetweenDeaths >= Time.time)
-            {
-                Debug.LogWarning("Attempted to respawn within the min time between spawns");
-                return;
-            }
-            
-            _playerController.lastDeathTime = Time.time;
-            _playerController.IsAlive = false;
-
-            if (!_gameManager.SpawnController.PlayerCanRespawnFreely(_playerController))
-                _playerController.Deaths++;
+            // Respawn loop protection
+            // if (_playerController.lastDeathTime + minTimeBetweenDeaths >= Time.time)
+            // {
+            //     return;
+            // }
             
             //the game is already over so don't do anything
             if(_gameManager.IsGameOver()) return;
@@ -312,8 +306,6 @@ namespace Entropy.Scripts.Player
             }
             
             // The game is not over
-            _playerController.ResetPlayerState();
-            _playerController.DropCollectibles();
             _playerController.HandleKilled(other, null);
         }
     }

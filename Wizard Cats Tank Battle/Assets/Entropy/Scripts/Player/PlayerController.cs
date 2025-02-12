@@ -42,29 +42,15 @@ namespace Vashta.Entropy.Player
         public int TeamIndex => PlayerTeam.TeamIndex;
 
         // Health
-        public int Health
-        {
-            get => _health;
-            set
-            {
-                _health = Mathf.Clamp(value, 0, maxHealth);
-                PlayerViewController.SetHealth(value, maxHealth);
-            }
-        }
+        [Networked, OnChangedRender(nameof(OnHealthChanged))]
+        public int Health { get; private set; }
 
         public int maxHealth = 10;
         public bool IsAlive { get; set; } = true; // This replaced another variable called "isAlive" - need to make sure they weren't competing
 
         // Shield
-        public int Shield
-        {
-            get => _shield;
-            set
-            {
-                _shield = Mathf.Clamp(value, 0, maxShield);
-                PlayerViewController.SetOvershield(value, maxShield);
-            }
-        }
+        [Networked, OnChangedRender(nameof(OnShieldChanged))]
+        public int Shield { get; private set; }
 
         public int maxShield = 5;
         
@@ -156,8 +142,6 @@ namespace Vashta.Entropy.Player
         public GameManager GameManager;
         
         public bool isBot = false;
-        [SerializeField] private int _health;
-        [SerializeField] private int _shield;
         
         public override void Spawned()
         {
@@ -191,6 +175,8 @@ namespace Vashta.Entropy.Player
             {
                 JoinTime = Runner.SimulationTime;
             }
+
+            bool justJoined = Mathf.Approximately(JoinTime, Runner.SimulationTime);
 
             // Will eventually need to move this into another method that is overriden by bots
             if (HasInputAuthority && !isBot)
@@ -252,7 +238,7 @@ namespace Vashta.Entropy.Player
             }
             
             // Apply status effect
-            if (StatusEffectApplyOnSpawn)
+            if (StatusEffectApplyOnSpawn && justJoined)
             {
                 StatusEffectController.AddStatusEffect(StatusEffectApplyOnSpawn.Id, this);
             }
@@ -288,14 +274,46 @@ namespace Vashta.Entropy.Player
             PlayerViewController.RefreshHealthSlider();
         }
 
+        public void SetHealth(int health)
+        {
+            Health = Mathf.Clamp(health, 0, maxHealth);
+            OnHealthChanged();
+        }
+
+        public void OnHealthChanged()
+        {
+            PlayerViewController.SetHealth(Health, maxHealth);
+            
+            // check for death
+            if (Health <= 0 && IsAlive)
+            {
+                Debug.Log("Player should be dead but they are not");
+                HandleKilled(null);
+                // CombatController.KillPlayer(null);
+            }
+        }
+
         public void SetMaxHealth()
         {
             Health = maxHealth;
+            OnHealthChanged();
+        }
+
+        public void SetShield(int shield)
+        {
+            Shield = Mathf.Clamp(shield, 0, maxShield);
+            OnShieldChanged();
+        }
+
+        public void OnShieldChanged()
+        {
+            PlayerViewController.SetOvershield(Shield, maxShield);
         }
 
         public void SetMaxShield()
         {
             Shield = maxShield;
+            OnShieldChanged();
         }
 
         private void OnDestroy()
@@ -400,7 +418,7 @@ namespace Vashta.Entropy.Player
             
             health += healAmount;
             
-            Health = health;
+            SetHealth(health);
             
             if(healAmount < 0 || health < maxHealth)
                 PlayerViewController.ShowDamageText(-healAmount, false, false);
@@ -422,6 +440,13 @@ namespace Vashta.Entropy.Player
         // this method handles all of the game controller logic.  This method handles ONLY the player's response to dying.
         public void HandleKilled(PlayerController killedByPlayerController, string deathFxId = null)
         {
+            ResetPlayerState();
+            DropCollectibles();
+            
+            // Increment deaths if respawning in the base
+            if (killedByPlayerController != null && !GameManager.SpawnController.PlayerCanRespawnFreely(this))
+                Deaths++;
+            
             lastDeathTime = Time.time;
             
             //toggle visibility for player gameobject (on/off)
@@ -434,7 +459,6 @@ namespace Vashta.Entropy.Player
                 
             if (HasInputAuthority)
             {
-                // Hide "Drop Flag" button if local player
                 GameManager.ui.HUD.PlayerDied();
             }
                 
@@ -480,6 +504,12 @@ namespace Vashta.Entropy.Player
             transform.position = GameManager.TeamController.GetSpawnPosition(TeamIndex);
         }
 
+        [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.All)]
+        public void RPC_Respawn()
+        {
+            HandleRespawned();
+        }
+        
         public void HandleRespawned()
         {
             GameManager.TeamController.OnePassPlayerCheckToChangeTeams(this, false);
@@ -589,7 +619,6 @@ namespace Vashta.Entropy.Player
 
             if (respawnPlayer && !GameManager.SpawnController.PlayerCanRespawnFreely(this))
             {
-                Debug.Log("Killing player for class");
                 CombatController.KillPlayer(null);
             }
         }
@@ -719,7 +748,7 @@ namespace Vashta.Entropy.Player
         public void ResetPlayerState()
         {
             Bullet = 0;
-            Health = maxHealth;
+            SetMaxHealth();
             Shield = 0;
             UltimateController.ClearUltimate();
         }

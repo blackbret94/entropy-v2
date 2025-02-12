@@ -1,10 +1,13 @@
+using Fusion;
 using UnityEngine;
 using Vashta.Entropy.Player;
+using Vashta.Entropy.Spells;
 
 namespace Entropy.Scripts.Player
 {
-    public class UltimateController : MonoBehaviour
+    public class UltimateController : NetworkBehaviour
     {
+        // Not networked because only the local player needs to know this value
         public int Ultimate { get; private set; }
         
         [Header("Cached references")] 
@@ -42,8 +45,7 @@ namespace Entropy.Scripts.Player
                 Ultimate += ultimateIncrease;
             }
         }
-
-        // Server only
+        
         public void ClearUltimate()
         {
             Ultimate = 0;
@@ -61,17 +63,36 @@ namespace Entropy.Scripts.Player
         /// <returns></returns>
         public bool TryCastUltimate()
         {
-            int ultimateCost = _playerController.GetClass().ultimateCost;
+            ClassDefinition playerClass = _playerController.GetClass();
+            int ultimateCost = playerClass.ultimateCost;
             
             if (Ultimate >= ultimateCost)
             {
-                _playerController.CastUltimate();
+                SpellData ultimateSpell = playerClass.ultimateSpell;
+                ClearUltimate();
+            
+                if (!ultimateSpell)
+                {
+                    Debug.LogError("Class with ID " + playerClass.classId + " is missing an ultimate spell!");
+                    return false;
+                }
+
+                RPC_CastUltimate();
+                
                 return true;
             }
             else
             {
                 return false;
             }
+        }
+
+        [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.All)]
+        public void RPC_CastUltimate()
+        {
+            ClassDefinition playerClass = _playerController.GetClass();
+            SpellData ultimateSpell = playerClass.ultimateSpell;
+            ultimateSpell.Cast(_playerController);
         }
     }
 }

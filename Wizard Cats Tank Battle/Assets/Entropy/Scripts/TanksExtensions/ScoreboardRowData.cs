@@ -27,7 +27,7 @@ namespace Vashta.Entropy.TanksExtensions
             Deaths = playerController.Deaths;
             TeamInstance = teamInstance;
             IsLocalPlayer = isLocalPlayer;
-            ClassId = playerController.ClassId;
+            ClassId = playerController.ClassController.ClassId;
             PlayerIsOnline = true;
         }
 

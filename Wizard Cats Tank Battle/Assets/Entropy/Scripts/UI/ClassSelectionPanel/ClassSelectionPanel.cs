@@ -156,7 +156,7 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
                 playerController.PlayerTeam.TryChangeTeams(respawnPlayer);
             }
 
-            playerController.SetClass(ClassSelectionSelectorMultipanel.SelectedClassDefinition(), respawnPlayer, applyNow);
+            playerController.ChangeClass(ClassSelectionSelectorMultipanel.SelectedClassDefinition(), respawnPlayer, applyNow);
             ClosePanel();
         }
 

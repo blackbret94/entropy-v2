@@ -48,7 +48,7 @@ namespace Vashta.Entropy.TanksExtensions
                 return false;
             }
             
-            p.PowerupId = statusEffectSessionId;
+            p.PowerupController.SetPowerupId(statusEffectSessionId);
             p.ShowPowerupIcon(statusEffectSessionId);
 
             return true;

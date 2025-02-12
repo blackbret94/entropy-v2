@@ -8,7 +8,6 @@ using UnityEngine.Serialization;
 using Vashta.Entropy.Character;
 using Vashta.Entropy.Network;
 using Vashta.Entropy.ScriptableObject;
-using Vashta.Entropy.Spells;
 using Vashta.Entropy.StatusEffects;
 using Vashta.Entropy.UI;
 using Vashta.Entropy.UI.Minimap;
@@ -30,6 +29,7 @@ namespace Vashta.Entropy.Player
     [RequireComponent(typeof(ClassController))]
     [RequireComponent(typeof(NetworkInputController))]
     [RequireComponent(typeof(PlayerTeam))]
+    [RequireComponent(typeof(PowerupController))]
     public class PlayerController : FusionPlayer
     {
         [Header("Stats")]
@@ -45,7 +45,7 @@ namespace Vashta.Entropy.Player
         [Networked, OnChangedRender(nameof(OnHealthChanged))]
         public int Health { get; private set; }
 
-        public int maxHealth = 10;
+        public int maxHealth { get; set; }
         public bool IsAlive { get; set; } = true; // This replaced another variable called "isAlive" - need to make sure they weren't competing
 
         // Shield
@@ -60,15 +60,11 @@ namespace Vashta.Entropy.Player
         public int Kills { get; set; }
         public int Deaths { get; set; }
         [Networked] public float JoinTime { get; protected set; }
-        public int ClassId { get; protected set; } // Move to class Controller
-        public int ClassIdQueued { get; protected set; }
         public int PreferredTeamIndex => PlayerTeam.PreferredTeamIndex;
-        public int PowerupId { get; set; }
 
         /// <summary>
         /// Current turret rotation and shooting direction.
         /// </summary>
-        [HideInInspector]
         [Networked] public short turretRotation { get; set; }
         
         /// <summary>
@@ -107,6 +103,7 @@ namespace Vashta.Entropy.Player
         public CharacterAppearance CharacterAppearance;
         public NetworkManagerCustom NetworkManagerCustom { get; private set; }
         public PlayerTeam PlayerTeam { get; private set; }
+        public PowerupController PowerupController { get; private set; }
 
         //reference to this rigidbody
         #pragma warning disable 0649
@@ -155,6 +152,7 @@ namespace Vashta.Entropy.Player
             UltimateController = GetComponent<UltimateController>();
             MovementController = GetComponent<MovementController>();
             ClassController = GetComponent<ClassController>();
+            PowerupController = GetComponent<PowerupController>();
             InputController = GameManager.PlayerInputController;
             NetworkInputController = GetComponent<NetworkInputController>();
             rb = GetComponent<Rigidbody>();
@@ -217,11 +215,6 @@ namespace Vashta.Entropy.Player
             PlayerList.Add(this);
             StartCoroutine(RefreshHudCoroutine());
             
-            // Set up class
-            ClassDefinition classDefinition = defaultClassDefinition ? defaultClassDefinition : classDirectory.RandomClass();
-            ClassId = classDefinition.classId;
-            ApplyClass();
-            
             // refresh slider to fix render issues
             PlayerViewController.RefreshHealthSlider();
             
@@ -233,9 +226,23 @@ namespace Vashta.Entropy.Player
             // Move player to start position
             if (HasInputAuthority)
             {
+                // Set position
                 Vector3 startPos = GameManager.TeamController.GetSpawnPosition(TeamIndex);
                 transform.position = startPos;
+                
+                // Set class
+                ClassDefinition classDefinition = defaultClassDefinition ? defaultClassDefinition : classDirectory.RandomClass();
+                ClassController.SetClassId(classDefinition.classId);
             }
+            else if (Health <= 0)
+            {
+                // If the player is already dead when we join, reflect this
+                // Might not be the best way to handle this
+                HandleKilled(null);
+            }
+            
+            // Apply class
+            ClassController.ApplyClass(handicapModifier);
             
             // Apply status effect
             if (StatusEffectApplyOnSpawn && justJoined)
@@ -283,13 +290,13 @@ namespace Vashta.Entropy.Player
         public void OnHealthChanged()
         {
             PlayerViewController.SetHealth(Health, maxHealth);
+            PlayerViewController.SetOvershield(Shield, maxShield);
             
             // check for death
             if (Health <= 0 && IsAlive)
             {
                 Debug.Log("Player should be dead but they are not");
                 HandleKilled(null);
-                // CombatController.KillPlayer(null);
             }
         }
 
@@ -364,7 +371,7 @@ namespace Vashta.Entropy.Player
 
                     // POWERUP
                     if(inputData.IsDown(NetworkInputData.BUTTON_FIRE_POWERUP))
-                        TryCastPowerup();
+                        PowerupController.TryCastPowerup();
                         
                     
                     // ULTIMATE
@@ -406,7 +413,7 @@ namespace Vashta.Entropy.Player
         }
         
         /// <summary>
-        /// Server only.  Heal the player a specified amount
+        /// Heal the player a specified amount
         /// </summary>
         public void Heal(int healAmount)
         {
@@ -521,7 +528,7 @@ namespace Vashta.Entropy.Player
 
             // apply class
             StatusEffectController.RefreshCache();
-            ApplyClass();
+            ClassController.ApplyClass(handicapModifier);
             PlayerViewController.ColorizePlayerForTeam();
                 
             // Render as alive
@@ -544,7 +551,6 @@ namespace Vashta.Entropy.Player
             }
             
             ResetTransform();
-            
         }
 
         protected void RewardCoinsForKill()
@@ -609,42 +615,19 @@ namespace Vashta.Entropy.Player
             GameManager.ui.controls[1].OnEndDrag(null);
         }
         
-        public void SetClass(ClassDefinition newClassDefinition, bool respawnPlayer, bool applyInstantly)
+        // handles full logic for changing class.  ClassController.ApplyClass just handles class-specific changes.
+        public void ChangeClass(ClassDefinition newClassDefinition, bool respawnPlayer, bool applyInstantly)
         {
-            ClassId = newClassDefinition.classId;
+            ClassController.SetClassId(newClassDefinition.classId);
             UIGame.GetInstance().ClassSelectionButton.UpdateIcon();
             
             if(applyInstantly)
-                ApplyClass();
+                ClassController.RPC_ApplyClass(newClassDefinition.classId, handicapModifier);
 
             if (respawnPlayer && !GameManager.SpawnController.PlayerCanRespawnFreely(this))
             {
                 CombatController.KillPlayer(null);
             }
-        }
-        
-        protected void ApplyClass()
-        {
-            PlayerCollisionHandler playerCollisionHandler = GetComponent<PlayerCollisionHandler>();
-
-            if (!playerCollisionHandler)
-            {
-                Debug.LogError("Player is missing a collision handler!  Can not apply class.");
-                return;
-            }
-
-            ClassDefinition classDefinition = classDirectory[ClassId];
-
-            if (classDefinition == null)
-            {
-                Debug.LogError("Could not find class definition for class " + ClassId);
-            }
-
-            ClassController.ApplyClass(this, playerCollisionHandler, classDefinition, handicapModifier);
-            SetMaxHealth();
-            
-            if(HasInputAuthority)
-                GameManager.ui.CastUltimateButton.UpdateSpellIcon(classDefinition.ultimateIcon);
         }
         
         public void ApplyStatusEffect(string statusEffectId, PlayerController effectOwnerPlayerController)
@@ -681,61 +664,10 @@ namespace Vashta.Entropy.Player
             HUDPanel.Get().ShowPowerupUI(powerupId);
         }
 
-        /// Section: ULTIMATES
-        public void CastUltimate()
-        {
-            SpellData ultimateSpell = GetClass().ultimateSpell;
-            UltimateController.ClearUltimate();
-            
-            if (!ultimateSpell)
-            {
-                Debug.LogError("Class with ID " + ClassId + " is missing an ultimate spell!");
-                return;
-            }
-
-            ultimateSpell.Cast(this);
-        }
-        
-        public void TryCastPowerup()
-        {
-            if (PowerupId > 0)
-            {
-                CastPowerup();
-            }
-            else
-            {
-                Debug.LogWarning("Tried to cast powerup with ID <=0: "+ PowerupId);
-            }
-        }
-        
-        public void CastPowerup()
-        {
-            if (PowerupId < 1)
-            {
-                Debug.LogError("Could not cast powerup, session ID: " + PowerupId);
-            }
-            
-            StatusEffectData data = StatusEffectDirectory.GetBySessionId(PowerupId);
-
-            if (!data)
-            {
-                Debug.LogError("Could not find powerup, session ID: " + PowerupId);
-            }
-            
-            StatusEffectController.AddStatusEffect(data.Id, this);
-            
-            if (HasInputAuthority)
-            {
-                UIGame.GetInstance().CastPowerupButton.ClosePanel();
-            }
-
-            PowerupId = 0;
-        }
-
         /// SECTION: HELPFUL GETTERS
         public ClassDefinition GetClass()
         {
-            return classDirectory[ClassId];
+            return ClassController.ClassDefinition;
         }
         
         public TeamDefinition GetTeamDefinition()

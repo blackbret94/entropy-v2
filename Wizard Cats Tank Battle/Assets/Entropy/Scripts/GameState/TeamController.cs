@@ -345,11 +345,6 @@ namespace Vashta.Entropy.GameState
 
         public List<TeamStateSnapshot> GetTeamStates(bool includeLocalPlayer = true)
         {
-            if (teams.Length != ScoreByTeamIndex.Length)
-            {
-                Debug.LogWarning($"Team count ({teams.Length}) did not match score count({ScoreByTeamIndex.Length})!");
-            }
-
             List<TeamStateSnapshot> teamStates = new List<TeamStateSnapshot>();
             
             for (int i = 0; i < teams.Length && i < ScoreByTeamIndex.Length; i++)

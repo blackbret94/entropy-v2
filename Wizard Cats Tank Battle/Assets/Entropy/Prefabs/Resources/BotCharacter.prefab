@@ -1518,6 +1518,7 @@ GameObject:
   - component: {fileID: 3342811283625289617}
   - component: {fileID: 125347520223489442}
   - component: {fileID: 4589138142109185729}
+  - component: {fileID: 8604377245090731716}
   m_Layer: 8
   m_Name: BotCharacter
   m_TagString: Untagged
@@ -1587,8 +1588,9 @@ MonoBehaviour:
   moveSpeed: 7
   defaultMass: 1
   _PlayerName: 
-  _TeamIndex: 0
+  _Health: 0
   maxHealth: 10
+  _Shield: 0
   maxShield: 5
   _Ammo: 0
   _Bullet: 0
@@ -1610,8 +1612,6 @@ MonoBehaviour:
     type: 2}
   GameManager: {fileID: 0}
   isBot: 0
-  _health: 0
-  _shield: 0
   myName: 
   teamIndex: 0
   range: 6
@@ -1674,7 +1674,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d28ac23d18d54947a04026d40008e244, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 5128119020115832740}
+  playerController: {fileID: 5128119020115832740}
   damageAmtOnCollision: 6
   armor: 2
   collisionFx: {fileID: 1000011513120438, guid: 89ac73a2c6d7fd04ba1250607c343f31,
@@ -1858,7 +1858,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b062b8186cf4b4abbdbd199e95ce6ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: {fileID: 5128119020115832740}
+  playerController: {fileID: 5128119020115832740}
 --- !u!114 &7832800269976863104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1922,6 +1922,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fac291ca1c614ca5a80cda66d6bc4e52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ClassDirectory: {fileID: 11400000, guid: 7d8bbf25c3319e2428b905b7f07fbe8b, type: 2}
+  _classDefinition: {fileID: 0}
+  _ClassId: 0
 --- !u!114 &4385678458074626077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1941,9 +1944,12 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 5128119020115832740}
   - {fileID: 9211731162699355234}
+  - {fileID: 7571687306469954801}
+  - {fileID: 5294441234163762721}
   - {fileID: 3342811283625289617}
   - {fileID: 125347520223489442}
   - {fileID: 4589138142109185729}
+  - {fileID: 8604377245090731716}
   - {fileID: 8423563394307992586}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &3342811283625289617
@@ -1993,6 +1999,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a75b78006dcb4dc69a22dd60e4587c41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _TeamIndex: 0
+  _PreferredTeamIndex: 0
+--- !u!114 &8604377245090731716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4388435187269524573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a25953da6f94449abbcedc33ae20a85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StatusEffectDirectory: {fileID: 11400000, guid: 06185a77b443ee54b8ce18ae4e7db647,
+    type: 2}
+  _PowerupId: 0
 --- !u!1 &4497364272883642154
 GameObject:
   m_ObjectHideFlags: 0
@@ -8305,7 +8328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 845cb420ef2abc748b81bafc1a14a978, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: {fileID: 0}
+  playerController: {fileID: 0}
   PlayerCharacterWardrobe: {fileID: 11400000, guid: 8cadd9cf34379be4b85114337eaa4b65,
     type: 2}
   PlayerInventory: {fileID: 2425203863067720665}
@@ -14144,6 +14167,11 @@ PrefabInstance:
     - target: {fileID: 5909351344927821947, guid: de79c78f6abef994aa5f8e1a388e4876,
         type: 3}
       propertyPath: Player
+      value: 
+      objectReference: {fileID: 5128119020115832740}
+    - target: {fileID: 5909351344927821947, guid: de79c78f6abef994aa5f8e1a388e4876,
+        type: 3}
+      propertyPath: playerController
       value: 
       objectReference: {fileID: 5128119020115832740}
     - target: {fileID: 6248702483080565840, guid: de79c78f6abef994aa5f8e1a388e4876,

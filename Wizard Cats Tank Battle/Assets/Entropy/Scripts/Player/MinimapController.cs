@@ -22,7 +22,6 @@ namespace Entropy.Scripts.Player
 
         public GameObject PointerPrefab;
         public TeamDefinitionDictionary TeamDefinitionDictionary;
-
         
         private int _teamIndex = -1;
         private GameObject _spawnedPointer;

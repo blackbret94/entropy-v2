@@ -78,9 +78,9 @@ namespace TanksMP
 
             _lastSecondUpdate = Time.time + .1f;
             JoinTime = -Time.time;
-            ClassId = classDefinition.classId;
+            ClassController.SetClassId(classDefinition.classId);
             
-            ApplyClass();
+            ClassController.ApplyClass(handicapModifier);
             
             if (GameManager.TeamController.UsesTeams)
             {

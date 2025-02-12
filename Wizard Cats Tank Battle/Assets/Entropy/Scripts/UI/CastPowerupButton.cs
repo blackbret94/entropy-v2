@@ -40,7 +40,7 @@ namespace Vashta.Entropy.UI
                 return;
             }
             
-            _localPlayerController.TryCastPowerup();
+            _localPlayerController.PowerupController.TryCastPowerup();
         }
 
         public void ResetPowerup()

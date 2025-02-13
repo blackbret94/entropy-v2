@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1904
     height: 1174.4
   m_ShowMode: 4
-  m_Title: Console
+  m_Title: Game
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -120,7 +120,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 34
+  controlID: 151
   draggingID: 0
 --- !u!114 &6
 MonoBehaviour:
@@ -146,7 +146,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 100}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 35
+  controlID: 30
   draggingID: 0
 --- !u!114 &7
 MonoBehaviour:
@@ -158,7 +158,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: SceneView
+  m_Name: GameView
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -169,13 +169,13 @@ MonoBehaviour:
     height: 724.8
   m_MinSize: {x: 201, y: 226}
   m_MaxSize: {x: 4001, y: 4026}
-  m_ActualView: {fileID: 16}
+  m_ActualView: {fileID: 18}
   m_Panes:
   - {fileID: 16}
   - {fileID: 17}
   - {fileID: 18}
-  m_Selected: 0
-  m_LastSelected: 2
+  m_Selected: 2
+  m_LastSelected: 0
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -231,7 +231,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 100}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 79
+  controlID: 88
   draggingID: 0
 --- !u!114 &10
 MonoBehaviour:
@@ -337,10 +337,10 @@ MonoBehaviour:
     m_TextWithWhitespace: "Multiplayer Play Mode\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1093.6
+    x: 1100
     y: 86.4
     width: 443.59998
-    height: 493.2
+    height: 490
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -572,8 +572,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Scene\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 0
-    y: 24
+    x: 7.2000003
+    y: 86.4
     width: 1091.8
     height: 698.8
   m_SerializedDataModeController:
@@ -1040,15 +1040,15 @@ MonoBehaviour:
   m_OverrideSceneCullingMask: 6917529027641081856
   m_SceneIsLit: 1
   m_SceneLighting: 1
-  m_2DMode: 0
+  m_2DMode: 1
   m_isRotationLocked: 0
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: -8.9489155, y: 0.19999996, z: -1.415344}
+    m_Target: {x: 1014.3306, y: 470.69376, z: 3.4093}
     speed: 2
-    m_Value: {x: -8.9489155, y: 0.19999996, z: -1.415344}
+    m_Value: {x: 1014.3306, y: 470.69376, z: 3.4093}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1094,13 +1094,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 1
   m_Rotation:
-    m_Target: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+    m_Target: {x: 0, y: 0, z: 0, w: 1}
     speed: 2
-    m_Value: {x: -0.7071068, y: 0, z: -0, w: -0.7071068}
+    m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 22.751637
+    m_Target: 760.52386
     speed: 2
-    m_Value: 22.751637
+    m_Value: 760.52386
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1189,10 +1189,10 @@ MonoBehaviour:
     m_TextWithWhitespace: "Game\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 7.2000003
-    y: 86.4
+    x: 0
+    y: 24
     width: 1091.8
-    height: 702.8
+    height: 698.8
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -1239,7 +1239,7 @@ MonoBehaviour:
     m_HSlider: 0
     m_VSlider: 0
     m_IgnoreScrollWheelUntilClicked: 0
-    m_EnableMouseInput: 0
+    m_EnableMouseInput: 1
     m_EnableSliderZoomHorizontal: 0
     m_EnableSliderZoomVertical: 0
     m_UniformScale: 1
@@ -1249,9 +1249,9 @@ MonoBehaviour:
       x: 0
       y: 21
       width: 1091.8
-      height: 681.8
+      height: 677.8
     m_Scale: {x: 0.7108073, y: 0.7108073}
-    m_Translation: {x: 545.9, y: 340.9}
+    m_Translation: {x: 545.9, y: 338.9}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
@@ -1259,12 +1259,12 @@ MonoBehaviour:
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
       x: -768
-      y: -479.5955
+      y: -476.7818
       width: 1536
-      height: 959.191
+      height: 953.5636
     m_MinimalGUI: 1
   m_defaultScale: 0.7108073
-  m_LastWindowPixelSize: {x: 1091.8, y: 702.8}
+  m_LastWindowPixelSize: {x: 1091.8, y: 698.8}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
   m_LowResolutionForAspectRatios: 00000000000000000000
@@ -2522,10 +2522,10 @@ MonoBehaviour:
       e32: 0
       e33: 1
   m_PreviewAnimator: {fileID: 0}
-  m_AnimatorController: {fileID: 9100000, guid: da094c79cf5b702488447b862a14f7be,
+  m_AnimatorController: {fileID: 9100000, guid: 9da334e8d0dd56d44bed53b61fc850a2,
     type: 2}
   m_BreadCrumbs:
-  - m_Target: {fileID: -8485897763536492826, guid: da094c79cf5b702488447b862a14f7be,
+  - m_Target: {fileID: 1107000013880658084, guid: 9da334e8d0dd56d44bed53b61fc850a2,
       type: 2}
     m_ScrollPosition: {x: 0, y: 0}
   stateMachineGraph: {fileID: 0}
@@ -2578,7 +2578,7 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: 464488
+  m_LastSelectedObjectID: -3804380
 --- !u!114 &25
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -2621,7 +2621,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: c88ac6ff76b9c9ff08bac9ffaac3ceffee74cfffbe9ccfff4cbfcfff8cd1d0ff80add3ffc29ad5ff50bdd5ff86c2d6ff201ffcffc8fafcffacfaffffee0f0200
+      m_ExpandedIDs: 203dc2ff303dc2ff643ec2ff9871c2ff008dc4ff5a3bc5ff4ed7c5ffb8f8c5ffecf9c5ffc608c6ff7847c7ff70eed0ffec11d1ff6830d1ff709cd2ff82d2d2fffef5d2ff100cd3ff6a77d4ff2a14d5ffa637d5ffda79d5ffde6dd6ffbc6ed6ff5a91d6ffb8c5d6ffb233d7ff849dd8ff169ed8ff5acfd8ffd6f2d8ff0a0ed9ff2259d9ff005ad9ff9e7cd9ff0287d9ff70fbd9ff543adbffd60ee9ff34ddf6ffac1cf7ff4a3ff7ff7c64f7ffb8faffff04620200d46302009a6402005068020076ad0600
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -2704,7 +2704,7 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Entropy/Data
+  - Assets/Entropy/Prefabs/PowerUps
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\emoma\Documents\GitHub\entropy-v2\Wizard Cats Tank
     Battle
@@ -2714,7 +2714,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 03ca9a3b
     m_LastClickedID: 1000000003
-    m_ExpandedIDs: 0000000046000100480001004a0001004c0001004e0001005000010052000100540001005600010058000100
+    m_ExpandedIDs: 0000000050000100520001005400010056000100580001005a0001005c0001005e0001006000010062000100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -2743,7 +2743,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 300}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 0000000046000100480001004a0001004c0001004e0001005000010052000100540001005600010058000100
+    m_ExpandedIDs: 0000000050000100520001005400010056000100580001005a0001005c0001005e0001006000010062000100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 

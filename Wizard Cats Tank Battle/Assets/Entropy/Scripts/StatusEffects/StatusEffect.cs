@@ -5,6 +5,7 @@ using Vashta.Entropy.ScriptableObject;
 
 namespace Vashta.Entropy.StatusEffects
 {
+    // This will be replaced with StatusEffectNetwork
     public class StatusEffect
     {
         private StatusEffectController _statusEffectController;

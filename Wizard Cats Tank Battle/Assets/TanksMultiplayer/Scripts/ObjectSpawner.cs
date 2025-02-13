@@ -16,8 +16,11 @@ namespace TanksMP
     /// Manages network-synced spawning of prefabs, in this case collectibles and powerups.
     /// With the respawn time synced on all clients it supports host migration too.
     /// </summary>
-    public class ObjectSpawner : NetworkBehaviour
-	{
+    public class ObjectSpawner : NetworkBehaviour, IStateAuthorityChanged
+    {
+        [Networked]
+        public bool IsSpawned { get; set; }
+        
         /// <summary>
         /// Prefab to sync the instantiation for over the network.
         /// </summary>
@@ -47,57 +50,61 @@ namespace TanksMP
         public CollectionType colType = CollectionType.Use;
 
         //time value when the next respawn should happen measured in game time
-        private float nextSpawn;
-        private int lastInflatedObjectIndex = 0;
+        [Networked]
+        public float nextSpawn { get; set; }
+        [Networked]
+        public int lastInflatedObjectIndex { get; set; }
+        [Networked]
+        public int nextInflatedObjectIndex { get; set; } // calculate on state authority
 
-
-        //when entering the game scene for the first time as a master client,
-        //the master should spawn the object in the scene for all other clients
-        void Start()
+        
+        public override void Spawned()
         {
-            // OnMasterClientSwitched();
+            if (HasStateAuthority)
+            {
+                // State authority: Init
+                // Pick index
+                PickNextSpawnIndex();
+                
+                // Spawn object
+                Instantiate(nextInflatedObjectIndex);
+                IsSpawned = true;
+                lastInflatedObjectIndex = nextInflatedObjectIndex;
+                PickNextSpawnIndex();
+            }
+            else
+            {
+                // Client: "catch up" to state
+                if (IsSpawned)
+                {
+                    Instantiate(lastInflatedObjectIndex);
+                }
+            }
+            
+            // switch (colType)
+            // {
+            //     case CollectionType.Use:
+            //         if (obj == null || !obj.activeInHierarchy)
+            //         {
+            //             SetRespawn(nextSpawn);
+            //         }
+            //         break;
+            //
+            //     case CollectionType.Pickup:
+            //         //in addition to the check above, here we check for the current state too
+            //         //if the item got dropped, the master should send an updated respawn time as well
+            //         if (obj == null || !obj.activeInHierarchy ||
+            //           (obj.transform.parent != PoolManager.GetPool(obj).transform && obj.transform.position != transform.position))
+            //         {
+            //             SetRespawn(nextSpawn);
+            //         }
+            //         break;
+            // }
         }
-        
-        
-        /// <summary>
-        /// Synchronizes current active state of the object to joining players.
-        /// TODO: Re-write for fusion
-        /// </summary>
-        public void OnPlayerEnteredRoom(PlayerController playerController)
+
+        private void PickNextSpawnIndex()
         {
-            //don't execute as a non-master, but also don't execute it for the master itself
-            // if(!PhotonNetwork.IsMasterClient || player.IsMasterClient)
-                // return;
-
-            //the object is active in the scene on the master. Thus send an instantiate call
-            //to the joining player so the object gets enabled/instantiated on that client too
-            if (obj != null && obj.activeInHierarchy)
-            {
-                Instantiate(lastInflatedObjectIndex);
-            }
-
-            //defining cases in which the SetRespawn method should be called instead
-            switch (colType)
-            {
-                case CollectionType.Use:
-                    //on the master the object is not active in the scene. As a client we have to know the
-                    //remaining respawn time so we are able to take over in a host migration scenario
-                    if (obj == null || !obj.activeInHierarchy)
-                    {
-                        SetRespawn(nextSpawn);
-                    }
-                    break;
-
-                case CollectionType.Pickup:
-                    //in addition to the check above, here we check for the current state too
-                    //if the item got dropped, the master should send an updated respawn time as well
-                    if (obj == null || !obj.activeInHierarchy ||
-                      (obj.transform.parent != PoolManager.GetPool(obj).transform && obj.transform.position != transform.position))
-                    {
-                        SetRespawn(nextSpawn);
-                    }
-                    break;
-            }
+            nextInflatedObjectIndex = Random.Range(0, prefabList.Count);
         }
 
 
@@ -133,11 +140,15 @@ namespace TanksMP
             StartCoroutine(SpawnRoutine());
         }
 
-
         //calculates the remaining time until the next respawn,
         //waits for the delay to have passed and then instantiates the object
         IEnumerator SpawnRoutine()
 		{
+            if (HasStateAuthority)
+            {
+                PickNextSpawnIndex();
+            }
+            
             yield return new WaitForEndOfFrame();
             float delay = Mathf.Clamp(nextSpawn - (float)Runner.SimulationTime, 0, respawnTime);
 			yield return new WaitForSeconds(delay);
@@ -158,7 +169,17 @@ namespace TanksMP
                 }
             }
         }
-		
+
+        public void StateAuthorityChanged()
+        {
+            if (HasStateAuthority)
+            {
+                if (!IsSpawned)
+                {
+                    StartCoroutine(SpawnRoutine());
+                }
+            }
+        }
         
         /// <summary>
         /// Instantiates the object in the scene using PoolManager functionality.
@@ -235,6 +256,8 @@ namespace TanksMP
             
             //cancel return timer as this object is now being carried around
             StopAllCoroutines();
+
+            IsSpawned = false;
         }
 
 

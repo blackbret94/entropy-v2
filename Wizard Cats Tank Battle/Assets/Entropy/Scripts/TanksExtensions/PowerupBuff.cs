@@ -22,27 +22,23 @@ namespace Vashta.Entropy.TanksExtensions
 
             if (StatusEffectData != null)
             {
-                return ApplyStatusEffect(p);
+                int statusEffectSessionId = StatusEffectDirectory.GetSessionId(StatusEffectData);
+
+                if (statusEffectSessionId <= 0)
+                {
+                    Debug.LogError("Could not find status effect with ID: " + StatusEffectData.Id);
+                    return false;
+                }
+            
+                Debug.Log("Applying status effect with ID: " + statusEffectSessionId);
+                p.PowerupController.SetPowerupId(statusEffectSessionId);
+                p.ShowPowerupIcon(statusEffectSessionId);
+
+                return true;
             }
 
             Debug.LogError("Could not apply a status effect, was missing statusEffectData");
             return false;
-        }
-
-        private bool ApplyStatusEffect(PlayerController p)
-        {
-            int statusEffectSessionId = StatusEffectDirectory.GetSessionId(StatusEffectData);
-
-            if (statusEffectSessionId <= 0)
-            {
-                Debug.LogError("Could not find status effect with ID: " + StatusEffectData.Id);
-                return false;
-            }
-            
-            p.PowerupController.SetPowerupId(statusEffectSessionId);
-            p.ShowPowerupIcon(statusEffectSessionId);
-
-            return true;
         }
     }
 }

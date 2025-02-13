@@ -4,21 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2d0b1129-1c08-4810-a5a8-04b901ecd844" name="Changes" comment="Fixed more respawn issues">
-      <change afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PowerupController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PowerupController.cs.meta" afterDir="false" />
+    <list default="true" id="2d0b1129-1c08-4810-a5a8-04b901ecd844" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Wizard Cats Tank Battle/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Wizard Cats Tank Battle/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Resources/BotCharacter.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Resources/BotCharacter.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Resources/PlayerCharacter.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Resources/PlayerCharacter.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/ClassController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/ClassController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scenes/TDM-Fantasy-004-Canyon.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scenes/TDM-Fantasy-004-Canyon.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scenes/TDM-Fantasy-MultiplayerTest.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scenes/TDM-Fantasy-MultiplayerTest.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameState/SpawnController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameState/SpawnController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameState/TeamController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameState/TeamController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/CombatController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/CombatController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/UltimateController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/UltimateController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PowerupController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PowerupController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/TanksExtensions/PowerupBuff.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/TanksExtensions/PowerupBuff.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/TanksExtensions/PowerupRandom.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/TanksExtensions/PowerupRandom.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/TanksExtensions/ScoreboardRowData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/TanksExtensions/ScoreboardRowData.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/UI/CastPowerupButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/UI/CastPowerupButton.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/UI/ClassSelectionPanel/ClassSelectionPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/UI/ClassSelectionPanel/ClassSelectionPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/PlayerControllerBot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/PlayerControllerBot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/FusionHelpers/Launcher/FusionPlayer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/FusionHelpers/Launcher/FusionPlayer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/ObjectSpawner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/ObjectSpawner.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,6 +40,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/d819e76d2dac496782e863b6fab6eea3bcc00/10/0e31553f/IStateAuthorityChanged.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/d819e76d2dac496782e863b6fab6eea3bcc00/2d/2e6c6798/NetworkBehaviour.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/d819e76d2dac496782e863b6fab6eea3bcc00/47/2fadb3e3/INetworkRunnerCallbacks.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/d819e76d2dac496782e863b6fab6eea3bcc00/50/f29079d5/INetworkStruct.cs" root0="FORCE_HIGHLIGHTING" />
@@ -339,7 +339,8 @@
       <workItem from="1738076240145" duration="60667000" />
       <workItem from="1738606404216" duration="6719000" />
       <workItem from="1738635377906" duration="38620000" />
-      <workItem from="1739289183630" duration="28884000" />
+      <workItem from="1739289183630" duration="43650000" />
+      <workItem from="1739396690399" duration="8563000" />
     </task>
     <task id="LOCAL-00001" summary="Cleaned up files that are not being used">
       <option name="closed" value="true" />
@@ -453,7 +454,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739334487488</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Implemented RPCs for Ultimates and Powerups">
+      <option name="closed" value="true" />
+      <created>1739341486478</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1739341486478</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -504,7 +513,8 @@
     <MESSAGE value="Scoreboard works again" />
     <MESSAGE value="Fixed some respawn issues" />
     <MESSAGE value="Fixed more respawn issues" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed more respawn issues" />
+    <MESSAGE value="Implemented RPCs for Ultimates and Powerups" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented RPCs for Ultimates and Powerups" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

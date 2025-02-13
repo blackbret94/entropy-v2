@@ -29,20 +29,11 @@ namespace FusionHelpers
 			// Getting this here because it will revert to -1 if the player disconnects, but we still want to remember the Id we were assigned for clean-up purposes
 			PlayerId = Object.InputAuthority;
 			PlayerIndex = NetworkedPlayerIndex;
-
-			// The EventRelay only makes sense in shared mode, and most games don't support both hosted and shared,
-			// so this particular check is very specific to Tanknarok.
-			if (Runner.Topology == Topologies.Shared)
-			{
-				if(HasStateAuthority)
-					eventRelay = Runner.Spawn(_eventRelayPrefab);
-				_eventStub = eventRelay;
-			}
-			else
-			{
-				// For hosted mode, we avoid spawning the event relay since it doesn't really do anything except calling the local peer.
-				_eventStub = gameObject.AddComponent<TickAlignedEventRelay>();
-			}
+			
+			if(HasStateAuthority)
+				eventRelay = Runner.Spawn(_eventRelayPrefab);
+			_eventStub = eventRelay;
+	
 
 			Debug.Log($"Spawned Player with InputAuth {PlayerId}, Index {PlayerIndex}");
 

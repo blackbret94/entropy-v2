@@ -265,12 +265,6 @@ namespace Entropy.Scripts.Player
         
         public void KillPlayer(PlayerController other, string deathFxId = null)
         {
-            // Respawn loop protection
-            // if (_playerController.lastDeathTime + minTimeBetweenDeaths >= Time.time)
-            // {
-            //     return;
-            // }
-            
             //the game is already over so don't do anything
             if(_gameManager.IsGameOver()) return;
 

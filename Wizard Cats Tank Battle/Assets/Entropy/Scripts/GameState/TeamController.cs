@@ -138,8 +138,8 @@ namespace Vashta.Entropy.GameState
             Debug.Log("Setting player team: " + playerController.TeamIndex);
             
             // Force respawn
-            if(respawn)
-                playerController.Respawn(null);
+            if(respawn && playerController.HasInputAuthority)
+                playerController.RPC_Kill();
         }
 
         public void RefreshDisplay()

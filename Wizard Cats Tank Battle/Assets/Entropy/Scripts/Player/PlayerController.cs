@@ -55,10 +55,8 @@ namespace Vashta.Entropy.Player
         public int maxShield = 5;
         
         // Loadout
-        [Networked] public int Ammo { get; protected set; } // Is this needed anymore? Or should it be renamed?
-        [Networked] public int Bullet { get; protected set; } // Rename this to powerup?
-        public int Kills { get; set; }
-        public int Deaths { get; set; }
+        [Networked] public int Kills { get; set; }
+        [Networked] public int Deaths { get; set; }
         [Networked] public float JoinTime { get; protected set; }
         public int PreferredTeamIndex => PlayerTeam.PreferredTeamIndex;
 
@@ -123,17 +121,11 @@ namespace Vashta.Entropy.Player
         
         public MinimapEntityControllerPlayer MinimapEntityControllerPlayer;
         
-        public override void InitNetworkState() {}
-        
-        // Spawn timer
-        [HideInInspector]
-        public float lastDeathTime = 0f;
         private bool _hasLateInited = false;
         
         [Header("Data")]
         [FormerlySerializedAs("classList")] 
         public ClassDirectory classDirectory;
-        public StatusEffectDirectory StatusEffectDirectory;
         public StatusEffectData StatusEffectApplyOnSpawn;
 
         public GameManager GameManager;
@@ -181,12 +173,9 @@ namespace Vashta.Entropy.Player
             {
                 // Local player logic
                 GameManager.localPlayerController = this;
-                
                 GameManager.ui.CastPowerupButton.gameObject.SetActive(false);
-                
                 PlayerName = NetworkManagerCustom.LocalPlayerInfo.Name;
                 CharacterAppearance.SaveLoad.LoadLocal();
-                
                 CameraController.SetTarget(turret);
 
                 //initialize input controls for mobile devices
@@ -211,9 +200,7 @@ namespace Vashta.Entropy.Player
             
             PlayerViewController.SetName(PlayerName);
             GameManager.ui.GameLogPanel.EventPlayerJoined(PlayerName);
-            
             PlayerList.Add(this);
-            StartCoroutine(RefreshHudCoroutine());
             
             // refresh slider to fix render issues
             PlayerViewController.RefreshHealthSlider();
@@ -250,6 +237,8 @@ namespace Vashta.Entropy.Player
                 StatusEffectController.AddStatusEffect(StatusEffectApplyOnSpawn.Id, this);
             }
         }
+        
+        public override void InitNetworkState() {}
 
         public override void Render()
         {
@@ -272,13 +261,6 @@ namespace Vashta.Entropy.Player
                 // // Debug.Log("Setting turret rotation: " + lerpedRotation);
                 turret.rotation = Quaternion.Euler(0, turretRotation, 0);
             }
-        }
-        
-        // TODO: Check if this does anything
-        private IEnumerator RefreshHudCoroutine()
-        {
-            yield return new WaitForSeconds(.1f);
-            PlayerViewController.RefreshHealthSlider();
         }
 
         public void SetHealth(int health)
@@ -431,17 +413,17 @@ namespace Vashta.Entropy.Player
                 PlayerViewController.ShowDamageText(-healAmount, false, false);
         }
         
-        public virtual void Respawn(PlayerController killedByPlayerController, string deathFxId = null)
-        {
-            if (IsAlive)
-            {
-                CombatController.KillPlayer(killedByPlayerController, deathFxId);
-            }
-            else
-            {
-                HandleRespawned();
-            }
-        }
+        // public virtual void Respawn(PlayerController killedByPlayerController, string deathFxId = null)
+        // {
+        //     if (IsAlive)
+        //     {
+        //         CombatController.KillPlayer(killedByPlayerController, deathFxId);
+        //     }
+        //     else
+        //     {
+        //         HandleRespawned();
+        //     }
+        // }
 
         // This should ONLY be called from CombatController.  CombatController.KillPlayer() should be used instead as
         // this method handles all of the game controller logic.  This method handles ONLY the player's response to dying.
@@ -450,12 +432,12 @@ namespace Vashta.Entropy.Player
             ResetPlayerState();
             DropCollectibles();
             
-            // Increment deaths if respawning in the base
-            if (killedByPlayerController != null && !GameManager.SpawnController.PlayerCanRespawnFreely(this))
+            // Increment deaths if outside of the base or killed by another player
+            if (killedByPlayerController != null || !GameManager.SpawnController.PlayerCanRespawnFreely(this))
+            {
                 Deaths++;
-            
-            lastDeathTime = Time.time;
-            
+            }
+
             //toggle visibility for player gameobject (on/off)
             gameObject.SetActive(false);
             killedBy = null;
@@ -515,6 +497,12 @@ namespace Vashta.Entropy.Player
         public void RPC_Respawn()
         {
             HandleRespawned();
+        }
+
+        [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.All)]
+        public void RPC_Kill()
+        {
+            CombatController.KillPlayer(null);
         }
         
         public void HandleRespawned()
@@ -651,6 +639,7 @@ namespace Vashta.Entropy.Player
                 return;
             
             HUDPanel.Get().ShowPowerupIcon(powerupSessionId);
+            Debug.Log("Showing powerup icon");
         }
         /// <summary>
         /// Shows UI overlay announcing powerup
@@ -679,7 +668,6 @@ namespace Vashta.Entropy.Player
         // Reset on death
         public void ResetPlayerState()
         {
-            Bullet = 0;
             SetMaxHealth();
             Shield = 0;
             UltimateController.ClearUltimate();

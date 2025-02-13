@@ -12,15 +12,21 @@ namespace Vashta.Entropy.UI
 
         private PlayerController _localPlayerController;
 
-        private void Start()
+        private void Awake()
         {
-            FindLocalPlayer();
-            ClosePanel();
+            if(gameObject.activeSelf)
+                ClosePanel();
         }
         
         private void FindLocalPlayer()
         {
             _localPlayerController = PlayerList.GetLocalPlayer();
+        }
+
+        public override void ClosePanel()
+        {
+            Debug.Log("Hiding powerup button");
+            base.ClosePanel();
         }
 
         public void UpdateIcon(Sprite sprite)

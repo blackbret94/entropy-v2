@@ -9,15 +9,23 @@ namespace Vashta.Entropy.Player
     {
         public StatusEffectDirectory StatusEffectDirectory;
         
-        [Networked]
         public int PowerupId { get; protected set; }
         
         [Header("Cached references")] 
         private PlayerController _playerController;
 
+        private bool _hasInit;
+
         private void Awake()
         {
+            Init();
+        }
+
+        private void Init()
+        {
+            if(_hasInit) return;
             _playerController = GetComponent<PlayerController>();
+            _hasInit = true;
         }
 
         public void SetPowerupId(int powerupId)
@@ -27,9 +35,11 @@ namespace Vashta.Entropy.Player
         
         public void TryCastPowerup()
         {
+            Init();
+
             if (PowerupId > 0)
             {
-                RPC_CastPowerup();
+                RPC_CastPowerup(PowerupId);
             }
             else
             {
@@ -37,19 +47,23 @@ namespace Vashta.Entropy.Player
             }
         }
         
+        /// <summary>
+        /// Passes powerupId as a parameter, only the user has to know their powerup.
+        /// </summary>
+        /// <param name="powerupId"></param>
         [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.All)]
-        public void RPC_CastPowerup()
+        private void RPC_CastPowerup(int powerupId)
         {
-            if (PowerupId < 1)
+            if (powerupId < 1)
             {
-                Debug.LogError("Could not cast powerup, session ID: " + PowerupId);
+                Debug.LogError("Could not cast powerup, session ID: " + powerupId);
             }
             
-            StatusEffectData data = StatusEffectDirectory.GetBySessionId(PowerupId);
+            StatusEffectData data = StatusEffectDirectory.GetBySessionId(powerupId);
 
             if (!data)
             {
-                Debug.LogError("Could not find powerup, session ID: " + PowerupId);
+                Debug.LogError("Could not find powerup, session ID: " + powerupId);
             }
             
             _playerController.StatusEffectController.AddStatusEffect(data.Id, _playerController);
@@ -59,6 +73,7 @@ namespace Vashta.Entropy.Player
                 UIGame.GetInstance().CastPowerupButton.ClosePanel();
             }
 
+            // This might be re-setting it before the client has a chance to read it.
             PowerupId = 0;
         }
     }

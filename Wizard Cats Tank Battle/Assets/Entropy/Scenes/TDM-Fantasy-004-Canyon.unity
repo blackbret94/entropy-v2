@@ -10087,7 +10087,6 @@ GameObject:
   m_Component:
   - component: {fileID: 578490575}
   - component: {fileID: 578490577}
-  - component: {fileID: 578490576}
   m_Layer: 0
   m_Name: BulletSpawner (2)
   m_TagString: Untagged
@@ -10110,29 +10109,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 183165448}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &578490576
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 578490574}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 0
-  OwnershipTransfer: 0
-  observableSearch: 0
-  ObservedComponents:
-  - {fileID: 0}
-  sceneViewId: 12
-  InstantiationId: -1
-  isRuntimeInstantiated: 0
 --- !u!114 &578490577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34358,7 +34334,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1829432422}
   - component: {fileID: 1829432424}
-  - component: {fileID: 1829432423}
+  - component: {fileID: 1829432425}
   m_Layer: 0
   m_Name: ShieldSpawner
   m_TagString: Untagged
@@ -34381,29 +34357,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1577421397}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1829432423
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1829432421}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 0
-  OwnershipTransfer: 0
-  observableSearch: 0
-  ObservedComponents:
-  - {fileID: 0}
-  sceneViewId: 3
-  InstantiationId: -1
-  isRuntimeInstantiated: 0
 --- !u!114 &1829432424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34422,6 +34375,25 @@ MonoBehaviour:
   respawnTime: 30
   obj: {fileID: 0}
   colType: 0
+--- !u!114 &1829432425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1829432421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 1152941523
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 1829432424}
+  ForceRemoteRenderTimeframe: 0
 --- !u!43 &1838005310
 Mesh:
   m_ObjectHideFlags: 0
@@ -41317,6 +41289,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 137415512431350458, guid: e4a53bbfdd13b6545a92577342c00d64,
+        type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 1919
+      objectReference: {fileID: 0}
     - target: {fileID: 137415512518353544, guid: e4a53bbfdd13b6545a92577342c00d64,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -41736,6 +41713,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -660
+      objectReference: {fileID: 0}
+    - target: {fileID: 997060350682894610, guid: e4a53bbfdd13b6545a92577342c00d64,
+        type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 1919
       objectReference: {fileID: 0}
     - target: {fileID: 999105762790836255, guid: e4a53bbfdd13b6545a92577342c00d64,
         type: 3}

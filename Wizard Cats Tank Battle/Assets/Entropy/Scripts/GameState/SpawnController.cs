@@ -82,7 +82,6 @@ namespace Vashta.Entropy.GameState
             // Check all potential team colliders
             foreach (var team in _gameManager.TeamController.teams)
             {
-                Debug.Log("Checking collider: " + team.teamDefinition.TeamId);
                 if (playerTeamDefinition && team.teamDefinition.TeamId == playerTeamDefinition.TeamId)
                 {
 

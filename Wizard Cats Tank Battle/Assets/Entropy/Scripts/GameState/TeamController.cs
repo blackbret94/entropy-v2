@@ -202,7 +202,7 @@ namespace Vashta.Entropy.GameState
             return true;
             // TODO: Revisit this later
             // int teamNo = teamIndex - 1;
-            int maxTeamSize = 3; // This should NOT be hardcoded here
+            // int maxTeamSize = 3; // This should NOT be hardcoded here
             
             // int[] size = PhotonNetwork.CurrentRoom.GetSize();
 

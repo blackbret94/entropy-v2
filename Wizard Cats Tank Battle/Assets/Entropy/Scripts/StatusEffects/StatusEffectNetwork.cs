@@ -8,13 +8,24 @@ namespace Vashta.Entropy.StatusEffects
 {
     public struct StatusEffectNetwork : INetworkStruct
     {
-        // TODO: string - maybe I just need sessionId instead?
-        private int _sessionId;
+        private ushort _sessionId;
         private PlayerRef _player;
         private float _expiration;
         private NetworkBool _forceExpire;
         private float _timeCreated;
-        private NetworkBool _isValid; // Not sure if I need this
+        private NetworkBool _isValid;
+
+        public StatusEffectNetwork(ushort sessionId, PlayerRef player)
+        {
+            _sessionId = sessionId;
+            _player = player;
+            _expiration = 0;
+            _forceExpire = false;
+            _timeCreated = Time.time;
+            _isValid = true;
+
+            SetExpiration();
+        }
         
         public void Reset()
         {
@@ -26,7 +37,7 @@ namespace Vashta.Entropy.StatusEffects
             _isValid = false;
         }
 
-        public void Set(int sessionId, PlayerRef player, float expiration, bool forceExpire, float timeCreated,
+        public void Set(ushort sessionId, PlayerRef player, float expiration, bool forceExpire, float timeCreated,
             bool isValid)
         {
             _sessionId = sessionId;
@@ -35,6 +46,11 @@ namespace Vashta.Entropy.StatusEffects
             _forceExpire = forceExpire;
             _timeCreated = timeCreated;
             _isValid = isValid;
+        }
+
+        public StatusEffectView GetView()
+        {
+            return new StatusEffectView(this);
         }
         
         public float GetAge()
@@ -45,6 +61,16 @@ namespace Vashta.Entropy.StatusEffects
         public void ForceExpire()
         {
             _forceExpire = true;
+        }
+
+        public bool GetForceExpire()
+        {
+            return _forceExpire;
+        }
+
+        public bool IsValid()
+        {
+            return _isValid;
         }
 
         public PlayerController OriginPlayer()
@@ -84,8 +110,18 @@ namespace Vashta.Entropy.StatusEffects
             
             return _expiration - Time.time;
         }
+
+        public float GetTTL()
+        {
+            return StatusEffectData().TTL;
+        }
+
+        public float TimeSinceCast()
+        {
+            return Time.time - _timeCreated;
+        }
         
-        public int SessionId()
+        public ushort SessionId()
         {
             return _sessionId;
         }

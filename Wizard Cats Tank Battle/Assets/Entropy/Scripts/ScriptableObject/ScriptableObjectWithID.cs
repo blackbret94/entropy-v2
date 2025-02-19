@@ -26,6 +26,6 @@ namespace Vashta.Entropy.ScriptableObject
         [ScriptableObjectId]
         public string Id;
         [HideInInspector] 
-        public int SessionId; // Generated on a per-session basis using the Dictionary.  Safe for single session use, but not saving.
+        public ushort SessionId; // Generated on a per-session basis using the Dictionary.  Safe for single session use, but not saving.
     }
 }

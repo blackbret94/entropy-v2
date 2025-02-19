@@ -16,11 +16,11 @@ namespace Vashta.Entropy.Character
             EffectRoot.SetActive(enable);
         }
 
-        public void Toggle(SortedSet<string> indexedStatusEffectIds)
+        public void Toggle(SortedSet<ushort> indexedStatusEffectIds)
         {
             foreach (var statusEffectData in TriggeredBy)
             {
-                if (indexedStatusEffectIds.Contains(statusEffectData.Id))
+                if (indexedStatusEffectIds.Contains(statusEffectData.SessionId))
                 {
                     Toggle(true);
                     return;

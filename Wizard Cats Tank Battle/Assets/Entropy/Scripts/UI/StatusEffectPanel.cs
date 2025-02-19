@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using TanksMP;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Vashta.Entropy.Player;
@@ -10,7 +8,7 @@ namespace Vashta.Entropy.UI
 {
     public class StatusEffectPanel : GamePanel
     {
-        public List<StatusEffectSlot> StatusEffectBlocks;
+        [FormerlySerializedAs("StatusEffectBlocks")] public List<StatusEffectSlot> StatusEffectSlots;
         [FormerlySerializedAs("Player")] public PlayerController playerController;
         private float _lastRefreshTime;
         private float _refreshRate = .15f;
@@ -41,13 +39,13 @@ namespace Vashta.Entropy.UI
 
         private void RefreshStatusEffects()
         {
-            List<StatusEffect> statusEffects = new List<StatusEffect>(playerController.StatusEffectController.StatusEffects);
+            List<StatusEffectView> statusEffects = new List<StatusEffectView>(playerController.StatusEffectController.GetStatusEffectViews());
             statusEffects.Sort(CompareStatusEffects);
             SortSlots();
 
-            for(int i=0; i<StatusEffectBlocks.Count; i++)
+            for(int i=0; i<StatusEffectSlots.Count; i++)
             {
-                StatusEffectSlot slot = StatusEffectBlocks[i];
+                StatusEffectSlot slot = StatusEffectSlots[i];
     
                 // Hide blocks without status effects
                 if (i >= statusEffects.Count)
@@ -56,41 +54,28 @@ namespace Vashta.Entropy.UI
                     continue;
                 }
 
-                StatusEffect statusEffect = statusEffects[i];
+                StatusEffectView statusEffectView = statusEffects[i];
 
-                if (slot.GetStatusEffect() != statusEffect)
+                if (slot.GetStatusEffect() != statusEffectView)
                 {
-                    slot.SetStatusEffect(statusEffect);
+                    slot.SetStatusEffect(statusEffectView);
                 }
-                else
-                {
-                    // Temp 
-                    slot.ShowNoAnimation();
-                }
-                // else
-                // {
-                //     // Attempt to fix issue of disappearing status effects
-                //     if (statusEffect.GetAge() > .5f && statusEffect.GetTimeLeft() > .5f)
-                //     {
-                //         slot.SetStatusEffect(statusEffect);
-                //     }
-                // }
             }
         }
 
         private void SortSlots()
         {
-            StatusEffectBlocks.Sort(CompareStatusEffectSlots);
+            StatusEffectSlots.Sort(CompareStatusEffectSlots);
 
-            for (int i = 0; i < StatusEffectBlocks.Count; i++)
+            for (int i = 0; i < StatusEffectSlots.Count; i++)
             {
-                StatusEffectBlocks[i].transform.SetSiblingIndex(i);
+                StatusEffectSlots[i].transform.SetSiblingIndex(i);
             }
         }
 
         public void ResetSlots()
         {
-            foreach (var slot in StatusEffectBlocks)
+            foreach (var slot in StatusEffectSlots)
             {
                 slot.ResetStatusEffect();
             }
@@ -107,13 +92,13 @@ namespace Vashta.Entropy.UI
             if (y.GetStatusEffect() == null)
                 return -1;
 
-            if (x.GetStatusEffect().ExpirationTime() < y.GetStatusEffect().ExpirationTime())
+            if (x.GetStatusEffect().StatusEffect.ExpirationTime() < y.GetStatusEffect().StatusEffect.ExpirationTime())
                 return -1;
 
             return 1;
         }
         
-        private int CompareStatusEffects(StatusEffect x, StatusEffect y)
+        private int CompareStatusEffects(StatusEffectView x, StatusEffectView y)
         {
             if (x == null && y == null)
                 return 0;
@@ -124,7 +109,7 @@ namespace Vashta.Entropy.UI
             if (y == null)
                 return -1;
 
-            if (x.ExpirationTime() < y.ExpirationTime())
+            if (x.StatusEffect.ExpirationTime() < y.StatusEffect.ExpirationTime())
                 return -1;
 
             return 1;

@@ -63,7 +63,7 @@ namespace Vashta.Entropy.Character
             SpikeDamageVisualizer.Toggle(enable);
         }
 
-        public void Refresh(SortedSet<string> indexedIds)
+        public void Refresh(SortedSet<ushort> indexedIds)
         {
             SpeedBoostVisualizer.Toggle(indexedIds);
             RapidFireVisualizer.Toggle(indexedIds);

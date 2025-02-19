@@ -31,7 +31,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7719874392674692929}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -88,7 +87,6 @@ GameObject:
   - component: {fileID: 2993261271852909581}
   - component: {fileID: 4685104383947702439}
   - component: {fileID: 8140844310714572349}
-  - component: {fileID: 7018734487426993908}
   - component: {fileID: 2507113862340602967}
   m_Layer: 9
   m_Name: StatusEffectSlot
@@ -111,7 +109,6 @@ RectTransform:
   m_Children:
   - {fileID: 7719874392674692929}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -169,37 +166,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ChildPanels: []
-  FadeInTrigger: Fade In
-  BlinkBool: Blinking
-  FadeOutTrigger: Fade Out
-  BlinkThreshold: 1
-  FadeOutThreshold: 0.334
-  Animator: {fileID: 7018734487426993908}
+  CanBeClosedByHotkey: 0
+  BlockGameplayWhenSelected: 0
+  BlinkThreshold: 3
+  FadeOutThreshold: 0.5
+  FadeInTime: 0.25
   Image: {fileID: 2151274983295918683}
   BuffOutline: {fileID: 3445101173555708822}
   DebuffOutline: {fileID: 7396782437020705013}
---- !u!95 &7018734487426993908
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5390802302880651896}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: cd1fb014b7b059a4c98acc7b82937168, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  _debugStatusEffectName: 
 --- !u!225 &2507113862340602967
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -208,7 +183,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5390802302880651896}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -245,7 +220,6 @@ RectTransform:
   - {fileID: 8480210981451836491}
   - {fileID: 4220476506211380088}
   m_Father: {fileID: 438766827589965245}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -295,7 +269,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7719874392674692929}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -371,7 +344,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7719874392674692929}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}

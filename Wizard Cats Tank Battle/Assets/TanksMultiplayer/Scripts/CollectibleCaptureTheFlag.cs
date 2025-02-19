@@ -112,7 +112,7 @@ namespace TanksMP
         public override void OnDrop()
         {
             // remove status effect
-            _carriedBy.StatusEffectController.RemoveStatusEffect(StatusEffectToApply.Id);
+            _carriedBy.StatusEffectController.RemoveStatusEffect(StatusEffectToApply.SessionId);
             
             // notify
             GameManager.GetInstance().ui.GameLogPanel.EventSpoonDropped(_carriedBy.PlayerName, _carriedBy.GetTeamDefinition());
@@ -128,7 +128,7 @@ namespace TanksMP
             if (_carriedBy != null)
             {
                 // remove status effect
-                _carriedBy.StatusEffectController.RemoveStatusEffect(StatusEffectToApply.Id);
+                _carriedBy.StatusEffectController.RemoveStatusEffect(StatusEffectToApply.SessionId);
 
                 // Notify
                 GameManager.GetInstance().ui.GameLogPanel.EventSpoonCaptured(_carriedBy.PlayerName, _carriedBy.GetTeamDefinition());

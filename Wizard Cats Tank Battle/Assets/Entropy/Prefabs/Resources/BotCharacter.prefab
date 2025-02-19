@@ -1589,11 +1589,10 @@ MonoBehaviour:
   defaultMass: 1
   _PlayerName: 
   _Health: 0
-  maxHealth: 10
   _Shield: 0
   maxShield: 5
-  _Ammo: 0
-  _Bullet: 0
+  _Kills: 0
+  _Deaths: 0
   _JoinTime: 0
   _turretRotation: 0
   turret: {fileID: 7764713437238784532}
@@ -1604,10 +1603,7 @@ MonoBehaviour:
   CharacterAppearance: {fileID: 8423563394307992586}
   defaultClassDefinition: {fileID: 0}
   MinimapEntityControllerPlayer: {fileID: 8814309887499864025}
-  lastDeathTime: 0
   classDirectory: {fileID: 11400000, guid: 7d8bbf25c3319e2428b905b7f07fbe8b, type: 2}
-  StatusEffectDirectory: {fileID: 11400000, guid: 06185a77b443ee54b8ce18ae4e7db647,
-    type: 2}
   StatusEffectApplyOnSpawn: {fileID: 11400000, guid: bfc8e71ecafd3f44382045d0241b7ed3,
     type: 2}
   GameManager: {fileID: 0}
@@ -1943,6 +1939,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 5128119020115832740}
+  - {fileID: 17881755486394314}
   - {fileID: 9211731162699355234}
   - {fileID: 7571687306469954801}
   - {fileID: 5294441234163762721}
@@ -2015,7 +2012,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StatusEffectDirectory: {fileID: 11400000, guid: 06185a77b443ee54b8ce18ae4e7db647,
     type: 2}
-  _PowerupId: 0
 --- !u!1 &4497364272883642154
 GameObject:
   m_ObjectHideFlags: 0

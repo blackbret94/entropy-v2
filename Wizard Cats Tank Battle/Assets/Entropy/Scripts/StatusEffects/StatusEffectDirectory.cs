@@ -24,7 +24,7 @@ namespace Vashta.Entropy.StatusEffects
             _dictionarySession = new Dictionary<int, StatusEffectData>();
 
             // 0 needs to be null so that network data can be unsigned
-            int i = 1;
+            ushort i = 1;
             foreach (StatusEffectData statusEffect in Directory)
             {
                 statusEffect.SessionId = i;

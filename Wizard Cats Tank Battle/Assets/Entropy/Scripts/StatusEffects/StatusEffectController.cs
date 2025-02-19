@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using Fusion;
 using TanksMP;
 using UnityEngine;
 using Vashta.Entropy.Character;
@@ -7,7 +9,7 @@ using Vashta.Entropy.UI;
 
 namespace Vashta.Entropy.StatusEffects
 {
-    public class StatusEffectController : MonoBehaviour
+    public class StatusEffectController : NetworkBehaviour
     {
         [Header("Data Sources")]
         public StatusEffectDirectory StatusEffectDirectory;
@@ -16,9 +18,10 @@ namespace Vashta.Entropy.StatusEffects
         [Header("Cached references")]
         private PlayerController _playerController;
         private PlayerStatusEffectVisualizer _visualizer;
-        
-        private List<StatusEffect> _statusEffects = new();
-        private SortedSet<string> _indexedIds = new();
+
+        [Networked, Capacity(10)] 
+        private NetworkDictionary<ushort, StatusEffectNetwork> _statusEffects => default;
+        private SortedSet<ushort> _indexedIds = new();
         private bool _dirtyFlag;
         
         private const float _refreshRateS = .5f;
@@ -52,8 +55,6 @@ namespace Vashta.Entropy.StatusEffects
         private bool _buffsLastForeverCached = false;
 
         private StatusEffectData _bloodVengeanceChainedEffect;
-        
-        public List<StatusEffect> StatusEffects => _statusEffects;
 
         public float MassMultiplier => _massMultiplierCashed;
         public float MovementSpeedModifier => _movementSpeedModifierCached;
@@ -86,6 +87,23 @@ namespace Vashta.Entropy.StatusEffects
         {
             _playerController = GetComponent<PlayerController>();
             _visualizer = GetComponent<PlayerStatusEffectVisualizer>();
+        }
+
+        public List<StatusEffectView> GetStatusEffectViews()
+        {
+            List<StatusEffectView> statusEffectViews = new List<StatusEffectView>();
+            
+            foreach (KeyValuePair<ushort, StatusEffectNetwork> statusEffectNetwork in _statusEffects)
+            {
+                StatusEffectNetwork statusEffect = statusEffectNetwork.Value;
+
+                if (statusEffect.IsValid())
+                {
+                    statusEffectViews.Add(statusEffect.GetView());
+                }
+            }
+
+            return statusEffectViews;
         }
         
         public virtual void StatusEffectTick()
@@ -141,10 +159,19 @@ namespace Vashta.Entropy.StatusEffects
         /// <param name="owner"></param>
         public void AddStatusEffect(string statusEffectId, PlayerController owner)
         {
-            StatusEffect statusEffect = new StatusEffect(this, statusEffectId, owner);
+            StatusEffectData statusEffectData = StatusEffectDirectory[statusEffectId];
+            if (statusEffectData == null)
+            {
+                Debug.LogError("Invalid status effect UUID: " + statusEffectId);
+                return;
+            }
+
+            ushort statusEffectSessionId = statusEffectData.SessionId;
+            
+            StatusEffectNetwork statusEffect = new StatusEffectNetwork(statusEffectSessionId, owner.PlayerId);
             
             // Check if status effect already exists
-            StatusEffect existingEffect = StatusEffectAlreadyExists(statusEffect.Id());
+            StatusEffectNetwork existingEffect = StatusEffectAlreadyExists(statusEffectSessionId);
             
             // If a buff and buffs are blocked, return
             if (!statusEffect.IsImmuneToRemoval() && (statusEffect.IsBuff() && _blocksBuffsCached))
@@ -166,7 +193,7 @@ namespace Vashta.Entropy.StatusEffects
             _visualizer.AddEffect(statusEffect.ApplyFxData());
 
             // Alert if local player
-            if (_playerController.IsLocal && existingEffect == null)
+            if (_playerController.IsLocal && !existingEffect.IsValid())
             {
                 // Show panel
                 GameManager.GetInstance().ui.PowerUpPanel.SetText(statusEffect.Title(), statusEffect.Description(),
@@ -195,18 +222,19 @@ namespace Vashta.Entropy.StatusEffects
                 return;
             }
             
-            if (existingEffect == null)
+            if (!existingEffect.IsValid())
             {
                 // If it doesn't exist, add it
-                _statusEffects.Add(statusEffect);
-                _indexedIds.Add(statusEffect.Id());
+                _statusEffects.Add(statusEffectSessionId, statusEffect);
+                _indexedIds.Add(statusEffectSessionId);
                 _dirtyFlag = true;
             }
             else
             {
                 // If it exists, update TTL
                 existingEffect.SetExpiration();
-                existingEffect.SetFresh(true);
+                _statusEffects.Set(statusEffectSessionId, existingEffect);
+                // existingEffect.SetFresh(true);
             }
             
             // Refresh the panel
@@ -234,51 +262,55 @@ namespace Vashta.Entropy.StatusEffects
         private void CheckLifeOfStatusEffects()
         {
             // Duplicate to safely iterate
-            List<StatusEffect> statusEffects = new List<StatusEffect>(_statusEffects);
+            NetworkDictionary<ushort, StatusEffectNetwork> statusEffects = _statusEffects;
 
-            foreach (StatusEffect statusEffect in statusEffects)
+            foreach (KeyValuePair<ushort, StatusEffectNetwork> statusEffect in statusEffects)
             {
+                StatusEffectNetwork statusEffectNetwork = statusEffect.Value;
+                
                 // Refresh expiration if buffs last forever
                 // Makes sure that this is NOT a buffsLastForever effect, as that would be preserved forever
-                if (_buffsLastForeverCached && !statusEffect.BuffsLastForever())
+                if (_buffsLastForeverCached && !statusEffectNetwork.BuffsLastForever())
                 {
-                    statusEffect.SetExpiration();
+                    statusEffects[statusEffect.Key].SetExpiration();
                 }
                 
-                if (statusEffect.HasExpired())
+                if (statusEffectNetwork.HasExpired())
                 {
-                    RemoveStatusEffect(statusEffect);
+                    RemoveStatusEffect(statusEffectNetwork);
                 }
             }
             
             _lastRefresh = Time.time;
         }
         
-        public void RemoveStatusEffect(string statusEffectId)
+        public void RemoveStatusEffect(ushort statusEffectId)
         { 
-            StatusEffect statusEffect = GetStatusEffectById(statusEffectId);
+            StatusEffectNetwork statusEffect = GetStatusEffectById(statusEffectId);
 
-            if (statusEffect == null)
+            if (!statusEffect.IsValid())
                 return;
             
             RemoveStatusEffect(statusEffect);
         }
-        private StatusEffect GetStatusEffectById(string id)
+        private StatusEffectNetwork GetStatusEffectById(ushort id)
         {
             foreach (var statusEffect in _statusEffects)
             {
-                if (statusEffect.Id() == id)
-                    return statusEffect;
+                if (statusEffect.Value.SessionId() == id)
+                    return statusEffect.Value;
             }
 
-            return null;
+            return new StatusEffectNetwork();
         }
 
-        private void RemoveStatusEffect(StatusEffect statusEffect)
+        private void RemoveStatusEffect(StatusEffectNetwork statusEffect)
         {
+            ushort sessionId = statusEffect.SessionId();
+            
             statusEffect.ForceExpire();
-            _statusEffects.Remove(statusEffect);
-            _indexedIds.Remove(statusEffect.Id());
+            _statusEffects.Remove(sessionId);
+            _indexedIds.Remove(sessionId);
             _visualizer.RemoveEffect(statusEffect.ApplyFxData());
             _dirtyFlag = true;
         }
@@ -308,8 +340,10 @@ namespace Vashta.Entropy.StatusEffects
             _additionalProjectilesSprayCached = 0;
             _piercesCached = false;
 
-            foreach (var statusEffect in _statusEffects)
+            foreach (KeyValuePair<ushort, StatusEffectNetwork> statusEffectKVP in _statusEffects)
             {
+                StatusEffectNetwork statusEffect = statusEffectKVP.Value;
+                
                 if(statusEffect.HasExpired())
                     continue;
 
@@ -387,10 +421,12 @@ namespace Vashta.Entropy.StatusEffects
         private void ClearBuffs()
         {
             // Copy to safely enum
-            List<StatusEffect> statusEffectsCopy = new List<StatusEffect>(_statusEffects);
+            NetworkDictionary<ushort, StatusEffectNetwork> statusEffectsCopy = _statusEffects;
             
-            foreach (var statusEffect in statusEffectsCopy)
+            foreach (KeyValuePair<ushort, StatusEffectNetwork> statusEffectKVP in statusEffectsCopy)
             {
+                StatusEffectNetwork statusEffect = statusEffectKVP.Value;
+                
                 if(!statusEffect.IsImmuneToRemoval() && statusEffect.IsBuff())
                     RemoveStatusEffect(statusEffect);
             }
@@ -399,24 +435,28 @@ namespace Vashta.Entropy.StatusEffects
         private void ClearDebuffs()
         {
             // Copy to safely enum
-            List<StatusEffect> statusEffectsCopy = new List<StatusEffect>(_statusEffects);
+            NetworkDictionary<ushort, StatusEffectNetwork> statusEffectsCopy = _statusEffects;
             
-            foreach (var statusEffect in statusEffectsCopy)
+            foreach (KeyValuePair<ushort, StatusEffectNetwork> statusEffectKVP in statusEffectsCopy)
             {
+                StatusEffectNetwork statusEffect = statusEffectKVP.Value;
+                
                 if(!statusEffect.IsImmuneToRemoval() && statusEffect.IsDebuff())
                     RemoveStatusEffect(statusEffect);
             }
         }
 
-        private StatusEffect StatusEffectAlreadyExists(string id)
+        private StatusEffectNetwork StatusEffectAlreadyExists(ushort id)
         {
-            foreach (var statusEffect in _statusEffects)
+            foreach (KeyValuePair<ushort, StatusEffectNetwork> statusEffectKVP in _statusEffects)
             {
-                if (statusEffect.Id() == id)
+                StatusEffectNetwork statusEffect = statusEffectKVP.Value;
+                
+                if (statusEffect.SessionId() == id)
                     return statusEffect;
             }
 
-            return null;
+            return new StatusEffectNetwork();
         }
 
         /// <summary>
@@ -425,8 +465,10 @@ namespace Vashta.Entropy.StatusEffects
         /// <returns></returns>
         public string GetDeathFx()
         {
-            foreach (var statusEffect in _statusEffects)
+            foreach (KeyValuePair<ushort, StatusEffectNetwork> statusEffectKVP in _statusEffects)
             {
+                StatusEffectNetwork statusEffect = statusEffectKVP.Value;
+                
                 if (statusEffect.DeathFxData())
                 {
                     return statusEffect.DeathFxData().Id;

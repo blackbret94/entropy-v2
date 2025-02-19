@@ -1,30 +1,25 @@
-using System;
 using UnityEngine;
-using UnityEngine.UI;
 using Vashta.Entropy.StatusEffects;
+using Image = UnityEngine.UI.Image;
 
 namespace Vashta.Entropy.UI
 {
     [RequireComponent(typeof(CanvasGroup))]
     public class StatusEffectSlot : GamePanel
     {
-        public string FadeInTrigger = "Fade In";
-        public string BlinkBool = "Blinking";
-        public string FadeOutTrigger = "Fade Out";
-        public string OffTrigger = "Off";
-        public string OnTrigger = "On";
-
-        public float BlinkThreshold = 1f;
-        public float FadeOutThreshold = .334f;
+        public float BlinkThreshold = 5f;
+        public float FadeOutThreshold = .5f;
+        public float FadeInTime = .25f;
         
-        public Animator Animator;
+        // public Animator Animator;
         public Image Image;
         public GameObject BuffOutline;
         public GameObject DebuffOutline;
-        private StatusEffect _statusEffect;
+        private StatusEffectView _statusEffectView;
         private CanvasGroup _canvasGroup;
+        private Vector3 _vectorOne;
         
-        // DEBUG
+        // DEBUG, exists for viewing in the inspector during runtime.
         [SerializeField]
         private string _debugStatusEffectName;
 
@@ -32,100 +27,84 @@ namespace Vashta.Entropy.UI
         {
             _canvasGroup = GetComponent<CanvasGroup>();
             _canvasGroup.alpha = 0;
+            _vectorOne = Vector3.one;
         }
 
-        public void SetStatusEffect(StatusEffect statusEffect)
+        public void SetStatusEffect(StatusEffectView statusEffectView)
         {
             // Ignore status effects that are about to fade away
-            // if (statusEffect.GetTimeLeft() <= FadeOutThreshold + .01f)
-                // return;
+            _statusEffectView = statusEffectView;
+
+            if (statusEffectView == null || statusEffectView.StatusEffect.HasExpired())
+                return;
             
-            _statusEffect = statusEffect;
-            _debugStatusEffectName = statusEffect.Title();
-            Image.sprite = statusEffect.Icon();
-
-            if (statusEffect.IsFresh())
-            {
-                Animator.SetBool(BlinkBool, false);
-                Animator.ResetTrigger(FadeOutTrigger);
-                Animator.ResetTrigger(OffTrigger);
-                Animator.SetTrigger(FadeInTrigger);
-                statusEffect.SetFresh(false);
-            }
-            else
-            {
-                ShowNoAnimation();
-            }
-
-            BuffOutline.SetActive(statusEffect.IsBuff());
-            DebuffOutline.SetActive(statusEffect.IsDebuff());
-        }
-
-        public void ShowNoAnimation()
-        {
-            Animator.SetBool(BlinkBool, false);
-            Animator.ResetTrigger(FadeOutTrigger);
-            Animator.ResetTrigger(OffTrigger);
-            Animator.SetTrigger(OnTrigger);
+            _debugStatusEffectName = statusEffectView.StatusEffect.Title();
+            Image.sprite = statusEffectView.StatusEffect.Icon();
             _canvasGroup.alpha = 1;
+
+            BuffOutline.SetActive(statusEffectView.StatusEffect.IsBuff());
+            DebuffOutline.SetActive(statusEffectView.StatusEffect.IsDebuff());
         }
         
         public void ResetStatusEffect()
         {
-            Animator.SetBool(BlinkBool, false);
-            Animator.ResetTrigger(FadeInTrigger);
-            Animator.ResetTrigger(FadeOutTrigger);
-            Animator.SetTrigger(OffTrigger);
-            _statusEffect = null;
+            _statusEffectView = null;
 
             _debugStatusEffectName = "No effect";
-            // Image.sprite = null;
             
             if(_canvasGroup)
                 _canvasGroup.alpha = 0;
         }
 
-        public StatusEffect GetStatusEffect()
+        public StatusEffectView GetStatusEffect()
         {
-            return _statusEffect;
+            return _statusEffectView;
         }
 
         private void Update()
         {
-            if(_statusEffect != null)
-                UpdateAnimation();
-        }
-
-        private void UpdateAnimation()
-        {
-            float timeLeft = _statusEffect.GetTimeLeft();
-
-            if (timeLeft < FadeOutThreshold)
+            if (_statusEffectView == null || _statusEffectView.StatusEffect.HasExpired())
             {
-                Close();
-            } else if (timeLeft < BlinkThreshold)
-            {
-                Animator.SetBool(BlinkBool, true);
+                _canvasGroup.alpha = 0;
             }
             else
             {
-                if (Animator.GetBool(BlinkBool))
-                {
-                    Animator.SetBool(BlinkBool, false);
-                    Animator.SetTrigger(FadeInTrigger);
-                }
+                Animate();
             }
         }
 
-        public void Close()
+        private void Animate()
         {
-            Animator.SetBool(BlinkBool, false);
-            Animator.SetTrigger(FadeOutTrigger);
-        }
-        
-        public void AnimationEnd()
-        {
-            ResetStatusEffect();
+            if (!_canvasGroup || _statusEffectView == null)
+                return;
+
+            float timeLeft = _statusEffectView.StatusEffect.GetTimeLeft();
+            float timeSinceCast = _statusEffectView.StatusEffect.TimeSinceCast();
+
+            if (timeSinceCast < FadeInTime)
+            {
+                // Fading in
+                float fadeInPercent = (timeSinceCast / FadeInTime);
+                
+                _canvasGroup.alpha = fadeInPercent;
+                _canvasGroup.transform.localScale = _vectorOne * ((1+2*(1-fadeInPercent)));
+            } else if (timeLeft < FadeOutThreshold)
+            {
+                // Fading out
+                _canvasGroup.transform.localScale = _vectorOne;
+                _canvasGroup.alpha = (timeLeft / FadeOutThreshold);
+            } else if (timeLeft < BlinkThreshold)
+            {
+                // Blinking
+                _canvasGroup.transform.localScale = _vectorOne;
+                _canvasGroup.alpha = Mathf.PingPong(timeLeft / FadeOutThreshold,1);
+            }
+            else
+            {
+                // Solid
+                _canvasGroup.transform.localScale = _vectorOne;
+                _canvasGroup.alpha = 1;
+            }
         }
     }
 }

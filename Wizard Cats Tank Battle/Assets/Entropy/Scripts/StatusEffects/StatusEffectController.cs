@@ -19,7 +19,7 @@ namespace Vashta.Entropy.StatusEffects
         private PlayerController _playerController;
         private PlayerStatusEffectVisualizer _visualizer;
 
-        [Networked, Capacity(10)] 
+        [Networked, Capacity(10), OnChangedRender(nameof(OnStatusEffectsChange))] 
         private NetworkDictionary<ushort, StatusEffectNetwork> _statusEffects => default;
         private SortedSet<ushort> _indexedIds = new();
         private bool _dirtyFlag;
@@ -168,6 +168,7 @@ namespace Vashta.Entropy.StatusEffects
 
             ushort statusEffectSessionId = statusEffectData.SessionId;
             
+            // Could eventually optimize this so new structs are not created if it is already in the dictionary.
             StatusEffectNetwork statusEffect = new StatusEffectNetwork(statusEffectSessionId, owner.PlayerId);
             
             // Check if status effect already exists
@@ -250,7 +251,12 @@ namespace Vashta.Entropy.StatusEffects
             _visualizer.Clear();
         }
 
-        private void Update()
+        public void OnStatusEffectsChange()
+        {
+            _dirtyFlag = true;
+        }
+
+        public override void Render()
         {
             if(Time.time + _refreshRateS >= _lastRefresh)
                 CheckLifeOfStatusEffects();

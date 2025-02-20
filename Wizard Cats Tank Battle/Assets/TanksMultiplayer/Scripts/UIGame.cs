@@ -223,7 +223,7 @@ namespace TanksMP
         public void Disconnect()
         {
             NetworkRunner runner = UIMain.GetInstance().Runner;
-            if (runner.IsRunning)
+            if (runner != null && runner.IsRunning)
                 runner.Shutdown();
         }
 

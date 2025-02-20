@@ -113,7 +113,7 @@ namespace TanksMP
                 switch (status)
                 {
                     case FusionLauncher.ConnectionStatus.Disconnected:
-                        Debug.LogError("Disconnected!");
+                        Debug.Log("Disconnected!");
                         break;
                     case FusionLauncher.ConnectionStatus.Failed:
                         Debug.LogError("Error");
@@ -304,7 +304,7 @@ namespace TanksMP
             }
             else
             {
-                Debug.LogError("Could not find PlayerRef: " + playerRef.PlayerId);
+                // Debug.LogError("Could not find PlayerRef: " + playerRef.PlayerId);
                 return null;
             }
         }

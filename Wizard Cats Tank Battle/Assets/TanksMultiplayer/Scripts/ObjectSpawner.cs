@@ -19,7 +19,7 @@ namespace TanksMP
     public class ObjectSpawner : NetworkBehaviour, IStateAuthorityChanged
     {
         [Networked]
-        public bool IsSpawned { get; set; }
+        public NetworkBool IsSpawned { get; set; }
         
         /// <summary>
         /// Prefab to sync the instantiation for over the network.
@@ -68,7 +68,7 @@ namespace TanksMP
                 
                 // Spawn object
                 Instantiate(nextInflatedObjectIndex);
-                IsSpawned = true;
+                
                 lastInflatedObjectIndex = nextInflatedObjectIndex;
                 PickNextSpawnIndex();
             }
@@ -105,39 +105,6 @@ namespace TanksMP
         private void PickNextSpawnIndex()
         {
             nextInflatedObjectIndex = Random.Range(0, prefabList.Count);
-        }
-
-
-        /// <summary>
-        /// Called after switching to a new MasterClient when the current one leaves.
-        /// Here the new master has to decide whether to enable the object in the scene.
-        /// TODO: Handle in Fusion
-        /// </summary>
-		public void OnMasterClientSwitched(PlayerController newMaster)
-		{         
-            //only execute on the new master client
-            // if(PhotonNetwork.LocalPlayer != newMaster)
-                // return;
-
-            //defining cases in which the SpawnRoutine should be skipped
-            switch (colType)
-            {
-                case CollectionType.Use:
-                    //the object is already active thus do not trigger a respawn coroutine
-                    if (obj != null && obj.activeInHierarchy)
-                        return;
-                    break;
-                case CollectionType.Pickup:
-                    //in addition to the check above, here we check for the current state too
-                    //if the item is not being carried around and at the home base we can skip the respawn
-                    if (obj != null && obj.activeInHierarchy &&
-                        obj.transform.parent == PoolManager.GetPool(obj).transform &&
-                        obj.transform.position == transform.position)
-                        return;
-                    break;
-            }
-
-            StartCoroutine(SpawnRoutine());
         }
 
         //calculates the remaining time until the next respawn,
@@ -209,6 +176,8 @@ namespace TanksMP
                 if (colItem is CollectibleTeam) colType = CollectionType.Pickup;
                 else colType = CollectionType.Use;
             }
+            
+            IsSpawned = true;
 		}
         
         private void SpawnObject(bool spawnInstantly)
@@ -326,6 +295,8 @@ namespace TanksMP
             //despawn object and clear references
 			PoolManager.Despawn(obj);
             obj = null;
+
+            IsSpawned = false;
 			
             //if it should respawn again, trigger a new coroutine
 			if(respawn)

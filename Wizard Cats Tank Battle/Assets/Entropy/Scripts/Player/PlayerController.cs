@@ -305,10 +305,11 @@ namespace Vashta.Entropy.Player
             OnShieldChanged();
         }
 
-        private void OnDestroy()
+        public override void Despawned(NetworkRunner runner, bool hasState)
         {
-            PlayerList.Remove(this);
             GameManager.ui.GameLogPanel.EventPlayerLeft(PlayerName);
+            PlayerList.Remove(this);
+            base.Despawned(runner, hasState);
         }
         
         protected virtual void Update()

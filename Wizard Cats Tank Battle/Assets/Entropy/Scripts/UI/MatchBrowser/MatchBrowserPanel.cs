@@ -13,7 +13,7 @@ namespace Vashta.Entropy.UI.MatchBrowser
             
             NetworkRunner runner = FindAnyObjectByType<NetworkRunner>();
 
-            if (!runner.IsRunning)
+            if (runner != null && !runner.IsRunning)
             {
                 NetworkManagerCustom.GetInstance().Connect(NetworkMode.Online);
             }

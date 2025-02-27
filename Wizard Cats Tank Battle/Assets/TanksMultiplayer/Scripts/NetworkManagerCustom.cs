@@ -98,7 +98,13 @@ namespace TanksMP
         public void TempNetworkStart()
         {
             LocalPlayerInfo.Name = CBSIntegrator.Instance.ProfileState.CachedDisplayName;
-            FusionLauncher.Launch(Fusion.GameMode.Shared, "us", "WCTB", WCTBSessionPrefab, _networkSceneManager, OnConnectionStatusUpdate);
+            StartGameArgs startGameArgs = new StartGameArgs()
+            {
+                SessionName =  "WCTB",
+                GameMode = Fusion.GameMode.Shared
+            };
+            
+            FusionLauncher.Launch(startGameArgs, "us", WCTBSessionPrefab, _networkSceneManager, OnConnectionStatusUpdate);
         }
         
         private void OnConnectionStatusUpdate(NetworkRunner runner, FusionLauncher.ConnectionStatus status, string reason)
@@ -191,7 +197,8 @@ namespace TanksMP
 
         public void CreateMatch(StartGameArgs startGameArgs)
         {
-            Runner.StartGame(startGameArgs);
+            LocalPlayerInfo.Name = CBSIntegrator.Instance.ProfileState.CachedDisplayName;
+            FusionLauncher.Launch(startGameArgs, "us", WCTBSessionPrefab, _networkSceneManager, OnConnectionStatusUpdate);
         }
 
         /// <summary>

@@ -43,7 +43,7 @@ namespace Vashta.Entropy.Player
             }
             else
             {
-                Debug.LogWarning("Tried to cast powerup with ID <=0: "+ PowerupId);
+                // Debug.LogWarning("Tried to cast powerup with ID <=0: "+ PowerupId);
             }
         }
         

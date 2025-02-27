@@ -1,5 +1,6 @@
 using UnityEngine;
 using Vashta.Entropy.StatusEffects;
+using Vashta.Entropy.UI.MapSelection;
 
 namespace Vashta.Entropy.ScriptableObject
 {
@@ -16,6 +17,7 @@ namespace Vashta.Entropy.ScriptableObject
         public RarityDictionary RarityDictionary;
         public TeamDefinitionDictionary TeamDefinitionDictionary;
         public VisualEffectDirectory VisualEffectDirectory;
+        public MapDefinitionDictionary MapDefinitionDictionary;
         
         private void Awake()
         {

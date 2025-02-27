@@ -5,6 +5,9 @@ using Fusion.Photon.Realtime;
 using Fusion.Sockets;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Vashta.Entropy.PhotonExtensions;
+using Vashta.Entropy.ScriptableObject;
+using Vashta.Entropy.UI.MapSelection;
 
 namespace FusionHelpers
 {
@@ -45,23 +48,18 @@ namespace FusionHelpers
 			Loading,
 			Loaded
 		}
-
-		public static FusionLauncher Launch(GameMode mode, string region, string room,FusionSession sessionPrefab,
+		
+		public static FusionLauncher Launch(StartGameArgs startGameArgs, string region,FusionSession sessionPrefab,
 			INetworkSceneManager sceneLoader,
 			Action<NetworkRunner, ConnectionStatus, string> onConnect)
 		{
 			FusionLauncher launcher = new GameObject("Launcher").AddComponent<FusionLauncher>();
 
-			// In non-shared mode, we need a hitbox manager to make sure lag compensation works properly.
-			if (mode != GameMode.Shared)
-				launcher.gameObject.AddComponent<HitboxManager>();
-
-			launcher.InternalLaunch(mode,region,room,sessionPrefab, sceneLoader, onConnect);
-      return launcher;
-    }
+			launcher.InternalLaunch(startGameArgs, region,sessionPrefab, sceneLoader, onConnect);
+			return launcher;
+		}
 		
-		private async void InternalLaunch(GameMode mode, string region, string room,
-			FusionSession sessionPrefab,
+		private async void InternalLaunch(StartGameArgs startGameArgs, string region, FusionSession sessionPrefab,
 			INetworkSceneManager sceneManager,
 			Action<NetworkRunner, ConnectionStatus, string> onConnect)
 		{
@@ -72,26 +70,48 @@ namespace FusionHelpers
 			
 			NetworkRunner runner = gameObject.AddComponent<NetworkRunner>();
 			runner.name = name;
-			runner.ProvideInput = mode != GameMode.Server;
-
-			NetworkSceneInfo scene = new NetworkSceneInfo();
-			scene.AddSceneRef(SceneRef.FromIndex(6));
-			// scene.AddSceneRef(SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex));
-
+			runner.ProvideInput = startGameArgs.GameMode != GameMode.Server;
+			
 			// An empty region will use the best region.
 			PhotonAppSettings.Global.AppSettings.FixedRegion = region;
 
 			SetConnectionStatus(runner, ConnectionStatus.Connecting, "");
+			
+			startGameArgs.ObjectProvider = gameObject.AddComponent<PooledNetworkObjectProvider>();
+			
+			NetworkSceneInfo scene = new NetworkSceneInfo();
+			int sceneIndex = GetSceneIndex(startGameArgs);
 
-			await runner.StartGame(new StartGameArgs()
+			if (sceneIndex != -1)
 			{
-				GameMode = mode, 
-				SessionName = room,
-				ObjectProvider = gameObject.AddComponent<PooledNetworkObjectProvider>(),
-				SceneManager = sceneManager,
-				Scene = scene,
+				scene.AddSceneRef(SceneRef.FromIndex(sceneIndex));
+				startGameArgs.Scene = scene;
+				startGameArgs.SceneManager = sceneManager;
+			}
+
+			await runner.StartGame(startGameArgs);
+		}
+
+		private int GetSceneIndex(StartGameArgs startGameArgs)
+		{
+			if (startGameArgs.SessionProperties.TryGetValue(RoomKeys.mapKey, out var sceneName))
+			{
+				Debug.Log("Map Scene Name: " + sceneName);
+
+				if (sceneName == "random")
+					return -1;
 				
-			});
+				MapDefinitionDictionary mapDefinitionDictionary = GameDataSet.Get().MapDefinitionDictionary;
+				MapDefinition mapDefinition = mapDefinitionDictionary.GetByName(sceneName);
+
+				if (mapDefinition != null)
+				{
+					Debug.Log("Scene Index: " + mapDefinition.SceneIndex());
+					return mapDefinition.SceneIndex();
+				}
+			}
+
+			return -1;
 		}
 
 		public void SetConnectionStatus(NetworkRunner runner, ConnectionStatus status, string message)

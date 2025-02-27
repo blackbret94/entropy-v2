@@ -26,7 +26,7 @@ namespace Vashta.Entropy.PhotonExtensions
             // Generate
             if (roomName == "")
             {
-                roomName = GenerateRoomName();
+                return roomName;
             }
             
             // Truncate
@@ -34,7 +34,6 @@ namespace Vashta.Entropy.PhotonExtensions
                 roomName = roomName.Substring(0, MaxRoomNameLength);
             
             // Sanitize
-
             return roomName;
         }
 
@@ -46,7 +45,12 @@ namespace Vashta.Entropy.PhotonExtensions
         public StartGameArgs CreateRoomOptions(string roomName, string mapName, int maxPlayers, TanksMP.GameMode gameMode, bool isVisible = true)
         {
             StartGameArgs startGameArgs = new StartGameArgs();
-            startGameArgs.SessionName = roomName;
+
+            if (roomName != "")
+            {
+                startGameArgs.SessionName = roomName;
+            }
+            
             startGameArgs.PlayerCount = maxPlayers;
             startGameArgs.IsVisible = isVisible;
             startGameArgs.GameMode = Fusion.GameMode.Shared;
@@ -55,7 +59,12 @@ namespace Vashta.Entropy.PhotonExtensions
             // custom properties
             Dictionary<string, SessionProperty> customProperties = new Dictionary<string, SessionProperty>();
             customProperties[RoomKeys.modeKey] = (byte)(int)gameMode;
-            customProperties[RoomKeys.mapKey] = mapName;
+
+            if (mapName != "random")
+            {
+                customProperties[RoomKeys.mapKey] = mapName;
+            }
+            
             startGameArgs.SessionProperties = customProperties;
 
             return startGameArgs;
@@ -65,7 +74,11 @@ namespace Vashta.Entropy.PhotonExtensions
         {
             Dictionary<string, SessionProperty> customProperties = new Dictionary<string, SessionProperty>();
             customProperties[RoomKeys.modeKey] = gameMode;
-            customProperties[RoomKeys.mapKey] = mapName;
+            
+            if (mapName != "random")
+            {
+                customProperties[RoomKeys.mapKey] = mapName;
+            }
             
             StartGameArgs startGameArgs = new StartGameArgs();
             startGameArgs.SessionProperties = customProperties;
@@ -78,7 +91,7 @@ namespace Vashta.Entropy.PhotonExtensions
         public StartGameArgs CreateRoomOptionsGameMode(byte gameMode)
         {
             Dictionary<string, SessionProperty> customProperties = new Dictionary<string, SessionProperty>();
-            customProperties[RoomKeys.modeKey] = gameMode;
+            customProperties[RoomKeys.modeKey]= gameMode;
             
             StartGameArgs startGameArgs = new StartGameArgs();
             startGameArgs.SessionProperties = customProperties;

@@ -48,7 +48,7 @@ namespace Vashta.Entropy.UI.MapSelection
 
         public MapDefinition GetByName(string mapName)
         {
-            return _dictionary.TryGetValue(mapName, out var value) ? value : GetRandom();
+            return _dictionaryByName.TryGetValue(mapName, out var value) ? value : GetRandom();
         }
         
         // Need to eventually take game modes into account here

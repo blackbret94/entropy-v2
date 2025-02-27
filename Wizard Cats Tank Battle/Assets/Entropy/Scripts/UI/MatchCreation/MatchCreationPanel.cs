@@ -46,22 +46,22 @@ namespace Vashta.Entropy.UI.MatchCreation
                 // Connect to server
                 PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Online);
 
-                if (!UIMain.GetInstance().Runner.IsRunning)
-                {
-                    NetworkManagerCustom.GetInstance().Connect(NetworkMode.Online);
-                }
+                // if (!UIMain.GetInstance().Runner.IsRunning)
+                // {
+                //     NetworkManagerCustom.GetInstance().Connect(NetworkMode.Online);
+                // }
 
-                HeaderText.text = "Create Match";
+                HeaderText.text = "Matchmaking";
             }
             else
             {
                 // Disconnect from server
                 PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Offline);
             
-                if (UIMain.GetInstance().Runner.IsRunning)
-                {
-                    NetworkManagerCustom.GetInstance().DisconnectFromServer();
-                }
+                // if (UIMain.GetInstance().Runner.IsRunning)
+                // {
+                //     NetworkManagerCustom.GetInstance().DisconnectFromServer();
+                // }
 
                 HeaderText.text = "Practice Against Bots";
             }
@@ -77,7 +77,7 @@ namespace Vashta.Entropy.UI.MatchCreation
             }
             else
             {
-                NameInputField.text = RoomOptionsFactory.CreateRoomNameFromPlayerNickname(_networkManagerCustom.LocalPlayerInfo.Name);
+                // NameInputField.text = RoomOptionsFactory.CreateRoomNameFromPlayerNickname(_networkManagerCustom.LocalPlayerInfo.Name);
             }
             
             SetMapTitleText();
@@ -178,6 +178,9 @@ namespace Vashta.Entropy.UI.MatchCreation
 
         private string GetMapName()
         {
+            if (MapSelector.IsRandom())
+                return "random";
+            
             MapDefinition mapDefinition = MapSelector.SelectedMapDefinition();
             
             if(!mapDefinition)

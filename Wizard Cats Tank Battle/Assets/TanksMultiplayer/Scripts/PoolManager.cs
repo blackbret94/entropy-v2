@@ -94,6 +94,9 @@ namespace TanksMP
         /// </summary>
         public static void Despawn(GameObject instance, float time = 0f)
         {
+            if (instance == null)
+                return;
+            
             if(time > 0) GetPool(instance).Despawn(instance, time);
             else GetPool(instance).Despawn(instance);
         }

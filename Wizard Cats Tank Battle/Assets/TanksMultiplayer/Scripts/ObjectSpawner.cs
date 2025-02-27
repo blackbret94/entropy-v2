@@ -60,6 +60,9 @@ namespace TanksMP
         
         public override void Spawned()
         {
+            if (!isActiveAndEnabled)
+                return;
+            
             if (HasStateAuthority)
             {
                 // State authority: Init
@@ -120,7 +123,7 @@ namespace TanksMP
             float delay = Mathf.Clamp(nextSpawn - (float)Runner.SimulationTime, 0, respawnTime);
 			yield return new WaitForSeconds(delay);
 
-            if (UIMain.GetInstance().Runner.IsRunning)
+            if (Runner.IsRunning)
             {
                 //differ between CollectionType
                 if(colType == CollectionType.Pickup && obj != null)

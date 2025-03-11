@@ -290,32 +290,6 @@ namespace TanksMP
             OnPlayerJoined(Runner, Runner.LocalPlayer);
         }
 
-        /// <summary>
-        /// Finds the remotely controlled Player game object of a specific player,
-        /// by iterating over all Player components and searching for the matching creator.
-        /// </summary>
-        public PlayerController GetPlayerGameObject(PlayerRef playerRef)
-        {
-            if (Runner.TryGetPlayerObject(playerRef, out NetworkObject playerObject))
-            {
-                PlayerController playerController = playerObject.GetComponent<PlayerController>();
-
-                if (playerController == null)
-                {
-                    Debug.LogError("PlayerRef: " + playerRef.PlayerId + " does not contain Player component!");
-                    return null;
-                }
-
-                return playerController;
-
-            }
-            else
-            {
-                // Debug.LogError("Could not find PlayerRef: " + playerRef.PlayerId);
-                return null;
-            }
-        }
-
         public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
 
         public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }

@@ -63,7 +63,14 @@ namespace Vashta.Entropy.Network
         public void PlayerLeft(PlayerRef player)
         {
             //get player-controlled game object from disconnected player
-            PlayerController targetPlayerController = _networkManagerCustom.GetPlayerGameObject(player);
+            PlayerController localPlayer = _gameManager.localPlayerController;
+
+            if (!localPlayer)
+            {
+                Debug.LogError("Missing reference to local player!");
+            }
+            
+            PlayerController targetPlayerController = localPlayer.GetPlayerGameObject(player);
 
             //process any collectibles assigned to that player
             if(targetPlayerController != null)

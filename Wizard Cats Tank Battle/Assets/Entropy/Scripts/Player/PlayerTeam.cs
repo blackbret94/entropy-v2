@@ -49,12 +49,22 @@ namespace Vashta.Entropy.Player
             {
                 // Local, choose initial team
                 TeamController.ChooseInitialTeamForPlayer(PlayerController);
+                Debug.Log("Chose initial team: " + TeamIndex);
             }
             else
             {
                 // Remote, apply networked values
                 OnTeamIdChanged();
             }
+        }
+
+        public void SetPlayerPreferredTeam(int teamIndex, bool changeTeamsNow = false, bool respawnPlayer = false)
+        {
+            PreferredTeamIndex = teamIndex;
+            // if (changeTeamsNow)
+            // {
+            //     TryChangeTeams(respawnPlayer);
+            // }
         }
         
         public void OnTeamIdChanged()
@@ -72,6 +82,14 @@ namespace Vashta.Entropy.Player
         public void TryChangeTeams(bool respawn)
         {
             Init();
+            
+            Debug.Log("Attempting to change teams");
+
+            if (respawn)
+            {
+                PlayerController.RPC_Kill();
+                return;
+            }
             
             if (GameManager.SpawnController.PlayerCanRespawnFreely(PlayerController) || !PlayerController.IsAlive)
             {

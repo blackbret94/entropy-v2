@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Security.Cryptography.X509Certificates;
 using Entropy.Scripts.Player;
 using Fusion;
 using FusionHelpers;
@@ -57,7 +58,7 @@ namespace Vashta.Entropy.Player
         // Loadout
         [Networked] public int Kills { get; set; }
         [Networked] public int Deaths { get; set; }
-        [Networked] public float JoinTime { get; protected set; }
+        [Networked] public float JoinTime { get; set; }
         public int PreferredTeamIndex => PlayerTeam.PreferredTeamIndex;
 
         /// <summary>
@@ -151,13 +152,7 @@ namespace Vashta.Entropy.Player
             _playerCurrencyRewarder = new PlayerCurrencyRewarder();
             PlayerTeam = GetComponent<PlayerTeam>();
             NetworkManagerCustom = NetworkManagerCustom.GetInstance();
-
-            // Setup coroutine
-            StartCoroutine(SetupCR());
-        }
-
-        protected IEnumerator SetupCR()
-        {
+            
             // Join time
             _lastSecondUpdate = Time.time + .1f;
 
@@ -202,12 +197,7 @@ namespace Vashta.Entropy.Player
             GameManager.ui.GameLogPanel.EventPlayerJoined(PlayerName);
             PlayerList.Add(this);
             
-            // refresh slider to fix render issues
             PlayerViewController.RefreshHealthSlider();
-            
-            // Set up team
-            while (!PlayerTeam.Object.IsValid) yield return null;
-            
             PlayerTeam.Setup();
             
             // Move player to start position
@@ -216,19 +206,20 @@ namespace Vashta.Entropy.Player
                 // Set position
                 Vector3 startPos = GameManager.TeamController.GetSpawnPosition(TeamIndex);
                 transform.position = startPos;
+
+                StartCoroutine(SetTeamPositionCR(.15f));
                 
                 // Set class
                 ClassDefinition classDefinition = defaultClassDefinition ? defaultClassDefinition : classDirectory.RandomClass();
                 ClassController.SetClassId(classDefinition.classId);
             }
-            else if (Health <= 0)
+            else if (!justJoined && Health <= 0)
             {
                 // If the player is already dead when we join, reflect this
                 // Might not be the best way to handle this
                 HandleKilled(null);
             }
             
-            // Apply class
             ClassController.ApplyClass(handicapModifier);
             
             // Apply status effect
@@ -236,6 +227,20 @@ namespace Vashta.Entropy.Player
             {
                 StatusEffectController.AddStatusEffect(StatusEffectApplyOnSpawn.Id, this);
             }
+
+        }
+
+        private IEnumerator SetTeamPositionCR(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            transform.position = GameManager.TeamController.GetSpawnPosition(TeamIndex);
+        }
+
+        // Allows the player to freely respawn for 10 seconds after they joined the game.
+        // Use SpawnController->PlayerCanRespawnFreely() to factor in everything, including bases.
+        public bool RespawnIsFreeFromJointime()
+        {
+            return Runner.SimulationTime - JoinTime < 10f;
         }
         
         public override void InitNetworkState() {}
@@ -314,6 +319,9 @@ namespace Vashta.Entropy.Player
         
         protected virtual void Update()
         {
+            // if(HasInputAuthority)
+                // Debug.Log("Position: " + transform.position);
+            
             // Delayed update
             if (Time.time >= _lastSecondUpdate + _secondUpdateTime)
             {
@@ -486,12 +494,8 @@ namespace Vashta.Entropy.Player
             {
                 CameraController.FollowKiller(killedBy);
                 GameManager.SpawnController.DisplayDeath();
+                transform.position = GameManager.TeamController.GetSpawnPosition(TeamIndex);
             }
-            
-            //send player back to the team area, this will get overwritten by the exact position from the client itself later on
-            //we just do this to avoid players "popping up" from the position they died and then teleporting to the team area instantly
-            //this is manipulating the internal PhotonTransformView cache to update the networkPosition variable
-            transform.position = GameManager.TeamController.GetSpawnPosition(TeamIndex);
         }
 
         [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.All)]
@@ -513,7 +517,10 @@ namespace Vashta.Entropy.Player
             gameObject.SetActive(true);
                 
             // Move player to spawn
-            transform.position = GameManager.TeamController.GetSpawnPosition(TeamIndex);
+            if (HasInputAuthority)
+            {
+                transform.position = GameManager.TeamController.GetSpawnPosition(TeamIndex);
+            }
 
             // apply class
             StatusEffectController.RefreshCache();
@@ -590,11 +597,11 @@ namespace Vashta.Entropy.Player
         private void ResetTransform()
         {
             //start following the local player again
-            if(HasInputAuthority)
+            if (HasInputAuthority)
+            {
                 CameraController.FollowPlayer(turret);
-            
-            //get team area and reposition it there
-            // transform.position = GameManager.GetSpawnPosition(TeamId);
+                transform.position = GameManager.TeamController.GetSpawnPosition(TeamIndex);
+            }
 
             //reset forces modified by input
             MovementController.ResetTransform();
@@ -640,7 +647,6 @@ namespace Vashta.Entropy.Player
                 return;
             
             HUDPanel.Get().ShowPowerupIcon(powerupSessionId);
-            Debug.Log("Showing powerup icon");
         }
         /// <summary>
         /// Shows UI overlay announcing powerup
@@ -672,6 +678,38 @@ namespace Vashta.Entropy.Player
             SetMaxHealth();
             Shield = 0;
             UltimateController.ClearUltimate();
+        }
+        
+        /// <summary>
+        /// Finds the remotely controlled Player game object of a specific player,
+        /// by iterating over all Player components and searching for the matching creator.
+        /// </summary>
+        public PlayerController GetPlayerGameObject(PlayerRef playerRef)
+        {
+            if (!Runner || !Runner.IsRunning)
+            {
+                Debug.LogError("Runner is not running or hasn't been initiated!");
+                return null;
+            }
+            
+            if (Runner.TryGetPlayerObject(playerRef, out NetworkObject playerObject))
+            {
+                PlayerController playerController = playerObject.GetComponent<PlayerController>();
+
+                if (playerController == null)
+                {
+                    Debug.LogError("PlayerRef: " + playerRef.PlayerId + " does not contain Player component!");
+                    return null;
+                }
+
+                return playerController;
+
+            }
+            else
+            {
+                // Debug.LogError("Could not find PlayerRef: " + playerRef.PlayerId);
+                return null;
+            }
         }
     }
 }

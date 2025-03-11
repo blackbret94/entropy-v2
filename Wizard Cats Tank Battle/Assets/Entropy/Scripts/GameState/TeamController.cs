@@ -80,10 +80,14 @@ namespace Vashta.Entropy.GameState
         {
             int teamIndex = GetTeamFill();
             
+            Debug.Log("Team index: " + teamIndex);
+            
             TeamSize.Set(teamIndex, TeamSize[teamIndex] + 1);
             
             playerController.PlayerTeam.PreferredTeamIndex = teamIndex;
-            playerController.PlayerTeam.TeamIndex = teamIndex;
+            // playerController.PlayerTeam.TeamIndex = teamIndex;
+            AttemptToChangePlayerToPreferredTeam(playerController, true);
+            // playerController.PlayerTeam.SetPlayerPreferredTeam(teamIndex, true, true);
             
             RefreshDisplay();
         }
@@ -116,7 +120,7 @@ namespace Vashta.Entropy.GameState
 
             if (preferredTeamIndex == RANDOM_TEAM_INDEX && preferredTeamIndex != currentTeam)
             {
-                playerController.PlayerTeam.PreferredTeamIndex = currentTeam;
+                playerController.PlayerTeam.SetPlayerPreferredTeam(currentTeam);
                 return;
             }
 
@@ -138,8 +142,8 @@ namespace Vashta.Entropy.GameState
             Debug.Log("Setting player team: " + playerController.TeamIndex);
             
             // Force respawn
-            if(respawn && playerController.HasInputAuthority)
-                playerController.RPC_Kill();
+            // if(respawn && playerController.HasInputAuthority)
+                // playerController.RPC_Kill(); // Is this where the recursive loop was happening?
         }
 
         public void RefreshDisplay()
@@ -265,6 +269,9 @@ namespace Vashta.Entropy.GameState
         /// </summary>
         public void AddScore(ScoreType scoreType, int teamIndex)
         {
+            if (!HasStateAuthority)
+                return;
+            
             GameModeDefinition gameMode = _gameManager.GameModeDefinition;
             
             switch(scoreType)
@@ -287,6 +294,9 @@ namespace Vashta.Entropy.GameState
 
         public void RemoveScore(ScoreType scoreType, int teamIndex)
         {
+            if (!HasStateAuthority)
+                return;
+            
             ScoreByTeamIndex.Set(teamIndex, ScoreByTeamIndex[teamIndex]-1);
             TeamScoreDisplayController.UpdateScores(ScoreByTeamIndex.ToArray());
         }

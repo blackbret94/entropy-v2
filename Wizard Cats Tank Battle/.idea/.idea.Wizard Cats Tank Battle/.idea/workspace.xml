@@ -6,19 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="2d0b1129-1c08-4810-a5a8-04b901ecd844" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Wizard Cats Tank Battle/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Wizard Cats Tank Battle/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/GameDataSet.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/GameDataSet.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scenes/MainMenu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scenes/MainMenu.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/PhotonExtensions/RoomOptionsFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/PhotonExtensions/RoomOptionsFactory.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PowerupController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PowerupController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/ScriptableObject/GameDataSet.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/ScriptableObject/GameDataSet.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/UI/MapSelection/MapDefinitionDictionary.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/UI/MapSelection/MapDefinitionDictionary.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/UI/MatchBrowser/MatchBrowserPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/UI/MatchBrowser/MatchBrowserPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/UI/MatchCreation/MatchCreationPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/UI/MatchCreation/MatchCreationPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/FusionHelpers/Launcher/FusionLauncher.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/FusionHelpers/Launcher/FusionLauncher.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Resources/PlayerCharacter.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Resources/PlayerCharacter.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameState/SpawnController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameState/SpawnController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameState/TeamController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameState/TeamController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Network/PlayerConnectionHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Network/PlayerConnectionHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/CombatController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/CombatController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerTeam.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerTeam.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/StatusEffects/StatusEffectNetwork.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/StatusEffects/StatusEffectNetwork.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/FusionHelpers/Pooling/ObjectPool.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/FusionHelpers/Pooling/ObjectPool.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/NetworkManagerCustom.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/NetworkManagerCustom.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/ObjectSpawner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/ObjectSpawner.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/PoolManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/PoolManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -354,7 +351,10 @@
       <workItem from="1739396690399" duration="9154000" />
       <workItem from="1739438167139" duration="4183000" />
       <workItem from="1739907028318" duration="49790000" />
-      <workItem from="1740498559384" duration="18115000" />
+      <workItem from="1740498559384" duration="29829000" />
+      <workItem from="1741060465034" duration="6128000" />
+      <workItem from="1741187967363" duration="11161000" />
+      <workItem from="1741212737517" duration="11603000" />
     </task>
     <task id="LOCAL-00001" summary="Cleaned up files that are not being used">
       <option name="closed" value="true" />
@@ -516,7 +516,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740032717952</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Added back map selection, improved matchmaking, fixed spawning errors.">
+      <option name="closed" value="true" />
+      <created>1740619456852</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1740619456853</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -573,7 +581,8 @@
     <MESSAGE value="Created new StatusEffectNetwork" />
     <MESSAGE value="Re-wrote status effects for new networking system." />
     <MESSAGE value="Fixed bugs, eliminated errors when exiting game" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed bugs, eliminated errors when exiting game" />
+    <MESSAGE value="Added back map selection, improved matchmaking, fixed spawning errors." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added back map selection, improved matchmaking, fixed spawning errors." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

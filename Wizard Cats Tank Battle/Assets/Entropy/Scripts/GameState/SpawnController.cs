@@ -77,6 +77,9 @@ namespace Vashta.Entropy.GameState
         
         public bool PlayerCanRespawnFreely(PlayerController player)
         {
+            if (player.RespawnIsFreeFromJointime())
+                return true;
+            
             TeamDefinition playerTeamDefinition = player.GetTeamDefinition();
 
             // Check all potential team colliders

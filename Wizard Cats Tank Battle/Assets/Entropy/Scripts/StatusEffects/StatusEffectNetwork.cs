@@ -75,8 +75,21 @@ namespace Vashta.Entropy.StatusEffects
 
         public PlayerController OriginPlayer()
         {
-            NetworkManagerCustom networkManagerCustom = NetworkManagerCustom.GetInstance();
-            return networkManagerCustom.GetPlayerGameObject(_player);
+            GameManager gameManager = GameManager.GetInstance();
+            if (!gameManager)
+            {
+                Debug.LogError("Missing reference to GameManager");
+                return null;
+            }
+            
+            PlayerController localPlayer = gameManager.localPlayerController;
+            if (!localPlayer)
+            {
+                Debug.LogError("Missing reference to local player!");
+                return null;
+            }
+            
+            return localPlayer.GetPlayerGameObject(_player);
         }
 
         public void SetExpiration()

@@ -293,7 +293,7 @@ namespace Entropy.Scripts.Player
                     return;
                 }
             }
-            else
+            else if(!_playerController.RespawnIsFreeFromJointime())
             {
                 // Killed by environment
                 _gameManager.TeamController.RemoveScore(ScoreType.Kill, _playerController.TeamIndex);

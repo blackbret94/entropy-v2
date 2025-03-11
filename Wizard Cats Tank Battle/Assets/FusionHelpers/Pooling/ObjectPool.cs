@@ -30,7 +30,7 @@ namespace FusionHelpers
 
 			if (newt == null)
 			{
-				Debug.Log($"Creating new instance for prefab {prefab}");
+				// Debug.Log($"Creating new instance for prefab {prefab}");
 				newt = Instantiate(prefab, pos, rot, parent);
 				_poolsByInstance[newt] = pool;
 			}

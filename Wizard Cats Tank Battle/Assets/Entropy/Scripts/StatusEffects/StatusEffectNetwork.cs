@@ -15,16 +15,16 @@ namespace Vashta.Entropy.StatusEffects
         private float _timeCreated;
         private NetworkBool _isValid;
 
-        public StatusEffectNetwork(ushort sessionId, PlayerRef player)
+        public StatusEffectNetwork(ushort sessionId, PlayerRef player, float time)
         {
             _sessionId = sessionId;
             _player = player;
             _expiration = 0;
             _forceExpire = false;
-            _timeCreated = Time.time;
+            _timeCreated = time;
             _isValid = true;
 
-            SetExpiration();
+            SetExpiration(time);
         }
         
         public void Reset()
@@ -53,19 +53,9 @@ namespace Vashta.Entropy.StatusEffects
             return new StatusEffectView(this);
         }
         
-        public float GetAge()
-        {
-            return Time.time - _timeCreated;
-        }
-        
         public void ForceExpire()
         {
             _forceExpire = true;
-        }
-
-        public bool GetForceExpire()
-        {
-            return _forceExpire;
         }
 
         public bool IsValid()
@@ -92,9 +82,9 @@ namespace Vashta.Entropy.StatusEffects
             return localPlayer.GetPlayerGameObject(_player);
         }
 
-        public void SetExpiration()
+        public void SetExpiration(float time)
         {
-            _expiration = Time.time + StatusEffectData().TTL;
+            _expiration = time + StatusEffectData().TTL;
         }
         
         public float ExpirationTime()
@@ -109,8 +99,10 @@ namespace Vashta.Entropy.StatusEffects
             
             if (StatusEffectData().TTL < 0) 
                 return false;
+
+            float time = GameManager.GetInstance().Runner.SimulationTime;
             
-            return Time.time > _expiration;
+            return time > _expiration;
         }
 
         public float GetTimeLeft()
@@ -121,7 +113,9 @@ namespace Vashta.Entropy.StatusEffects
             if (StatusEffectData().TTL < 0)
                 return 100f;
             
-            return _expiration - Time.time;
+            float time = GameManager.GetInstance().Runner.SimulationTime;
+            
+            return _expiration - time;
         }
 
         public float GetTTL()
@@ -131,7 +125,8 @@ namespace Vashta.Entropy.StatusEffects
 
         public float TimeSinceCast()
         {
-            return Time.time - _timeCreated;
+            float time = GameManager.GetInstance().Runner.SimulationTime;
+            return time - _timeCreated;
         }
         
         public ushort SessionId()

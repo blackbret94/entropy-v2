@@ -169,7 +169,7 @@ namespace Vashta.Entropy.StatusEffects
             ushort statusEffectSessionId = statusEffectData.SessionId;
             
             // Could eventually optimize this so new structs are not created if it is already in the dictionary.
-            StatusEffectNetwork statusEffect = new StatusEffectNetwork(statusEffectSessionId, owner.PlayerId);
+            StatusEffectNetwork statusEffect = new StatusEffectNetwork(statusEffectSessionId, owner.PlayerId, Runner.SimulationTime);
             
             // Check if status effect already exists
             StatusEffectNetwork existingEffect = StatusEffectAlreadyExists(statusEffectSessionId);
@@ -233,7 +233,7 @@ namespace Vashta.Entropy.StatusEffects
             else
             {
                 // If it exists, update TTL
-                existingEffect.SetExpiration();
+                existingEffect.SetExpiration(Runner.SimulationTime);
                 _statusEffects.Set(statusEffectSessionId, existingEffect);
                 // existingEffect.SetFresh(true);
             }
@@ -254,11 +254,19 @@ namespace Vashta.Entropy.StatusEffects
         public void OnStatusEffectsChange()
         {
             _dirtyFlag = true;
+            //
+            // string effects = default;
+            // foreach (KeyValuePair<ushort,StatusEffectNetwork> statusEffect in _statusEffects)
+            // {
+            //     effects += statusEffect.Value.Title() + " ";
+            // }
+            //
+            // Debug.Log(effects);
         }
-
-        public override void Render()
+        
+        public override void FixedUpdateNetwork()
         {
-            if(Time.time + _refreshRateS >= _lastRefresh)
+            if(Runner.SimulationTime + _refreshRateS >= _lastRefresh)
                 CheckLifeOfStatusEffects();
             
             if(_dirtyFlag)
@@ -278,7 +286,7 @@ namespace Vashta.Entropy.StatusEffects
                 // Makes sure that this is NOT a buffsLastForever effect, as that would be preserved forever
                 if (_buffsLastForeverCached && !statusEffectNetwork.BuffsLastForever())
                 {
-                    statusEffects[statusEffect.Key].SetExpiration();
+                    statusEffects[statusEffect.Key].SetExpiration(Runner.SimulationTime);
                 }
                 
                 if (statusEffectNetwork.HasExpired())
@@ -287,7 +295,7 @@ namespace Vashta.Entropy.StatusEffects
                 }
             }
             
-            _lastRefresh = Time.time;
+            _lastRefresh = Runner.SimulationTime;
         }
         
         public void RemoveStatusEffect(ushort statusEffectId)

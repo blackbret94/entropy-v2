@@ -199,9 +199,9 @@ namespace TanksMP
             agent.SetDestination(result);
         }
 
-        protected override void Update()
+        public override void Render()
         {
-            base.Update();
+            base.Render();
 
             if (Time.time >= _lastUpdateTime + _slowUpdateRate)
             {

@@ -154,7 +154,7 @@ namespace Vashta.Entropy.Player
             NetworkManagerCustom = NetworkManagerCustom.GetInstance();
             
             // Join time
-            _lastSecondUpdate = Time.time + .1f;
+            _lastSecondUpdate = Runner.SimulationTime + .1f;
 
             if (HasStateAuthority)
             {
@@ -242,8 +242,11 @@ namespace Vashta.Entropy.Player
         {
             return Runner.SimulationTime - JoinTime < 10f;
         }
-        
-        public override void InitNetworkState() {}
+
+        public override void InitNetworkState()
+        {
+            
+        }
 
         public override void Render()
         {
@@ -266,6 +269,20 @@ namespace Vashta.Entropy.Player
                 // // Debug.Log("Setting turret rotation: " + lerpedRotation);
                 turret.rotation = Quaternion.Euler(0, turretRotation, 0);
             }
+            
+            // Delayed update
+            // if (Runner.SimulationTime >= _lastSecondUpdate + _secondUpdateTime)
+            // {
+            //     LateInit();
+            //
+            //     // StatusEffectController.StatusEffectTick();
+            //     _lastSecondUpdate = Runner.SimulationTime;
+            // }
+
+            // if (Health <= 0 && IsAlive)
+            // {
+            //     HandleKilled(null);
+            // }
         }
 
         public void SetHealth(int health)
@@ -316,21 +333,6 @@ namespace Vashta.Entropy.Player
             PlayerList.Remove(this);
             base.Despawned(runner, hasState);
         }
-        
-        protected virtual void Update()
-        {
-            // if(HasInputAuthority)
-                // Debug.Log("Position: " + transform.position);
-            
-            // Delayed update
-            if (Time.time >= _lastSecondUpdate + _secondUpdateTime)
-            {
-                LateInit();
-
-                StatusEffectController.StatusEffectTick();
-                _lastSecondUpdate = Time.time;
-            }
-        }
 
         private void LateInit()
         {
@@ -346,6 +348,16 @@ namespace Vashta.Entropy.Player
         public override void FixedUpdateNetwork()
         {
             UpdateMass();
+            
+            // Delayed update
+            if (Runner.SimulationTime >= _lastSecondUpdate + _secondUpdateTime)
+            {
+                LateInit();
+            
+                StatusEffectController.StatusEffectTick();
+                Debug.Log("Status effect tick");
+                _lastSecondUpdate = Runner.SimulationTime;
+            }
             
             if (NetworkInputController.fetchInput)
             {
@@ -438,7 +450,6 @@ namespace Vashta.Entropy.Player
         // this method handles all of the game controller logic.  This method handles ONLY the player's response to dying.
         public void HandleKilled(PlayerController killedByPlayerController, string deathFxId = null)
         {
-            ResetPlayerState();
             DropCollectibles();
             
             // Increment deaths if outside of the base or killed by another player
@@ -512,6 +523,8 @@ namespace Vashta.Entropy.Player
         
         public void HandleRespawned()
         {
+            ResetPlayerState();
+            
             GameManager.TeamController.OnePassPlayerCheckToChangeTeams(this, false);
             IsAlive = true;
             gameObject.SetActive(true);

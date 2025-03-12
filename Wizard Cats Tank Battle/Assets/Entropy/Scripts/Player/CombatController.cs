@@ -59,23 +59,6 @@ namespace Entropy.Scripts.Player
             _shotPos = _playerController.shotPos;
             _turret = _playerController.turret;
         }
-
-        public override void Spawned()
-        {
-            // Projectiles = new SparseCollection<ProjectileState, Projectile>(State.projectileStates, ProjectilePrefab);
-        }
-
-        public override void Render()
-        {
-            // if (TryGetStateChanges(out var from, out var to))
-            // {
-            //     // OnFireTickChanged(); // Not sure what this does? Reloads?
-            // }
-            // else
-            //     TryGetStateSnapshots(out from, out _, out _, out _, out _);
-            //
-            // Projectiles.Render(this, from.projectileStates);
-        }
         
         public int CalculateDamageTaken(Projectile projectile, out bool attackerIsCounter, out bool attackerIsSame)
         {
@@ -133,7 +116,7 @@ namespace Entropy.Scripts.Player
 
                     //send current client position and turret rotation along to sync the shot position
                     //also we are sending it as a short array (only x,z - skip y) to save additional bandwidth
-                    short[] pos = new short[] { (short)(_shotPos.position.x * 10), (short)(_shotPos.position.z * 10) };
+                    // short[] pos = new short[] { (short)(_shotPos.position.x * 10), (short)(_shotPos.position.z * 10) };
                     //send shot request with origin to server
                     // Debug.Log(turretRotation);
                     RPC_Shoot(_playerController.turretRotation);

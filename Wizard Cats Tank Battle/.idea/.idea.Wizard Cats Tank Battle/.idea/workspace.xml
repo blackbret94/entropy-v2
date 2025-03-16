@@ -6,11 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="2d0b1129-1c08-4810-a5a8-04b901ecd844" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Wizard Cats Tank Battle/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Wizard Cats Tank Battle/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/CombatController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/CombatController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Character/PlayerStatusEffectVisualizer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Character/PlayerStatusEffectVisualizer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Character/StatusEffectVisualizerSlot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Character/StatusEffectVisualizerSlot.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/StatusEffects/StatusEffectController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/StatusEffects/StatusEffectController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/StatusEffects/StatusEffectNetwork.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/StatusEffects/StatusEffectNetwork.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/PlayerControllerBot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/PlayerControllerBot.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -42,6 +41,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/d819e76d2dac496782e863b6fab6eea3bcc00/84/d0362aab/NetworkDictionary`2.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/d819e76d2dac496782e863b6fab6eea3bcc00/8b/a83152b8/NetworkBool.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/d819e76d2dac496782e863b6fab6eea3bcc00/8f/4c085580/NetworkRunner.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/d819e76d2dac496782e863b6fab6eea3bcc00/a4/1984ceaf/GameMode.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/d819e76d2dac496782e863b6fab6eea3bcc00/d4/bc2e549b/StartGameArgs.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/d819e76d2dac496782e863b6fab6eea3bcc00/da/6831c04a/NetworkArray`1.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/d819e76d2dac496782e863b6fab6eea3bcc00/f1/75cc1725/PlayerRef.cs" root0="FORCE_HIGHLIGHTING" />
@@ -51,11 +51,9 @@
     <setting file="file://$PROJECT_DIR$/Assets/Entropy/Scripts/CBSIntegration/ProfileState.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerViewController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Entropy/Scripts/SceneNavigation/AddressableSceneManager.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/emoma/Documents/GitHub/entropy-v2/Wizard Cats Tank Battle/Assets/Entropy/Scripts/StatusEffects/StatusEffectController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Entropy/Scripts/StatusEffects/StatusEffectView.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Entropy/Scripts/UI/WardrobeItemUI.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Photon/Fusion/Editor/Fusion.Unity.Editor.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/emoma/Documents/GitHub/entropy-v2/Wizard Cats Tank Battle/Assets/TanksMultiplayer/Scripts/NetworkManagerCustom.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/_VrGamesDev/DDuA/Scripts/VRG_DDuA.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@24b10291b18f/Runtime/UGUI/UI/Core/Button.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
@@ -351,7 +349,9 @@
       <workItem from="1741187967363" duration="11161000" />
       <workItem from="1741212737517" duration="11603000" />
       <workItem from="1741634005129" duration="5509000" />
-      <workItem from="1741726049967" duration="8283000" />
+      <workItem from="1741726049967" duration="23797000" />
+      <workItem from="1742092585195" duration="6006000" />
+      <workItem from="1742159657998" duration="7651000" />
     </task>
     <task id="LOCAL-00001" summary="Cleaned up files that are not being used">
       <option name="closed" value="true" />
@@ -529,7 +529,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741721348318</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="Fixed issues related to damage sync">
+      <option name="closed" value="true" />
+      <created>1741753231971</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1741753231971</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -588,7 +596,8 @@
     <MESSAGE value="Fixed bugs, eliminated errors when exiting game" />
     <MESSAGE value="Added back map selection, improved matchmaking, fixed spawning errors." />
     <MESSAGE value="Fixed sync issues" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed sync issues" />
+    <MESSAGE value="Fixed issues related to damage sync" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed issues related to damage sync" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

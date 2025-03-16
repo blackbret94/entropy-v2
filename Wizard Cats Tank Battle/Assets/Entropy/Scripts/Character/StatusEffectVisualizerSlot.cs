@@ -9,16 +9,32 @@ namespace Vashta.Entropy.Character
     public class StatusEffectVisualizerSlot : MonoBehaviour
     {
         public Slot slot;
-        private Dictionary<string, GameObject> _activeEffects = new Dictionary<string, GameObject>();
+        private Dictionary<ushort, GameObject> _activeEffects = new Dictionary<ushort, GameObject>();
 
-        public void AddEffect(VisualEffectData effectData)
+        public List<ushort> GetEffectIds()
+        {
+            List<ushort> effectIds = new List<ushort>();
+
+            foreach (KeyValuePair<ushort,GameObject> valuePair in _activeEffects)
+            {
+                if (valuePair.Value != null)
+                {
+                    effectIds.Add(valuePair.Key);
+                    Debug.Log("Added key: " + valuePair.Key);
+                }
+            }
+
+            return effectIds;
+        }
+
+        public void AddEffect(ushort sessionId, VisualEffectData effectData)
         {
             ParticleSystem thisParticleSystem;
             
-            if (_activeEffects.ContainsKey(effectData.Id) && _activeEffects[effectData.Id] != null)
+            if (_activeEffects.ContainsKey(sessionId) && _activeEffects[sessionId] != null)
             {
                 // Refresh
-                thisParticleSystem = _activeEffects[effectData.Id].GetComponent<ParticleSystem>();
+                thisParticleSystem = _activeEffects[sessionId].GetComponent<ParticleSystem>();
                 
                 if (thisParticleSystem != null)
                 {
@@ -31,7 +47,7 @@ namespace Vashta.Entropy.Character
                 effectGo.transform.parent = transform;
                 effectGo.transform.localPosition = Vector3.zero;
                 effectGo.transform.localScale = new Vector3(1,1,1);
-                _activeEffects.Add(effectData.Id, effectGo);
+                _activeEffects.Add(sessionId, effectGo);
                 
                 thisParticleSystem = effectGo.GetComponent<ParticleSystem>();
 
@@ -52,18 +68,20 @@ namespace Vashta.Entropy.Character
             
         }
 
-        public void RemoveEffect(VisualEffectData effectData)
+        public void RemoveEffect(ushort sessionId)
         {
-            if (_activeEffects.ContainsKey(effectData.Id) && _activeEffects[effectData.Id] != null)
+            if (_activeEffects.ContainsKey(sessionId))
             {
                 try
                 {
-                    PoolManager.Despawn(_activeEffects[effectData.Id]);
+                    if (_activeEffects[sessionId] != null)
+                    {
+                        PoolManager.Despawn(_activeEffects[sessionId]);
+                    }
                 }
                 catch (NullReferenceException e) { }
                 
-                _activeEffects.Remove(effectData.Id);
-
+                _activeEffects.Remove(sessionId);
             }
         }
 

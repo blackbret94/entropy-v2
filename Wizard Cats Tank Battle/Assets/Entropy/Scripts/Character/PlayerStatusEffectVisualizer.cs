@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -47,6 +46,19 @@ namespace Vashta.Entropy.Character
             }
         }
 
+        public List<ushort> GetActiveVisualizations()
+        {
+            List<ushort> activeVisualizationIds = new List<ushort>();
+            
+            // iterate over slots
+            foreach (StatusEffectVisualizerSlot slot in slots)
+            {
+                activeVisualizationIds.AddRange(slot.GetEffectIds());
+            }
+
+            return activeVisualizationIds;
+        }
+
         private void Spawn()
         {
             Instantiate(SpeedBoostVisualizer.EffectPrefab, SpeedBoostVisualizer.EffectRoot.transform);
@@ -63,12 +75,30 @@ namespace Vashta.Entropy.Character
             SpikeDamageVisualizer.Toggle(enable);
         }
 
-        public void Refresh(SortedSet<ushort> indexedIds)
+        public void Refresh(SortedSet<ushort> activeEffectIds)
         {
-            SpeedBoostVisualizer.Toggle(indexedIds);
-            RapidFireVisualizer.Toggle(indexedIds);
-            ReflectionVisualizer.Toggle(indexedIds);
-            SpikeDamageVisualizer.Toggle(indexedIds);
+            SpeedBoostVisualizer.Toggle(activeEffectIds);
+            RapidFireVisualizer.Toggle(activeEffectIds);
+            ReflectionVisualizer.Toggle(activeEffectIds);
+            SpikeDamageVisualizer.Toggle(activeEffectIds);
+            
+            List<ushort> visualIds = GetActiveVisualizations();
+            
+            // string debug = "Active effect IDs: ";
+            // foreach (ushort activeEffectId in activeEffectIds)
+            // {
+            //     debug += activeEffectId + ", ";
+            // }
+            //
+            // Debug.Log(debug);
+            
+            foreach (ushort visualId in visualIds)
+            {
+                if (!activeEffectIds.Contains(visualId))
+                {
+                    RemoveEffect(visualId);
+                }
+            }
         }
 
         public void Clear()
@@ -81,7 +111,7 @@ namespace Vashta.Entropy.Character
             }
         }
         
-        public void AddEffect(VisualEffectData effectData)
+        public void AddEffect(ushort sessionId, VisualEffectData effectData)
         {
             Init();
 
@@ -90,28 +120,15 @@ namespace Vashta.Entropy.Character
 
             if (_visualizerBySlot.ContainsKey(effectData.slot))
             {
-                _visualizerBySlot[effectData.slot].AddEffect(effectData);
-            }
-            else
-            {
-                Debug.Log("No slot for: " + effectData.slot);
+                _visualizerBySlot[effectData.slot].AddEffect(sessionId, effectData);
             }
         }
 
-        public void RemoveEffect(VisualEffectData effectData)
+        public void RemoveEffect(ushort effectSessionId)
         {
-            Init();
-
-            if (effectData == null)
-                return;
-
-            if (_visualizerBySlot.ContainsKey(effectData.slot))
+            foreach (StatusEffectVisualizerSlot slot in slots)
             {
-                _visualizerBySlot[effectData.slot].RemoveEffect(effectData);
-            }
-            else
-            {
-                Debug.Log("No slot for: " + effectData.slot);
+                slot.RemoveEffect(effectSessionId);
             }
         }
     }

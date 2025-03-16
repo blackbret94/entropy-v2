@@ -250,6 +250,17 @@ namespace Vashta.Entropy.Player
 
         public override void Render()
         {
+            UpdateMass();
+            
+            // Delayed update
+            if (Runner.SimulationTime >= _lastSecondUpdate + _secondUpdateTime)
+            {
+                LateInit();
+            
+                StatusEffectController.StatusEffectTick();
+                _lastSecondUpdate = Runner.SimulationTime;
+            }
+            
             if (HasInputAuthority)
             {
                 // rotate to cursor position
@@ -347,17 +358,8 @@ namespace Vashta.Entropy.Player
 
         public override void FixedUpdateNetwork()
         {
-            UpdateMass();
-            
-            // Delayed update
-            if (Runner.SimulationTime >= _lastSecondUpdate + _secondUpdateTime)
-            {
-                LateInit();
-            
-                StatusEffectController.StatusEffectTick();
-                Debug.Log("Status effect tick");
-                _lastSecondUpdate = Runner.SimulationTime;
-            }
+            // Debug.Log(Runner.Mode);
+            // Debug.Log("Running FixedUpdateNetwork for player " + PlayerIndex);
             
             if (NetworkInputController.fetchInput)
             {

@@ -21,7 +21,6 @@ namespace Vashta.Entropy.StatusEffects
 
         [Networked, Capacity(10), OnChangedRender(nameof(OnStatusEffectsChange))] 
         private NetworkDictionary<ushort, StatusEffectNetwork> _statusEffects => default;
-        private SortedSet<ushort> _indexedIds = new();
         private bool _dirtyFlag;
         
         private const float _refreshRateS = .5f;
@@ -191,7 +190,7 @@ namespace Vashta.Entropy.StatusEffects
                 ClearDebuffs();
             
             // Apply fx
-            _visualizer.AddEffect(statusEffect.ApplyFxData());
+            _visualizer.AddEffect(statusEffectData.SessionId, statusEffect.ApplyFxData());
 
             // Alert if local player
             if (_playerController.IsLocal && !existingEffect.IsValid())
@@ -227,7 +226,6 @@ namespace Vashta.Entropy.StatusEffects
             {
                 // If it doesn't exist, add it
                 _statusEffects.Add(statusEffectSessionId, statusEffect);
-                _indexedIds.Add(statusEffectSessionId);
                 _dirtyFlag = true;
             }
             else
@@ -245,7 +243,6 @@ namespace Vashta.Entropy.StatusEffects
         public void ClearStatusEffects()
         {
             _statusEffects.Clear();
-            _indexedIds.Clear();
             _dirtyFlag = true;
             StatusEffectPanel.ResetSlots();
             _visualizer.Clear();
@@ -253,6 +250,8 @@ namespace Vashta.Entropy.StatusEffects
 
         public void OnStatusEffectsChange()
         {
+            
+            
             _dirtyFlag = true;
             //
             // string effects = default;
@@ -264,7 +263,10 @@ namespace Vashta.Entropy.StatusEffects
             // Debug.Log(effects);
         }
         
-        public override void FixedUpdateNetwork()
+        
+        public override void FixedUpdateNetwork(){}
+        
+        public override void Render()
         {
             if(Runner.SimulationTime + _refreshRateS >= _lastRefresh)
                 CheckLifeOfStatusEffects();
@@ -324,8 +326,7 @@ namespace Vashta.Entropy.StatusEffects
             
             statusEffect.ForceExpire();
             _statusEffects.Remove(sessionId);
-            _indexedIds.Remove(sessionId);
-            _visualizer.RemoveEffect(statusEffect.ApplyFxData());
+            _visualizer.RemoveEffect(sessionId);
             _dirtyFlag = true;
         }
 
@@ -428,7 +429,15 @@ namespace Vashta.Entropy.StatusEffects
                 _projectileLifeExtendedCached += statusEffect.ProjectileLifeExtension();
             }
 
-            _visualizer.Refresh(_indexedIds);
+            // Get indecies
+            SortedSet<ushort> indexedIds = new SortedSet<ushort>();
+            foreach (KeyValuePair<ushort,StatusEffectNetwork> keyValuePair in _statusEffects)
+            {
+                indexedIds.Add(keyValuePair.Key);
+            }
+
+            _visualizer.Refresh(indexedIds);
+
             _dirtyFlag = false;
         }
 

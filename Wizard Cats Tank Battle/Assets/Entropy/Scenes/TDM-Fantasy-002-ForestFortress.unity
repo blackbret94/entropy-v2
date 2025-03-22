@@ -7248,12 +7248,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7107ec45aac37b44c9394c4e4d0cc5d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _IsSpawned:
+    _value: 0
   prefabList:
   - {fileID: 5815488680999885027, guid: 0488019a6a5a6b74e801238667821c87, type: 3}
   respawn: 1
   respawnTime: 30
   obj: {fileID: 0}
   colType: 0
+  _nextSpawn: 0
+  _lastInflatedObjectIndex: 0
+  _nextInflatedObjectIndex: 0
 --- !u!1001 &1111631543
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14254,6 +14259,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 137415512431350458, guid: e4a53bbfdd13b6545a92577342c00d64,
+        type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 1919
       objectReference: {fileID: 0}
     - target: {fileID: 137415512518353587, guid: e4a53bbfdd13b6545a92577342c00d64,
         type: 3}

@@ -233,7 +233,7 @@ namespace Vashta.Entropy.GameState
                 //find a position within the box collider range, first set fixed y position
                 //the counter determines how often we are calculating a new position if out of range
                 pos.y = col.transform.position.y;
-                int counter = 10;
+                int counter = 30;
                 
                 //try to get random position within collider bounds
                 //if it's not within bounds, do another iteration

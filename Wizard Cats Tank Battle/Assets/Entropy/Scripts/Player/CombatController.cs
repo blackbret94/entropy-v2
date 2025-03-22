@@ -192,10 +192,11 @@ namespace Entropy.Scripts.Player
                     health = 1;
                 }
             }
-            
+
             if (health <= 0)
                 // killed the player
-                _playerController.CombatController.KillPlayer(other, deathFxId);
+                KillPlayer(other, deathFxId);
+                // RPCKillPlayer(other.PlayerId, deathFxId);
             else
             {
                 //we didn't die, set health to new value
@@ -210,6 +211,11 @@ namespace Entropy.Scripts.Player
         /// </summary>
         public void TakeDamage(Projectile projectile)
         {
+            if (projectile == null)
+            {
+                Debug.LogError("Attempted to take damage from a null projectile");
+            }
+            
             // ignore damage to team mates
             if (_playerController.TeamIndex == projectile.owner.GetComponent<PlayerController>().TeamIndex)
                 return;
@@ -235,7 +241,7 @@ namespace Entropy.Scripts.Player
             
             if (health <= 0)
                 //bullet killed the player
-                _playerController.CombatController.KillPlayer(
+                KillPlayer(
                     projectile.owner.GetComponent<PlayerController>(), 
                     projectile.DeathFx.Id);
             else
@@ -244,6 +250,12 @@ namespace Entropy.Scripts.Player
                 _playerController.SetHealth(health);
                 _playerController.PlayerViewController.ShowDamageText(damage, attackerIsCounter, attackerIsSame);
             }
+        }
+
+        [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.All)]
+        public void RPCKillPlayer()
+        {
+            KillPlayer(null);
         }
         
         public void KillPlayer(PlayerController other, string deathFxId = null)
@@ -283,7 +295,7 @@ namespace Entropy.Scripts.Player
             }
             
             // The game is not over
-            _playerController.HandleKilled(other, null);
+            _playerController.HandleKilled(other, deathFxId);
         }
     }
 }

@@ -207,7 +207,7 @@ namespace Vashta.Entropy.Player
                 Vector3 startPos = GameManager.TeamController.GetSpawnPosition(TeamIndex);
                 transform.position = startPos;
 
-                StartCoroutine(SetTeamPositionCR(.15f));
+                StartCoroutine(SetTeamPositionCR(.5f));
                 
                 // Set class
                 ClassDefinition classDefinition = defaultClassDefinition ? defaultClassDefinition : classDirectory.RandomClass();
@@ -233,7 +233,13 @@ namespace Vashta.Entropy.Player
         private IEnumerator SetTeamPositionCR(float delay)
         {
             yield return new WaitForSeconds(delay);
-            transform.position = GameManager.TeamController.GetSpawnPosition(TeamIndex);
+            
+            Vector3 currentPos = transform.position;
+            if (Mathf.Abs(currentPos.x) < 10 && Mathf.Abs(currentPos.z) < 10)
+            {
+                transform.position = GameManager.TeamController.GetSpawnPosition(TeamIndex);
+                Debug.Log("Setting position for team: " + TeamIndex + " to position: " + transform.position);
+            }
         }
 
         // Allows the player to freely respawn for 10 seconds after they joined the game.
@@ -308,11 +314,11 @@ namespace Vashta.Entropy.Player
             PlayerViewController.SetOvershield(Shield, maxShield);
             
             // check for death
-            if (Health <= 0 && IsAlive)
-            {
-                Debug.Log("Player should be dead but they are not");
-                HandleKilled(null);
-            }
+            // if (Health <= 0 && IsAlive)
+            // {
+                // Debug.Log("Player should be dead but they are not");
+                // HandleKilled(null);
+            // }
         }
 
         public void SetMaxHealth()
@@ -637,7 +643,7 @@ namespace Vashta.Entropy.Player
 
             if (respawnPlayer && !GameManager.SpawnController.PlayerCanRespawnFreely(this))
             {
-                CombatController.KillPlayer(null);
+                CombatController.RPCKillPlayer();
             }
         }
         

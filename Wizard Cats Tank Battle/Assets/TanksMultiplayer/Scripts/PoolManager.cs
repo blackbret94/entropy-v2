@@ -96,9 +96,17 @@ namespace TanksMP
         {
             if (instance == null)
                 return;
+
+            Pool pool = GetPool(instance);
+
+            if (pool == null)
+            {
+                Debug.LogWarning("Could not find pool for " + instance.name);
+                return;
+            }
             
-            if(time > 0) GetPool(instance).Despawn(instance, time);
-            else GetPool(instance).Despawn(instance);
+            if(time > 0) pool.Despawn(instance, time);
+            else pool.Despawn(instance);
         }
 
 
@@ -116,7 +124,7 @@ namespace TanksMP
             }
             
             //the instance could not be found in a Pool
-            Debug.LogError("PoolManager couldn't find Pool for instance: " + instance.name);
+            Debug.LogWarning("PoolManager couldn't find Pool for instance: " + instance.name);
             return null;
         }
 
@@ -129,7 +137,7 @@ namespace TanksMP
             //debug error if Pool wasn't already added before
             if (!Pools.ContainsKey(prefab))
             {
-                Debug.LogError("PoolManager couldn't find Pool for prefab to deactivate: " + prefab.name);
+                Debug.LogWarning("PoolManager couldn't find Pool for prefab to deactivate: " + prefab.name);
                 return;
             }
 

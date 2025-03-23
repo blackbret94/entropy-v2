@@ -22,7 +22,7 @@ namespace Vashta.Entropy.TanksExtensions
 
             if (StatusEffectData != null)
             {
-                int statusEffectSessionId = StatusEffectDirectory.GetSessionId(StatusEffectData);
+                ushort statusEffectSessionId = StatusEffectDirectory.GetSessionId(StatusEffectData);
 
                 if (statusEffectSessionId <= 0)
                 {

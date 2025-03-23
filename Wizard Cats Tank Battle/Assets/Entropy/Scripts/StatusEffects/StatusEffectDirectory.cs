@@ -34,11 +34,6 @@ namespace Vashta.Entropy.StatusEffects
             }
         }
 
-        /// <summary>
-        /// Use this accessor to get the desired clip from other classes
-        /// audioDirectory["shoot"]
-        /// </summary>
-        /// <param name="key"></param>
         public StatusEffectData this[string key]
         {
             get
@@ -48,17 +43,17 @@ namespace Vashta.Entropy.StatusEffects
             }
         }
 
-        public StatusEffectData GetBySessionId(int key)
+        public StatusEffectData GetBySessionId(ushort key)
         {
             CreateDictionaryIfDoesNotExist();
             return _dictionarySession.TryGetValue(key, out var value) ? value : null;
         }
 
-        public int GetSessionId(StatusEffectData data)
+        public ushort GetSessionId(StatusEffectData data)
         {
             CreateDictionaryIfDoesNotExist();
             
-            return _dictionary.TryGetValue(data.Id, out var value) ? value.SessionId : 0;
+            return _dictionary.TryGetValue(data.Id, out var value) ? value.SessionId : (ushort)0;
         }
     }
 }

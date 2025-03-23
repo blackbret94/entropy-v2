@@ -9,7 +9,7 @@ namespace Vashta.Entropy.Player
     {
         public StatusEffectDirectory StatusEffectDirectory;
         
-        public int PowerupId { get; protected set; }
+        public ushort PowerupId { get; protected set; }
         
         [Header("Cached references")] 
         private PlayerController _playerController;
@@ -28,7 +28,7 @@ namespace Vashta.Entropy.Player
             _hasInit = true;
         }
 
-        public void SetPowerupId(int powerupId)
+        public void SetPowerupId(ushort powerupId)
         {
             PowerupId = powerupId;
         }
@@ -52,7 +52,7 @@ namespace Vashta.Entropy.Player
         /// </summary>
         /// <param name="powerupId"></param>
         [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.All)]
-        private void RPC_CastPowerup(int powerupId)
+        private void RPC_CastPowerup(ushort powerupId)
         {
             if (powerupId < 1)
             {

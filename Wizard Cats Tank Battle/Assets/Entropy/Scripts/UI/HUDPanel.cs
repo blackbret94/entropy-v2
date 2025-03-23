@@ -30,7 +30,7 @@ namespace Vashta.Entropy.UI
             // ClosePanel();
         }
         
-        public void ShowPowerupIcon(int powerupSessionId)
+        public void ShowPowerupIcon(ushort powerupSessionId)
         {
             StatusEffectData statusEffectData = StatusEffectDirectory.GetBySessionId(powerupSessionId);
 

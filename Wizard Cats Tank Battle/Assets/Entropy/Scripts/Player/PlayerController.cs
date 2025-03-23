@@ -674,7 +674,7 @@ namespace Vashta.Entropy.Player
         /// Shows, or updates, the powerup icon in the bottom-right corner
         /// </summary>
         /// <param name="powerupSessionId"></param>
-        public void ShowPowerupIcon(int powerupSessionId)
+        public void ShowPowerupIcon(ushort powerupSessionId)
         {
             if (!HasInputAuthority)
                 return;

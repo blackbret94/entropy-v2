@@ -205,7 +205,7 @@ namespace Vashta.Entropy.Player
             {
                 // Set position
                 Vector3 startPos = GameManager.TeamController.GetSpawnPosition(TeamIndex);
-                transform.position = startPos;
+                rb.MovePosition(startPos);
 
                 StartCoroutine(SetTeamPositionCR(.5f));
                 
@@ -235,9 +235,21 @@ namespace Vashta.Entropy.Player
             yield return new WaitForSeconds(delay);
             
             Vector3 currentPos = transform.position;
-            if (Mathf.Abs(currentPos.x) < 10 && Mathf.Abs(currentPos.z) < 10)
+            Vector3 spawnPosition = Vector3.zero;
+						
+            GameManager gameManager = GameManager.GetInstance();
+            if (gameManager != null)
             {
-                transform.position = GameManager.TeamController.GetSpawnPosition(TeamIndex);
+                if(gameManager.InitialSpawnPos != null)
+                    spawnPosition = gameManager.InitialSpawnPos.transform.position;
+            }
+            
+            float xx = Mathf.Abs(spawnPosition.x-currentPos.x);
+            float zz = Mathf.Abs(spawnPosition.z-currentPos.z);
+            
+            if (xx < 10 && zz < 10)
+            {
+                rb.MovePosition(GameManager.TeamController.GetSpawnPosition(TeamIndex));
                 Debug.Log("Setting position for team: " + TeamIndex + " to position: " + transform.position);
             }
         }
@@ -513,7 +525,7 @@ namespace Vashta.Entropy.Player
             {
                 CameraController.FollowKiller(killedBy);
                 GameManager.SpawnController.DisplayDeath();
-                transform.position = GameManager.TeamController.GetSpawnPosition(TeamIndex);
+                rb.MovePosition(GameManager.TeamController.GetSpawnPosition(TeamIndex));
             }
         }
 
@@ -540,7 +552,7 @@ namespace Vashta.Entropy.Player
             // Move player to spawn
             if (HasInputAuthority)
             {
-                transform.position = GameManager.TeamController.GetSpawnPosition(TeamIndex);
+                rb.MovePosition(transform.position = GameManager.TeamController.GetSpawnPosition(TeamIndex));
             }
 
             // apply class
@@ -621,7 +633,7 @@ namespace Vashta.Entropy.Player
             if (HasInputAuthority)
             {
                 CameraController.FollowPlayer(turret);
-                transform.position = GameManager.TeamController.GetSpawnPosition(TeamIndex);
+                rb.MovePosition(transform.position = GameManager.TeamController.GetSpawnPosition(TeamIndex));
             }
 
             //reset forces modified by input

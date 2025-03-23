@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Fusion;
+using TanksMP;
 using UnityEngine;
 
 namespace FusionHelpers
@@ -48,8 +49,17 @@ namespace FusionHelpers
 				{
 					if (!_players.TryGetValue(refByIndex.Value, out _))
 					{
+						Vector3 spawnPosition = Vector3.zero;
+						
+						GameManager gameManager = GameManager.GetInstance();
+						if (gameManager != null)
+						{
+							if(gameManager.InitialSpawnPos != null)
+								spawnPosition = gameManager.InitialSpawnPos.transform.position;
+						}
+						
 						Debug.Log($"I am State Auth for Player Index {refByIndex.Key} - Spawning Avatar");
-						Runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, refByIndex.Value, (runner, o) =>
+						Runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, refByIndex.Value, (runner, o) =>
 						{
 							Runner.SetPlayerObject(refByIndex.Value, o);
 							FusionPlayer player = o.GetComponent<FusionPlayer>();

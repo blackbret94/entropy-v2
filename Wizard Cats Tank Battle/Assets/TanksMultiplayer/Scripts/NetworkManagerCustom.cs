@@ -305,7 +305,7 @@ namespace TanksMP
 
             //add ourselves to the game. This is only called for the master client
             //because other clients will trigger the OnPhotonPlayerConnected callback directly
-            StartCoroutine(WaitForSceneChange());
+            // StartCoroutine(WaitForSceneChange());
         }
 
         public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)

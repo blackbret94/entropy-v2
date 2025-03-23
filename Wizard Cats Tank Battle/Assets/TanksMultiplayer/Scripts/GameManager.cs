@@ -9,15 +9,10 @@ using Fusion;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Vashta.Entropy.GameMode;
-using Vashta.Entropy.PhotonExtensions;
 using Vashta.Entropy.GameState;
 using Vashta.Entropy.Player;
-using Vashta.Entropy.Scoreboard;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.UI.MapSelection;
-#if UNITY_ADS
-using UnityEngine.Advertisements;
-#endif
 
 namespace TanksMP
 {
@@ -48,6 +43,7 @@ namespace TanksMP
         public MusicController MusicController;
         public PlayerInputController PlayerInputController;
         public SfxController SfxController;
+        public GameObject InitialSpawnPos;
         public TeamController TeamController { get; private set; }
         public GameOverController GameOverController { get; private set; }
         public SpawnController SpawnController { get; private set; }
@@ -79,12 +75,6 @@ namespace TanksMP
             MatchTimer = GetComponent<MatchTimer>();
 
             TeamController.maxScore = GameModeDefinition.ScoreToWin;
-
-
-            //if Unity Ads is enabled, hook up its result callback
-#if UNITY_ADS
-                UnityAdsManager.adResultEvent += HandleAdResult;
-#endif
         }
 
         /// <summary>
@@ -101,37 +91,6 @@ namespace TanksMP
                 return true;
 
             return TeamController.MaxScoreIsReached();
-        }
-        
-        //implements what to do when an ad view completes
-        #if UNITY_ADS
-        void HandleAdResult(ShowResult result)
-        {
-            switch (result)
-            {
-                //in case the player successfully watched an ad,
-                //it sends a request for it be respawned
-                case ShowResult.Finished:
-                case ShowResult.Skipped:
-                    localPlayer.CmdRespawn();
-                    break;
-                
-                //in case the ad can't be shown, just handle it
-                //like we wouldn't have tried showing a video ad
-                //with the regular death countdown (force ad skip)
-                case ShowResult.Failed:
-                    DisplayDeath(true);
-                    break;
-            }
-        }
-        #endif
-        
-        //clean up callbacks on scene switches
-        void OnDestroy()
-        {
-            #if UNITY_ADS
-                UnityAdsManager.adResultEvent -= HandleAdResult;
-            #endif
         }
     }
 }

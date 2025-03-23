@@ -94,24 +94,41 @@ namespace FusionHelpers
 
 		private int GetSceneIndex(StartGameArgs startGameArgs)
 		{
+			MapDefinitionDictionary mapDefinitionDictionary = GameDataSet.Get().MapDefinitionDictionary;
+			MapDefinition mapDefinition;
+			
 			if (startGameArgs.SessionProperties.TryGetValue(RoomKeys.mapKey, out var sceneName))
 			{
 				Debug.Log("Map Scene Name: " + sceneName);
-
-				if (sceneName == "random")
-					return -1;
 				
-				MapDefinitionDictionary mapDefinitionDictionary = GameDataSet.Get().MapDefinitionDictionary;
-				MapDefinition mapDefinition = mapDefinitionDictionary.GetByName(sceneName);
-
-				if (mapDefinition != null)
+				if (sceneName == "random")
 				{
-					Debug.Log("Scene Index: " + mapDefinition.SceneIndex());
-					return mapDefinition.SceneIndex();
+					// Get random map
+					mapDefinition = mapDefinitionDictionary.GetRandom();
+				}
+				else
+				{
+					// Get specific map
+					mapDefinition = mapDefinitionDictionary.GetByName(sceneName);
 				}
 			}
-
-			return -1;
+			else
+			{
+				// Get random map
+				mapDefinition = mapDefinitionDictionary.GetRandom();
+			}
+			
+			if (mapDefinition != null)
+			{
+				// Get map index
+				Debug.Log("Scene Index: " + mapDefinition.SceneIndex());
+				return mapDefinition.SceneIndex();
+			}
+			else
+			{
+				Debug.LogError("Failed to get random map!");
+				return -1;
+			}
 		}
 
 		public void SetConnectionStatus(NetworkRunner runner, ConnectionStatus status, string message)

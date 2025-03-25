@@ -353,7 +353,7 @@ namespace TanksMP
 
         //the actual respawn routine
         // Need to update this, right now it's not called anywhere
-        IEnumerator RespawnCR(PlayerController killedByPlayerController, string deathFxId)
+        IEnumerator RespawnCR(PlayerController killedByPlayerController, ushort deathFxId)
         {   
             //stop AI updates
             IsAlive = false;

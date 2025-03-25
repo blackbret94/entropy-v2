@@ -115,21 +115,21 @@ namespace Entropy.Scripts.Player
                 _playerAnimator.Heal();
         }
         
-        public void SpawnDeathFx(string killingBlowDeathFx)
+        public void SpawnDeathFx(ushort killingBlowDeathFx)
         {
-            string deathFx = "";
-            
-            if(killingBlowDeathFx != "")
-                deathFx = killingBlowDeathFx;
-                
-            if (deathFx == "")
-                deathFx = _statusEffectController.GetDeathFx();
+            VisualEffectData deathFxData;
+            if (killingBlowDeathFx == 0)
+                deathFxData = VisualEffectDirectory.GetBySessionId(_statusEffectController.GetDeathFx());
+            else
+                deathFxData = VisualEffectDirectory.GetBySessionId(killingBlowDeathFx);
 
-            if (deathFx != null)
+            if (!deathFxData)
             {
-                VisualEffectData deathFxData = VisualEffectDirectory[deathFx];
-                PoolManager.Spawn(deathFxData.VisualEffectPrefab, transform.position, transform.rotation);
+                Debug.LogError("Could not load death fx with ID: " + killingBlowDeathFx);
+                deathFxData = _playerController.GetClass().DefaultDeathEffects();
             }
+            
+            PoolManager.Spawn(deathFxData.VisualEffectPrefab, transform.position, transform.rotation);
         }
         
         public void ColorizePlayerForTeam(TeamInstance teamInstance = null)

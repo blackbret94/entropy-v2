@@ -50,28 +50,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cd273be5de0c024da7ef86707f5d826, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletId: 6
-  baseSpeed: 16
+  projectileId: 6
   _damageRaw: 3
   despawnDelay: 0.75
   bounce: 0
   maxTargetsBase: 1
   explosionRangeBase: 0.75
-  HitSfx: {fileID: 11400000, guid: 0e71addc8f774d44697c6a2b53a8e8b0, type: 2}
-  CastSfx: {fileID: 11400000, guid: 9ac7591d381453a4bbd7d4cbba034b3f, type: 2}
-  BounceSfx: {fileID: 11400000, guid: 123be4e74c4b3ba4c9b55eb474764eed, type: 2}
-  hitFX: {fileID: 1000010321467122, guid: d10c7e9a7840ca844b7c5fa1b7d014c6, type: 3}
-  explosionFX: {fileID: 1000010321467122, guid: 8fe0310324507c248b6bdceb48a42c28,
-    type: 3}
-  explosionFxLarge: {fileID: 1000010321467122, guid: b2b62567097cc4947a4450c09180c4bb,
-    type: 3}
-  deathFxData: {fileID: 11400000, guid: def80e943cc9dd4429491728e4130838, type: 2}
   bounceInf: 0
   StatusEffectOnEnemy: {fileID: 11400000, guid: 80b2625781cf4e2459fcacb5603e4fba,
     type: 2}
   StatusEffectOnEnemyChance: 0.5
   StatusEffectOnAlly: {fileID: 11400000, guid: b39d5c661c8391f43bc6f2ea73240d1a, type: 2}
   StatusEffectOnAllyChance: 1
+  ProjectileData: {fileID: 11400000, guid: d0a76fc417c89c34e9f98aa9317d5c0b, type: 2}
+  classDirectory: {fileID: 11400000, guid: 7d8bbf25c3319e2428b905b7f07fbe8b, type: 2}
   owner: {fileID: 0}
   canBuff: 1
   canDebuff: 1
@@ -102,6 +94,7 @@ MeshRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -226,6 +219,7 @@ SpriteRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

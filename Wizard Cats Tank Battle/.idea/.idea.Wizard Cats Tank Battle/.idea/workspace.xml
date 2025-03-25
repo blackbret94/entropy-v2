@@ -4,12 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2d0b1129-1c08-4810-a5a8-04b901ecd844" name="Changes" comment="Fixed bugs for joining random rooms">
+    <list default="true" id="2d0b1129-1c08-4810-a5a8-04b901ecd844" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerDeathStruct.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerDeathStruct.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Wizard Cats Tank Battle/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Wizard Cats Tank Battle/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PowerupController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PowerupController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/ScriptableObject/VisualEffectDirectory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/ScriptableObject/VisualEffectDirectory.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/StatusEffects/StatusEffectDirectory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/StatusEffects/StatusEffectDirectory.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/TanksExtensions/PowerupBuff.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/TanksExtensions/PowerupBuff.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/ClassDefinition.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/ClassDefinition.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/CombatController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/CombatController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerTeam.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerTeam.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerViewController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerViewController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Spells/SpellData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Spells/SpellData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/StatusEffects/StatusEffectController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/StatusEffects/StatusEffectController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/PlayerControllerBot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/PlayerControllerBot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +61,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/Entropy/Scripts/StatusEffects/StatusEffectView.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Entropy/Scripts/UI/WardrobeItemUI.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Photon/Fusion/Editor/Fusion.Unity.Editor.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/NetworkManagerCustom.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/_VrGamesDev/DDuA/Scripts/VRG_DDuA.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@24b10291b18f/Runtime/UGUI/UI/Core/Button.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
@@ -353,7 +362,8 @@
       <workItem from="1742159657998" duration="13280000" />
       <workItem from="1742281088427" duration="756000" />
       <workItem from="1742621081659" duration="6144000" />
-      <workItem from="1742766061688" duration="4010000" />
+      <workItem from="1742766061688" duration="8865000" />
+      <workItem from="1742798687080" duration="15931000" />
     </task>
     <task id="LOCAL-00001" summary="Cleaned up files that are not being used">
       <option name="closed" value="true" />
@@ -571,7 +581,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742769164213</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="Replaced int references with ushort for status effect sessionIds">
+      <option name="closed" value="true" />
+      <created>1742770198587</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1742770198587</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -609,7 +627,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="First set of Fusion updates" />
     <MESSAGE value="Fixed all compilation errors in code" />
     <MESSAGE value="Fusion compiles" />
     <MESSAGE value="Worked through character appearance bugs" />
@@ -634,7 +651,8 @@
     <MESSAGE value="Fixed several major network bugs" />
     <MESSAGE value="Fixed multiplayer bugs" />
     <MESSAGE value="Fixed bugs for joining random rooms" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed bugs for joining random rooms" />
+    <MESSAGE value="Replaced int references with ushort for status effect sessionIds" />
+    <option name="LAST_COMMIT_MESSAGE" value="Replaced int references with ushort for status effect sessionIds" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

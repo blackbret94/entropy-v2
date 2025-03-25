@@ -170,7 +170,7 @@ namespace Entropy.Scripts.Player
         /// Server only: calculate damage to be taken by the Player,
         /// triggers score increase and respawn workflow on death.
         /// </summary>
-        public void TakeDamage(int damage, PlayerController other, bool canKill = true, string deathFxId = "")
+        public void TakeDamage(int damage, PlayerController other, bool canKill = true, ushort deathFxId = 0)
         {
             int health = _playerController.Health;
             int shield = _playerController.Shield;
@@ -196,7 +196,6 @@ namespace Entropy.Scripts.Player
             if (health <= 0)
                 // killed the player
                 KillPlayer(other, deathFxId);
-                // RPCKillPlayer(other.PlayerId, deathFxId);
             else
             {
                 //we didn't die, set health to new value
@@ -243,7 +242,7 @@ namespace Entropy.Scripts.Player
                 //bullet killed the player
                 KillPlayer(
                     projectile.owner.GetComponent<PlayerController>(), 
-                    projectile.DeathFx.Id);
+                    projectile.DeathFx.SessionId);
             else
             {
                 //we didn't die, set health to new value
@@ -251,17 +250,27 @@ namespace Entropy.Scripts.Player
                 _playerController.PlayerViewController.ShowDamageText(damage, attackerIsCounter, attackerIsSame);
             }
         }
-
+        
+        // A simple command that ignores the player's health and just kills them.  Useful for respawning on class or team change.
         [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.All)]
-        public void RPCKillPlayer()
+        public void RPCKillPlayerForRespawn()
         {
+            _playerController.SetHealth(0);
+            _playerController.SetShield(0);
             KillPlayer(null);
         }
         
-        public void KillPlayer(PlayerController other, string deathFxId = null)
+        // The main Kill Player method
+        public void KillPlayer(PlayerController other, ushort deathFxId = 0)
         {
             //the game is already over so don't do anything
             if(_gameManager.IsGameOver()) return;
+
+            if (HasInputAuthority)
+            {
+                // Create death struct here
+                _playerController.PlayerDeathStruct = new PlayerDeathStruct(other.PlayerId, deathFxId, Runner.SimulationTime);
+            }
 
             _gameManager.TeamController.OnePassPlayerCheckToChangeTeams(_playerController, false);
             
@@ -295,7 +304,7 @@ namespace Entropy.Scripts.Player
             }
             
             // The game is not over
-            _playerController.HandleKilled(other, deathFxId);
+            _playerController.PlayerDeath(other, deathFxId);
         }
     }
 }

@@ -48,6 +48,8 @@ namespace Vashta.Entropy.Player
 
         public int maxHealth { get; set; }
         public bool IsAlive { get; set; } = true; // This replaced another variable called "isAlive" - need to make sure they weren't competing
+        [Networked, OnChangedRender(nameof(OnPlayerDeathChanged))]
+        public PlayerDeathStruct PlayerDeathStruct { get; set; }
 
         // Shield
         [Networked, OnChangedRender(nameof(OnShieldChanged))]
@@ -217,7 +219,7 @@ namespace Vashta.Entropy.Player
             {
                 // If the player is already dead when we join, reflect this
                 // Might not be the best way to handle this
-                HandleKilled(null);
+                PlayerDeath(null);
             }
             
             ClassController.ApplyClass(handicapModifier);
@@ -316,8 +318,11 @@ namespace Vashta.Entropy.Player
 
         public void SetHealth(int health)
         {
-            Health = Mathf.Clamp(health, 0, maxHealth);
-            OnHealthChanged();
+            if (HasInputAuthority)
+            {
+                Health = Mathf.Clamp(health, 0, maxHealth);
+                OnHealthChanged();
+            }
         }
 
         public void OnHealthChanged()
@@ -361,6 +366,16 @@ namespace Vashta.Entropy.Player
             GameManager.ui.GameLogPanel.EventPlayerLeft(PlayerName);
             PlayerList.Remove(this);
             base.Despawned(runner, hasState);
+        }
+
+        public void OnPlayerDeathChanged()
+        {
+            if (IsAlive && Health <= 0 && PlayerDeathStruct.timeOfDeath - Runner.SimulationTime < 1f)
+            {
+                // Handle death
+                PlayerController otherPlayer = GetPlayerGameObject(PlayerDeathStruct.killedByPlayer);
+                CombatController.KillPlayer(otherPlayer, PlayerDeathStruct.visualEffectId);
+            }
         }
 
         private void LateInit()
@@ -453,22 +468,11 @@ namespace Vashta.Entropy.Player
             if(healAmount < 0 || health < maxHealth)
                 PlayerViewController.ShowDamageText(-healAmount, false, false);
         }
-        
-        // public virtual void Respawn(PlayerController killedByPlayerController, string deathFxId = null)
-        // {
-        //     if (IsAlive)
-        //     {
-        //         CombatController.KillPlayer(killedByPlayerController, deathFxId);
-        //     }
-        //     else
-        //     {
-        //         HandleRespawned();
-        //     }
-        // }
 
-        // This should ONLY be called from CombatController.  CombatController.KillPlayer() should be used instead as
+        // This should ONLY be called from CombatController and in the initial death check.  CombatController.KillPlayer()
+        // should be used instead as
         // this method handles all of the game controller logic.  This method handles ONLY the player's response to dying.
-        public void HandleKilled(PlayerController killedByPlayerController, string deathFxId = null)
+        public void PlayerDeath(PlayerController killedByPlayerController, ushort deathFxId = 0)
         {
             DropCollectibles();
             
@@ -533,12 +537,6 @@ namespace Vashta.Entropy.Player
         public void RPC_Respawn()
         {
             HandleRespawned();
-        }
-
-        [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.All)]
-        public void RPC_Kill()
-        {
-            CombatController.KillPlayer(null);
         }
         
         public void HandleRespawned()
@@ -655,7 +653,7 @@ namespace Vashta.Entropy.Player
 
             if (respawnPlayer && !GameManager.SpawnController.PlayerCanRespawnFreely(this))
             {
-                CombatController.RPCKillPlayer();
+                CombatController.RPCKillPlayerForRespawn();
             }
         }
         

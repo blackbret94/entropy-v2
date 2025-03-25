@@ -60,6 +60,11 @@ namespace Entropy.Scripts.Player
             Init();
         }
 
+        public VisualEffectData DefaultDeathEffects()
+        {
+            return ProjectileData.deathFxData;
+        }
+
         private void Init()
         {
             if (counterClassIdList != null)

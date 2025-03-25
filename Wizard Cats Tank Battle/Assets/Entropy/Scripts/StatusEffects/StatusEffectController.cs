@@ -133,7 +133,7 @@ namespace Vashta.Entropy.StatusEffects
 
             if (health <= 0)
             {
-                string deathFx = GetDeathFx();
+                ushort deathFx = GetDeathFx();
                 
                 // killed the player
                 _playerController.CombatController.KillPlayer(LastDotAppliedBy, deathFx);
@@ -486,7 +486,7 @@ namespace Vashta.Entropy.StatusEffects
         /// Iterate over all status effects, get death fx
         /// </summary>
         /// <returns></returns>
-        public string GetDeathFx()
+        public ushort GetDeathFx()
         {
             foreach (KeyValuePair<ushort, StatusEffectNetwork> statusEffectKVP in _statusEffects)
             {
@@ -494,11 +494,11 @@ namespace Vashta.Entropy.StatusEffects
                 
                 if (statusEffect.DeathFxData())
                 {
-                    return statusEffect.DeathFxData().Id;
+                    return statusEffect.DeathFxData().SessionId;
                 }
             }
 
-            return "";
+            return 0;
         }
 
         public void Leech()

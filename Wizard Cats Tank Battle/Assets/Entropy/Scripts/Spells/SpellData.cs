@@ -96,7 +96,7 @@ namespace Vashta.Entropy.Spells
             }
             
             // Apply effects to enemies
-            string deathFxId = enemyDeathEffectData ? enemyDeathEffectData.Id : "";
+            ushort deathFxId = enemyDeathEffectData ? enemyDeathEffectData.SessionId : (ushort)0;
             foreach (PlayerController player in enemiesList)
             {
                 player.CombatController.TakeDamage(DamageEnemiesOnCast, caster, true, deathFxId);

@@ -354,7 +354,7 @@ namespace TanksMP
 
             //respawn and continue with pathfinding
             targetPoint = GameManager.GetInstance().TeamController.GetSpawnPosition(TeamIndex);
-            rb.MovePosition(targetPoint);
+            rb.position = targetPoint;
             agent.Warp(targetPoint);
             agent.isStopped = false;
             IsAlive = true;

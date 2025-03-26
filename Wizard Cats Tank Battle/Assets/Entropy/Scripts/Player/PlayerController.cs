@@ -206,7 +206,7 @@ namespace Vashta.Entropy.Player
             {
                 // Set position
                 Vector3 startPos = GameManager.TeamController.GetSpawnPosition(TeamIndex);
-                rb.MovePosition(startPos);
+                rb.position = startPos;
 
                 // Not sure if this is still needed
                 // StartCoroutine(SetTeamPositionCR(.5f));
@@ -364,7 +364,7 @@ namespace Vashta.Entropy.Player
 
         public void OnPlayerDeathChanged()
         {
-            if (IsAlive && Health <= 0 && PlayerDeathStruct.timeOfDeath - Runner.SimulationTime < 1f)
+            if (IsAlive && Health <= 0 && PlayerDeathStruct.timeOfDeath - Runner.SimulationTime < 1f && !HasStateAuthority)
             {
                 // Handle death
                 PlayerController otherPlayer = GetPlayerGameObject(PlayerDeathStruct.killedByPlayer);
@@ -522,10 +522,10 @@ namespace Vashta.Entropy.Player
                 GameManager.SpawnController.DisplayDeath(this);
             }
 
-            if (HasStateAuthority)
+            if (HasInputAuthority || (isBot && HasStateAuthority))
             {
+                rb.position = GameManager.TeamController.GetSpawnPosition(TeamIndex);
                 GameManager.SpawnController.StartSpawnRoutine(this);
-                rb.MovePosition(GameManager.TeamController.GetSpawnPosition(TeamIndex));
             }
         }
 
@@ -544,9 +544,9 @@ namespace Vashta.Entropy.Player
             gameObject.SetActive(true);
                 
             // Move player to spawn
-            if (HasStateAuthority)
+            if (HasInputAuthority || (isBot && HasStateAuthority))
             {
-                rb.MovePosition(transform.position = GameManager.TeamController.GetSpawnPosition(TeamIndex));
+                rb.position = GameManager.TeamController.GetSpawnPosition(TeamIndex);
             }
 
             // apply class
@@ -563,9 +563,6 @@ namespace Vashta.Entropy.Player
             // Show ultimates button
             if(HasInputAuthority)
                 GameManager.ui.HUD.PlayerRespawned();
-            
-
-            IsAlive = true;
                 
             // Apply status effect
             if (StatusEffectApplyOnSpawn)
@@ -629,17 +626,20 @@ namespace Vashta.Entropy.Player
                 CameraController.FollowPlayer(turret);
             }
 
-            if (HasStateAuthority)
+            if (HasInputAuthority || (isBot && HasStateAuthority))
             {
-                rb.MovePosition(transform.position = GameManager.TeamController.GetSpawnPosition(TeamIndex));
+                rb.position = GameManager.TeamController.GetSpawnPosition(TeamIndex);
             }
 
             //reset forces modified by input
             MovementController.ResetTransform();
             
             //reset input left over
-            GameManager.ui.controls[0].OnEndDrag(null);
-            GameManager.ui.controls[1].OnEndDrag(null);
+            if (HasInputAuthority)
+            {
+                GameManager.ui.controls[0].OnEndDrag(null);
+                GameManager.ui.controls[1].OnEndDrag(null);
+            }
         }
         
         // handles full logic for changing class.  ClassController.ApplyClass just handles class-specific changes.

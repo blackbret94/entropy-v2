@@ -108,7 +108,6 @@ namespace Vashta.Entropy.GameState
             {
                 if (playerTeamDefinition && team.teamDefinition.TeamId == playerTeamDefinition.TeamId)
                 {
-
                     Collider col = team.freeClassChangeArea.GetComponent<Collider>();
 
                     if (col == null)

@@ -87,7 +87,7 @@ namespace Entropy.Scripts.Player
             }
         }
 
-        [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.All)]
+        [Rpc(sources: RpcSources.StateAuthority, targets: RpcTargets.All)]
         public void RPC_CastUltimate()
         {
             ClassDefinition playerClass = _playerController.GetClass();

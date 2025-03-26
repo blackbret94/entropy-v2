@@ -10,7 +10,7 @@ namespace Vashta.Entropy.Player
     {
         [Networked, OnChangedRender(nameof(OnTeamIdChanged))] 
         public int TeamIndex { get; set; }
-        [Networked, OnChangedRender(nameof(OnTeamIdChanged))]
+        [Networked]
         public int PreferredTeamIndex { get; set; }
 
         public TeamController TeamController { get; private set; }
@@ -45,7 +45,7 @@ namespace Vashta.Entropy.Player
         public void Setup()
         {
             Init();
-            if (HasInputAuthority)
+            if (HasStateAuthority)
             {
                 // Local, choose initial team
                 TeamController.ChooseInitialTeamForPlayer(PlayerController);

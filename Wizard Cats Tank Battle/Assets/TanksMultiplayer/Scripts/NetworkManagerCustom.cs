@@ -173,13 +173,17 @@ namespace TanksMP
         /// <returns></returns>
         private IEnumerator Disconnect()
         {
-            Runner.Shutdown();
-            
-            while (Runner.IsRunning)
+            if (Runner)
             {
-                yield return null;
+                if (Runner.IsRunning)
+                    Runner.Shutdown();
+
+                while (Runner.IsRunning)
+                {
+                    yield return null;
+                }
+                // PhotonNetwork.OfflineMode = true;
             }
-            // PhotonNetwork.OfflineMode = true;
         }
 
         public void Reconnect()
@@ -353,19 +357,20 @@ namespace TanksMP
         public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
         {
             // TODO: This is dated, a room should be created automatically if all else failed
-            Debug.Log("Photon did not find any matches on the Master Client we are connected to. Creating our own room...");
+            Debug.LogError("Failed to connect to room!");
+            // Debug.Log("Photon did not find any matches on the Master Client we are connected to. Creating our own room...");
 
-            //joining failed so try to create our own room
-            string mapId = PlayerPrefs.GetString(PrefsKeys.selectedMap, "-1");
-            MapDefinition mapDefinition = MapDefinitionDictionary[mapId];
-
-            string roomName = _roomOptionsFactory.CreateRoomNameFromPlayerNickname(LocalPlayerInfo.Name);
-            byte maxPlayersForMap = (byte)mapDefinition.PlayerCount;
-            string mapName = mapDefinition.Title;
-            GameMode gameMode = (GameMode)PlayerPrefs.GetInt(PrefsKeys.gameMode, (int)GameMode.TDM);
-
-            StartGameArgs startGameArgs = _roomOptionsFactory.CreateRoomOptions(roomName, mapName, maxPlayersForMap, gameMode);
-            Runner.StartGame(startGameArgs);
+            // //joining failed so try to create our own room
+            // string mapId = PlayerPrefs.GetString(PrefsKeys.selectedMap, "-1");
+            // MapDefinition mapDefinition = MapDefinitionDictionary[mapId];
+            //
+            // string roomName = _roomOptionsFactory.CreateRoomNameFromPlayerNickname(LocalPlayerInfo.Name);
+            // byte maxPlayersForMap = (byte)mapDefinition.PlayerCount;
+            // string mapName = mapDefinition.Title;
+            // GameMode gameMode = (GameMode)PlayerPrefs.GetInt(PrefsKeys.gameMode, (int)GameMode.TDM);
+            //
+            // StartGameArgs startGameArgs = _roomOptionsFactory.CreateRoomOptions(roomName, mapName, maxPlayersForMap, gameMode);
+            // Runner.StartGame(startGameArgs);
         }
 
         public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message)

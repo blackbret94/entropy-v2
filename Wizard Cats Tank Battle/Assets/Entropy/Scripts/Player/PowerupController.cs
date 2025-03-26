@@ -51,7 +51,7 @@ namespace Vashta.Entropy.Player
         /// Passes powerupId as a parameter, only the user has to know their powerup.
         /// </summary>
         /// <param name="powerupId"></param>
-        [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.All)]
+        [Rpc(sources: RpcSources.StateAuthority, targets: RpcTargets.All)]
         private void RPC_CastPowerup(ushort powerupId)
         {
             if (powerupId < 1)

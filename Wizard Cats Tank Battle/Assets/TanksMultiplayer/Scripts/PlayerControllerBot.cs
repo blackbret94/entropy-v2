@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Vashta.Entropy.Player;
 using Vashta.Entropy.UI;
+using Vashta.Entropy.Util;
 using Vashta.Entropy.World;
 
 namespace TanksMP
@@ -19,23 +20,8 @@ namespace TanksMP
     /// </summary>
 	public class PlayerControllerBot : PlayerController
     {
-        //custom properties per PhotonPlayer do not work in offline mode
-        //(actually they do, but for objects spawned by the master client,
-        //PhotonPlayer is always the local master client. This means that
-        //setting custom player properties would apply to all objects)
         [HideInInspector] public string myName;
         [HideInInspector] public int teamIndex;
-        // [HideInInspector] public int health;
-        // [HideInInspector] public int shield;
-        // [HideInInspector] public int ammo;
-        // [HideInInspector] public int currentBullet;
-        // [HideInInspector] public int kills;
-        // [HideInInspector] public int deaths;
-        // [HideInInspector] public float joinTime;
-        // [HideInInspector] public int classId;
-        // [HideInInspector] public int classIdQueued;
-        // [HideInInspector] public int ultimate;
-        // [HideInInspector] public int powerup;
         
         /// <summary>
         /// Radius in units for detecting other players.
@@ -66,31 +52,29 @@ namespace TanksMP
         private float nextShot;
 
         private float _slowUpdateRate = .5f;
+        private float _pathfindingRate = 1f;
         private float _lastUpdateTime;
+        private Timer _timerSlowUpdate;
+        private Timer _timerPathfinding;
 
-
+        private void Awake()
+        {
+            isBot = true;
+            defaultClassDefinition = classDirectory.RandomClass();
+        }
+        
         //called before SyncVar updates
         public override void Spawned()
         {
-            // TODO: This needs to inherit from base, but might conflict with Player
+            base.Spawned();
+            _timerSlowUpdate = new Timer(_slowUpdateRate);
+            _timerPathfinding = new Timer(_pathfindingRate);
             
-            ClassDefinition classDefinition = defaultClassDefinition ? defaultClassDefinition : classDirectory.RandomClass();
-
-            _lastSecondUpdate = Time.time + .1f;
-            JoinTime = -Time.time;
-            ClassController.SetClassId(classDefinition.classId);
-            
-            ClassController.ApplyClass(handicapModifier);
-            
-            if (GameManager.TeamController.UsesTeams)
-            {
-                PlayerViewController.ColorizePlayerForTeam();
-                GameManager.ui.GameLogPanel.EventPlayerChangedTeam(PlayerName, GetTeamDefinition());
-            }
-            
-            isBot = true;
-            _playerCurrencyRewarder = new PlayerCurrencyRewarder();
-            GameManager = GameManager.GetInstance();
+            // if (GameManager.TeamController.UsesTeams)
+            // {
+                // PlayerViewController.ColorizePlayerForTeam();
+                // GameManager.ui.GameLogPanel.EventPlayerChangedTeam(PlayerName, GetTeamDefinition());
+            // }
    
             agent = GetComponent<NavMeshAgent>();
             agent.speed = moveSpeed;
@@ -100,71 +84,49 @@ namespace TanksMP
             agent.Warp(targetPoint);
 
             TeamInstance teamInstance = GameManager.GetInstance().TeamController.teams[TeamIndex];
-            CharacterAppearance.teamInstance = teamInstance;
-            CharacterAppearance.ColorizeCart();
+            // CharacterAppearance.teamInstance = teamInstance;
+            // CharacterAppearance.ColorizeCart();
             
-            myName = CatNameGenerator.GetRandomName();
+            PlayerName = CatNameGenerator.GetRandomName();
             PlayerViewController.SetName(myName);
             
-            PlayerViewController.SetTeam(teamInstance.teamDefinition);
+            // PlayerViewController.SetTeam(teamInstance.teamDefinition);
             
-            GameManager.ui.GameLogPanel.EventPlayerJoined(PlayerName);
-            rb = GetComponent<Rigidbody>();
+            // GameManager.ui.GameLogPanel.EventPlayerJoined(PlayerName);
             
             //call hooks manually to update
             
             // add to player bot list
             GameManager.GetInstance().BotController.AddBot(this);
 
-            PlayerViewController.RefreshHealthSlider();
-            
-            //start enemy detection routine
-            StartCoroutine(DetectPlayers());
-
-            _slowUpdateRate += Random.Range(0f, .25f);
-            
-            // Apply status effect
-            if (StatusEffectApplyOnSpawn)
-            {
-                StatusEffectController.AddStatusEffect(StatusEffectApplyOnSpawn.Id, this);
-            }
+            _timerPathfinding.Run();
+            _timerSlowUpdate.Run();
         }
         
-        
         //sets inRange list for player detection
-        IEnumerator DetectPlayers()
+        private void DetectPlayers()
         {
-            //wait for initialization
-            yield return new WaitForEndOfFrame();
-            
-            //detection logic
-            while(true)
-            {
-                //empty list on each iteration
-                _enemiesInRange.Clear();
-                _alliesInRange.Clear();
+            //empty list on each iteration
+            _enemiesInRange.Clear();
+            _alliesInRange.Clear();
 
-                //casts a sphere to detect other player objects within the sphere radius
-                Collider[] cols = Physics.OverlapSphere(transform.position, range, LayerMask.GetMask("Player"));
-                //loop over players found within bot radius
-                for (int i = 0; i < cols.Length; i++)
-                {
-                    //get other Player component
-                    PlayerController p = cols[i].gameObject.GetComponent<PlayerController>();
-                    
-                    // Add enemies to the list
-                    if(p.TeamIndex != TeamIndex && !_enemiesInRange.Contains(cols[i].gameObject))
-                    {
-                        _enemiesInRange.Add(cols[i].gameObject);   
-                    // Add allies to the list
-                    } else if (p.TeamIndex == TeamIndex && p != this)
-                    {
-                        _alliesInRange.Add(cols[i].gameObject);
-                    }
-                }
+            //casts a sphere to detect other player objects within the sphere radius
+            Collider[] cols = Physics.OverlapSphere(transform.position, range, LayerMask.GetMask("Player"));
+            //loop over players found within bot radius
+            for (int i = 0; i < cols.Length; i++)
+            {
+                //get other Player component
+                PlayerController p = cols[i].gameObject.GetComponent<PlayerController>();
                 
-                //wait a second before doing the next range check
-                yield return new WaitForSeconds(1);
+                // Add enemies to the list
+                if(p.TeamIndex != TeamIndex && !_enemiesInRange.Contains(cols[i].gameObject))
+                {
+                    _enemiesInRange.Add(cols[i].gameObject);   
+                // Add allies to the list
+                } else if (p.TeamIndex == TeamIndex && p != this)
+                {
+                    _alliesInRange.Add(cols[i].gameObject);
+                }
             }
         }
         
@@ -203,14 +165,19 @@ namespace TanksMP
         {
             base.Render();
 
-            if (Time.time >= _lastUpdateTime + _slowUpdateRate)
+            if(_timerSlowUpdate.Run())
             {
                 SlowUpdate();
+            }
+
+            if (_timerPathfinding.Run())
+            {
+                DetectPlayers();
             }
         }
 
         // Cast ultimates
-        void SlowUpdate()
+        private void SlowUpdate()
         {
             //empty list on each iteration
             _enemiesInRange.Clear();
@@ -244,7 +211,7 @@ namespace TanksMP
             _lastUpdateTime = Time.time;
         }
 
-        void FixedUpdate()
+        public override void FixedUpdateNetwork()
         {
             //don't execute anything if the game is over already,
             //but termine the agent and path finding routines

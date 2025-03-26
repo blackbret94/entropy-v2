@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Fusion;
 using UnityEngine;
 using Vashta.Entropy.ScriptableObject;
+using WebSocketSharp;
 
 namespace Vashta.Entropy.PhotonExtensions
 {
@@ -42,7 +43,7 @@ namespace Vashta.Entropy.PhotonExtensions
             return CreateRoomName(nickName + "'s Room");
         }
         
-        public StartGameArgs CreateRoomOptions(string roomName, string mapName, int maxPlayers, TanksMP.GameMode gameMode, bool isVisible = true)
+        public StartGameArgs CreateRoomOptions(bool isMultiplayer, string roomName, string mapName, int maxPlayers, TanksMP.GameMode gameMode, string password, bool isVisible = true)
         {
             StartGameArgs startGameArgs = new StartGameArgs();
 
@@ -53,7 +54,7 @@ namespace Vashta.Entropy.PhotonExtensions
             
             startGameArgs.PlayerCount = maxPlayers;
             startGameArgs.IsVisible = isVisible;
-            startGameArgs.GameMode = Fusion.GameMode.Shared;
+            startGameArgs.GameMode = isMultiplayer ? Fusion.GameMode.Shared : Fusion.GameMode.Single;
             startGameArgs.SceneManager = NetworkSceneManagerDefault;
             
             // custom properties
@@ -63,6 +64,11 @@ namespace Vashta.Entropy.PhotonExtensions
             if (mapName != "random")
             {
                 customProperties[RoomKeys.mapKey] = mapName;
+            }
+
+            if (!password.IsNullOrEmpty())
+            {
+                customProperties[RoomKeys.password] = password;
             }
             
             startGameArgs.SessionProperties = customProperties;

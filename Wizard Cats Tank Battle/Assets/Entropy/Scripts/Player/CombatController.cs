@@ -134,7 +134,7 @@ namespace Entropy.Scripts.Player
                 nextFire = Time.time + 0.1f;
         }
 
-        [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.All)]
+        [Rpc(sources: RpcSources.StateAuthority, targets: RpcTargets.All)]
         public void RPC_Shoot(short angle)
         {
             // animate
@@ -252,7 +252,7 @@ namespace Entropy.Scripts.Player
         }
         
         // A simple command that ignores the player's health and just kills them.  Useful for respawning on class or team change.
-        [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.All)]
+        [Rpc(sources: RpcSources.StateAuthority, targets: RpcTargets.All)]
         public void RPCKillPlayerForRespawn()
         {
             _playerController.SetHealth(0);
@@ -266,7 +266,7 @@ namespace Entropy.Scripts.Player
             //the game is already over so don't do anything
             if(_gameManager.IsGameOver()) return;
 
-            if (HasInputAuthority)
+            if (HasStateAuthority)
             {
                 // Create death struct here
                 _playerController.PlayerDeathStruct = new PlayerDeathStruct(other.PlayerId, deathFxId, Runner.SimulationTime);

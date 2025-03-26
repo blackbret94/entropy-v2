@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Fusion;
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.PhotonExtensions;
 using Vashta.Entropy.Player;
 
 namespace Vashta.Entropy.GameState
 {
-    public class BotController : SimulationBehaviour
+    public class BotController : NetworkBehaviour
     {
         /// <summary>
         /// Amount of bots to spawn across all teams.
@@ -23,55 +25,50 @@ namespace Vashta.Entropy.GameState
         private List<PlayerControllerBot> _botList;
         private GameManager _gameManager;
 
-        private void Awake()
+        public override void Spawned()
         {
-            //temporarily disable
-            this.enabled = false;
-            
+            base.Spawned();
+            _gameManager = GameManager.GetInstance();
             _botList = new List<PlayerControllerBot>();
             
-            //disabled when not in offline mode
-            if ((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode) != NetworkMode.Offline)
-                this.enabled = false;
+            if(Runner.GameMode == Fusion.GameMode.Single && _gameManager.HasStateAuthority)
+            {
+                StartCoroutine(SpawnBots());
+            }
+            else
+            {
+                // Eventually, this should instead use a "maxBotCount" property
+            }
         }
         
-        IEnumerator Start()
+        private IEnumerator SpawnBots()
         {
-            // Temp disabled
-            if (false)
+            //wait a second for all script to initialize
+            yield return new WaitForSeconds(1);
+
+            //loop over bot count
+            for (int i = 0; i < maxBots; i++)
             {
-                _gameManager = GameManager.GetInstance();
+                //randomly choose bot from array of bot prefabs
+                //spawn bot across the simulated private network
+                NetworkObject obj = Runner.Spawn(prefab, Vector3.zero, Quaternion.identity);
 
-                //wait a second for all script to initialize
-                yield return new WaitForSeconds(1);
+                //let the local host determine the team assignment
+                // PlayerController p = obj.GetComponent<PlayerController>();
+                // int teamIndex = GameManager.GetInstance().TeamController.GetTeamFill();
+                // p.PlayerTeam.SetPlayerPreferredTeam(teamIndex);
+                // p.PlayerTeam.TryChangeTeams(true);
 
-                //loop over bot count
-                for (int i = 0; i < maxBots; i++)
-                {
-                    //randomly choose bot from array of bot prefabs
-                    //spawn bot across the simulated private network
-                    NetworkObject obj = Runner.Spawn(prefab, Vector3.zero, Quaternion.identity);
+                //increase corresponding team size
+                // _gameManager.TeamController.AddPlayerTeamTeam(p, p.TeamIndex);
 
-                    //let the local host determine the team assignment
-                    PlayerController p = obj.GetComponent<PlayerController>();
-                    p.PlayerTeam.TeamIndex = GameManager.GetInstance().TeamController.GetTeamFill();
-
-                    //increase corresponding team size
-                    _gameManager.TeamController.AddPlayerTeamTeam(p, p.TeamIndex);
-
-                    yield return new WaitForSeconds(0.25f);
-                }
+                yield return new WaitForSeconds(0.33f);
             }
         }
         
         public void AddBot(PlayerControllerBot controllerBot)
         {
             _botList.Add(controllerBot);
-        }
-
-        public void ClearBots()
-        {
-            _botList.Clear();
         }
 
         public List<PlayerControllerBot> GetBotList()

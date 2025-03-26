@@ -86,39 +86,21 @@ namespace Vashta.Entropy.UI.MatchCreation
         
         public void CreateMatch()
         {
-            if (_isMultiplayer)
-            {
-                CreateMatchMultiplayer();
-            }
-            else
-            {
-                CreateMatchSingleplayer();
-            }
-        }
-
-        private void CreateMatchMultiplayer()
-        {
             // Get info
             string roomName = GetRoomName();
             // string password = GetPassword();
             int maxPlayers = GetMaxPlayers();
             string mapName = GetMapName();
+            string password = GetPassword();
             TanksMP.GameMode gameMode = GetGameMode();
+            bool isVisible = true;
             
             // format
             roomName = RoomOptionsFactory.CreateRoomName(roomName);
-            StartGameArgs startGameArgs = RoomOptionsFactory.CreateRoomOptions(roomName, mapName, maxPlayers, gameMode);
+            StartGameArgs startGameArgs = RoomOptionsFactory.CreateRoomOptions(_isMultiplayer, roomName, mapName, maxPlayers, gameMode, password, isVisible);
             
             // create room
             UIMain.GetInstance().roomConnectionController.CreateRoom(startGameArgs);
-        }
-
-        private void CreateMatchSingleplayer()
-        {
-            string mapName = GetMapName();
-            TanksMP.GameMode gameMode = GetGameMode();
-            
-            UIMain.GetInstance().roomConnectionController.PlayOffline(mapName, (int)gameMode);
         }
         
         private string GetRoomName()

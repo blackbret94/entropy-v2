@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
  
 namespace MagicArsenal
 {
@@ -22,6 +21,14 @@ namespace MagicArsenal
             }
             else
                 print("No light object found on " + gameObject.name);
+        }
+
+        private void OnEnable()
+        {
+            if (li)
+            {
+                li.intensity = initIntensity;
+            }
         }
  
         // Update is called once per frame

@@ -67,7 +67,7 @@ namespace Vashta.Entropy.Player
         }
 
         // Apply class for everyone
-        [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.All)]
+        [Rpc(sources: RpcSources.StateAuthority, targets: RpcTargets.All)]
         public void RPC_ApplyClass(int classId, float modifier = 1f)
         {
             ClassId = classId;

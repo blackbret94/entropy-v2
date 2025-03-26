@@ -39,7 +39,7 @@ namespace Vashta.Entropy.Player
         public float moveSpeed = 8f;
         public float defaultMass = 1;
         
-        [Networked] public string PlayerName { get; private set; }
+        [Networked] public string PlayerName { get; protected set; }
         public int TeamIndex => PlayerTeam.TeamIndex;
 
         // Health
@@ -203,7 +203,7 @@ namespace Vashta.Entropy.Player
             PlayerTeam.Setup();
             
             // Move player to start position
-            if (HasInputAuthority)
+            if (HasStateAuthority)
             {
                 // Set position
                 Vector3 startPos = GameManager.TeamController.GetSpawnPosition(TeamIndex);
@@ -318,7 +318,7 @@ namespace Vashta.Entropy.Player
 
         public void SetHealth(int health)
         {
-            if (HasInputAuthority)
+            if (HasStateAuthority)
             {
                 Health = Mathf.Clamp(health, 0, maxHealth);
                 OnHealthChanged();
@@ -529,11 +529,15 @@ namespace Vashta.Entropy.Player
             {
                 CameraController.FollowKiller(killedBy);
                 GameManager.SpawnController.DisplayDeath();
+            }
+
+            if (HasStateAuthority)
+            {
                 rb.MovePosition(GameManager.TeamController.GetSpawnPosition(TeamIndex));
             }
         }
 
-        [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.All)]
+        [Rpc(sources: RpcSources.StateAuthority, targets: RpcTargets.All)]
         public void RPC_Respawn()
         {
             HandleRespawned();
@@ -548,7 +552,7 @@ namespace Vashta.Entropy.Player
             gameObject.SetActive(true);
                 
             // Move player to spawn
-            if (HasInputAuthority)
+            if (HasStateAuthority)
             {
                 rb.MovePosition(transform.position = GameManager.TeamController.GetSpawnPosition(TeamIndex));
             }
@@ -591,7 +595,7 @@ namespace Vashta.Entropy.Player
         {
             Kills += 10;
             
-            if (!HasInputAuthority)
+            if (!HasStateAuthority)
                 return;
             
             GameManager.ui.DropCollectiblesButton.gameObject.SetActive(false);
@@ -615,7 +619,7 @@ namespace Vashta.Entropy.Player
         {
             Kills += 10;
             
-            if (!HasInputAuthority)
+            if (!HasStateAuthority)
                 return;
 
             PlayerViewController.RewardCoins(_playerCurrencyRewarder.RewardForPointCapture());
@@ -631,6 +635,10 @@ namespace Vashta.Entropy.Player
             if (HasInputAuthority)
             {
                 CameraController.FollowPlayer(turret);
+            }
+
+            if (HasStateAuthority)
+            {
                 rb.MovePosition(transform.position = GameManager.TeamController.GetSpawnPosition(TeamIndex));
             }
 

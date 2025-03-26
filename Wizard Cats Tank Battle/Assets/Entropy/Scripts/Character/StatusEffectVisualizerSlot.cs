@@ -20,7 +20,6 @@ namespace Vashta.Entropy.Character
                 if (valuePair.Value != null)
                 {
                     effectIds.Add(valuePair.Key);
-                    Debug.Log("Added key: " + valuePair.Key);
                 }
             }
 

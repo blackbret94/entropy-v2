@@ -48,7 +48,7 @@ namespace Vashta.Entropy.Player
             if (HasStateAuthority)
             {
                 // Local, choose initial team
-                TeamController.ChooseInitialTeamForPlayer(PlayerController);
+                TeamController.AttemptToChangePlayerToPreferredTeam(PlayerController);
                 Debug.Log("Chose initial team: " + TeamIndex);
             }
             else
@@ -73,7 +73,6 @@ namespace Vashta.Entropy.Player
                 return;
             
             Init();
-            // Should I add a "refresh" call here for Teams?
             TeamController.ReCalculateTeams();
             
             ApplyTeamChange();

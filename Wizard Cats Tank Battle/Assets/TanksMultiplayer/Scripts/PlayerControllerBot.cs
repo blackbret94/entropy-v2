@@ -20,9 +20,6 @@ namespace TanksMP
     /// </summary>
 	public class PlayerControllerBot : PlayerController
     {
-        [HideInInspector] public string myName;
-        [HideInInspector] public int teamIndex;
-        
         /// <summary>
         /// Radius in units for detecting other players.
         /// </summary>
@@ -51,9 +48,8 @@ namespace TanksMP
         //timestamp when next shot should happen
         private float nextShot;
 
-        private float _slowUpdateRate = .5f;
-        private float _pathfindingRate = 1f;
-        private float _lastUpdateTime;
+        private readonly float _slowUpdateRate = .5f;
+        private readonly float _pathfindingRate = 1f;
         private Timer _timerSlowUpdate;
         private Timer _timerPathfinding;
 
@@ -67,6 +63,7 @@ namespace TanksMP
         public override void Spawned()
         {
             base.Spawned();
+            
             _timerSlowUpdate = new Timer(_slowUpdateRate);
             _timerPathfinding = new Timer(_pathfindingRate);
             
@@ -83,12 +80,11 @@ namespace TanksMP
             targetPoint = GameManager.GetInstance().TeamController.GetSpawnPosition(TeamIndex);
             agent.Warp(targetPoint);
 
-            TeamInstance teamInstance = GameManager.GetInstance().TeamController.teams[TeamIndex];
+            // TeamInstance teamInstance = GameManager.GetInstance().TeamController.teams[TeamIndex];
             // CharacterAppearance.teamInstance = teamInstance;
             // CharacterAppearance.ColorizeCart();
             
-            PlayerName = CatNameGenerator.GetRandomName();
-            PlayerViewController.SetName(myName);
+            // PlayerViewController.SetName(myName);
             
             // PlayerViewController.SetTeam(teamInstance.teamDefinition);
             
@@ -101,6 +97,11 @@ namespace TanksMP
 
             _timerPathfinding.Run();
             _timerSlowUpdate.Run();
+        }
+
+        protected override void SetName()
+        {
+            PlayerName = CatNameGenerator.GetRandomName();
         }
         
         //sets inRange list for player detection
@@ -149,7 +150,7 @@ namespace TanksMP
                 if (NavMesh.SamplePosition(randomPoint, out hit, 2f, NavMesh.AllAreas)) 
                 {
                     // Check for collision with PathfindingZone
-                    if (!PathfindingZone.PointIsInRestrictedZone(randomPoint, teamIndex))
+                    if (!PathfindingZone.PointIsInRestrictedZone(randomPoint, Team.TeamIndex))
                     {
                         result = hit.position;
                         break;
@@ -176,7 +177,6 @@ namespace TanksMP
             }
         }
 
-        // Cast ultimates
         private void SlowUpdate()
         {
             //empty list on each iteration
@@ -203,12 +203,11 @@ namespace TanksMP
                 }
             }
 
+            // Cast ultimates
             if (_enemiesInRange.Count > 0)
             {
                 UltimateController.TryCastUltimate();
             }
-
-            _lastUpdateTime = Time.time;
         }
 
         public override void FixedUpdateNetwork()
@@ -235,7 +234,7 @@ namespace TanksMP
                 // EXPERIMENTAL UPDATE to seek out specific spots instead
                 if(Vector3.Distance(transform.position, targetPoint) < agent.stoppingDistance)
                 {
-                    List<GameObject> possibleTargets = GameManager.GetInstance().BotController.BotTargetList;
+                    List<GameObject> possibleTargets = GameManager.BotController.BotTargetList;
                     RandomPoint(possibleTargets[Random.Range(0, possibleTargets.Count)].transform.position, range, out targetPoint);
                     // int teamCount = GameManager.GetInstance().teams.Length;
                     // RandomPoint(GameManager.GetInstance().teams[Random.Range(0, teamCount)].spawn.position, range, out targetPoint);
@@ -293,7 +292,7 @@ namespace TanksMP
                         // Vector3 shotDirError = new Vector2(shotDir.x + CalculateAccuracyError(),
                         //     shotDir.z + CalculateAccuracyError());
                         CombatController.AttemptToShoot();
-                        _lastBuffS = Time.time;
+                        _lastBuffS = Runner.SimulationTime;
                         return;
                     }
                 }
@@ -302,7 +301,7 @@ namespace TanksMP
 
         private bool CanBuff()
         {
-            return Time.time - _lastBuffS > buffFrequencyS;
+            return Runner.SimulationTime - _lastBuffS > buffFrequencyS;
         }
 
         private float CalculateAccuracyError()

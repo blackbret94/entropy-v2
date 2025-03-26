@@ -21,10 +21,10 @@ namespace Vashta.Entropy.GameState
         // Networked properties.  Later re-factor into a INetworkStruct
         // Array needs a fixed size set here, so it is always 4
         [Networked, Capacity(4), OnChangedRender(nameof(RefreshDisplay))]
-        public NetworkArray<int> ScoreByTeamIndex => default;
+        private NetworkArray<int> ScoreByTeamIndex => default;
 
         [Networked, Capacity(4), OnChangedRender(nameof(RefreshDisplay))]
-        public NetworkArray<int> TeamSize => default;
+        private NetworkArray<int> TeamSize => default;
 
         public bool UsesTeams => _gameManager.gameMode != TanksMP.GameMode.FFA;
         
@@ -45,8 +45,11 @@ namespace Vashta.Entropy.GameState
             return teams[0];
         }
 
-        public void AddPlayerTeamTeam(PlayerController playerController, int teamIndex)
+        public void AddPlayerToTeam(PlayerController playerController, int teamIndex)
         {
+            playerController.Team.TeamIndex = teamIndex;
+            playerController.Team.PreferredTeamIndex = teamIndex;
+            
             if (teamIndex < TeamSize.Length)
             {
                 TeamSize.Set(teamIndex, TeamSize[teamIndex]+1);
@@ -75,22 +78,6 @@ namespace Vashta.Entropy.GameState
                 Debug.LogError("Tried to remove player with invalid team: " + teamIndex);
             }
         }
-
-        public void ChooseInitialTeamForPlayer(PlayerController playerController)
-        {
-            int teamIndex = GetTeamFill();
-            
-            Debug.Log("Team index: " + teamIndex);
-            
-            TeamSize.Set(teamIndex, TeamSize[teamIndex] + 1);
-            
-            playerController.PlayerTeam.PreferredTeamIndex = teamIndex;
-            // playerController.PlayerTeam.TeamIndex = teamIndex;
-            AttemptToChangePlayerToPreferredTeam(playerController, true);
-            // playerController.PlayerTeam.SetPlayerPreferredTeam(teamIndex, true, true);
-            
-            RefreshDisplay();
-        }
         
         public void OnePassPlayerCheckToChangeTeams(PlayerController playerController, bool respawn)
         {
@@ -108,42 +95,41 @@ namespace Vashta.Entropy.GameState
                     if (_gameManager.IsGameOver())
                         return;
 
-                    AttemptToChangePlayerToPreferredTeam(playerController, respawn);
+                    AttemptToChangePlayerToPreferredTeam(playerController);
                 }
             }
         }
         
-        private void AttemptToChangePlayerToPreferredTeam(PlayerController playerController, bool respawn)
+        public void AttemptToChangePlayerToPreferredTeam(PlayerController playerController)
         {
             int preferredTeamIndex = playerController.PreferredTeamIndex;
             int currentTeam = playerController.TeamIndex;
 
-            if (preferredTeamIndex == RANDOM_TEAM_INDEX && preferredTeamIndex != currentTeam)
+            if (preferredTeamIndex == RANDOM_TEAM_INDEX)
             {
-                playerController.PlayerTeam.SetPlayerPreferredTeam(currentTeam);
-                return;
+                preferredTeamIndex = GetTeamFill();
+                playerController.Team.SetPlayerPreferredTeam(preferredTeamIndex);
             }
 
-            if (preferredTeamIndex == RANDOM_TEAM_INDEX || preferredTeamIndex == currentTeam ||
-                !TeamHasVacancy(preferredTeamIndex))
+            // Do not continue if already on the preferred team or if the preferred team does not have vacancy
+            if (preferredTeamIndex == currentTeam || !TeamHasVacancy(preferredTeamIndex))
             {
                 return;
             }
-
-            Debug.Log("Changing teams to: " + preferredTeamIndex);
 
             if(playerController.TeamIndex != -1)
                 TeamSize.Set(playerController.TeamIndex, TeamSize[playerController.TeamIndex] - 1);
             
             if(preferredTeamIndex != -1)
-                TeamSize.Set(preferredTeamIndex, TeamSize[preferredTeamIndex] + 1);
+                AddPlayerToTeam(playerController, preferredTeamIndex);
             
-            playerController.PlayerTeam.TeamIndex = preferredTeamIndex;
-            Debug.Log("Setting player team: " + playerController.TeamIndex);
-            
-            // Force respawn
-            // if(respawn && playerController.HasInputAuthority)
-                // playerController.RPC_Kill(); // Is this where the recursive loop was happening?
+            playerController.Team.TeamIndex = preferredTeamIndex;
+
+            if (currentTeam != playerController.Team.TeamIndex)
+            {
+                RefreshDisplay();
+                playerController.Team.ApplyTeamChange();
+            }
         }
 
         public void RefreshDisplay()
@@ -205,12 +191,6 @@ namespace Vashta.Entropy.GameState
         {
             return true;
             // TODO: Revisit this later
-            // int teamNo = teamIndex - 1;
-            // int maxTeamSize = 3; // This should NOT be hardcoded here
-            
-            // int[] size = PhotonNetwork.CurrentRoom.GetSize();
-
-            // return size[teamIndex] < maxTeamSize;
         }
 
         #region Spawning

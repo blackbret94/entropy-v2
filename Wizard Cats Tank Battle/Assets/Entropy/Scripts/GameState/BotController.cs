@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Fusion;
+using FusionHelpers;
 using TanksMP;
 using UnityEngine;
 using Vashta.Entropy.PhotonExtensions;
@@ -51,7 +52,14 @@ namespace Vashta.Entropy.GameState
             {
                 //randomly choose bot from array of bot prefabs
                 //spawn bot across the simulated private network
-                NetworkObject obj = Runner.Spawn(prefab, Vector3.zero, Quaternion.identity);
+                NetworkObject obj = Runner.Spawn(prefab, Vector3.zero, Quaternion.identity, null, (runner, o) =>
+                {
+                    FusionPlayer player = o.GetComponent<FusionPlayer>();
+                    if (player != null)
+                    {
+                        player.InitNetworkState();
+                    }
+                });
 
                 //let the local host determine the team assignment
                 // PlayerController p = obj.GetComponent<PlayerController>();

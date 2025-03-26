@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Security.Cryptography.X509Certificates;
 using Entropy.Scripts.Player;
 using Fusion;
 using FusionHelpers;
@@ -40,7 +39,7 @@ namespace Vashta.Entropy.Player
         public float defaultMass = 1;
         
         [Networked] public string PlayerName { get; protected set; }
-        public int TeamIndex => PlayerTeam.TeamIndex;
+        public int TeamIndex => Team.TeamIndex;
 
         // Health
         [Networked, OnChangedRender(nameof(OnHealthChanged))]
@@ -61,7 +60,7 @@ namespace Vashta.Entropy.Player
         [Networked] public int Kills { get; set; }
         [Networked] public int Deaths { get; set; }
         [Networked] public float JoinTime { get; set; }
-        public int PreferredTeamIndex => PlayerTeam.PreferredTeamIndex;
+        public int PreferredTeamIndex => Team.PreferredTeamIndex;
 
         /// <summary>
         /// Current turret rotation and shooting direction.
@@ -103,7 +102,7 @@ namespace Vashta.Entropy.Player
         public ClassController ClassController { get; private set; }
         public CharacterAppearance CharacterAppearance;
         public NetworkManagerCustom NetworkManagerCustom { get; private set; }
-        public PlayerTeam PlayerTeam { get; private set; }
+        public PlayerTeam Team { get; private set; }
         public PowerupController PowerupController { get; private set; }
 
         //reference to this rigidbody
@@ -152,7 +151,7 @@ namespace Vashta.Entropy.Player
             NetworkInputController = GetComponent<NetworkInputController>();
             rb = GetComponent<Rigidbody>();
             _playerCurrencyRewarder = new PlayerCurrencyRewarder();
-            PlayerTeam = GetComponent<PlayerTeam>();
+            Team = GetComponent<PlayerTeam>();
             NetworkManagerCustom = NetworkManagerCustom.GetInstance();
             
             // Join time
@@ -161,6 +160,7 @@ namespace Vashta.Entropy.Player
             if (HasStateAuthority)
             {
                 JoinTime = Runner.SimulationTime;
+                SetName();
             }
 
             bool justJoined = Mathf.Approximately(JoinTime, Runner.SimulationTime);
@@ -171,7 +171,6 @@ namespace Vashta.Entropy.Player
                 // Local player logic
                 GameManager.localPlayerController = this;
                 GameManager.ui.CastPowerupButton.gameObject.SetActive(false);
-                PlayerName = NetworkManagerCustom.LocalPlayerInfo.Name;
                 CharacterAppearance.SaveLoad.LoadLocal();
                 CameraController.SetTarget(turret);
 
@@ -200,7 +199,7 @@ namespace Vashta.Entropy.Player
             PlayerList.Add(this);
             
             PlayerViewController.RefreshHealthSlider();
-            PlayerTeam.Setup();
+            Team.Setup();
             
             // Move player to start position
             if (HasStateAuthority)
@@ -209,7 +208,8 @@ namespace Vashta.Entropy.Player
                 Vector3 startPos = GameManager.TeamController.GetSpawnPosition(TeamIndex);
                 rb.MovePosition(startPos);
 
-                StartCoroutine(SetTeamPositionCR(.5f));
+                // Not sure if this is still needed
+                // StartCoroutine(SetTeamPositionCR(.5f));
                 
                 // Set class
                 ClassDefinition classDefinition = defaultClassDefinition ? defaultClassDefinition : classDirectory.RandomClass();
@@ -229,32 +229,36 @@ namespace Vashta.Entropy.Player
             {
                 StatusEffectController.AddStatusEffect(StatusEffectApplyOnSpawn.Id, this);
             }
-
         }
 
-        private IEnumerator SetTeamPositionCR(float delay)
+        protected virtual void SetName()
         {
-            yield return new WaitForSeconds(delay);
-            
-            Vector3 currentPos = transform.position;
-            Vector3 spawnPosition = Vector3.zero;
-						
-            GameManager gameManager = GameManager.GetInstance();
-            if (gameManager != null)
-            {
-                if(gameManager.InitialSpawnPos != null)
-                    spawnPosition = gameManager.InitialSpawnPos.transform.position;
-            }
-            
-            float xx = Mathf.Abs(spawnPosition.x-currentPos.x);
-            float zz = Mathf.Abs(spawnPosition.z-currentPos.z);
-            
-            if (xx < 10 && zz < 10)
-            {
-                rb.MovePosition(GameManager.TeamController.GetSpawnPosition(TeamIndex));
-                Debug.Log("Setting position for team: " + TeamIndex + " to position: " + transform.position);
-            }
+            PlayerName = NetworkManagerCustom.LocalPlayerInfo.Name;
         }
+
+        // private IEnumerator SetTeamPositionCR(float delay)
+        // {
+        //     yield return new WaitForSeconds(delay);
+        //     
+        //     Vector3 currentPos = transform.position;
+        //     Vector3 spawnPosition = Vector3.zero;
+						  //
+        //     GameManager gameManager = GameManager.GetInstance();
+        //     if (gameManager != null)
+        //     {
+        //         if(gameManager.InitialSpawnPos != null)
+        //             spawnPosition = gameManager.InitialSpawnPos.transform.position;
+        //     }
+        //     
+        //     float xx = Mathf.Abs(spawnPosition.x-currentPos.x);
+        //     float zz = Mathf.Abs(spawnPosition.z-currentPos.z);
+        //     
+        //     if (xx < 10 && zz < 10)
+        //     {
+        //         rb.MovePosition(GameManager.TeamController.GetSpawnPosition(TeamIndex));
+        //         Debug.Log("Setting position for team: " + TeamIndex + " to position: " + transform.position);
+        //     }
+        // }
 
         // Allows the player to freely respawn for 10 seconds after they joined the game.
         // Use SpawnController->PlayerCanRespawnFreely() to factor in everything, including bases.
@@ -263,10 +267,7 @@ namespace Vashta.Entropy.Player
             return Runner.SimulationTime - JoinTime < 10f;
         }
 
-        public override void InitNetworkState()
-        {
-            
-        }
+        public override void InitNetworkState() { }
 
         public override void Render()
         {
@@ -329,13 +330,6 @@ namespace Vashta.Entropy.Player
         {
             PlayerViewController.SetHealth(Health, maxHealth);
             PlayerViewController.SetOvershield(Shield, maxShield);
-            
-            // check for death
-            // if (Health <= 0 && IsAlive)
-            // {
-                // Debug.Log("Player should be dead but they are not");
-                // HandleKilled(null);
-            // }
         }
 
         public void SetMaxHealth()
@@ -391,9 +385,6 @@ namespace Vashta.Entropy.Player
 
         public override void FixedUpdateNetwork()
         {
-            // Debug.Log(Runner.Mode);
-            // Debug.Log("Running FixedUpdateNetwork for player " + PlayerIndex);
-            
             if (NetworkInputController.fetchInput)
             {
                 if (GetInput(out NetworkInputData inputData))

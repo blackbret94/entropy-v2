@@ -76,15 +76,15 @@ namespace Vashta.Entropy.TanksExtensions
             }
             
             // bots
-            List<PlayerControllerBot> bots = GameManager.GetInstance().BotController.GetBotList();
-            foreach (PlayerControllerBot bot in bots)
-            {
-                if (bot.teamIndex == TeamId)
-                {
-                    ScoreboardRowData row = new ScoreboardRowData(bot, TeamInstance, false);
-                    data.Add(row);
-                }
-            }
+            // List<PlayerControllerBot> bots = GameManager.GetInstance().BotController.GetBotList();
+            // foreach (PlayerControllerBot bot in bots)
+            // {
+            //     if (bot.teamIndex == TeamId)
+            //     {
+            //         ScoreboardRowData row = new ScoreboardRowData(bot, TeamInstance, false);
+            //         data.Add(row);
+            //     }
+            // }
             
             return data;
         }

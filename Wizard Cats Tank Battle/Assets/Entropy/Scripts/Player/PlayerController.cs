@@ -385,6 +385,9 @@ namespace Vashta.Entropy.Player
 
         public override void FixedUpdateNetwork()
         {
+            if (!HasInputAuthority || isBot)
+                return;
+            
             if (NetworkInputController.fetchInput)
             {
                 if (GetInput(out NetworkInputData inputData))

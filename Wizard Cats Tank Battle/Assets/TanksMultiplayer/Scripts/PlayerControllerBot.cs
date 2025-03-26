@@ -3,9 +3,7 @@
  * 	You shall not license, sublicense, sell, resell, transfer, assign, distribute or
  * 	otherwise make available to any third party the Service or the Content. */
 
-using System.Collections;
 using System.Collections.Generic;
-using Entropy.Scripts.Player;
 using UnityEngine;
 using UnityEngine.AI;
 using Vashta.Entropy.Player;
@@ -52,6 +50,11 @@ namespace TanksMP
         private readonly float _pathfindingRate = 1f;
         private Timer _timerSlowUpdate;
         private Timer _timerPathfinding;
+        
+        private float _maxTimeWithoutMovement = 10f;
+        private float _lastMovementTime = 0f;
+        private Vector3 _lastPosition;
+        private float _minMovementDistance = .5f;
 
         private void Awake()
         {
@@ -73,6 +76,9 @@ namespace TanksMP
             //get corresponding team and colorize renderers in team color
             targetPoint = GameManager.GetInstance().TeamController.GetSpawnPosition(TeamIndex);
             agent.Warp(targetPoint);
+            SnapToNavMesh();
+            bool success = agent.SetDestination(targetPoint);
+            Debug.Log("Destination set: " + success + " with speed: " + agent.speed);
             
             // add to player bot list
             GameManager.GetInstance().BotController.AddBot(this);
@@ -141,7 +147,58 @@ namespace TanksMP
             }
             
             //set the target point as the new destination
-            agent.SetDestination(result);
+            // Debug.Log("Destination: " + result);
+            bool success = agent.SetDestination(result);
+            Debug.Log("Destination set: " + success + " with speed: " + agent.speed);
+        }
+
+        private void SnapToNavMesh()
+        {
+            float maxSampleDistance = 5f;
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(rb.position, out hit, maxSampleDistance, NavMesh.AllAreas))
+            {
+                Vector3 alignedPosition = new Vector3(
+                    rb.position.x,
+                    hit.position.y,
+                    rb.position.z
+                );
+
+                rb.position = alignedPosition;
+            }
+            else
+            {
+                Debug.LogWarning("No NavMesh found near this position!");
+            }
+        }
+
+        private bool CheckForStuckInPosition()
+        {
+            if (_lastMovementTime + _maxTimeWithoutMovement > Time.time)
+            {
+                Vector3 pos = transform.position;
+                if ((_lastPosition - pos).magnitude < _minMovementDistance)
+                {
+                    SnapToNavMesh();
+                    PickRandomLocation();
+                    _lastMovementTime = Time.time;
+                    return true;
+                }
+                else
+                {
+                    _lastPosition = pos;
+                    _lastMovementTime = Time.time;
+                    return false;
+                }
+            }
+
+            return false;
+        }
+        
+        private void PickRandomLocation()
+        {
+            List<GameObject> possibleTargets = GameManager.BotController.BotTargetList;
+            RandomPoint(possibleTargets[Random.Range(0, possibleTargets.Count)].transform.position, range, out targetPoint);
         }
 
         public override void Render()
@@ -207,6 +264,8 @@ namespace TanksMP
             //don't continue if this bot is marked as dead
             if(!IsAlive) return;
 
+            // CheckForStuckInPosition();
+
             //no enemy players are in range
             if(_enemiesInRange.Count == 0)
             {
@@ -216,10 +275,7 @@ namespace TanksMP
                 // EXPERIMENTAL UPDATE to seek out specific spots instead
                 if(Vector3.Distance(transform.position, targetPoint) < agent.stoppingDistance)
                 {
-                    List<GameObject> possibleTargets = GameManager.BotController.BotTargetList;
-                    RandomPoint(possibleTargets[Random.Range(0, possibleTargets.Count)].transform.position, range, out targetPoint);
-                    // int teamCount = GameManager.GetInstance().teams.Length;
-                    // RandomPoint(GameManager.GetInstance().teams[Random.Range(0, teamCount)].spawn.position, range, out targetPoint);
+                    PickRandomLocation();
                 }
             }
             else
@@ -289,81 +345,6 @@ namespace TanksMP
         private float CalculateAccuracyError()
         {
             return Random.Range(-accuracyError, accuracyError);
-        }
-        
-        /// <summary>
-        /// Override of the base method to handle bot respawn separately.
-        /// </summary>
-        // public override void Respawn(PlayerController killedByPlayerController, string deathFxId)
-        // {
-        //     StartCoroutine(RespawnCR(killedByPlayerController, deathFxId));
-        // }
-
-        //the actual respawn routine
-        // Need to update this, right now it's not called anywhere
-        IEnumerator RespawnCR(PlayerController killedByPlayerController, ushort deathFxId)
-        {   
-            //stop AI updates
-            IsAlive = false;
-            _enemiesInRange.Clear();
-            agent.isStopped = true;
-            killedBy = killedByPlayerController.gameObject;
-
-            if (killedByPlayerController)
-            {
-                killedByPlayerController.UltimateController.RewardUltimateForKill();
-                GameManager.ui.GameLogPanel.EventPlayerKilled(PlayerName, GetTeamDefinition(), killedByPlayerController.PlayerName, killedByPlayerController.GetTeamDefinition());
-            }
-
-            //detect whether the current user was responsible for the kill
-            //yes, that's my kill: increase local kill counter
-            if (killedBy == PlayerList.GetLocalPlayer().gameObject) // This might be a problem if it is run on EVERY device
-            {
-                RewardCoinsForKill();
-            }
-            
-            PlayerViewController.SpawnDeathFx(deathFxId);
-            
-            // Mark dead on minimap
-            if (MinimapEntityControllerPlayer)
-            {
-                MinimapEntityControllerPlayer.RenderAsDead();
-            }
-
-            //play sound clip on player death
-            if (killedBy != null)
-            {
-                if (killedByPlayerController != null)
-                {
-                    AudioManager.Play3D(killedByPlayerController.CharacterAppearance.Meow.AudioClip, transform.position);
-                }
-            }
-
-            //toggle visibility for all rendering parts (off)
-            ToggleComponents(false);
-            //wait global respawn delay until reactivation
-            yield return new WaitForSeconds(GameManager.GetInstance().SpawnController.respawnTime);
-            //toggle visibility again (on)
-            ToggleComponents(true);
-            
-            // Mark alive on minimap
-            if (MinimapEntityControllerPlayer)
-            {
-                MinimapEntityControllerPlayer.RenderAsAlive();
-            }
-
-            //respawn and continue with pathfinding
-            targetPoint = GameManager.GetInstance().TeamController.GetSpawnPosition(TeamIndex);
-            rb.position = targetPoint;
-            agent.Warp(targetPoint);
-            agent.isStopped = false;
-            IsAlive = true;
-            
-            // Apply status effect
-            if (StatusEffectApplyOnSpawn)
-            {
-                StatusEffectController.AddStatusEffect(StatusEffectApplyOnSpawn.Id, this);
-            }
         }
 
         //disable rendering or blocking components

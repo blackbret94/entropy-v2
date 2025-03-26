@@ -501,13 +501,15 @@ namespace Vashta.Entropy.StatusEffects
             return 0;
         }
 
-        public void Leech()
+        private void Leech()
         {
             if (_leechingPerSecondCached <= 0 || (_leechingAppliedByCached != null && !_leechingAppliedByCached.IsAlive))
                 return;
             
             _playerController.CombatController.TakeDamage(_leechingPerSecondCached, _leechingAppliedByCached);
-            _leechingAppliedByCached.Heal(_leechingPerSecondCached);
+            
+            if(_leechingAppliedByCached != null)
+                _leechingAppliedByCached.Heal(_leechingPerSecondCached);
         }
 
         // Server-only, trigger blood pact

@@ -7384,6 +7384,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1127463885}
+  - component: {fileID: 1127463886}
   m_Layer: 0
   m_Name: BotTarget (4)
   m_TagString: Untagged
@@ -7406,6 +7407,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 137415513683796525}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1127463886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127463884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c364455a52374527bec899766766ddee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: {r: 0.97735846, g: 0.3153364, b: 0.3153364, a: 1}
+  radius: 1.25
 --- !u!1 &1143186773
 GameObject:
   m_ObjectHideFlags: 0
@@ -14775,6 +14790,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 997060350682894610, guid: e4a53bbfdd13b6545a92577342c00d64,
+        type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 1919
+      objectReference: {fileID: 0}
     - target: {fileID: 999105762790836255, guid: e4a53bbfdd13b6545a92577342c00d64,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -18248,6 +18268,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -231.11252
+      objectReference: {fileID: 0}
+    - target: {fileID: 7115388444439424583, guid: e4a53bbfdd13b6545a92577342c00d64,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -5.88
       objectReference: {fileID: 0}
     - target: {fileID: 7172045402229482541, guid: e4a53bbfdd13b6545a92577342c00d64,
         type: 3}

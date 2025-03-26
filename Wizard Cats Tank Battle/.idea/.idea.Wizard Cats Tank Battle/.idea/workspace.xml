@@ -4,16 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2d0b1129-1c08-4810-a5a8-04b901ecd844" name="Changes" comment="Bug fixes, began supporting bots again">
+    <list default="true" id="2d0b1129-1c08-4810-a5a8-04b901ecd844" name="Changes" comment="Simplified team logic">
+      <change afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Util/DrawSimpleGizmo.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Util/DrawSimpleGizmo.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Wizard Cats Tank Battle/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Wizard Cats Tank Battle/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Resources/BotCharacter.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Resources/BotCharacter.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Resources/PlayerCharacter.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Resources/PlayerCharacter.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameState/BotController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameState/BotController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameState/TeamController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameState/TeamController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/CommonGameplay.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/CommonGameplay.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scenes/TDM-Fantasy-002-ForestFortress.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scenes/TDM-Fantasy-002-ForestFortress.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scenes/TDM-Fantasy-003-BattleIsles.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scenes/TDM-Fantasy-003-BattleIsles.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameState/GameOverController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameState/GameOverController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameState/SpawnController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameState/SpawnController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/CombatController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/CombatController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerTeam.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerTeam.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/TanksExtensions/TeamStateSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/TanksExtensions/TeamStateSnapshot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/StatusEffects/StatusEffectController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/StatusEffects/StatusEffectController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Util/Timer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Util/Timer.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/PlayerControllerBot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/PlayerControllerBot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -365,7 +371,7 @@
       <workItem from="1742281088427" duration="756000" />
       <workItem from="1742621081659" duration="6144000" />
       <workItem from="1742766061688" duration="8865000" />
-      <workItem from="1742798687080" duration="46022000" />
+      <workItem from="1742798687080" duration="53275000" />
     </task>
     <task id="LOCAL-00001" summary="Cleaned up files that are not being used">
       <option name="closed" value="true" />
@@ -607,7 +613,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742962531556</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="Simplified team logic">
+      <option name="closed" value="true" />
+      <created>1743018147826</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1743018147826</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -645,7 +659,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Worked through character appearance bugs" />
     <MESSAGE value="Worked through issues in character" />
     <MESSAGE value="Worked through some bugs" />
     <MESSAGE value="Added Physics Add On" />
@@ -670,7 +683,8 @@
     <MESSAGE value="Replaced int references with ushort for status effect sessionIds" />
     <MESSAGE value="Fixed issues related to deaths, status effects, and projectiles" />
     <MESSAGE value="Bug fixes, began supporting bots again" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bug fixes, began supporting bots again" />
+    <MESSAGE value="Simplified team logic" />
+    <option name="LAST_COMMIT_MESSAGE" value="Simplified team logic" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

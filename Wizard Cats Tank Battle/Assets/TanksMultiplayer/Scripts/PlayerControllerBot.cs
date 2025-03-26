@@ -64,14 +64,8 @@ namespace TanksMP
         {
             base.Spawned();
             
-            _timerSlowUpdate = new Timer(_slowUpdateRate);
-            _timerPathfinding = new Timer(_pathfindingRate);
-            
-            // if (GameManager.TeamController.UsesTeams)
-            // {
-                // PlayerViewController.ColorizePlayerForTeam();
-                // GameManager.ui.GameLogPanel.EventPlayerChangedTeam(PlayerName, GetTeamDefinition());
-            // }
+            _timerSlowUpdate = new Timer(_slowUpdateRate, true);
+            _timerPathfinding = new Timer(_pathfindingRate, true);
    
             agent = GetComponent<NavMeshAgent>();
             agent.speed = moveSpeed;
@@ -79,18 +73,6 @@ namespace TanksMP
             //get corresponding team and colorize renderers in team color
             targetPoint = GameManager.GetInstance().TeamController.GetSpawnPosition(TeamIndex);
             agent.Warp(targetPoint);
-
-            // TeamInstance teamInstance = GameManager.GetInstance().TeamController.teams[TeamIndex];
-            // CharacterAppearance.teamInstance = teamInstance;
-            // CharacterAppearance.ColorizeCart();
-            
-            // PlayerViewController.SetName(myName);
-            
-            // PlayerViewController.SetTeam(teamInstance.teamDefinition);
-            
-            // GameManager.ui.GameLogPanel.EventPlayerJoined(PlayerName);
-            
-            //call hooks manually to update
             
             // add to player bot list
             GameManager.GetInstance().BotController.AddBot(this);

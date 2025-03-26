@@ -1,23 +1,13 @@
 using Fusion;
-using FusionHelpers;
 using TanksMP;
 using UnityEngine;
 using Vashta.Entropy.Player;
-using Vashta.Entropy.Spells;
 using Vashta.Entropy.StatusEffects;
 
 namespace Entropy.Scripts.Player
 {
     public class CombatController : NetworkBehaviour
     {
-        // : NetworkBehaviourWithState<CombatController.NetworkState>
-        // [Networked] public override ref NetworkState State => ref MakeRef<NetworkState>();
-        // public struct NetworkState : INetworkStruct
-        // {
-        //     [Networked, Capacity(24)] 
-        //     public NetworkArray<ProjectileState> projectileStates => default;
-        // }
-        //
         [Header("Modifiers")]
         public int counterDamageMod = 2;
         public int sameClassDamageMod = -1;
@@ -33,9 +23,6 @@ namespace Entropy.Scripts.Player
         private float nextFire;
         public float TimeToNextFire => nextFire - Time.time;
         public float FractionFireReady => Mathf.Min(1-(TimeToNextFire / _playerController.fireRate), 1);
-        // death loop protections
-        private const float minTimeBetweenDeaths = .5f;
-        // private SparseCollection<ProjectileState, Projectile> Projectiles;
         
         [Header("Cached references")]
         private StatusEffectController _statusEffectController;
@@ -269,7 +256,7 @@ namespace Entropy.Scripts.Player
             if (HasStateAuthority)
             {
                 // Create death struct here
-                _playerController.PlayerDeathStruct = new PlayerDeathStruct(other.PlayerId, deathFxId, Runner.SimulationTime);
+                _playerController.PlayerDeathStruct = new PlayerDeathStruct(other != null ? other.PlayerId : new PlayerRef(), deathFxId, Runner.SimulationTime);
             }
 
             _gameManager.TeamController.OnePassPlayerCheckToChangeTeams(_playerController, false);

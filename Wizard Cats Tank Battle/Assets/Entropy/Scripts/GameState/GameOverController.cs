@@ -51,7 +51,7 @@ namespace Vashta.Entropy.GameState
             }
 
             //starts coroutine for displaying the game over window
-            StopCoroutine(_gameManager.SpawnController.SpawnRoutine());
+            // _gameManager.SpawnController.StartSpawnRoutine();
             StartCoroutine(DisplayGameOverCR(teamIndex));
         }
 

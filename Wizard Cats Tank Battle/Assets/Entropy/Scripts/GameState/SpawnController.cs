@@ -5,6 +5,7 @@ using UnityEngine;
 using Vashta.Entropy.Player;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.UI.ClassSelectionPanel;
+using Vashta.Entropy.Util;
 
 namespace Vashta.Entropy.GameState
 {
@@ -25,19 +26,24 @@ namespace Vashta.Entropy.GameState
         /// <summary>
         /// Only for this player: sets the death text stating the killer on death.
         /// </summary>
-        public void DisplayDeath()
+        public void DisplayDeath(PlayerController playerToRespawn)
         {
+            if (playerToRespawn == null)
+            {
+                Debug.LogError("Tried to respawn a null player");
+                return;
+            }
+            
             if (!ClassSelectionPanel.Instance.CountdownIsActive())
             {
-                PlayerController localPlayerController = _gameManager.localPlayerController;
                 //get the player component that killed us
-                PlayerController other = localPlayerController;
+                PlayerController other = playerToRespawn;
                 string killedByName = "YOURSELF";
-                if (localPlayerController.killedBy != null)
-                    other = localPlayerController.killedBy.GetComponent<PlayerController>();
+                if (playerToRespawn.killedBy != null)
+                    other = playerToRespawn.killedBy.GetComponent<PlayerController>();
 
                 //suicide or regular kill?
-                if (other != localPlayerController)
+                if (other != playerToRespawn)
                 {
                     killedByName = other.PlayerName;
                 }
@@ -46,33 +52,48 @@ namespace Vashta.Entropy.GameState
                 _gameManager.ui.SetDeathText(killedByName, _gameManager.TeamController.teams[other.TeamIndex]);
             }
 
-            StartCoroutine(SpawnRoutine());
+            StartSpawnRoutine(playerToRespawn);
         }
 
-
+        public void StartSpawnRoutine(PlayerController playerToRespawn)
+        {
+            StartCoroutine(SpawnRoutine(playerToRespawn));
+        }
+        
         //coroutine spawning the player after a respawn delay
         // This is run on the local player's game
-        public IEnumerator SpawnRoutine()
+        private IEnumerator SpawnRoutine(PlayerController playerToRespawn)
         {
-            //calculate point in time for respawn
-            float targetTime = 0f;
-            if (!ClassSelectionPanel.Instance.CountdownIsActive())
+            if (playerToRespawn == null)
             {
-                targetTime = Time.time + respawnTime;
+                Debug.LogError("Tried to respawn a null player");
             }
-            
-            //wait for the respawn to be over,
-            //while waiting update the respawn countdown
-            while (targetTime - Time.time > 0)
+            else
             {
-                float timeToSpawn = targetTime - Time.time;
-                _gameManager.ui.SetSpawnDelay(timeToSpawn);
-                yield return null;
-            }
+                bool isLocalPlayer = playerToRespawn.HasInputAuthority;
 
-            //respawn now: send request to the server
-            _gameManager.ui.DisableDeath();
-            _gameManager.localPlayerController.RPC_Respawn();
+                //calculate point in time for respawn
+                Timer timer = new Timer(respawnTime, false);
+
+                //wait for the respawn to be over,
+                while (!timer.Run())
+                {
+                    float timeToSpawn = timer.GetTimeToRun();
+                    
+                    if(isLocalPlayer)
+                        _gameManager.ui.SetSpawnDelay(timeToSpawn);
+                    
+                    yield return null;
+                }
+
+                if (isLocalPlayer)
+                {
+                    _gameManager.ui.DisableDeath();
+                }
+
+                if(playerToRespawn != null)
+                    playerToRespawn.RPC_Respawn();
+            }
         }
         
         public bool PlayerCanRespawnFreely(PlayerController player)

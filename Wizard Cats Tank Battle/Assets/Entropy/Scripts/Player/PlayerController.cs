@@ -519,11 +519,12 @@ namespace Vashta.Entropy.Player
             if (HasInputAuthority)
             {
                 CameraController.FollowKiller(killedBy);
-                GameManager.SpawnController.DisplayDeath();
+                GameManager.SpawnController.DisplayDeath(this);
             }
 
             if (HasStateAuthority)
             {
+                GameManager.SpawnController.StartSpawnRoutine(this);
                 rb.MovePosition(GameManager.TeamController.GetSpawnPosition(TeamIndex));
             }
         }

@@ -33,7 +33,7 @@ namespace Vashta.Entropy.SceneNavigation
 
         private SceneRef GetSceneRef(string sceneName)
         {
-            return SceneRef.FromIndex(SceneUtility.GetBuildIndexByScenePath(SceneBasePath+sceneName));
+            return SceneRef.FromIndex(SceneUtility.GetBuildIndexByScenePath(SceneBasePath+sceneName+".unity"));
         }
         
         public bool IsMainMenu()

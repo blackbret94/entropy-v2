@@ -251,6 +251,8 @@ namespace TanksMP
 
         public override void FixedUpdateNetwork()
         {
+            Debug.Log(agent.pathStatus);
+            
             //don't execute anything if the game is over already,
             //but termine the agent and path finding routines
             if(GameManager.IsGameOver())
@@ -360,6 +362,19 @@ namespace TanksMP
         private void OnDestroy()
         {
             GameManager.ui.GameLogPanel.EventPlayerLeft(PlayerName);
+        }
+        
+        // Draw navmesh path
+        private void OnDrawGizmos()
+        {
+            if (agent == null || agent.path == null) return;
+
+            var corners = agent.path.corners;
+            for (int i = 0; i < corners.Length - 1; i++)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawLine(corners[i], corners[i + 1]);
+            }
         }
     }
 }

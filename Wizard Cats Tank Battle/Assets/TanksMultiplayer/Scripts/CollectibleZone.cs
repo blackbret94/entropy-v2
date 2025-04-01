@@ -78,7 +78,7 @@ namespace TanksMP
                 if (GameManager.GetInstance().IsGameOver())
                 {
                     //tell all clients the winning team
-                    GameManager.GetInstance().GameOverController.GameOver((byte)teamIndex);
+                    GameManager.GetInstance().GameOverController.RPCGameOver((byte)teamIndex);
                     return;
                 }
 

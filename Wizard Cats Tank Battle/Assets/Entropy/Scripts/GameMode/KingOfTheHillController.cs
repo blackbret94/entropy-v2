@@ -80,7 +80,7 @@ namespace Vashta.Entropy.GameMode
 
                 int teamWithHighestScore = GameManager.TeamController.GetTeamWithHighestScore();
                 
-                GameManager.GameOverController.GameOver((byte)teamWithHighestScore);
+                GameManager.GameOverController.RPCGameOver((byte)teamWithHighestScore);
     
                 _timerIsRunning = false;
                 _hasCalledGameOver = true;

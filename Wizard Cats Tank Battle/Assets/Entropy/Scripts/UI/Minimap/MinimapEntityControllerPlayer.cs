@@ -65,6 +65,13 @@ namespace Vashta.Entropy.UI.Minimap
         private bool SameTeamAsLocalPlayer()
         {
             PlayerController localPlayerController = PlayerList.GetLocalPlayer();
+
+            if (localPlayerController == null)
+            {
+                Debug.LogError("Could not load local player!");
+                return false;
+            }
+            
             return localPlayerController.TeamIndex == playerController.TeamIndex;
         }
 

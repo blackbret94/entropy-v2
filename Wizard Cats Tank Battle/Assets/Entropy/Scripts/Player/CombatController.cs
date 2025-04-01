@@ -280,7 +280,7 @@ namespace Entropy.Scripts.Player
                 if (_gameManager.IsGameOver())
                 {
                     //tell all clients the winning team
-                    _gameManager.GameOverController.GameOver((byte)otherTeam);
+                    _gameManager.GameOverController.RPCGameOver((byte)otherTeam);
                     return;
                 }
             }

@@ -1,18 +1,25 @@
 using System.Collections;
 using Entropy.Scripts.Audio;
+using Fusion;
 using TanksMP;
 using UnityEngine;
 using Vashta.Entropy.GameMode;
 
 namespace Vashta.Entropy.GameState
 {
-    public class GameOverController : MonoBehaviour
+    public class GameOverController : NetworkBehaviour
     {
         private GameManager _gameManager;
 
         private void Awake()
         {
             _gameManager = GetComponent<GameManager>();
+        }
+
+        [Rpc(sources: RpcSources.StateAuthority, targets: RpcTargets.All)]
+        public void RPCGameOver(byte teamIndex)
+        {
+            GameOver(teamIndex);
         }
         
         public void GameOver(byte teamIndex)

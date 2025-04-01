@@ -576,13 +576,6 @@ namespace Vashta.Entropy.Player
             ResetTransform();
         }
 
-        protected void RewardCoinsForKill()
-        {
-            // reward coins if the player is on a different team
-            PlayerViewController.RewardCoins(_playerCurrencyRewarder.RewardForKill());
-            
-        }
-
         public void RewardForFlagCapture()
         {
             Kills += 10;

@@ -32,6 +32,12 @@ namespace Vashta.Entropy.UI
 
         private void LoadRegion()
         {
+            if (NetworkManagerCustom.RegionController == null)
+            {
+                Debug.LogWarning("Could not load region!");
+                return;
+            }
+
             string regionToken = NetworkManagerCustom.RegionController.Region;
 
             for (int i=0; i<Regions.Count; i++)

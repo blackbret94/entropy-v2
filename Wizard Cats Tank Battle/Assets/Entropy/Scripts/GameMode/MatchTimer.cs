@@ -51,7 +51,7 @@ namespace Vashta.Entropy.GameMode
                     _matchTimerIsRunning = false;
                     GameManager gameManager = GameManager.GetInstance();
                     int teamWithHighestScore = gameManager.TeamController.GetTeamWithHighestScore();
-                    gameManager.GameOverController.GameOver((byte)teamWithHighestScore);
+                    gameManager.GameOverController.RPCGameOver((byte)teamWithHighestScore);
                 }
 
                 _lastUpdateTime = Time.time;

@@ -225,6 +225,8 @@ namespace TanksMP
             NetworkRunner runner = UIMain.GetInstance().Runner;
             if (runner != null && runner.IsRunning)
                 runner.Shutdown();
+            
+            SceneNavigator.GoToMainMenu();
         }
 
         public void RefreshAimArrow()

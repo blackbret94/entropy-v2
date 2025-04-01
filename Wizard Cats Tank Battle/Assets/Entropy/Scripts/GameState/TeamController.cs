@@ -128,7 +128,6 @@ namespace Vashta.Entropy.GameState
             if (currentTeam != playerController.Team.TeamIndex)
             {
                 RefreshDisplay();
-                // playerController.Team.ApplyTeamChange();
             }
         }
 

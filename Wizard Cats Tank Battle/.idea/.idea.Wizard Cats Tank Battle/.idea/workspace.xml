@@ -4,27 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2d0b1129-1c08-4810-a5a8-04b901ecd844" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Wizard Cats Tank Battle/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Wizard Cats Tank Battle/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Data/GameMode/GM_TDM.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Data/GameMode/GM_TDM.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/CommonGameplay.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/CommonGameplay.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Resources/BotCharacter.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Resources/BotCharacter.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scenes/Login.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scenes/Login.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scenes/MainMenu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scenes/MainMenu.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameMode/KingOfTheHillController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameMode/KingOfTheHillController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameMode/MatchTimer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameMode/MatchTimer.cs" afterDir="false" />
+    <list default="true" id="2d0b1129-1c08-4810-a5a8-04b901ecd844" name="Changes" comment="Fixed bugs related to spawning">
       <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameState/GameOverController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameState/GameOverController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameState/SpawnController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameState/SpawnController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/CombatController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/CombatController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/SceneNavigation/SceneNavigator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/SceneNavigation/SceneNavigator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TanksMultiplayer/Prefabs/GameManager.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TanksMultiplayer/Prefabs/GameManager.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/CollectibleZone.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/CollectibleZone.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/PlayerControllerBot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/PlayerControllerBot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/UIGame.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/UIGame.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameState/TeamController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameState/TeamController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -378,6 +360,7 @@
       <workItem from="1742798687080" duration="62008000" />
       <workItem from="1743392606139" duration="2535000" />
       <workItem from="1743396112969" duration="1747000" />
+      <workItem from="1743456762072" duration="4853000" />
     </task>
     <task id="LOCAL-00001" summary="Cleaned up files that are not being used">
       <option name="closed" value="true" />
@@ -651,7 +634,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743033044516</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="Fixed bugs related to spawning">
+      <option name="closed" value="true" />
+      <created>1743467030373</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1743467030373</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -689,7 +680,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Migrated movement to the new system" />
     <MESSAGE value="Minimap is now working" />
     <MESSAGE value="Scoreboard works again" />
     <MESSAGE value="Fixed some respawn issues" />
@@ -714,7 +704,8 @@
     <MESSAGE value="Fixed spawn issues" />
     <MESSAGE value="Fixed respawn issues" />
     <MESSAGE value="Attempts to fix enemy nav" />
-    <option name="LAST_COMMIT_MESSAGE" value="Attempts to fix enemy nav" />
+    <MESSAGE value="Fixed bugs related to spawning" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed bugs related to spawning" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

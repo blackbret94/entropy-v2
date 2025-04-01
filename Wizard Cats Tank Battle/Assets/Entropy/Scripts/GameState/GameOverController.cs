@@ -4,6 +4,7 @@ using Fusion;
 using TanksMP;
 using UnityEngine;
 using Vashta.Entropy.GameMode;
+using Vashta.Entropy.Player;
 
 namespace Vashta.Entropy.GameState
 {
@@ -68,6 +69,12 @@ namespace Vashta.Entropy.GameState
             //give the user a chance to read which team won the game
             //before enabling the game over screen
             yield return new WaitForSeconds(3);
+            
+            // disable local death screen
+            _gameManager.ui.DeathPanel.Clear();
+            
+            //disable spawn routine
+            _gameManager.SpawnController.StopAllCoroutines();
 
             //show game over window (still connected at that point)
             if (teamIndex != -1)

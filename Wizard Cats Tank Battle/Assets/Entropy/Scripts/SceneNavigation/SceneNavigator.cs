@@ -13,7 +13,9 @@ namespace Vashta.Entropy.SceneNavigation
         
         public void GoToMainMenu()
         {
-            Runner.LoadScene(GetSceneRef(MainMenuSceneName));
+            // Runner.LoadScene(GetSceneRef(MainMenuSceneName));
+            // Runner.Shutdown(true);
+            SceneManager.LoadScene(MainMenuSceneName);
         }
         
         public void GoToLogin()

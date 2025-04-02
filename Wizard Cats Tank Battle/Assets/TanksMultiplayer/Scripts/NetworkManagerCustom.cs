@@ -228,10 +228,12 @@ namespace TanksMP
 
         public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
         {
+            GameManager gameManager = GameManager.GetInstance();
+            
             //we've joined a finished room, disconnect immediately
-            if (GameManager.GetInstance() != null && GameManager.GetInstance().IsGameOver())
+            if (gameManager != null && gameManager.IsGameOver())
             {
-                Runner.Shutdown();
+                Runner.Disconnect(player);
                 return;
             }
 

@@ -15,7 +15,7 @@ namespace FusionHelpers
 
 	public abstract class FusionSession : NetworkBehaviour
 	{
-		private const int MAX_PLAYERS = 4;
+		private const int MAX_PLAYERS = 12;
 		
 		[SerializeField] private FusionPlayer _playerPrefab;
 
@@ -129,10 +129,10 @@ namespace FusionHelpers
 				}
 				
 				// This means only on player remains
-				if (Runner.SessionInfo.PlayerCount == 1)
-                {
-					Runner.Shutdown(false);
-                }
+				// if (Runner.SessionInfo.PlayerCount == 1)
+    //             {
+				// 	Runner.Shutdown(false);
+    //             }
 			}
 		}
 

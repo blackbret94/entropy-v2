@@ -1,4 +1,3 @@
-
 using UnityEngine;
 
 namespace BuildReportTool
@@ -11,7 +10,7 @@ namespace BuildReportTool
 		public string BuildTimeStart;
 		public string BuildTimeDuration;
 		public int LastTargetBuild;
-		
+
 		System.DateTime _savedBuildTimeStart = new System.DateTime(0);
 		public bool HasBuildTime()
 		{
@@ -26,14 +25,18 @@ namespace BuildReportTool
 		{
 			return _savedBuildTimeStart;
 		}
-		
+		public void ClearBuildTime()
+		{
+			_savedBuildTimeStart = default;
+		}
+
 		public void SaveBuildTimeDuration()
 		{
 			if (_savedBuildTimeStart.Ticks <= 0)
 			{
 				return;
 			}
-			
+
 			var timeSpanBuildStart = new System.TimeSpan(_savedBuildTimeStart.Ticks);
 			var timeSpanNow = new System.TimeSpan(System.DateTime.Now.Ticks);
 			var buildDurationTime = timeSpanNow - timeSpanBuildStart;
@@ -54,8 +57,9 @@ namespace BuildReportTool
 
 		public void OnAfterLoad()
 		{
-			_savedBuildTimeStart =
-				System.DateTime.ParseExact(BuildTimeStart, "u", System.Globalization.CultureInfo.InvariantCulture);
+			_savedBuildTimeStart = !string.IsNullOrEmpty(BuildTimeStart)
+				? System.DateTime.ParseExact(BuildTimeStart, "u", System.Globalization.CultureInfo.InvariantCulture)
+				: default;
 		}
 
 		public void SetSavedPath(string savedPath)
@@ -63,7 +67,7 @@ namespace BuildReportTool
 		}
 
 		public string SavedPath => null;
-		
+
 		public string GetDefaultFilename()
 		{
 			return $"{BuildReportTool.Util.RemoveSuffix("Assets", Application.dataPath)}Library/BuildReportTool-SessionData.xml";

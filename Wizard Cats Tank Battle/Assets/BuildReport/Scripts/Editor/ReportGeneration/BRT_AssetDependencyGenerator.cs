@@ -2,9 +2,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using UnityEditor;
+using UnityEditor.Compilation;
 using UnityEngine;
+using UnityEngine.U2D;
 
 namespace BuildReportTool
 {
@@ -147,20 +150,47 @@ namespace BuildReportTool
 
 			// plus all Resources assets (since they are not referred
 			// to in any scenes, we have to add them explicitly)
-			if (buildInfo.UsedAssets != null && buildInfo.UsedAssets.All != null)
+			if (buildInfo.UsedAssets != null)
 			{
-				var allUsedAssets = buildInfo.UsedAssets.All;
-				for (int n = 0, len = allUsedAssets.Length; n < len; ++n)
+				if (buildInfo.UsedAssets.All != null)
 				{
-					if (!string.IsNullOrEmpty(allUsedAssets[n].Name) &&
-					    allUsedAssets[n].Name.IndexOf("/Resources/", StringComparison.OrdinalIgnoreCase) > -1)
+					var allUsedAssets = buildInfo.UsedAssets.All;
+					for (int n = 0, len = allUsedAssets.Length; n < len; ++n)
 					{
-						startingOpenSet.Enqueue(allUsedAssets[n].Name);
+						if (!string.IsNullOrEmpty(allUsedAssets[n].Name) &&
+						    allUsedAssets[n].Name.IndexOf("/Resources/", StringComparison.OrdinalIgnoreCase) > -1)
+						{
+							startingOpenSet.Enqueue(allUsedAssets[n].Name);
+						}
+					}
+				}
+
+				// also include sprite atlases
+				int textureFilterIdx = buildInfo.FileFilters.GetFilterIdx("Textures");
+				SizePart[] usedTextures;
+				if (buildInfo.HasUsedAssets && textureFilterIdx != -1)
+				{
+					usedTextures = buildInfo.UsedAssets.PerCategory[textureFilterIdx];
+				}
+				else
+				{
+					usedTextures = null;
+				}
+
+				if (usedTextures != null)
+				{
+					foreach (var texture in usedTextures)
+					{
+						if (texture.Name.IsSpriteAtlasFile())
+						{
+							startingOpenSet.Enqueue(texture.Name);
+						}
 					}
 				}
 			}
 
 			Create(data, startingOpenSet, debugLog);
+			CalculateScriptDependencies(data, buildInfo);
 		}
 
 		public static void CreateForAllAssets(AssetDependencies data, BuildReportTool.BuildInfo buildInfo,
@@ -202,6 +232,7 @@ namespace BuildReportTool
 			}
 
 			Create(data, startingOpenSet, debugLog);
+			CalculateScriptDependencies(data, buildInfo);
 		}
 
 		// ==================================================================================
@@ -978,6 +1009,66 @@ namespace BuildReportTool
 					}
 
 					Debug.Log(stringBuilder.ToString());
+				}
+			}
+		}
+
+		// ==================================================================================
+
+		static void CalculateScriptDependencies(AssetDependencies data, BuildReportTool.BuildInfo buildInfo)
+		{
+			int scriptsFilterIdx = buildInfo.FileFilters.GetFilterIdx("Scripts");
+			SizePart[] usedScripts;
+			if (buildInfo.HasUsedAssets && scriptsFilterIdx != -1)
+			{
+				usedScripts = buildInfo.UsedAssets.PerCategory[scriptsFilterIdx];
+			}
+			else
+			{
+				return;
+			}
+
+			var assetDependencies = data.GetAssetDependencies();
+
+			var assemblies = CompilationPipeline.GetAssemblies();
+			foreach (Assembly assembly in assemblies)
+			{
+				string assemblyFilename = Path.GetFileName(assembly.outputPath);
+
+				if (!buildInfo.ScriptDLLs.Exists(assemblyFilename) && !buildInfo.UnityEngineDLLs.Exists(assemblyFilename))
+				{
+					continue;
+				}
+
+				foreach (string sourceFile in assembly.sourceFiles)
+				{
+					if (!usedScripts.Exists(sourceFile))
+					{
+						continue;
+					}
+
+					DependencyEntry assetDependency;
+					if (assetDependencies.ContainsKey(sourceFile))
+					{
+						assetDependency = assetDependencies[sourceFile];
+					}
+					else
+					{
+						assetDependency = new DependencyEntry();
+						assetDependencies.Add(sourceFile, assetDependency);
+					}
+
+					assetDependency.Users.Add(assemblyFilename);
+
+					var usersFlattened = new List<AssetUserFlattened>(assetDependency.Users.Count);
+					assetDependency.UsersFlattened = usersFlattened;
+
+					var newEntry = new AssetUserFlattened(assemblyFilename, 1
+#if BRT_ASSET_DEPENDENCY_DEBUG
+					, "[initial]"
+#endif
+					);
+					usersFlattened.Add(newEntry);
 				}
 			}
 		}

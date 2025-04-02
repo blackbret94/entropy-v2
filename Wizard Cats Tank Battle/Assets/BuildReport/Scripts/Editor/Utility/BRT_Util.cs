@@ -5,7 +5,10 @@
 using UnityEngine;
 using UnityEditor;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace BuildReportTool
@@ -48,6 +51,9 @@ namespace BuildReportTool
 #endif
 					return BuildPlatform.iOS;
 
+				case BuildTarget.tvOS:
+					return BuildPlatform.tvOS;
+
 				case BuildTarget.Android:
 					return BuildPlatform.Android;
 
@@ -65,7 +71,7 @@ namespace BuildReportTool
 
 				// 8th gen
 				case BuildTarget.XboxOne:
-					return BuildPlatform.XBOXOne;
+					return BuildPlatform.XboxOne;
 				case BuildTarget.PS4:
 					return BuildPlatform.PS4;
 #if UNITY_5_2_OR_NEWER && !UNITY_2018_1_OR_NEWER
@@ -76,6 +82,15 @@ namespace BuildReportTool
 #if UNITY_5_6_OR_NEWER || UNITY_2017_1_OR_NEWER
 				case BuildTarget.Switch:
 					return BuildPlatform.Switch;
+#endif
+
+				// 9th gen
+#if UNITY_2019_4_OR_NEWER
+				case BuildTarget.GameCoreXboxSeries:
+					return BuildPlatform.XboxSeries;
+
+				case BuildTarget.PS5:
+					return BuildPlatform.PS5;
 #endif
 
 				// -----------------------------------
@@ -177,7 +192,7 @@ namespace BuildReportTool
 		}
 
 		static SessionData _sessionData = new SessionData();
-		
+
 		// note: Changed these from EditorPrefs to an xml-serialized class,
 		// because some users are reporting problems with EditorPrefs.
 
@@ -211,7 +226,7 @@ namespace BuildReportTool
 				SaveSessionData();
 			}
 		}
-		
+
 		public static bool ShouldGetBuildReportNow
 		{
 			get
@@ -249,7 +264,14 @@ namespace BuildReportTool
 		public static System.DateTime LoadBuildTime(bool clearKey = true)
 		{
 			ReloadSessionData();
-			return _sessionData.GetBuildTime();
+
+			System.DateTime returnValue = _sessionData.GetBuildTime();
+			if (clearKey)
+			{
+				_sessionData.ClearBuildTime();
+				SaveSessionData();
+			}
+			return returnValue;
 		}
 
 		public static void SaveBuildTimeDuration()
@@ -267,8 +289,6 @@ namespace BuildReportTool
 #if UNITY_2018_1_OR_NEWER
 		public static void SaveUnityBuildReportToCurrent(UnityEditor.Build.Reporting.BuildReport report)
 		{
-			var buildTimeStart = LoadBuildTime(false);
-
 			string buildType;
 			string gotBuildType = BuildReportTool.ReportGenerator.GetBuildTypeFromEditorLog(BuildReportTool.Util.UsedEditorLogPath);
 			if (string.IsNullOrEmpty(gotBuildType))
@@ -284,7 +304,7 @@ namespace BuildReportTool
 			var br = new BuildReportTool.UnityBuildReport();
 			br.ProjectName = BuildReportTool.Util.GetProjectName(Application.dataPath);
 			br.BuildType = buildType;
-			br.TimeGot = buildTimeStart;
+			br.TimeGot = LoadBuildTime(false);
 			br.SetFrom(report);
 			BuildReportTool.Util.SerializeAtFolder(br, BuildReportTool.Options.BuildReportSavePath);
 		}
@@ -343,7 +363,7 @@ namespace BuildReportTool
 			{
 				if (totalSeconds >= 60)
 				{
-					return timeSpan.ToString();
+					return timeSpan.ToString("h':'mm':'ss'.'FF");
 				}
 				else
 				{
@@ -551,6 +571,10 @@ namespace BuildReportTool
 			}
 		}
 
+		public static bool IsAnAssembly(this string filename)
+		{
+			return filename.EndsWith(".dll", StringComparison.OrdinalIgnoreCase);
+		}
 
 		public static bool IsAScriptDLL(string filename)
 		{
@@ -575,6 +599,7 @@ namespace BuildReportTool
 			       filename.Equals("mono.security.dll", StringComparison.OrdinalIgnoreCase) ||
 			       filename.Equals("netstandard.dll", StringComparison.OrdinalIgnoreCase) ||
 			       filename.Equals("Accessibility.dll", StringComparison.OrdinalIgnoreCase) ||
+			       filename.Equals("nunit.framework.dll", StringComparison.OrdinalIgnoreCase) ||
 			       filename.Equals("boo.lang.dll", StringComparison.OrdinalIgnoreCase);
 		}
 
@@ -766,10 +791,18 @@ namespace BuildReportTool
 			}
 
 			double totalBytesOfFilesInFolder = 0;
+#if UNITY_2019_4_OR_NEWER
+			foreach (string file in System.IO.Directory.EnumerateFiles(folderPath, "*", SearchOption.AllDirectories))
+			{
+				totalBytesOfFilesInFolder += GetFileSizeInBytes(file);
+			}
+#else
+			// Note: Old versions of Unity did not have Directory.EnumerateFiles so we use this instead:
 			foreach (string file in DldUtil.TraverseDirectory.Do(folderPath))
 			{
 				totalBytesOfFilesInFolder += GetFileSizeInBytes(file);
 			}
+#endif
 
 			return totalBytesOfFilesInFolder;
 		}
@@ -1101,8 +1134,23 @@ namespace BuildReportTool
 
 		public static string GetFileNameOnly(this string filepath)
 		{
-			if ((filepath.StartsWith("Built-in") && filepath.EndsWith(":")) || filepath.DoesFileHaveInvalidPathChars())
+			if (filepath.DoesFileHaveInvalidPathChars())
 			{
+				return filepath;
+			}
+			if (filepath.StartsWith("Built-in "))
+			{
+				if (filepath.EndsWith(":"))
+				{
+					return filepath;
+				}
+
+				int colonIdx = filepath.IndexOf(':');
+				if (colonIdx > -1 && colonIdx + 2 < filepath.Length)
+				{
+					return filepath.Substring(colonIdx + 2);
+				}
+
 				return filepath;
 			}
 			return System.IO.Path.GetFileName(filepath);
@@ -1110,8 +1158,23 @@ namespace BuildReportTool
 
 		public static string GetFileNameOnlyNoExtension(this string filepath)
 		{
-			if ((filepath.StartsWith("Built-in") && filepath.EndsWith(":")) || filepath.DoesFileHaveInvalidPathChars())
+			if (filepath.DoesFileHaveInvalidPathChars())
 			{
+				return filepath;
+			}
+			if (filepath.StartsWith("Built-in "))
+			{
+				if (filepath.EndsWith(":"))
+				{
+					return filepath;
+				}
+
+				int colonIdx = filepath.IndexOf(':');
+				if (colonIdx > -1 && colonIdx + 2 < filepath.Length)
+				{
+					return filepath.Substring(colonIdx + 2);
+				}
+
 				return filepath;
 			}
 			return System.IO.Path.GetFileNameWithoutExtension(filepath);
@@ -1151,6 +1214,11 @@ namespace BuildReportTool
 		public static bool IsMaterialFile(this string me)
 		{
 			return !string.IsNullOrEmpty(me) && me.EndsWith(".mat", StringComparison.OrdinalIgnoreCase);
+		}
+
+		public static bool IsSpriteAtlasFile(this string me)
+		{
+			return !string.IsNullOrEmpty(me) && me.EndsWith(".spriteatlasv2", StringComparison.OrdinalIgnoreCase);
 		}
 
 		/// <summary>
@@ -1645,6 +1713,49 @@ namespace BuildReportTool
 			}
 		}
 
+		public static void OpenFolderInFileBrowser(string path)
+		{
+			string folderToOpen = path;
+			while (!string.IsNullOrEmpty(folderToOpen) && !Directory.Exists(folderToOpen))
+			{
+				folderToOpen = Path.GetDirectoryName(folderToOpen);
+			}
+			if (!string.IsNullOrEmpty(folderToOpen) && Directory.Exists(folderToOpen))
+			{
+				OpenInFileBrowser(folderToOpen);
+			}
+		}
+
+		/// <summary>
+		/// Creates a relative path from one file or folder to another. For old versions of Unity that doesn't have access to System.IO.Path.GetRelativePath
+		/// </summary>
+		/// <param name="fromPath">Contains the directory that defines the start of the relative path.</param>
+		/// <param name="toPath">Contains the path that defines the endpoint of the relative path.</param>
+		/// <returns>The relative path from the start directory to the end path or <c>toPath</c> if the paths are not related.</returns>
+		/// <exception cref="ArgumentNullException"></exception>
+		/// <exception cref="UriFormatException"></exception>
+		/// <exception cref="InvalidOperationException"></exception>
+		public static string MakeRelativePath(string fromPath, string toPath)
+		{
+			if (string.IsNullOrEmpty(fromPath)) throw new ArgumentNullException(nameof(fromPath));
+			if (string.IsNullOrEmpty(toPath))   throw new ArgumentNullException(nameof(toPath));
+
+			var fromUri = new Uri(fromPath);
+			var toUri = new Uri(toPath);
+
+			if (fromUri.Scheme != toUri.Scheme) { return toPath; } // path can't be made relative.
+
+			Uri relativeUri = fromUri.MakeRelativeUri(toUri);
+			string relativePath = Uri.UnescapeDataString(relativeUri.ToString());
+
+			if (toUri.Scheme.Equals("file", StringComparison.InvariantCultureIgnoreCase))
+			{
+				relativePath = relativePath.Replace(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+			}
+
+			return relativePath;
+		}
+
 		public static bool IsInMacOS
 		{
 			get { return SystemInfo.operatingSystem.IndexOf("Mac OS", StringComparison.Ordinal) != -1; }
@@ -1955,11 +2066,38 @@ namespace BuildReportTool
 			return tempFolder;
 		}
 
+		public static string GetProjectScriptAssembliesPath(string projectDataPath)
+		{
+			string tempFolder = projectDataPath;
+			const string ASSETS = "Assets";
+			tempFolder = tempFolder.Substring(0, tempFolder.Length - ASSETS.Length);
+			tempFolder += "Library/Bee/PlayerScriptAssemblies/";
+			return tempFolder;
+		}
+
+		public static string GetProjectWebGLManagedStrippedPath(string projectDataPath)
+		{
+			string tempFolder = projectDataPath;
+			const string ASSETS = "Assets";
+			tempFolder = tempFolder.Substring(0, tempFolder.Length - ASSETS.Length);
+			tempFolder += "Library/Bee/artifacts/WebGL/ManagedStripped/";
+			return tempFolder;
+		}
+
+		public static string GetProjectManagedDLLArtifacts(string projectDataPath)
+		{
+			string tempFolder = projectDataPath;
+			const string ASSETS = "Assets";
+			tempFolder = tempFolder.Substring(0, tempFolder.Length - ASSETS.Length);
+			tempFolder += "Library/Bee/artifacts/csharpactions/";
+			return tempFolder;
+		}
+
 		public static bool AttemptGetWebTempStagingArea(string projectDataPath, out string path)
 		{
 			string tempFolder = GetProjectTempStagingArea(projectDataPath) + "/Data/Managed/";
 
-			if (System.IO.Directory.Exists(tempFolder))
+			if (System.IO.Directory.Exists(tempFolder) && System.IO.Directory.EnumerateFiles(tempFolder, "*.dll").Any())
 			{
 				path = tempFolder;
 				return true;
@@ -1975,7 +2113,15 @@ namespace BuildReportTool
 
 			//Debug.Log(tempFolder);
 
-			if (System.IO.Directory.Exists(tempFolder))
+			if (System.IO.Directory.Exists(tempFolder) && System.IO.Directory.EnumerateFiles(tempFolder, "*.dll").Any())
+			{
+				path = tempFolder;
+				return true;
+			}
+
+			tempFolder = GetProjectTempStagingArea(projectDataPath) + "/Data/Managed/";
+
+			if (System.IO.Directory.Exists(tempFolder) && System.IO.Directory.EnumerateFiles(tempFolder, "*.dll").Any())
 			{
 				path = tempFolder;
 				return true;
@@ -1989,6 +2135,22 @@ namespace BuildReportTool
 			string editorAppContentsPath, ApiCompatibilityLevel monoLevel, StrippingLevel codeStrippingLevel,
 			out string path, out string higherPriorityPath)
 		{
+			if (wasAndroidApkBuild)
+			{
+				string unityEditorPath = System.IO.Path.GetDirectoryName(EditorApplication.applicationPath);
+				path = unityEditorPath + "/Data/PlaybackEngines/AndroidPlayer/Variations/mono/Managed/";
+				higherPriorityPath = unityEditorPath + "/Data/MonoBleedingEdge/lib/mono/unityjit-linux/";
+				return true;
+			}
+
+			if (wasWebBuild)
+			{
+				string unityEditorPath = System.IO.Path.GetDirectoryName(EditorApplication.applicationPath);
+				path = unityEditorPath + "/Data/MonoBleedingEdge/lib/mono/4.5/";
+				higherPriorityPath = unityEditorPath + "/Data/MonoBleedingEdge/lib/mono/4.5/Facades/";
+				return true;
+			}
+
 			bool success = false;
 
 			// more hackery
@@ -2131,6 +2293,44 @@ namespace BuildReportTool
 			return outPart;
 		}
 
+		public static bool Exists(this SizePart[] list, string assetName)
+		{
+			for (int n = 0; n < list.Length; ++n)
+			{
+				if (list[n].Name == assetName)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		public static bool Exists(this List<SizePart> list, string assetName)
+		{
+			for (int n = 0; n < list.Count; ++n)
+			{
+				if (list[n].Name == assetName)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		public static int FindIdx(this List<SizePart> list, string assetName)
+		{
+			for (int n = 0; n < list.Count; ++n)
+			{
+				if (list[n].Name == assetName)
+				{
+					return n;
+				}
+			}
+
+			return -1;
+		}
 
 		static void SaveTextFile(string saveFilePath, string data)
 		{

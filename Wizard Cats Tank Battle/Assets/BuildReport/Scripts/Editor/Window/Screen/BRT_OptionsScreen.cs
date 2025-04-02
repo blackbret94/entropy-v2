@@ -1,8 +1,8 @@
+using System.IO;
 using UnityEngine;
 using UnityEditor;
 using System.Text.RegularExpressions;
 using UnityEditorInternal;
-
 
 namespace BuildReportTool.Window.Screen
 {
@@ -165,7 +165,7 @@ namespace BuildReportTool.Window.Screen
 		{
 			if (_saveTypeLabels == null)
 			{
-				_saveTypeLabels = new[] {SAVE_PATH_TYPE_PERSONAL_OS_SPECIFIC_LABEL, Labels.SAVE_PATH_TYPE_PROJECT_LABEL};
+				_saveTypeLabels = new[] {SAVE_PATH_TYPE_PERSONAL_OS_SPECIFIC_LABEL, Labels.SAVE_PATH_TYPE_PROJECT_LABEL, Labels.SAVE_PATH_TYPE_CUSTOM_LABEL};
 			}
 
 			_selectedCalculationLevelIdx = GetCalculationLevelGuiIdxFromOptions();
@@ -193,6 +193,8 @@ namespace BuildReportTool.Window.Screen
 		ReorderableList _ignorePatternList;
 		readonly GUIContent _basicSearchRadioLabel = new GUIContent("Basic");
 		readonly GUIContent _regexSearchRadioLabel = new GUIContent("Regex");
+
+		readonly GUIContent _infoMessage = new GUIContent();
 
 		Texture2D _iconValid;
 		Texture2D _iconInvalid;
@@ -1057,7 +1059,7 @@ namespace BuildReportTool.Window.Screen
 
 			GUILayout.Space(10);
 			GUILayout.Label("Prefab Data", header2Style, BRT_BuildReportWindow.LayoutNone);
-			
+
 			GUILayout.BeginHorizontal(BRT_BuildReportWindow.LayoutNone);
 			GUILayout.Label("Name of File Filter where Prefab Data will be shown:", BRT_BuildReportWindow.LayoutNone);
 			BuildReportTool.Options.FileFilterNameForPrefabData =
@@ -1136,7 +1138,7 @@ namespace BuildReportTool.Window.Screen
 			GUILayout.FlexibleSpace();
 
 			GUILayout.EndHorizontal();
-			
+
 			// --------------------------------------------
 
 			GUILayout.Space(10);
@@ -1367,25 +1369,6 @@ namespace BuildReportTool.Window.Screen
 
 			GUILayout.Label("Build Report Files", header1Style, BRT_BuildReportWindow.LayoutNone);
 
-			// build report files save path
-			GUILayout.BeginHorizontal(BRT_BuildReportWindow.LayoutNone);
-			GUILayout.Label(string.Format("{0}{1}", Labels.SAVE_PATH_LABEL, BuildReportTool.Options.BuildReportSavePath), BRT_BuildReportWindow.LayoutNone);
-			if (GUILayout.Button(OPEN_IN_FILE_BROWSER_OS_SPECIFIC_LABEL, BRT_BuildReportWindow.LayoutNone))
-			{
-				BuildReportTool.Util.OpenInFileBrowser(BuildReportTool.Options.BuildReportSavePath);
-			}
-
-			GUILayout.FlexibleSpace();
-			GUILayout.EndHorizontal();
-
-			// change name of build reports folder
-			GUILayout.BeginHorizontal(BRT_BuildReportWindow.LayoutNone);
-			GUILayout.Label(Labels.SAVE_FOLDER_NAME_LABEL, BRT_BuildReportWindow.LayoutNone);
-			BuildReportTool.Options.BuildReportFolderName =
-				GUILayout.TextField(BuildReportTool.Options.BuildReportFolderName, LayoutMinWidth250);
-			GUILayout.FlexibleSpace();
-			GUILayout.EndHorizontal();
-
 			// where to save build reports (my docs/home, or beside project)
 			GUILayout.BeginHorizontal(BRT_BuildReportWindow.LayoutNone);
 			GUILayout.Label(Labels.SAVE_PATH_TYPE_LABEL, BRT_BuildReportWindow.LayoutNone);
@@ -1393,13 +1376,92 @@ namespace BuildReportTool.Window.Screen
 			if (_saveTypeLabels == null)
 			{
 				_saveTypeLabels = new[]
-					{SAVE_PATH_TYPE_PERSONAL_OS_SPECIFIC_LABEL, Labels.SAVE_PATH_TYPE_PROJECT_LABEL};
+					{SAVE_PATH_TYPE_PERSONAL_OS_SPECIFIC_LABEL, Labels.SAVE_PATH_TYPE_PROJECT_LABEL, Labels.SAVE_PATH_TYPE_CUSTOM_LABEL};
 			}
 
 			BuildReportTool.Options.SaveType = GUILayout.SelectionGrid(BuildReportTool.Options.SaveType, _saveTypeLabels,
 				_saveTypeLabels.Length, BRT_BuildReportWindow.LayoutNone);
 			GUILayout.FlexibleSpace();
 			GUILayout.EndHorizontal();
+
+			GUILayout.Space(10);
+
+			if (BuildReportTool.Options.SaveType == BuildReportTool.Options.SAVE_TYPE_CUSTOM)
+			{
+				GUILayout.BeginHorizontal(BRT_BuildReportWindow.LayoutNone);
+				GUILayout.Label(Labels.SAVE_PATH_LABEL, BRT_BuildReportWindow.LayoutNone);
+				BuildReportTool.Options.BuildReportCustomOutputPath =
+					GUILayout.TextField(BuildReportTool.Options.BuildReportCustomOutputPath, LayoutMinWidth250);
+				if (GUILayout.Button("Change", BRT_BuildReportWindow.LayoutNone))
+				{
+					bool isRelative;
+					string fullPath;
+					if (Path.IsPathRooted(BuildReportTool.Options.BuildReportCustomOutputPath))
+					{
+						isRelative = false;
+						fullPath = BuildReportTool.Options.BuildReportCustomOutputPath;
+					}
+					else
+					{
+						isRelative = true;
+						fullPath = Path.GetFullPath(Path.Combine(BuildReportTool.Util.GetProjectPath(Application.dataPath),
+							BuildReportTool.Options.BuildReportCustomOutputPath));
+					}
+
+					string gotPath = EditorUtility.OpenFolderPanel(
+						"Choose output path for Build Reports", fullPath, "");
+					if (isRelative && !string.IsNullOrEmpty(gotPath))
+					{
+						// convert it back to being relative to project folder
+						gotPath = BuildReportTool.Util.MakeRelativePath(BuildReportTool.Util.GetProjectPath(Application.dataPath), gotPath);
+					}
+					if (!string.IsNullOrEmpty(gotPath))
+					{
+						BuildReportTool.Options.BuildReportCustomOutputPath = gotPath;
+					}
+				}
+				if (GUILayout.Button(OPEN_IN_FILE_BROWSER_OS_SPECIFIC_LABEL, BRT_BuildReportWindow.LayoutNone))
+				{
+					BuildReportTool.Util.OpenFolderInFileBrowser(BuildReportTool.Options.BuildReportSavePath);
+				}
+				GUILayout.FlexibleSpace();
+				GUILayout.EndHorizontal();
+
+				if (!Path.IsPathRooted(BuildReportTool.Options.BuildReportCustomOutputPath))
+				{
+					GUILayout.BeginHorizontal(BRT_BuildReportWindow.LayoutNone);
+					GUILayout.BeginVertical(EditorStyles.helpBox);
+					_infoMessage.image = EditorGUIUtility.IconContent("console.infoicon").image;
+					string fullPath = Path.GetFullPath(Path.Combine(BuildReportTool.Util.GetProjectPath(Application.dataPath),
+						BuildReportTool.Options.BuildReportCustomOutputPath));
+					_infoMessage.text = $"Relative path detected. Path is:\n{fullPath}";
+					GUILayout.Label(_infoMessage);
+					GUILayout.EndVertical();
+					GUILayout.FlexibleSpace();
+					GUILayout.EndHorizontal();
+				}
+			}
+			else // non-custom save path type
+			{
+				// build report files save path
+				GUILayout.BeginHorizontal(BRT_BuildReportWindow.LayoutNone);
+				GUILayout.Label(string.Format("{0}{1}", Labels.SAVE_PATH_LABEL, BuildReportTool.Options.BuildReportSavePath), BRT_BuildReportWindow.LayoutNone);
+				if (GUILayout.Button(OPEN_IN_FILE_BROWSER_OS_SPECIFIC_LABEL, BRT_BuildReportWindow.LayoutNone))
+				{
+					BuildReportTool.Util.OpenFolderInFileBrowser(BuildReportTool.Options.BuildReportSavePath);
+				}
+
+				GUILayout.FlexibleSpace();
+				GUILayout.EndHorizontal();
+
+				// change name of build reports folder
+				GUILayout.BeginHorizontal(BRT_BuildReportWindow.LayoutNone);
+				GUILayout.Label(Labels.SAVE_FOLDER_NAME_LABEL, BRT_BuildReportWindow.LayoutNone);
+				BuildReportTool.Options.BuildReportFolderName =
+					GUILayout.TextField(BuildReportTool.Options.BuildReportFolderName, LayoutMinWidth250);
+				GUILayout.FlexibleSpace();
+				GUILayout.EndHorizontal();
+			}
 
 			GUILayout.Space(BuildReportTool.Window.Settings.CATEGORY_VERTICAL_SPACING);
 

@@ -135,6 +135,7 @@ namespace BuildReportTool.Window
 		public const string SAVE_PATH_TYPE_PERSONAL_WIN_LABEL = "In \"My Documents\" folder";
 		public const string SAVE_PATH_TYPE_PERSONAL_MAC_LABEL = "In Home folder";
 		public const string SAVE_PATH_TYPE_PROJECT_LABEL = "Beside project folder";
+		public const string SAVE_PATH_TYPE_CUSTOM_LABEL = "Custom";
 
 		public const string EDITOR_LOG_LABEL = "Unity Editor.log path ";
 		public const string DEFAULT_EDITOR_LOG_NOT_FOUND_MSG = "Warning: Unity Editor Log file not found.";

@@ -1,42 +1,6 @@
-#if UNITY_5 && (!UNITY_5_0 && !UNITY_5_1)
-#define UNITY_5_2_AND_GREATER
-#endif
-
-#if UNITY_5 && (!UNITY_5_0 && !UNITY_5_1 && !UNITY_5_2)
-#define UNITY_5_3_AND_GREATER
-#endif
-
-#if UNITY_4 || UNITY_5_0 || UNITY_5_1
-#define UNITY_5_1_AND_LESSER
-#endif
-
-#if UNITY_4 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2
-#define UNITY_5_2_AND_LESSER
-#endif
-
-#if UNITY_4 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2 || UNITY_5_3
-#define UNITY_5_3_AND_LESSER
-#endif
-
-#if UNITY_4 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2 || UNITY_5_3 || UNITY_5_4
-#define UNITY_5_4_AND_LESSER
-#endif
-
-#if UNITY_4 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2 || UNITY_5_3 || UNITY_5_4 || UNITY_5_5
-#define UNITY_5_5_AND_LESSER
-#endif
-
-#if !UNITY_2018
-#define UNITY_2017_AND_LESSER
-#endif
-
-#if !UNITY_4 && !UNITY_5 && !UNITY_2017
-#define UNITY_2018_AND_NEWER
-#endif
-
 using System;
 using System.Collections.Generic;
-#if !UNITY_5_1_AND_LESSER // 5.2 and greater
+#if UNITY_5_3_OR_NEWER // 5.2 and greater
 using System.Linq;
 #endif
 using UnityEditor;
@@ -59,25 +23,28 @@ namespace BuildReportTool
 			//
 			return new[]
 			{
-				/* 0 */ new GUIContent("Windows"),
-				/* 1 */ new GUIContent("Mac"),
-				/* 2 */ new GUIContent("Linux"),
+				/*  0 */ new GUIContent("Windows"),
+				/*  1 */ new GUIContent("Mac"),
+				/*  2 */ new GUIContent("Linux"),
 
-				/* 3 */ new GUIContent("Web"),
+				/*  3 */ new GUIContent("Web"),
 				/*  4 */ new GUIContent("Web GL"),
 
 				/*  5 */ new GUIContent("iOS"),
-				/*  6 */ new GUIContent("Android"),
-				/*  7 */ new GUIContent("Blackberry"),
+				/*  6 */ new GUIContent("tvOS"),
+				/*  7 */ new GUIContent("Android"),
+				/*  8 */ new GUIContent("Blackberry"),
 
-				/*  8 */ new GUIContent("Xbox 360"),
-				/*  9 */ new GUIContent("Xbox One"),
-				/* 10 */ new GUIContent("Playstation 3"),
-				/* 11 */ new GUIContent("Playstation 4"),
+				/*  9 */ new GUIContent("Xbox 360"),
+				/* 10 */ new GUIContent("Xbox One"),
+				/* 11 */ new GUIContent("Xbox Series"),
+				/* 12 */ new GUIContent("Playstation 3"),
+				/* 13 */ new GUIContent("Playstation 4"),
+				/* 14 */ new GUIContent("Playstation 5"),
 
-				/* 12 */ new GUIContent("Playstation Vita (Native)"),
+				/* 15 */ new GUIContent("Playstation Vita (Native)"),
 
-				/* 13 */ new GUIContent("Samsung TV"),
+				/* 16 */ new GUIContent("Samsung TV"),
 			};
 		}
 
@@ -102,25 +69,31 @@ namespace BuildReportTool
 
 				case BuildSettingCategory.iOS:
 					return 5;
-				case BuildSettingCategory.Android:
+				case BuildSettingCategory.tvOS:
 					return 6;
-				case BuildSettingCategory.Blackberry:
+				case BuildSettingCategory.Android:
 					return 7;
+				case BuildSettingCategory.Blackberry:
+					return 8;
 
 				case BuildSettingCategory.Xbox360:
-					return 8;
-				case BuildSettingCategory.XboxOne:
 					return 9;
-				case BuildSettingCategory.PS3:
+				case BuildSettingCategory.XboxOne:
 					return 10;
-				case BuildSettingCategory.PS4:
+				case BuildSettingCategory.XboxSeries:
 					return 11;
+				case BuildSettingCategory.PS3:
+					return 12;
+				case BuildSettingCategory.PS4:
+					return 13;
+				case BuildSettingCategory.PS5:
+					return 14;
 
 				case BuildSettingCategory.PSVita:
-					return 12;
+					return 15;
 
 				case BuildSettingCategory.SamsungTV:
-					return 13;
+					return 16;
 			}
 
 			return -1;
@@ -145,23 +118,29 @@ namespace BuildReportTool
 				case 5:
 					return BuildSettingCategory.iOS;
 				case 6:
-					return BuildSettingCategory.Android;
+					return BuildSettingCategory.tvOS;
 				case 7:
+					return BuildSettingCategory.Android;
+				case 8:
 					return BuildSettingCategory.Blackberry;
 
-				case 8:
-					return BuildSettingCategory.Xbox360;
 				case 9:
-					return BuildSettingCategory.XboxOne;
+					return BuildSettingCategory.Xbox360;
 				case 10:
-					return BuildSettingCategory.PS3;
+					return BuildSettingCategory.XboxOne;
 				case 11:
-					return BuildSettingCategory.PS4;
-
+					return BuildSettingCategory.XboxSeries;
 				case 12:
+					return BuildSettingCategory.PS3;
+				case 13:
+					return BuildSettingCategory.PS4;
+				case 14:
+					return BuildSettingCategory.PS5;
+
+				case 15:
 					return BuildSettingCategory.PSVita;
 
-				case 13:
+				case 16:
 					return BuildSettingCategory.SamsungTV;
 			}
 
@@ -196,11 +175,15 @@ namespace BuildReportTool
 					return "Xbox 360";
 				case BuildSettingCategory.XboxOne:
 					return "Xbox One";
+				case BuildSettingCategory.XboxSeries:
+					return "Xbox Series";
 
 				case BuildSettingCategory.PS3:
 					return "Playstation 3";
 				case BuildSettingCategory.PS4:
 					return "Playstation 4";
+				case BuildSettingCategory.PS5:
+					return "Playstation 5";
 
 				case BuildSettingCategory.PSVita:
 					return "Playstation Vita (Native)";
@@ -266,6 +249,10 @@ namespace BuildReportTool
 
 			settings.UsingAdvancedLicense = PlayerSettings.advancedLicense;
 
+#if UNITY_5_6_OR_NEWER
+			settings.ApplicationIdentifier = PlayerSettings.applicationIdentifier;
+#endif
+
 			// debug settings
 			// ---------------------------------------------------------------
 			settings.EnableDevelopmentBuild = EditorUserBuildSettings.development;
@@ -289,8 +276,11 @@ namespace BuildReportTool
 #endif
 #endif
 
-#if !UNITY_5_3_AND_LESSER
+#if UNITY_5_4_OR_NEWER
 			settings.EnableExplicitDivideByZeroChecks = EditorUserBuildSettings.explicitDivideByZeroChecks;
+#endif
+#if UNITY_2018_1_OR_NEWER
+			settings.EnableArrayBoundsChecks = EditorUserBuildSettings.explicitArrayBoundsChecks;
 #endif
 
 #if !UNITY_4
@@ -301,7 +291,7 @@ namespace BuildReportTool
 
 			settings.ConnectProfiler = EditorUserBuildSettings.connectProfiler;
 
-#if UNITY_5_3_AND_GREATER
+#if UNITY_5_3_OR_NEWER && !UNITY_2017_1_OR_NEWER
 			// this setting actually started appearing in Unity 5.2.2 (it is not present in 5.2.1)
 			// but our script compilation defines can't detect the patch number in the version,
 			// so we have no choice but to restrict this to 5.3
@@ -336,8 +326,12 @@ namespace BuildReportTool
 #endif
 			settings.StripUnusedMeshComponents = PlayerSettings.stripUnusedMeshComponents;
 
-#if !UNITY_5_1_AND_LESSER // 5.2 and greater
+#if UNITY_5_3_OR_NEWER // 5.2 and greater (but Unity 5.2 doesn't have a define so we use 5.3)
 			settings.StripEngineCode = PlayerSettings.stripEngineCode;
+#endif
+
+#if UNITY_2020_1_OR_NEWER
+			settings.StripUnusedMips = PlayerSettings.mipStripping;
 #endif
 
 
@@ -360,13 +354,34 @@ namespace BuildReportTool
 
 			settings.CompileDefines = defines.ToArray();
 
-#if UNITY_2023_1_OR_NEWER
+#if UNITY_2019_1_OR_NEWER
+			settings.IncrementalGC = PlayerSettings.gcIncremental;
+#endif
+#if UNITY_2019_4_OR_NEWER
+			settings.SuppressCommonWarnings = PlayerSettings.suppressCommonWarnings;
+#endif
+
 			BuildTarget buildTarget = EditorUserBuildSettings.activeBuildTarget;
 			BuildTargetGroup targetGroup = BuildPipeline.GetBuildTargetGroup(buildTarget);
+#if UNITY_2021_2_OR_NEWER
 			var namedBuildTarget = UnityEditor.Build.NamedBuildTarget.FromBuildTargetGroup(targetGroup);
 #endif
 
-#if UNITY_2023_1_OR_NEWER
+#if UNITY_2021_2_OR_NEWER
+			settings.ScriptingBackend = PlayerSettings.GetScriptingBackend(namedBuildTarget).ToString();
+#elif UNITY_2017_1_OR_NEWER
+			settings.ScriptingBackend = PlayerSettings.GetScriptingBackend(targetGroup).ToString();
+#endif
+
+#if UNITY_2017_1_OR_NEWER
+			settings.AdditionalIL2CPPArguments = PlayerSettings.GetAdditionalIl2CppArgs();
+#endif
+
+#if UNITY_2021_2_OR_NEWER
+			settings.AdditionalCompilerArguments = PlayerSettings.GetAdditionalCompilerArguments(namedBuildTarget);
+#endif
+
+#if UNITY_2021_3_OR_NEWER
 			settings.StrippingLevelUsed = PlayerSettings
 			                              .GetManagedStrippingLevel(namedBuildTarget)
 			                              .ToString();
@@ -378,16 +393,57 @@ namespace BuildReportTool
 			settings.StrippingLevelUsed = PlayerSettings.strippingLevel.ToString();
 #endif
 
-#if UNITY_2023_1_OR_NEWER
-			settings.NETApiCompatibilityLevel = PlayerSettings
-			                                    .GetApiCompatibilityLevel(namedBuildTarget)
-			                                    .ToString();
+			ApiCompatibilityLevel apiCompat;
+#if UNITY_2021_3_OR_NEWER
+			apiCompat = PlayerSettings.GetApiCompatibilityLevel(namedBuildTarget);
 #elif UNITY_5_6_OR_NEWER
-			settings.NETApiCompatibilityLevel = PlayerSettings
-			                                    .GetApiCompatibilityLevel(EditorUserBuildSettings.selectedBuildTargetGroup)
-			                                    .ToString();
+			apiCompat = PlayerSettings.GetApiCompatibilityLevel(EditorUserBuildSettings.selectedBuildTargetGroup);
 #else
-			settings.NETApiCompatibilityLevel = PlayerSettings.apiCompatibilityLevel.ToString();
+			apiCompat = PlayerSettings.apiCompatibilityLevel;
+#endif
+
+			switch (apiCompat)
+			{
+				case ApiCompatibilityLevel.NET_Standard_2_0:
+					// NET_Standard_2_0 is deprecated, change to NET_Standard instead
+					// both NET_Standard_2_0 and NET_Standard have the same int value, so we have to force the change
+					settings.NETApiCompatibilityLevel = "NET_Standard";
+					break;
+				case ApiCompatibilityLevel.NET_4_6:
+					// NET_4_6 is deprecated, change to NET_Unity_4_8 instead
+					// both NET_4_6 and NET_Unity_4_8 have the same int value, so we have to force the change
+					settings.NETApiCompatibilityLevel = "NET_Unity_4_8";
+					break;
+				default:
+					settings.NETApiCompatibilityLevel = apiCompat.ToString();
+					break;
+			}
+
+#if UNITY_2022_1_OR_NEWER
+			settings.IL2CPPCodeGeneration = PlayerSettings.GetIl2CppCodeGeneration(namedBuildTarget).ToString();
+#elif UNITY_2021_2_OR_NEWER
+			// Added in 2021.2, marked as obsolete in 2022.1
+			settings.IL2CPPCodeGeneration = EditorUserBuildSettings.il2CppCodeGeneration.ToString();
+#endif
+
+#if UNITY_2022_1_OR_NEWER
+			settings.InsecureHttpOption = PlayerSettings.insecureHttpOption.ToString();
+#endif
+
+#if UNITY_2021_2_OR_NEWER
+			settings.IL2CPPCompilerConfig = PlayerSettings.GetIl2CppCompilerConfiguration(namedBuildTarget).ToString();
+#elif UNITY_2018_1_OR_NEWER
+			settings.IL2CPPCompilerConfig = PlayerSettings.GetIl2CppCompilerConfiguration(targetGroup).ToString();
+#endif
+
+#if UNITY_2018_1_OR_NEWER
+			settings.AllowUnsafeCode = PlayerSettings.allowUnsafeCode;
+#endif
+
+#if UNITY_2022_2_OR_NEWER
+#elif UNITY_2019_4_OR_NEWER
+			// Added in Unity 2019.4, marked as obsolete in Unity 2022.2
+			settings.AssemblyVersionValidation = PlayerSettings.assemblyVersionValidation;
 #endif
 
 			settings.AOTOptions = PlayerSettings.aotOptions;
@@ -401,16 +457,61 @@ namespace BuildReportTool
 
 			// rendering settings
 			// ---------------------------------------------------------------
+
+			settings.Use32BitDisplayBuffer = PlayerSettings.use32BitDisplayBuffer;
+			settings.UseHDRDisplay = PlayerSettings.useHDRDisplay;
 			settings.ColorSpaceUsed = PlayerSettings.colorSpace.ToString();
 			settings.UseMultithreadedRendering = PlayerSettings.MTRendering;
 			settings.UseGPUSkinning = PlayerSettings.gpuSkinning;
 			settings.VisibleInBackground = PlayerSettings.visibleInBackground;
+
+#if UNITY_2022_3_OR_NEWER
+			settings.AllowHDRDisplaySupport = PlayerSettings.allowHDRDisplaySupport;
+#endif
+
+#if UNITY_2022_2_OR_NEWER
+			settings.HdrBitDepth = PlayerSettings.hdrBitDepth.ToString();
+#endif
+
+#if UNITY_2018_3_OR_NEWER
+			settings.LegacyClampBlendShapeWeights = PlayerSettings.legacyClampBlendShapeWeights;
+#endif
+
+#if UNITY_2021_2_OR_NEWER
+			settings.OverrideMaxTextureSize = EditorUserBuildSettings.overrideMaxTextureSize;
+			settings.OverrideTextureCompression = EditorUserBuildSettings.overrideTextureCompression.ToString();
+#endif
+
+#if UNITY_2020_1_OR_NEWER
+			settings.VirtualTexturingSupportEnabled = PlayerSettings.GetVirtualTexturingSupportEnabled();
+#endif
+
+#if UNITY_2021_2_OR_NEWER
+			settings.NormalMapEncoding = PlayerSettings.GetNormalMapEncoding(namedBuildTarget).ToString();
+#elif UNITY_2020_2_OR_NEWER
+			settings.NormalMapEncoding = PlayerSettings.GetNormalMapEncoding(targetGroup).ToString();
+#endif
+
+#if UNITY_2020_2_OR_NEWER
+			settings.ShaderPrecisionModel = PlayerSettings.GetShaderPrecisionModel().ToString();
+#endif
+
+#if UNITY_2021_3_OR_NEWER && !UNITY_2021_3_0 && !UNITY_2021_3_1 && !UNITY_2021_3_2 && !UNITY_2021_3_3 && !UNITY_2021_3_4 && !UNITY_2021_3_5 && !UNITY_2021_3_6 && !UNITY_2021_3_7 && !UNITY_2021_3_8 && !UNITY_2021_3_9 && !UNITY_2021_3_10 && !UNITY_2021_3_11
+			settings.ShaderChunkCountForPlatform = PlayerSettings.GetShaderChunkCountForPlatform(buildTarget);
+			settings.ShaderChunkSizeInMBForPlatform = PlayerSettings.GetShaderChunkSizeInMBForPlatform(buildTarget);
+#endif
+
+#if UNITY_2022_1_OR_NEWER
+			settings.StrictShaderVariantMatching = PlayerSettings.strictShaderVariantMatching;
+			settings.SpriteBatchVertexThreshold = PlayerSettings.spriteBatchVertexThreshold;
+#endif
 
 #if UNITY_5_4_OR_NEWER
 			settings.UseGraphicsJobs = PlayerSettings.graphicsJobs;
 #endif
 #if UNITY_5_5_OR_NEWER
 			settings.GraphicsJobsType = PlayerSettings.graphicsJobMode.ToString();
+			settings.StereoRenderingPath = PlayerSettings.stereoRenderingPath.ToString();
 #endif
 
 #if (UNITY_EDITOR_WIN || UNITY_EDITOR_OSX)
@@ -423,7 +524,7 @@ namespace BuildReportTool
 #endif
 #endif
 
-#if !UNITY_5_1_AND_LESSER && !UNITY_2019_3_OR_NEWER // 5.2 to 2019.2
+#if UNITY_5_3_OR_NEWER && !UNITY_2019_3_OR_NEWER // 5.2 (but Unity 5.2 doesn't have a define so we use 5.3) to 2019.2
 			settings.EnableVirtualRealitySupport = PlayerSettings.virtualRealitySupported;
 #elif UNITY_2019_3_OR_NEWER
 			settings.EnableVirtualRealitySupport = UnityEngine.XR.XRSettings.enabled;
@@ -458,11 +559,27 @@ namespace BuildReportTool
 			settings.AspectRatiosAllowed = new string[]{"N/A"}; // AspectRatio enum removed in Unity 2022.2
 #endif
 
-#if !UNITY_5_1_AND_LESSER // 5.2 and greater
+#if UNITY_5_3_OR_NEWER // 5.2 and greater (but Unity 5.2 doesn't have a define so we use 5.3)
 			settings.GraphicsAPIsUsed = PlayerSettings.GetGraphicsAPIs(EditorUserBuildSettings.activeBuildTarget)
 			                                          .Select(type => type.ToString()).ToArray();
 #endif
 
+
+#if UNITY_2018_2_OR_NEWER
+			settings.VulkanEnableSetSRGBWrite = PlayerSettings.vulkanEnableSetSRGBWrite;
+#endif
+
+#if UNITY_2019_3_OR_NEWER
+			settings.vulkanNumSwapchainBuffers = PlayerSettings.vulkanNumSwapchainBuffers;
+#endif
+
+#if UNITY_2019_4_OR_NEWER
+			settings.VulkanEnableLateAcquireNextImage = PlayerSettings.vulkanEnableLateAcquireNextImage;
+#endif
+
+#if UNITY_2020_2_OR_NEWER
+			settings.VulkanEnablePreTransform = PlayerSettings.vulkanEnablePreTransform;
+#endif
 
 			// shared settings
 			// ---------------------------------------------------------------
@@ -489,16 +606,16 @@ namespace BuildReportTool
 			settings.WebPlayerDeployOffline = EditorUserBuildSettings.webPlayerOfflineDeployment;
 #endif
 
-#if UNITY_5_2_AND_LESSER
-			settings.WebPlayerFirstStreamedLevelWithResources = PlayerSettings.firstStreamedLevelWithResources;
-#else
+#if UNITY_5_3_OR_NEWER
 			settings.WebPlayerFirstStreamedLevelWithResources = 0;
+#else
+			settings.WebPlayerFirstStreamedLevelWithResources = PlayerSettings.firstStreamedLevelWithResources;
 #endif
 
 			// Web GL settings
 			// ---------------------------------------------------------------
 
-#if UNITY_5_3_AND_LESSER
+#if !UNITY_5_4_OR_NEWER
 			settings.WebGLOptimizationLevel = EditorUserBuildSettings.webGLOptimizationLevel.ToString();
 #endif
 #if UNITY_5_4_OR_NEWER && !UNITY_2019_1_OR_NEWER
@@ -525,19 +642,19 @@ namespace BuildReportTool
 			// standalone (windows/mac/linux) build settings
 			// ---------------------------------------------------------------
 #if !UNITY_2019_1_OR_NEWER
-		settings.StandaloneResolutionDialogSettingUsed = PlayerSettings.displayResolutionDialog.ToString();
+			settings.StandaloneResolutionDialogSettingUsed = PlayerSettings.displayResolutionDialog.ToString();
 #endif
-#if UNITY_2018_AND_NEWER
+#if UNITY_2018_1_OR_NEWER
 			settings.StandaloneFullScreenModeUsed = PlayerSettings.fullScreenMode.ToString();
 #endif
 
 			settings.StandaloneDefaultScreenWidth = PlayerSettings.defaultScreenWidth;
 			settings.StandaloneDefaultScreenHeight = PlayerSettings.defaultScreenHeight;
 
-#if UNITY_2017_AND_LESSER && !UNITY_2019_1_OR_NEWER
-		settings.StandaloneFullScreenByDefault = PlayerSettings.defaultIsFullScreen;
+#if !UNITY_2019_1_OR_NEWER
+			settings.StandaloneFullScreenByDefault = PlayerSettings.defaultIsFullScreen;
 #endif
-#if !UNITY_5_2_AND_LESSER
+#if UNITY_5_3_OR_NEWER
 			settings.StandaloneAllowFullScreenSwitch = PlayerSettings.allowFullscreenSwitch;
 #endif
 
@@ -549,38 +666,68 @@ namespace BuildReportTool
 
 			// windows only build settings
 			// ---------------------------------------------------------------
-#if UNITY_5_1_AND_LESSER
-		settings.WinUseDirect3D11IfAvailable = PlayerSettings.useDirect3D11;
+#if !UNITY_5_3_OR_NEWER
+			settings.WinUseDirect3D11IfAvailable = PlayerSettings.useDirect3D11;
 #endif
 
 #if !UNITY_2017_3_OR_NEWER
-		settings.WinDirect3D9FullscreenModeUsed = PlayerSettings.d3d9FullscreenMode.ToString();
+			settings.WinDirect3D9FullscreenModeUsed = PlayerSettings.d3d9FullscreenMode.ToString();
 #endif
 
-#if !UNITY_4 && UNITY_2017_AND_LESSER && !UNITY_2019_1_OR_NEWER
-		settings.WinDirect3D11FullscreenModeUsed = PlayerSettings.d3d11FullscreenMode.ToString();
+#if !UNITY_4 && !UNITY_2019_1_OR_NEWER
+			settings.WinDirect3D11FullscreenModeUsed = PlayerSettings.d3d11FullscreenMode.ToString();
 #endif
 
-#if UNITY_5_3_AND_LESSER
-		settings.StandaloneUseStereoscopic3d = PlayerSettings.stereoscopic3D;
+#if !UNITY_5_4_OR_NEWER
+			settings.StandaloneUseStereoscopic3d = PlayerSettings.stereoscopic3D;
 #endif
 
+#if UNITY_2019_1_OR_NEWER
+			settings.WinUseFlipModelSwapchain = PlayerSettings.useFlipModelSwapchain;
+#endif
+
+#if UNITY_2021_3_OR_NEWER && !UNITY_2021_3_0 && !UNITY_2021_3_1 && !UNITY_2021_3_2 && !UNITY_2021_3_3 && !UNITY_2021_3_4 && !UNITY_2021_3_5 && !UNITY_2021_3_6 && !UNITY_2021_3_7 && !UNITY_2021_3_8 && !UNITY_2021_3_9 && !UNITY_2021_3_10 && !UNITY_2021_3_11 && !UNITY_2021_3_12
+			settings.WinGamepadInputHint = PlayerSettings.windowsGamepadBackendHint.ToString();
+
+			// simplify value
+			switch (settings.WinGamepadInputHint)
+			{
+				case "WindowsGamepadBackendHintDefault":
+					settings.WinGamepadInputHint = "Default";
+					break;
+				case "WindowsGamepadBackendHintXInput":
+					settings.WinGamepadInputHint = "XInput API";
+					break;
+				case "WindowsGamepadBackendHintWindowsGamingInput":
+					settings.WinGamepadInputHint = "GamingInput API";
+					break;
+			}
+#endif
 
 			// Windows Store App only build settings
 			// ---------------------------------------------------------------
 #if !UNITY_4 && !UNITY_2019_1_OR_NEWER
-		settings.WSAGenerateReferenceProjects = EditorUserBuildSettings.wsaGenerateReferenceProjects;
+			settings.WSAGenerateReferenceProjects = EditorUserBuildSettings.wsaGenerateReferenceProjects;
 #endif
-#if UNITY_5_2_AND_GREATER
-		settings.WSASDK = EditorUserBuildSettings.wsaSDK.ToString();
+#if UNITY_5_3_OR_NEWER && !UNITY_2017_1_OR_NEWER
+			settings.WSASDK = EditorUserBuildSettings.wsaSDK.ToString();
 #endif
 
 
 			// mac only build settings
 			// ---------------------------------------------------------------
+
+#if UNITY_2017_2_OR_NEWER
+			settings.MacRetinaSupport = PlayerSettings.macRetinaSupport;
+#endif
+
+#if UNITY_2021_2_OR_NEWER
+			settings.MacXcodeBuildConfig = EditorUserBuildSettings.macOSXcodeBuildConfig.ToString();
+#endif
+
 			settings.MacUseAppStoreValidation = PlayerSettings.useMacAppStoreValidation;
-#if UNITY_2017_AND_LESSER && !UNITY_2019_1_OR_NEWER
-		settings.MacFullscreenModeUsed = PlayerSettings.macFullscreenMode.ToString();
+#if !UNITY_2019_1_OR_NEWER
+			settings.MacFullscreenModeUsed = PlayerSettings.macFullscreenMode.ToString();
 #endif
 		}
 
@@ -590,17 +737,14 @@ namespace BuildReportTool
 			// Mobile build settings
 			// ---------------------------------------------------------------
 
-
-#if UNITY_5_5_AND_LESSER
-		settings.MobileBundleIdentifier =
- PlayerSettings.bundleIdentifier; // ("Bundle Identifier" in iOS, "Package Identifier" in Android)
+			// ("Bundle Identifier" in iOS, "Package Identifier" in Android)
+#if UNITY_5_6_OR_NEWER
+			settings.MobileBundleIdentifier = PlayerSettings.applicationIdentifier;
 #else
-			settings.MobileBundleIdentifier =
-				PlayerSettings.applicationIdentifier; // ("Bundle Identifier" in iOS, "Package Identifier" in Android)
+			settings.MobileBundleIdentifier = PlayerSettings.bundleIdentifier;
 #endif
-
-			settings.MobileBundleVersion =
-				PlayerSettings.bundleVersion; // ("Bundle Version" in iOS, "Version Name" in Android)
+			// ("Bundle Version" in iOS, "Version Name" in Android)
+			settings.MobileBundleVersion = PlayerSettings.bundleVersion;
 			settings.MobileHideStatusBar = PlayerSettings.statusBarHidden;
 
 			settings.MobileAccelerometerFrequency = PlayerSettings.accelerometerFrequency;
@@ -611,8 +755,7 @@ namespace BuildReportTool
 			settings.MobileEnableAutorotateToLandscapeLeft = PlayerSettings.allowedAutorotateToLandscapeLeft;
 			settings.MobileEnableAutorotateToLandscapeRight = PlayerSettings.allowedAutorotateToLandscapeRight;
 			settings.MobileEnableOSAutorotation = PlayerSettings.useAnimatedAutorotation;
-
-			settings.Use32BitDisplayBuffer = PlayerSettings.use32BitDisplayBuffer;
+			settings.MuteOtherAudioSources = PlayerSettings.muteOtherAudioSources;
 
 
 			// iOS only build settings
@@ -638,7 +781,11 @@ namespace BuildReportTool
 			settings.iOSSDKVersionUsed = PlayerSettings.iOS.sdkVersion.ToString();
 			settings.iOSTargetDevice = PlayerSettings.iOS.targetDevice.ToString();
 
-#if UNITY_5_2_AND_LESSER
+#if UNITY_2021_2_OR_NEWER
+			settings.iOSXcodeBuildConfig = EditorUserBuildSettings.iOSXcodeBuildConfig.ToString();
+#endif
+
+#if !UNITY_5_3_OR_NEWER
 			settings.iOSTargetResolution = PlayerSettings.iOS.targetResolution.ToString();
 #else
 			// not sure what the equivalent is for PlayerSettings.iOS.targetResolution in Unity 5.3
@@ -661,7 +808,7 @@ namespace BuildReportTool
 			settings.iOSLogObjCUncaughtExceptions = PlayerSettings.logObjCUncaughtExceptions;
 #endif
 
-#if UNITY_5_1_AND_LESSER
+#if !UNITY_5_3_OR_NEWER
 			settings.iOSTargetGraphics = PlayerSettings.targetIOSGraphics.ToString();
 #else
 			settings.iOSTargetGraphics = string.Join(",",
@@ -672,6 +819,14 @@ namespace BuildReportTool
 			// ---------------------------------------------------------------
 
 			settings.AndroidBuildSubtarget = EditorUserBuildSettings.androidBuildSubtarget.ToString();
+
+#if UNITY_2018_2_OR_NEWER
+			settings.AndroidBuildApkPerCpuArch = PlayerSettings.Android.buildApkPerCpuArchitecture;
+#endif
+
+#if UNITY_2021_1_OR_NEWER
+			settings.AndroidCreateSymbols = EditorUserBuildSettings.androidCreateSymbols.ToString();
+#endif
 
 #if UNITY_2023_1_OR_NEWER
 			settings.AndroidUseAPKExpansionFiles = PlayerSettings.Android.splitApplicationBinary;
@@ -685,7 +840,15 @@ namespace BuildReportTool
 			settings.AndroidTvCompatible = PlayerSettings.Android.androidTVCompatibility;
 #endif
 
+#if UNITY_2017_4_OR_NEWER
+			settings.AndroidAppBundle = EditorUserBuildSettings.buildAppBundle;
+#endif
+
 			settings.AndroidUseLicenseVerification = PlayerSettings.Android.licenseVerification;
+
+#if UNITY_2022_2_OR_NEWER
+			settings.AndroidEnableArmV9SecurityFeatures = PlayerSettings.Android.enableArmv9SecurityFeatures;
+#endif
 
 
 #if UNITY_4
@@ -694,13 +857,29 @@ namespace BuildReportTool
 			settings.AndroidDisableDepthAndStencilBuffers = PlayerSettings.Android.disableDepthAndStencilBuffers;
 #endif
 
+#if UNITY_2017_3_OR_NEWER
+			settings.AndroidPreserveFramebufferAlpha = PlayerSettings.preserveFramebufferAlpha;
+#endif
+
 			settings.AndroidVersionCode = PlayerSettings.Android.bundleVersionCode;
 
 			settings.AndroidMinSDKVersion = PlayerSettings.Android.minSdkVersion.ToString();
-#if UNITY_2018_AND_NEWER
+
+#if UNITY_5_6_OR_NEWER
+			settings.AndroidTargetSDKVersion = PlayerSettings.Android.targetSdkVersion.ToString();
+#endif
+
+			// Available in 2019.4+ (but was removed in 2020.3.0 to 2020.3.16, returned in 2020.3.17)
+#if UNITY_2019_4_OR_NEWER && !UNITY_2020_3_0 && !UNITY_2020_3_1 && !UNITY_2020_3_2 && !UNITY_2020_3_3 && !UNITY_2020_3_4 && !UNITY_2020_3_5 && !UNITY_2020_3_6 && !UNITY_2020_3_7 && !UNITY_2020_3_8 && !UNITY_2020_3_9 && !UNITY_2020_3_10 && !UNITY_2020_3_11 && !UNITY_2020_3_12 && !UNITY_2020_3_13 && !UNITY_2020_3_14 && !UNITY_2020_3_15 && !UNITY_2020_3_16
+			settings.AndroidTargetDevice = PlayerSettings.Android.androidTargetDevices.ToString();
+#elif UNITY_2020_3_OR_NEWER
 			settings.AndroidTargetDevice = PlayerSettings.Android.targetArchitectures.ToString();
 #else
 			settings.AndroidTargetDevice = PlayerSettings.Android.targetDevice.ToString();
+#endif
+
+#if UNITY_2017_4_OR_NEWER
+			settings.AndroidTargetArchitectures = PlayerSettings.Android.targetArchitectures.ToString();
 #endif
 
 			settings.AndroidSplashScreenScaleMode = PlayerSettings.Android.splashScreenScale.ToString();
@@ -717,7 +896,7 @@ namespace BuildReportTool
 			settings.AndroidKeystoreName = PlayerSettings.Android.keystoreName;
 
 
-#if UNITY_5_3_AND_LESSER // blackberry build option no longer in Unity 5.4
+#if !UNITY_5_4_OR_NEWER // blackberry build option no longer in Unity 5.4
 			// BlackBerry only build settings
 			// ---------------------------------------------------------------
 
@@ -894,7 +1073,7 @@ namespace BuildReportTool
 			settings.PSVUpgradable = PlayerSettings.PSVita.upgradable;
 			settings.PSVTvBootMode = PlayerSettings.PSVita.tvBootMode.ToString();
 			settings.PSVAcquireBgm = PlayerSettings.PSVita.acquireBGM;
-#if UNITY_5_2_AND_LESSER
+#if !UNITY_5_3_OR_NEWER
 			settings.PSVAllowTwitterDialog = PlayerSettings.PSVita.AllowTwitterDialog;
 #endif
 
@@ -903,7 +1082,7 @@ namespace BuildReportTool
 			settings.PSVTvDisableEmu = PlayerSettings.PSVita.tvDisableEmu;
 			settings.PSVNpSupportGbmOrGjp = PlayerSettings.PSVita.npSupportGBMorGJP;
 			settings.PSVPowerMode = PlayerSettings.PSVita.powerMode.ToString();
-#if UNITY_5_2_AND_LESSER
+#if !UNITY_5_3_OR_NEWER
 			settings.PSVUseLibLocation = PlayerSettings.PSVita.useLibLocation;
 #endif
 
@@ -939,7 +1118,7 @@ namespace BuildReportTool
 			settings.XboxOneContentId = PlayerSettings.XboxOne.ContentId;
 			settings.XboxOneProductId = PlayerSettings.XboxOne.ProductId;
 
-#if UNITY_5_5_AND_LESSER
+#if !UNITY_5_6_OR_NEWER
 			settings.XboxOneSandboxId = PlayerSettings.XboxOne.SandboxId;
 #endif
 

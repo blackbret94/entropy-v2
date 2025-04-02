@@ -20,6 +20,7 @@ namespace Vashta.Entropy.GameState
         [Rpc(sources: RpcSources.StateAuthority, targets: RpcTargets.All)]
         public void RPCGameOver(byte teamIndex)
         {
+            _gameManager.MarkGameOver();
             GameOver(teamIndex);
         }
         

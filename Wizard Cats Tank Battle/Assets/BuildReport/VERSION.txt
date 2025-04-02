@@ -1,3 +1,43 @@
+Version 3.11.12
+- FIX: Fixed file sizes not showing for DLL files in
+  Android and WebGL builds.
+- FIX: Minor UI fix for message getting cut off.
+
+Version 3.11.11
+- FIX: Fixed compile error in Unity 2020.3.0 to 2020.3.16.
+- NEW: Added custom Build Report save type, to allow user to
+  manually specify output path for reports.
+
+Version 3.11.10
+- FIX: Fixed compile error in Unity 2020.2 and 2020.3.
+
+Version 3.11.9
+- FIX: Fixed incompatibility with Unity 2021.3.0.
+
+Version 3.11.8
+- FIX: Fixed incompatibility with Unity 2021.3.12 and below.
+
+Version 3.11.7
+- FIX: Fixed ArgumentNullException for a project with new SessionData.
+
+Version 3.11.6
+- FIX: Updated project settings to include new values, such as
+  whether the build is a clean build or incremental build.
+- FIX: Minor fix in the Build Report Tool window GUI
+  when text is too long.
+- FIX: Other minor fixes.
+
+Version 3.11.5
+- NEW: Asset dependencies for scripts are now populated with
+  the assembly dll file that they are compiled into.
+- NEW: Added texture info (format, width, and height)
+  in the tooltip of a sprite atlas.
+- FIX: Sprites now recognize the asset dependency of
+  a sprite atlas to them.
+- FIX: Fixed the Used Assets list getting scripts that aren't
+  really in the build.
+- FIX: Fixed exceptions when the Editor log file doesn't exist.
+
 Version 3.11.4
 - NEW: Prefab data in Build Reports now include detection of
   static editor flags in the prefab's child GameObjects.

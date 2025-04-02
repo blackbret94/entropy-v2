@@ -19,6 +19,12 @@ public class BRT_BuildReportWindow : EditorWindow
 	public const int ICON_WIDTH_WITH_PADDING = 20;
 	public const int LIST_HEIGHT = 20;
 
+	const int TOOLTIP_END_USERS_MAX_COUNT = 10;
+	const int TOOLTIP_PADDING_T = 2;
+	const int TOOLTIP_PADDING_B = 4;
+	const int TOOLTIP_PADDING_L = 2;
+	const int TOOLTIP_PADDING_R = 2;
+
 	public static Vector2 IconSize = new Vector2(15, 15);
 
 	public static readonly GUILayoutOption[] LayoutNone = { };
@@ -51,6 +57,9 @@ public class BRT_BuildReportWindow : EditorWindow
 	public static readonly GUILayoutOption[] LayoutTo100x30 = {GUILayout.MaxWidth(100), GUILayout.Height(30)};
 
 	public static readonly GUILayoutOption[] Layout100x30 = {GUILayout.MinWidth(100), GUILayout.Height(30), GUILayout.ExpandWidth(true)};
+	public static readonly GUILayoutOption[] LayoutMinWidth44 = {GUILayout.MinWidth(44)};
+	public static readonly GUILayoutOption[] LayoutMinWidth63 = {GUILayout.MinWidth(63)};
+	public static readonly GUILayoutOption[] LayoutMinWidth84 = {GUILayout.MinWidth(84)};
 	public static readonly GUILayoutOption[] LayoutMaxWidth500 = {GUILayout.MaxWidth(500)};
 
 	public const string STYLE_BREADCRUMB_LEFT = "GUIEditor.BreadcrumbLeft";
@@ -157,9 +166,9 @@ public class BRT_BuildReportWindow : EditorWindow
 		}
 
 		// if Unity Editor has finished making a build and we are scheduled to create a Build Report...
-		if (BuildReportTool.Util.ShouldGetBuildReportNow &&
-		    !BuildReportTool.ReportGenerator.IsStillGettingValues &&
-		    !EditorApplication.isCompiling)
+		if (!BuildReportTool.ReportGenerator.IsStillGettingValues &&
+		    !EditorApplication.isCompiling &&
+		    BuildReportTool.Util.ShouldGetBuildReportNow)
 		{
 			//Debug.Log("BuildReportWindow getting build info right after the build... " + System.DateTime.Now);
 			Refresh(true);
@@ -245,7 +254,7 @@ public class BRT_BuildReportWindow : EditorWindow
 	/// for whichever Build Report is displayed.
 	/// </summary>
 	static BuildReportTool.PrefabData _prefabData;
-	
+
 	static BuildReportTool.UnityBuildReport _unityBuildReport;
 
 	static ExtraData _extraData;
@@ -281,7 +290,7 @@ public class BRT_BuildReportWindow : EditorWindow
 	/// </summary>
 	public static string HoveredAssetEntryPath;
 
-	public static readonly List<GUIContent> HoveredAssetEndUsers = new List<GUIContent>();
+	public static List<GUIContent> HoveredAssetEndUsers;
 
 	public static void UpdateHoveredAsset(string hoveredAssetPath, Rect hoveredAssetRect, bool showingUsedAssets,
 		BuildInfo buildReportToDisplay, AssetDependencies assetDependencies)
@@ -364,6 +373,7 @@ public class BRT_BuildReportWindow : EditorWindow
 	static void AssignHoveredAssetEndUsers(AssetDependencies assetDependencies)
 	{
 		BuildReportTool.AssetDependencies.PopulateAssetEndUsers(HoveredAssetEntryPath, assetDependencies);
+		HoveredAssetEndUsers = GetEndUserLabelsFor(assetDependencies, HoveredAssetEntryPath);
 	}
 
 	static AssetInfoType _hoveredAssetType = AssetInfoType.None;
@@ -414,14 +424,27 @@ public class BRT_BuildReportWindow : EditorWindow
 		switch (_hoveredAssetType)
 		{
 			case AssetInfoType.InAPackage:
-				return InPackagesLabel;
+			{
+				if (HoveredAssetEndUsers != null && HoveredAssetEndUsers.Count > 0)
+				{
+					if (HoveredAssetEndUsers[0].text.IsAnAssembly())
+					{
+						return InPackagesButAlsoUsedInLabel;
+					}
+					return InPackagesButAlsoUsedByLabel;
+				}
+				else
+				{
+					return InPackagesLabel;
+				}
+			}
 
 			case AssetInfoType.InStreamingAssetsFolder:
 				return InStreamingAssetsLabel;
 
 			case AssetInfoType.InAResourcesFolder:
 			{
-				if (HoveredAssetEndUsers.Count > 0)
+				if (HoveredAssetEndUsers != null && HoveredAssetEndUsers.Count > 0)
 				{
 					return AResourcesAssetButAlsoUsedByLabel;
 				}
@@ -435,6 +458,11 @@ public class BRT_BuildReportWindow : EditorWindow
 				return SceneIsInBuildLabel;
 
 			default:
+				if (HoveredAssetEndUsers != null && HoveredAssetEndUsers.Count > 0 && HoveredAssetEndUsers[0].text.IsAnAssembly())
+				{
+					return IsInLabel;
+				}
+
 				return UsedByLabel;
 		}
 	}
@@ -443,6 +471,10 @@ public class BRT_BuildReportWindow : EditorWindow
 	/// "Used by:"
 	/// </summary>
 	static readonly GUIContent UsedByLabel = new GUIContent("Used by:");
+
+	static readonly GUIContent IsInLabel = new GUIContent("Is compiled into:");
+
+	static readonly GUIContent PlusMore = new GUIContent("...plus x more");
 
 	/// <summary>
 	/// "Asset is in a Resources folder"
@@ -470,6 +502,8 @@ public class BRT_BuildReportWindow : EditorWindow
 
 	static readonly GUIContent InPackagesLabel = new GUIContent("Asset is from the Packages folder");
 
+	static readonly GUIContent InPackagesButAlsoUsedByLabel = new GUIContent("Asset is from the Packages folder\n<size=7>\n</size>Used by:");
+	static readonly GUIContent InPackagesButAlsoUsedInLabel = new GUIContent("Asset is from the Packages folder\n<size=7>\n</size>Is compiled into:");
 
 	Texture2D _toolbarIconLog;
 	Texture2D _toolbarIconOpen;
@@ -1031,7 +1065,7 @@ public class BRT_BuildReportWindow : EditorWindow
 
 	bool IsWaitingForBuildCompletionToGenerateBuildReport
 	{
-		get { return BuildReportTool.Util.ShouldGetBuildReportNow && EditorApplication.isCompiling; }
+		get { return EditorApplication.isCompiling && BuildReportTool.Util.ShouldGetBuildReportNow; }
 	}
 
 	void OnFinishOpeningBuildReportFile()
@@ -1377,7 +1411,7 @@ public class BRT_BuildReportWindow : EditorWindow
 	void DrawCentralMessage(string msg)
 	{
 		float w = 300;
-		float h = 100;
+		float h = 200;
 		float x = (position.width - w) * 0.5f;
 		float y = (position.height - h) * 0.25f;
 
@@ -1983,14 +2017,27 @@ public class BRT_BuildReportWindow : EditorWindow
 		{
 			EditorGUIUtility.SetIconSize(IconSize);
 
-			for (int n = 0, len = endUsers.Count; n < len; ++n)
+			for (int n = 0, len = Mathf.Min(endUsers.Count, TOOLTIP_END_USERS_MAX_COUNT); n < len; ++n)
 			{
 				var endUserSize = assetStyle.CalcSize(endUsers[n]);
 
 				endUsersSize.x = Mathf.Max(endUsersSize.x, endUserSize.x);
 				endUsersSize.y += endUserSize.y;
 			}
+
+			if (endUsers.Count > TOOLTIP_END_USERS_MAX_COUNT)
+			{
+				PlusMore.text = string.Format("...plus {0} more", endUsers.Count - TOOLTIP_END_USERS_MAX_COUNT);
+				var plusMoreSize = labelStyle.CalcSize(PlusMore);
+
+				endUsersSize.x = Mathf.Max(endUsersSize.x, plusMoreSize.x);
+				endUsersSize.y += plusMoreSize.y;
+			}
 		}
+
+		// padding
+		endUsersSize.x += TOOLTIP_PADDING_L + TOOLTIP_PADDING_R;
+		endUsersSize.y += TOOLTIP_PADDING_T + TOOLTIP_PADDING_B;
 
 		return endUsersSize;
 	}
@@ -2008,7 +2055,7 @@ public class BRT_BuildReportWindow : EditorWindow
 			labelStyle = GUI.skin.box;
 		}
 
-		Rect endUserRect = new Rect(pos.x, pos.y, 0, 0);
+		Rect endUserRect = new Rect(pos.x + TOOLTIP_PADDING_T, pos.y + TOOLTIP_PADDING_L, 0, 0);
 
 		endUserRect.size = labelStyle.CalcSize(label);
 		GUI.Label(endUserRect, label, labelStyle);
@@ -2019,13 +2066,21 @@ public class BRT_BuildReportWindow : EditorWindow
 
 			EditorGUIUtility.SetIconSize(IconSize);
 
-			for (int n = 0, len = endUsers.Count; n < len; ++n)
+			for (int n = 0, len = Mathf.Min(endUsers.Count, TOOLTIP_END_USERS_MAX_COUNT); n < len; ++n)
 			{
 				endUserRect.size = assetStyle.CalcSize(endUsers[n]);
 
 				GUI.Label(endUserRect, endUsers[n], assetStyle);
 
 				endUserRect.y += endUserRect.height;
+			}
+
+			if (endUsers.Count > TOOLTIP_END_USERS_MAX_COUNT)
+			{
+				PlusMore.text = string.Format("...plus {0} more", endUsers.Count - TOOLTIP_END_USERS_MAX_COUNT);
+				endUserRect.size = labelStyle.CalcSize(PlusMore);
+
+				GUI.Label(endUserRect, PlusMore, labelStyle);
 			}
 		}
 	}
@@ -2045,6 +2100,25 @@ public class BRT_BuildReportWindow : EditorWindow
 		{
 			labelSize = Vector2.zero;
 			return false;
+		}
+
+		var labelStyle = GUI.skin.FindStyle("TooltipText");
+		if (labelStyle == null)
+		{
+			labelStyle = GUI.skin.box;
+		}
+
+		if (assetPath.IsSpriteAtlasFile())
+		{
+			var thumbnailImage = BRT_BuildReportWindow.GetAssetPreview(assetPath);
+
+			TextureDataTooltipLabel.text = string.Format("Sprite Atlas ({0}) {1}x{2}",
+				thumbnailImage.graphicsFormat,
+				thumbnailImage.width,
+				thumbnailImage.height);
+
+			labelSize = labelStyle.CalcSize(TextureDataTooltipLabel);
+			return true;
 		}
 
 		var data = textureData.GetTextureData();
@@ -2077,11 +2151,6 @@ public class BRT_BuildReportWindow : EditorWindow
 					data[assetPath].ToDisplayedValue(TextureData.DataId.ImportedWidthAndHeight));
 			}
 
-			var labelStyle = GUI.skin.FindStyle("TooltipText");
-			if (labelStyle == null)
-			{
-				labelStyle = GUI.skin.box;
-			}
 			labelSize = labelStyle.CalcSize(TextureDataTooltipLabel);
 
 			return true;

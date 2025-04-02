@@ -454,10 +454,14 @@ namespace BuildReportTool
 					return "Standalone";
 				case BuildPlatform.WindowsStoreApp:
 					return "Windows Store Apps";
-				case BuildPlatform.XBOXOne:
+				case BuildPlatform.XboxOne:
 					return "XboxOne";
+				case BuildPlatform.XboxSeries:
+					return "GameCoreXboxSeries";
 				case BuildPlatform.PS4:
 					return "PS4";
+				case BuildPlatform.PS5:
+					return "PS5";
 				case BuildPlatform.PSVitaNative:
 					return "PSP2";
 				case BuildPlatform.WiiU:

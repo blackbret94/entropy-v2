@@ -3,15 +3,15 @@
 Note: If you are upgrading Build Report Tool in your project, delete the current BuildReport folder first before importing the new one! This will eliminate any potential metadata file conflicts with the old Build Report Tool.
 
 
-
-
 To show the Build Report Window, go to Window > Show Build Report.
 
 If Build Report Tool doesn't show up when you do that, you may have to reset your Unity Editor layout. Choose Window > Layouts > Default.
 
 Then try opening the Build Report Window again.
 
+=== ADDITIONAL NOTE! ===
 
+If you are not able to generate a proper Build Report for an existing project, try doing a Clean Build. A Clean Build will refresh the subscribers to your project's build pipeline events, which Build Report Tool needs.
 
 
 === Saved Options ===

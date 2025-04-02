@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using DldUtil;
+using UnityEditor.Compilation;
 
 /*
 
@@ -126,6 +127,8 @@ namespace BuildReportTool
 		static BuildReportTool.MeshData _lastKnownMeshData;
 		static BuildReportTool.PrefabData _lastKnownPrefabData;
 		static BuildReportTool.UnityBuildReport _lastKnownUnityBuildReport;
+
+		static Assembly[] _lastAssemblies;
 
 		public static BuildReportTool.UnityBuildReport LastKnownUnityBuildReport { get { return _lastKnownUnityBuildReport; } }
 
@@ -338,7 +341,7 @@ namespace BuildReportTool
 				if (DoesEditorLogHaveBuildInfo(lastSuccessfulBuildEditorLog))
 				{
 					bool playerDataNotRebuilt = DoesEditorLogHaveNoBuildInfoDueToNoPlayerRebuilt(regularEditorLogPath);
-					
+
 					_lastEditorLogPath = lastSuccessfulBuildEditorLog;
 					if (playerDataNotRebuilt)
 					{
@@ -386,6 +389,7 @@ namespace BuildReportTool
 			}
 
 			_lastSavePath = BuildReportTool.Options.BuildReportSavePath;
+			_lastAssemblies = CompilationPipeline.GetAssemblies();
 		}
 
 #if UNITY_2018_1_OR_NEWER
@@ -463,7 +467,7 @@ namespace BuildReportTool
 #else
 			BuildReportTool.Util.SaveBuildTimeDuration();
 #endif
-			
+
 			// Later on, in BRT_BuildReportWindow.Update(),
 			// when `BuildReportTool.ReportGenerator.IsFinishedGettingValuesFromThread` is true,
 			// the code will finally save the created build report
@@ -554,6 +558,11 @@ namespace BuildReportTool
 
 		public static string GetBuildTypeFromEditorLog(string editorLogPath)
 		{
+			if (!File.Exists(editorLogPath))
+			{
+				return null;
+			}
+
 			const string BUILD_TYPE_KEY = "*** Completed 'Build.";
 			const string CANCELED_BUILD_TYPE_KEY = "*** Canceled 'Build.";
 
@@ -568,6 +577,11 @@ namespace BuildReportTool
 
 		static string GetBuildTypeFromEditorLog(string editorLogPath, string buildTypeKey)
 		{
+			if (!File.Exists(editorLogPath))
+			{
+				return null;
+			}
+
 			//Debug.Log("GetBuildTypeFromEditorLog path: " + editorLogPath);
 			var gotLines = DldUtil.BigFileReader.SeekAllText(editorLogPath, buildTypeKey);
 
@@ -1600,6 +1614,7 @@ namespace BuildReportTool
 			string buildManagedDLLsFolderHigherPriority;
 
 			bool wasAndroidApkBuild = buildFilePath.EndsWith(".apk", StringComparison.OrdinalIgnoreCase);
+			bool wasAndroidAppBundleBuild = buildFilePath.EndsWith(".aab", StringComparison.OrdinalIgnoreCase);
 
 			if (wasWebBuild || wasWebGLBuild)
 			{
@@ -1610,8 +1625,13 @@ namespace BuildReportTool
 					buildManagedDLLsFolder = tryPath;
 					buildScriptDLLsFolder = tryPath;
 				}
+				else
+				{
+					buildManagedDLLsFolder = BuildReportTool.Util.GetProjectWebGLManagedStrippedPath(projectAssetsPath);
+					buildScriptDLLsFolder = buildManagedDLLsFolder;
+				}
 			}
-			else if (wasAndroidApkBuild)
+			else if (wasAndroidApkBuild || wasAndroidAppBundleBuild)
 			{
 				string tryPath;
 				bool success = BuildReportTool.Util.AttemptGetAndroidTempStagingArea(projectAssetsPath, out tryPath);
@@ -1620,11 +1640,65 @@ namespace BuildReportTool
 					buildManagedDLLsFolder = tryPath;
 					buildScriptDLLsFolder = tryPath;
 				}
+				else
+				{
+					buildScriptDLLsFolder = BuildReportTool.Util.GetProjectScriptAssembliesPath(projectAssetsPath);
+				}
 			}
+
+			bool buildManagedDLLsFolderHasContents = !string.IsNullOrEmpty(buildManagedDLLsFolder) && Directory.Exists(buildManagedDLLsFolder) && System.IO.Directory.EnumerateFiles(buildManagedDLLsFolder, "*.dll").Any();
 
 			BuildReportTool.SizePart inPart;
 
-			if (!string.IsNullOrEmpty(buildManagedDLLsFolder) && Directory.Exists(buildManagedDLLsFolder))
+			bool checkApkItself = wasAndroidApkBuild && System.IO.File.Exists(buildFilePath);
+
+			if (checkApkItself)
+			{
+#if UNITY_2021_1_OR_NEWER
+				var apkContents = System.IO.Compression.ZipFile.Open(buildFilePath, System.IO.Compression.ZipArchiveMode.Read);
+				{
+#else
+				using (System.IO.FileStream fs = System.IO.File.OpenRead(buildFilePath))
+				{
+					System.IO.Compression.ZipArchive apkContents = new System.IO.Compression.ZipArchive(fs, System.IO.Compression.ZipArchiveMode.Read);
+#endif
+					if (apkContents != null)
+					{
+						foreach (var e in apkContents.Entries)
+						{
+							string filepath = e.FullName;
+							if (filepath.StartsWith("assets/bin/Data/Managed/") && filepath.EndsWith(".dll"))
+							{
+								inPart = new BuildReportTool.SizePart();
+								inPart.Name = System.Security.SecurityElement.Escape(e.Name);
+								inPart.RawSizeBytes = e.Length;
+								inPart.RawSize = BuildReportTool.Util.GetBytesReadable(inPart.RawSizeBytes);
+								inPart.ImportedSizeBytes = -1;
+								inPart.ImportedSize = "N/A";
+								inPart.Percentage = -1;
+
+								if (BuildReportTool.Util.IsAUnityEngineDLL(e.Name))
+								{
+									unityEngineDLLsList.Add(inPart);
+								}
+								else if (BuildReportTool.Util.IsAScriptDLL(e.Name))
+								{
+									scriptDLLsList.Add(inPart);
+								}
+								else if (BuildReportTool.Util.IsAKnownSystemDLL(e.Name))
+								{
+									systemDLLsList.Add(inPart);
+								}
+								else
+								{
+									scriptDLLsList.Add(inPart);
+								}
+							}
+						}
+					}
+				}
+			}
+			else if (buildManagedDLLsFolderHasContents)
 			{
 				foreach (string filepath in DldUtil.TraverseDirectory.Do(buildManagedDLLsFolder))
 				{
@@ -1653,34 +1727,34 @@ namespace BuildReportTool
 					}
 				}
 			}
-			else
+
+			if ((!checkApkItself && !buildManagedDLLsFolderHasContents) || wasWebGLBuild)
 			{
 				// folder inside the Unity installation where mono system dlls are
 				string unityFolderManagedDLLs;
 
-				bool unityfoldersSuccess = BuildReportTool.Util.AttemptGetUnityFolderMonoDLLs(wasWebBuild,
+				bool unityFoldersSuccess = BuildReportTool.Util.AttemptGetUnityFolderMonoDLLs(wasWebBuild || wasWebGLBuild,
 					wasAndroidApkBuild, editorAppContentsPath, monoLevel,
 					codeStrippingLevel, out unityFolderManagedDLLs,
 					out buildManagedDLLsFolderHigherPriority);
 
-
 				//Debug.Log("buildManagedDLLsFolder: " + buildManagedDLLsFolder);
 				//Debug.Log("Application.dataPath: " + Application.dataPath);
 
-				if (unityfoldersSuccess &&
+				if (unityFoldersSuccess &&
 				    (string.IsNullOrEmpty(buildManagedDLLsFolder) || !Directory.Exists(buildManagedDLLsFolder)))
 				{
 #if BRT_SHOW_MINOR_WARNINGS
-				Debug.LogWarning("Could not find build folder. Using Unity install folder instead for getting mono DLL file sizes.");
+					Debug.LogWarning("Could not find build folder. Using Unity install folder instead for getting mono DLL file sizes.");
 #endif
 					buildManagedDLLsFolder = unityFolderManagedDLLs;
 				}
 
 #if BRT_SHOW_MINOR_WARNINGS
-			if (!Directory.Exists(buildManagedDLLsFolder))
-			{
-				Debug.LogWarning("Could not find folder for getting DLL file sizes. Got: \"" + buildManagedDLLsFolder + "\"");
-			}
+				if (!Directory.Exists(buildManagedDLLsFolder))
+				{
+					Debug.LogWarning("Could not find folder for getting DLL file sizes. Got: \"" + buildManagedDLLsFolder + "\"");
+				}
 #endif
 
 
@@ -1692,6 +1766,14 @@ namespace BuildReportTool
 				bool gotDateTimePrefix = false;
 				int dateTimePrefixLen = 0;
 
+				string dllArtifactsPath = BuildReportTool.Util.GetProjectManagedDLLArtifacts(projectAssetsPath);
+				bool dllArtifactsFolderExists = System.IO.Directory.Exists(dllArtifactsPath);
+
+				bool hasUnityEngineDLL = false;
+				if (wasWebGLBuild)
+				{
+					hasUnityEngineDLL = unityEngineDLLsList.Exists("UnityEngine.dll");
+				}
 				foreach (string line in DldUtil.BigFileReader.ReadFile(editorLogPath, MONO_DLL_KEY))
 				{
 					// blank line signifies end of dll list
@@ -1716,7 +1798,7 @@ namespace BuildReportTool
 							filename = filename.Substring(dateTimePrefixLen);
 						}
 					}
-					else
+					else if (filename.Length >= dateTimePrefixLen)
 					{
 						filename = filename.Substring(dateTimePrefixLen);
 					}
@@ -1725,40 +1807,92 @@ namespace BuildReportTool
 					{
 						continue;
 					}
-					
+
 					filename = BuildReportTool.Util.RemovePrefix(PREFIX_REMOVE, filename);
 
-					string filepath;
-					if (BuildReportTool.Util.IsAScriptDLL(filename))
+					if (wasWebGLBuild)
 					{
-						filepath = buildScriptDLLsFolder + filename;
-						//Debug.LogWarning("Script \"" + filepath + "\".");
-					}
-					else
-					{
-						filepath = buildManagedDLLsFolder + filename;
-
-						if (!File.Exists(filepath) && unityfoldersSuccess &&
-						    (buildManagedDLLsFolder != unityFolderManagedDLLs))
+						if (systemDLLsList.Exists(filename) ||
+						    unityEngineDLLsList.Exists(filename) ||
+						    scriptDLLsList.Exists(filename))
 						{
-#if BRT_SHOW_MINOR_WARNINGS
-						Debug.LogWarning("Failed to find file \"" + filepath + "\". Attempting to get from Unity folders.");
-#endif
-							filepath = unityFolderManagedDLLs + filename;
+							continue;
+						}
+					}
 
-							if (!string.IsNullOrEmpty(buildManagedDLLsFolderHigherPriority) &&
-							    File.Exists(buildManagedDLLsFolderHigherPriority + filename))
+					if (filename == "UnityEngine.dll")
+					{
+						hasUnityEngineDLL = true;
+					}
+
+					string filepath = null;
+
+					bool foundFileInArtifactsPath = false;
+					if (dllArtifactsFolderExists)
+					{
+						// If we can find the DLL's path from the .info file, favor using it, because it's the most accurate
+						// Older versions of Unity won't have this, in those cases, we resort to our usual code.
+
+						// Check the .info files (which are just json text files) in "Library/Bee/artifacts/csharpactions"
+						// Look for the .info file in that folder whose filename starts with the same filename of our DLL.
+						string nameSearch = System.IO.Path.GetFileNameWithoutExtension(filename) + "*";
+						foreach (string foundFile in System.IO.Directory.EnumerateFiles(dllArtifactsPath, nameSearch,
+							         SearchOption.TopDirectoryOnly))
+						{
+							object infoObj = MiniJSON.Json.Deserialize(System.IO.File.ReadAllText(foundFile));
+							if (infoObj is Dictionary<string, object> info)
 							{
-								filepath = buildManagedDLLsFolderHigherPriority + filename;
+								if (info.TryGetValue("Bee.TundraBackend.CSharpActionInvocationInformation", out object invocationsObj) &&
+								    invocationsObj is Dictionary<string, object> invocations)
+								{
+									if (invocations.TryGetValue("inputs", out object inputsObj) && inputsObj is List<object> inputs &&
+									    inputs.Count > 0 && inputs[0] is string inputString && !string.IsNullOrEmpty(inputString))
+									{
+										if (System.IO.File.Exists(inputString))
+										{
+											filepath = inputString;
+											foundFileInArtifactsPath = true;
+											break;
+										}
+									}
+								}
 							}
 						}
 					}
 
-					if ((buildManagedDLLsFolder == unityFolderManagedDLLs) &&
-					    !string.IsNullOrEmpty(buildManagedDLLsFolderHigherPriority) &&
-					    File.Exists(buildManagedDLLsFolderHigherPriority + filename))
+					if (!foundFileInArtifactsPath || string.IsNullOrEmpty(filepath))
 					{
-						filepath = buildManagedDLLsFolderHigherPriority + filename;
+						if (BuildReportTool.Util.IsAScriptDLL(filename))
+						{
+							filepath = buildScriptDLLsFolder + filename;
+						}
+						else
+						{
+							filepath = buildManagedDLLsFolder + filename;
+
+							if (!File.Exists(filepath) &&
+							    unityFoldersSuccess &&
+							    (buildManagedDLLsFolder != unityFolderManagedDLLs))
+							{
+#if BRT_SHOW_MINOR_WARNINGS
+							Debug.LogWarning("Failed to find file \"" + filepath + "\". Attempting to get from Unity folders.");
+#endif
+								filepath = unityFolderManagedDLLs + filename;
+
+								if (!string.IsNullOrEmpty(buildManagedDLLsFolderHigherPriority) &&
+								    File.Exists(buildManagedDLLsFolderHigherPriority + filename))
+								{
+									filepath = buildManagedDLLsFolderHigherPriority + filename;
+								}
+							}
+						}
+
+						if ((buildManagedDLLsFolder == unityFolderManagedDLLs) &&
+						    !string.IsNullOrEmpty(buildManagedDLLsFolderHigherPriority) &&
+						    File.Exists(buildManagedDLLsFolderHigherPriority + filename))
+						{
+							filepath = buildManagedDLLsFolderHigherPriority + filename;
+						}
 					}
 
 					//Debug.Log(filename + " " + filepath);
@@ -1788,16 +1922,7 @@ namespace BuildReportTool
 				// somehow, the editor logfile
 				// doesn't include UnityEngine.dll
 				// even though it gets included in the final build (for desktop builds)
-				//
-				// for web builds though, it makes sense not to put UnityEngine.dll in the build. and it isn't.
-				// Instead, it's likely residing in the browser plugin to save bandwidth.
-				//
-				// begs the question though, why not have the whole Mono Web Subset DLLs be
-				// installed alongside the Unity web browser plugin?
-				// no need to bundle Mono DLLs in the web build itself.
-				// would have shaved 1 whole MB when a game uses System.Xml.dll for example
-				//
-				//if (!wasWebBuild)
+				if (!hasUnityEngineDLL)
 				{
 					string filename = "UnityEngine.dll";
 					string filepath = buildManagedDLLsFolder + filename;
@@ -1833,7 +1958,7 @@ namespace BuildReportTool
 
 		const string NO_BUILD_INFO_NO_PLAYER_REBUILT =
 			"Information on used Assets is not available, since player data was not rebuilt.";
-		
+
 		public static bool DoesEditorLogHaveBuildInfo(string editorLogPath)
 		{
 			return DldUtil.BigFileReader.FileHasText(editorLogPath, ASSET_SIZES_KEY, ASSET_SIZES_KEY_2);
@@ -1891,16 +2016,28 @@ namespace BuildReportTool
 
 				case BuildPlatform.iOS:
 					return BuildSettingCategory.iOS;
+				case BuildPlatform.tvOS:
+					return BuildSettingCategory.tvOS;
 				case BuildPlatform.Android:
 					return BuildSettingCategory.Android;
 				case BuildPlatform.Blackberry:
 					return BuildSettingCategory.Blackberry;
 
 
-				case BuildPlatform.XBOX360:
+				case BuildPlatform.Xbox360:
 					return BuildSettingCategory.Xbox360;
+				case BuildPlatform.XboxOne:
+					return BuildSettingCategory.XboxOne;
+				case BuildPlatform.XboxSeries:
+					return BuildSettingCategory.XboxSeries;
 				case BuildPlatform.PS3:
 					return BuildSettingCategory.PS3;
+				case BuildPlatform.PS4:
+					return BuildSettingCategory.PS4;
+				case BuildPlatform.PS5:
+					return BuildSettingCategory.PS5;
+				case BuildPlatform.Switch:
+					return BuildSettingCategory.Switch;
 			}
 
 			return BuildSettingCategory.None;
@@ -1932,6 +2069,10 @@ namespace BuildReportTool
 			else if (gotBuildType.IndexOf("iOS", StringComparison.Ordinal) != -1)
 			{
 				buildPlatform = BuildPlatform.iOS;
+			}
+			else if (gotBuildType.IndexOf("tvOS", StringComparison.Ordinal) != -1)
+			{
+				buildPlatform = BuildPlatform.tvOS;
 			}
 
 			// browser
@@ -1971,6 +2112,17 @@ namespace BuildReportTool
 				// unfortunately we don't know if this is a 32-bit or universal build
 				// we'll have to rely on current build settings which may be inaccurate
 				buildPlatform = BuildReportTool.Util.GetBuildPlatformBasedOnUnityBuildTarget(buildTarget);
+
+				if (buildPlatform != BuildPlatform.Linux32 &&
+				    buildPlatform != BuildPlatform.Linux64 &&
+				    buildPlatform != BuildPlatform.LinuxUniversal &&
+				    buildPlatform != BuildPlatform.LinuxHeadless &&
+				    buildPlatform != BuildPlatform.EmbeddedLinux)
+				{
+					// build platform was not detected properly
+					// default to 64-bit Linux
+					buildPlatform = BuildPlatform.Linux64;
+				}
 			}
 
 			// Mac OS X
@@ -1980,6 +2132,15 @@ namespace BuildReportTool
 				// unfortunately we don't know if this is a 32-bit, 64-bit, or universal build
 				// we'll have to rely on current build settings which may be inaccurate
 				buildPlatform = BuildReportTool.Util.GetBuildPlatformBasedOnUnityBuildTarget(buildTarget);
+
+				if (buildPlatform != BuildPlatform.MacOSX32 &&
+				    buildPlatform != BuildPlatform.MacOSX64 &&
+				    buildPlatform != BuildPlatform.MacOSXUniversal)
+				{
+					// build platform was not detected properly
+					// default to 64-bit Mac
+					buildPlatform = BuildPlatform.MacOSX64;
+				}
 			}
 
 			// ???
@@ -2710,6 +2871,35 @@ namespace BuildReportTool
 					}
 				}
 
+				// remove scripts that aren't included in the build
+				// by checking if the assembly they belong to is not in the build
+				if (_lastAssemblies != null)
+				{
+					foreach (Assembly assembly in _lastAssemblies)
+					{
+						string assemblyFilename = Path.GetFileName(assembly.outputPath);
+
+						if (buildInfo.ScriptDLLs.Exists(assemblyFilename) ||
+						    buildInfo.UnityEngineDLLs.Exists(assemblyFilename))
+						{
+							continue;
+						}
+
+						// this is an assembly that isn't included in the build
+						// any source file of this assembly shouldn't be in the used list
+						foreach (string sourceFile in assembly.sourceFiles)
+						{
+							int sourceFileIdxInAllUsed = allUsed.FindIdx(sourceFile);
+							if (sourceFileIdxInAllUsed == -1)
+							{
+								continue;
+							}
+
+							allUsed.RemoveAt(sourceFileIdxInAllUsed);
+						}
+					}
+				}
+
 				//Debug.Log("buildInfo.UsedAssets.All: " + buildInfo.UsedAssets.All.Length);
 
 				if (buildInfo.UnusedAssetsIncludedInCreation)
@@ -3025,8 +3215,8 @@ namespace BuildReportTool
 			// the next part of the code that gets executed is BRT_BuildReportWindow.OnFinishGeneratingBuildReport()
 		}
 
-		public static string OnFinishedGetValues(BuildReportTool.BuildInfo buildInfo, 
-			BuildReportTool.AssetDependencies assetDependencies, BuildReportTool.TextureData textureData, 
+		public static string OnFinishedGetValues(BuildReportTool.BuildInfo buildInfo,
+			BuildReportTool.AssetDependencies assetDependencies, BuildReportTool.TextureData textureData,
 			BuildReportTool.MeshData meshData, BuildReportTool.PrefabData prefabData, string customSavePath = null)
 		{
 			string resultingFilePath = null;
@@ -3147,7 +3337,7 @@ namespace BuildReportTool
 			{
 				prefabData.ProjectName = buildInfo.ProjectName;
 				prefabData.BuildType = buildInfo.BuildType;
-				
+
 				BuildReportTool.PrefabDataGenerator.CreateForUsedAssetsOnly(prefabData, buildInfo);
 			}
 

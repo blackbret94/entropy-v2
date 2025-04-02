@@ -1,8 +1,10 @@
 using Fusion;
+using Newtonsoft.Json;
 using TanksMP;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Vashta.Entropy.Network;
 using Vashta.Entropy.PhotonExtensions;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.UI.MapSelection;
@@ -43,26 +45,14 @@ namespace Vashta.Entropy.UI.MatchCreation
 
             if (_isMultiplayer)
             {
-                // Connect to server
                 PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Online);
-
-                // if (!UIMain.GetInstance().Runner.IsRunning)
-                // {
-                //     NetworkManagerCustom.GetInstance().Connect(NetworkMode.Online);
-                // }
 
                 HeaderText.text = "Matchmaking";
             }
             else
             {
-                // Disconnect from server
                 PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Offline);
-            
-                // if (UIMain.GetInstance().Runner.IsRunning)
-                // {
-                //     NetworkManagerCustom.GetInstance().DisconnectFromServer();
-                // }
-
+                
                 HeaderText.text = "Practice Against Bots";
             }
         }
@@ -88,21 +78,22 @@ namespace Vashta.Entropy.UI.MatchCreation
         {
             // Get info
             string roomName = GetRoomName();
-            // string password = GetPassword();
-            int maxPlayers = GetMaxPlayers();
-            string mapName = GetMapName();
-            string password = GetPassword();
-            TanksMP.GameMode gameMode = GetGameMode();
-            bool isVisible = true;
             
             // format
             roomName = RoomOptionsFactory.CreateRoomName(roomName);
-            StartGameArgs startGameArgs = RoomOptionsFactory.CreateRoomOptions(_isMultiplayer, roomName, mapName, maxPlayers, gameMode, password, isVisible);
+            
+            MatchmakingArgs matchmakingArgs = new MatchmakingArgs(_isMultiplayer, roomName, GetPassword(), GetMaxPlayers(), 
+                GetMapName(), GetGameMode(), true);
+
+            string encrypted = matchmakingArgs.Encrypt();
+            PlayerPrefs.SetString(SaveLoad.PrefsKeys.matchmakingArgs, encrypted);
+            
+            StartGameArgs startGameArgs = RoomOptionsFactory.CreateRoomOptions(matchmakingArgs);
             
             // create room
             UIMain.GetInstance().roomConnectionController.CreateRoom(startGameArgs);
         }
-        
+
         private string GetRoomName()
         {
             if (NameInputField == null)

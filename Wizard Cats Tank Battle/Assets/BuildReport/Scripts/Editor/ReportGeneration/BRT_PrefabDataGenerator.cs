@@ -32,7 +32,7 @@ namespace BuildReportTool
 				{
 					continue;
 				}
-				
+
 				if (prefabDataEntries.ContainsKey(assets[n].Name))
 				{
 					if (!overwriteExistingEntries)
@@ -87,7 +87,7 @@ namespace BuildReportTool
 				// root level is already on
 				return childStaticEditorFlags;
 			}
-			
+
 			// check children of rootTransform to see if flag is turned on for any of them
 			var stack = new Stack<Transform>();
 			stack.Push(rootTransform);
@@ -112,12 +112,12 @@ namespace BuildReportTool
 			}
 			return childStaticEditorFlags;
 		}
-		
+
 		static int GetIntFlags(StaticEditorFlags flags)
 		{
 			// Unity might change the value of these flags in a future version, so we explicitly convert it ourselves
 			int intFlags = 0;
-			
+
 			if (flags.Has(StaticEditorFlags.ContributeGI))
 			{
 				intFlags |= PrefabData.FLAG_CONTRIBUTE_GI;

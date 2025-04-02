@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Fusion;
 using UnityEngine;
+using Vashta.Entropy.Network;
 using Vashta.Entropy.ScriptableObject;
 using WebSocketSharp;
 
@@ -43,32 +44,32 @@ namespace Vashta.Entropy.PhotonExtensions
             return CreateRoomName(nickName + "'s Room");
         }
         
-        public StartGameArgs CreateRoomOptions(bool isMultiplayer, string roomName, string mapName, int maxPlayers, TanksMP.GameMode gameMode, string password, bool isVisible = true)
+        public StartGameArgs CreateRoomOptions(MatchmakingArgs matchmakingArgs)
         {
             StartGameArgs startGameArgs = new StartGameArgs();
 
-            if (roomName != "")
+            if (matchmakingArgs.roomName != "")
             {
-                startGameArgs.SessionName = roomName;
+                startGameArgs.SessionName = matchmakingArgs.roomName;
             }
             
-            startGameArgs.PlayerCount = maxPlayers;
-            startGameArgs.IsVisible = isVisible;
-            startGameArgs.GameMode = isMultiplayer ? Fusion.GameMode.Shared : Fusion.GameMode.Single;
+            startGameArgs.PlayerCount = matchmakingArgs.maxPlayers;
+            startGameArgs.IsVisible = matchmakingArgs.isVisible;
+            startGameArgs.GameMode = matchmakingArgs.isMultiplayer ? Fusion.GameMode.Shared : Fusion.GameMode.Single;
             startGameArgs.SceneManager = NetworkSceneManagerDefault;
             
             // custom properties
             Dictionary<string, SessionProperty> customProperties = new Dictionary<string, SessionProperty>();
-            customProperties[RoomKeys.modeKey] = (byte)(int)gameMode;
+            customProperties[RoomKeys.modeKey] = (byte)(int)matchmakingArgs.gameMode;
 
-            if (mapName != "random")
+            if (matchmakingArgs.mapName != "random")
             {
-                customProperties[RoomKeys.mapKey] = mapName;
+                customProperties[RoomKeys.mapKey] = matchmakingArgs.mapName;
             }
 
-            if (!password.IsNullOrEmpty())
+            if (!matchmakingArgs.password.IsNullOrEmpty())
             {
-                customProperties[RoomKeys.password] = password;
+                customProperties[RoomKeys.password] = matchmakingArgs.password;
             }
             
             startGameArgs.SessionProperties = customProperties;

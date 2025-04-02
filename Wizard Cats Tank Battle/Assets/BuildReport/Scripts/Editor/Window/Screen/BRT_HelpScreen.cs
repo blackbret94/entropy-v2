@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEditor;
 
-
 namespace BuildReportTool.Window.Screen
 {
 	public class Help : BaseScreen

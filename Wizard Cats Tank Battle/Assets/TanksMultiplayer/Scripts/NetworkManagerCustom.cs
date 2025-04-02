@@ -10,6 +10,7 @@ using Vashta.Entropy.GameState;
 using Vashta.Entropy.Network;
 using Vashta.Entropy.PhotonExtensions;
 using Vashta.Entropy.Player;
+using Vashta.Entropy.SceneNavigation;
 using Vashta.Entropy.Scripts.CBSIntegration;
 using Vashta.Entropy.UI.MapSelection;
 
@@ -31,22 +32,6 @@ namespace TanksMP
         public LocalPlayerInfo LocalPlayerInfo;
         public WCTBSession WCTBSessionPrefab;
         private INetworkSceneManager _networkSceneManager;
-
-        /// <summary>
-        /// Scene index that gets loaded when disconnecting from a game.
-        /// </summary>
-        public string offlineSceneIndex = "MainMenu";
-
-        /// <summary>
-        /// Scene index that gets loaded after a connection has been established.
-        /// Will get overridden by random matching scene, when using GameMode filtering.
-        /// </summary>
-        public string onlineSceneIndex = "Null";
-
-        /// <summary>
-        /// Maximum amount of players per room.
-        /// </summary>
-        public int maxPlayers = 12;
 
         /// <summary>
         /// Event fired when a connection to the matchmaker service failed.
@@ -112,20 +97,20 @@ namespace TanksMP
             if (!this)
                 return;
 
-            Debug.Log(status);
+            // Debug.Log(status);
 
-            if (status != _status)
-            {
-                switch (status)
-                {
-                    case FusionLauncher.ConnectionStatus.Disconnected:
-                        Debug.Log("Disconnected!");
-                        break;
-                    case FusionLauncher.ConnectionStatus.Failed:
-                        Debug.LogError("Error");
-                        break;
-                }
-            }
+            // if (status != _status)
+            // {
+            //     switch (status)
+            //     {
+            //         case FusionLauncher.ConnectionStatus.Disconnected:
+            //             Debug.Log("Disconnected!");
+            //             break;
+            //         case FusionLauncher.ConnectionStatus.Failed:
+            //             Debug.LogError("Error");
+            //             break;
+            //     }
+            // }
 
             _status = status;
         }
@@ -160,11 +145,6 @@ namespace TanksMP
                     StartCoroutine(Disconnect());
                     break;
             }
-        }
-
-        public void DisconnectFromServer()
-        {
-            StartCoroutine(Disconnect());
         }
         
         /// <summary>
@@ -241,59 +221,7 @@ namespace TanksMP
             startGameArgs.SessionName = roomName;
             Runner.StartGame(startGameArgs);
         }
-
-        /// <summary>
-        /// Called when a creating a room failed. 
-        /// See the official Photon docs for more details.
-        /// </summary>
-        // public override void OnCreateRoomFailed(short returnCode, string message)
-        // {
-        //     Debug.LogError("Error creating room: " + returnCode + " : " + message);
-        //     
-        //     if (connectionFailedEvent != null)
-        //         connectionFailedEvent();
-        // }
-
-
-        /// <summary>
-        /// Called when this client created a room and entered it.
-        /// See the official Photon docs for more details.
-        /// </summary>
-        // public void OnSessionCreate(SessionInfo sessionInfo)
-        // {
-        //     string mapId = PlayerPrefs.GetString(PrefsKeys.selectedMap, "-1");
-        //     MapDefinition mapDefinition = MapDefinitionDictionary[mapId];
-        //     
-        //     //the initial team size of the game for the server creating a new room.
-        //     //unfortunately this cannot be set via the GameManager because it does not exist at that point
-        //     short initialArrayLength = mapDefinition.TeamCount;
-        //
-        //     //we created a room so we have to set the initial room properties for this room,
-        //     //such as populating the team fill and score arrays
-        //     Hashtable roomProps = new Hashtable();
-        //     roomProps.Add(RoomExtensions.size, new int[initialArrayLength]);
-        //     roomProps.Add(RoomExtensions.score, new int[initialArrayLength]);
-        //     PhotonNetwork.CurrentRoom.SetCustomProperties(roomProps);
-        //
-        //     // Load scene
-        //     onlineSceneIndex = mapDefinition.SceneName;
-        //     PhotonNetwork.LoadLevelFromBundle(onlineSceneIndex);
-        // }
         
-        //this wait routine is needed on offline mode for waiting on completed scene change,
-        //because in offline mode Photon does not pause network messages. But it doesn't hurt
-        //leaving this in for all other network modes too
-        IEnumerator WaitForSceneChange()
-        {
-            while (SceneManager.GetActiveScene().name != onlineSceneIndex)
-            {
-                yield return null;
-            }
-
-            //we connected ourselves
-            OnPlayerJoined(Runner, Runner.LocalPlayer);
-        }
-
         public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
 
         public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
@@ -319,6 +247,10 @@ namespace TanksMP
 
         public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
         {
+            //do not switch scenes automatically when the game is already over
+            if (GameManager.GetInstance().IsGameOver())
+                return;
+            
             UIGame uiGame = UIGame.GetInstance();
             if (uiGame != null)
             {
@@ -334,17 +266,17 @@ namespace TanksMP
                 connectionFailedEvent();
             }
 
-            // Debug.LogError("Disconnect cause: " + cause);
+            Debug.LogError("Disconnect cause: " + reason);
 
-            //do not switch scenes automatically when the game over screen is being shown already
-            if (GameManager.GetInstance() != null && GameManager.GetInstance().ui.gameOverMenu.activeInHierarchy)
+            //do not switch scenes automatically when the game is already over
+            if (GameManager.GetInstance().IsGameOver())
                 return;
 
             //switch from the online to the offline scene after connection is closed
-            UIGame uiGame = UIGame.GetInstance();
             
-            if (!uiGame.SceneNavigator.IsMainMenu())
+            if (!SceneNavigator.IsMainMenu())
             {
+                UIGame uiGame = UIGame.GetInstance();
                 uiGame.SceneNavigator.GoToMainMenu();
             }
         }

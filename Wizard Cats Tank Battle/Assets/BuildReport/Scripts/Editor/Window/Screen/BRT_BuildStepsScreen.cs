@@ -35,6 +35,8 @@ namespace BuildReportTool.Window.Screen
 		readonly GUIContent _warnFilterLabel = new GUIContent("0");
 		readonly GUIContent _errorFilterLabel = new GUIContent("0");
 
+		readonly GUIContent _tableItemLabel = new GUIContent();
+
 		Rect _stepsViewRect;
 
 		bool _showLogMessagesCollapsed;
@@ -230,7 +232,11 @@ namespace BuildReportTool.Window.Screen
 
 				GUILayout.BeginHorizontal(styleToUse);
 				GUILayout.Space(steps[i].Depth * 20);
-				if (GUILayout.Button(steps[i].Name, styleToUse, BRT_BuildReportWindow.LayoutListHeight))
+
+				_tableItemLabel.text = steps[i].Name;
+				_tableItemLabel.tooltip = _tableItemLabel.text;
+
+				if (GUILayout.Button(_tableItemLabel, styleToUse, BRT_BuildReportWindow.LayoutListHeight))
 				{
 					SelectStep(i, steps);
 				}
@@ -261,7 +267,7 @@ namespace BuildReportTool.Window.Screen
 
 			#region Column 2 (Warning Count)
 			GUILayout.BeginVertical(BRT_BuildReportWindow.LayoutNone);
-			GUILayout.Label("Warning Count", columnHeaderStyle);
+			GUILayout.Label("Warnings", columnHeaderStyle, BRT_BuildReportWindow.LayoutMinWidth63);
 			_scrollPos = GUILayout.BeginScrollView(_scrollPos,
 				hiddenHorizontalScrollbarStyle,
 				hiddenVerticalScrollbarStyle, BRT_BuildReportWindow.LayoutNone);
@@ -293,7 +299,7 @@ namespace BuildReportTool.Window.Screen
 
 			#region Column 3 (Error Count)
 			GUILayout.BeginVertical(BRT_BuildReportWindow.LayoutNone);
-			GUILayout.Label("Error Count", columnHeaderStyle);
+			GUILayout.Label("Errors", columnHeaderStyle, BRT_BuildReportWindow.LayoutMinWidth44);
 			_scrollPos = GUILayout.BeginScrollView(_scrollPos,
 				hiddenHorizontalScrollbarStyle,
 				hiddenVerticalScrollbarStyle, BRT_BuildReportWindow.LayoutNone);
@@ -325,7 +331,7 @@ namespace BuildReportTool.Window.Screen
 
 			#region Last Column (Duration)
 			GUILayout.BeginVertical(BRT_BuildReportWindow.LayoutNone);
-			GUILayout.Label("Duration", columnHeaderStyle);
+			GUILayout.Label("Duration", columnHeaderStyle, BRT_BuildReportWindow.LayoutMinWidth84);
 			_scrollPos = GUILayout.BeginScrollView(_scrollPos,
 				hiddenHorizontalScrollbarStyle,
 				verticalScrollbarStyle, BRT_BuildReportWindow.LayoutNone);
@@ -350,7 +356,11 @@ namespace BuildReportTool.Window.Screen
 					duration = steps[i].Duration.ToReadableString();
 				}
 
-				GUILayout.Label(duration, styleToUse, BRT_BuildReportWindow.LayoutListHeight);
+				_tableItemLabel.text = duration;
+				GUILayout.Label(_tableItemLabel, styleToUse,
+					GUILayout.Height(BRT_BuildReportWindow.LIST_HEIGHT),
+					GUILayout.ExpandHeight(false),
+					GUILayout.MinWidth(styleToUse.CalcSize(_tableItemLabel).x));
 
 				useAlt = !useAlt;
 			}

@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace BuildReportTool
@@ -12,16 +10,19 @@ namespace BuildReportTool
 
 		/// <summary>
 		/// Name of project folder.
+		/// Included as part of the filename when saved.
 		/// </summary>
 		public string ProjectName;
 
 		/// <summary>
 		/// Type of build that the project was configured to, at the time that PrefabData was collected.
+		/// Included as part of the filename when saved.
 		/// </summary>
 		public string BuildType;
 
 		/// <summary>
 		/// When PrefabData was collected.
+		/// Included as part of the filename when saved.
 		/// </summary>
 		public System.DateTime TimeGot;
 
@@ -65,7 +66,7 @@ namespace BuildReportTool
 		public const int FLAG_OCCLUDEE_STATIC = 1 << 4;
 		public const int FLAG_OFF_MESH_LINK_GENERATION = 1 << 5;
 		public const int FLAG_REFLECTION_PROBE_STATIC = 1 << 6;
-		
+
 		public struct Entry
 		{
 			/// <summary>
@@ -109,7 +110,7 @@ namespace BuildReportTool
 			public int OccludeeStaticValue => HasOccludeeStatic ? 2 : ChildHasOccludeeStatic ? 1 : 0;
 			public int NavigationStaticValue => HasNavigationStatic ? 2 : ChildHasNavigationStatic ? 1 : 0;
 			public int OffMeshLinkGenerationValue => HasOffMeshLinkGeneration ? 2 : ChildHasOffMeshLinkGeneration ? 1 : 0;
-			
+
 			public string HasValue(DataId prefabDataId)
 			{
 				switch (prefabDataId)
@@ -133,7 +134,7 @@ namespace BuildReportTool
 				}
 			}
 		}
-		
+
 		/// <summary>
 		/// Key is asset path.
 		/// </summary>
@@ -151,7 +152,7 @@ namespace BuildReportTool
 		{
 			_prefabData.Clear();
 		}
-		
+
 		// ==================================================================================
 
 		public enum DataId
@@ -165,7 +166,7 @@ namespace BuildReportTool
 			NavigationStatic,
 			OffMeshLinkGeneration,
 		}
-		
+
 		public static string GetTooltipTextFromId(DataId flag)
 		{
 			switch (flag)
@@ -196,7 +197,7 @@ namespace BuildReportTool
 					return null;
 			}
 		}
-		
+
 		// ==================================================================================
 
 		public void OnBeforeSave()

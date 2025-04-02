@@ -10,9 +10,9 @@ namespace BuildReportTool.Window.Screen
 	public partial class AssetList : BaseScreen
 	{
 #if BRT_ASSET_LIST_SCREEN_DEBUG
-	bool _showDebugText;
-	readonly GUIContent _debugLabel = new GUIContent();
-	StringBuilder _debugText;
+		bool _showDebugText;
+		readonly GUIContent _debugLabel = new GUIContent();
+		System.Text.StringBuilder _debugText;
 #endif
 
 		const int SCROLLBAR_BOTTOM_PADDING = 5;
@@ -37,12 +37,12 @@ namespace BuildReportTool.Window.Screen
 
 		BuildReportTool.MeshData.DataId _hoveredMeshDataId = BuildReportTool.MeshData.DataId.None;
 		BuildReportTool.MeshData.DataId _clickedMeshDataId = BuildReportTool.MeshData.DataId.None;
-		
+
 		BuildReportTool.PrefabData.DataId _currentPrefabDataSortType = BuildReportTool.PrefabData.DataId.None;
 
 		BuildReportTool.PrefabData.DataId _hoveredPrefabDataId = BuildReportTool.PrefabData.DataId.None;
 		BuildReportTool.PrefabData.DataId _clickedPrefabDataId = BuildReportTool.PrefabData.DataId.None;
-		
+
 		/// <summary>
 		/// Whether we are sorting ascending or descending.
 		/// </summary>
@@ -807,7 +807,7 @@ namespace BuildReportTool.Window.Screen
 				GUI.Label(rect, _columnLabel, toggleHeaderStyle);
 				rect.y += rect.height - 2;
 				toggleYStart = rect.y;
-				
+
 				#region Prefab Column 1
 
 				_columnLabel.text = "Contribute Global Illumination";
@@ -842,7 +842,7 @@ namespace BuildReportTool.Window.Screen
 				}
 				rect.y += rect.height + TOGGLE_SPACING;
 				prefabColumn1Width = Mathf.Max(prefabColumn1Width, rect.width);
-				
+
 				#endregion
 
 				// -----------------------------------------------------------------------
@@ -906,9 +906,9 @@ namespace BuildReportTool.Window.Screen
 				}
 				rect.y += rect.height + TOGGLE_SPACING;
 				prefabColumn2Width = Mathf.Max(prefabColumn2Width, rect.width);
-				
+
 				#endregion
-				
+
 				// -----------------------------------------------------------------------
 
 				// input catcher
@@ -1076,7 +1076,7 @@ namespace BuildReportTool.Window.Screen
 #if BRT_ASSET_LIST_SCREEN_DEBUG
 			if (_debugText == null)
 			{
-				_debugText = new StringBuilder();
+				_debugText = new System.Text.StringBuilder();
 			}
 			else
 			{
@@ -1321,6 +1321,16 @@ namespace BuildReportTool.Window.Screen
 			                                         _assetUsageAncestryHoveredIdx != -1 ||
 			                                         _assetUserEntryHoveredIdx != -1);
 
+#if BRT_ASSET_LIST_SCREEN_DEBUG
+			_debugText.AppendFormat("shouldShowAssetEndUsersTooltipNow: {0}\n",
+				shouldShowAssetEndUsersTooltipNow);
+			_debugText.AppendFormat("_mouseIsOnOverlayControl: {0}\n",
+				_mouseIsOnOverlayControl);
+			_debugText.AppendFormat("_overridenTextureDataTooltipText: {0}\n",
+				_overridenTextureDataTooltipText);
+			_debugText.AppendFormat("HoveredAssetEntryPath: {0}\n",
+				BRT_BuildReportWindow.HoveredAssetEntryPath);
+#endif
 
 			if (Event.current.type == EventType.Repaint)
 			{
@@ -1416,7 +1426,10 @@ namespace BuildReportTool.Window.Screen
 			}
 			var debugLabelSize = debugStyle.CalcSize(_debugLabel);
 
+			var prevBgColor = GUI.backgroundColor;
+			GUI.backgroundColor = new Color(1, 1, 1, 0.85f);
 			GUI.Label(new Rect(position.width - debugLabelSize.x, 0, debugLabelSize.x, debugLabelSize.y), _debugLabel, debugStyle);
+			GUI.backgroundColor = prevBgColor;
 		}
 #endif
 		}
@@ -2830,9 +2843,9 @@ namespace BuildReportTool.Window.Screen
 			#endregion
 
 			// --------------------------------------------------------------------------------------------------------
-			
+
 			#region Columns: Prefab Data
-			
+
 			if (Event.current.type == EventType.Repaint)
 			{
 				_hoveredPrefabDataId = BuildReportTool.PrefabData.DataId.None;
@@ -2902,7 +2915,7 @@ namespace BuildReportTool.Window.Screen
 			}
 
 			#endregion
-			
+
 			// --------------------------------------------------------------------------------------------------------
 
 			#region Column: Raw File Size (Size Before Build)

@@ -5,9 +5,12 @@
 
 using System.Collections;
 using Fusion;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Vashta.Entropy.Network;
 using Vashta.Entropy.PhotonExtensions;
+using SceneNavigator = Vashta.Entropy.SceneNavigation.SceneNavigator;
 
 namespace TanksMP
 {
@@ -15,7 +18,7 @@ namespace TanksMP
     /// This script is attached to a runtime-generated gameobject in the game scene,
     /// taken over to the intro scene to directly request starting a new multiplayer game.
     /// </summary>
-    public class UIRestartButton : SimulationBehaviour 
+    public class UIRestartButton : SimulationBehaviour
     {
         //listen to scene changes
         void Awake()
@@ -23,71 +26,35 @@ namespace TanksMP
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
         
-        
         //give the scene some time to initialize
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             StartCoroutine(EnterPlay());
         }
         
-        
         //call the play button instantly on scene load
         //destroy itself after use
         IEnumerator EnterPlay()
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
-            NetworkMode networkMode = (NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode);
+            
+            while(!SceneNavigator.IsMainMenu())
+                yield return null;
+            
+            yield return new WaitForSeconds(.25f);
+            
+            string matchmakingArgsString = PlayerPrefs.GetString(Vashta.Entropy.SaveLoad.PrefsKeys.matchmakingArgs);
+            MatchmakingArgs matchmakingArgs = JsonConvert.DeserializeObject<MatchmakingArgs>(matchmakingArgsString);
+        
+            UIMain.GetInstance().ToggleLoadingWindow(true);
 
-            if (networkMode == NetworkMode.Online)
-            {
-                // Handle online
+            RoomOptionsFactory roomOptionsFactory = FindFirstObjectByType<RoomOptionsFactory>();
+            StartGameArgs startGameArgs = roomOptionsFactory.CreateRoomOptions(matchmakingArgs);
+    
+            // create room
+            UIMain.GetInstance().roomConnectionController.CreateRoom(startGameArgs);
             
-                if (!UIMain.GetInstance().Runner.IsRunning)
-                {
-                    NetworkManagerCustom.GetInstance().Connect(networkMode);
-
-                    // while (!PhotonNetwork.IsConnected)
-                    // {
-                    //     yield return null;
-                    // }
-                }
-                else
-                {
-                    OnConnectedToMaster();
-                }
-            }
-            else
-            {
-                // Handle offline
-                
-                // Clear connection
-                if (UIMain.GetInstance().Runner.IsRunning)
-                {
-                    Runner.Shutdown();
-                    while (UIMain.GetInstance().Runner.IsRunning)
-                    {
-                        yield return null;
-                    }
-                }
-            
-                NetworkManagerCustom.GetInstance().Connect(networkMode);
-                
-                OnConnectedToMaster();
-            }
-            
-            
-        }
-
-        /// <summary>
-        /// Called after the connection to the master is established.
-        /// See the official Photon docs for more details.
-        /// </summary>
-        public void OnConnectedToMaster()
-        {
-            // Right now it goes to random map/mode.  Can save conditions later
-            FindObjectOfType<RoomConnectionController>().Play();
-            
-            Destroy(gameObject);
+            Destroy(gameObject, .5f);
         }
     }
 }

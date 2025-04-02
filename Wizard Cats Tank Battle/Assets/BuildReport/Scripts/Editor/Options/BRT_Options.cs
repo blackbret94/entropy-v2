@@ -5,7 +5,6 @@ using System.Xml;
 using System.Xml.Serialization;
 using UnityEngine;
 
-
 namespace BuildReportTool
 {
 	/// <summary>
@@ -18,6 +17,8 @@ namespace BuildReportTool
 		public string EditorLogOverridePath;
 
 		public string BuildReportFolderName = BuildReportTool.Options.BUILD_REPORTS_DEFAULT_FOLDER_NAME;
+
+		public string BuildReportCustomOutputPath = BuildReportTool.Util.GetUserHomeFolder();
 
 		/// <summary>
 		/// Where build reports are saved to: <br/>
@@ -122,10 +123,10 @@ namespace BuildReportTool
 		public bool ShowPrefabColumnOccluderStatic;
 		public bool ShowPrefabColumnOccludeeStatic;
 		public bool ShowPrefabColumnReflectionProbeStatic;
-		
+
 		public bool ShowPrefabColumnNavigationStatic;
 		public bool ShowPrefabColumnOffMeshLinkGeneration;
-		
+
 		// ----------------------------------------------------------
 
 		public bool ShowColumnAssetPath = true;
@@ -298,6 +299,7 @@ namespace BuildReportTool
 
 		public const int SAVE_TYPE_PERSONAL = 0;
 		public const int SAVE_TYPE_PROJECT = 1;
+		public const int SAVE_TYPE_CUSTOM = 2;
 
 
 		public const int ASSET_USAGE_LABEL_TYPE_VERBOSE = 0;
@@ -775,6 +777,24 @@ namespace BuildReportTool
 			}
 		}
 
+		public static string BuildReportCustomOutputPath
+		{
+			get
+			{
+				InitializeOptionsIfNeeded();
+				return _savedOptions.BuildReportCustomOutputPath;
+			}
+			set
+			{
+				InitializeOptionsIfNeeded();
+				if (_savedOptions.BuildReportCustomOutputPath != value)
+				{
+					_savedOptions.BuildReportCustomOutputPath = value;
+					SaveOptions();
+				}
+			}
+		}
+
 
 		/// <summary>
 		/// Full path to folder where Build Reports are saved.
@@ -788,12 +808,23 @@ namespace BuildReportTool
 				{
 					return string.Format("{0}/{1}", BuildReportTool.Util.GetUserHomeFolder(), BuildReportFolderName);
 				}
-				else
+				else if (BuildReportTool.Options.SaveType == BuildReportTool.Options.SAVE_TYPE_PROJECT)
 				{
-					// assume BuildReportTool.Options.SaveType == BuildReportTool.Options.SAVE_TYPE_PROJECT
-
 					// makes use of Application.dataPath so it has to be called from the main thread
 					return string.Format("{0}/{1}", BuildReportTool.ReportGenerator.GetSavePathToProjectFolder(), BuildReportFolderName);
+				}
+				else // BuildReportTool.Options.SAVE_TYPE_CUSTOM
+				{
+					if (Path.IsPathRooted(BuildReportCustomOutputPath))
+					{
+						return BuildReportCustomOutputPath;
+					}
+					else
+					{
+						// relative path? it will be relative to the project folder
+						return Path.GetFullPath(Path.Combine(BuildReportTool.Util.GetProjectPath(Application.dataPath),
+							BuildReportCustomOutputPath));
+					}
 				}
 			}
 		}

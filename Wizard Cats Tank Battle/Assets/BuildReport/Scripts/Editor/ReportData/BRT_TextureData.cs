@@ -12,16 +12,19 @@ namespace BuildReportTool
 
 		/// <summary>
 		/// Name of project folder.
+		/// Included as part of the filename when saved.
 		/// </summary>
 		public string ProjectName;
 
 		/// <summary>
 		/// Type of build that the project was configured to, at the time that TextureData was collected.
+		/// Included as part of the filename when saved.
 		/// </summary>
 		public string BuildType;
 
 		/// <summary>
 		/// When TextureData was collected.
+		/// Included as part of the filename when saved.
 		/// </summary>
 		public System.DateTime TimeGot;
 

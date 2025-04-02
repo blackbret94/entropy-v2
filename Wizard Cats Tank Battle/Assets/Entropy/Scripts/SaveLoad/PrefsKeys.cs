@@ -6,5 +6,6 @@ namespace Vashta.Entropy.SaveLoad
     {
         public const string characterAppearance = "VE_characterAppearance";
         public const string characterClass = "VE_characterClass";
+        public const string matchmakingArgs = "VE_matchmakingArgs";
     }
 }

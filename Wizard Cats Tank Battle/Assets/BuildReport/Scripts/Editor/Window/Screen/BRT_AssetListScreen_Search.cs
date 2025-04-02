@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 using UnityEditor;
 using FuzzyString;
-
 
 namespace BuildReportTool.Window.Screen
 {

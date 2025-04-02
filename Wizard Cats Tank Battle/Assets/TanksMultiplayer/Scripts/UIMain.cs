@@ -3,6 +3,7 @@ using Fusion;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Vashta.Entropy.IO;
+using Vashta.Entropy.Network;
 using Vashta.Entropy.PhotonExtensions;
 using Vashta.Entropy.SaveLoad;
 using Vashta.Entropy.SceneNavigation;
@@ -49,6 +50,7 @@ namespace TanksMP
             if (!PlayerPrefs.HasKey(Vashta.Entropy.SaveLoad.PrefsKeys.characterAppearance)) PlayerPrefs.SetString(Vashta.Entropy.SaveLoad.PrefsKeys.characterAppearance, CharacterAppearanceSaveLoad.DefaultAppearanceStringEncrypted());
             if(!PlayerPrefs.HasKey(PrefsKeys.lefthandedMode)) PlayerPrefs.SetInt(PrefsKeys.lefthandedMode, 0);
             if(!PlayerPrefs.HasKey(PrefsKeys.aimArrow)) PlayerPrefs.SetInt(PrefsKeys.aimArrow, 0);
+            if(!PlayerPrefs.HasKey(Vashta.Entropy.SaveLoad.PrefsKeys.matchmakingArgs)) PlayerPrefs.SetString(Vashta.Entropy.SaveLoad.PrefsKeys.matchmakingArgs, new MatchmakingArgs().Encrypt());
 
             PlayerPrefs.Save();
             _playerNameVerification.VerifyName();

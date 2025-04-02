@@ -28,18 +28,26 @@ namespace BuildReportTool
 	{
 		/// <summary>
 		/// Name of project folder.
+		/// Included as part of the filename when saved.
 		/// </summary>
 		public string ProjectName;
 
 		/// <summary>
 		/// Type of build that the project was configured to, at the time that UnityBuildReport was collected.
+		/// Included as part of the filename when saved.
 		/// </summary>
 		public string BuildType;
 
 		/// <summary>
 		/// When UnityBuildReport was collected.
+		/// Included as part of the filename when saved.
 		/// </summary>
 		public System.DateTime TimeGot;
+
+		public ulong TotalSize;
+
+		public System.DateTime BuildStartedAt;
+		public System.TimeSpan BuildTotalTime;
 
 		public UnityEditor.BuildOptions BuildOptions;
 
@@ -56,6 +64,10 @@ namespace BuildReportTool
 #if UNITY_2018_1_OR_NEWER
 		public void SetFrom(UnityEditor.Build.Reporting.BuildReport buildReport)
 		{
+			TotalSize = buildReport.summary.totalSize;
+			BuildStartedAt = buildReport.summary.buildStartedAt;
+			BuildTotalTime = buildReport.summary.totalTime;
+
 			string outputFolder = buildReport.summary.outputPath;
 			int outputPathLength;
 

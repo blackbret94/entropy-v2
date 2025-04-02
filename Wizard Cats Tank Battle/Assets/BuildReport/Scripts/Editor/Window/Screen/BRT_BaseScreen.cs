@@ -1,6 +1,5 @@
 using UnityEngine;
 
-
 namespace BuildReportTool.Window.Screen
 {
 	public abstract class BaseScreen

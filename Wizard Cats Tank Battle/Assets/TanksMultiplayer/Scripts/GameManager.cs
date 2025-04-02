@@ -100,5 +100,10 @@ namespace TanksMP
             _gameHasEnded = TeamController.MaxScoreIsReached();
             return _gameHasEnded;
         }
+
+        public void MarkGameOver()
+        {
+            _gameHasEnded = true;
+        }
     }
 }

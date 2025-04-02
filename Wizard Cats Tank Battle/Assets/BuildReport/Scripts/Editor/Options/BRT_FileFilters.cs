@@ -265,6 +265,19 @@ namespace BuildReportTool
 			return _selectedFilterIdx >= 1 && _selectedFilterIdx <= _fileFilters.Length ? _fileFilters[_selectedFilterIdx-1].Label : null;
 		}
 
+		public int GetFilterIdx(string label)
+		{
+			for (int n = 0; n < _fileFilters.Length; ++n)
+			{
+				if (_fileFilters[n].Label == label)
+				{
+					return n;
+				}
+			}
+
+			return -1;
+		}
+
 		public void ForceSetSelectedFilterIdx(int idx)
 		{
 			if ((idx < _fileFilters.Length + 2) && idx >= 0)

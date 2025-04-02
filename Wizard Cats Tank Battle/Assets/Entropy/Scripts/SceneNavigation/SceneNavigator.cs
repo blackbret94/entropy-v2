@@ -6,10 +6,10 @@ namespace Vashta.Entropy.SceneNavigation
 {
     public class SceneNavigator: NetworkBehaviour
     {
-        private const string SceneBasePath = "Assets/Entropy/Scenes/";
-        private const string MainMenuSceneName = "MainMenu";
-        private const string LoginSceneName = "Login";
-        private const string InitSceneName = "Init";
+        public const string SceneBasePath = "Assets/Entropy/Scenes/";
+        public const string MainMenuSceneName = "MainMenu";
+        public const string LoginSceneName = "Login";
+        public const string InitSceneName = "Init";
         
         public void GoToMainMenu()
         {
@@ -36,7 +36,7 @@ namespace Vashta.Entropy.SceneNavigation
             return SceneRef.FromIndex(SceneUtility.GetBuildIndexByScenePath(SceneBasePath+sceneName+".unity"));
         }
         
-        public bool IsMainMenu()
+        public static bool IsMainMenu()
         {
             return SceneManager.GetActiveScene().name == MainMenuSceneName;
         }

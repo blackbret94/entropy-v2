@@ -354,12 +354,6 @@ namespace TanksMP
             for (int i = 0; i < transform.childCount; i++)
                 transform.GetChild(i).gameObject.SetActive(state);
         }
-
-        private void OnDestroy()
-        {
-            
-            // GameManager.ui.GameLogPanel.EventPlayerLeft(PlayerName);
-        }
         
         // Draw navmesh path
         private void OnDrawGizmos()

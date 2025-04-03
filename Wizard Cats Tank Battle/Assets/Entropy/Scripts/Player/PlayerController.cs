@@ -518,6 +518,10 @@ namespace Vashta.Entropy.Player
                 }
             }
 
+            // Exit here if game over
+            if (GameManager.IsGameOver())
+                return;
+
             // Local only
             if (HasInputAuthority)
             {

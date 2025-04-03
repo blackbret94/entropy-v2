@@ -281,7 +281,7 @@ namespace Entropy.Scripts.Player
                 {
                     //tell all clients the winning team
                     _gameManager.GameOverController.RPCGameOver((byte)otherTeam);
-                    return;
+                    // return;
                 }
             }
             else if(!_playerController.RespawnIsFreeFromJointime())

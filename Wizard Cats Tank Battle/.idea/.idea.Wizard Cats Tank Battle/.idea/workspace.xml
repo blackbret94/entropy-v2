@@ -4,21 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2d0b1129-1c08-4810-a5a8-04b901ecd844" name="Changes" comment="Added first casting effect">
+    <list default="true" id="2d0b1129-1c08-4810-a5a8-04b901ecd844" name="Changes" comment="Added casting vfx">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Wizard Cats Tank Battle/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Wizard Cats Tank Battle/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Data/Projectiles/AirProjectile.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Data/Projectiles/AirProjectile.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Data/Projectiles/EarthProjectile.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Data/Projectiles/EarthProjectile.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Data/Projectiles/LightProjectile.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Data/Projectiles/LightProjectile.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Data/Projectiles/NecroProjectile.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Data/Projectiles/NecroProjectile.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Data/Projectiles/VoidProjectile.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Data/Projectiles/VoidProjectile.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Data/Projectiles/WaterProjectile.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Data/Projectiles/WaterProjectile.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Particle Effects/CastFx/FxMissileCast (Fire).prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Particle Effects/CastFx/FxMissileCast (Fire).prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Particle Effects/Missile Hit/FxMissileHit (Air).prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Particle Effects/Missile Hit/FxMissileHit (Air).prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Particle Effects/Missile Hit/FxMissileHit (Earth).prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Particle Effects/Missile Hit/FxMissileHit (Earth).prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Particle Effects/Missile Hit/FxMissileHit (Light).prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Particle Effects/Missile Hit/FxMissileHit (Light).prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Particle Effects/Missile Hit/FxMissileHit (Necro).prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Particle Effects/Missile Hit/FxMissileHit (Necro).prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Particle Effects/Missile Hit/FxMissileHit (Void).prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Prefabs/Particle Effects/Missile Hit/FxMissileHit (Void).prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/ScriptableObject/ProjectileData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/ScriptableObject/ProjectileData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,6 +50,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/3ea01e77be99618395f448b16bd7cc2bd4248bd9e5d8474964b2d97f39c5d74/System.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="mock://C:/Users/emoma/Documents/GitHub/entropy-v2/Wizard Cats Tank Battle/Assets/AddressableAssetsData/AddressableAssetSettings.asset" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/AssetBundleMagic/Scripts/AssetBundleMagic.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/emoma/Documents/GitHub/entropy-v2/Wizard Cats Tank Battle/Assets/Entropy/Data/Projectiles/AirProjectile.asset" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Entropy/Editor/UI/ButtonEntropyEditor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Entropy/Scripts/CBSIntegration/ProfileState.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerViewController.cs" root0="FORCE_HIGHLIGHTING" />
@@ -380,7 +370,7 @@
       <workItem from="1743392606139" duration="2535000" />
       <workItem from="1743396112969" duration="1747000" />
       <workItem from="1743456762072" duration="5649000" />
-      <workItem from="1743489016813" duration="48463000" />
+      <workItem from="1743489016813" duration="49571000" />
     </task>
     <task id="LOCAL-00001" summary="Cleaned up files that are not being used">
       <option name="closed" value="true" />
@@ -734,7 +724,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743670042580</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="Added casting vfx">
+      <option name="closed" value="true" />
+      <created>1743678139578</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1743678139578</updated>
+    </task>
+    <option name="localTasksCounter" value="46" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -772,7 +770,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Fixed bugs, eliminated errors when exiting game" />
     <MESSAGE value="Added back map selection, improved matchmaking, fixed spawning errors." />
     <MESSAGE value="Fixed sync issues" />
     <MESSAGE value="Fixed issues related to damage sync" />
@@ -797,7 +794,8 @@
     <MESSAGE value="Fixed bot bugs" />
     <MESSAGE value="Fixed issue where player's final death is not visible" />
     <MESSAGE value="Added first casting effect" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added first casting effect" />
+    <MESSAGE value="Added casting vfx" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added casting vfx" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

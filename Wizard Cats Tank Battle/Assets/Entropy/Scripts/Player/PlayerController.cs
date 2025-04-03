@@ -43,7 +43,8 @@ namespace Vashta.Entropy.Player
 
         // Health
         [Networked, OnChangedRender(nameof(OnHealthChanged))]
-        public int Health { get; private set; }
+        public int Health { get; private set; } // accurate health
+        public int DisplayHealth { get; private set; } // For showing immediate changes, resets ever render
 
         public int maxHealth { get; set; }
         public bool IsAlive { get; set; } = true; // This replaced another variable called "isAlive" - need to make sure they weren't competing
@@ -319,16 +320,27 @@ namespace Vashta.Entropy.Player
 
         public void SetHealth(int health)
         {
+            int clampedHealth = Mathf.Clamp(health, 0, maxHealth);
+            
             if (HasStateAuthority)
             {
-                Health = Mathf.Clamp(health, 0, maxHealth);
+                Health = clampedHealth;
                 OnHealthChanged();
             }
+
+            DisplayHealth = clampedHealth;
+            RefreshHealthView();
         }
 
         public void OnHealthChanged()
         {
-            PlayerViewController.SetHealth(Health, maxHealth);
+            DisplayHealth = Health;
+            RefreshHealthView();
+        }
+
+        public void RefreshHealthView()
+        {
+            PlayerViewController.SetHealth(DisplayHealth, maxHealth);
             PlayerViewController.SetOvershield(Shield, maxShield);
         }
 

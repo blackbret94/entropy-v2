@@ -41,7 +41,7 @@ namespace TanksMP
         
         
         //play particles
-        void OnSpawn()
+        public void OnSpawn()
         {
             //loop over ParticleSystem references and play them
             //Unity does not seem to calculate a new iteration of particles when

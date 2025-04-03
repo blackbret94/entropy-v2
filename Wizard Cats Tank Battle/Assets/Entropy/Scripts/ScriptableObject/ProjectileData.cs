@@ -16,6 +16,7 @@ namespace Vashta.Entropy.ScriptableObject
          
         [Header("Visuals")]
         public GameObject ProjectilePrefab;
+        public GameObject CastFx;
         public GameObject HitFx;
         public GameObject ExplosionFx;
         public GameObject ExplosionFxLarge;

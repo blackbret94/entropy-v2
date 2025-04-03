@@ -1,7 +1,9 @@
 using Fusion;
 using TanksMP;
+using Unity.Mathematics;
 using UnityEngine;
 using Vashta.Entropy.Player;
+using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.StatusEffects;
 
 namespace Entropy.Scripts.Player
@@ -134,6 +136,21 @@ namespace Entropy.Scripts.Player
 
             ClassDefinition playerClass = _playerController.GetClass();
             
+            // spawn casting vfx
+            if (playerClass != null)
+            {
+                ProjectileData projectileData = playerClass.ProjectileData;
+                if (projectileData != null && projectileData)
+                {
+                    GameObject castFx = projectileData.CastFx;
+
+                    if (castFx != null)
+                    {
+                        PoolManager.Spawn(castFx, shotCenter + Vector3.up, quaternion.identity);
+                    }
+                }
+            }
+
             //spawn bullet using pooling
             _projectileFactory.SpawnProjectile(shotCenter, syncedRot, playerClass);
             // Projectiles.Add(Runner, new ProjectileState(shotCenter, syncedRot.eulerAngles, playerClass.classId), 5);

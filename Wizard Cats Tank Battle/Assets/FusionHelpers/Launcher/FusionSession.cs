@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Fusion;
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.GameState;
 using Vashta.Entropy.Player;
 
 namespace FusionHelpers
@@ -120,6 +121,9 @@ namespace FusionHelpers
 		{
 			if (!Runner.IsShutdown)
 			{
+				TeamController teamController = GameManager.GetInstance().TeamController;
+
+				
 				FusionPlayer player = GetPlayer<FusionPlayer>(playerRef);
 				PlayerController localPlayer = (PlayerController)player;
 	            
@@ -127,41 +131,27 @@ namespace FusionHelpers
 
 				if (!localPlayer)
 				{
-					Debug.LogError("Missing reference to local player!");
-					return;
+					Debug.LogWarning("Missing reference to local player!");
 				}
-
-				//process any collectibles assigned to that player
-				Collectible[] collectibles = localPlayer.GetComponentsInChildren<Collectible>(true);
-				for (int i = 0; i < collectibles.Length; i++)
+				else
 				{
-					//let the player drop the Collectible
-					localPlayer.DropCollectibles();
+					//process any collectibles assigned to that player
+					Collectible[] collectibles = localPlayer.GetComponentsInChildren<Collectible>(true);
+					for (int i = 0; i < collectibles.Length; i++)
+					{
+						//let the player drop the Collectible
+						localPlayer.DropCollectibles();
+					}
+					
+					teamController.RemovePlayerFromTeam(localPlayer);
 				}
 
-				GameManager.GetInstance().TeamController.RemovePlayerFromTeam(localPlayer);
+				teamController.ReCalculateTeams();
+				teamController.RefreshDisplay();
 	            
 				
 				Runner.Despawn(localPlayer.Object);
 			}
-			
-			// Debug.Log($"Player {playerRef} Left");
-			//
-			// if (!Runner.IsShutdown)
-			// {
-			// 	FusionPlayer player = GetPlayer<FusionPlayer>(playerRef);
-			// 	if (player && player.Object.IsValid)
-			// 	{
-			// 		Debug.Log($"Despawning PlayerAvatar for PlayerRef {player.PlayerId}");
-			// 		Runner.Despawn(player.Object);
-			// 	}
-				
-				// This means only on player remains
-				// if (Runner.SessionInfo.PlayerCount == 1)
-    //             {
-				// 	Runner.Shutdown(false);
-    //             }
-			// }
 		}
 
 		public void PlayerJoined(PlayerRef player)

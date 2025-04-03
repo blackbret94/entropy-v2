@@ -81,6 +81,7 @@ namespace TanksMP
             
             // add to player bot list
             GameManager.GetInstance().BotController.AddBot(this);
+            PlayerViewController.ColorizePlayerForTeam();
 
             _timerPathfinding.Run();
             _timerSlowUpdate.Run();
@@ -356,7 +357,8 @@ namespace TanksMP
 
         private void OnDestroy()
         {
-            GameManager.ui.GameLogPanel.EventPlayerLeft(PlayerName);
+            
+            // GameManager.ui.GameLogPanel.EventPlayerLeft(PlayerName);
         }
         
         // Draw navmesh path

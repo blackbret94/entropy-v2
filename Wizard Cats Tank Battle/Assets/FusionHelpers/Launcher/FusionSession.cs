@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Fusion;
 using TanksMP;
 using UnityEngine;
+using Vashta.Entropy.Player;
 
 namespace FusionHelpers
 {
@@ -117,23 +118,50 @@ namespace FusionHelpers
 
 		public void PlayerLeft(PlayerRef playerRef)
 		{
-			Debug.Log($"Player {playerRef} Left");
-
 			if (!Runner.IsShutdown)
 			{
 				FusionPlayer player = GetPlayer<FusionPlayer>(playerRef);
-				if (player && player.Object.IsValid)
+				PlayerController localPlayer = (PlayerController)player;
+	            
+				Debug.Log($"Player {player} Left");
+
+				if (!localPlayer)
 				{
-					Debug.Log($"Despawning PlayerAvatar for PlayerRef {player.PlayerId}");
-					Runner.Despawn(player.Object);
+					Debug.LogError("Missing reference to local player!");
+					return;
 				}
+
+				//process any collectibles assigned to that player
+				Collectible[] collectibles = localPlayer.GetComponentsInChildren<Collectible>(true);
+				for (int i = 0; i < collectibles.Length; i++)
+				{
+					//let the player drop the Collectible
+					localPlayer.DropCollectibles();
+				}
+
+				GameManager.GetInstance().TeamController.RemovePlayerFromTeam(localPlayer);
+	            
+				
+				Runner.Despawn(localPlayer.Object);
+			}
+			
+			// Debug.Log($"Player {playerRef} Left");
+			//
+			// if (!Runner.IsShutdown)
+			// {
+			// 	FusionPlayer player = GetPlayer<FusionPlayer>(playerRef);
+			// 	if (player && player.Object.IsValid)
+			// 	{
+			// 		Debug.Log($"Despawning PlayerAvatar for PlayerRef {player.PlayerId}");
+			// 		Runner.Despawn(player.Object);
+			// 	}
 				
 				// This means only on player remains
 				// if (Runner.SessionInfo.PlayerCount == 1)
     //             {
 				// 	Runner.Shutdown(false);
     //             }
-			}
+			// }
 		}
 
 		public void PlayerJoined(PlayerRef player)

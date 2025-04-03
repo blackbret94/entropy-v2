@@ -21,7 +21,6 @@ namespace TanksMP
     /// responsible for connecting to Photon's Cloud, spawning players and handling disconnects.
     /// </summary>
     [RequireComponent(typeof(RoomOptionsFactory))]
-    [RequireComponent(typeof(PlayerConnectionHandler))]
 	public class NetworkManagerCustom : NetworkBehaviour, IPlayerJoined, INetworkRunnerCallbacks
     {
         //reference to this script instance
@@ -41,7 +40,6 @@ namespace TanksMP
         private RoomOptionsFactory _roomOptionsFactory;
 
         public MapDefinitionDictionary MapDefinitionDictionary;
-        private PlayerConnectionHandler _playerConnectionHandler;
         private FusionLauncher.ConnectionStatus _status = FusionLauncher.ConnectionStatus.Disconnected;
 
         //initialize network view
@@ -65,7 +63,6 @@ namespace TanksMP
             
             // Get components
             _roomOptionsFactory = GetComponent<RoomOptionsFactory>();
-            _playerConnectionHandler = GetComponent<PlayerConnectionHandler>();
             _networkSceneManager = GetComponent<INetworkSceneManager>(); 
             RegionController = new RegionController();
 

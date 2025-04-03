@@ -156,7 +156,7 @@ namespace TanksMP
             if (Runner)
             {
                 if (Runner.IsRunning)
-                    Runner.Shutdown();
+                    Runner.Shutdown(false);
 
                 while (Runner.IsRunning)
                 {

@@ -224,8 +224,8 @@ namespace TanksMP
         {
             NetworkRunner runner = UIMain.GetInstance().Runner;
             if (runner != null && runner.IsRunning)
-                Runner.Shutdown(false);
-                // runner.Disconnect(GameManager.GetInstance().localPlayerController.PlayerId);
+                // Runner.Shutdown(false);
+                runner.Disconnect(GameManager.GetInstance().localPlayerController.PlayerId);
             
             SceneNavigator.GoToMainMenu();
         }

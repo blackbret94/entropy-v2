@@ -78,7 +78,6 @@ namespace TanksMP
             agent.Warp(targetPoint);
             SnapToNavMesh();
             bool success = agent.SetDestination(targetPoint);
-            Debug.Log("Destination set: " + success + " with speed: " + agent.speed);
             
             // add to player bot list
             GameManager.GetInstance().BotController.AddBot(this);
@@ -147,9 +146,7 @@ namespace TanksMP
             }
             
             //set the target point as the new destination
-            // Debug.Log("Destination: " + result);
             bool success = agent.SetDestination(result);
-            Debug.Log("Destination set: " + success + " with speed: " + agent.speed);
         }
 
         private void SnapToNavMesh()
@@ -251,8 +248,6 @@ namespace TanksMP
 
         public override void FixedUpdateNetwork()
         {
-            Debug.Log(agent.pathStatus);
-            
             //don't execute anything if the game is over already,
             //but termine the agent and path finding routines
             if(GameManager.IsGameOver())

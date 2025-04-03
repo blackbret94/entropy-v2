@@ -9,6 +9,7 @@ using UnityEngine.Serialization;
 using Vashta.Entropy.Character.Prop;
 using Vashta.Entropy.Player;
 using Vashta.Entropy.SaveLoad;
+using Vashta.Entropy.SceneNavigation;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.UI;
 
@@ -77,6 +78,11 @@ namespace Vashta.Entropy.Character
         private void Awake()
         {
             _gameManager = GameManager.GetInstance();
+
+            if (SceneNavigator.IsMainMenu())
+            {
+                StartCoroutine(LoadAppearanceWhenInventoryIsLoaded());
+            }
         }
         
         public void Start()
@@ -161,13 +167,17 @@ namespace Vashta.Entropy.Character
         
         public void LoadAppearanceCallback(CharacterAppearanceSerializable appearance)
         {
-            HatId = appearance.HatId;
-            BodyId = appearance.BodyId;
-            SkinId = appearance.SkinId;
-            CartId = appearance.CartId;
-            TurretId = appearance.TurretId;
-            MeowId = appearance.MeowId;
-            
+            if (!SceneNavigator.IsMainMenu())
+            {
+                // Save network IDs
+                HatId = appearance.HatId;
+                BodyId = appearance.BodyId;
+                SkinId = appearance.SkinId;
+                CartId = appearance.CartId;
+                TurretId = appearance.TurretId;
+                MeowId = appearance.MeowId;
+            }
+
             LoadFromSerialized(appearance);
             
             if(playerController && playerController.PlayerViewController)

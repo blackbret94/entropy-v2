@@ -58,7 +58,8 @@ namespace TanksMP
         public GameModeDefinition GameModeDefinition { get; private set; }
 
         private NetworkManagerCustom _networkManager;
-        private bool _gameHasEnded;
+        [Networked]
+        public bool GameHasEnded { get; private set; }
 
         //initialize variables
         void Awake()
@@ -88,22 +89,22 @@ namespace TanksMP
 
         public bool IsGameOver()
         {
-            if (_gameHasEnded)
+            if (GameHasEnded)
                 return true;
             
             if (!MatchTimer.MatchTimeIsRunning())
             {
-                _gameHasEnded = true;
+                GameHasEnded = true;
                 return true;
             }
 
-            _gameHasEnded = TeamController.MaxScoreIsReached();
-            return _gameHasEnded;
+            GameHasEnded = TeamController.MaxScoreIsReached();
+            return GameHasEnded;
         }
 
         public void MarkGameOver()
         {
-            _gameHasEnded = true;
+            GameHasEnded = true;
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Vashta.Entropy.IO
     {
         public static bool GetMusicIsOn()
         {
-            return bool.Parse(PlayerPrefs.GetString(PrefsKeys.playMusic));
+            return Convert.ToBoolean(PlayerPrefs.GetInt(PrefsKeys.playMusic, 1));
         }
 
         public static float GetVolume()
@@ -39,6 +39,11 @@ namespace Vashta.Entropy.IO
         public static int GetGraphicsSettings()
         {
             return PlayerPrefs.GetInt(PrefsKeys.graphicsSettings, QualitySettings.GetQualityLevel());
+        }
+        
+        public static bool GetShowFlashingLights()
+        {
+            return Convert.ToBoolean(PlayerPrefs.GetInt(PrefsKeys.flashingLights, 1));
         }
     }
 }

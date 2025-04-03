@@ -3,6 +3,8 @@ using TanksMP;
 using UnityEngine;
 using UnityEngine.UI;
 using Vashta.Entropy.IO;
+using Vashta.Entropy.SaveLoad;
+using PrefsKeys = TanksMP.PrefsKeys;
 
 namespace Vashta.Entropy.UI
 {
@@ -17,6 +19,7 @@ namespace Vashta.Entropy.UI
         public Toggle musicToggle;
         public Toggle leftHandedModeToggle;
         public Toggle showMinimapToggle;
+        public Toggle showFlashingLightsToggle;
         
         public JoystickPlacementController joystickPlacementController;
 
@@ -27,6 +30,13 @@ namespace Vashta.Entropy.UI
         
         public string WebsiteUrl = "https://wizardcatstankbattle.com";
         public string PrivacyPolicyUrl = "https://vashtaentertainment.com/privacy_policy.html";
+        
+        private CurrentSettings _currentSettings;
+
+        private void Awake()
+        {
+            _currentSettings = CurrentSettings.Instance();
+        }
         
         public override void OpenPanel()
         {
@@ -48,14 +58,16 @@ namespace Vashta.Entropy.UI
 
         private void ReadSettings()
         {
-            musicToggle.isOn = SettingsReader.GetMusicIsOn();
+            _currentSettings.Load();
             
+            musicToggle.isOn = SettingsReader.GetMusicIsOn();
             volumeSlider.value = SettingsReader.GetVolume();
             musicSlider.value = SettingsReader.GetMusicVolume();
             
             leftHandedModeToggle.isOn = SettingsReader.GetLeftHandedMode();
             AimArrowToggle.isOn = SettingsReader.GetAimArrow();
             showMinimapToggle.isOn = SettingsReader.GetShowMinimap();
+            showFlashingLightsToggle.isOn = SettingsReader.GetShowFlashingLights();
             
             if(FullscreenToggle)
                 FullscreenToggle.isOn = Screen.fullScreen;
@@ -63,27 +75,28 @@ namespace Vashta.Entropy.UI
 
         public void ApplySettings()
         {
-            PlayerPrefs.SetString(PrefsKeys.playMusic, musicToggle.isOn.ToString());
-            PlayerPrefs.SetFloat(PrefsKeys.appVolume, volumeSlider.value);
-            PlayerPrefs.SetFloat(PrefsKeys.musicVolume, musicSlider.value);
-            PlayerPrefs.SetInt(PrefsKeys.lefthandedMode, leftHandedModeToggle.isOn ? 1 : 0);
-            PlayerPrefs.SetInt(PrefsKeys.aimArrow, AimArrowToggle.isOn ? 1 : 0);
-            PlayerPrefs.SetInt(PrefsKeys.showMinimap, showMinimapToggle.isOn ? 1 : 0);
-
+            _currentSettings.MusicIsOn = musicToggle.isOn;
+            _currentSettings.Volume = volumeSlider.value;
+            _currentSettings.MusicVolume = musicSlider.value;
+            _currentSettings.LeftHandedMode = leftHandedModeToggle.isOn;
+            _currentSettings.AimArrowOn = AimArrowToggle.isOn;
+            _currentSettings.ShowMinimap = showMinimapToggle.isOn;
+            _currentSettings.ShowFlashingLights = showFlashingLightsToggle.isOn;
+            
+            if (graphicsSlider)
+            {
+                int qualityLevel = Mathf.RoundToInt(graphicsSlider.value);
+                QualitySettings.SetQualityLevel(qualityLevel);
+                _currentSettings.GraphicsQuality = Mathf.RoundToInt(graphicsSlider.value);
+            }
+   
+            _currentSettings.Save();
+            
             if (!isOnMainMenu)
             {
                 UIGame.GetInstance().RefreshAimArrow();
                 UIGame.GetInstance().Minimap.SetActive(showMinimapToggle.isOn);
             }
-
-            if (graphicsSlider)
-            {
-                int qualityLevel = Mathf.RoundToInt(graphicsSlider.value);
-                QualitySettings.SetQualityLevel(qualityLevel);
-                PlayerPrefs.SetInt(PrefsKeys.graphicsSettings, qualityLevel);
-            }
-
-            PlayerPrefs.Save();
         }
 
         public void OnLeftHandedModeChanged(bool leftHandedModeEnabled)

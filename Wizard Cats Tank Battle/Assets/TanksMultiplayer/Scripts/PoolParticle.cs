@@ -4,6 +4,7 @@
  * 	otherwise make available to any third party the Service or the Content. */
 
 using UnityEngine;
+using Vashta.Entropy.SaveLoad;
 
 namespace TanksMP
 {
@@ -21,7 +22,8 @@ namespace TanksMP
         
         //references to all ParticleSystem components
         private ParticleSystem[] pSystems;
-        
+        private bool _lightsAreOn = true;
+        private CurrentSettings _settings;
         
         //initialize variables
         void Awake()
@@ -37,12 +39,16 @@ namespace TanksMP
                 if(main.duration > delay)
                     delay = main.duration;
             }
+
+            _settings = CurrentSettings.Instance();
         }
         
         
         //play particles
         public void OnSpawn()
         {
+            UpdateLights();
+            
             //loop over ParticleSystem references and play them
             //Unity does not seem to calculate a new iteration of particles when
             //particles get activated, so here we add a randomized seed to it too
@@ -55,6 +61,35 @@ namespace TanksMP
 
             //set automatic despawn after play duration
             PoolManager.Despawn(gameObject, delay);
+        }
+
+        private void UpdateLights()
+        {
+            if (!_lightsAreOn && _settings.ShowFlashingLights)
+            {
+                // turn on lights
+                Light[] lights = GetComponentsInChildren<Light>();
+
+                foreach (Light thisLight in lights)
+                {
+                    thisLight.enabled = true;
+                }
+                
+                _lightsAreOn = true;
+            }
+            else if(_lightsAreOn && !_settings.ShowFlashingLights)
+            {
+                // turn off lights
+                Light[] lights = GetComponentsInChildren<Light>();
+
+                foreach (Light thisLight in lights)
+                {
+                    thisLight.enabled = false;
+                }
+                
+                _lightsAreOn = false;
+            }
+
         }
     }
 }

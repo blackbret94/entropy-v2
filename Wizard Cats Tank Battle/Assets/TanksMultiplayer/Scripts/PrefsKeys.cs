@@ -58,5 +58,7 @@ namespace TanksMP
         public const string showMinimap = "WCTB_ShowMinimap";
 
         public const string graphicsSettings = "WCTB_GraphicsSettings";
+        
+        public const string flashingLights = "WCTB_FlashingLights"; // enables or disables flashing lights
     }
 }

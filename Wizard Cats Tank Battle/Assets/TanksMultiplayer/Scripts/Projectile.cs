@@ -100,7 +100,7 @@ namespace TanksMP
         private bool _isPiercing;
 
         private List<PlayerController> _playerCollidedWith = new List<PlayerController>();
-
+        
         private bool OwnerIsProtected => Time.time - _timeCreated < OwnerProtectionTime;
 
         //get component references

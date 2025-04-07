@@ -3022,7 +3022,7 @@ GameObject:
   m_Component:
   - component: {fileID: 149228225}
   - component: {fileID: 149228227}
-  - component: {fileID: 149228226}
+  - component: {fileID: 149228228}
   m_Layer: 0
   m_Name: FlagSpawner
   m_TagString: Untagged
@@ -3045,29 +3045,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1045197832}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &149228226
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 149228224}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 0
-  OwnershipTransfer: 0
-  observableSearch: 0
-  ObservedComponents:
-  - {fileID: 0}
-  sceneViewId: 10
-  InstantiationId: -1
-  isRuntimeInstantiated: 0
 --- !u!114 &149228227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3091,6 +3068,25 @@ MonoBehaviour:
   _nextSpawn: 0
   _lastInflatedObjectIndex: 0
   _nextInflatedObjectIndex: 0
+--- !u!114 &149228228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149228224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 2657447104
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 149228227}
+  ForceRemoteRenderTimeframe: 0
 --- !u!1001 &150067333
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3198,6 +3194,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7199926091092590823}
     m_Modifications:
+    - target: {fileID: 4079822780650362304, guid: b25f463cb41505f4a833f59f201ffef1,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 3696795034441039650, guid: 54edde67da5150349883e8c18be64dde,
         type: 3}
       propertyPath: m_Name
@@ -3252,11 +3253,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4079822780650362304, guid: b25f463cb41505f4a833f59f201ffef1,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -12361,7 +12357,7 @@ GameObject:
   m_Component:
   - component: {fileID: 570909526}
   - component: {fileID: 570909528}
-  - component: {fileID: 570909527}
+  - component: {fileID: 570909529}
   m_Layer: 0
   m_Name: RedFlagSpawner
   m_TagString: Untagged
@@ -12384,29 +12380,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1042263036}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &570909527
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 570909525}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 0
-  OwnershipTransfer: 0
-  observableSearch: 0
-  ObservedComponents:
-  - {fileID: 0}
-  sceneViewId: 7
-  InstantiationId: -1
-  isRuntimeInstantiated: 0
 --- !u!114 &570909528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12430,6 +12403,25 @@ MonoBehaviour:
   _nextSpawn: 0
   _lastInflatedObjectIndex: 0
   _nextInflatedObjectIndex: 0
+--- !u!114 &570909529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 570909525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 4004475484
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 570909528}
+  ForceRemoteRenderTimeframe: 0
 --- !u!1001 &573196394
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12519,7 +12511,6 @@ GameObject:
   m_Component:
   - component: {fileID: 578490575}
   - component: {fileID: 578490577}
-  - component: {fileID: 578490576}
   m_Layer: 0
   m_Name: BulletSpawner (2)
   m_TagString: Untagged
@@ -12542,29 +12533,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 183165448}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &578490576
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 578490574}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 0
-  OwnershipTransfer: 0
-  observableSearch: 0
-  ObservedComponents:
-  - {fileID: 0}
-  sceneViewId: 12
-  InstantiationId: -1
-  isRuntimeInstantiated: 0
 --- !u!114 &578490577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17636,6 +17604,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7199926091092590823}
     m_Modifications:
+    - target: {fileID: 4079822780650362304, guid: b25f463cb41505f4a833f59f201ffef1,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 3696795034441039650, guid: 54edde67da5150349883e8c18be64dde,
         type: 3}
       propertyPath: m_Name
@@ -17690,11 +17663,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4079822780650362304, guid: b25f463cb41505f4a833f59f201ffef1,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -18480,7 +18448,7 @@ GameObject:
   m_Component:
   - component: {fileID: 923249051}
   - component: {fileID: 923249053}
-  - component: {fileID: 923249052}
+  - component: {fileID: 923249054}
   m_Layer: 0
   m_Name: BlueFlagSpawner
   m_TagString: Untagged
@@ -18503,29 +18471,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1042263036}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &923249052
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 923249050}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 0
-  OwnershipTransfer: 0
-  observableSearch: 0
-  ObservedComponents:
-  - {fileID: 0}
-  sceneViewId: 6
-  InstantiationId: -1
-  isRuntimeInstantiated: 0
 --- !u!114 &923249053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18549,6 +18494,25 @@ MonoBehaviour:
   _nextSpawn: 0
   _lastInflatedObjectIndex: 0
   _nextInflatedObjectIndex: 0
+--- !u!114 &923249054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 923249050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 3720271314
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 923249053}
+  ForceRemoteRenderTimeframe: 0
 --- !u!43 &926185227
 Mesh:
   m_ObjectHideFlags: 0
@@ -20964,7 +20928,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1045197832
 Transform:
   m_ObjectHideFlags: 0

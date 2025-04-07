@@ -68,6 +68,7 @@ namespace TanksMP
             _networkManager = NetworkManagerCustom.GetInstance();
 
             gameMode = _networkManager.LocalPlayerInfo.GameModeEnum;
+            
             GameModeDefinition = GameModeDictionary[gameMode];
             
             BotController = GetComponent<BotController>();

@@ -59,14 +59,15 @@ namespace Vashta.Entropy.PhotonExtensions
             startGameArgs.SceneManager = NetworkSceneManagerDefault;
             
             // custom properties
+            // game mode
             Dictionary<string, SessionProperty> customProperties = new Dictionary<string, SessionProperty>();
             customProperties[RoomKeys.modeKey] = (byte)(int)matchmakingArgs.gameMode;
 
-            if (matchmakingArgs.mapName != "random")
-            {
-                customProperties[RoomKeys.mapKey] = matchmakingArgs.mapName;
-            }
+            // map
+            string mapName = matchmakingArgs.mapName != "random" ? matchmakingArgs.mapName : "random";
+            customProperties[RoomKeys.mapKey] = mapName;
 
+            // password
             if (!matchmakingArgs.password.IsNullOrEmpty())
             {
                 customProperties[RoomKeys.password] = matchmakingArgs.password;

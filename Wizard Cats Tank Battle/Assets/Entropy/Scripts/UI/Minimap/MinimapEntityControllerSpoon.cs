@@ -32,8 +32,8 @@ namespace Vashta.Entropy.UI.Minimap
         {
             int teamIndex = Spoon.teamIndex;
 
-            if (teamIndex != _teamIndex)
-            {
+            // if (teamIndex != _teamIndex)
+            // {
                 _teamIndex = teamIndex;
                 TeamInstance teamInstance = GameManager.TeamController.GetTeamByIndex(_teamIndex);
 
@@ -46,7 +46,7 @@ namespace Vashta.Entropy.UI.Minimap
                 {
                     SetEntityColor(Color.white);
                 }
-            }
+            // }
         }
     }
 }

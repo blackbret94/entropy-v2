@@ -56,6 +56,8 @@ namespace TanksMP
         public int lastInflatedObjectIndex { get; set; }
         [Networked]
         public int nextInflatedObjectIndex { get; set; } // calculate on state authority
+        [Networked] public PlayerRef playerHeldBy { get; set; } // Make sure fusion supports Nullable
+        [Networked] public NetworkBool isHeldByPlayer { get; set; }
 
         
         public override void Spawned()
@@ -81,6 +83,13 @@ namespace TanksMP
                 if (IsSpawned)
                 {
                     Instantiate(lastInflatedObjectIndex);
+                    
+                    if (isHeldByPlayer)
+                    {
+                        PlayerController playerController = PlayerController.GetPlayerGameObject(playerHeldBy);
+                        obj.transform.parent = playerController.transform;
+                        obj.transform.localPosition = Vector3.zero + new Vector3(0, 2, 0);
+                    }
                 }
             }
             
@@ -207,6 +216,9 @@ namespace TanksMP
             if (obj == null)
                 SpawnObject(true);
 
+            playerHeldBy = playerController.PlayerId;
+            isHeldByPlayer = true;
+
             //get target view transform to parent to
             obj.transform.parent = playerController.transform;
             obj.transform.localPosition = Vector3.zero + new Vector3(0, 2, 0);
@@ -224,12 +236,20 @@ namespace TanksMP
             {
                 GameManager gameManager = GameManager.GetInstance();
                 gameManager.ui.GameLogPanel.EventSpoonPickedUp(playerController.PlayerName, gameManager.TeamController.GetTeamByIndex(playerController.TeamIndex).teamDefinition);
+                
+                if (playerController.IsLocal)
+                {
+                    GameManager.GetInstance().ui.DropCollectiblesButton.gameObject.SetActive(true);
+                }
+            }
+            else
+            {
+                // This should register as being despawned if not an item carried by the player
+                IsSpawned = false;
             }
             
             //cancel return timer as this object is now being carried around
             StopAllCoroutines();
-
-            IsSpawned = false;
         }
 
 
@@ -248,6 +268,7 @@ namespace TanksMP
             obj.transform.position = position;
 
             //reset carrier
+            isHeldByPlayer = false;
             Collectible colItem = obj.GetComponent<Collectible>();
             if (colItem != null)
             {
@@ -277,6 +298,7 @@ namespace TanksMP
             obj.transform.position = transform.position;
 
             //reset carrier
+            isHeldByPlayer = false;
             Collectible colItem = obj.GetComponent<Collectible>();
             if (colItem != null)
             {

@@ -79,7 +79,7 @@ namespace Vashta.Entropy.StatusEffects
                 return null;
             }
             
-            return localPlayer.GetPlayerGameObject(_player);
+            return PlayerController.GetPlayerGameObject(_player);
         }
 
         public void SetExpiration(float time)

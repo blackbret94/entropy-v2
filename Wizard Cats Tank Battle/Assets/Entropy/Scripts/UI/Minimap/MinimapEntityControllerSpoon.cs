@@ -32,21 +32,25 @@ namespace Vashta.Entropy.UI.Minimap
         {
             int teamIndex = Spoon.teamIndex;
 
-            // if (teamIndex != _teamIndex)
-            // {
+            if (teamIndex != _teamIndex)
+            {
                 _teamIndex = teamIndex;
-                TeamInstance teamInstance = GameManager.TeamController.GetTeamByIndex(_teamIndex);
-
-                if (teamInstance != null && teamInstance.teamDefinition != null)
-                {
-                    TeamDefinition teamDefinition = teamInstance.teamDefinition;
-                    SetEntityColor(teamDefinition.TeamColorPrim);
-                }
-                else
+                
+                if (_teamIndex == -1)
                 {
                     SetEntityColor(Color.white);
                 }
-            // }
+                else
+                {
+                    TeamInstance teamInstance = GameManager.TeamController.GetTeamByIndex(_teamIndex);
+
+                    if (teamInstance != null && teamInstance.teamDefinition != null)
+                    {
+                        TeamDefinition teamDefinition = teamInstance.teamDefinition;
+                        SetEntityColor(teamDefinition.TeamColorPrim);
+                    }
+                }
+            }
         }
     }
 }

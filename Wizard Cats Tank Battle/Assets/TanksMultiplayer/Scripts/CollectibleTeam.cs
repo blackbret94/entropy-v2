@@ -62,6 +62,11 @@ namespace TanksMP
                 {
                     //player picked up item from other team, send out buffered RPC for it to be remembered
                     spawner.Pickup(playerController);
+
+                    if (playerController.IsLocal)
+                    {
+                        GameManager.GetInstance().ui.DropCollectiblesButton.gameObject.SetActive(true);
+                    }
                 }
             }
         }
@@ -119,18 +124,15 @@ namespace TanksMP
         
         public override void OnPickup()
         {
-            PlayerController localPlayerController = PlayerList.GetLocalPlayer();
-
-            if (!localPlayerController)
-            {
-                Debug.LogError("Local player not found!");
-                return;
-            }
-
-            if (Runner)
-            {
-                GameManager.GetInstance().ui.DropCollectiblesButton.gameObject.SetActive(true);
-            }
+            // PlayerController localPlayerController = PlayerList.GetLocalPlayer();
+            //
+            // if (!localPlayerController)
+            // {
+            //     Debug.LogError("Local player not found!");
+            //     return;
+            // }
+            //
+            // GameManager.GetInstance().ui.DropCollectiblesButton.gameObject.SetActive(true);
         }
     }
 }

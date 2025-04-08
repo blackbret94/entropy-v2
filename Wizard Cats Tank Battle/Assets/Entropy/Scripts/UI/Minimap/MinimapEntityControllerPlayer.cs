@@ -68,7 +68,6 @@ namespace Vashta.Entropy.UI.Minimap
 
             if (localPlayerController == null)
             {
-                Debug.LogError("Could not load local player!");
                 return false;
             }
             

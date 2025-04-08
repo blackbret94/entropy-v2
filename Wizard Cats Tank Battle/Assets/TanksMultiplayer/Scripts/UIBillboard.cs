@@ -35,7 +35,7 @@ namespace TanksMP
 
 
         //initialize variables
-        void Awake()
+        void Start()
         {
             camTrans = Camera.main.transform;
             trans = transform;

@@ -149,8 +149,8 @@ namespace FusionHelpers
 				teamController.ReCalculateTeams();
 				teamController.RefreshDisplay();
 	            
-				
-				Runner.Despawn(localPlayer.Object);
+				if(localPlayer != null && localPlayer.Object != null)
+					Runner.Despawn(localPlayer.Object);
 			}
 		}
 

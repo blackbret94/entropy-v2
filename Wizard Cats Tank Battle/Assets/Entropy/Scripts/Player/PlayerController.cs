@@ -727,15 +727,16 @@ namespace Vashta.Entropy.Player
         /// Finds the remotely controlled Player game object of a specific player,
         /// by iterating over all Player components and searching for the matching creator.
         /// </summary>
-        public PlayerController GetPlayerGameObject(PlayerRef playerRef)
+        public static PlayerController GetPlayerGameObject(PlayerRef playerRef)
         {
-            if (!Runner || !Runner.IsRunning)
+            NetworkRunner runner = TanksMP.GameManager.GetInstance().Runner;
+            if (!runner || !runner.IsRunning)
             {
                 Debug.LogError("Runner is not running or hasn't been initiated!");
                 return null;
             }
             
-            if (Runner.TryGetPlayerObject(playerRef, out NetworkObject playerObject))
+            if (runner.TryGetPlayerObject(playerRef, out NetworkObject playerObject))
             {
                 PlayerController playerController = playerObject.GetComponent<PlayerController>();
 

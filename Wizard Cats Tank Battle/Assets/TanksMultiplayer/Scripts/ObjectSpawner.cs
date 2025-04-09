@@ -58,6 +58,7 @@ namespace TanksMP
         public int nextInflatedObjectIndex { get; set; } // calculate on state authority
         [Networked] public PlayerRef playerHeldBy { get; set; } // Make sure fusion supports Nullable
         [Networked] public NetworkBool isHeldByPlayer { get; set; }
+        [Networked] private TickTimer RespawnTimer { get; set; } = default;
 
         
         public override void Spawned()
@@ -87,6 +88,13 @@ namespace TanksMP
                     if (isHeldByPlayer)
                     {
                         PlayerController playerController = PlayerController.GetPlayerGameObject(playerHeldBy);
+
+                        if (playerController == null)
+                        {
+                            Debug.LogError("Could not find player to attach object to!");
+                            return;
+                        }
+                        
                         obj.transform.parent = playerController.transform;
                         obj.transform.localPosition = Vector3.zero + new Vector3(0, 2, 0);
                     }
@@ -119,19 +127,29 @@ namespace TanksMP
             nextInflatedObjectIndex = Random.Range(0, prefabList.Count);
         }
 
-        //calculates the remaining time until the next respawn,
-        //waits for the delay to have passed and then instantiates the object
-        IEnumerator SpawnRoutine()
-		{
+        public override void FixedUpdateNetwork()
+        {
+            if (RespawnTimer.Expired(Runner))
+            {
+                // Trigger respawn
+                Respawn();
+
+                RespawnTimer = default;
+            }
+        }
+
+        private void SetRespawnTimer()
+        {
             if (HasStateAuthority)
             {
                 PickNextSpawnIndex();
             }
             
-            yield return new WaitForEndOfFrame();
-            float delay = Mathf.Clamp(nextSpawn - (float)Runner.SimulationTime, 0, respawnTime);
-			yield return new WaitForSeconds(delay);
+            RespawnTimer = TickTimer.CreateFromSeconds(Runner, respawnTime);
+        }
 
+        private void Respawn()
+        {
             if (Runner.IsRunning)
             {
                 //differ between CollectionType
@@ -149,13 +167,30 @@ namespace TanksMP
             }
         }
 
+        //calculates the remaining time until the next respawn,
+        //waits for the delay to have passed and then instantiates the object
+        // this works well on the server, but not on clients
+        IEnumerator SpawnRoutine()
+		{
+            if (HasStateAuthority)
+            {
+                PickNextSpawnIndex();
+            }
+            
+            yield return new WaitForEndOfFrame();
+            float delay = Mathf.Clamp(nextSpawn - (float)Runner.SimulationTime, 0, respawnTime);
+			yield return new WaitForSeconds(delay);
+
+            Respawn();
+        }
+
         public void StateAuthorityChanged()
         {
             if (HasStateAuthority)
             {
                 if (!IsSpawned)
                 {
-                    StartCoroutine(SpawnRoutine());
+                    SetRespawnTimer();
                 }
             }
         }
@@ -249,7 +284,7 @@ namespace TanksMP
             }
             
             //cancel return timer as this object is now being carried around
-            StopAllCoroutines();
+            RespawnTimer = default;
         }
 
 
@@ -281,8 +316,7 @@ namespace TanksMP
             //if the respawn mechanic is selected, trigger a new coroutine
             if (respawn)
             {
-                StopAllCoroutines();
-                StartCoroutine(SpawnRoutine());
+                SetRespawnTimer();
             }
         }
 
@@ -307,7 +341,7 @@ namespace TanksMP
             }
 
             //cancel return timer as the object is now back at its base position
-            StopAllCoroutines();
+            RespawnTimer = default;
         }
 
 
@@ -323,9 +357,9 @@ namespace TanksMP
 
             IsSpawned = false;
 			
-            //if it should respawn again, trigger a new coroutine
+            //if it should respawn again, trigger a new timer
 			if(respawn)
-                StartCoroutine(SpawnRoutine());
+                SetRespawnTimer();
 		}
         
         

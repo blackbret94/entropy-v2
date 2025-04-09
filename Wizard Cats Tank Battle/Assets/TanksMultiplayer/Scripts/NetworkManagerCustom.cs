@@ -5,11 +5,9 @@ using Fusion;
 using Fusion.Sockets;
 using FusionHelpers;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Vashta.Entropy.GameState;
 using Vashta.Entropy.Network;
 using Vashta.Entropy.PhotonExtensions;
-using Vashta.Entropy.Player;
 using Vashta.Entropy.SceneNavigation;
 using Vashta.Entropy.Scripts.CBSIntegration;
 using Vashta.Entropy.UI.MapSelection;
@@ -133,7 +131,8 @@ namespace TanksMP
             {
                 //connects to a cloud game available on the Photon servers
                 case NetworkMode.Online:
-                    Runner.StartGame(new StartGameArgs { GameMode = Fusion.GameMode.Shared });
+                    StartGameArgs startGameArgs = new StartGameArgs { GameMode = Fusion.GameMode.Shared };
+                    FusionLauncher.Launch(startGameArgs, "us", WCTBSessionPrefab, _networkSceneManager, OnConnectionStatusUpdate);
                     // TODO: Pass in sessionName, scene
                     break;
 
@@ -190,13 +189,7 @@ namespace TanksMP
         public void JoinRandomRoom()
         {
             StartGameArgs startGameArgs = _roomOptionsFactory.CreateRoomOptionsGameMode((byte)PlayerPrefs.GetInt(PrefsKeys.gameMode));
-            Runner.StartGame(startGameArgs);
-        }
-
-        public void JoinRandomRoom(string mapName, int gameMode)
-        {
-            StartGameArgs startGameArgs = _roomOptionsFactory.CreateRoomOptions(mapName, (byte)gameMode);
-            Runner.StartGame(startGameArgs);
+            FusionLauncher.Launch(startGameArgs, "us", WCTBSessionPrefab, _networkSceneManager, OnConnectionStatusUpdate);
         }
 
         public void JoinRandomRoomOffline(StartGameArgs startGameArgs)
@@ -208,7 +201,7 @@ namespace TanksMP
         {
             yield return StartCoroutine(Disconnect());
             startGameArgs.GameMode = Fusion.GameMode.Single;
-            Runner.StartGame(startGameArgs);
+            FusionLauncher.Launch(startGameArgs, "us", WCTBSessionPrefab, _networkSceneManager, OnConnectionStatusUpdate);
         }
 
         /// <summary>
@@ -218,7 +211,7 @@ namespace TanksMP
         {
             StartGameArgs startGameArgs = new StartGameArgs();
             startGameArgs.SessionName = roomName;
-            Runner.StartGame(startGameArgs);
+            FusionLauncher.Launch(startGameArgs, "us", WCTBSessionPrefab, _networkSceneManager, OnConnectionStatusUpdate);
         }
         
         public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Fusion;
 using UnityEngine;
@@ -11,6 +12,34 @@ namespace Vashta.Entropy.PhotonExtensions
         public RoomInfoWrapper(SessionInfo sessionInfo)
         {
             _sessionInfo = sessionInfo;
+        }
+
+        public SessionInfo GetSessionInfo()
+        {
+            return _sessionInfo;
+        }
+
+        public StartGameArgs GetStartGameArgs()
+        {
+            Dictionary<string, SessionProperty> properties = new Dictionary<string, SessionProperty>();
+
+            
+            // Get mode
+            string modeKey = RoomKeys.modeKey;
+            if(_sessionInfo.Properties.TryGetValue(modeKey, out var modeProperty))
+                properties[modeKey] =  modeProperty;
+            
+            // Get map
+            string mapKey = RoomKeys.mapKey;
+            if(_sessionInfo.Properties.TryGetValue(mapKey, out var mapProperty))
+                properties[mapKey] =  mapProperty;
+            
+            return new StartGameArgs()
+            {
+                SessionName = _sessionInfo.Name,
+                GameMode = Fusion.GameMode.Shared,
+                SessionProperties = properties
+            };
         }
 
         public string GetMapName()
@@ -45,14 +74,15 @@ namespace Vashta.Entropy.PhotonExtensions
 
         public string GetDisplayRoomName()
         {
-            ReadOnlyDictionary<string, SessionProperty> customProperties = _sessionInfo.Properties;
-
-            if (customProperties.TryGetValue(RoomKeys.roomNameKey, out var property))
-            {
-                return (string)property;
-            }
-
-            return "";
+            return _sessionInfo.Name;
+            // ReadOnlyDictionary<string, SessionProperty> customProperties = _sessionInfo.Properties;
+            //
+            // if (customProperties.TryGetValue(RoomKeys.roomNameKey, out var property))
+            // {
+            //     return (string)property;
+            // }
+            //
+            // return "";
         }
 
         public int GetMaxPlayers()
@@ -86,13 +116,7 @@ namespace Vashta.Entropy.PhotonExtensions
                 return null;
             }
 
-            if (!_sessionInfo.Properties.ContainsKey(RoomKeys.roomNameKey))
-            {
-                Debug.LogError("Retrieved lobby that is missing a room name!");
-                return null;
-            }
-
-            string roomName = (string)_sessionInfo.Properties[RoomKeys.roomNameKey];
+            string roomName = (string)_sessionInfo.Name;
 
             return $"{roomName} | {map} ({_sessionInfo.PlayerCount}/{_sessionInfo.MaxPlayers})";
         }

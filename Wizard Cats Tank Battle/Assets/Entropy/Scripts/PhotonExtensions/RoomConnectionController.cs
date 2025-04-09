@@ -7,7 +7,6 @@ namespace Vashta.Entropy.PhotonExtensions
 {
     public class RoomConnectionController : SimulationBehaviour
     {
-        public RoomOptionsFactory RoomOptionsFactory;
         private NetworkManagerCustom _networkManager;
 
         private void Start()
@@ -36,31 +35,6 @@ namespace Vashta.Entropy.PhotonExtensions
                 _networkManager.JoinRandomRoomOffline(new StartGameArgs());
             }
             
-            // NetworkManagerCustom.StartMatch((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode));
-            StartCoroutine(HandleTimeout());
-        }
-
-        public void Play(string mapName, int gameMode)
-        {
-            UIMain.GetInstance().ToggleLoadingWindow(true);
-
-            StartGameArgs startGameArgs = RoomOptionsFactory.CreateRoomOptions(mapName, (byte)gameMode);
-            Runner.StartGame(startGameArgs);
-            StartCoroutine(HandleTimeout());
-        }
-
-        public void PlayOffline(string mapName, int gameMode)
-        {
-            UIMain.GetInstance().ToggleLoadingWindow(true);
-            
-            StartGameArgs startGameArgs = RoomOptionsFactory.CreateRoomOptions(mapName, (byte)gameMode);
-            NetworkManagerCustom.GetInstance().JoinRandomRoomOffline(startGameArgs);
-        }
-
-        public void JoinRoom(string roomName)
-        {
-            UIMain.GetInstance().ToggleLoadingWindow(true);
-            NetworkManagerCustom.GetInstance().JoinRoom(roomName);
             // NetworkManagerCustom.StartMatch((NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode));
             StartCoroutine(HandleTimeout());
         }

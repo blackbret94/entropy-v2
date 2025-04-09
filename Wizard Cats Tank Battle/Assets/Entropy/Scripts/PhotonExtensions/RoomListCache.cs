@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Fusion;
 using Fusion.Sockets;
 using TanksMP;
@@ -8,7 +9,7 @@ using UnityEngine;
 
 namespace Vashta.Entropy.PhotonExtensions
 {
-    public class RoomListCache : SimulationBehaviour, INetworkRunnerCallbacks
+    public class RoomListCache : NetworkBehaviour, INetworkRunnerCallbacks
     {
         public UIMain UIMain { get; private set; }
         // private TypedLobby customLobby = new TypedLobby("customLobby", LobbyType.Default);
@@ -26,19 +27,25 @@ namespace Vashta.Entropy.PhotonExtensions
         private void Start()
         {
             UIMain = UIMain.GetInstance();
-            JoinLobby();
+
+            JoinLobbyAsync();
         }
 
-        public void JoinLobby()
+        public async Task JoinLobbyAsync()
         {
-            // TODO: Pass in sessionName, scene
-            NetworkRunner runner = FindAnyObjectByType<NetworkRunner>();
-            runner.StartGame(new StartGameArgs { GameMode = Fusion.GameMode.Shared });
-            //
-            // Debug.Log("Attempted to join lobby: " + joinedLobby);
-
-            StartCoroutine(RetryConnection());
+            NetworkRunner runner = GetComponent<NetworkRunner>();
+            if (!runner || runner.IsShutdown)
+            {
+                runner = gameObject.AddComponent<NetworkRunner>();
+            }
             
+            var result = await runner.JoinSessionLobby(SessionLobby.Shared);
+
+            if (result.Ok) {
+                // all good
+            } else {
+                Debug.LogError($"Failed to Start: {result.ShutdownReason}");
+            }
         }
 
         public void RefreshLobbies()
@@ -49,13 +56,13 @@ namespace Vashta.Entropy.PhotonExtensions
             if (onUpdatedCache != null) onUpdatedCache();
             
             // Refresh
-            JoinLobby();
+            JoinLobbyAsync();
         }
 
         private IEnumerator RetryConnection()
         {
             yield return new WaitForSeconds(RefreshWaitTime);
-            JoinLobby();
+            JoinLobbyAsync();
         }
 
         private void UpdateCachedRoomList(List<SessionInfo> roomList)
@@ -63,6 +70,7 @@ namespace Vashta.Entropy.PhotonExtensions
             for(int i=0; i<roomList.Count; i++)
             {
                 SessionInfo info = roomList[i];
+                Debug.Log("Room: " + info.Name);
                 if (!info.IsOpen || !info.IsVisible || !info.IsValid)
                 {
                     cachedRoomList.Remove(info.Name);

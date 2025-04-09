@@ -2,6 +2,7 @@ using Fusion;
 using TanksMP;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Vashta.Entropy.PhotonExtensions;
 using Vashta.Entropy.ScriptableObject;
@@ -10,7 +11,8 @@ namespace Vashta.Entropy.UI.MatchBrowser
 {
     public class MatchBrowserSelectorUnit : MonoBehaviour
     {
-        public Button Button;
+        [FormerlySerializedAs("Button")] public Button JoinButton;
+        public Button CreateButton;
         public Image Image;
         public TextMeshProUGUI Text;
         public Image GameModeIcon;
@@ -39,7 +41,10 @@ namespace Vashta.Entropy.UI.MatchBrowser
             GameModeIcon.sprite = gameModeDefinition.Icon;
 
             // Format widget
-            ShowButton(room.IsOpen);
+            if(room.IsOpen)
+                ShowJoinButton();
+            else
+                HideButtons();
         }
 
         /// <summary>
@@ -47,8 +52,8 @@ namespace Vashta.Entropy.UI.MatchBrowser
         /// </summary>
         public void SetNoRoomsFound()
         {
-            Text.text = "No matches could be found for the selected region!";
-            ShowButton(false);
+            Text.text = "No matches could be found!  Create one instead!";
+            ShowCreateButton();
             Image.enabled = false;
         }
         
@@ -65,12 +70,39 @@ namespace Vashta.Entropy.UI.MatchBrowser
                 return;
             }
             
-            UIMain.GetInstance().roomConnectionController.JoinRoom(roomNameId);
+            UIMain.GetInstance().roomConnectionController.CreateRoom(_roomInfoWrapper.GetStartGameArgs());
         }
 
-        private void ShowButton(bool show)
+        public void CreateRoom()
         {
-            Button.gameObject.SetActive(show);
+            MatchmakingPanel matchmakingPanel = FindFirstObjectByType<MatchmakingPanel>();
+
+            if (matchmakingPanel)
+            {
+                matchmakingPanel.ShowCreate();
+            }
+            else
+            {
+                Debug.LogError("Cannot find matchmaking panel!");
+            }
+        }
+        
+        private void ShowJoinButton()
+        {
+            HideButtons();
+            JoinButton.gameObject.SetActive(true);
+        }
+
+        private void ShowCreateButton()
+        {
+            HideButtons();
+            CreateButton.gameObject.SetActive(true);
+        }
+
+        private void HideButtons()
+        {
+            JoinButton.gameObject.SetActive(false);
+            CreateButton.gameObject.SetActive(false);
         }
     }
 }

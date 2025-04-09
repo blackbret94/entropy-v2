@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using Vashta.Entropy.Network;
 using Vashta.Entropy.PhotonExtensions;
 using Vashta.Entropy.ScriptableObject;
+using Vashta.Entropy.Scripts.CBSIntegration;
 using Vashta.Entropy.UI.MapSelection;
 
 namespace Vashta.Entropy.UI.MatchCreation
@@ -67,7 +68,7 @@ namespace Vashta.Entropy.UI.MatchCreation
             }
             else
             {
-                // NameInputField.text = RoomOptionsFactory.CreateRoomNameFromPlayerNickname(_networkManagerCustom.LocalPlayerInfo.Name);
+                NameInputField.text = RoomOptionsFactory.CreateRoomNameFromPlayerNickname(CBSIntegrator.Instance.ProfileState.CachedDisplayName);
             }
             
             SetMapTitleText();

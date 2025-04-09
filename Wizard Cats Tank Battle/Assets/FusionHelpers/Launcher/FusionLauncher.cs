@@ -92,48 +92,61 @@ namespace FusionHelpers
 			await runner.StartGame(startGameArgs);
 		}
 		
-		// public static FusionLauncher Join(string roomName, string region, FusionSession sessionPrefab,
-		// 	INetworkSceneManager sceneLoader,
-		// 	Action<NetworkRunner, ConnectionStatus, string> onConnect)
-		// {
-		// 	FusionLauncher launcher = new GameObject("Launcher").AddComponent<FusionLauncher>();
-		//
-		// 	launcher.InternalLaunch(roomName, region,sessionPrefab, sceneLoader, onConnect);
-		// 	return launcher;
-		// }
-		//
-		// private async void InternalJoin(string roomName, string region, FusionSession sessionPrefab,
-		// 	INetworkSceneManager sceneManager,
-		// 	Action<NetworkRunner, ConnectionStatus, string> onConnect)
-		// {
-		// 	_sessionPrefab = sessionPrefab;
-		// 	_connectionCallback = onConnect;
-		//
-		// 	DontDestroyOnLoad(gameObject);
-		// 	
-		// 	NetworkRunner runner = gameObject.AddComponent<NetworkRunner>();
-		// 	runner.name = name;
-		// 	runner.ProvideInput = startGameArgs.GameMode != GameMode.Server;
-		// 	
-		// 	// An empty region will use the best region.
-		// 	PhotonAppSettings.Global.AppSettings.FixedRegion = region;
-		//
-		// 	SetConnectionStatus(runner, ConnectionStatus.Connecting, "");
-		// 	
-		// 	startGameArgs.ObjectProvider = gameObject.AddComponent<PooledNetworkObjectProvider>();
-		// 	
-		// 	NetworkSceneInfo scene = new NetworkSceneInfo();
-		// 	int sceneIndex = GetSceneIndex(startGameArgs);
-		//
-		// 	if (sceneIndex != -1)
-		// 	{
-		// 		scene.AddSceneRef(SceneRef.FromIndex(sceneIndex));
-		// 		startGameArgs.Scene = scene;
-		// 		startGameArgs.SceneManager = sceneManager;
-		// 	}
-		//
-		// 	await runner.StartGame(roomName);
-		// }
+		public static FusionLauncher LaunchByName(string roomName, string password, string region, FusionSession sessionPrefab,
+			INetworkSceneManager sceneLoader,
+			Action<NetworkRunner, ConnectionStatus, string> onConnect)
+		{
+			FusionLauncher launcher = new GameObject("Launcher").AddComponent<FusionLauncher>();
+		
+			launcher.InternalLaunchByName(roomName, password, region,sessionPrefab, sceneLoader, onConnect);
+			return launcher;
+		}
+		
+		private async void InternalLaunchByName(string roomName, string password, string region, FusionSession sessionPrefab,
+			INetworkSceneManager sceneManager,
+			Action<NetworkRunner, ConnectionStatus, string> onConnect)
+		{
+			_sessionPrefab = sessionPrefab;
+			_connectionCallback = onConnect;
+		
+			DontDestroyOnLoad(gameObject);
+			
+			NetworkRunner runner = gameObject.AddComponent<NetworkRunner>();
+			runner.name = name;
+			runner.ProvideInput = true;
+			
+			// An empty region will use the best region.
+			PhotonAppSettings.Global.AppSettings.FixedRegion = region;
+		
+			SetConnectionStatus(runner, ConnectionStatus.Connecting, "");
+
+			var result = await runner.JoinSessionLobby(SessionLobby.Shared);
+
+			if (result.Ok)
+			{
+				Debug.Log($"Successfully joined by name! {roomName}");
+				
+				// if(result.)
+			}
+			else
+			{
+				Debug.Log($"Could not join room with name {roomName}: {result.ShutdownReason}");
+			}
+			
+			// startGameArgs.ObjectProvider = gameObject.AddComponent<PooledNetworkObjectProvider>();
+			//
+			// NetworkSceneInfo scene = new NetworkSceneInfo();
+			// int sceneIndex = GetSceneIndex(startGameArgs);
+			//
+			// if (sceneIndex != -1)
+			// {
+			// 	scene.AddSceneRef(SceneRef.FromIndex(sceneIndex));
+			// 	startGameArgs.Scene = scene;
+			// 	startGameArgs.SceneManager = sceneManager;
+			// }
+			//
+			// await runner.StartGame(roomName);
+		}
 
 		private int GetSceneIndex(StartGameArgs startGameArgs)
 		{

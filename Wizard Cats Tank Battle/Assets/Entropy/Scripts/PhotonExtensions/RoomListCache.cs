@@ -91,7 +91,6 @@ namespace Vashta.Entropy.PhotonExtensions
         
         public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
         {
-            Debug.Log("Getting list of lobbies!");
             UpdateCachedRoomList(sessionList);
         }
 

@@ -75,18 +75,6 @@ namespace TanksMP
             UIMain = UIMain.GetInstance();
         }
         
-        public void TempNetworkStart()
-        {
-            LocalPlayerInfo.Name = CBSIntegrator.Instance.ProfileState.CachedDisplayName;
-            StartGameArgs startGameArgs = new StartGameArgs()
-            {
-                SessionName =  "WCTB",
-                GameMode = Fusion.GameMode.Shared
-            };
-            
-            FusionLauncher.Launch(startGameArgs, "us", WCTBSessionPrefab, _networkSceneManager, OnConnectionStatusUpdate);
-        }
-        
         private void OnConnectionStatusUpdate(NetworkRunner runner, FusionLauncher.ConnectionStatus status, string reason)
         {
             if (!this)
@@ -207,11 +195,9 @@ namespace TanksMP
         /// <summary>
         /// Join a specific room by name
         /// </summary>
-        public void JoinRoom(string roomName)
+        public void JoinRoom(string roomName, string password)
         {
-            StartGameArgs startGameArgs = new StartGameArgs();
-            startGameArgs.SessionName = roomName;
-            FusionLauncher.Launch(startGameArgs, "us", WCTBSessionPrefab, _networkSceneManager, OnConnectionStatusUpdate);
+            FusionLauncher.LaunchByName(roomName, password, "us", WCTBSessionPrefab, _networkSceneManager, OnConnectionStatusUpdate);
         }
         
         public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }

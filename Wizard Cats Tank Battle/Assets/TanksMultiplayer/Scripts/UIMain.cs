@@ -52,14 +52,20 @@ namespace TanksMP
             if(!PlayerPrefs.HasKey(PrefsKeys.aimArrow)) PlayerPrefs.SetInt(PrefsKeys.aimArrow, 0);
             if(!PlayerPrefs.HasKey(Vashta.Entropy.SaveLoad.PrefsKeys.matchmakingArgs)) PlayerPrefs.SetString(Vashta.Entropy.SaveLoad.PrefsKeys.matchmakingArgs, new MatchmakingArgs().Encrypt());
 
+            
             PlayerPrefs.Save();
-            _playerNameVerification.VerifyName();
+            
+            CurrentSettings currentSettings = CurrentSettings.Instance();
+            currentSettings.Load();
 
+            _playerNameVerification.VerifyName();
+            
             // read music and volume levels
             if(SettingsReader.GetMusicIsOn())
                 MusicController.PlayMusic();
             
             AudioListener.volume = SettingsReader.GetVolume();
+            MusicController.AudioSource.volume = SettingsReader.GetMusicVolume();
             
             // read graphics quality
             QualitySettings.SetQualityLevel(SettingsReader.GetGraphicsSettings());

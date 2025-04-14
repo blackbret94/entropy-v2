@@ -39,7 +39,7 @@ namespace Vashta.Entropy.UI.MatchBrowser
             {
                 SessionInfo room = kvp.Value;
                 
-                if(!room.IsVisible)
+                if(!room.IsVisible || !room.IsOpen)
                     continue;
 
                 // Instantiate new row

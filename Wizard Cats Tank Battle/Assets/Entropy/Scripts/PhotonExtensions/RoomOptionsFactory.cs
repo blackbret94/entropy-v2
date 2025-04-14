@@ -66,6 +66,15 @@ namespace Vashta.Entropy.PhotonExtensions
             // map
             string mapName = matchmakingArgs.mapName != "random" ? matchmakingArgs.mapName : "random";
             customProperties[RoomKeys.mapKey] = mapName;
+            
+            if (matchmakingArgs.roomName != "")
+            {
+                customProperties[RoomKeys.roomNameKey] = matchmakingArgs.roomName;
+            }
+            else
+            {
+                customProperties[RoomKeys.roomNameKey] = GenerateRoomName();
+            }
 
             // password
             if (!matchmakingArgs.password.IsNullOrEmpty())
@@ -77,25 +86,7 @@ namespace Vashta.Entropy.PhotonExtensions
 
             return startGameArgs;
         }
-
-        public StartGameArgs CreateRoomOptions(string mapName, byte gameMode)
-        {
-            Dictionary<string, SessionProperty> customProperties = new Dictionary<string, SessionProperty>();
-            customProperties[RoomKeys.modeKey] = gameMode;
-            
-            if (mapName != "random")
-            {
-                customProperties[RoomKeys.mapKey] = mapName;
-            }
-            
-            StartGameArgs startGameArgs = new StartGameArgs();
-            startGameArgs.SessionProperties = customProperties;
-            startGameArgs.GameMode = Fusion.GameMode.Shared;
-            startGameArgs.SceneManager = NetworkSceneManagerDefault;
-
-            return startGameArgs;
-        }
-
+        
         public StartGameArgs CreateRoomOptionsGameMode(byte gameMode)
         {
             Dictionary<string, SessionProperty> customProperties = new Dictionary<string, SessionProperty>();

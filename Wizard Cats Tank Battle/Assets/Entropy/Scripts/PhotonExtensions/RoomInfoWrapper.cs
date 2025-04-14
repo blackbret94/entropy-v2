@@ -74,15 +74,14 @@ namespace Vashta.Entropy.PhotonExtensions
 
         public string GetDisplayRoomName()
         {
-            return _sessionInfo.Name;
-            // ReadOnlyDictionary<string, SessionProperty> customProperties = _sessionInfo.Properties;
-            //
-            // if (customProperties.TryGetValue(RoomKeys.roomNameKey, out var property))
-            // {
-            //     return (string)property;
-            // }
-            //
-            // return "";
+            ReadOnlyDictionary<string, SessionProperty> customProperties = _sessionInfo.Properties;
+            
+            if (customProperties.TryGetValue(RoomKeys.roomNameKey, out var property))
+            {
+                return (string)property;
+            }
+            
+            return "";
         }
 
         public int GetMaxPlayers()

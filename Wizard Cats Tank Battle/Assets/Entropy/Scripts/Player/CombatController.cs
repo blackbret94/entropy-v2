@@ -267,9 +267,6 @@ namespace Entropy.Scripts.Player
         // The main Kill Player method
         public void KillPlayer(PlayerController other, ushort deathFxId = 0)
         {
-            //the game is already over so don't do anything
-            if(_gameManager.IsGameOver()) return;
-
             if (HasStateAuthority)
             {
                 // Create death struct here

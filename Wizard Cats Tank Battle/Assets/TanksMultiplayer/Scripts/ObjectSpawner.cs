@@ -132,9 +132,9 @@ namespace TanksMP
             if (RespawnTimer.Expired(Runner))
             {
                 // Trigger respawn
-                Respawn();
+                RPCRespawn();
 
-                RespawnTimer = default;
+                RespawnTimer = TickTimer.None;
             }
         }
 
@@ -148,7 +148,8 @@ namespace TanksMP
             RespawnTimer = TickTimer.CreateFromSeconds(Runner, respawnTime);
         }
 
-        private void Respawn()
+        [Rpc(sources: RpcSources.StateAuthority, targets: RpcTargets.All)]
+        protected void RPCRespawn()
         {
             if (Runner.IsRunning)
             {
@@ -181,7 +182,7 @@ namespace TanksMP
             float delay = Mathf.Clamp(nextSpawn - (float)Runner.SimulationTime, 0, respawnTime);
 			yield return new WaitForSeconds(delay);
 
-            Respawn();
+            RPCRespawn();
         }
 
         public void StateAuthorityChanged()

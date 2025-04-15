@@ -80,6 +80,10 @@ namespace Vashta.Entropy.PhotonExtensions
             {
                 return (string)property;
             }
+            else
+            {
+                return _sessionInfo.Name;
+            }
             
             return "";
         }
@@ -115,7 +119,7 @@ namespace Vashta.Entropy.PhotonExtensions
                 return null;
             }
 
-            string roomName = (string)_sessionInfo.Name;
+            string roomName = GetDisplayRoomName();
 
             return $"{roomName} | {map} ({_sessionInfo.PlayerCount}/{_sessionInfo.MaxPlayers})";
         }

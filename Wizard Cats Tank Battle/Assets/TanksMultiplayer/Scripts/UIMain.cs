@@ -95,7 +95,7 @@ namespace TanksMP
                 return;
             }
             
-            SceneNavigator.GoToLogin();
+            FindFirstObjectByType<SceneNavigator>().GoToLogin();
         }
     }
 }

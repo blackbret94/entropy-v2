@@ -48,6 +48,15 @@ namespace Vashta.Entropy.PhotonExtensions
             }
         }
 
+        public void OnDestroy()
+        {
+            NetworkRunner runner = GetComponent<NetworkRunner>();
+            if (runner != null && !runner.IsShutdown)
+            {
+                runner.Shutdown();
+            }
+        }
+
         public void RefreshLobbies()
         {
             // Clear text

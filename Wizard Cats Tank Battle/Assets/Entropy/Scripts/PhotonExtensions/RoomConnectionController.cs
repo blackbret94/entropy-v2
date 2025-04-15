@@ -52,9 +52,11 @@ namespace Vashta.Entropy.PhotonExtensions
             yield return new WaitForSeconds(10);
 
             //timeout has passed, we would like to stop joining a game now
-            Runner.Shutdown();
+            if(Runner != null)
+                Runner.Shutdown();
             //display connection issue window
             OnConnectionError();
+            UIMain.GetInstance().ToggleLoadingWindow(false);
         }
 
 

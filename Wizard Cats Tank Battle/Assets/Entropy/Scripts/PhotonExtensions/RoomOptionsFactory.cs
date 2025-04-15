@@ -48,10 +48,10 @@ namespace Vashta.Entropy.PhotonExtensions
         {
             StartGameArgs startGameArgs = new StartGameArgs();
 
-            if (matchmakingArgs.roomName != "")
-            {
-                startGameArgs.SessionName = matchmakingArgs.roomName;
-            }
+            // if (matchmakingArgs.roomName != "")
+            // {
+                // startGameArgs.SessionName = matchmakingArgs.roomName;
+            // }
             
             startGameArgs.PlayerCount = matchmakingArgs.maxPlayers;
             startGameArgs.IsVisible = matchmakingArgs.isVisible;

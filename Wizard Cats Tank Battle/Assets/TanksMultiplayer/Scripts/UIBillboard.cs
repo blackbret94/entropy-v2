@@ -45,6 +45,24 @@ namespace TanksMP
         //always face the camera every frame
         void Update()
         {
+            if (!camTrans || !trans)
+            {
+                camTrans = Camera.main.transform;
+                trans = transform;
+            }
+
+            if (!camTrans)
+            {
+                Debug.LogError("Billboard is missing link to a camera transform!");
+                return;
+            }
+
+            if (!trans)
+            {
+                Debug.LogError("Billboard is missing link to a transform!");
+                return;
+            }
+            
             transform.LookAt(trans.position + camTrans.rotation * Vector3.forward,
                             camTrans.rotation * Vector3.up);
 

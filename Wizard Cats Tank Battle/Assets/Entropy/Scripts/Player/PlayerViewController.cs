@@ -129,12 +129,13 @@ namespace Entropy.Scripts.Player
                 deathFxData = _playerController.GetClass().DefaultDeathEffects();
             }
             
-            PoolManager.Spawn(deathFxData.VisualEffectPrefab, transform.position, transform.rotation);
+            if(deathFxData != null)
+                PoolManager.Spawn(deathFxData.VisualEffectPrefab, transform.position, transform.rotation);
         }
         
         public void ColorizePlayerForTeam(TeamInstance teamInstance = null)
         {
-            if (teamInstance == null)
+            if (teamInstance == null && _playerController.TeamIndex > -1)
             {
                 teamInstance = GameManager.TeamController.teams[_playerController.TeamIndex];
             }

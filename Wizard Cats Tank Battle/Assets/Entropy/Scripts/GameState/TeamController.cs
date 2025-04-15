@@ -140,6 +140,9 @@ namespace Vashta.Entropy.GameState
 
         public void ReCalculateTeams()
         {
+            if (!Runner)
+                return;
+            
             List<int> teamScores = new List<int> { 0, 0, 0, 0 };
 
             // Iterate over players

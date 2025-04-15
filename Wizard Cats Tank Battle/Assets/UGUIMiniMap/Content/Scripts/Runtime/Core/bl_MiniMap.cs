@@ -674,7 +674,9 @@ public sealed class bl_MiniMap : MonoBehaviour
     public void SetPointerColor(Color color)
     {
         playerColor = color;
-        mapPointer.GetComponent<bl_MapPointerBase>().SetColor(playerColor);
+
+        bl_MapPointerBase pointerBase = mapPointer.GetComponent<bl_MapPointerBase>(); 
+        pointerBase.SetColor(playerColor);
     }
 
     /// <summary>

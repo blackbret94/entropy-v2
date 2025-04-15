@@ -11,10 +11,24 @@ namespace Vashta.Entropy.ScriptableObject
         public Sprite IconSmall;
         public TanksMP.GameMode GameMode;
         public int ScoreToWin = 20;
-
+        
         [Header("Scoring")] 
         public int KillPoints = 1;
         public int CapturePoints = 10;
         public int HoldPointPoints = 1;
+        
+        [Header("Test Mode")] [Tooltip("Applies test mode score if in editor")]
+        public int TestModeScore = 1;
+        public bool TestMode = false;
+
+        public int GetScoreToWin()
+        {
+            #if UNITY_EDITOR
+            if (TestMode)
+                return TestModeScore;
+            #endif
+            
+            return ScoreToWin;
+        }
     }
 }

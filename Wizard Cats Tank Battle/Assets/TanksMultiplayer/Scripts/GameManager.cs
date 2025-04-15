@@ -77,7 +77,7 @@ namespace TanksMP
             SpawnController = GetComponent<SpawnController>();
             MatchTimer = GetComponent<MatchTimer>();
 
-            TeamController.maxScore = GameModeDefinition.ScoreToWin;
+            TeamController.maxScore = GameModeDefinition.GetScoreToWin();
         }
 
         /// <summary>

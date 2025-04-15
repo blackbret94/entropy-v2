@@ -49,7 +49,7 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
                     ""name"": ""Fire"",
                     ""type"": ""Value"",
                     ""id"": ""f0e401f6-d7d3-4e90-a7a9-461a716025e1"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -58,7 +58,7 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
                     ""name"": ""CastPowerup"",
                     ""type"": ""Button"",
                     ""id"": ""7378ad6c-d030-42a0-aca2-19cc2a488b3c"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -67,7 +67,7 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
                     ""name"": ""CastUltimate"",
                     ""type"": ""Button"",
                     ""id"": ""0d75a691-83c5-4f13-b3f0-59ba0c92b672"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -76,7 +76,7 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
                     ""name"": ""DropSpoon"",
                     ""type"": ""Button"",
                     ""id"": ""8878160e-7de0-420b-8116-790d7bbc1577"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -388,7 +388,7 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
                     ""name"": ""Submit"",
                     ""type"": ""Button"",
                     ""id"": ""f289b623-1216-4213-8058-75c40064ebd3"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -397,7 +397,7 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
                     ""name"": ""Cancel"",
                     ""type"": ""Button"",
                     ""id"": ""7c61196e-1ebd-40af-8d12-10ec5d6d6c59"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -469,7 +469,7 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
                     ""name"": ""ToggleSettings"",
                     ""type"": ""Button"",
                     ""id"": ""cf2cb2d5-8a02-4dc3-beb4-e6afaa89a1df"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -478,7 +478,7 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
                     ""name"": ""ToggleChangeClass"",
                     ""type"": ""Button"",
                     ""id"": ""1bc88faf-8699-4c0c-aa3c-2914c7e8f734"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -487,7 +487,7 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
                     ""name"": ""ToggleScoreboard"",
                     ""type"": ""Button"",
                     ""id"": ""55f827aa-9584-404c-aa2b-0f479edc6c7d"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -496,7 +496,7 @@ public partial class @PlayerInputActionsWCTB: IInputActionCollection2, IDisposab
                     ""name"": ""MenuSecondaryAction"",
                     ""type"": ""Button"",
                     ""id"": ""2a86fe8c-2326-4ed3-9259-051d517a9c6c"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false

@@ -62,7 +62,10 @@ namespace Entropy.Scripts.Player
 
         public VisualEffectData DefaultDeathEffects()
         {
-            return ProjectileData.deathFxData;
+            if(ProjectileData != null)
+                return ProjectileData.deathFxData;
+
+            return null;
         }
 
         private void Init()

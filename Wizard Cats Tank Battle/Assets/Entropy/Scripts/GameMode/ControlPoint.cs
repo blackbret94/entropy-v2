@@ -26,13 +26,14 @@ namespace Vashta.Entropy.GameMode
 
         // How many ticks the point currently has towards capture
         [Networked, OnChangedRender(nameof(OnCaptureTicksChanged))]
-        private sbyte _captureTicks { get; set; }= 0;
+        private sbyte CaptureTicks { get; set; }= 0;
         private int _ticksToCapture = 5;
         private List<PlayerController> _playersInBounds;
         private GameManager _gameManager;
 
         private bool _hasInit;
         private bool _wasRecentlyCaptured; // Use to determine if Lost sfx should be played
+        private int _lastTickTeam = -1;
         
         private void Init()
         {
@@ -51,6 +52,15 @@ namespace Vashta.Entropy.GameMode
             Init();
         }
 
+        public override void Spawned()
+        {
+            base.Spawned();
+            
+            OnCaptureTeamIndexChanged();
+            OnControlledByTeamIndexChanged();
+            OnCaptureTicksChanged();
+        }
+
         public void OneTickCapture()
         {
             RecalculateOwnership();
@@ -61,6 +71,8 @@ namespace Vashta.Entropy.GameMode
             Init();
             
             CleanList();
+
+            _lastTickTeam = -1;
             
             // ignore recalculation if no players are in bounds
             if (_playersInBounds.Count == 0)
@@ -70,19 +82,18 @@ namespace Vashta.Entropy.GameMode
             
             // iterate over list of players.  If only ONE team is in control, set them to be the capturing team.
             // if multiple teams are present, put it into a neutral capture state
-            int teamIndex = -1;
 
             foreach (PlayerController player in _playersInBounds)
             {
                 if (player.IsAlive)
                 {
-                    if (teamIndex == -1)
-                        teamIndex = player.TeamIndex;
+                    if (_lastTickTeam == -1)
+                        _lastTickTeam = player.TeamIndex;
                     else
                     {
                         // if player is on a different team stop capturing
-                        if(teamIndex != player.TeamIndex)
-                            teamIndex = -1;
+                        if(_lastTickTeam != player.TeamIndex)
+                            _lastTickTeam = -1;
                         
                         break;
                     }
@@ -90,70 +101,43 @@ namespace Vashta.Entropy.GameMode
             }
 
             // Alter the state of capture ticks
-            if (teamIndex != -1)
+            if (_lastTickTeam != -1)
             {
-                int lastCaptureTicks = _captureTicks;
-                
                 // Continue capturing
-                if (teamIndex == CaptureTeamIndex)
+                if (_lastTickTeam == CaptureTeamIndex)
                 {
-                    _captureTicks = (sbyte)Mathf.Min(_captureTicks + 1, _ticksToCapture);
-
-                    if (_captureTicks != lastCaptureTicks)
-                    {
-                        AudioManager.Play3D(CaptureUpAudioClip, transform.position);
-                    }
+                    CaptureTicks = (sbyte)Mathf.Min(CaptureTicks + 1, _ticksToCapture);
                 }
                 // Uncapture towards 0
                 else
                 {
-                    _captureTicks = (sbyte)Mathf.Max(_captureTicks - 1, 0);
-
-                    if (_captureTicks != lastCaptureTicks)
-                    {
-                        AudioManager.Play3D(CaptureDownAudioClip, transform.position);
-                    }
+                    CaptureTicks = (sbyte)Mathf.Max(CaptureTicks - 1, 0);
                 }
             }
 
-            float flagPosition = Mathf.Abs(_captureTicks) / (float)_ticksToCapture;
+            float flagPosition = Mathf.Abs(CaptureTicks) / (float)_ticksToCapture;
             ControlPointGraphics.SetFlagPosition(flagPosition);
             
             // Calculate who is capturing
             // Check if the state should change back to neutral
-            if (_captureTicks == 0)
+            if (CaptureTicks == 0)
             {
                 // Set to neutral
-                CaptureTeamIndex = (sbyte)teamIndex;
+                CaptureTeamIndex = (sbyte)_lastTickTeam;
                 ControlledByTeamIndex = -1;
-
-                if (_wasRecentlyCaptured)
-                {
-                    AudioManager.Play3D(PointLost, transform.position);
-                    
-                    _gameManager.ui.GameLogPanel.EventCapturePointContested();
-                    
-                    _wasRecentlyCaptured = false;
-                }
             }
             else
             {
                 // Calculate who controls the point
-                if (_captureTicks == _ticksToCapture)
+                if (CaptureTicks == _ticksToCapture)
                 {
                     // Award the capture
-                    if (teamIndex != -1 && ControlledByTeamIndex != teamIndex)
+                    if (_lastTickTeam != -1 && ControlledByTeamIndex != _lastTickTeam)
                     {
-                        ControlledByTeamIndex = (sbyte)teamIndex;
-                        AudioManager.Play3D(PointCaptured, transform.position);
-                        _wasRecentlyCaptured = true;
+                        ControlledByTeamIndex = (sbyte)_lastTickTeam;
                         
                         // award points
                         AwardPointsToPlayersOnCapture();
-                        
-                        // notify
-                        TeamInstance teamInstance = GameManager.GetInstance().TeamController.GetTeamByIndex(teamIndex);
-                        _gameManager.ui.GameLogPanel.EventCapturePointCaptured(teamInstance.teamDefinition);
                     }
                 }
             }
@@ -216,7 +200,7 @@ namespace Vashta.Entropy.GameMode
         private void OnCaptureTeamIndexChanged()
         {
             TeamInstance teamInstance = GameManager.GetInstance().TeamController.GetTeamByIndex(CaptureTeamIndex);
-
+            
             if (teamInstance != null)
             {
                 ControlPointGraphics.ChangeTeamColorCapturing(teamInstance.teamDefinition);
@@ -229,27 +213,46 @@ namespace Vashta.Entropy.GameMode
 
         private void OnControlledByTeamIndexChanged()
         {
-            TeamInstance teamInstance = GameManager.GetInstance().TeamController.GetTeamByIndex(ControlledByTeamIndex);
-
-            if (teamInstance != null)
-            {
-                ControlPointGraphics.ChangeTeamColorControl(teamInstance.teamDefinition);
-            }
-            else
-            {
-                Debug.LogError("Could not find team with ID: " + ControlledByTeamIndex);
-            }
-
             if (ControlledByTeamIndex == -1)
             {
                 // Color neutral
                 ControlPointGraphics.ChangeTeamColorControl(TeamDefinitionNeutral);
+                
+                if (_wasRecentlyCaptured)
+                {
+                    AudioManager.Play3D(PointLost, transform.position);
+                    _gameManager.ui.GameLogPanel.EventCapturePointContested();
+                    _wasRecentlyCaptured = false;
+                }
+            }
+            else
+            {
+                TeamInstance teamInstance = GameManager.GetInstance().TeamController.GetTeamByIndex(ControlledByTeamIndex);
+
+                // Color for team
+                ControlPointGraphics.ChangeTeamColorControl(teamInstance.teamDefinition);
+                
+                AudioManager.Play3D(PointCaptured, transform.position);
+                _wasRecentlyCaptured = true;
+                
+                // notify
+                _gameManager.ui.GameLogPanel.EventCapturePointCaptured(teamInstance.teamDefinition);
             }
         }
         
         private void OnCaptureTicksChanged()
         {
-            
+            if (_lastTickTeam == CaptureTeamIndex)
+            {
+                AudioManager.Play3D(CaptureUpAudioClip, transform.position);
+            }
+            else
+            {
+                AudioManager.Play3D(CaptureDownAudioClip, transform.position);
+            }
+
+            float flagPosition = Mathf.Abs(CaptureTicks) / (float)_ticksToCapture;
+            ControlPointGraphics.SetFlagPosition(flagPosition);
         }
     }
 }

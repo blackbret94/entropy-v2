@@ -126,6 +126,10 @@ namespace Entropy.Scripts.Player
         [Rpc(sources: RpcSources.StateAuthority, targets: RpcTargets.All)]
         public void RPC_Shoot(short angle)
         {
+            // Ignore requests that arrive before the player is set up.  Should improve this later with a proper init
+            if(!_shotPos || !_turret)
+                return;
+            
             // animate
             _playerAnimator.Attack();
             

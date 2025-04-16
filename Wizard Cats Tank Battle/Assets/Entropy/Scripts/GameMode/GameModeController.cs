@@ -12,9 +12,8 @@ namespace Vashta.Entropy.GameMode
         public GameObject KothsRoot;
 
         private NetworkManagerCustom _networkManager;
-        // private RoomOptionsReader _roomOptionsReader;
 
-        private void Start()
+        private void Awake()
         {
             _networkManager = NetworkManagerCustom.GetInstance();
             
@@ -67,31 +66,21 @@ namespace Vashta.Entropy.GameMode
         
         private void SetGameModeTDM()
         {
-            // Debug.Log("Setting game mode to TDM");
             DeactivateAll();
 
             if (TdmRoot != null)
             {
                 TdmRoot.SetActive(true);
-                // Destroy(CtfRoot);
-                // Destroy(CtfsRoot);
-                // Destroy(KothRoot);
-                // Destroy(KothsRoot);
             }
         }
 
         private void SetGameModeCTF()
         {
-            // Debug.LogError("Setting game mode to CTF");
             DeactivateAll();
 
             if (CtfRoot != null)
             {
                 CtfRoot.SetActive(true);
-                // Destroy(TdmRoot);
-                // Destroy(CtfsRoot);
-                // Destroy(KothRoot);
-                // Destroy(KothsRoot);
             }
         }
 
@@ -102,10 +91,6 @@ namespace Vashta.Entropy.GameMode
             if (CtfsRoot != null)
             {
                 CtfsRoot.SetActive(true);
-                // Destroy(CtfRoot);
-                // Destroy(TdmRoot);
-                // Destroy(KothRoot);
-                // Destroy(KothsRoot);
             }
         }
 
@@ -116,10 +101,6 @@ namespace Vashta.Entropy.GameMode
             if (KothRoot != null)
             {
                 KothRoot.SetActive(true);
-                // Destroy(CtfRoot);
-                // Destroy(CtfsRoot);
-                // Destroy(TdmRoot);
-                // Destroy(KothsRoot);
             }
         }
 
@@ -130,10 +111,6 @@ namespace Vashta.Entropy.GameMode
             if (KothsRoot != null)
             {
                 KothsRoot.SetActive(true);
-                // Destroy(CtfRoot);
-                // Destroy(CtfsRoot);
-                // Destroy(KothRoot);
-                // Destroy(TdmRoot);
             }
         }
     }

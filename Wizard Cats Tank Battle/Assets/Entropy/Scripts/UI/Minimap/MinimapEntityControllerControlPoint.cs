@@ -1,4 +1,3 @@
-using System.Collections;
 using TanksMP;
 using UnityEngine;
 using Vashta.Entropy.GameMode;
@@ -14,7 +13,7 @@ namespace Vashta.Entropy.UI.Minimap
         public ControlPoint ControlPoint;
         private GameManager GameManager;
         
-        private int _teamIndex = -1;
+        private int _teamIndex = -2;
         
         protected override void Init()
         {
@@ -33,6 +32,11 @@ namespace Vashta.Entropy.UI.Minimap
 
         private void UpdateTeamColor()
         {
+            if (ControlPoint.Runner == null)
+                return;
+            
+            ShowEntity();
+            
             int teamIndex = ControlPoint.ControlledByTeamIndex;
                 
             if (teamIndex != _teamIndex)

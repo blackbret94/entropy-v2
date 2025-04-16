@@ -1,10 +1,10 @@
 using System.Collections.Generic;
+using Fusion;
 using TanksMP;
-using UnityEngine;
 
 namespace Vashta.Entropy.GameMode
 {
-    public class KingOfTheHillController : MonoBehaviour
+    public class KingOfTheHillController : NetworkBehaviour
     {
         public List<ControlPoint> ControlPointsSingle;
         public List<ControlPoint> ControlPointsMulti;
@@ -18,6 +18,11 @@ namespace Vashta.Entropy.GameMode
 
         private bool _hasInit;
         private bool _hasCalledGameOver = false;
+
+        public override void Spawned()
+        {
+            Init();
+        }
         
         private void Init()
         {
@@ -36,7 +41,7 @@ namespace Vashta.Entropy.GameMode
             _hasInit = true;
         }
         
-        private void Update()
+        public override void FixedUpdateNetwork()
         {
             Init();
             
@@ -45,7 +50,7 @@ namespace Vashta.Entropy.GameMode
             
             if (gameMode == TanksMP.GameMode.KOTH || gameMode == TanksMP.GameMode.KOTHS)
             {
-                if (_timerIsRunning && _lastTick + TickTimeS < Time.time)
+                if (_timerIsRunning && _lastTick + TickTimeS < Runner.SimulationTime)
                 {
                     OneTick();
                 }
@@ -64,15 +69,14 @@ namespace Vashta.Entropy.GameMode
                     // Refresh state
                     controlPoint.OneTickCapture();
                     int teamControllingPoint = controlPoint.ControlledByTeamIndex;
-
-                    // Server only
+                    
                     // Award points to teamControllingPoint
                     if (teamControllingPoint != -1)
                         GameManager.TeamController.AddScore(ScoreType.HoldPoint, teamControllingPoint);
                 }
             }
             
-            _lastTick = Time.time;
+            _lastTick = Runner.SimulationTime;
             
             if (GameManager.IsGameOver())
             {

@@ -9,6 +9,12 @@ namespace Vashta.Entropy.UI.Minimap
         protected override void PostInit()
         {
             SetEntityColor(TeamDefinition.TeamColorPrim);
+            ShowEntity();
+        }
+
+        private void Update()
+        {
+            ShowEntity();
         }
     }
 }

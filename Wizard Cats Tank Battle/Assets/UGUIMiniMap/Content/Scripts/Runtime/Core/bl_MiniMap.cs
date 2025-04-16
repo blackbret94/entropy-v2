@@ -673,10 +673,20 @@ public sealed class bl_MiniMap : MonoBehaviour
 
     public void SetPointerColor(Color color)
     {
+        if (mapPointer == null)
+        {
+            Debug.LogWarning("Cannot set color for null map pointer gameobject!!");
+            return;
+        }
+        
         playerColor = color;
 
-        bl_MapPointerBase pointerBase = mapPointer.GetComponent<bl_MapPointerBase>(); 
-        pointerBase.SetColor(playerColor);
+        bl_MapPointerBase pointerBase = mapPointer.GetComponent<bl_MapPointerBase>();
+        
+        if(pointerBase)
+            pointerBase.SetColor(playerColor);
+        else
+            Debug.LogWarning("Minimap is canont set color for null mapPointerBase!");
     }
 
     /// <summary>

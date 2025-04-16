@@ -38,11 +38,11 @@ namespace Entropy.Scripts.Player
                 if ((_localPlayerController = _gameManager.localPlayerController) != null)
                 {
                     MiniMap.Target = _localPlayerController.transform;
-                    Debug.Log("Player attached!");
+                    // Debug.Log("Player attached!");
                 }
                 else
                 {
-                    Debug.Log("Player is null");
+                    // Debug.Log("Player is null");
                     return;
                 }
             }
@@ -71,6 +71,10 @@ namespace Entropy.Scripts.Player
                     if (teamInstance != null && teamInstance.teamDefinition != null)
                     {
                         MiniMap.SetPointerColor(teamInstance.teamDefinition.TeamColorPrim);
+                    }
+                    else
+                    {
+                        MiniMap.SetPointerColor(Color.white);
                     }
                 }
                 catch (NullReferenceException e)

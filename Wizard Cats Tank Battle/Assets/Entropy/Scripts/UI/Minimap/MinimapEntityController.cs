@@ -5,7 +5,7 @@ namespace Vashta.Entropy.UI.Minimap
     [RequireComponent(typeof(bl_MiniMapEntity))]
     public class MinimapEntityController : MonoBehaviour
     {
-        protected bl_MiniMapEntity _entity;
+        protected bl_MiniMapEntity Entity;
         private bool _hasInit;
         
         private void Start()
@@ -21,9 +21,9 @@ namespace Vashta.Entropy.UI.Minimap
             if (_hasInit)
                 return;
 
-            _entity = GetComponent<bl_MiniMapEntity>();
+            Entity = GetComponent<bl_MiniMapEntity>();
 
-            if (!_entity)
+            if (!Entity)
             {
                 Debug.LogError("Missing connection to entity!");
             }
@@ -42,35 +42,35 @@ namespace Vashta.Entropy.UI.Minimap
         {
             Init();
 
-            _entity.Icon = newIcon;
+            Entity.Icon = newIcon;
         }
 
         public void SetEntityColor(Color color)
         {
             Init();
             
-            _entity.SetIconColor(color);
+            Entity.SetIconColor(color);
         }
 
         protected void SetOffscreenVisible(bool visibleOffscreen)
         {
             Init();
 
-            _entity.OffScreen = visibleOffscreen;
+            Entity.OffScreen = visibleOffscreen;
         }
 
         public void ShowEntity()
         {
             Init();
             
-            _entity.ShowItem();
+            Entity.ShowItem();
         }
 
         public void HideEntity()
         {
             Init();
             
-            _entity.HideItem();
+            Entity.HideItem();
         }
     }
 }

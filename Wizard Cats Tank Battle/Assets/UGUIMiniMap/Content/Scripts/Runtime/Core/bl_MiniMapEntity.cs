@@ -345,9 +345,9 @@ public class bl_MiniMapEntity : bl_MiniMapEntityBase
     public override void SetIconColor(Color newIconColor)
     {
         IconColor = newIconColor;
-
+        
         if (IconInstance == null) return;
-
+        
         IconInstance.SetColor(newIconColor);
     }
 

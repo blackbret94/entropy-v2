@@ -4,13 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2d0b1129-1c08-4810-a5a8-04b901ecd844" name="Changes" comment="Fixed several playtest bugs">
+    <list default="true" id="2d0b1129-1c08-4810-a5a8-04b901ecd844" name="Changes" comment="Fixed bugs in audio, removed logger noise">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Wizard Cats Tank Battle/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Wizard Cats Tank Battle/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/MovementController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/MovementController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/UI/CastPowerupButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/UI/CastPowerupButton.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/FusionHelpers/Launcher/FusionSession.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/FusionHelpers/Launcher/FusionSession.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/UIGame.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/UIGame.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/UGUIMiniMap/Content/Scripts/Runtime/Core/bl_MiniMapEntity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/UGUIMiniMap/Content/Scripts/Runtime/Core/bl_MiniMapEntity.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameState/TeamController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/GameState/TeamController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerTeam.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Entropy/Scripts/Player/PlayerTeam.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/PlayerControllerBot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TanksMultiplayer/Scripts/PlayerControllerBot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/default-6000.dwlt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -386,15 +386,7 @@
       <workItem from="1744243612739" duration="1243000" />
       <workItem from="1744609760999" duration="28471000" />
       <workItem from="1744744479580" duration="17315000" />
-      <workItem from="1745953783944" duration="33105000" />
-    </task>
-    <task id="LOCAL-00009" summary="Added Physics Add On">
-      <option name="closed" value="true" />
-      <created>1737611600806</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1737611600806</updated>
+      <workItem from="1745953783944" duration="35715000" />
     </task>
     <task id="LOCAL-00010" summary="Migrated movement to the new system">
       <option name="closed" value="true" />
@@ -780,7 +772,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746057745273</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL-00058" summary="Fixed bugs in audio, removed logger noise">
+      <option name="closed" value="true" />
+      <created>1746088277992</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1746088277992</updated>
+    </task>
+    <option name="localTasksCounter" value="59" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -818,7 +818,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Fixed respawn issues" />
     <MESSAGE value="Attempts to fix enemy nav" />
     <MESSAGE value="Fixed bugs related to spawning" />
     <MESSAGE value="Fixed issues related to gameover" />
@@ -843,7 +842,8 @@
     <MESSAGE value="Got capture the spoon working again" />
     <MESSAGE value="Got king of the hill working again" />
     <MESSAGE value="Fixed several playtest bugs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed several playtest bugs" />
+    <MESSAGE value="Fixed bugs in audio, removed logger noise" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed bugs in audio, removed logger noise" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

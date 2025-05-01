@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 3072
     height: 1188.8
   m_ShowMode: 4
-  m_Title: Inspector
+  m_Title: Multiplayer Play Mode
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -243,7 +243,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: SceneHierarchyWindow
+  m_Name: MultiplayerWindow
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -252,15 +252,15 @@ MonoBehaviour:
     y: 0
     width: 604
     height: 522.4
-  m_MinSize: {x: 202, y: 226}
+  m_MinSize: {x: 52, y: 76}
   m_MaxSize: {x: 4002, y: 4026}
-  m_ActualView: {fileID: 25}
+  m_ActualView: {fileID: 13}
   m_Panes:
   - {fileID: 25}
   - {fileID: 14}
   - {fileID: 13}
-  m_Selected: 0
-  m_LastSelected: 2
+  m_Selected: 2
+  m_LastSelected: 0
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -337,8 +337,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Multiplayer Play Mode\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1744
-    y: 79.200005
+    x: 1
+    y: 24
     width: 602
     height: 496.40002
   m_SerializedDataModeController:
@@ -1076,9 +1076,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 37.17709, y: 5.9909053, z: -42.157272}
+    m_Target: {x: 928.09894, y: 515.7227, z: -1002.03296}
     speed: 2
-    m_Value: {x: 31.937672, y: 2.6786866, z: -39.104023}
+    m_Value: {x: 928.09894, y: 515.7227, z: -1002.03296}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1106,9 +1106,9 @@ MonoBehaviour:
       m_Size: {x: 0.5, y: 0.5}
     yGrid:
       m_Fade:
-        m_Target: 1
+        m_Target: 0
         speed: 2
-        m_Value: 1
+        m_Value: 0
       m_Color: {r: 0.5, g: 0.5, b: 0.5, a: 0.4}
       m_Pivot: {x: 0, y: 0, z: 0}
       m_Size: {x: 0.5, y: 0.5}
@@ -1120,17 +1120,17 @@ MonoBehaviour:
       m_Color: {r: 0.5, g: 0.5, b: 0.5, a: 0.4}
       m_Pivot: {x: 0, y: 0, z: 0}
       m_Size: {x: 0.5, y: 0.5}
-    m_ShowGrid: 1
+    m_ShowGrid: 0
     m_GridAxis: 1
     m_gridOpacity: 1
   m_Rotation:
-    m_Target: {x: 0.29053468, y: 0.5188773, z: -0.19320486, w: 0.7804325}
+    m_Target: {x: -0.0072001447, y: -0.0084379455, z: -0.00010097532, w: 0.99997413}
     speed: 2
-    m_Value: {x: 0.24644966, y: 0.43253547, z: -0.12419662, w: 0.85835844}
+    m_Value: {x: 0.0072001447, y: 0.0084379455, z: 0.00010097532, w: -0.99997413}
   m_Size:
-    m_Target: 2.044506
+    m_Target: 3.411468
     speed: 2
-    m_Value: 2.044506
+    m_Value: 3.411468
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -2631,8 +2631,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Hierarchy\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1
-    y: 24
+    x: 1744
+    y: 79.200005
     width: 602
     height: 496.40002
   m_SerializedDataModeController:
@@ -2651,7 +2651,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 66ade2ff14d0e2ff24a4e3ff2ed0e3ff3cd9e3ffcc66f1ff6224f3ff4c1ef5ff724af8ff4a27f9ff5453f9ffe260f9ff8083f9ff8a83f9ff9083f9ffbc8ff9fffe93f9ff4cd4f9ff52d4f9ffd8d8f9ffdcd8f9ff14dcf9ff44dcf9ff02f2faff0c1efbff3e5bfbff100efcffd25cfdffcc5efdff3462fdffc074fdff9a77fdff489afdff6c9afdffceeefdff8c11feff6e40feffccfaffff9ed501006cd801009cdd0100c2dd010034df0100b0df01006ae00100b6e20100d2e20100f6e20100bc550400a05f0400ec6104002c62040042a00400f09f06007ca20600
+      m_ExpandedIDs: ccfaffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -2724,7 +2724,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Entropy/Prefabs/Resources
+    - Assets/Entropy/Scenes
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -2742,8 +2742,8 @@ MonoBehaviour:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 09ca9a3b
-    m_LastClickedID: 1000000009
+    m_SelectedIDs: 03ca9a3b
+    m_LastClickedID: 1000000003
     m_ExpandedIDs: 00000000fa070100fc070100fe07010000080100020801000408010006080100080801000a0801000c0801000e08010010080100120801001408010016080100180801001a0801001c0801001e080100
     m_RenameOverlay:
       m_UserAcceptedRename: 0

@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Serialization;
 using Vashta.Entropy.Character;
+using Vashta.Entropy.GameState;
 using Vashta.Entropy.Network;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.StatusEffects;
@@ -135,6 +136,7 @@ namespace Vashta.Entropy.Player
 
         public GameManager GameManager;
         
+        public bool HasSpawned { get; private set; }
         public bool isBot = false;
         
         public override void Spawned()
@@ -157,7 +159,13 @@ namespace Vashta.Entropy.Player
             Team = GetComponent<PlayerTeam>();
             NetworkManagerCustom = NetworkManagerCustom.GetInstance();
             _collider = GetComponent<Collider>();
-            
+
+            HasSpawned = true;
+            StartCoroutine(SpawnedCR());
+        }
+
+        protected IEnumerator SpawnedCR()
+        {
             // Join time
             _lastSecondUpdate = Runner.SimulationTime + .1f;
 
@@ -203,6 +211,10 @@ namespace Vashta.Entropy.Player
             PlayerList.Add(this);
             
             PlayerViewController.RefreshHealthSlider();
+
+            while (!Team.TeamController.HasSpawned)
+                yield return null;
+            
             Team.Setup();
             
             // Move player to start position
@@ -229,6 +241,13 @@ namespace Vashta.Entropy.Player
             {
                 StatusEffectController.AddStatusEffect(StatusEffectApplyOnSpawn.Id, this);
             }
+            
+            PostSpawn();
+        }
+
+        protected virtual void PostSpawn()
+        {
+            // Override in children to safely execute post-spawn 
         }
 
         protected virtual void SetName()
@@ -569,7 +588,7 @@ namespace Vashta.Entropy.Player
             NavMeshHit hit;
             if (NavMesh.SamplePosition(samplePosition, out hit, maxSampleDistance, NavMesh.AllAreas))
             {
-                float yOffset = .1f;
+                float yOffset = .05f;
                 
                 Vector3 alignedPosition = new Vector3(
                     rb.position.x,

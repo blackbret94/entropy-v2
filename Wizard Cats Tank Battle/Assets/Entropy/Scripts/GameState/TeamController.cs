@@ -29,10 +29,18 @@ namespace Vashta.Entropy.GameState
         public bool UsesTeams => _gameManager.gameMode != TanksMP.GameMode.FFA;
         
         TeamScoreDisplayController TeamScoreDisplayController => TeamScoreDisplayController.GetInstance();
+        
+        public bool HasSpawned { get; private set; }
 
         private void Awake()
         {
             _gameManager = GetComponent<GameManager>();
+        }
+
+        public override void Spawned()
+        {
+            base.Spawned();
+            HasSpawned = true;
         }
         
         public TeamInstance GetTeamByIndex(int index)

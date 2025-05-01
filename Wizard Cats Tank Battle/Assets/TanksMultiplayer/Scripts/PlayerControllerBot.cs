@@ -3,6 +3,7 @@
  * 	You shall not license, sublicense, sell, resell, transfer, assign, distribute or
  * 	otherwise make available to any third party the Service or the Content. */
 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -61,12 +62,9 @@ namespace TanksMP
             isBot = true;
             defaultClassDefinition = classDirectory.RandomClass();
         }
-        
-        //called before SyncVar updates
-        public override void Spawned()
+
+        protected override void PostSpawn()
         {
-            base.Spawned();
-            
             _timerSlowUpdate = new Timer(_slowUpdateRate, true);
             _timerPathfinding = new Timer(_pathfindingRate, true);
    

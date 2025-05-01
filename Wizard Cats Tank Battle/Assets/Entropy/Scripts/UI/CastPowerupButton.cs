@@ -25,7 +25,6 @@ namespace Vashta.Entropy.UI
 
         public override void ClosePanel()
         {
-            Debug.Log("Hiding powerup button");
             base.ClosePanel();
         }
 

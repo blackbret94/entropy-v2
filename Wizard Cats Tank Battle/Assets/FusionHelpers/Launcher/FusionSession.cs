@@ -131,7 +131,7 @@ namespace FusionHelpers
 
 				if (!localPlayer)
 				{
-					Debug.LogWarning("Missing reference to local player!");
+					// Debug.LogWarning("Missing reference to local player!");
 				}
 				else
 				{

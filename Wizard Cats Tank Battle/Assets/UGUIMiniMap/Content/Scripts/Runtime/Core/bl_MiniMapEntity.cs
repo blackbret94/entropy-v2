@@ -407,7 +407,7 @@ public class bl_MiniMapEntity : bl_MiniMapEntityBase
         }
         else
         {
-            Debug.Log("There is no item to disable.");
+            // Debug.Log("There is no item to disable.");
         }
     }
 
@@ -423,7 +423,7 @@ public class bl_MiniMapEntity : bl_MiniMapEntityBase
         }
         else
         {
-            Debug.Log("There is no item to active.");
+            // Debug.Log("There is no item to active.");
         }
     }
 

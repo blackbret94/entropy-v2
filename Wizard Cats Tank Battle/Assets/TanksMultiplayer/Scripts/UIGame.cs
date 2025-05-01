@@ -103,7 +103,12 @@ namespace TanksMP
             #endif
 
             //play background music
-            MusicController.PlayMusic();
+            if(SettingsReader.GetMusicIsOn())
+                MusicController.PlayMusic();
+            
+            AudioListener.volume = SettingsReader.GetVolume();
+            MusicController.AudioSource.volume = SettingsReader.GetMusicVolume();
+            
             Minimap.SetActive(SettingsReader.GetShowMinimap());
         }
         

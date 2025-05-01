@@ -4,6 +4,7 @@ using Fusion;
 using FusionHelpers;
 using TanksMP;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Serialization;
 using Vashta.Entropy.Character;
 using Vashta.Entropy.Network;
@@ -125,6 +126,7 @@ namespace Vashta.Entropy.Player
         public MinimapEntityControllerPlayer MinimapEntityControllerPlayer;
         
         private bool _hasLateInited = false;
+        private Collider _collider;
         
         [Header("Data")]
         [FormerlySerializedAs("classList")] 
@@ -154,6 +156,7 @@ namespace Vashta.Entropy.Player
             _playerCurrencyRewarder = new PlayerCurrencyRewarder();
             Team = GetComponent<PlayerTeam>();
             NetworkManagerCustom = NetworkManagerCustom.GetInstance();
+            _collider = GetComponent<Collider>();
             
             // Join time
             _lastSecondUpdate = Runner.SimulationTime + .1f;
@@ -206,11 +209,7 @@ namespace Vashta.Entropy.Player
             if (HasStateAuthority)
             {
                 // Set position
-                Vector3 startPos = GameManager.TeamController.GetSpawnPosition(TeamIndex);
-                rb.position = startPos;
-
-                // Not sure if this is still needed
-                // StartCoroutine(SetTeamPositionCR(.5f));
+                MoveToSpawn();
                 
                 // Set class
                 ClassDefinition classDefinition = defaultClassDefinition ? defaultClassDefinition : classDirectory.RandomClass();
@@ -236,30 +235,6 @@ namespace Vashta.Entropy.Player
         {
             PlayerName = NetworkManagerCustom.LocalPlayerInfo.Name;
         }
-
-        // private IEnumerator SetTeamPositionCR(float delay)
-        // {
-        //     yield return new WaitForSeconds(delay);
-        //     
-        //     Vector3 currentPos = transform.position;
-        //     Vector3 spawnPosition = Vector3.zero;
-						  //
-        //     GameManager gameManager = GameManager.GetInstance();
-        //     if (gameManager != null)
-        //     {
-        //         if(gameManager.InitialSpawnPos != null)
-        //             spawnPosition = gameManager.InitialSpawnPos.transform.position;
-        //     }
-        //     
-        //     float xx = Mathf.Abs(spawnPosition.x-currentPos.x);
-        //     float zz = Mathf.Abs(spawnPosition.z-currentPos.z);
-        //     
-        //     if (xx < 10 && zz < 10)
-        //     {
-        //         rb.MovePosition(GameManager.TeamController.GetSpawnPosition(TeamIndex));
-        //         Debug.Log("Setting position for team: " + TeamIndex + " to position: " + transform.position);
-        //     }
-        // }
 
         // Allows the player to freely respawn for 10 seconds after they joined the game.
         // Use SpawnController->PlayerCanRespawnFreely() to factor in everything, including bases.
@@ -538,12 +513,12 @@ namespace Vashta.Entropy.Player
             if (HasInputAuthority)
             {
                 CameraController.FollowKiller(killedBy);
-                GameManager.SpawnController.DisplayDeath(this);
+                GameManager.SpawnController.HandleDeathSpawn(this);
             }
 
             if (HasInputAuthority || (isBot && HasStateAuthority))
             {
-                rb.position = GameManager.TeamController.GetSpawnPosition(TeamIndex);
+                MoveToSpawn();
                 GameManager.SpawnController.StartSpawnRoutine(this);
             }
         }
@@ -553,6 +528,62 @@ namespace Vashta.Entropy.Player
         {
             HandleRespawned();
         }
+
+        public void MoveToSpawn()
+        {
+            // Move player to spawn
+            if (HasInputAuthority || (isBot && HasStateAuthority))
+            {
+                Vector3 respawnPosition = GameManager.TeamController.GetSpawnPosition(TeamIndex);
+                Debug.Log("Spawn Position: " + respawnPosition);
+                //
+                // float raycastDistance = 10f;
+                // float clippingOffset = 0.01f; // Small vertical offset to avoid clipping
+                //
+                // Vector3 bottomOfCollider = respawnPosition + transform.rotation * _collider.bounds.center - Vector3.up * _collider.bounds.extents.y;
+                //
+                // // Raycast down from above the respawn point
+                // if (Physics.Raycast(bottomOfCollider + Vector3.up * raycastDistance, Vector3.down, out RaycastHit hit, raycastDistance * 2f, LayerMask.GetMask("Ground")))
+                // {
+                //     // Adjust position so the bottom of the player sits right on the ground
+                //
+                //     Vector3 adjustedPosition = hit.point - transform.rotation * _collider.bounds.center + Vector3.up * _collider.bounds.extents.y + Vector3.up * clippingOffset;
+                //     Debug.Log("Adjusted Position: " + adjustedPosition);
+                //     rb.position = adjustedPosition;
+                // }
+                // else
+                // {
+                //     Debug.LogWarning("No ground found beneath respawn point!");
+                //     rb.position = respawnPosition;
+                // }
+                
+                rb.position = respawnPosition;
+                SnapToNavMesh(respawnPosition);
+            }
+            
+        }
+        
+        public void SnapToNavMesh(Vector3 samplePosition)
+        {
+            float maxSampleDistance = 5f;
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(samplePosition, out hit, maxSampleDistance, NavMesh.AllAreas))
+            {
+                float yOffset = .1f;
+                
+                Vector3 alignedPosition = new Vector3(
+                    rb.position.x,
+                    hit.position.y + yOffset,
+                    rb.position.z
+                );
+
+                rb.position = alignedPosition;
+            }
+            else
+            {
+                Debug.LogWarning("No NavMesh found near this position!");
+            }
+        }
         
         public void HandleRespawned()
         {
@@ -561,13 +592,9 @@ namespace Vashta.Entropy.Player
             GameManager.TeamController.OnePassPlayerCheckToChangeTeams(this, false);
             IsAlive = true;
             gameObject.SetActive(true);
-                
-            // Move player to spawn
-            if (HasInputAuthority || (isBot && HasStateAuthority))
-            {
-                rb.position = GameManager.TeamController.GetSpawnPosition(TeamIndex);
-            }
-
+            
+            MoveToSpawn();
+            
             // apply class
             StatusEffectController.RefreshCache();
             ClassController.ApplyClass(handicapModifier);
@@ -636,11 +663,6 @@ namespace Vashta.Entropy.Player
             if (HasInputAuthority)
             {
                 CameraController.FollowPlayer(turret);
-            }
-
-            if (HasInputAuthority || (isBot && HasStateAuthority))
-            {
-                rb.position = GameManager.TeamController.GetSpawnPosition(TeamIndex);
             }
 
             //reset forces modified by input

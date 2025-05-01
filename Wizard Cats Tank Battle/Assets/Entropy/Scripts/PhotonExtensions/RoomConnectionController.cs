@@ -8,6 +8,7 @@ namespace Vashta.Entropy.PhotonExtensions
     public class RoomConnectionController : SimulationBehaviour
     {
         private NetworkManagerCustom _networkManager;
+        private bool _isConnecting;
 
         private void Start()
         {
@@ -20,6 +21,9 @@ namespace Vashta.Entropy.PhotonExtensions
         /// </summary>
         public void Play()
         {
+            if (_isConnecting)
+                return;
+            
             NetworkMode networkMode = (NetworkMode)PlayerPrefs.GetInt(PrefsKeys.networkMode);
             
             UIMain.GetInstance().ToggleLoadingWindow(true);
@@ -28,6 +32,7 @@ namespace Vashta.Entropy.PhotonExtensions
             {
                 // Join online
                 _networkManager.JoinRandomRoom();
+                _isConnecting = true;
             }
             else
             {
@@ -57,6 +62,7 @@ namespace Vashta.Entropy.PhotonExtensions
             //display connection issue window
             OnConnectionError();
             UIMain.GetInstance().ToggleLoadingWindow(false);
+            _isConnecting = false;
         }
 
 
@@ -72,6 +78,7 @@ namespace Vashta.Entropy.PhotonExtensions
             StopAllCoroutines();
             
             UIMain.GetInstance().ShowConnectionErrorWindow();
+            _isConnecting = false;
         }
     }
 }

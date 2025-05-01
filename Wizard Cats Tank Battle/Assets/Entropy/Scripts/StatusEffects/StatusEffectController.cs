@@ -131,7 +131,7 @@ namespace Vashta.Entropy.StatusEffects
             if(healthPerSecond != 0 && (healthPerSecond < 0 || health < _playerController.maxHealth))
                 _playerController.PlayerViewController.ShowDamageText(-healthPerSecond, false, false);
 
-            if (health <= 0)
+            if (health <= 0 && HasStateAuthority)
             {
                 ushort deathFx = GetDeathFx();
                 

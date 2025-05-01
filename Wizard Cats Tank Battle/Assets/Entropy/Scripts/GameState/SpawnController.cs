@@ -25,7 +25,7 @@ namespace Vashta.Entropy.GameState
         /// <summary>
         /// Only for this player: sets the death text stating the killer on death.
         /// </summary>
-        public void DisplayDeath(PlayerController playerToRespawn)
+        public void HandleDeathSpawn(PlayerController playerToRespawn)
         {
             if (playerToRespawn == null)
             {
@@ -72,12 +72,19 @@ namespace Vashta.Entropy.GameState
                 bool isLocalPlayer = playerToRespawn.HasInputAuthority;
 
                 //calculate point in time for respawn
-                Timer timer = new Timer(respawnTime, false);
+                Timer respawnTimer = new Timer(respawnTime, false);
+                Timer movePlayerTimer = new Timer(Mathf.Max(0, respawnTime-1), false);
 
                 //wait for the respawn to be over,
-                while (!timer.Run())
+                while (!respawnTimer.Run())
                 {
-                    float timeToSpawn = timer.GetTimeToRun();
+                    if (movePlayerTimer.Run())
+                    {
+                        playerToRespawn.MoveToSpawn();
+                        movePlayerTimer.SetActive(false);
+                    }
+                    
+                    float timeToSpawn = respawnTimer.GetTimeToRun();
                     
                     if(isLocalPlayer)
                         _gameManager.ui.SetSpawnDelay(timeToSpawn);

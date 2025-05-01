@@ -194,7 +194,7 @@ namespace Entropy.Scripts.Player
 
         private void SetInputGamepad()
         {
-            // Debug.Log("Detected Gamepad!");
+            Debug.Log("Detected Gamepad!");
             Cursor.lockState = CursorLockMode.Locked;
             ToggleCursor(false);
             SetInputType(PlayerInputType.Gamepad);
@@ -213,11 +213,11 @@ namespace Entropy.Scripts.Player
         private bool DetectGamepadInput()
         {
             if (
-                Input.GetAxisRaw("Rotate X") != 0 || 
-                Input.GetAxisRaw("Rotate Y") != 0 || 
-                Input.GetAxisRaw("Fire Controller") != 0 ||
-                Input.GetAxisRaw("HorizontalGamepad") != 0 ||
-                Input.GetAxisRaw("VerticalGamepad") != 0)
+                !Mathf.Approximately(Input.GetAxisRaw("Rotate X"), 0) || 
+                !Mathf.Approximately(Input.GetAxisRaw("Rotate Y"), 0) || 
+                !Mathf.Approximately(Input.GetAxisRaw("Fire Controller"), 0) ||
+                !Mathf.Approximately(Input.GetAxisRaw("HorizontalGamepad"), 0) ||
+                !Mathf.Approximately(Input.GetAxisRaw("VerticalGamepad"), 0))
             {
                 return true;
             }

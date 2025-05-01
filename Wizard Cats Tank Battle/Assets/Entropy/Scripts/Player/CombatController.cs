@@ -202,8 +202,13 @@ namespace Entropy.Scripts.Player
             }
 
             if (health <= 0)
-                // killed the player
-                KillPlayer(other, deathFxId);
+            {
+                if (HasStateAuthority)
+                {
+                    // killed the player
+                    KillPlayer(other, deathFxId);
+                }
+            }
             else
             {
                 //we didn't die, set health to new value
@@ -245,12 +250,18 @@ namespace Entropy.Scripts.Player
             // Debug.Log("Taking damage from bullet: " + damage);
             
             health -= damage;
-            
+
             if (health <= 0)
-                //bullet killed the player
-                KillPlayer(
-                    projectile.owner.GetComponent<PlayerController>(), 
-                    projectile.DeathFx.SessionId);
+            {
+                // Only trigger death if local
+                if (HasStateAuthority)
+                {
+                    //bullet killed the player
+                    KillPlayer(
+                        projectile.owner.GetComponent<PlayerController>(),
+                        projectile.DeathFx.SessionId);
+                }
+            }
             else
             {
                 //we didn't die, set health to new value
@@ -305,7 +316,7 @@ namespace Entropy.Scripts.Player
             else if(!_playerController.RespawnIsFreeFromJointime())
             {
                 // Killed by environment
-                _gameManager.TeamController.RemoveScore(ScoreType.Kill, _playerController.TeamIndex);
+                // _gameManager.TeamController.RemoveScore(ScoreType.Kill, _playerController.TeamIndex);
             }
             
             // The game is not over

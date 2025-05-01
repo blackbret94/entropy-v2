@@ -76,7 +76,7 @@ namespace TanksMP
             //get corresponding team and colorize renderers in team color
             targetPoint = GameManager.GetInstance().TeamController.GetSpawnPosition(TeamIndex);
             agent.Warp(targetPoint);
-            SnapToNavMesh();
+            SnapToNavMesh(targetPoint);
             bool success = agent.SetDestination(targetPoint);
             
             // add to player bot list
@@ -149,49 +149,29 @@ namespace TanksMP
             //set the target point as the new destination
             bool success = agent.SetDestination(result);
         }
-
-        private void SnapToNavMesh()
-        {
-            float maxSampleDistance = 5f;
-            NavMeshHit hit;
-            if (NavMesh.SamplePosition(rb.position, out hit, maxSampleDistance, NavMesh.AllAreas))
-            {
-                Vector3 alignedPosition = new Vector3(
-                    rb.position.x,
-                    hit.position.y,
-                    rb.position.z
-                );
-
-                rb.position = alignedPosition;
-            }
-            else
-            {
-                Debug.LogWarning("No NavMesh found near this position!");
-            }
-        }
-
-        private bool CheckForStuckInPosition()
-        {
-            if (_lastMovementTime + _maxTimeWithoutMovement > Time.time)
-            {
-                Vector3 pos = transform.position;
-                if ((_lastPosition - pos).magnitude < _minMovementDistance)
-                {
-                    SnapToNavMesh();
-                    PickRandomLocation();
-                    _lastMovementTime = Time.time;
-                    return true;
-                }
-                else
-                {
-                    _lastPosition = pos;
-                    _lastMovementTime = Time.time;
-                    return false;
-                }
-            }
-
-            return false;
-        }
+        //
+        // private bool CheckForStuckInPosition()
+        // {
+        //     if (_lastMovementTime + _maxTimeWithoutMovement > Time.time)
+        //     {
+        //         Vector3 pos = transform.position;
+        //         if ((_lastPosition - pos).magnitude < _minMovementDistance)
+        //         {
+        //             SnapToNavMesh();
+        //             PickRandomLocation();
+        //             _lastMovementTime = Time.time;
+        //             return true;
+        //         }
+        //         else
+        //         {
+        //             _lastPosition = pos;
+        //             _lastMovementTime = Time.time;
+        //             return false;
+        //         }
+        //     }
+        //
+        //     return false;
+        // }
         
         private void PickRandomLocation()
         {

@@ -176,6 +176,7 @@ namespace TanksMP
         /// </summary>
         public void JoinRandomRoom()
         {
+            LocalPlayerInfo.Name = CBSIntegrator.Instance.ProfileState.CachedDisplayName;
             StartGameArgs startGameArgs = _roomOptionsFactory.CreateRoomOptionsGameMode((byte)PlayerPrefs.GetInt(PrefsKeys.gameMode));
             FusionLauncher.Launch(startGameArgs, "us", WCTBSessionPrefab, _networkSceneManager, OnConnectionStatusUpdate);
         }
@@ -195,9 +196,10 @@ namespace TanksMP
         /// <summary>
         /// Join a specific room by name
         /// </summary>
-        public void JoinRoom(string roomName, string password)
+        public void JoinRoom(string roomName)
         {
-            FusionLauncher.LaunchByName(roomName, password, "us", WCTBSessionPrefab, _networkSceneManager, OnConnectionStatusUpdate);
+            LocalPlayerInfo.Name = CBSIntegrator.Instance.ProfileState.CachedDisplayName;
+            FusionLauncher.LaunchByName(roomName, "us", WCTBSessionPrefab, _networkSceneManager, OnConnectionStatusUpdate);
         }
         
         public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }

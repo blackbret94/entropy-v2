@@ -12,12 +12,11 @@ namespace Vashta.Entropy.UI
         public void JoinByRoomName()
         {
             string roomName = RoomNameInput.text;
-            string roomPassword = RoomPasswordInput.text;
             
             NetworkManagerCustom networkManagerCustom = NetworkManagerCustom.GetInstance();
             if (networkManagerCustom != null)
             {
-                networkManagerCustom.JoinRoom(roomName, roomPassword);
+                networkManagerCustom.JoinRoom(roomName);
             }
             else
             {

@@ -17,6 +17,7 @@ namespace Vashta.Entropy.UI.MatchCreation
         public InputField NameInputField;
         public InputField PasswordInputField;
         public InputField MaxPlayersInputField;
+        public Toggle IsPrivateToggle;
         public MapSelectionSelector MapSelector;
         public GameModeSelector GameModeSelector;
 
@@ -28,33 +29,56 @@ namespace Vashta.Entropy.UI.MatchCreation
 
         public GameObject MultiplayerOnlyFieldsRoot;
         public GameObject SingleplayerOnlyFieldsRoot;
-
+        public GameObject CreateMatchOnlyFieldsRoot;
+        
         private bool _isMultiplayer;
         private NetworkManagerCustom _networkManagerCustom;
+        private MatchPanelType _matchPanelType;
 
         private void Start()
         {
             Init();
         }
 
-        public void ToggleMultiplayer(bool isMultiplayer)
+        public void ToggleMultiplayer(MatchPanelType type)
         {
-            _isMultiplayer = isMultiplayer;
-            
-            MultiplayerOnlyFieldsRoot.SetActive(_isMultiplayer);
-            SingleplayerOnlyFieldsRoot.SetActive(!_isMultiplayer);
+            _matchPanelType = type;
 
+            // This is done in an order to force the UI to refresh the layout
+            // Refresh the sub layout first
+            CreateMatchOnlyFieldsRoot.SetActive(type == MatchPanelType.Create);
+            
+            // Force the top level root to refresh
+            MultiplayerOnlyFieldsRoot.SetActive(false);
+            SingleplayerOnlyFieldsRoot.SetActive(false);
+
+            // Re-enable the correct panel
+            _isMultiplayer = (type is MatchPanelType.Create or MatchPanelType.Matchmaking);
             if (_isMultiplayer)
             {
-                PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Online);
-
-                HeaderText.text = "Matchmaking";
+                MultiplayerOnlyFieldsRoot.SetActive(true);
             }
             else
             {
-                PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Offline);
+                SingleplayerOnlyFieldsRoot.SetActive(true);
+            }
+
+            switch (type)
+            {
+                case MatchPanelType.Practice:
+                    PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Offline);
+                    HeaderText.text = "Practice Against Bots";
+                    break;
                 
-                HeaderText.text = "Practice Against Bots";
+                case MatchPanelType.Matchmaking:
+                    PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Online);
+                    HeaderText.text = "Matchmaking";
+                    break;
+                
+                case MatchPanelType.Create:
+                    PlayerPrefs.SetInt(PrefsKeys.networkMode, (int)NetworkMode.Online);
+                    HeaderText.text = "Create";
+                    break;
             }
         }
 
@@ -79,12 +103,13 @@ namespace Vashta.Entropy.UI.MatchCreation
         {
             // Get info
             string roomName = GetRoomName();
+            bool isPrivate = IsPrivateToggle.isOn;
             
             // format
             roomName = RoomOptionsFactory.CreateRoomName(roomName);
             
             MatchmakingArgs matchmakingArgs = new MatchmakingArgs(_isMultiplayer, roomName, GetPassword(), GetMaxPlayers(), 
-                GetMapName(), GetGameMode(), true);
+                GetMapName(), GetGameMode(), !isPrivate);
 
             string encrypted = matchmakingArgs.Encrypt();
             PlayerPrefs.SetString(SaveLoad.PrefsKeys.matchmakingArgs, encrypted);

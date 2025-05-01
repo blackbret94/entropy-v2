@@ -60,6 +60,7 @@ namespace TanksMP
         private NetworkManagerCustom _networkManager;
         [Networked]
         public bool GameHasEnded { get; private set; }
+        public bool HasSpawned { get; private set; }
 
         //initialize variables
         void Awake()
@@ -78,6 +79,13 @@ namespace TanksMP
             MatchTimer = GetComponent<MatchTimer>();
 
             TeamController.maxScore = GameModeDefinition.GetScoreToWin();
+        }
+
+        public override void Spawned()
+        {
+            base.Spawned();
+
+            HasSpawned = true;
         }
 
         /// <summary>

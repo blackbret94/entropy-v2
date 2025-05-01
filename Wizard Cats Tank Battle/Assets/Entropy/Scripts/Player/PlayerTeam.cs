@@ -32,7 +32,7 @@ namespace Vashta.Entropy.Player
             Init();
         }
 
-        private void Init()
+        public void Init()
         {
             if (_hasInit)
                 return;

@@ -92,17 +92,17 @@ namespace FusionHelpers
 			await runner.StartGame(startGameArgs);
 		}
 		
-		public static FusionLauncher LaunchByName(string roomName, string password, string region, FusionSession sessionPrefab,
+		public static FusionLauncher LaunchByName(string roomName, string region, FusionSession sessionPrefab,
 			INetworkSceneManager sceneLoader,
 			Action<NetworkRunner, ConnectionStatus, string> onConnect)
 		{
 			FusionLauncher launcher = new GameObject("Launcher").AddComponent<FusionLauncher>();
 		
-			launcher.InternalLaunchByName(roomName, password, region,sessionPrefab, sceneLoader, onConnect);
+			launcher.InternalLaunchByName(roomName, region,sessionPrefab, sceneLoader, onConnect);
 			return launcher;
 		}
 		
-		private async void InternalLaunchByName(string roomName, string password, string region, FusionSession sessionPrefab,
+		private async void InternalLaunchByName(string roomName, string region, FusionSession sessionPrefab,
 			INetworkSceneManager sceneManager,
 			Action<NetworkRunner, ConnectionStatus, string> onConnect)
 		{
@@ -120,32 +120,36 @@ namespace FusionHelpers
 		
 			SetConnectionStatus(runner, ConnectionStatus.Connecting, "");
 
-			var result = await runner.JoinSessionLobby(SessionLobby.Shared);
-
-			if (result.Ok)
-			{
-				Debug.Log($"Successfully joined by name! {roomName}");
-				
-				// if(result.)
-			}
-			else
-			{
-				Debug.Log($"Could not join room with name {roomName}: {result.ShutdownReason}");
-			}
-			
-			// startGameArgs.ObjectProvider = gameObject.AddComponent<PooledNetworkObjectProvider>();
+			// var result = await runner.JoinSessionLobby(SessionLobby.Shared);
 			//
+			// if (result.Ok)
+			// {
+			// 	Debug.Log($"Successfully joined by name! {roomName}");
+			// 	
+			// 	// if(result.)
+			// }
+			// else
+			// {
+			// 	Debug.Log($"Could not join room with name {roomName}: {result.ShutdownReason}");
+			// }
+
+			StartGameArgs startGameArgs = new StartGameArgs();
+			startGameArgs.ObjectProvider = gameObject.AddComponent<PooledNetworkObjectProvider>();
+			startGameArgs.EnableClientSessionCreation = false;
+			startGameArgs.SessionName = roomName;
+			startGameArgs.GameMode = GameMode.Shared;
+			startGameArgs.SceneManager = sceneManager;
+			
 			// NetworkSceneInfo scene = new NetworkSceneInfo();
 			// int sceneIndex = GetSceneIndex(startGameArgs);
-			//
+			
 			// if (sceneIndex != -1)
 			// {
-			// 	scene.AddSceneRef(SceneRef.FromIndex(sceneIndex));
-			// 	startGameArgs.Scene = scene;
-			// 	startGameArgs.SceneManager = sceneManager;
+				// scene.AddSceneRef(SceneRef.FromIndex(sceneIndex));
+				// startGameArgs.Scene = scene;
 			// }
-			//
-			// await runner.StartGame(roomName);
+			
+			await runner.StartGame(startGameArgs);
 		}
 
 		private int GetSceneIndex(StartGameArgs startGameArgs)

@@ -3,6 +3,7 @@ using Fusion;
 using UnityEngine;
 using Vashta.Entropy.Network;
 using Vashta.Entropy.ScriptableObject;
+using Vashta.Entropy.Util;
 using WebSocketSharp;
 
 namespace Vashta.Entropy.PhotonExtensions
@@ -52,6 +53,8 @@ namespace Vashta.Entropy.PhotonExtensions
             // {
                 // startGameArgs.SessionName = matchmakingArgs.roomName;
             // }
+
+            startGameArgs.SessionName = HashCodeGenerator.GenerateRandomString(6);
             
             startGameArgs.PlayerCount = matchmakingArgs.maxPlayers;
             startGameArgs.IsVisible = matchmakingArgs.isVisible;

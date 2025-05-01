@@ -211,7 +211,8 @@ namespace Vashta.Entropy.Player
             PlayerList.Add(this);
             
             PlayerViewController.RefreshHealthSlider();
-
+            
+            Team.Init();
             while (!Team.TeamController.HasSpawned)
                 yield return null;
             
@@ -554,7 +555,7 @@ namespace Vashta.Entropy.Player
             if (HasInputAuthority || (isBot && HasStateAuthority))
             {
                 Vector3 respawnPosition = GameManager.TeamController.GetSpawnPosition(TeamIndex);
-                Debug.Log("Spawn Position: " + respawnPosition);
+                // Debug.Log("Spawn Position: " + respawnPosition);
                 //
                 // float raycastDistance = 10f;
                 // float clippingOffset = 0.01f; // Small vertical offset to avoid clipping

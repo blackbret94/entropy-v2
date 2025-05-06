@@ -43,7 +43,7 @@ namespace TanksMP
 
 
         //always face the camera every frame
-        void Update()
+        void LateUpdate()
         {
             if (!camTrans || !trans)
             {

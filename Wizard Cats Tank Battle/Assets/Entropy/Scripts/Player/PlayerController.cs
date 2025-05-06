@@ -555,6 +555,12 @@ namespace Vashta.Entropy.Player
             if (HasInputAuthority || (isBot && HasStateAuthority))
             {
                 Vector3 respawnPosition = GameManager.TeamController.GetSpawnPosition(TeamIndex);
+                
+                if (isBot)
+                {
+                    Debug.Log("Setting bot spawn position: " + respawnPosition);
+                }
+                
                 // Debug.Log("Spawn Position: " + respawnPosition);
                 //
                 // float raycastDistance = 10f;
@@ -578,7 +584,13 @@ namespace Vashta.Entropy.Player
                 // }
                 
                 rb.position = respawnPosition;
+                transform.position = respawnPosition;
                 SnapToNavMesh(respawnPosition);
+                
+                if (isBot)
+                {
+                    Debug.Log("Bot position set: " + transform.position);
+                }
             }
             
         }
@@ -597,6 +609,7 @@ namespace Vashta.Entropy.Player
                     rb.position.z
                 );
 
+                transform.position = alignedPosition;
                 rb.position = alignedPosition;
             }
             else

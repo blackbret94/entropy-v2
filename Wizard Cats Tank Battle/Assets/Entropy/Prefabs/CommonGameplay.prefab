@@ -1141,6 +1141,7 @@ GameObject:
   - component: {fileID: 1934922644525356947}
   - component: {fileID: 8880297449568291456}
   - component: {fileID: 6949940068229763488}
+  - component: {fileID: 3795060452480631792}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1204,12 +1205,12 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 8127
+    m_Bits: 16319
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
-  m_HDR: 0
+  m_HDR: 1
   m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
@@ -1285,7 +1286,7 @@ MonoBehaviour:
   volumeTrigger: {fileID: 137415512518353544}
   volumeLayer:
     serializedVersion: 2
-    m_Bits: 2147483647
+    m_Bits: 7583
   stopNaNPropagation: 1
   finalBlitToCameraTarget: 0
   antialiasingMode: 1
@@ -1347,6 +1348,18 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   priority: 0
+--- !u!114 &3795060452480631792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 137415512518353587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf75d5831c954db8bc35d7e767b579db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &137415512528415367
 GameObject:
   m_ObjectHideFlags: 0

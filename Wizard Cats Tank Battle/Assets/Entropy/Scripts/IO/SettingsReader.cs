@@ -45,5 +45,10 @@ namespace Vashta.Entropy.IO
         {
             return Convert.ToBoolean(PlayerPrefs.GetInt(PrefsKeys.flashingLights, 1));
         }
+
+        public static float GetBrightness()
+        {
+            return PlayerPrefs.GetFloat(PrefsKeys.brightness, .5f);
+        }
     }
 }

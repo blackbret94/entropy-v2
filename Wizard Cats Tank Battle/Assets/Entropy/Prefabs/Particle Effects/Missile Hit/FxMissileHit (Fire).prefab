@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4000013952235708}
   - component: {fileID: 114000013705798950}
-  m_Layer: 2
+  m_Layer: 13
   m_Name: FxMissileHit (Fire)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24,6 +24,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000010321467122}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -31,7 +32,6 @@ Transform:
   m_Children:
   - {fileID: 4158772947354564457}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &114000013705798950
 MonoBehaviour:
@@ -51,7 +51,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 4000013952235708}
     m_Modifications:
     - target: {fileID: 387594403079794008, guid: d481dc194dbbb2f41bb56ba7aa3c8ee6,
@@ -73,6 +73,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FireSlashHit
+      objectReference: {fileID: 0}
+    - target: {fileID: 387594403099771044, guid: d481dc194dbbb2f41bb56ba7aa3c8ee6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 387594403099774200, guid: d481dc194dbbb2f41bb56ba7aa3c8ee6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 387594403099885180, guid: d481dc194dbbb2f41bb56ba7aa3c8ee6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 387594403100124682, guid: d481dc194dbbb2f41bb56ba7aa3c8ee6,
         type: 3}
@@ -175,7 +190,9 @@ PrefabInstance:
       value: 0.75
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d481dc194dbbb2f41bb56ba7aa3c8ee6, type: 3}
 --- !u!4 &4158772947354564457 stripped
 Transform:

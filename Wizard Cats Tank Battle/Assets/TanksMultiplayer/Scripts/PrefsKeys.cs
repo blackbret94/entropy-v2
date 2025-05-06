@@ -60,5 +60,7 @@ namespace TanksMP
         public const string graphicsSettings = "WCTB_GraphicsSettings";
         
         public const string flashingLights = "WCTB_FlashingLights"; // enables or disables flashing lights
+        
+        public const string brightness = "WCTB_Brightness"; // sets the brightness of the camera
     }
 }

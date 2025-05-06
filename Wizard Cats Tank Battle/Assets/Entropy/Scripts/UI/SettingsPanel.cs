@@ -3,6 +3,7 @@ using TanksMP;
 using UnityEngine;
 using UnityEngine.UI;
 using Vashta.Entropy.IO;
+using Vashta.Entropy.PostProcessing;
 using Vashta.Entropy.SaveLoad;
 using PrefsKeys = TanksMP.PrefsKeys;
 
@@ -15,6 +16,7 @@ namespace Vashta.Entropy.UI
         public Slider volumeSlider;
         public Slider musicSlider;
         public Slider graphicsSlider;
+        public Slider brightnessSlider;
 
         public Toggle musicToggle;
         public Toggle leftHandedModeToggle;
@@ -32,7 +34,7 @@ namespace Vashta.Entropy.UI
         public string PrivacyPolicyUrl = "https://vashtaentertainment.com/privacy_policy.html";
         
         private CurrentSettings _currentSettings;
-
+        
         private void Awake()
         {
             _currentSettings = CurrentSettings.Instance();
@@ -68,6 +70,7 @@ namespace Vashta.Entropy.UI
             AimArrowToggle.isOn = SettingsReader.GetAimArrow();
             showMinimapToggle.isOn = SettingsReader.GetShowMinimap();
             showFlashingLightsToggle.isOn = SettingsReader.GetShowFlashingLights();
+            brightnessSlider.value = SettingsReader.GetBrightness();
             
             if(FullscreenToggle)
                 FullscreenToggle.isOn = Screen.fullScreen;
@@ -82,6 +85,7 @@ namespace Vashta.Entropy.UI
             _currentSettings.AimArrowOn = AimArrowToggle.isOn;
             _currentSettings.ShowMinimap = showMinimapToggle.isOn;
             _currentSettings.ShowFlashingLights = showFlashingLightsToggle.isOn;
+            _currentSettings.Brightness = brightnessSlider.value;
             
             if (graphicsSlider)
             {
@@ -149,6 +153,16 @@ namespace Vashta.Entropy.UI
         public void OpenPrivacyPolicy()
         {
             Application.OpenURL(PrivacyPolicyUrl);
+        }
+
+        public void OnBrightnessChanged(float value)
+        {
+            // CameraPostProcessingController[] controllers = FindObjectsByType<CameraPostProcessingController>(FindObjectsSortMode.None);
+            //
+            // foreach (CameraPostProcessingController controller in controllers)
+            // {
+            //     controller.SetBrightness(value);
+            // }
         }
     }
 }

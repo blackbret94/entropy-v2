@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3062424631925109516}
   - component: {fileID: 8374027682380308874}
   - component: {fileID: 9172712733569004170}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: VFX_Burning
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25,6 +25,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2024315445576615424}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -33,7 +34,6 @@ Transform:
   - {fileID: 1441767678011731083}
   - {fileID: 905009866178703587}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &8374027682380308874
 ParticleSystem:
@@ -4776,6 +4776,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4814,13 +4817,15 @@ ParticleSystemRenderer:
   m_RenderAlignment: 0
   m_Pivot: {x: 0, y: 0, z: 0}
   m_Flip: {x: 0, y: 0, z: 0}
-  m_UseCustomVertexStreams: 0
   m_EnableGPUInstancing: 1
   m_ApplyActiveColorSpace: 1
   m_AllowRoll: 1
   m_FreeformStretching: 0
   m_RotateWithStretchDirection: 1
+  m_UseCustomVertexStreams: 0
   m_VertexStreams: 00010304
+  m_UseCustomTrailVertexStreams: 0
+  m_TrailVertexStreams: 00010304
   m_Mesh: {fileID: 0}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
@@ -4838,9 +4843,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3062424631925109516}
     m_Modifications:
+    - target: {fileID: 122216, guid: 7484de48c7f720b449b0afaf518695f1, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 153472, guid: 7484de48c7f720b449b0afaf518695f1, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 153508, guid: 7484de48c7f720b449b0afaf518695f1, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 164416, guid: 7484de48c7f720b449b0afaf518695f1, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 187646, guid: 7484de48c7f720b449b0afaf518695f1, type: 3}
       propertyPath: m_Name
       value: DamageOverTimeFire
+      objectReference: {fileID: 0}
+    - target: {fileID: 187646, guid: 7484de48c7f720b449b0afaf518695f1, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 436526, guid: 7484de48c7f720b449b0afaf518695f1, type: 3}
       propertyPath: m_RootOrder
@@ -4985,9 +5010,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3062424631925109516}
     m_Modifications:
+    - target: {fileID: 107144, guid: 996caa051abc4be4d8b39b565b8694b5, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 174222, guid: 996caa051abc4be4d8b39b565b8694b5, type: 3}
       propertyPath: m_Name
       value: FireFlame
+      objectReference: {fileID: 0}
+    - target: {fileID: 174222, guid: 996caa051abc4be4d8b39b565b8694b5, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 478684, guid: 996caa051abc4be4d8b39b565b8694b5, type: 3}
       propertyPath: m_RootOrder

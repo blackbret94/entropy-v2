@@ -14,17 +14,17 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
-  m_Fog: 0
-  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  m_Fog: 1
+  m_FogColor: {r: 0.58169454, g: 0.8338018, b: 0.90943396, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.01
+  m_FogDensity: 0.0025
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.9433962, g: 0.8640928, b: 0.24385896, a: 1}
+  m_AmbientSkyColor: {r: 1, g: 1, b: 1, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 0
+  m_AmbientMode: 3
   m_SubtractiveShadowColor: {r: 0.22352941, g: 0.22352941, b: 0.36862746, a: 1}
   m_SkyboxMaterial: {fileID: 2100000, guid: 123caa41e84e041d0bd65bb3ae888dd1, type: 2}
   m_HaloStrength: 0.5
@@ -43460,12 +43460,12 @@ PrefabInstance:
     - target: {fileID: 137415513610125845, guid: e4a53bbfdd13b6545a92577342c00d64,
         type: 3}
       propertyPath: m_Color.b
-      value: 0.4509434
+      value: 0.8229436
       objectReference: {fileID: 0}
     - target: {fileID: 137415513610125845, guid: e4a53bbfdd13b6545a92577342c00d64,
         type: 3}
       propertyPath: m_Color.g
-      value: 0.8365025
+      value: 0.8039216
       objectReference: {fileID: 0}
     - target: {fileID: 137415513610125845, guid: e4a53bbfdd13b6545a92577342c00d64,
         type: 3}
@@ -43475,7 +43475,7 @@ PrefabInstance:
     - target: {fileID: 137415513610125845, guid: e4a53bbfdd13b6545a92577342c00d64,
         type: 3}
       propertyPath: m_Intensity
-      value: 0.9
+      value: 1.15
       objectReference: {fileID: 0}
     - target: {fileID: 137415513610125845, guid: e4a53bbfdd13b6545a92577342c00d64,
         type: 3}
@@ -43515,37 +43515,37 @@ PrefabInstance:
     - target: {fileID: 137415513610125846, guid: e4a53bbfdd13b6545a92577342c00d64,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.64681995
+      value: -0.3950693
       objectReference: {fileID: 0}
     - target: {fileID: 137415513610125846, guid: e4a53bbfdd13b6545a92577342c00d64,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.3719445
+      value: -0.18476722
       objectReference: {fileID: 0}
     - target: {fileID: 137415513610125846, guid: e4a53bbfdd13b6545a92577342c00d64,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.044823375
+      value: 0.5141066
       objectReference: {fileID: 0}
     - target: {fileID: 137415513610125846, guid: e4a53bbfdd13b6545a92577342c00d64,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.6642832
+      value: -0.7385633
       objectReference: {fileID: 0}
     - target: {fileID: 137415513610125846, guid: e4a53bbfdd13b6545a92577342c00d64,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 32.732
+      value: 64.876
       objectReference: {fileID: 0}
     - target: {fileID: 137415513610125846, guid: e4a53bbfdd13b6545a92577342c00d64,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 391.232
+      value: 341.703
       objectReference: {fileID: 0}
     - target: {fileID: 137415513610125846, guid: e4a53bbfdd13b6545a92577342c00d64,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 100.911
+      value: 112.026
       objectReference: {fileID: 0}
     - target: {fileID: 138414422584571940, guid: e4a53bbfdd13b6545a92577342c00d64,
         type: 3}
@@ -44963,6 +44963,16 @@ PrefabInstance:
       objectReference: {fileID: 2005589031}
     - target: {fileID: 3981455624214705516, guid: e4a53bbfdd13b6545a92577342c00d64,
         type: 3}
+      propertyPath: teams.Array.data[0].spawnArea
+      value: 
+      objectReference: {fileID: 825745027}
+    - target: {fileID: 3981455624214705516, guid: e4a53bbfdd13b6545a92577342c00d64,
+        type: 3}
+      propertyPath: teams.Array.data[1].spawnArea
+      value: 
+      objectReference: {fileID: 2005589031}
+    - target: {fileID: 3981455624214705516, guid: e4a53bbfdd13b6545a92577342c00d64,
+        type: 3}
       propertyPath: teams.Array.data[0].teamDefinition
       value: 
       objectReference: {fileID: 11400000, guid: ab1c7d333a5d20e488f50a354eeea484,
@@ -44981,6 +44991,16 @@ PrefabInstance:
     - target: {fileID: 3981455624214705516, guid: e4a53bbfdd13b6545a92577342c00d64,
         type: 3}
       propertyPath: teams.Array.data[1].freeClassChange
+      value: 
+      objectReference: {fileID: 188507367}
+    - target: {fileID: 3981455624214705516, guid: e4a53bbfdd13b6545a92577342c00d64,
+        type: 3}
+      propertyPath: teams.Array.data[0].freeClassChangeArea
+      value: 
+      objectReference: {fileID: 710871492}
+    - target: {fileID: 3981455624214705516, guid: e4a53bbfdd13b6545a92577342c00d64,
+        type: 3}
+      propertyPath: teams.Array.data[1].freeClassChangeArea
       value: 
       objectReference: {fileID: 188507367}
     - target: {fileID: 4028928543931742977, guid: e4a53bbfdd13b6545a92577342c00d64,

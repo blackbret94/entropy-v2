@@ -13,6 +13,7 @@ namespace Vashta.Entropy.SaveLoad
         public bool ShowMinimap;
         public int GraphicsQuality;
         public bool ShowFlashingLights;
+        public float Brightness;
 
         private static CurrentSettings _instance;
         
@@ -37,6 +38,7 @@ namespace Vashta.Entropy.SaveLoad
             ShowMinimap = SettingsReader.GetShowMinimap();
             ShowFlashingLights = SettingsReader.GetShowFlashingLights();
             GraphicsQuality = SettingsReader.GetGraphicsSettings();
+            Brightness = SettingsReader.GetBrightness();
         }
 
         public void Save()
@@ -49,6 +51,7 @@ namespace Vashta.Entropy.SaveLoad
             PlayerPrefs.SetInt(PrefsKeys.showMinimap, ShowMinimap ? 1 : 0);
             PlayerPrefs.SetInt(PrefsKeys.flashingLights, ShowFlashingLights ? 1 : 0);
             PlayerPrefs.SetInt(PrefsKeys.graphicsSettings, GraphicsQuality);
+            PlayerPrefs.SetFloat(PrefsKeys.brightness, Brightness);
             PlayerPrefs.Save();
         }
     }

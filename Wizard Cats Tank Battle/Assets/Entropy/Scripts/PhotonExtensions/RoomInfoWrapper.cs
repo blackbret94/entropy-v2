@@ -54,6 +54,21 @@ namespace Vashta.Entropy.PhotonExtensions
             return "";
         }
 
+        public bool BotFilling()
+        {
+            // Temporarily force bot filling
+            return true;
+            
+            ReadOnlyDictionary<string, SessionProperty> customProperties = _sessionInfo.Properties;
+
+            if (customProperties.TryGetValue(RoomKeys.botFilling, out var property))
+            {
+                return (bool)property;
+            }
+
+            return false;
+        }
+
         public TanksMP.GameMode GetGameMode()
         {
             ReadOnlyDictionary<string, SessionProperty> customProperties = _sessionInfo.Properties;

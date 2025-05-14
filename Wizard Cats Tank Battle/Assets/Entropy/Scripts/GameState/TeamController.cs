@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Entropy.Scripts.Player;
 using Fusion;
@@ -7,6 +8,7 @@ using Vashta.Entropy.Player;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.TanksExtensions;
 using Vashta.Entropy.UI.TeamScore;
+using Random = UnityEngine.Random;
 
 namespace Vashta.Entropy.GameState
 {
@@ -16,7 +18,8 @@ namespace Vashta.Entropy.GameState
         public TeamInstance[] teams; // This is set in the editor
         private GameManager _gameManager;
         private int lastSpawnIndex = -1;
-        public int maxScore { get; set; } = 30;
+        [Networked]
+        public int maxScore { get; set; }
         
         // Networked properties.  Later re-factor into a INetworkStruct
         // Array needs a fixed size set here, so it is always 4
@@ -25,8 +28,10 @@ namespace Vashta.Entropy.GameState
 
         [Networked, Capacity(4), OnChangedRender(nameof(RefreshDisplay))]
         private NetworkArray<int> TeamSize => default;
+        public NetworkArray<int> TeamSizes => TeamSize;
 
-        public bool UsesTeams => _gameManager.gameMode != TanksMP.GameMode.FFA;
+        public bool UsesTeams => _gameManager.MatchInfo.GameMode != TanksMP.GameMode.FFA;
+        public int TeamCount => teams.Length;
         
         TeamScoreDisplayController TeamScoreDisplayController => TeamScoreDisplayController.GetInstance();
         
@@ -53,6 +58,20 @@ namespace Vashta.Entropy.GameState
             return teams[0];
         }
 
+        public bool TeamsAreEven()
+        {
+            int teamSize = TeamSize[0];
+            int teamCount = TeamCount;
+
+            for (int i = 1; i < TeamCount; i++)
+            {
+                if (TeamSize[i] != teamSize)
+                    return false;
+            }
+
+            return true;
+        }
+        
         public void AddPlayerToTeam(PlayerController playerController, int teamIndex)
         {
             playerController.Team.TeamIndex = teamIndex;
@@ -177,6 +196,17 @@ namespace Vashta.Entropy.GameState
         /// </summary>
         public int GetTeamFill()
         {
+            if (_gameManager.MatchInfo.BotFilling || Runner.GameMode == Fusion.GameMode.Single)
+            {
+                return GetTeamFillNoBots();
+            }
+
+            return GetTeamFillWithBots();
+        }
+
+        // More efficient team fill when there are no bots to consider
+        private int GetTeamFillNoBots()
+        {
             //init variables
             int teamNo = 0;
 
@@ -195,6 +225,53 @@ namespace Vashta.Entropy.GameState
 
             //return index of lowest team
             return teamNo;
+        }
+
+        private int GetTeamFillWithBots()
+        {
+            // init
+            List<int> teamSizesNoBots = new();
+
+            for (int i = 0; i < TeamCount; i++)
+            {
+                teamSizesNoBots.Add(0);
+            }
+            
+            // count
+            IEnumerable<PlayerRef> it = Runner.ActivePlayers;
+            
+            foreach (PlayerRef playerRef in it)
+            {
+                if (Runner.TryGetPlayerObject(playerRef, out var plObject))
+                {
+                    PlayerController player = plObject.GetComponent<PlayerController>();
+                    if (!player.isBot)
+                    {
+                        if(player.TeamIndex == -1)
+                            continue;
+                        
+                        teamSizesNoBots[player.TeamIndex]++;
+                    }
+                }
+            }
+            
+            // get smallest team
+            int smallestTeamIndex = -1;
+            int smallestTeamSize = Int32.MaxValue;
+
+            for (int i = 0; i < teamSizesNoBots.Count; i++)
+            {
+                if (teamSizesNoBots[i] < smallestTeamSize)
+                {
+                    smallestTeamSize = teamSizesNoBots[i];
+                    smallestTeamIndex = i;
+                }
+            }
+
+            if (smallestTeamIndex == -1)
+                return 0;
+
+            return smallestTeamIndex;
         }
 
         public bool TeamHasVacancy(int teamIndex)

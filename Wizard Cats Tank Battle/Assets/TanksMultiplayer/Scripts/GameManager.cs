@@ -7,9 +7,9 @@ using Entropy.Scripts.Audio;
 using Entropy.Scripts.Player;
 using Fusion;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Vashta.Entropy.GameMode;
 using Vashta.Entropy.GameState;
+using Vashta.Entropy.PhotonExtensions;
 using Vashta.Entropy.Player;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.UI.MapSelection;
@@ -33,9 +33,8 @@ namespace TanksMP
         /// <summary>
         /// The local player instance spawned for this client.
         /// </summary>
-        [FormerlySerializedAs("localPlayer")] [HideInInspector]
+        [HideInInspector]
         public PlayerController localPlayerController;
-        public GameMode gameMode = GameMode.TDM;
         
         [Header("Controllers")]
         public UIGame ui;
@@ -49,15 +48,19 @@ namespace TanksMP
         public SpawnController SpawnController { get; private set; }
         public MatchTimer MatchTimer { get; private set; }
         
-        [FormerlySerializedAs("_mapDefinition")] [SerializeField]
+        [SerializeField]
         private MapDefinition mapDefinition;
         
         [Header("Data Sources")]
         public GameModeDictionary GameModeDictionary;
-        
-        public GameModeDefinition GameModeDefinition { get; private set; }
+
+        public GameModeDefinition GameModeDefinition => GameModeDictionary[MatchInfo.GameMode];
 
         private NetworkManagerCustom _networkManager;
+        
+        [Networked]
+        public MatchInfo MatchInfo { get; private set; }
+        
         [Networked]
         public bool GameHasEnded { get; private set; }
         public bool HasSpawned { get; private set; }
@@ -67,24 +70,53 @@ namespace TanksMP
         {
             instance = this;
             _networkManager = NetworkManagerCustom.GetInstance();
-
-            gameMode = _networkManager.LocalPlayerInfo.GameModeEnum;
-            
-            GameModeDefinition = GameModeDictionary[gameMode];
             
             BotController = GetComponent<BotController>();
             TeamController = GetComponent<TeamController>();
             GameOverController = GetComponent<GameOverController>();
             SpawnController = GetComponent<SpawnController>();
             MatchTimer = GetComponent<MatchTimer>();
+        }
 
-            TeamController.maxScore = GameModeDefinition.GetScoreToWin();
+        private void CreateMatchInfo()
+        {
+            if (!HasStateAuthority)
+                return;
+
+            MatchInfo matchInfo = new MatchInfo();
+            LocalPlayerInfo localPlayerInfo = _networkManager.LocalPlayerInfo;
+            
+
+            SessionInfo sessionInfo = Runner.SessionInfo;
+            RoomInfoWrapper roomInfoWrapper = new RoomInfoWrapper(sessionInfo);
+            
+            matchInfo.GameMode = localPlayerInfo.GameModeEnum;
+            matchInfo.MaxNumberOfPlayers = roomInfoWrapper.GetMaxPlayers();
+            matchInfo.BotFilling = roomInfoWrapper.BotFilling();
+            matchInfo.MapName = roomInfoWrapper.GetMapName();
+            matchInfo.MaxScoreToWin = GameModeDefinition.GetScoreToWin();
+            
+            MatchInfo = matchInfo;
+            
+            TeamController.maxScore = matchInfo.MaxScoreToWin;
         }
 
         public override void Spawned()
         {
             base.Spawned();
+            
+            if (HasStateAuthority)
+            {
+                CreateMatchInfo();
 
+                if (MatchInfo.BotFilling)
+                {
+                    BotController.maxBots = MatchInfo.MaxNumberOfPlayers;
+                    BotController.maxPlayers = MatchInfo.MaxNumberOfPlayers;
+                    StartCoroutine(BotController.InitialSpawnCR());
+                }
+            }
+            
             HasSpawned = true;
         }
 

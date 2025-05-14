@@ -6,5 +6,6 @@ namespace Vashta.Entropy.PhotonExtensions
         public const string modeKey = "mode";
         public const string mapKey = "map";
         public const string password = "password";
+        public const string botFilling = "botFilling";
     }
 }

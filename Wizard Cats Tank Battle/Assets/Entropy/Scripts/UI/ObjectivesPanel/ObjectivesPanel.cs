@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TanksMP;
 using TMPro;
@@ -20,7 +21,7 @@ namespace Vashta.Entropy.UI.ObjectivesPanel
         {
             _gameManager = GameManager.GetInstance();
             _lastRefreshTime = Time.time;
-            Invoke(nameof(Init), .1f);
+            StartCoroutine(Init());
         }
 
         private void Update()
@@ -31,9 +32,14 @@ namespace Vashta.Entropy.UI.ObjectivesPanel
             }
         }
 
-        private void Init()
+        private IEnumerator Init()
         {
-            ObjectiveText.text = GameManager.GetInstance().GameModeDefinition.Description;
+            GameManager gameManager = GameManager.GetInstance();
+            
+            while (!gameManager.HasSpawned)
+                yield return null;
+            
+            ObjectiveText.text = gameManager.GameModeDefinition.Description;
         }
         
         // None of this can be cached, as it may change in between refreshes

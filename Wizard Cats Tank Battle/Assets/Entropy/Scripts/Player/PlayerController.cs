@@ -120,8 +120,7 @@ namespace Vashta.Entropy.Player
 
         protected float _lastSecondUpdate;
         private float _secondUpdateTime = 1f;
-
-        private float _initTime;
+        
         private NetworkInputData _oldInput;
         
         public MinimapEntityControllerPlayer MinimapEntityControllerPlayer;

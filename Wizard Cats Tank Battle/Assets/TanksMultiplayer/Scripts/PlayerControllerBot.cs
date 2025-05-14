@@ -219,7 +219,7 @@ namespace TanksMP
             }
 
             // Cast ultimates
-            if (_enemiesInRange.Count > 0)
+            if (HasStateAuthority && _enemiesInRange.Count > 0)
             {
                 UltimateController.TryCastUltimate();
             }

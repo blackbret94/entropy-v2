@@ -18,42 +18,44 @@ namespace Vashta.Entropy.GameMode
 
         private bool _hasInit;
         private bool _hasCalledGameOver = false;
-
+        private bool _shouldRun = false;
+        
         public override void Spawned()
         {
             Init();
         }
         
-        private void Init()
+        private bool Init()
         {
-            if (_hasInit) return;
+            if (!GameManager.HasSpawned)
+                return false;
             
-            TanksMP.GameMode gameMode = GameManager.GameModeDefinition.GameMode;
+            if (_hasInit) return true;
+            
+            TanksMP.GameMode gameMode = GameManager.MatchInfo.GameMode;
 
             if (gameMode == TanksMP.GameMode.KOTH)
             {
                 ControlPoints = ControlPointsSingle;
+                _shouldRun = true;
             } else if (gameMode == TanksMP.GameMode.KOTHS)
             {
                 ControlPoints = ControlPointsMulti;
+                _shouldRun = true;
             }
 
             _hasInit = true;
+            return true;
         }
         
         public override void FixedUpdateNetwork()
         {
-            Init();
+            if (!Init() || !_shouldRun)
+                return;
             
-            // Only run if game mode is KOTH
-            TanksMP.GameMode gameMode = GameManager.GameModeDefinition.GameMode;
-            
-            if (gameMode == TanksMP.GameMode.KOTH || gameMode == TanksMP.GameMode.KOTHS)
+            if (_timerIsRunning && _lastTick + TickTimeS < Runner.SimulationTime)
             {
-                if (_timerIsRunning && _lastTick + TickTimeS < Runner.SimulationTime)
-                {
-                    OneTick();
-                }
+                OneTick();
             }
         }
 

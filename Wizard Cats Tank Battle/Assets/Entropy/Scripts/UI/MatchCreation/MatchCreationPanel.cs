@@ -1,8 +1,8 @@
 using Fusion;
-using Newtonsoft.Json;
 using TanksMP;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Vashta.Entropy.Network;
 using Vashta.Entropy.PhotonExtensions;
@@ -14,22 +14,27 @@ namespace Vashta.Entropy.UI.MatchCreation
 {
     public class MatchCreationPanel : GamePanel
     {
+        [Header("Fields")]
         public InputField NameInputField;
-        public InputField PasswordInputField;
-        public InputField MaxPlayersInputField;
         public Toggle IsPrivateToggle;
         public MapSelectionSelector MapSelector;
         public GameModeSelector GameModeSelector;
-
-        public RoomOptionsFactory RoomOptionsFactory;
-
+        public InputField MaxPlayersInputField;
+        [FormerlySerializedAs("MatchTimeInputField")] public InputField MaxTimeInputField;
+        public InputField MaxScoreInputField;
+        public Toggle BotFillToggle;
+        
+        [Header("Dynamic Text")]
         public Text MapTitleText;
         public Text GameModeText;
         public TextMeshProUGUI HeaderText;
-
+        
+        [Header("Roots")]
         public GameObject MultiplayerOnlyFieldsRoot;
         public GameObject SingleplayerOnlyFieldsRoot;
         public GameObject CreateMatchOnlyFieldsRoot;
+        
+        public RoomOptionsFactory RoomOptionsFactory;
         
         private bool _isMultiplayer;
         private NetworkManagerCustom _networkManagerCustom;
@@ -94,9 +99,25 @@ namespace Vashta.Entropy.UI.MatchCreation
             {
                 NameInputField.text = RoomOptionsFactory.CreateRoomNameFromPlayerNickname(CBSIntegrator.Instance.ProfileState.CachedDisplayName);
             }
+
+            // Set initial values
+            if (MaxPlayersInputField != null)
+            {
+                MaxPlayersInputField.text = 12.ToString();
+            }
+
+            if (MaxScoreInputField != null)
+            {
+                MaxScoreInputField.text = 20.ToString();
+            }
+
+            if (MaxTimeInputField != null)
+            {
+                MaxTimeInputField.text = 10.ToString();
+            }
             
-            SetMapTitleText();
-            SetGameModeTitleText();
+            HandleMapSelected();
+            HandleGameModeSelected();
         }
         
         public void CreateMatch()
@@ -108,8 +129,15 @@ namespace Vashta.Entropy.UI.MatchCreation
             // format
             roomName = RoomOptionsFactory.CreateRoomName(roomName);
             
-            MatchmakingArgs matchmakingArgs = new MatchmakingArgs(_isMultiplayer, roomName, GetPassword(), GetMaxPlayers(), 
-                GetMapName(), GetGameMode(), !isPrivate);
+            MatchmakingArgs matchmakingArgs = new MatchmakingArgs(
+                _isMultiplayer, 
+                roomName,
+                GetMaxPlayers(), 
+                GetMapName(), 
+                GetGameMode(), 
+                !isPrivate,
+                GetMaxScore(),
+                GetMaxTime());
 
             string encrypted = matchmakingArgs.Encrypt();
             PlayerPrefs.SetString(SaveLoad.PrefsKeys.matchmakingArgs, encrypted);
@@ -132,11 +160,6 @@ namespace Vashta.Entropy.UI.MatchCreation
                 return "";
 
             return NameInputField.text;
-        }
-
-        private string GetPassword()
-        {
-            return PasswordInputField.text;
         }
 
         private TanksMP.GameMode GetGameMode()
@@ -191,14 +214,71 @@ namespace Vashta.Entropy.UI.MatchCreation
             return mapDefinition.Title;
         }
 
-        public void SetMapTitleText()
+        public void HandleMapSelected()
         {
             MapTitleText.text = "Map: " + (MapSelector.IsRandom() ? "Random" : GetMapName());
         }
 
-        public void SetGameModeTitleText()
+        public void HandleGameModeSelected()
         {
-            GameModeText.text = "Game Mode: " + (GameModeSelector.IsRandom() ? "Random" : GameModeSelector.SelectedGameMode().Title);
+            GameModeDefinition gameModeDefinition = GameModeSelector.SelectedGameMode();
+            bool isRandom = GameModeSelector.IsRandom();
+            
+            GameModeText.text = "Game Mode: " + (isRandom ? "Random" : gameModeDefinition.Title);
+
+            if (isRandom)
+            {
+                if (MaxScoreInputField != null)
+                {
+                    MaxScoreInputField.gameObject.SetActive(false);
+                }
+            }
+            else
+            {
+                if (MaxScoreInputField != null && gameModeDefinition != null)
+                {
+                    MaxScoreInputField.gameObject.SetActive(true);
+                    MaxScoreInputField.text = gameModeDefinition.ScoreToWin.ToString();
+                }
+            }
+        }
+
+        public int GetMaxTime()
+        {
+            if (!MaxTimeInputField)
+            {
+                Debug.LogError("Match creation panel is missing a max time input field!");
+                return 12;
+            }
+            
+            ClampInputFieldInt clampInputFieldInt = MaxTimeInputField.gameObject.GetComponent<ClampInputFieldInt>();
+
+            if (!clampInputFieldInt)
+            {
+                Debug.LogError("Match creation panel max time input field is missing a clamp component");
+                return 12;
+            }
+            
+            return clampInputFieldInt.GetClampedValue();
+        }
+
+        public int GetMaxScore()
+        {
+            if (!MaxScoreInputField)
+            {
+                Debug.LogError("Match creation panel is missing a max score input field!");
+                return 12;
+            }
+            
+            ClampInputFieldInt clampInputFieldInt = MaxScoreInputField.gameObject.GetComponent<ClampInputFieldInt>();
+
+            if (!clampInputFieldInt)
+            {
+                Debug.LogError("Match creation panel max score input field is missing a clamp component");
+                return 12;
+            }
+            
+            return clampInputFieldInt.GetClampedValue();
         }
     }
 }

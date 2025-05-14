@@ -94,11 +94,27 @@ namespace TanksMP
             matchInfo.MaxNumberOfPlayers = roomInfoWrapper.GetMaxPlayers();
             matchInfo.BotFilling = roomInfoWrapper.BotFilling();
             matchInfo.MapName = roomInfoWrapper.GetMapName();
-            matchInfo.MaxScoreToWin = GameModeDefinition.GetScoreToWin();
+            
+            // Score
+            int maxScore = roomInfoWrapper.GetMaxScore();
+            
+            // if max score is not stored, use default for game mode
+            matchInfo.MaxScoreToWin = maxScore != -1 ? 
+                roomInfoWrapper.GetMaxScore() : 
+                GameModeDefinition.GetScoreToWin();
             
             MatchInfo = matchInfo;
             
             TeamController.maxScore = matchInfo.MaxScoreToWin;
+            
+            // Time
+            int maxTime = roomInfoWrapper.GetMaxTime();
+            matchInfo.MaxTime = maxTime;
+            
+            if (maxTime != -1)
+            {
+                MatchTimer.SetMaxTime(maxTime);
+            }
         }
 
         public override void Spawned()

@@ -22,6 +22,11 @@ namespace Vashta.Entropy.GameMode
                 StartTime = networkRunner.SimulationTime;
             }
         }
+
+        public void SetMaxTime(int numOfMinutes)
+        {
+            maxTime = numOfMinutes * 60;
+        }
         
         public int CurrentMatchTime()
         {

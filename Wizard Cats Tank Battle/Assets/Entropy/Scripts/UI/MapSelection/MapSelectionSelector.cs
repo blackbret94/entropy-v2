@@ -26,7 +26,7 @@ namespace Vashta.Entropy.UI.MapSelection
             checkbox.Toggle(true);
             _activeSelection = checkbox;
             
-            MatchCreationPanel.SetMapTitleText();
+            MatchCreationPanel.HandleMapSelected();
 
             string mapIdToSave = checkbox.mapDefinition ? checkbox.mapDefinition.Id : "-1";
             PlayerPrefs.SetString(PrefsKeys.selectedMap, mapIdToSave);

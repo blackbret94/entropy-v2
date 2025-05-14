@@ -65,6 +65,11 @@ namespace TanksMP
 
         private void UpdateLights()
         {
+            if (_settings == null)
+            {
+                _settings = CurrentSettings.Instance();
+            }
+            
             if (!_lightsAreOn && _settings.ShowFlashingLights)
             {
                 // turn on lights

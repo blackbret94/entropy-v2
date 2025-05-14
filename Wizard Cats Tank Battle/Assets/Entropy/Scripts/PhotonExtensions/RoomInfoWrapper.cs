@@ -54,11 +54,32 @@ namespace Vashta.Entropy.PhotonExtensions
             return "";
         }
 
+        public int GetMaxScore()
+        {
+            ReadOnlyDictionary<string, SessionProperty> customProperties = _sessionInfo.Properties;
+
+            if (customProperties.TryGetValue(RoomKeys.maxScoreKey, out var property))
+            {
+                return (int)property;
+            }
+
+            return -1;
+        }
+
+        public int GetMaxTime()
+        {
+            ReadOnlyDictionary<string, SessionProperty> customProperties = _sessionInfo.Properties;
+
+            if (customProperties.TryGetValue(RoomKeys.maxTime, out var property))
+            {
+                return (int)property;
+            }
+
+            return -1;
+        }
+        
         public bool BotFilling()
         {
-            // Temporarily force bot filling
-            return true;
-            
             ReadOnlyDictionary<string, SessionProperty> customProperties = _sessionInfo.Properties;
 
             if (customProperties.TryGetValue(RoomKeys.botFilling, out var property))

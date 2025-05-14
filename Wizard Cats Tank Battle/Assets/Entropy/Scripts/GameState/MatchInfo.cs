@@ -10,6 +10,6 @@ namespace Vashta.Entropy.GameState
         public NetworkBool BotFilling;
         public NetworkString<_32> MapName;
         public int MaxScoreToWin;
-        public float MaxTime; // Not implemented
+        public float MaxTime;
     }
 }

@@ -19,6 +19,7 @@ namespace Entropy.Scripts.Player
         
         [Header("Controllers")]
         private PlayerController _playerController;
+        private DeathController _deathController;
         private ProjectileFactory _projectileFactory;
         private PlayerAnimator _playerAnimator;
         
@@ -36,6 +37,7 @@ namespace Entropy.Scripts.Player
         {
             _playerController = GetComponent<PlayerController>();
             _playerAnimator = GetComponent<PlayerAnimator>();
+            _deathController = GetComponent<DeathController>();
         }
 
         private void Start()
@@ -157,19 +159,16 @@ namespace Entropy.Scripts.Player
 
             //spawn bullet using pooling
             _projectileFactory.SpawnProjectile(shotCenter, syncedRot, playerClass);
-            // Projectiles.Add(Runner, new ProjectileState(shotCenter, syncedRot.eulerAngles, playerClass.classId), 5);
 
             // Spray.  Only handles 3 projectiles right now
             if (_statusEffectController.AdditionalProjectilesSpray > 0)
             {
                 // shoot left
                 Quaternion leftProjectile = Quaternion.Euler(0, angle - 5, 0);
-                // Projectiles.Add(Runner, new ProjectileState(shotCenter, leftProjectile.eulerAngles, playerClass.classId, .66f), 0);
                 _projectileFactory.SpawnProjectile(shotCenter, leftProjectile, playerClass, .66f);
                 
                 // shoot right
                 Quaternion rightProjectile = Quaternion.Euler(0, angle + 5, 0);
-                // Projectiles.Add(Runner, new ProjectileState(shotCenter, rightProjectile.eulerAngles, playerClass.classId, .66f), 0);
                 _projectileFactory.SpawnProjectile(shotCenter, rightProjectile, playerClass, .66f);
             }
         }
@@ -206,7 +205,7 @@ namespace Entropy.Scripts.Player
                 if (HasStateAuthority)
                 {
                     // killed the player
-                    KillPlayer(other, deathFxId);
+                    _deathController.KillPlayerLocalDamage(other, deathFxId);
                 }
             }
             else
@@ -257,7 +256,7 @@ namespace Entropy.Scripts.Player
                 if (HasStateAuthority)
                 {
                     //bullet killed the player
-                    KillPlayer(
+                    _deathController.KillPlayerLocalDamage(
                         projectile.owner.GetComponent<PlayerController>(),
                         projectile.DeathFx.SessionId);
                 }
@@ -268,59 +267,6 @@ namespace Entropy.Scripts.Player
                 _playerController.SetHealth(health);
                 _playerController.PlayerViewController.ShowDamageText(damage, attackerIsCounter, attackerIsSame);
             }
-        }
-        
-        // A simple command that ignores the player's health and just kills them.  Useful for respawning on class or team change.
-        [Rpc(sources: RpcSources.StateAuthority, targets: RpcTargets.All)]
-        public void RPCKillPlayerForRespawn()
-        {
-            _playerController.SetHealth(0);
-            _playerController.SetShield(0);
-            KillPlayer(null);
-        }
-        
-        // The main Kill Player method
-        public void KillPlayer(PlayerController other, ushort deathFxId = 0)
-        {
-            if (HasStateAuthority)
-            {
-                // Create death struct here
-                _playerController.PlayerDeathStruct = new PlayerDeathStruct(other != null ? other.PlayerId : new PlayerRef(), deathFxId, Runner.SimulationTime);
-            }
-
-            _gameManager.TeamController.OnePassPlayerCheckToChangeTeams(_playerController, false);
-            
-            //get killer and increase score for that enemy team
-            if (other != null)
-            {
-                // Reflect damage on killer if blood pact is active
-                _statusEffectController.BloodPact(other);
-                
-                int otherTeam = other.TeamIndex;
-                
-                // killer is other team
-                if (_playerController.TeamIndex != otherTeam)
-                {
-                    _gameManager.TeamController.AddScore(ScoreType.Kill, otherTeam);
-                    other.Kills++;
-                }
-                
-                //the maximum score has been reached now
-                if (_gameManager.IsGameOver())
-                {
-                    //tell all clients the winning team
-                    _gameManager.GameOverController.RPCGameOver((byte)otherTeam);
-                    // return;
-                }
-            }
-            else if(!_playerController.RespawnIsFreeFromJointime())
-            {
-                // Killed by environment
-                // _gameManager.TeamController.RemoveScore(ScoreType.Kill, _playerController.TeamIndex);
-            }
-            
-            // The game is not over
-            _playerController.PlayerDeath(other, deathFxId);
         }
     }
 }

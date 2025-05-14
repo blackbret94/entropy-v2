@@ -34,7 +34,7 @@ namespace Vashta.Entropy.UI.MatchCreation
                 (int)(mapDefinition ? mapDefinition.GetRandomGamemode() : TanksMP.GameMode.TDM);
             
             PlayerPrefs.SetInt(PrefsKeys.gameMode, idToSave);
-            MatchCreationPanel.SetGameModeTitleText();
+            MatchCreationPanel.HandleGameModeSelected();
         }
 
         // Null implies random
@@ -56,7 +56,7 @@ namespace Vashta.Entropy.UI.MatchCreation
                 GameModeCheckboxes[0].Toggle(true);
             }
             
-            MatchCreationPanel.SetGameModeTitleText();
+            MatchCreationPanel.HandleGameModeSelected();
         }
         
         private void ResetCheckboxes()

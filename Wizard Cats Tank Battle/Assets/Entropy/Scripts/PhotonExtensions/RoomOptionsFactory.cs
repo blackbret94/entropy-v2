@@ -67,7 +67,8 @@ namespace Vashta.Entropy.PhotonExtensions
             customProperties[RoomKeys.modeKey] = (byte)(int)matchmakingArgs.gameMode;
 
             // map
-            string mapName = matchmakingArgs.mapName != "random" ? matchmakingArgs.mapName : "random";
+            bool mapIsRandom = matchmakingArgs.mapName == "random";
+            string mapName = !mapIsRandom ? matchmakingArgs.mapName : "random";
             customProperties[RoomKeys.mapKey] = mapName;
             
             if (matchmakingArgs.roomName != "")
@@ -78,12 +79,15 @@ namespace Vashta.Entropy.PhotonExtensions
             {
                 customProperties[RoomKeys.roomNameKey] = GenerateRoomName();
             }
-
-            // password
-            if (!matchmakingArgs.password.IsNullOrEmpty())
+            
+            // score
+            if (!mapIsRandom)
             {
-                customProperties[RoomKeys.password] = matchmakingArgs.password;
+                customProperties[RoomKeys.maxScoreKey] = matchmakingArgs.maxScore;
             }
+            
+            // time
+            customProperties[RoomKeys.maxTime] = matchmakingArgs.maxTime;
             
             startGameArgs.SessionProperties = customProperties;
 

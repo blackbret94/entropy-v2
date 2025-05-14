@@ -87,7 +87,7 @@ namespace Vashta.Entropy.Player
 
             if (respawn)
             {
-                PlayerController.CombatController.RPCKillPlayerForRespawn();
+                PlayerController.DeathController.RPCKillPlayerForRespawn();
                 return;
             }
             

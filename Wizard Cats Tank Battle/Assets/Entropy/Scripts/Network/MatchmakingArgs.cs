@@ -9,27 +9,29 @@ namespace Vashta.Entropy.Network
     {
         public bool isMultiplayer;
         public string roomName;
-        public string password;
         public int maxPlayers;
         public string mapName;
         public TanksMP.GameMode gameMode;
         public bool isVisible = true;
+        public int maxScore;
+        public int maxTime;
 
         public MatchmakingArgs()
         {
             
         }
 
-        public MatchmakingArgs(bool isMultiplayer, string roomName, string password, int maxPlayers, string mapName,
-            TanksMP.GameMode gameMode, bool isVisible=true)
+        public MatchmakingArgs(bool isMultiplayer, string roomName, int maxPlayers, string mapName,
+            TanksMP.GameMode gameMode, bool isVisible, int maxScore, int maxTime)
         {
             this.isMultiplayer = isMultiplayer;
             this.roomName = roomName;
-            this.password = password;
             this.maxPlayers = maxPlayers;
             this.mapName = mapName;
             this.gameMode = gameMode;
             this.isVisible = isVisible;
+            this.maxScore = maxScore;
+            this.maxTime = maxTime;
         }
         
         public string Encrypt()

@@ -32,6 +32,7 @@ namespace Vashta.Entropy.Player
     [RequireComponent(typeof(NetworkInputController))]
     [RequireComponent(typeof(PlayerTeam))]
     [RequireComponent(typeof(PowerupController))]
+    [RequireComponent(typeof(DeathController))]
     public class PlayerController : FusionPlayer
     {
         [Header("Stats")]
@@ -50,8 +51,6 @@ namespace Vashta.Entropy.Player
 
         public int maxHealth { get; set; }
         public bool IsAlive { get; set; } = true; // This replaced another variable called "isAlive" - need to make sure they weren't competing
-        [Networked, OnChangedRender(nameof(OnPlayerDeathChanged))]
-        public PlayerDeathStruct PlayerDeathStruct { get; set; }
 
         // Shield
         [Networked, OnChangedRender(nameof(OnShieldChanged))]
@@ -102,6 +101,7 @@ namespace Vashta.Entropy.Player
         public CombatController CombatController { get; private set; }
         public UltimateController UltimateController { get; private set; }
         public MovementController MovementController { get; private set; }
+        public DeathController DeathController { get; private set; }
         public ClassController ClassController { get; private set; }
         public CharacterAppearance CharacterAppearance;
         public NetworkManagerCustom NetworkManagerCustom { get; private set; }
@@ -153,6 +153,7 @@ namespace Vashta.Entropy.Player
             PowerupController = GetComponent<PowerupController>();
             InputController = GameManager.PlayerInputController;
             NetworkInputController = GetComponent<NetworkInputController>();
+            DeathController = GetComponent<DeathController>();
             rb = GetComponent<Rigidbody>();
             _playerCurrencyRewarder = new PlayerCurrencyRewarder();
             Team = GetComponent<PlayerTeam>();
@@ -366,16 +367,6 @@ namespace Vashta.Entropy.Player
             GameManager.ui.GameLogPanel.EventPlayerLeft(PlayerName);
             PlayerList.Remove(this);
             base.Despawned(runner, hasState);
-        }
-
-        public void OnPlayerDeathChanged()
-        {
-            if (IsAlive && Health <= 0 && PlayerDeathStruct.timeOfDeath - Runner.SimulationTime < 1f && !HasStateAuthority)
-            {
-                // Handle death
-                PlayerController otherPlayer = GetPlayerGameObject(PlayerDeathStruct.killedByPlayer);
-                CombatController.KillPlayer(otherPlayer, PlayerDeathStruct.visualEffectId);
-            }
         }
 
         private void LateInit()
@@ -719,7 +710,7 @@ namespace Vashta.Entropy.Player
 
             if (respawnPlayer && !GameManager.SpawnController.PlayerCanRespawnFreely(this))
             {
-                CombatController.RPCKillPlayerForRespawn();
+                DeathController.RPCKillPlayerForRespawn();
             }
         }
         

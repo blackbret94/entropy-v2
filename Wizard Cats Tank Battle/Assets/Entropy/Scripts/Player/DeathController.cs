@@ -25,9 +25,9 @@ namespace Entropy.Scripts.Player
             _gameManager = GameManager.GetInstance();
         }
         
-        public void OnPlayerDeathChanged()
+        private void OnPlayerDeathChanged()
         {
-            if (!HasStateAuthority)
+            if (HasStateAuthority)
                 return;
             
             if (_playerController.IsAlive && _playerController.Health <= 0 && DeathStruct.timeOfDeath - Runner.SimulationTime < 1f)

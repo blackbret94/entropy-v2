@@ -196,7 +196,7 @@ namespace Vashta.Entropy.GameState
         /// </summary>
         public int GetTeamFill()
         {
-            if (_gameManager.MatchInfo.BotFilling || Runner.GameMode == Fusion.GameMode.Single)
+            if (!_gameManager.MatchInfo.BotFilling || Runner.GameMode == Fusion.GameMode.Single)
             {
                 return GetTeamFillNoBots();
             }

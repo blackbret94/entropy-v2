@@ -46,7 +46,7 @@ namespace Vashta.Entropy.Player
 
         // Health
         [Networked, OnChangedRender(nameof(OnHealthChanged))]
-        public int Health { get; private set; } // accurate health
+        public int Health { get; protected set; } // accurate health
         public int DisplayHealth { get; private set; } // For showing immediate changes, resets ever render
 
         public int maxHealth { get; set; }
@@ -335,7 +335,7 @@ namespace Vashta.Entropy.Player
 
         public void RefreshHealthView()
         {
-            PlayerViewController.SetHealth(DisplayHealth, maxHealth);
+            PlayerViewController.SetHealth(Health, maxHealth);
             PlayerViewController.SetOvershield(Shield, maxShield);
         }
 

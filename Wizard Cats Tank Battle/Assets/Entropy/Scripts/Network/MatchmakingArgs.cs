@@ -15,6 +15,7 @@ namespace Vashta.Entropy.Network
         public bool isVisible = true;
         public int maxScore;
         public int maxTime;
+        public bool botFilling;
 
         public MatchmakingArgs()
         {
@@ -22,7 +23,7 @@ namespace Vashta.Entropy.Network
         }
 
         public MatchmakingArgs(bool isMultiplayer, string roomName, int maxPlayers, string mapName,
-            TanksMP.GameMode gameMode, bool isVisible, int maxScore, int maxTime)
+            TanksMP.GameMode gameMode, bool isVisible, int maxScore, int maxTime, bool botFilling)
         {
             this.isMultiplayer = isMultiplayer;
             this.roomName = roomName;
@@ -32,6 +33,7 @@ namespace Vashta.Entropy.Network
             this.isVisible = isVisible;
             this.maxScore = maxScore;
             this.maxTime = maxTime;
+            this.botFilling = botFilling;
         }
         
         public string Encrypt()

@@ -31,6 +31,8 @@ namespace Vashta.Entropy.GameState
         private List<PlayerControllerBot> _botList;
         private GameManager _gameManager;
         private bool _hasSpawned;
+        private float _waitBetweenBots = .33f;
+        private Coroutine _spawnBotCR;
 
         protected int CurrentPlayerCount()
         {
@@ -113,17 +115,7 @@ namespace Vashta.Entropy.GameState
             for (int i = 0; i < maxBots; i++)
             {
                 SpawnBot();
-
-                //let the local host determine the team assignment
-                // PlayerController p = obj.GetComponent<PlayerController>();
-                // int teamIndex = GameManager.GetInstance().TeamController.GetTeamFill();
-                // p.PlayerTeam.SetPlayerPreferredTeam(teamIndex);
-                // p.PlayerTeam.TryChangeTeams(true);
-
-                //increase corresponding team size
-                // _gameManager.TeamController.AddPlayerTeamTeam(p, p.TeamIndex);
-
-                yield return new WaitForSeconds(0.33f);
+                yield return new WaitForSeconds(_waitBetweenBots);
             }
         }
 
@@ -149,13 +141,23 @@ namespace Vashta.Entropy.GameState
         {
             if (!_gameManager.HasStateAuthority)
                 return;
-            
-            int numberOfPlayers = Runner.ActivePlayers.Count();
-            int botsToAdd = maxBots - numberOfPlayers;
 
-            for (int i = 0; i < botsToAdd; i++)
+            if (_spawnBotCR != null)
+            {
+                StopCoroutine(_spawnBotCR);
+            }
+            
+            _spawnBotCR = StartCoroutine(FillWithBotsCR());
+        }
+
+        protected IEnumerator FillWithBotsCR()
+        {
+            yield return new WaitForSeconds(1);
+
+            while (Runner.ActivePlayers.Count() + _botList.Count() < maxPlayers)
             {
                 SpawnBot();
+                yield return new WaitForSeconds(_waitBetweenBots);
             }
         }
 
@@ -180,6 +182,8 @@ namespace Vashta.Entropy.GameState
                 return;
             
             PlayerControllerBot botToRemove = GetBotToRemove();
+
+            _botList.Remove(botToRemove);
             
             if(botToRemove != null)
                 Runner.Despawn(botToRemove.Object);

@@ -91,6 +91,9 @@ namespace Vashta.Entropy.PhotonExtensions
             
             startGameArgs.SessionProperties = customProperties;
 
+            // bot filling
+            customProperties[RoomKeys.botFilling] = matchmakingArgs.botFilling;
+            
             return startGameArgs;
         }
         

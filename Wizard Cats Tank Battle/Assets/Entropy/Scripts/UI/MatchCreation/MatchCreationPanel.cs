@@ -137,7 +137,8 @@ namespace Vashta.Entropy.UI.MatchCreation
                 GetGameMode(), 
                 !isPrivate,
                 GetMaxScore(),
-                GetMaxTime());
+                GetMaxTime(),
+                GetBotFilling());
 
             string encrypted = matchmakingArgs.Encrypt();
             PlayerPrefs.SetString(SaveLoad.PrefsKeys.matchmakingArgs, encrypted);
@@ -279,6 +280,17 @@ namespace Vashta.Entropy.UI.MatchCreation
             }
             
             return clampInputFieldInt.GetClampedValue();
+        }
+
+        public bool GetBotFilling()
+        {
+            if (!BotFillToggle)
+            {
+                Debug.LogError("Match creation panel is missing a bot filling toggle!");
+                return false;
+            }
+
+            return BotFillToggle.isOn;
         }
     }
 }

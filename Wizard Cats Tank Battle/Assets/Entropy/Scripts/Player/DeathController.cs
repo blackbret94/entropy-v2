@@ -27,8 +27,8 @@ namespace Entropy.Scripts.Player
         
         private void OnPlayerDeathChanged()
         {
-            if (HasStateAuthority)
-                return;
+            // if (HasStateAuthority)
+                // return;
             
             if (_playerController.IsAlive && _playerController.Health <= 0 && DeathStruct.timeOfDeath - Runner.SimulationTime < 1f)
             {

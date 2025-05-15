@@ -2,6 +2,7 @@ using Fusion;
 using TanksMP;
 using Unity.Mathematics;
 using UnityEngine;
+using Vashta.Entropy.Network;
 using Vashta.Entropy.Player;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.StatusEffects;
@@ -110,7 +111,15 @@ namespace Entropy.Scripts.Player
                     // short[] pos = new short[] { (short)(_shotPos.position.x * 10), (short)(_shotPos.position.z * 10) };
                     //send shot request with origin to server
                     // Debug.Log(turretRotation);
-                    RPC_Shoot(_playerController.turretRotation);
+                    float castDelay = .25f;
+
+                    Vector3 pos = _shotPos.position;
+                    short x = (short)Mathf.RoundToInt(pos.x);
+                    short z = (short)Mathf.RoundToInt(pos.z);
+                    
+                    short[] position = new short[] { x,z};
+                    short angle = _playerController.turretRotation;
+                    Shoot_RPC(position, angle);
                 }
             }
         }
@@ -124,20 +133,26 @@ namespace Entropy.Scripts.Player
             if(Time.time > nextFire)
                 nextFire = Time.time + 0.1f;
         }
-
+        
         [Rpc(sources: RpcSources.StateAuthority, targets: RpcTargets.All)]
-        public void RPC_Shoot(short angle)
+        public void Shoot_RPC(short[] casterPosition, short angle)
         {
             // Ignore requests that arrive before the player is set up.  Should improve this later with a proper init
             if(!_shotPos || !_turret)
                 return;
+         
+            // TODO: Interpolate between current position and sent position
             
             // animate
             _playerAnimator.Attack();
             
-            //calculate center between shot position sent and current server position (factor 0.6f = 40% client, 60% server)
+            //calculate center between shot position sent and current server position (factor 0.4f = 40% client, 60% server)
             //this is done to compensate network lag and smoothing it out between both client/server positions
-            Vector3 shotCenter = _shotPos.position;
+            Vector3 shotPos = _shotPos.position;
+            float xx = Mathf.Lerp(casterPosition[0], shotPos.x, .4f);
+            float zz = Mathf.Lerp(casterPosition[1], shotPos.z, .4f);
+            
+            Vector3 shotCenter = new Vector3(xx, shotPos.y, zz);
             Quaternion syncedRot = _turret.rotation = Quaternion.Euler(0, angle, 0);
 
             ClassDefinition playerClass = _playerController.GetClass();
@@ -233,6 +248,7 @@ namespace Entropy.Scripts.Player
             
             //store network variables temporary
             int health = _playerController.Health;
+            int startHealth = health;
             int shield = _playerController.Shield;
 
             //reduce shield on hit
@@ -265,7 +281,11 @@ namespace Entropy.Scripts.Player
             {
                 //we didn't die, set health to new value
                 _playerController.SetHealth(health);
-                _playerController.PlayerViewController.ShowDamageText(damage, attackerIsCounter, attackerIsSame);
+
+                if (startHealth != health)
+                {
+                    _playerController.PlayerViewController.ShowDamageText(damage, attackerIsCounter, attackerIsSame);
+                }
             }
         }
     }

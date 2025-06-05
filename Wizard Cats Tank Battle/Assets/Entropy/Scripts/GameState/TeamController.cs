@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Entropy.Scripts.Player;
 using Fusion;
 using TanksMP;
@@ -134,7 +135,15 @@ namespace Vashta.Entropy.GameState
 
             if (preferredTeamIndex == RANDOM_TEAM_INDEX)
             {
-                preferredTeamIndex = GetTeamFill();
+                if (!playerController.isBot && _gameManager.MatchInfo.BotFilling)
+                {
+                    preferredTeamIndex = GetTeamFillWithBots();
+                }
+                else
+                {
+                    preferredTeamIndex = GetTeamFillNoBots();
+                }
+                
                 playerController.Team.SetPlayerPreferredTeam(preferredTeamIndex);
             }
 
@@ -190,19 +199,6 @@ namespace Vashta.Entropy.GameState
                 TeamSize.Set(i, teamScores[i]);
             }
         }
-        
-        /// <summary>
-        /// Returns the next team index a player should be assigned to.
-        /// </summary>
-        public int GetTeamFill()
-        {
-            if (!_gameManager.MatchInfo.BotFilling || Runner.GameMode == Fusion.GameMode.Single)
-            {
-                return GetTeamFillNoBots();
-            }
-
-            return GetTeamFillWithBots();
-        }
 
         // More efficient team fill when there are no bots to consider
         private int GetTeamFillNoBots()
@@ -238,18 +234,14 @@ namespace Vashta.Entropy.GameState
             }
             
             // count
-            IEnumerable<PlayerRef> it = Runner.ActivePlayers;
-            
-            foreach (PlayerRef playerRef in it)
+            List<PlayerController> players = GetComponents<PlayerController>().ToList();
+
+            foreach (PlayerController player in players)
             {
-                if (Runner.TryGetPlayerObject(playerRef, out var plObject))
+                if (player != null)
                 {
-                    PlayerController player = plObject.GetComponent<PlayerController>();
-                    if (!player.isBot)
+                    if (player.TeamIndex != -1)
                     {
-                        if(player.TeamIndex == -1)
-                            continue;
-                        
                         teamSizesNoBots[player.TeamIndex]++;
                     }
                 }
@@ -267,6 +259,8 @@ namespace Vashta.Entropy.GameState
                     smallestTeamIndex = i;
                 }
             }
+            
+            Debug.Log("Team index: " + smallestTeamIndex + " Size: " + smallestTeamSize);
 
             if (smallestTeamIndex == -1)
                 return 0;

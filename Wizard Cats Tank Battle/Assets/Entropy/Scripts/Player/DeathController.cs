@@ -30,14 +30,14 @@ namespace Entropy.Scripts.Player
             if (_playerController.IsAlive && !DeathStruct.expired)
             {
                 // Handle death
-                PlayerController otherPlayer = PlayerController.GetPlayerGameObject(DeathStruct.killedByPlayer);
+                PlayerController otherPlayer = PlayerList.GetPlayer(DeathStruct.killedByPlayer);
                 KillPlayer(otherPlayer, DeathStruct.visualEffectId);
             }
         }
 
         public void KillPlayerLocalDamage(PlayerController other, ushort deathFxId = 0)
         {
-            DeathStruct = new PlayerDeathStruct(other != null ? other.PlayerId : new PlayerRef(), deathFxId, Runner.SimulationTime);
+            DeathStruct = new PlayerDeathStruct(other != null ? other.NetID : (short)-1, deathFxId, Runner.SimulationTime);
 
             KillPlayer(other, deathFxId);
         }

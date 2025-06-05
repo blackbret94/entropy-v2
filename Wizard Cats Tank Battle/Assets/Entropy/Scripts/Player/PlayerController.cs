@@ -42,6 +42,7 @@ namespace Vashta.Entropy.Player
         public float defaultMass = 1;
         
         [Networked] public string PlayerName { get; protected set; }
+        [Networked] public short NetID { get; protected set; } = -1;
         public int TeamIndex => Team.TeamIndex;
 
         // Health
@@ -174,6 +175,7 @@ namespace Vashta.Entropy.Player
             {
                 JoinTime = Runner.SimulationTime;
                 SetName();
+                NetID = PlayerList.GetValidId();
             }
 
             bool justJoined = Mathf.Approximately(JoinTime, Runner.SimulationTime);
@@ -794,6 +796,12 @@ namespace Vashta.Entropy.Player
         /// </summary>
         public static PlayerController GetPlayerGameObject(PlayerRef playerRef)
         {
+            if (playerRef.PlayerId == -1)
+            {
+                Debug.LogError("No player exists with PlayerRef.PlayerId=-1");
+                return null;
+            }
+            
             NetworkRunner runner = TanksMP.GameManager.GetInstance().Runner;
             if (!runner || !runner.IsRunning)
             {

@@ -171,7 +171,7 @@ namespace Vashta.Entropy.StatusEffects
             ushort statusEffectSessionId = statusEffectData.SessionId;
             
             // Could eventually optimize this so new structs are not created if it is already in the dictionary.
-            StatusEffectNetwork statusEffect = new StatusEffectNetwork(statusEffectSessionId, owner.PlayerId, Runner.SimulationTime);
+            StatusEffectNetwork statusEffect = new StatusEffectNetwork(statusEffectSessionId, owner.NetID, Runner.SimulationTime);
             
             // Check if status effect already exists
             StatusEffectNetwork existingEffect = StatusEffectAlreadyExists(statusEffectSessionId);

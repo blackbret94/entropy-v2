@@ -346,7 +346,6 @@ namespace TanksMP
             Gizmos.DrawWireSphere(agent.destination, 2);
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(targetPoint, 3);
-            Debug.Log("Agent Speed: " + agent.speed);
         }
     }
 }

@@ -6,6 +6,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Entropy.Scripts.Player;
 using Fusion;
 using Vashta.Entropy.Player;
 using Random = UnityEngine.Random;
@@ -56,7 +57,7 @@ namespace TanksMP
         public int lastInflatedObjectIndex { get; set; }
         [Networked]
         public int nextInflatedObjectIndex { get; set; } // calculate on state authority
-        [Networked] public PlayerRef playerHeldBy { get; set; } // Make sure fusion supports Nullable
+        [Networked] public short playerHeldBy { get; set; }
         [Networked] public NetworkBool isHeldByPlayer { get; set; }
         [Networked] private TickTimer RespawnTimer { get; set; } = default;
 
@@ -87,7 +88,7 @@ namespace TanksMP
                     
                     if (isHeldByPlayer)
                     {
-                        PlayerController playerController = PlayerController.GetPlayerGameObject(playerHeldBy);
+                        PlayerController playerController = PlayerList.GetPlayer(playerHeldBy);
 
                         if (playerController == null)
                         {
@@ -252,7 +253,7 @@ namespace TanksMP
             if (obj == null)
                 SpawnObject(true);
 
-            playerHeldBy = playerController.PlayerId;
+            playerHeldBy = playerController.NetID;
             isHeldByPlayer = true;
 
             //get target view transform to parent to

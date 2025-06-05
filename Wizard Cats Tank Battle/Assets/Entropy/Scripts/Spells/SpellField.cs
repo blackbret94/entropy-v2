@@ -40,6 +40,10 @@ namespace Vashta.Entropy.Spells
             _teamIndex = caster.TeamIndex;
             
             _spell = spellData;
+            
+            if(Collider == null)
+                Collider = GetComponent<CapsuleCollider>();
+            
             Collider.radius = _spell.Radius;
 
             _spawnTime = Time.time;

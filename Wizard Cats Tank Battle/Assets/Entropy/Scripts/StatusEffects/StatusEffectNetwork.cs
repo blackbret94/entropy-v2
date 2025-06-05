@@ -1,3 +1,4 @@
+using Entropy.Scripts.Player;
 using Fusion;
 using TanksMP;
 using UnityEngine;
@@ -9,13 +10,13 @@ namespace Vashta.Entropy.StatusEffects
     public struct StatusEffectNetwork : INetworkStruct
     {
         private ushort _sessionId;
-        private PlayerRef _player;
+        private short _player;
         private float _expiration;
         private NetworkBool _forceExpire;
         private float _timeCreated;
         private NetworkBool _isValid;
 
-        public StatusEffectNetwork(ushort sessionId, PlayerRef player, float time)
+        public StatusEffectNetwork(ushort sessionId, short player, float time)
         {
             _sessionId = sessionId;
             _player = player;
@@ -30,14 +31,14 @@ namespace Vashta.Entropy.StatusEffects
         public void Reset()
         {
             _sessionId = 0;
-            _player = new PlayerRef();
+            _player = -1;
             _expiration = 0;
             _forceExpire = false;
             _timeCreated = 0;
             _isValid = false;
         }
 
-        public void Set(ushort sessionId, PlayerRef player, float expiration, bool forceExpire, float timeCreated,
+        public void Set(ushort sessionId, short player, float expiration, bool forceExpire, float timeCreated,
             bool isValid)
         {
             _sessionId = sessionId;
@@ -79,7 +80,7 @@ namespace Vashta.Entropy.StatusEffects
                 return null;
             }
             
-            return PlayerController.GetPlayerGameObject(_player);
+            return PlayerList.GetPlayer(_player);
         }
 
         public void SetExpiration(float time)

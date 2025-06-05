@@ -21,6 +21,8 @@ namespace Vashta.Entropy.GameState
         /// Total number of players.  For multiplayer
         /// </summary>
         public int maxPlayers;
+        // This many less bots than max players
+        public const int MAX_PLAYER_BUFFER = 2;
         
         /// <summary>
         /// Selection of bot prefabs to choose from.
@@ -154,7 +156,7 @@ namespace Vashta.Entropy.GameState
         {
             yield return new WaitForSeconds(1);
 
-            while (Runner.ActivePlayers.Count() + _botList.Count() < maxPlayers)
+            while (Runner.ActivePlayers.Count() + _botList.Count() < maxPlayers-MAX_PLAYER_BUFFER)
             {
                 SpawnBot();
                 yield return new WaitForSeconds(_waitBetweenBots);
@@ -226,21 +228,14 @@ namespace Vashta.Entropy.GameState
                 PlayerControllerBot oldestBot = null;
                 float oldestBotSpawnTime = float.MaxValue;
 
-                IEnumerable<PlayerRef> it = Runner.ActivePlayers;
+                List<PlayerControllerBot> bots = GetComponents<PlayerControllerBot>().ToList();
 
-                foreach (PlayerRef playerRef in it)
+                foreach (PlayerControllerBot bot in bots)
                 {
-                    if (Runner.TryGetPlayerObject(playerRef, out var plObject))
+                    if (bot.JoinTime < oldestBotSpawnTime)
                     {
-                        PlayerControllerBot bot = plObject.GetComponent<PlayerControllerBot>();
-                        if (bot && bot.isBot)
-                        {
-                            if (bot.JoinTime < oldestBotSpawnTime)
-                            {
-                                oldestBot = bot;
-                                oldestBotSpawnTime = bot.JoinTime;
-                            }
-                        }
+                        oldestBot = bot;
+                        oldestBotSpawnTime = bot.JoinTime;
                     }
                 }
 
@@ -262,23 +257,17 @@ namespace Vashta.Entropy.GameState
 
                 teams = teams.OrderByDescending(x => x.Item2).ToList();
                 
-                // iterate over teams, return first bot
+                // iterate over teams ordered by size, return first bot, ideally from the largest team
+                List<PlayerControllerBot> bots = GetComponents<PlayerControllerBot>().ToList();
+                
                 for (int i = 0; i < teams.Count; i++)
                 {
                     int teamIndex = teams[i].Item1;
                     
-                    IEnumerable<PlayerRef> it = Runner.ActivePlayers;
-
-                    foreach (PlayerRef playerRef in it)
+                    foreach (PlayerControllerBot bot in bots)
                     {
-                        if (Runner.TryGetPlayerObject(playerRef, out var plObject))
-                        {
-                            PlayerControllerBot bot = plObject.GetComponent<PlayerControllerBot>();
-                            if (bot && bot.isBot && bot.TeamIndex == teamIndex)
-                            {
-                                return bot;
-                            }
-                        }
+                        if (bot.TeamIndex == teamIndex)
+                            return bot;
                     }
                 }
             }

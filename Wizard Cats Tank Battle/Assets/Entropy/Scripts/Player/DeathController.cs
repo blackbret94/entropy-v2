@@ -27,10 +27,7 @@ namespace Entropy.Scripts.Player
         
         private void OnPlayerDeathChanged()
         {
-            // if (HasStateAuthority)
-                // return;
-            
-            if (_playerController.IsAlive && _playerController.Health <= 0 && DeathStruct.timeOfDeath - Runner.SimulationTime < 1f)
+            if (_playerController.IsAlive && !DeathStruct.expired)
             {
                 // Handle death
                 PlayerController otherPlayer = PlayerController.GetPlayerGameObject(DeathStruct.killedByPlayer);
@@ -70,7 +67,11 @@ namespace Entropy.Scripts.Player
                 // killer is other team
                 if (_playerController.TeamIndex != otherTeam)
                 {
-                    _gameManager.TeamController.AddScore(ScoreType.Kill, otherTeam);
+                    if (HasStateAuthority)
+                    {
+                        _gameManager.TeamController.RPCAddScore(ScoreType.Kill, otherTeam);
+                    }
+
                     other.Kills++;
                 }
                 

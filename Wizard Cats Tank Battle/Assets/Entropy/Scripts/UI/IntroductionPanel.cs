@@ -1,8 +1,5 @@
-using System;
 using CBS;
-using UnityEngine;
 using UnityEngine.UI;
-using Vashta.Entropy.SaveLoad;
 using WebSocketSharp;
 
 namespace Vashta.Entropy.UI

@@ -50,7 +50,7 @@ namespace Vashta.Entropy.Player
         public int DisplayHealth { get; private set; } // For showing immediate changes, resets ever render
 
         public int maxHealth { get; set; }
-        public bool IsAlive { get; set; } = true; // This replaced another variable called "isAlive" - need to make sure they weren't competing
+        public bool IsAlive { get; private set; } = true; // This replaced another variable called "isAlive" - need to make sure they weren't competing
 
         // Shield
         [Networked, OnChangedRender(nameof(OnShieldChanged))]
@@ -115,6 +115,7 @@ namespace Vashta.Entropy.Player
         
         public bool IsLocal => (HasInputAuthority && !isBot);
         public ClassDefinition defaultClassDefinition;
+        public GameObject characterRoot;
 
         private Vector3 _lastMousePos;
 
@@ -232,6 +233,7 @@ namespace Vashta.Entropy.Player
             {
                 // If the player is already dead when we join, reflect this
                 // Might not be the best way to handle this
+                SetIsAlive(false);
                 PlayerDeath(null);
             }
             
@@ -244,6 +246,13 @@ namespace Vashta.Entropy.Player
             }
             
             PostSpawn();
+        }
+
+        public void SetIsAlive(bool isAlive)
+        {
+            Collider collider = GetComponent<Collider>();
+            collider.enabled = isAlive;
+            IsAlive = isAlive;
         }
 
         protected virtual void PostSpawn()
@@ -474,10 +483,10 @@ namespace Vashta.Entropy.Player
             }
 
             //toggle visibility for player gameobject (on/off)
-            gameObject.SetActive(false);
-            killedBy = null;
+            characterRoot.SetActive(false);
+            // killedBy = null;
             
-            IsAlive = false;
+            SetIsAlive(false);
             
             GameManager.TeamController.OnePassPlayerCheckToChangeTeams(this, false);
                 
@@ -507,12 +516,17 @@ namespace Vashta.Entropy.Player
                     
                 // log
                 GameManager.ui.GameLogPanel.EventPlayerKilled(PlayerName, GetTeamDefinition(), otherPlayerController.PlayerName, otherPlayerController.GetTeamDefinition());
+                Debug.Log("Kill logged!");
                 
                 if (otherPlayerController != null && otherPlayerController != this)
                 {
                     // play killer's death cry
                     AudioManager.Play3D(otherPlayerController.CharacterAppearance.Meow.AudioClip, transform.position);
                 }
+            }
+            else
+            {
+                Debug.LogWarning("'Killed By' no one!");
             }
 
             // Exit here if game over
@@ -528,7 +542,7 @@ namespace Vashta.Entropy.Player
 
             if (HasInputAuthority || (isBot && HasStateAuthority))
             {
-                MoveToSpawn();
+                // MoveToSpawn();
                 GameManager.SpawnController.StartSpawnRoutine(this);
             }
         }
@@ -574,24 +588,24 @@ namespace Vashta.Entropy.Player
                 // }
                 
                 rb.position = respawnPosition;
-                transform.position = respawnPosition;
+                // transform.position = respawnPosition;
                 SnapToNavMesh(respawnPosition);
                 
                 if (isBot)
                 {
-                    Debug.Log("Bot position set: " + transform.position);
+                    // Debug.Log("Bot position set: " + transform.position);
                 }
             }
             
         }
         
-        public void SnapToNavMesh(Vector3 samplePosition)
+        public Vector3 SnapToNavMesh(Vector3 samplePosition)
         {
             float maxSampleDistance = 5f;
             NavMeshHit hit;
             if (NavMesh.SamplePosition(samplePosition, out hit, maxSampleDistance, NavMesh.AllAreas))
             {
-                float yOffset = .05f;
+                float yOffset = .1f;
                 
                 Vector3 alignedPosition = new Vector3(
                     rb.position.x,
@@ -599,12 +613,14 @@ namespace Vashta.Entropy.Player
                     rb.position.z
                 );
 
-                transform.position = alignedPosition;
+                // transform.position = alignedPosition;
                 rb.position = alignedPosition;
+                return alignedPosition;
             }
             else
             {
                 Debug.LogWarning("No NavMesh found near this position!");
+                return transform.position;
             }
         }
         
@@ -613,8 +629,12 @@ namespace Vashta.Entropy.Player
             ResetPlayerState();
             
             GameManager.TeamController.OnePassPlayerCheckToChangeTeams(this, false);
-            IsAlive = true;
-            gameObject.SetActive(true);
+            SetIsAlive(true);
+            characterRoot.SetActive(true);
+
+            var @struct = DeathController.DeathStruct;
+            @struct.expired = true;
+            DeathController.DeathStruct = @struct;
             
             MoveToSpawn();
             
@@ -796,7 +816,7 @@ namespace Vashta.Entropy.Player
             }
             else
             {
-                // Debug.LogError("Could not find PlayerRef: " + playerRef.PlayerId);
+                Debug.LogError("Could not find PlayerRef: " + playerRef.PlayerId);
                 return null;
             }
         }

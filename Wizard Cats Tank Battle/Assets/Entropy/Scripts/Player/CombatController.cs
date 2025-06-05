@@ -196,6 +196,11 @@ namespace Entropy.Scripts.Player
         {
             int health = _playerController.Health;
             int shield = _playerController.Shield;
+            
+            if (health <= 0 || !_playerController.IsAlive)
+            {
+                return;
+            }
 
             //reduce shield on hit
             if (shield > 0)
@@ -237,6 +242,11 @@ namespace Entropy.Scripts.Player
         /// </summary>
         public void TakeDamage(Projectile projectile)
         {
+            if (_playerController.Health <= 0 || !_playerController.IsAlive)
+            {
+                return;
+            }
+            
             if (projectile == null)
             {
                 Debug.LogError("Attempted to take damage from a null projectile");

@@ -70,7 +70,7 @@ namespace Vashta.Entropy.GameState
             else
             {
                 bool isLocalPlayer = playerToRespawn.HasInputAuthority;
-
+                
                 //calculate point in time for respawn
                 Timer respawnTimer = new Timer(respawnTime, false);
                 Timer movePlayerTimer = new Timer(Mathf.Max(0, respawnTime-1), false);
@@ -95,8 +95,13 @@ namespace Vashta.Entropy.GameState
                 if (isLocalPlayer)
                 {
                     _gameManager.ui.DisableDeath();
+                    
+                    // expire death on respawn
+                    var @struct = playerToRespawn.DeathController.DeathStruct;
+                    @struct.expired = true;
+                    playerToRespawn.DeathController.DeathStruct = @struct;
                 }
-
+                
                 if(playerToRespawn != null)
                     playerToRespawn.RPC_Respawn();
             }

@@ -4,6 +4,7 @@
  * 	otherwise make available to any third party the Service or the Content. */
 
 using UnityEngine;
+using Vashta.Entropy.GameState;
 
 namespace TanksMP
 {
@@ -73,7 +74,13 @@ namespace TanksMP
                 }
 
                 //add points for this score type to the correct team
-                GameManager.GetInstance().TeamController.AddScore(ScoreType.Capture, teamIndex);
+                TeamController teamController = GameManager.GetInstance().TeamController;
+
+                if (teamController && teamController.HasStateAuthority)
+                {
+                    teamController.RPCAddScore(ScoreType.Capture, teamIndex);
+                }
+
                 //the maximum score has been reached now
                 if (GameManager.GetInstance().IsGameOver())
                 {

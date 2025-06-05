@@ -107,6 +107,9 @@ namespace Vashta.Entropy.StatusEffects
         
         public virtual void StatusEffectTick()
         {
+            if(!_playerController.IsAlive)
+                return;
+            
             // leech
             Leech();
             

@@ -73,9 +73,10 @@ namespace TanksMP
 
             //get corresponding team and colorize renderers in team color
             targetPoint = GameManager.GetInstance().TeamController.GetSpawnPosition(TeamIndex);
-            agent.Warp(targetPoint);
-            SnapToNavMesh(targetPoint);
-            bool success = agent.SetDestination(targetPoint);
+            
+            agent.Warp(SnapToNavMesh(targetPoint));
+            SetDestinationRandomMapPoint();
+            // bool success = agent.SetDestination(targetPoint);
             
             // add to player bot list
             GameManager.GetInstance().BotController.AddBot(this);
@@ -118,13 +119,13 @@ namespace TanksMP
         }
         
         //calculate random point for movement on navigation mesh
-        private void RandomPoint(Vector3 center, float range, out Vector3 result)
+        private void SetDestinationAroundPoint(Vector3 center, float range, out Vector3 result)
         {
             //clear previous target point
             result = Vector3.zero;
             
             //try to find a valid point on the navmesh with an upper limit (10 times)
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 20; i++)
             {
                 //find a point in the movement radius
                 Vector3 randomPoint = center + (Vector3)Random.insideUnitCircle * range;
@@ -171,10 +172,10 @@ namespace TanksMP
         //     return false;
         // }
         
-        private void PickRandomLocation()
+        private void SetDestinationRandomMapPoint()
         {
             List<GameObject> possibleTargets = GameManager.BotController.BotTargetList;
-            RandomPoint(possibleTargets[Random.Range(0, possibleTargets.Count)].transform.position, range, out targetPoint);
+            SetDestinationAroundPoint(possibleTargets[Random.Range(0, possibleTargets.Count)].transform.position, range, out targetPoint);
         }
 
         public override void Render()
@@ -194,6 +195,10 @@ namespace TanksMP
 
         private void SlowUpdate()
         {
+            agent.speed = moveSpeed;
+            agent.SetDestination(targetPoint);
+            // SnapToNavMesh(transform.position);
+            
             //empty list on each iteration
             _enemiesInRange.Clear();
             _alliesInRange.Clear();
@@ -212,7 +217,7 @@ namespace TanksMP
                 {
                     _enemiesInRange.Add(cols[i].gameObject);   
                     // Add allies to the list
-                } else if (p.TeamIndex == TeamIndex && p != this)
+                } else if (p.TeamIndex == TeamIndex && p != this && !_alliesInRange.Contains(cols[i].gameObject))
                 {
                     _alliesInRange.Add(cols[i].gameObject);
                 }
@@ -251,7 +256,7 @@ namespace TanksMP
                 // EXPERIMENTAL UPDATE to seek out specific spots instead
                 if(Vector3.Distance(transform.position, targetPoint) < agent.stoppingDistance)
                 {
-                    PickRandomLocation();
+                    SetDestinationRandomMapPoint();
                 }
             }
             else
@@ -260,7 +265,7 @@ namespace TanksMP
                 //this simulates more fluent "dancing" movement to avoid being shot easily
                 if(Vector3.Distance(shotPos.position, targetPoint) < agent.stoppingDistance)
                 {
-                    RandomPoint(_enemiesInRange[0].transform.position, range * 2, out targetPoint);
+                    SetDestinationAroundPoint(_enemiesInRange[0].transform.position, range * 2, out targetPoint);
                 }
                 
                 //shooting loop 
@@ -275,11 +280,7 @@ namespace TanksMP
                         gameObject.transform.LookAt(lookPos);
                         gameObject.transform.eulerAngles = new Vector3(0, turret.eulerAngles.y, 0);
                         turretRotation = (short)turret.eulerAngles.y;
-
-                        //find shot direction and shoot there
-                        // Vector3 shotDir = lookPos - shotPos.position;
-                        // Vector3 shotDirError = new Vector2(shotDir.x /*+ CalculateAccuracyError()*/,
-                        //     shotDir.z/* + CalculateAccuracyError()*/);
+                        
                         CombatController.AttemptToShoot();
                         return;
                     }
@@ -300,11 +301,7 @@ namespace TanksMP
                         gameObject.transform.LookAt(lookPos);
                         gameObject.transform.eulerAngles = new Vector3(0, turret.eulerAngles.y, 0);
                         turretRotation = (short)turret.eulerAngles.y;
-
-                        //find shot direction and shoot there
-                        // Vector3 shotDir = lookPos - shotPos.position;
-                        // Vector3 shotDirError = new Vector2(shotDir.x + CalculateAccuracyError(),
-                        //     shotDir.z + CalculateAccuracyError());
+                        
                         CombatController.AttemptToShoot();
                         _lastBuffS = Runner.SimulationTime;
                         return;
@@ -344,6 +341,12 @@ namespace TanksMP
                 Gizmos.color = Color.red;
                 Gizmos.DrawLine(corners[i], corners[i + 1]);
             }
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(agent.destination, 2);
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(targetPoint, 3);
+            Debug.Log("Agent Speed: " + agent.speed);
         }
     }
 }

@@ -65,7 +65,10 @@ namespace Vashta.Entropy.Spells
                 if (!_setToDespawn)
                 {
                     PoolManager.Despawn(gameObject, 1f);
-                    GetParticleSystem().Stop(true);
+                    ParticleSystem particleSystem = GetParticleSystem();
+                    if(particleSystem)
+                        particleSystem.Stop(true);
+                    
                     _setToDespawn = true;
                 }
                 return;

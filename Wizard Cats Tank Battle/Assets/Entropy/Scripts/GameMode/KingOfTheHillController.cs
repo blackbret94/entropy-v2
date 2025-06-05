@@ -73,8 +73,8 @@ namespace Vashta.Entropy.GameMode
                     int teamControllingPoint = controlPoint.ControlledByTeamIndex;
                     
                     // Award points to teamControllingPoint
-                    if (teamControllingPoint != -1)
-                        GameManager.TeamController.AddScore(ScoreType.HoldPoint, teamControllingPoint);
+                    if (HasStateAuthority && teamControllingPoint != -1)
+                        GameManager.TeamController.RPCAddScore(ScoreType.HoldPoint, teamControllingPoint);
                 }
             }
             

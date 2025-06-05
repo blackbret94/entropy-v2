@@ -9,10 +9,12 @@ namespace Entropy.Scripts.Player
             this.killedByPlayer = killedByPlayer;
             this.visualEffectId = visualEffectId;
             this.timeOfDeath = timeOfDeath;
+            this.expired = false;
         }
         
         public PlayerRef killedByPlayer { get; set; }
         public ushort visualEffectId { get; set; }
         public float timeOfDeath { get; set; }
+        public bool expired { get; set; }
     }
 }

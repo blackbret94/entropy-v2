@@ -300,7 +300,7 @@ namespace Vashta.Entropy.GameState
                 //find a position within the box collider range, first set fixed y position
                 //the counter determines how often we are calculating a new position if out of range
                 pos.y = col.transform.position.y;
-                int counter = 30;
+                int counter = 40;
                 
                 //try to get random position within collider bounds
                 //if it's not within bounds, do another iteration
@@ -330,11 +330,21 @@ namespace Vashta.Entropy.GameState
         #endregion
 
         #region Score
-/// <summary>
+
+        [Rpc(sources: RpcSources.All, targets: RpcTargets.StateAuthority)]
+        public void RPCAddScore(ScoreType scoreType, int teamIndex)
+        {
+            if (!HasStateAuthority)
+                return;
+            
+            AddScore(scoreType, teamIndex);
+        }
+        
+        /// <summary>
         /// Adds points to the target team depending on matching game mode and score type.
         /// This allows us for granting different amount of points on different score actions.
         /// </summary>
-        public void AddScore(ScoreType scoreType, int teamIndex)
+        private void AddScore(ScoreType scoreType, int teamIndex)
         {
             if (!HasStateAuthority)
                 return;

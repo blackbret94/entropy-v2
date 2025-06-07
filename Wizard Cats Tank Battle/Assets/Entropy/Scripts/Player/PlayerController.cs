@@ -171,7 +171,7 @@ namespace Vashta.Entropy.Player
             // Join time
             _lastSecondUpdate = Runner.SimulationTime + .1f;
 
-            if (HasStateAuthority)
+            if (HasStateAuthority  || Runner.GameMode == Fusion.GameMode.Single)
             {
                 JoinTime = Runner.SimulationTime;
                 SetName();
@@ -222,7 +222,7 @@ namespace Vashta.Entropy.Player
             Team.Setup();
             
             // Move player to start position
-            if (HasStateAuthority)
+            if (HasStateAuthority || Runner.GameMode == Fusion.GameMode.Single)
             {
                 // Set position
                 MoveToSpawn();
@@ -328,7 +328,7 @@ namespace Vashta.Entropy.Player
         {
             int clampedHealth = Mathf.Clamp(health, 0, maxHealth);
             
-            if (HasStateAuthority)
+            if (HasStateAuthority || Runner.GameMode == Fusion.GameMode.Single)
             {
                 Health = clampedHealth;
                 OnHealthChanged();
@@ -542,7 +542,7 @@ namespace Vashta.Entropy.Player
                 GameManager.SpawnController.HandleDeathSpawn(this);
             }
 
-            if (HasInputAuthority || (isBot && HasStateAuthority))
+            if (HasInputAuthority || (isBot && (HasStateAuthority || Runner.GameMode == Fusion.GameMode.Single)))
             {
                 // MoveToSpawn();
                 GameManager.SpawnController.StartSpawnRoutine(this);
@@ -558,7 +558,7 @@ namespace Vashta.Entropy.Player
         public void MoveToSpawn()
         {
             // Move player to spawn
-            if (HasInputAuthority || (isBot && HasStateAuthority))
+            if (HasInputAuthority || (isBot && (HasStateAuthority || Runner.GameMode == Fusion.GameMode.Single)))
             {
                 Vector3 respawnPosition = GameManager.TeamController.GetSpawnPosition(TeamIndex);
                 
@@ -668,7 +668,7 @@ namespace Vashta.Entropy.Player
         {
             Kills += 10;
             
-            if (!HasStateAuthority)
+            if (!HasStateAuthority || Runner.GameMode == Fusion.GameMode.Single)
                 return;
             
             GameManager.ui.DropCollectiblesButton.gameObject.SetActive(false);
@@ -692,7 +692,7 @@ namespace Vashta.Entropy.Player
         {
             Kills += 10;
             
-            if (!HasStateAuthority)
+            if (!HasStateAuthority || Runner.GameMode == Fusion.GameMode.Single)
                 return;
 
             PlayerViewController.RewardCoins(_playerCurrencyRewarder.RewardForPointCapture());

@@ -224,7 +224,7 @@ namespace TanksMP
             }
 
             // Cast ultimates
-            if (HasStateAuthority && _enemiesInRange.Count > 0)
+            if ((HasStateAuthority || Runner.GameMode == Fusion.GameMode.Single) && _enemiesInRange.Count > 0)
             {
                 UltimateController.TryCastUltimate();
             }

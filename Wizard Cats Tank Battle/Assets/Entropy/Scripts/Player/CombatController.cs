@@ -222,7 +222,7 @@ namespace Entropy.Scripts.Player
 
             if (health <= 0)
             {
-                if (HasStateAuthority)
+                if (HasStateAuthority || Runner.GameMode == Fusion.GameMode.Single)
                 {
                     // killed the player
                     _deathController.KillPlayerLocalDamage(other, deathFxId);
@@ -279,7 +279,7 @@ namespace Entropy.Scripts.Player
             if (health <= 0)
             {
                 // Only trigger death if local
-                if (HasStateAuthority)
+                if (HasStateAuthority  || Runner.GameMode == Fusion.GameMode.Single)
                 {
                     //bullet killed the player
                     _deathController.KillPlayerLocalDamage(

@@ -231,7 +231,7 @@ namespace TanksMP
         
         private void SpawnObject(bool spawnInstantly)
         {
-            lastInflatedObjectIndex = Random.Range(0, prefabList.Count);
+            // lastInflatedObjectIndex = Random.Range(0, prefabList.Count);
 
             if (spawnInstantly)
             {

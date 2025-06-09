@@ -323,7 +323,6 @@ namespace TanksMP
         //disable rendering or blocking components
         void ToggleComponents(bool state)
         {
-            GetComponent<Rigidbody>().isKinematic = false; //state;
             GetComponent<Collider>().enabled = state;
 
             for (int i = 0; i < transform.childCount; i++)

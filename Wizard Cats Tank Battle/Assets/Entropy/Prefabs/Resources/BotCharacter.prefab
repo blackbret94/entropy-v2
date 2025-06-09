@@ -1496,7 +1496,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2152447498083767370}
-  - component: {fileID: 1460654807251813510}
   - component: {fileID: 5128119020115832740}
   - component: {fileID: 9042423296827168902}
   - component: {fileID: 7345902104007818426}
@@ -1518,8 +1517,8 @@ GameObject:
   - component: {fileID: 125347520223489442}
   - component: {fileID: 4589138142109185729}
   - component: {fileID: 8604377245090731716}
-  - component: {fileID: 7107562175854902100}
   - component: {fileID: 146893406639463032}
+  - component: {fileID: 7917565475883993283}
   m_Layer: 8
   m_Name: BotCharacter
   m_TagString: Untagged
@@ -1543,33 +1542,6 @@ Transform:
   - {fileID: 2339001297832244224}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &1460654807251813510
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4388435187269524573}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 1
-  m_AngularDrag: 10
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 1
-  m_Constraints: 112
-  m_CollisionDetection: 2
 --- !u!114 &5128119020115832740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1599,7 +1571,7 @@ MonoBehaviour:
   _turretRotation: 0
   turret: {fileID: 7764713437238784532}
   shotPos: {fileID: 2287832152565130358}
-  handicapModifier: 0.75
+  handicapModifier: 0.85
   killedBy: {fileID: 0}
   StatusEffectController: {fileID: 17881755486394314}
   CharacterAppearance: {fileID: 8423563394307992586}
@@ -1948,8 +1920,8 @@ MonoBehaviour:
   - {fileID: 125347520223489442}
   - {fileID: 4589138142109185729}
   - {fileID: 8604377245090731716}
-  - {fileID: 7107562175854902100}
   - {fileID: 146893406639463032}
+  - {fileID: 7917565475883993283}
   - {fileID: 8423563394307992586}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &125347520223489442
@@ -1992,29 +1964,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StatusEffectDirectory: {fileID: 11400000, guid: 06185a77b443ee54b8ce18ae4e7db647,
     type: 2}
---- !u!114 &7107562175854902100
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4388435187269524573}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a591d221a634417e9827eb58e17de84, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _stateAuthorityChangeErrorCorrectionDelta: 0
-  SyncScale: 0
-  SyncParent: 1
-  _interpolationTarget: {fileID: 0}
-  UsePreciseRotation: 0
-  UseRenderSleepThresholds: 1
-  RenderThresholds:
-    UseEnergy: 1
-    Position: 0.01
-    Rotation: 0.01
-    Scale: 0.01
 --- !u!114 &146893406639463032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2027,6 +1976,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 873504da922b4027a248720a9e81aab8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7917565475883993283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4388435187269524573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stateAuthorityChangeErrorCorrectionDelta: 0
+  SyncScale: 0
+  SyncParent: 0
+  _autoAOIOverride: 1
+  DisableSharedModeInterpolation: 0
 --- !u!1 &4497364272883642154
 GameObject:
   m_ObjectHideFlags: 0

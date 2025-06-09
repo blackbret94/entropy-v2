@@ -449,7 +449,8 @@ namespace Vashta.Entropy.Player
 
         private void UpdateMass()
         {
-            rb.mass = defaultMass * StatusEffectController.MassMultiplier;
+            if(rb)
+                rb.mass = defaultMass * StatusEffectController.MassMultiplier;
         }
         
         /// <summary>
@@ -589,7 +590,7 @@ namespace Vashta.Entropy.Player
                 //     rb.position = respawnPosition;
                 // }
                 
-                rb.position = respawnPosition;
+                SetPosition(respawnPosition);
                 // transform.position = respawnPosition;
                 SnapToNavMesh(respawnPosition);
                 
@@ -608,15 +609,17 @@ namespace Vashta.Entropy.Player
             if (NavMesh.SamplePosition(samplePosition, out hit, maxSampleDistance, NavMesh.AllAreas))
             {
                 float yOffset = .1f;
+
+                Vector3 pos = GetPosition();
                 
                 Vector3 alignedPosition = new Vector3(
-                    rb.position.x,
+                    pos.x,
                     hit.position.y + yOffset,
-                    rb.position.z
+                    pos.z
                 );
 
                 // transform.position = alignedPosition;
-                rb.position = alignedPosition;
+                SetPosition(alignedPosition);
                 return alignedPosition;
             }
             else
@@ -827,6 +830,31 @@ namespace Vashta.Entropy.Player
                 Debug.LogError("Could not find PlayerRef: " + playerRef.PlayerId);
                 return null;
             }
+        }
+
+        public virtual Vector3 GetPosition()
+        {
+            if (rb != null)
+                return rb.position;
+
+            return transform.position;
+        }
+
+        public virtual void SetPosition(Vector3 pos)
+        {
+            if (rb != null)
+            {
+                rb.position = pos;
+            }
+            else
+            {
+                transform.position = pos;
+            }
+        }
+
+        public virtual void SetRotation(Quaternion rot)
+        {
+            
         }
     }
 }

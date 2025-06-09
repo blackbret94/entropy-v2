@@ -94,7 +94,7 @@ namespace Vashta.Entropy.Player
             
             PlayerController.maxHealth = (int)(ClassDefinition.maxHealth * modifier);
             PlayerController.fireRate = ClassDefinition.fireRate*(1/modifier);
-            PlayerController.moveSpeed = ClassDefinition.moveSpeed * modifier;
+            PlayerController.moveSpeed = ClassDefinition.moveSpeed;
             PlayerController.PlayerViewController.SetClassIcon(ClassDefinition.classIcon);
             playerCollisionHandler.armor = ClassDefinition.armor;
             playerCollisionHandler.damageAmtOnCollision = ClassDefinition.damageAmtOnCollision;

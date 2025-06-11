@@ -89,13 +89,43 @@ namespace Vashta.Entropy.PhotonExtensions
             // time
             customProperties[RoomKeys.maxTime] = matchmakingArgs.maxTime;
             
-            startGameArgs.SessionProperties = customProperties;
-
             // bot filling
             customProperties[RoomKeys.botFilling] = matchmakingArgs.botFilling;
             
+            startGameArgs.SessionProperties = customProperties;
+
             return startGameArgs;
         }
+
+        public StartGameArgs QuickplayArgs()
+        {
+            StartGameArgs startGameArgs = new StartGameArgs();
+            startGameArgs.SessionName = HashCodeGenerator.GenerateRandomString(6);
+            startGameArgs.PlayerCount = 12;
+            startGameArgs.IsVisible = true;
+            startGameArgs.GameMode = Fusion.GameMode.Shared;
+            startGameArgs.SceneManager = NetworkSceneManagerDefault;
+            
+            return startGameArgs;
+        }
+
+        // public StartGameArgs QuickplayArgsForMode(GameModeDefinition gameMode)
+        // {
+        //     StartGameArgs startGameArgs = new StartGameArgs();
+        //     startGameArgs.SessionName = HashCodeGenerator.GenerateRandomString(6);
+        //     startGameArgs.PlayerCount = 12;
+        //     startGameArgs.IsVisible = true;
+        //     startGameArgs.GameMode = Fusion.GameMode.Shared;
+        //     startGameArgs.SceneManager = NetworkSceneManagerDefault;
+        //     
+        //     Dictionary<string, SessionProperty> customProperties = new Dictionary<string, SessionProperty>();
+        //     customProperties[RoomKeys.modeKey] = (byte)(int)gameMode.GameMode;
+        //     customProperties[RoomKeys.roomNameKey] = GenerateRoomName();
+        //     customProperties[RoomKeys.mapKey] = "random";
+        //     startGameArgs.SessionProperties = customProperties;
+        //     
+        //     return startGameArgs;
+        // }
         
         public StartGameArgs CreateRoomOptionsGameMode(byte gameMode)
         {

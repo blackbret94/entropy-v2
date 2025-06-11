@@ -11,6 +11,7 @@ namespace Vashta.Entropy.ScriptableObject
         public Sprite IconSmall;
         public TanksMP.GameMode GameMode;
         public int ScoreToWin = 20;
+        public Color Color;
         
         [Header("Scoring")] 
         public int KillPoints = 1;

@@ -39,6 +39,8 @@ namespace TanksMP
         /// <summary>
         /// King of the Hills
         /// </summary>
-        KOTHS
+        KOTHS,
+        
+        RAND
     }
 }

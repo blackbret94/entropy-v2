@@ -14,7 +14,8 @@ namespace Vashta.Entropy.UI.MapSelection
         public string SceneName;
         public short PlayerCount;
         public short TeamCount;
-
+        public Color Color;
+        
         [Header("Music")] 
         public AudioClip[] MusicTracks;
 

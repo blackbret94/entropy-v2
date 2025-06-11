@@ -56,5 +56,20 @@ namespace Vashta.Entropy.UI.MapSelection
         {
             return _dictionary.ElementAt(Random.Range(0, _dictionary.Count)).Value;
         }
+
+        public List<MapDefinition> GetMapsSupportingGameMode(TanksMP.GameMode gameMode)
+        {
+            List<MapDefinition> maps = new List<MapDefinition>();
+
+            foreach (MapDefinition map in Directory)
+            {
+                if (map.SupportedGameModes.Contains(gameMode))
+                {
+                    maps.Add(map);
+                }
+            }
+            
+            return maps;
+        }
     }
 }

@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using Vashta.Entropy.UI.MatchBrowser;
 using Vashta.Entropy.UI.MatchCreation;
+using Vashta.Entropy.UI.Quickplay;
 
 namespace Vashta.Entropy.UI
 {
@@ -9,6 +10,7 @@ namespace Vashta.Entropy.UI
     {
         public MatchBrowserPanel BrowsePanel;
         public MatchCreationPanel CreatePanel;
+        public QuickplayPanel QuickplayPanel;
         
         public TextMeshProUGUI BrowseButtonText;
         public TextMeshProUGUI CreateButtonText;
@@ -22,6 +24,7 @@ namespace Vashta.Entropy.UI
         {
             BrowsePanel.ClosePanel();
             CreatePanel.ClosePanel();
+            QuickplayPanel.ClosePanel();
 
             BrowseButtonText.color = UnselectedColor;
             CreateButtonText.color = UnselectedColor;
@@ -53,8 +56,7 @@ namespace Vashta.Entropy.UI
             OpenPanel();
             HideAll();
             
-            CreatePanel.OpenPanel();
-            CreatePanel.ToggleMultiplayer(MatchPanelType.Matchmaking);
+            QuickplayPanel.OpenPanel();
             MatchmakingButtonText.color = SelectedColor;
         }
 

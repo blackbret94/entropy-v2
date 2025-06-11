@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Fusion;
 using Fusion.Sockets;
 using FusionHelpers;
@@ -166,9 +167,28 @@ namespace TanksMP
         public void CreateMatch(StartGameArgs startGameArgs)
         {
             LocalPlayerInfo.Name = CBSIntegrator.Instance.ProfileState.CachedDisplayName;
-            LocalPlayerInfo.GameMode = startGameArgs.SessionProperties[RoomKeys.modeKey];
-            LocalPlayerInfo.MapName = startGameArgs.SessionProperties[RoomKeys.mapKey];
+
+            if (startGameArgs.SessionProperties != null)
+            {
+                if (startGameArgs.SessionProperties.ContainsKey(RoomKeys.modeKey))
+                {
+                    LocalPlayerInfo.GameMode = startGameArgs.SessionProperties[RoomKeys.modeKey];
+                }
+
+                if (startGameArgs.SessionProperties.ContainsKey(RoomKeys.mapKey))
+                {
+                    LocalPlayerInfo.MapName = startGameArgs.SessionProperties[RoomKeys.mapKey];
+                }
+            }
+
             FusionLauncher.Launch(startGameArgs, "us", WCTBSessionPrefab, _networkSceneManager, OnConnectionStatusUpdate);
+        }
+
+        public void CreateRandomMatch(StartGameArgs startGameArgs)
+        {
+            LocalPlayerInfo.Name = CBSIntegrator.Instance.ProfileState.CachedDisplayName;
+
+            FusionLauncher.LaunchRandom(startGameArgs, "us", WCTBSessionPrefab, _networkSceneManager, OnConnectionStatusUpdate);
         }
 
         /// <summary>

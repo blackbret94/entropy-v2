@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Fusion;
 using Fusion.Photon.Realtime;
 using Fusion.Sockets;
+using TanksMP;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Vashta.Entropy.PhotonExtensions;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.UI.MapSelection;
+using GameMode = Fusion.GameMode;
 
 namespace FusionHelpers
 {
@@ -79,17 +82,115 @@ namespace FusionHelpers
 			
 			startGameArgs.ObjectProvider = gameObject.AddComponent<PooledNetworkObjectProvider>();
 			
-			NetworkSceneInfo scene = new NetworkSceneInfo();
-			int sceneIndex = GetSceneIndex(startGameArgs);
+			// Set up session.  Attempt to add set parameters, leave others empty
+			NetworkManagerCustom networkManagerCustom = NetworkManagerCustom.GetInstance();
 
-			if (sceneIndex != -1)
+			if (startGameArgs.SessionProperties != null)
 			{
-				scene.AddSceneRef(SceneRef.FromIndex(sceneIndex));
-				startGameArgs.Scene = scene;
-				startGameArgs.SceneManager = sceneManager;
+				NetworkSceneInfo scene = new NetworkSceneInfo();
+				MapDefinition map = GetMap(startGameArgs);
+				int sceneIndex = map ? map.SceneIndex() : -1;
+				
+				if (sceneIndex != -1)
+				{
+					scene.AddSceneRef(SceneRef.FromIndex(sceneIndex));
+					startGameArgs.Scene = scene;
+					startGameArgs.SceneManager = sceneManager;
+
+					// startGameArgs.SessionProperties[RoomKeys.mapKey] = map.Title;
+					networkManagerCustom.LocalPlayerInfo.MapName = map.Title;
+
+					int gameModeIndex = GetGameModeIndex(startGameArgs, map);
+					if (gameModeIndex != -1)
+					{
+						networkManagerCustom.LocalPlayerInfo.GameMode = gameModeIndex;
+					}
+				}
+			}
+			else
+			{
+				// Quickplay search, so don't create a room without config
+				startGameArgs.EnableClientSessionCreation = false;
 			}
 
-			await runner.StartGame(startGameArgs);
+			StartGameResult startGameTask = await runner.StartGame(startGameArgs);
+			if (startGameTask.Ok)
+			{
+				Debug.Log("Started game!");
+			}
+			else
+			{
+				// Attempt quickplay by filling out values in the sessionproperties
+				Debug.Log("Failed to start game");
+				
+				networkManagerCustom.CreateRandomMatch(startGameArgs);
+			}
+		}
+
+		public static FusionLauncher LaunchRandom(StartGameArgs startGameArgs, string region,FusionSession sessionPrefab,
+			INetworkSceneManager sceneLoader,
+			Action<NetworkRunner, ConnectionStatus, string> onConnect)
+		{
+			FusionLauncher launcher = new GameObject("Launcher").AddComponent<FusionLauncher>();
+
+			launcher.InternalLaunchRandom(startGameArgs, region,sessionPrefab, sceneLoader, onConnect);
+			return launcher;
+		}
+		
+		private async void InternalLaunchRandom(StartGameArgs startGameArgs, string region, FusionSession sessionPrefab,
+			INetworkSceneManager sceneManager,
+			Action<NetworkRunner, ConnectionStatus, string> onConnect)
+		{
+			_sessionPrefab = sessionPrefab;
+			_connectionCallback = onConnect;
+
+			DontDestroyOnLoad(gameObject);
+			
+			NetworkRunner runner = gameObject.AddComponent<NetworkRunner>();
+			runner.name = name;
+			runner.ProvideInput = startGameArgs.GameMode != GameMode.Server;
+			startGameArgs.EnableClientSessionCreation = true;
+			
+			// An empty region will use the best region.
+			PhotonAppSettings.Global.AppSettings.FixedRegion = region;
+
+			SetConnectionStatus(runner, ConnectionStatus.Connecting, "");
+			
+			startGameArgs.ObjectProvider = gameObject.AddComponent<PooledNetworkObjectProvider>();
+			
+			MapDefinitionDictionary mapDefinitionDictionary = GameDataSet.Get().MapDefinitionDictionary;
+			MapDefinition mapDefinition = mapDefinitionDictionary.GetRandom();
+
+			TanksMP.GameMode gameMode = mapDefinition.GetRandomGamemode();
+			GameModeDictionary gameModeDictionary = GameDataSet.Get().GameModeDictionary;
+			GameModeDefinition gameModeDef = gameModeDictionary[gameMode];
+
+			if (startGameArgs.SessionProperties == null)
+				startGameArgs.SessionProperties = new();
+			
+			startGameArgs.SessionProperties[RoomKeys.mapKey] = mapDefinition.Title;
+			startGameArgs.SessionProperties[RoomKeys.modeKey] = (int)gameMode;
+			startGameArgs.SessionProperties[RoomKeys.maxScoreKey] = gameModeDef.ScoreToWin;
+		
+			NetworkManagerCustom networkManagerCustom = NetworkManagerCustom.GetInstance();
+			networkManagerCustom.LocalPlayerInfo.MapName = mapDefinition.Title;
+			networkManagerCustom.LocalPlayerInfo.GameMode = (int)gameMode;
+			
+			NetworkSceneInfo scene = new NetworkSceneInfo();
+			scene.AddSceneRef(SceneRef.FromIndex(mapDefinition.SceneIndex()));
+			startGameArgs.Scene = scene;
+			startGameArgs.SceneManager = sceneManager;
+			
+			StartGameResult startGameTask = await runner.StartGame(startGameArgs);
+			if (startGameTask.Ok)
+			{
+				Debug.Log("Started quickplay game");
+			}
+			else
+			{
+				Debug.Log("Failed to start quickplay game: " + startGameTask.ErrorMessage);
+			}
+			
 		}
 		
 		public static FusionLauncher LaunchByName(string roomName, string region, FusionSession sessionPrefab,
@@ -120,19 +221,6 @@ namespace FusionHelpers
 		
 			SetConnectionStatus(runner, ConnectionStatus.Connecting, "");
 
-			// var result = await runner.JoinSessionLobby(SessionLobby.Shared);
-			//
-			// if (result.Ok)
-			// {
-			// 	Debug.Log($"Successfully joined by name! {roomName}");
-			// 	
-			// 	// if(result.)
-			// }
-			// else
-			// {
-			// 	Debug.Log($"Could not join room with name {roomName}: {result.ShutdownReason}");
-			// }
-
 			StartGameArgs startGameArgs = new StartGameArgs();
 			startGameArgs.ObjectProvider = gameObject.AddComponent<PooledNetworkObjectProvider>();
 			startGameArgs.EnableClientSessionCreation = false;
@@ -140,19 +228,11 @@ namespace FusionHelpers
 			startGameArgs.GameMode = GameMode.Shared;
 			startGameArgs.SceneManager = sceneManager;
 			
-			// NetworkSceneInfo scene = new NetworkSceneInfo();
-			// int sceneIndex = GetSceneIndex(startGameArgs);
-			
-			// if (sceneIndex != -1)
-			// {
-				// scene.AddSceneRef(SceneRef.FromIndex(sceneIndex));
-				// startGameArgs.Scene = scene;
-			// }
-			
-			await runner.StartGame(startGameArgs);
+			Task<StartGameResult> task = runner.StartGame(startGameArgs);
+			await task;
 		}
 
-		private int GetSceneIndex(StartGameArgs startGameArgs)
+		private MapDefinition GetMap(StartGameArgs startGameArgs)
 		{
 			MapDefinitionDictionary mapDefinitionDictionary = GameDataSet.Get().MapDefinitionDictionary;
 			MapDefinition mapDefinition;
@@ -182,13 +262,32 @@ namespace FusionHelpers
 			{
 				// Get map index
 				Debug.Log("Scene Index: " + mapDefinition.SceneIndex());
-				return mapDefinition.SceneIndex();
+				return mapDefinition;
 			}
 			else
 			{
 				Debug.LogError("Failed to get random map!");
-				return -1;
+				return null;
 			}
+		}
+
+		private int GetGameModeIndex(StartGameArgs startGameArgs, MapDefinition mapDefinition)
+		{
+			if (startGameArgs.SessionProperties.TryGetValue(RoomKeys.modeKey, out var sessionMode))
+			{
+				if (sessionMode == (int)TanksMP.GameMode.RAND)
+				{
+					if (mapDefinition != null)
+						return (int)mapDefinition.GetRandomGamemode();
+					// Get random mode for map
+				}
+				else
+				{
+					return (int)sessionMode;
+				}
+			}
+			
+			return (int)TanksMP.GameMode.TDM;
 		}
 
 		public void SetConnectionStatus(NetworkRunner runner, ConnectionStatus status, string message)
@@ -241,6 +340,30 @@ namespace FusionHelpers
 			}
 		}
 
+		private void SetUpQuickplayRoom(NetworkRunner runner)
+		{
+			MapDefinitionDictionary mapDefinitionDictionary = GameDataSet.Get().MapDefinitionDictionary;
+			MapDefinition mapDefinition = mapDefinitionDictionary.GetRandom();
+
+			TanksMP.GameMode gameMode = mapDefinition.GetRandomGamemode();
+			GameModeDictionary gameModeDictionary = GameDataSet.Get().GameModeDictionary;
+			GameModeDefinition gameModeDef = gameModeDictionary[gameMode];
+			
+			Dictionary<string, SessionProperty> sessionProperties = new Dictionary<string, SessionProperty>();
+
+			sessionProperties.Add(RoomKeys.mapKey, mapDefinition.Title);
+			sessionProperties.Add(RoomKeys.modeKey, (int)gameMode);
+			sessionProperties.Add(RoomKeys.maxScoreKey, gameModeDef.ScoreToWin);
+			
+			runner.SessionInfo.UpdateCustomProperties(sessionProperties);
+			
+			NetworkManagerCustom networkManagerCustom = NetworkManagerCustom.GetInstance();
+			networkManagerCustom.LocalPlayerInfo.MapName = mapDefinition.Title;
+			networkManagerCustom.LocalPlayerInfo.GameMode = (int)gameMode;
+			
+			runner.LoadScene(SceneRef.FromIndex(mapDefinition.SceneIndex()));
+		}
+		
 		public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
 		{
 			if(runner.TryGetSingleton(out FusionSession session))

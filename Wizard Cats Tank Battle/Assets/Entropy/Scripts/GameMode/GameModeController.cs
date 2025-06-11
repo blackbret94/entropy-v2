@@ -16,7 +16,6 @@ namespace Vashta.Entropy.GameMode
         private void Awake()
         {
             _networkManager = NetworkManagerCustom.GetInstance();
-            
             SetGameMode(_networkManager.LocalPlayerInfo.GameModeEnum);
         }
 

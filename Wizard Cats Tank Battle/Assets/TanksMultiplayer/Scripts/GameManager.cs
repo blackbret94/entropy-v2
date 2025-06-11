@@ -80,40 +80,59 @@ namespace TanksMP
 
         private void CreateMatchInfo()
         {
-            if (!HasStateAuthority)
-                return;
-
-            MatchInfo matchInfo = new MatchInfo();
-            LocalPlayerInfo localPlayerInfo = _networkManager.LocalPlayerInfo;
-            
-
-            SessionInfo sessionInfo = Runner.SessionInfo;
-            RoomInfoWrapper roomInfoWrapper = new RoomInfoWrapper(sessionInfo);
-            
-            matchInfo.GameMode = localPlayerInfo.GameModeEnum;
-            matchInfo.MaxNumberOfPlayers = roomInfoWrapper.GetMaxPlayers();
-            matchInfo.BotFilling = roomInfoWrapper.BotFilling();
-            matchInfo.MapName = roomInfoWrapper.GetMapName();
-            
-            // Score
-            int maxScore = roomInfoWrapper.GetMaxScore();
-            
-            // if max score is not stored, use default for game mode
-            matchInfo.MaxScoreToWin = maxScore != -1 ? 
-                roomInfoWrapper.GetMaxScore() : 
-                GameModeDefinition.GetScoreToWin();
-            
-            MatchInfo = matchInfo;
-            
-            TeamController.maxScore = matchInfo.MaxScoreToWin;
-            
-            // Time
-            int maxTime = roomInfoWrapper.GetMaxTime();
-            matchInfo.MaxTime = maxTime;
-            
-            if (maxTime != -1)
+            if (HasStateAuthority)
             {
-                MatchTimer.SetMaxTime(maxTime);
+
+                MatchInfo matchInfo = new MatchInfo();
+                LocalPlayerInfo localPlayerInfo = _networkManager.LocalPlayerInfo;
+                
+                SessionInfo sessionInfo = Runner.SessionInfo;
+                RoomInfoWrapper roomInfoWrapper = new RoomInfoWrapper(sessionInfo);
+
+                GameMode gameMode = localPlayerInfo.GameModeEnum;
+                if (gameMode == GameMode.RAND)
+                {
+                    gameMode = mapDefinition.GetRandomGamemode();
+                }
+
+                matchInfo.GameMode = gameMode;
+                matchInfo.MaxNumberOfPlayers = roomInfoWrapper.GetMaxPlayers();
+                matchInfo.BotFilling = roomInfoWrapper.BotFilling();
+                matchInfo.MapName = roomInfoWrapper.GetMapName();
+
+                GameModeController gameModeController = FindFirstObjectByType<GameModeController>();
+                if (gameModeController != null)
+                {
+                    gameModeController.SetGameMode(gameMode);
+                }
+
+                // Score
+                int maxScore = roomInfoWrapper.GetMaxScore();
+
+                // if max score is not stored, use default for game mode
+                matchInfo.MaxScoreToWin =
+                    maxScore != -1 ? roomInfoWrapper.GetMaxScore() : GameModeDefinition.GetScoreToWin();
+
+                MatchInfo = matchInfo;
+
+                TeamController.maxScore = matchInfo.MaxScoreToWin;
+
+                // Time
+                int maxTime = roomInfoWrapper.GetMaxTime();
+                matchInfo.MaxTime = maxTime;
+
+                if (maxTime != -1)
+                {
+                    MatchTimer.SetMaxTime(maxTime);
+                }
+            }
+            else
+            {
+                GameModeController gameModeController = FindFirstObjectByType<GameModeController>();
+                if (gameModeController != null)
+                {
+                    gameModeController.SetGameMode(MatchInfo.GameMode);
+                }
             }
         }
 

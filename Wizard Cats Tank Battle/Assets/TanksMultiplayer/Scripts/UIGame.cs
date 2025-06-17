@@ -136,13 +136,13 @@ namespace TanksMP
             
             DeathPanel.Set(playerName, teamInstance);
             MatchTimer.Hide();
+            Minimap.SetActive(false);
         }
         
         public void SetSpawnDelay(float time)
         {                
             DeathPanel.SetSpawnDelay(time);
         }
-        
         
         /// <summary>
         /// Hides any UI components related to player death after respawn.
@@ -159,6 +159,9 @@ namespace TanksMP
             
             // Enable timer
             MatchTimer.Show();
+            
+            // Enable minimap
+            Minimap.SetActive(true);
         }
 
 

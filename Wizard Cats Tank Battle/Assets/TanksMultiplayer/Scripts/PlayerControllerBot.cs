@@ -195,6 +195,13 @@ namespace TanksMP
 
         private void SlowUpdate()
         {
+            if (!IsAlive)
+            {
+                agent.speed = 0;
+                agent.destination = transform.position;
+                return;
+            }
+            
             agent.speed = moveSpeed;
             agent.SetDestination(targetPoint);
             // SnapToNavMesh(transform.position);

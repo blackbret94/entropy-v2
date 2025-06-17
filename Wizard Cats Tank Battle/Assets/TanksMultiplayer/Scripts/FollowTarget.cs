@@ -103,7 +103,7 @@ namespace TanksMP
             //Remark: parenting the AudioListener to the player doesn't work, because
             //it gets disabled on death and therefore stops playing sounds completely
             Transform listener = GetComponentInChildren<AudioListener>().transform;
-            listener.position = transform.position + transform.forward * getDistance();
+            listener.position = transform.position + transform.forward * GetDistance();
         }
 
         public void SetNormalCam()
@@ -131,28 +131,15 @@ namespace TanksMP
             //set the position of the camera on the x-z plane to:
             //distance units behind the target, height units above the target
             Vector3 targetPosition = target.position;
-            float desiredDistance = getDistance();
+            float desiredDistance = GetDistance();
             
             Vector3 desiredPosition = targetPosition - currentRotation * Vector3.forward * Mathf.Abs(desiredDistance);
-            desiredPosition.y = targetPosition.y + Mathf.Abs(getHeight());
-            
-            // Check for obstacles
-            // RaycastHit hit;
-            // Vector3 cameraOffset = desiredPosition - targetPosition;
-            // if (Physics.Raycast(target.position, cameraOffset.normalized, out hit, desiredDistance,
-            //         collisionMask))
-            // {
-            //     float adjustedDistance = Mathf.Clamp(hit.distance, minClampDistance, desiredDistance);
-            //     desiredPosition = target.position + cameraOffset.normalized * adjustedDistance;
-            // }
+            desiredPosition.y = targetPosition.y + Mathf.Abs(GetHeight());
 
-            transform.position = desiredPosition;//Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime * smoothingSpeed);
+            transform.position = desiredPosition;
 
             //look at the target
             transform.LookAt(target);
-
-            //clamp distance
-            // transform.position = target.position - (transform.forward * Mathf.Abs(getDistance()));
         }
         
         private void HandleZoom()
@@ -188,7 +175,7 @@ namespace TanksMP
             else cam.cullingMask |= respawnMask;
         }
 
-        private float getDistance()
+        private float GetDistance()
         {
             if (camMode == 0)
                 return _currentZoomDistance;
@@ -198,7 +185,7 @@ namespace TanksMP
             return _currentZoomDistance;
         }
 
-        private float getHeight()
+        private float GetHeight()
         {
             if (camMode == 0)
                 return _currentZoomHeight;

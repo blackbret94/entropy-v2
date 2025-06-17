@@ -305,6 +305,11 @@ namespace Vashta.Entropy.GameState
                     counter--;
                 }
                 while(!col.bounds.Contains(pos) && counter > 0);
+
+                if (counter <= 0)
+                {
+                    return teams[teamIndex].spawnArea.position;
+                }
             }
             
             return pos;

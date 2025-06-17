@@ -26,6 +26,9 @@ namespace Entropy.Scripts.Player
         //moves rigidbody in the direction passed in
         public void Move(float deltaTime, Vector2 direction)
         {
+            if (!_playerController || !_playerController.IsAlive)
+                return;
+            
             Rotate(deltaTime, direction);
             MoveRigidBody(direction);
         }
@@ -98,8 +101,12 @@ namespace Entropy.Scripts.Player
 
         public void ResetTransform()
         {
-            // _rigidbody.linearVelocity = Vector3.zero;
-            // _rigidbody.angularVelocity = Vector3.zero;
+            if (_rigidbody != null)
+            {
+                _rigidbody.linearVelocity = Vector3.zero;
+                _rigidbody.angularVelocity = Vector3.zero;
+            }
+
             transform.rotation = Quaternion.identity;
         }
     }

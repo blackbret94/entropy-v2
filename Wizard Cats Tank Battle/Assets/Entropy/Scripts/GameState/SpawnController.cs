@@ -51,7 +51,7 @@ namespace Vashta.Entropy.GameState
                 _gameManager.ui.SetDeathText(killedByName, _gameManager.TeamController.teams[other.TeamIndex]);
             }
 
-            StartSpawnRoutine(playerToRespawn);
+            // StartSpawnRoutine(playerToRespawn);
         }
 
         public void StartSpawnRoutine(PlayerController playerToRespawn)
@@ -73,7 +73,7 @@ namespace Vashta.Entropy.GameState
                 
                 //calculate point in time for respawn
                 Timer respawnTimer = new Timer(respawnTime, false);
-                Timer movePlayerTimer = new Timer(Mathf.Max(0, respawnTime-1), false);
+                Timer movePlayerTimer = new Timer(Mathf.Max(0, respawnTime-.5f), false);
 
                 //wait for the respawn to be over,
                 while (!respawnTimer.Run())
@@ -94,12 +94,15 @@ namespace Vashta.Entropy.GameState
 
                 if (isLocalPlayer)
                 {
+                    playerToRespawn.MoveToSpawn();
                     _gameManager.ui.DisableDeath();
                     
                     // expire death on respawn
                     var @struct = playerToRespawn.DeathController.DeathStruct;
                     @struct.expired = true;
+                    @struct.killedByPlayer = -1;
                     playerToRespawn.DeathController.DeathStruct = @struct;
+                    playerToRespawn.killedBy = null;
                 }
                 
                 if(playerToRespawn != null)

@@ -499,7 +499,8 @@ namespace Vashta.Entropy.Player
             }
                 
             //find original sender game object (killedBy)
-            if (killedByPlayerController != null && killedByPlayerController.gameObject != null) killedBy = killedByPlayerController.gameObject;
+            if (killedByPlayerController != null && killedByPlayerController.gameObject != null) 
+                killedBy = killedByPlayerController.gameObject;
                 
             PlayerViewController.SpawnDeathFx(deathFxId);
                 
@@ -519,7 +520,6 @@ namespace Vashta.Entropy.Player
                     
                 // log
                 GameManager.ui.GameLogPanel.EventPlayerKilled(PlayerName, GetTeamDefinition(), otherPlayerController.PlayerName, otherPlayerController.GetTeamDefinition());
-                Debug.Log("Kill logged!");
                 
                 if (otherPlayerController != null && otherPlayerController != this)
                 {
@@ -529,7 +529,7 @@ namespace Vashta.Entropy.Player
             }
             else
             {
-                Debug.LogWarning("'Killed By' no one!");
+                // Debug.LogWarning("'Killed By' no one!");
             }
 
             // Exit here if game over
@@ -639,7 +639,9 @@ namespace Vashta.Entropy.Player
 
             var @struct = DeathController.DeathStruct;
             @struct.expired = true;
+            @struct.killedByPlayer = -1;
             DeathController.DeathStruct = @struct;
+            killedBy = null;
             
             MoveToSpawn();
             

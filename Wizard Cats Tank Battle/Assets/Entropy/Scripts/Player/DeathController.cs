@@ -1,5 +1,6 @@
 using Fusion;
 using TanksMP;
+using UnityEngine;
 using Vashta.Entropy.Player;
 using Vashta.Entropy.StatusEffects;
 
@@ -54,6 +55,7 @@ namespace Entropy.Scripts.Player
         // The main Kill Player method
         private void KillPlayer(PlayerController other, ushort deathFxId = 0)
         {
+            _playerController.MovementController.ResetTransform();
             _gameManager.TeamController.OnePassPlayerCheckToChangeTeams(_playerController, false);
             
             //get killer and increase score for that enemy team
@@ -83,11 +85,12 @@ namespace Entropy.Scripts.Player
                     // return;
                 }
             }
-            else if(!_playerController.RespawnIsFreeFromJointime())
-            {
+            // else 
+            // if(!_playerController.RespawnIsFreeFromJointime())
+            // {
                 // Killed by environment
                 // _gameManager.TeamController.RemoveScore(ScoreType.Kill, _playerController.TeamIndex);
-            }
+            // }
             
             // The game is not over
             _playerController.PlayerDeath(other, deathFxId);

@@ -46,6 +46,9 @@ namespace Entropy.Scripts.Player
         
         public static PlayerController GetPlayer(short netId)
         {
+            if (netId == -1)
+                return null;
+            
             if (!_playersDict.ContainsKey(netId))
                 return null;
             

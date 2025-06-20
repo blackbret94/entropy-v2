@@ -239,8 +239,6 @@ namespace FusionHelpers
 			
 			if (startGameArgs.SessionProperties.TryGetValue(RoomKeys.mapKey, out var sceneName))
 			{
-				Debug.Log("Map Scene Name: " + sceneName);
-
 				if (sceneName == "random")
 				{
 					// Get random map
@@ -261,7 +259,6 @@ namespace FusionHelpers
 			if (mapDefinition != null)
 			{
 				// Get map index
-				Debug.Log("Scene Index: " + mapDefinition.SceneIndex());
 				return mapDefinition;
 			}
 			else

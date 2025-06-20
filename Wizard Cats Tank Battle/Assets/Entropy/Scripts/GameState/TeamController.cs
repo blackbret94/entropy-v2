@@ -29,6 +29,8 @@ namespace Vashta.Entropy.GameState
 
         [Networked, Capacity(4), OnChangedRender(nameof(RefreshDisplay))]
         private NetworkArray<int> TeamSize => default;
+        [Networked, Capacity(4), OnChangedRender(nameof(RefreshDisplay))]
+        private NetworkArray<int> TeamSizeNoBot => default;
         public NetworkArray<int> TeamSizes => TeamSize;
 
         public bool UsesTeams => _gameManager.MatchInfo.GameMode != TanksMP.GameMode.FFA;
@@ -81,6 +83,9 @@ namespace Vashta.Entropy.GameState
             if (teamIndex < TeamSize.Length)
             {
                 TeamSize.Set(teamIndex, TeamSize[teamIndex]+1);
+
+                if (!playerController.isBot)
+                    TeamSizeNoBot.Set(teamIndex, TeamSizeNoBot[teamIndex] + 1);
             }
             else
             {
@@ -100,6 +105,9 @@ namespace Vashta.Entropy.GameState
             if (teamIndex < TeamSize.Length)
             {
                 TeamSize.Set(teamIndex, TeamSize[teamIndex]-1);
+
+                if (!playerController.isBot)
+                    TeamSizeNoBot.Set(teamIndex, TeamSizeNoBot[teamIndex] - 1);
             }
             else
             {
@@ -153,9 +161,16 @@ namespace Vashta.Entropy.GameState
                 return;
             }
 
-            if(playerController.TeamIndex != -1)
+            if (playerController.TeamIndex != -1)
+            {
                 TeamSize.Set(playerController.TeamIndex, TeamSize[playerController.TeamIndex] - 1);
-            
+
+                if (!playerController.isBot)
+                {
+                    TeamSizeNoBot.Set(playerController.TeamIndex, TeamSizeNoBot[playerController.TeamIndex] - 1);
+                }
+            }
+
             if(preferredTeamIndex != -1)
                 AddPlayerToTeam(playerController, preferredTeamIndex);
             
@@ -225,47 +240,24 @@ namespace Vashta.Entropy.GameState
 
         private int GetTeamFillWithBots()
         {
-            // init
-            List<int> teamSizesNoBots = new();
+            //init variables
+            int teamNo = 0;
 
-            for (int i = 0; i < TeamCount; i++)
+            int min = TeamSizeNoBot[0];
+            //loop over teams to find the lowest fill
+            for (int i = 0; i < teams.Length; i++)
             {
-                teamSizesNoBots.Add(0);
-            }
-            
-            // count
-            List<PlayerController> players = GetComponents<PlayerController>().ToList();
-
-            foreach (PlayerController player in players)
-            {
-                if (player != null)
+                //if fill is lower than the previous value
+                //store new fill and team for next iteration
+                if (TeamSizeNoBot[i] < min)
                 {
-                    if (player.TeamIndex != -1)
-                    {
-                        teamSizesNoBots[player.TeamIndex]++;
-                    }
+                    min = TeamSizeNoBot[i];
+                    teamNo = i;
                 }
             }
-            
-            // get smallest team
-            int smallestTeamIndex = -1;
-            int smallestTeamSize = Int32.MaxValue;
 
-            for (int i = 0; i < teamSizesNoBots.Count; i++)
-            {
-                if (teamSizesNoBots[i] < smallestTeamSize)
-                {
-                    smallestTeamSize = teamSizesNoBots[i];
-                    smallestTeamIndex = i;
-                }
-            }
-            
-            Debug.Log("Team index: " + smallestTeamIndex + " Size: " + smallestTeamSize);
-
-            if (smallestTeamIndex == -1)
-                return 0;
-
-            return smallestTeamIndex;
+            //return index of lowest team
+            return teamNo;
         }
 
         public bool TeamHasVacancy(int teamIndex)

@@ -7,7 +7,6 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Serialization;
 using Vashta.Entropy.Character;
-using Vashta.Entropy.GameState;
 using Vashta.Entropy.Network;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.StatusEffects;
@@ -218,6 +217,8 @@ namespace Vashta.Entropy.Player
             Team.Init();
             while (!Team.TeamController.HasSpawned)
                 yield return null;
+
+            yield return null;
             
             Team.Setup();
             

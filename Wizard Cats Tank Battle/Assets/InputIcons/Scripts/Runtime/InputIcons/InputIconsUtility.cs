@@ -470,8 +470,8 @@ namespace InputIcons
 
             if (binding.groups.Length == 0)
             {
-                InputIconsLogger.LogWarning("There is no Control Scheme set for the Action " + action.name + " in the Input Action Asset: " + action.actionMap + "\n" +
-                    "Please make sure to set up control schemes and to assign the proper devices to these control schemes.");
+                // InputIconsLogger.LogWarning("There is no Control Scheme set for the Action " + action.name + " in the Input Action Asset: " + action.actionMap + "\n" +
+                    // "Please make sure to set up control schemes and to assign the proper devices to these control schemes.");
             }
 
             if (!BindingGroupContainsControlScheme(binding.groups, controlSchemeName))
@@ -608,8 +608,8 @@ namespace InputIcons
                 {
                     if (binding.groups.Length == 0)
                     {
-                        InputIconsLogger.LogWarning("There is no Control Scheme set for the Action " + action.name + " in the Input Action Asset: " + action.actionMap + "\n" +
-                            "Please make sure to set up control schemes and to assign the proper devices to these control schemes.");
+                        // InputIconsLogger.LogWarning("There is no Control Scheme set for the Action " + action.name + " in the Input Action Asset: " + action.actionMap + "\n" +
+                            // "Please make sure to set up control schemes and to assign the proper devices to these control schemes.");
                     }
 
                     if (!BindingGroupContainsControlScheme(binding.groups, controlSchemeName))

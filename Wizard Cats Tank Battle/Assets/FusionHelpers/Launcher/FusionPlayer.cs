@@ -35,14 +35,14 @@ namespace FusionHelpers
 			_eventStub = eventRelay;
 	
 
-			Debug.Log($"Spawned Player with InputAuth {PlayerId}, Index {PlayerIndex}");
+			// Debug.Log($"Spawned Player with InputAuth {PlayerId}, Index {PlayerIndex}");
 
       Runner.WaitForSingleton<FusionSession>(session => session.AddPlayerAvatar(this));
 		}
 
 		public override void Despawned(NetworkRunner runner, bool hasState)
 		{
-      Debug.Log($"Despawned Player with InputAuth {PlayerId}, Index {PlayerIndex}");
+      // Debug.Log($"Despawned Player with InputAuth {PlayerId}, Index {PlayerIndex}");
 
       Runner.WaitForSingleton<FusionSession>(session => session.RemovePlayerAvatar(this));
 		}

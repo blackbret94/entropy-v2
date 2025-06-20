@@ -36,7 +36,7 @@ namespace Vashta.Entropy.Network
                 Runner.AddCallbacks(this);
             }
             
-            Debug.Log("Spawned [" + this + "] IsClient=" + Runner.IsClient + " IsServer=" + Runner.IsServer + " IsInputSrc=" + Object.HasInputAuthority + " IsStateSrc=" + Object.HasStateAuthority);
+            // Debug.Log("Spawned [" + this + "] IsClient=" + Runner.IsClient + " IsServer=" + Runner.IsServer + " IsInputSrc=" + Object.HasInputAuthority + " IsStateSrc=" + Object.HasStateAuthority);
         }
 
         public void OnInput(NetworkRunner runner, NetworkInput input)

@@ -9,10 +9,10 @@ namespace Vashta.Entropy.Player
 {
     public class PlayerTeam : NetworkBehaviour
     {
-        [Networked, OnChangedRender(nameof(OnTeamIdChanged))] 
-        public int TeamIndex { get; set; }
-        [Networked]
-        public int PreferredTeamIndex { get; set; }
+        [Networked, OnChangedRender(nameof(OnTeamIdChanged))]
+        public int TeamIndex { get; set; } = -1;
+
+        [Networked] public int PreferredTeamIndex { get; set; } = 100;
 
         public TeamController TeamController { get; private set; }
         public PlayerController PlayerController { get; private set; }
@@ -50,7 +50,7 @@ namespace Vashta.Entropy.Player
             {
                 // Local, choose initial team
                 TeamController.AttemptToChangePlayerToPreferredTeam(PlayerController);
-                Debug.Log("Chose initial team: " + TeamIndex);
+                // Debug.Log("Chose initial team: " + TeamIndex);
             }
             else
             {

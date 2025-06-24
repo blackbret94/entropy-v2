@@ -46,10 +46,11 @@ namespace Vashta.Entropy.Player
 
         // Health
         [Networked, OnChangedRender(nameof(OnHealthChanged))]
-        public int Health { get; protected set; } // accurate health
-        public int DisplayHealth { get; private set; } // For showing immediate changes, resets ever render
+        public int Health { get; protected set; } = 10; // accurate health
 
-        public int maxHealth { get; set; }
+        public int DisplayHealth { get; private set; } = 10; // For showing immediate changes, resets ever render
+
+        public int maxHealth { get; set; } = 10;
         public bool IsAlive { get; private set; } = true; // This replaced another variable called "isAlive" - need to make sure they weren't competing
 
         // Shield
@@ -139,6 +140,8 @@ namespace Vashta.Entropy.Player
         public bool HasSpawned { get; private set; }
         public bool isBot = false;
         
+        public bool SpawnComplete { get; protected set; }
+        
         public override void Spawned()
         {
             base.Spawned();
@@ -209,7 +212,7 @@ namespace Vashta.Entropy.Player
             }
             
             PlayerViewController.SetName(PlayerName);
-            GameManager.ui.GameLogPanel.EventPlayerJoined(PlayerName);
+            // GameManager.ui.GameLogPanel.EventPlayerJoined(PlayerName);
             PlayerList.Add(this);
             
             PlayerViewController.RefreshHealthSlider();
@@ -249,6 +252,7 @@ namespace Vashta.Entropy.Player
             }
             
             PostSpawn();
+            SpawnComplete = true;
         }
 
         public void SetIsAlive(bool isAlive)
@@ -279,16 +283,8 @@ namespace Vashta.Entropy.Player
 
         public override void Render()
         {
-            UpdateMass();
-            
-            // Delayed update
-            if (Runner.SimulationTime >= _lastSecondUpdate + _secondUpdateTime)
-            {
-                LateInit();
-            
-                StatusEffectController.StatusEffectTick();
-                _lastSecondUpdate = Runner.SimulationTime;
-            }
+            if (!SpawnComplete)
+                return;
             
             if (HasInputAuthority)
             {
@@ -354,6 +350,7 @@ namespace Vashta.Entropy.Player
         public void SetMaxHealth()
         {
             Health = maxHealth;
+            
             OnHealthChanged();
         }
 
@@ -394,57 +391,72 @@ namespace Vashta.Entropy.Player
 
         public override void FixedUpdateNetwork()
         {
-            if (!HasInputAuthority || isBot)
-                return;
-            
-            if (NetworkInputController.fetchInput)
+            // Handle input
+            if (HasInputAuthority && !isBot)
             {
-                if (GetInput(out NetworkInputData inputData))
+                if (NetworkInputController.fetchInput)
                 {
-                    MovementController.Move(Runner.DeltaTime, inputData.moveDirection.normalized);
-                    MovementController.RotateTurret(inputData.aimDirection.normalized);
-                    
-                    // FIRE
-                    if (inputData.IsDown(NetworkInputData.BUTTON_FIRE_PRIMARY))
+                    if (GetInput(out NetworkInputData inputData))
                     {
-                        CombatController.AttemptToShoot();
-                    }
+                        MovementController.Move(Runner.DeltaTime, inputData.moveDirection.normalized);
+                        MovementController.RotateTurret(inputData.aimDirection.normalized);
 
-                    // POWERUP
-                    if(inputData.IsDown(NetworkInputData.BUTTON_FIRE_POWERUP))
-                        PowerupController.TryCastPowerup();
-                        
-                    
-                    // ULTIMATE
-                    if (inputData.IsDown(NetworkInputData.BUTTON_FIRE_ULTIMATE))
-                    {
-                        bool couldCast = UltimateController.TryCastUltimate();
-
-                        if (!couldCast)
+                        // FIRE
+                        if (inputData.IsDown(NetworkInputData.BUTTON_FIRE_PRIMARY))
                         {
-                            GameManager.ui.SfxController.PlayUltimateNotReady();
+                            CombatController.AttemptToShoot();
                         }
-                    }
-                    
-                    // DROP FLAG
-                    if (inputData.IsDown(NetworkInputData.BUTTON_DROP_FLAG))
-                    {
-                        DropCollectibles();
-                        UIGame.GetInstance().DropCollectiblesButton.gameObject.SetActive(false);
-                    }
-                    
+
+                        // POWERUP
+                        if (inputData.IsDown(NetworkInputData.BUTTON_FIRE_POWERUP))
+                            PowerupController.TryCastPowerup();
+
+
+                        // ULTIMATE
+                        if (inputData.IsDown(NetworkInputData.BUTTON_FIRE_ULTIMATE))
+                        {
+                            bool couldCast = UltimateController.TryCastUltimate();
+
+                            if (!couldCast)
+                            {
+                                GameManager.ui.SfxController.PlayUltimateNotReady();
+                            }
+                        }
+
+                        // DROP FLAG
+                        if (inputData.IsDown(NetworkInputData.BUTTON_DROP_FLAG))
+                        {
+                            DropCollectibles();
+                            UIGame.GetInstance().DropCollectiblesButton.gameObject.SetActive(false);
+                        }
+
 #if UNITY_EDITOR && (UNITY_IPHONE || UNITY_ANDROID)
 // Move dir and turn dir are from inputData
 				GameManager.ui.controls[0].position = moveDir;
 				GameManager.ui.controls[1].position = turnDir;
 #endif
 
-                    _oldInput = inputData;
+                        _oldInput = inputData;
+                    }
+                    else
+                    {
+                        Debug.Log("No input data");
+                    }
                 }
-                else
-                {
-                    Debug.Log("No input data");
-                }
+            }
+
+            if (!HasSpawned)
+                return;
+            
+            UpdateMass();
+            
+            // Delayed update
+            if (Runner.SimulationTime >= _lastSecondUpdate + _secondUpdateTime)
+            {
+                LateInit();
+            
+                StatusEffectController.StatusEffectTick();
+                _lastSecondUpdate = Runner.SimulationTime;
             }
         }
 
@@ -566,7 +578,7 @@ namespace Vashta.Entropy.Player
                 
                 if (isBot)
                 {
-                    Debug.Log("Setting bot spawn position: " + respawnPosition);
+                    // Debug.Log("Setting bot spawn position: " + respawnPosition);
                 }
                 
                 // Debug.Log("Spawn Position: " + respawnPosition);

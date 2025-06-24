@@ -126,7 +126,12 @@ namespace Entropy.Scripts.Player
             if (!deathFxData)
             {
                 Debug.LogWarning("Could not load death fx with ID: " + killingBlowDeathFx);
-                deathFxData = _playerController.GetClass().DefaultDeathEffects();
+                ClassDefinition classDefinition = _playerController.GetClass();
+
+                if (classDefinition != null)
+                {
+                    deathFxData = classDefinition.DefaultDeathEffects();
+                }
             }
             
             if(deathFxData != null)

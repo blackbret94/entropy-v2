@@ -182,6 +182,11 @@ namespace TanksMP
         {
             base.Render();
 
+            if (_timerSlowUpdate == null || _timerPathfinding == null)
+            {
+                return;
+            }
+
             if(_timerSlowUpdate.Run())
             {
                 SlowUpdate();

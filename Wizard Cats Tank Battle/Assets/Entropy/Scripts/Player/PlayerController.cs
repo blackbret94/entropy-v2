@@ -186,7 +186,7 @@ namespace Vashta.Entropy.Player
             if (HasInputAuthority && !isBot)
             {
                 // Local player logic
-                GameManager.localPlayerController = this;
+                PlayerList.SetLocalPlayer(this);
                 GameManager.ui.CastPowerupButton.gameObject.SetActive(false);
                 CharacterAppearance.SaveLoad.LoadLocal();
                 CameraController.SetTarget(turret);
@@ -509,6 +509,7 @@ namespace Vashta.Entropy.Player
             if (HasInputAuthority)
             {
                 GameManager.ui.HUD.PlayerDied();
+                
             }
                 
             //find original sender game object (killedBy)

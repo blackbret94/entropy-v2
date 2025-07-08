@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Entropy.Scripts.Player;
 using TanksMP;
 using TMPro;
 using UnityEngine;
@@ -54,7 +55,7 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
         private void UpdateCheckboxes()
         {
             // update top selection
-            PlayerController playerController = GameManager.GetInstance().localPlayerController;
+            PlayerController playerController = PlayerList.GetLocalPlayer();
             int teamIndex = playerController.PreferredTeamIndex;
 
             foreach (ClassSelectionTeamCheckbox checkbox in CheckboxList)
@@ -147,7 +148,7 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
 
         private void ApplyChanges(bool respawnPlayer, bool applyNow)
         {
-            PlayerController playerController = GameManager.GetInstance().localPlayerController;
+            PlayerController playerController = PlayerList.GetLocalPlayer();;
 
             int selectedTeamIndex = ClassSelectionTeamSelector.SelectedTeamIndex();
             if (selectedTeamIndex != -1)
@@ -167,7 +168,7 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
 
         public void RespawnPlayerIfTeamChangedButton()
         {
-            PlayerController playerController = GameManager.GetInstance().localPlayerController;
+            PlayerController playerController = PlayerList.GetLocalPlayer();;
             int teamIndex = playerController.TeamIndex;
 
             bool teamChanged = teamIndex != ClassSelectionTeamSelector.SelectedTeamIndex();
@@ -182,7 +183,7 @@ namespace Vashta.Entropy.UI.ClassSelectionPanel
 
         private bool IsInRespawnZone()
         {
-            return _gameManager.SpawnController.PlayerCanRespawnFreely(_gameManager.localPlayerController);
+            return _gameManager.SpawnController.PlayerCanRespawnFreely(PlayerList.GetLocalPlayer());
         }
         
         // UI

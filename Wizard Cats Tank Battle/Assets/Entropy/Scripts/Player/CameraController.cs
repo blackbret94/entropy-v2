@@ -6,6 +6,7 @@ namespace Entropy.Scripts.Player
     public class CameraController : MonoBehaviour
     {
         public FollowTarget camFollow { get; set; }
+        public Camera HUDCamera { get; set; }
 
         public Transform camTransform => camFollow.camTransform;
 
@@ -18,6 +19,16 @@ namespace Entropy.Scripts.Player
             else
             {
                 Debug.LogWarning("No MainCamera");
+            }
+            
+            if (HUDCamera == null)
+            {
+                HUDCamera = GameObject.Find("HUD Camera").GetComponent<Camera>();
+            }
+
+            if (HUDCamera == null)
+            {
+                Debug.LogError("Could not find HUD Camera!");
             }
         }
 
@@ -48,11 +59,15 @@ namespace Entropy.Scripts.Player
         public void SetDeathCam()
         {
             camFollow.SetDeathCam();
+            if(HUDCamera)
+                HUDCamera.gameObject.SetActive(false);
         }
 
         public void SetNormalCam()
         {
             camFollow.SetNormalCam();
+            if(HUDCamera)
+                HUDCamera.gameObject.SetActive(true);
         }
 
         public void HideMask(bool b)

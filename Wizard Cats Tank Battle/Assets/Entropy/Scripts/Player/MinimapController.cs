@@ -35,7 +35,7 @@ namespace Entropy.Scripts.Player
         {
             if (!_localPlayerController)
             {
-                if ((_localPlayerController = _gameManager.localPlayerController) != null)
+                if ((_localPlayerController = PlayerList.localPlayerController) != null)
                 {
                     MiniMap.Target = _localPlayerController.transform;
                     // Debug.Log("Player attached!");

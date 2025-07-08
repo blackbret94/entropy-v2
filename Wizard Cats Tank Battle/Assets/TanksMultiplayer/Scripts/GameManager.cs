@@ -29,12 +29,6 @@ namespace TanksMP
     {
         //reference to this script instance
         private static GameManager instance;
-
-        /// <summary>
-        /// The local player instance spawned for this client.
-        /// </summary>
-        [HideInInspector]
-        public PlayerController localPlayerController;
         
         [Header("Controllers")]
         public UIGame ui;

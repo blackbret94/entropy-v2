@@ -241,7 +241,7 @@ namespace TanksMP
 
         public void RefreshAimArrow()
         {
-            PlayerAimGraphic playerAimGraphic = GameManager.GetInstance().localPlayerController.PlayerViewController.PlayerAimGraphic;
+            PlayerAimGraphic playerAimGraphic = PlayerList.GetLocalPlayer().PlayerViewController.PlayerAimGraphic;
 
             if (playerAimGraphic)
             {

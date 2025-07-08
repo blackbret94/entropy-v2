@@ -73,7 +73,7 @@ namespace Vashta.Entropy.StatusEffects
                 return null;
             }
             
-            PlayerController localPlayer = gameManager.localPlayerController;
+            PlayerController localPlayer = PlayerList.GetLocalPlayer();
             if (!localPlayer)
             {
                 Debug.LogError("Missing reference to local player!");

@@ -11,7 +11,7 @@ namespace Vashta.Entropy.Player
         [SerializeField] private ClassDefinition _classDefinition;
 
         [Networked, OnChangedRender(nameof(OnClassChanged))]
-        public int ClassId { get; protected set; }
+        public int ClassId { get; protected set; } = 1;
         // [Networked]
         // public int ClassIdQueued { get; protected set; } // Needs to be implemented
 

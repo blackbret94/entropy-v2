@@ -1,5 +1,6 @@
 using System.Collections;
 using Entropy.Scripts.Audio;
+using Entropy.Scripts.Player;
 using Fusion;
 using TanksMP;
 using UnityEngine;
@@ -43,10 +44,11 @@ namespace Vashta.Entropy.GameState
         public void DisplayGameOver(int teamIndex)
         {
             _gameManager.MatchTimer.StopTimer();
-            _gameManager.localPlayerController.enabled = false;
-            if (_gameManager.localPlayerController.CameraController)
+            PlayerController playerController = PlayerList.GetLocalPlayer();
+            playerController.enabled = false;
+            if (playerController.CameraController)
             {
-                _gameManager.localPlayerController.CameraController.HideMask(true);
+                playerController.CameraController.HideMask(true);
             }
             
             if (teamIndex != -1)
@@ -84,7 +86,7 @@ namespace Vashta.Entropy.GameState
                 TeamInstance winningTeamInstance = _gameManager.TeamController.teams[teamIndex];
                 _gameManager.ui.ShowGameOver(teamIndex, winningTeamInstance.teamDefinition.TeamNameDisplay, winningTeamInstance.teamDefinition.Material.color);
 
-                int playerTeamIndex = _gameManager.localPlayerController.TeamIndex;
+                int playerTeamIndex = PlayerList.GetLocalPlayer().TeamIndex;
                 if (playerTeamIndex == teamIndex)
                     _gameManager.MusicController.PlayVictoryMusic();
                 else

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Entropy.Scripts.Player;
 using TanksMP;
 using TMPro;
 using UnityEngine;
@@ -45,7 +46,7 @@ namespace Vashta.Entropy.UI.ObjectivesPanel
         // None of this can be cached, as it may change in between refreshes
         private void RefreshContent()
         {
-            int teamIndex = _gameManager.localPlayerController.TeamIndex;
+            int teamIndex = PlayerList.GetLocalPlayer().TeamIndex;
             
             // Get team mates
             TeamStateSnapshot teamStateSnapshot = _gameManager.TeamController.GetTeamState(teamIndex);

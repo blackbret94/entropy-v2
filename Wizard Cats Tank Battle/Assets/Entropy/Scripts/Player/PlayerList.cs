@@ -12,6 +12,9 @@ namespace Entropy.Scripts.Player
         public static List<PlayerController> GetAllPlayers => _players;
         
         private static Dictionary<short, PlayerController> _playersDict = new ();
+        
+        [HideInInspector]
+        public static PlayerController localPlayerController;
 
         public static void Add(PlayerController playerController)
         {
@@ -62,20 +65,27 @@ namespace Entropy.Scripts.Player
 
         public static PlayerController GetLocalPlayer()
         {
-            PlayerController localPlayer = GameManager.GetInstance().localPlayerController;
-            
-            if(localPlayer)
-               return localPlayer;
-            
-            foreach (var player in _players)
+            if (!localPlayerController)
             {
-                if (player != null && player.IsLocal && !player.isBot)
+                foreach (var player in _players)
                 {
-                    return player;
+                    if (player != null && player.IsLocal && !player.isBot)
+                    {
+                        localPlayerController = player;
+                        break;
+                    }
                 }
             }
+            
+            if(!localPlayerController)
+                Debug.LogError("Missing reference to local player controller!");
 
-            return null;
+            return localPlayerController;
+        }
+
+        public static void SetLocalPlayer(PlayerController localPlayer)
+        {
+            localPlayerController = localPlayer;
         }
     }
 }

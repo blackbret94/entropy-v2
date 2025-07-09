@@ -22,7 +22,7 @@ namespace Vashta.Entropy.GameState
         /// </summary>
         public int maxPlayers;
         // This many less bots than max players
-        public const int MAX_PLAYER_BUFFER = 2;
+        private const int MAX_PLAYER_BUFFER = 0;
         
         /// <summary>
         /// Selection of bot prefabs to choose from.

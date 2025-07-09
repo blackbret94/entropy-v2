@@ -117,6 +117,7 @@ namespace Vashta.Entropy.Player
         public bool IsLocal => (HasInputAuthority && !isBot);
         public ClassDefinition defaultClassDefinition;
         public GameObject characterRoot;
+        public NavMeshAgent NavMeshAgent;
 
         private Vector3 _lastMousePos;
 
@@ -582,30 +583,7 @@ namespace Vashta.Entropy.Player
                     // Debug.Log("Setting bot spawn position: " + respawnPosition);
                 }
                 
-                // Debug.Log("Spawn Position: " + respawnPosition);
-                //
-                // float raycastDistance = 10f;
-                // float clippingOffset = 0.01f; // Small vertical offset to avoid clipping
-                //
-                // Vector3 bottomOfCollider = respawnPosition + transform.rotation * _collider.bounds.center - Vector3.up * _collider.bounds.extents.y;
-                //
-                // // Raycast down from above the respawn point
-                // if (Physics.Raycast(bottomOfCollider + Vector3.up * raycastDistance, Vector3.down, out RaycastHit hit, raycastDistance * 2f, LayerMask.GetMask("Ground")))
-                // {
-                //     // Adjust position so the bottom of the player sits right on the ground
-                //
-                //     Vector3 adjustedPosition = hit.point - transform.rotation * _collider.bounds.center + Vector3.up * _collider.bounds.extents.y + Vector3.up * clippingOffset;
-                //     Debug.Log("Adjusted Position: " + adjustedPosition);
-                //     rb.position = adjustedPosition;
-                // }
-                // else
-                // {
-                //     Debug.LogWarning("No ground found beneath respawn point!");
-                //     rb.position = respawnPosition;
-                // }
-                
                 SetPosition(respawnPosition);
-                // transform.position = respawnPosition;
                 SnapToNavMesh(respawnPosition);
                 
                 if (isBot)
@@ -861,6 +839,9 @@ namespace Vashta.Entropy.Player
             if (rb != null)
             {
                 rb.position = pos;
+            } else if (NavMeshAgent != null)
+            {
+                NavMeshAgent.Warp(pos);
             }
             else
             {

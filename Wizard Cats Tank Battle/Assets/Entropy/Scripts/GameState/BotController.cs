@@ -173,9 +173,11 @@ namespace Vashta.Entropy.GameState
 
             if (teamController.TeamsAreEven())
                 return;
-            
-            // int totalPlayers
-            // TODO: Come back to this after bots are working
+
+            int teamCount = teamController.TeamCount;
+            int maxPlayersPerTeam = maxPlayers / teamCount;
+
+            // Check all teams, add bot if under max team size, remove if over max team size.
         }
 
         protected void RemoveBot()

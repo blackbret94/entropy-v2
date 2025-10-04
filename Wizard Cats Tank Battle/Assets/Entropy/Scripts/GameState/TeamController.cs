@@ -74,6 +74,16 @@ namespace Vashta.Entropy.GameState
 
             return true;
         }
+
+        public bool TeamIsFull(int teamIndex)
+        {
+            return false;
+        }
+
+        public bool TeamIsOverfilled(int teamIndex)
+        {
+            return false;
+        }
         
         public void AddPlayerToTeam(PlayerController playerController, int teamIndex)
         {

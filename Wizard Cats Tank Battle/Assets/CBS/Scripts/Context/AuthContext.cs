@@ -69,7 +69,7 @@ namespace CBS.Context
             LoginForm.OnLogined += OnLoginComplete;
         }
 
-        private void OnLoginComplete(CBSLoginResult result)
+        public void OnLoginComplete(CBSLoginResult result)
         {
             if (result.IsSuccess)
             {

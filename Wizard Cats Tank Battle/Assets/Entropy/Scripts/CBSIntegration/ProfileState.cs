@@ -14,6 +14,16 @@ namespace Vashta.Entropy.Scripts.CBSIntegration
             CachedDisplayName = "";
             ProfileModule.OnAcountInfoGetted += OnAccountInfoGetted;
             ProfileModule.OnDisplayNameUpdated += OnDisplayNameUpdated;
+            AuthSteam authSteam = FindFirstObjectByType<AuthSteam>();
+            
+            if (authSteam)
+            {
+                authSteam.UpdateUsername();
+            }
+            else
+            {
+                Debug.LogError("No AuthSteam found! Could not update username");
+            }
         }
 
         public void GetActiveUser()

@@ -14,7 +14,8 @@ namespace Vashta.Entropy.PostProcessing
         private void Awake()
         {
             _postProcessVolume = GetComponent<PostProcessVolume>();
-            _postProcessVolume.profile.TryGetSettings(out _exposure);
+            if(_postProcessVolume != null)
+                _postProcessVolume.profile.TryGetSettings(out _exposure);
         }
 
         private void Start()

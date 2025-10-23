@@ -244,6 +244,9 @@ namespace Vashta.Entropy.Player
                 PlayerDeath(null);
             }
             
+            while(ClassController.ClassId == 0)
+                yield return null;
+            
             ClassController.ApplyClass(handicapModifier);
             
             // Apply status effect

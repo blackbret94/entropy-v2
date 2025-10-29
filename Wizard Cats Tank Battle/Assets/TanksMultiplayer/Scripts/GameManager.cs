@@ -12,6 +12,7 @@ using Vashta.Entropy.GameState;
 using Vashta.Entropy.PhotonExtensions;
 using Vashta.Entropy.Player;
 using Vashta.Entropy.ScriptableObject;
+using Vashta.Entropy.Scripts.SteamIntegration;
 using Vashta.Entropy.UI.MapSelection;
 
 namespace TanksMP
@@ -82,6 +83,17 @@ namespace TanksMP
                 
                 SessionInfo sessionInfo = Runner.SessionInfo;
                 RoomInfoWrapper roomInfoWrapper = new RoomInfoWrapper(sessionInfo);
+                
+                // broadcast to steam
+                SteamManager steamManager = SteamManager.Instance;
+                if (steamManager)
+                {
+                    steamManager.SteamLobbies.SetJoinableRoom(roomInfoWrapper);
+                }
+                else
+                {
+                    Debug.LogError("Could not find steam manager!");
+                }
 
                 GameMode gameMode = localPlayerInfo.GameModeEnum;
                 if (gameMode == GameMode.RAND)

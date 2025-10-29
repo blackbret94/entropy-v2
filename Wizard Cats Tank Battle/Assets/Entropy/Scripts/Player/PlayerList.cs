@@ -9,7 +9,7 @@ namespace Entropy.Scripts.Player
     public class PlayerList
     {
         private static List<PlayerController> _players = new ();
-        public static List<PlayerController> GetAllPlayers => _players;
+        public static List<PlayerController> GetAllPlayers => new (_players);
         
         private static Dictionary<short, PlayerController> _playersDict = new ();
         

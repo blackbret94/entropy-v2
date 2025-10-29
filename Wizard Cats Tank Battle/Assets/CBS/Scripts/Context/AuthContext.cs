@@ -35,31 +35,31 @@ namespace CBS.Context
             // var backgroundPrefab = AuthUIData.Background;
             // UIView.ShowWindow(backgroundPrefab);
             // check auto login
-            var autoLogin = PlayerPrefs.GetInt("autologin", 0) == 1;
-            if (autoLogin)
-            {
-                var popupViewer = new PopupViewer();
-                popupViewer.ShowLoadingPopup();
-            
-                Auth.AutoLogin(onAuth => { 
-                    if (onAuth.IsSuccess)
-                    {
-                        OnLoginComplete(onAuth);
-                    }
-                    else
-                    {
-                        ShowLoginScreen();
-                    }
-                    popupViewer.HideLoadingPopup();
-                });
-            }
-            else
-            {
-                ShowLoginScreen();
-            }
+            // var autoLogin = PlayerPrefs.GetInt("autologin", 0) == 1;
+            // if (autoLogin)
+            // {
+            //     var popupViewer = new PopupViewer();
+            //     popupViewer.ShowLoadingPopup();
+            //
+            //     Auth.AutoLogin(onAuth => { 
+            //         if (onAuth.IsSuccess)
+            //         {
+            //             OnLoginComplete(onAuth);
+            //         }
+            //         else
+            //         {
+            //             // ShowLoginScreen();
+            //         }
+            //         popupViewer.HideLoadingPopup();
+            //     });
+            // }
+            // else
+            // {
+            //     // ShowLoginScreen();
+            // }
         }
 
-        private void ShowLoginScreen()
+        public void ShowLoginScreen()
         {
             // show login screen
             var loginPrefab = AuthUIData.LoginForm;

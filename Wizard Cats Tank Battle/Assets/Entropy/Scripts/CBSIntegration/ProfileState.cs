@@ -1,5 +1,6 @@
 using CBS;
 using UnityEngine;
+using Vashta.Entropy.Scripts.SteamIntegration;
 
 namespace Vashta.Entropy.Scripts.CBSIntegration
 {

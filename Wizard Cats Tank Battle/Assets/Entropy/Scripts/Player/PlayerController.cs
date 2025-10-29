@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using CBS;
 using Entropy.Scripts.Player;
 using Fusion;
 using FusionHelpers;
@@ -42,6 +43,7 @@ namespace Vashta.Entropy.Player
         
         [Networked] public string PlayerName { get; protected set; }
         [Networked] public short NetID { get; protected set; } = -1;
+        [Networked] public string playfabId { get; protected set; }
         public int TeamIndex => Team.TeamIndex;
 
         // Health
@@ -125,6 +127,7 @@ namespace Vashta.Entropy.Player
         private float _secondUpdateTime = 1f;
         
         private NetworkInputData _oldInput;
+        private IProfile _profileModule { get; set; }
         
         public MinimapEntityControllerPlayer MinimapEntityControllerPlayer;
         
@@ -166,7 +169,40 @@ namespace Vashta.Entropy.Player
             _collider = GetComponent<Collider>();
 
             HasSpawned = true;
+
+            if (HasStateAuthority && !isBot)
+            {
+                LoadPlayfabId();
+            }
+            
             StartCoroutine(SpawnedCR());
+        }
+
+        protected void LoadPlayfabId()
+        {
+            _profileModule = CBSModule.Get<CBSProfile>();
+            _profileModule.OnAcountInfoGetted += OnAcountInfoGetted;
+        }
+        
+        private void OnAcountInfoGetted(CBSGetAccountInfoResult result)
+        {
+            if (result.IsSuccess)
+            {
+                playfabId = result.Result.PlayFabId;
+                // Debug.Log($"Playfab ID: {playfabId}");
+            }
+            else
+            {
+                Debug.Log("Error getting Playfab account info! " + result.Error);
+            }
+        }
+
+        protected void OnDestroy()
+        {
+            if (_profileModule != null)
+            {
+                _profileModule.OnAcountInfoGetted -= OnAcountInfoGetted;
+            }
         }
 
         protected IEnumerator SpawnedCR()

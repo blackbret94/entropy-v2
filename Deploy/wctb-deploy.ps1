@@ -9,8 +9,8 @@ Copy-Item -Path $sourcePath -Destination $steamDir -Exclude $exclude -Recurse -F
 
 # Run Steam upload bat
 "Uploading build..."
-Start-Process -FilePath $steamBuild -Wait
-# Run AZCopy
-# Upload for Android
+& $steamBuild
+# Start-Process -FilePath $steamBuild -Wait
+
 # Force user to quit manually
 # Read-Host -Prompt "Press Enter to exit"

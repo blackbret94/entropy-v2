@@ -11,6 +11,7 @@ using Vashta.Entropy.Network;
 using Vashta.Entropy.PhotonExtensions;
 using Vashta.Entropy.SceneNavigation;
 using Vashta.Entropy.Scripts.CBSIntegration;
+using Vashta.Entropy.Scripts.SteamIntegration;
 using Vashta.Entropy.UI.MapSelection;
 
 namespace TanksMP
@@ -138,6 +139,12 @@ namespace TanksMP
         /// <returns></returns>
         private IEnumerator Disconnect()
         {
+            SteamManager steamManager = SteamManager.Instance;
+            if (steamManager)
+            {
+                steamManager.SteamLobbies.ClearRoom();
+            }
+            
             if (Runner)
             {
                 if (Runner.IsRunning)
@@ -218,6 +225,14 @@ namespace TanksMP
         /// </summary>
         public void JoinRoom(string roomName)
         {
+            StartCoroutine(JoinRoomAsync(roomName));
+        }
+
+        private IEnumerator JoinRoomAsync(string roomName)
+        {
+            if (Runner && Runner.IsRunning)
+                yield return Disconnect();
+            
             LocalPlayerInfo.Name = CBSIntegrator.Instance.ProfileState.CachedDisplayName;
             FusionLauncher.LaunchByName(roomName, "us", WCTBSessionPrefab, _networkSceneManager, OnConnectionStatusUpdate);
         }
@@ -249,6 +264,12 @@ namespace TanksMP
 
         public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
         {
+            SteamManager steamManager = SteamManager.Instance;
+            if (steamManager)
+            {
+                steamManager.SteamLobbies.ClearRoom();
+            }
+            
             //do not switch scenes automatically when the game is already over
             if (GameManager.GetInstance().IsGameOver())
                 return;
@@ -269,6 +290,12 @@ namespace TanksMP
             }
 
             Debug.LogError("Disconnect cause: " + reason);
+            
+            SteamManager steamManager = SteamManager.Instance;
+            if (steamManager)
+            {
+                steamManager.SteamLobbies.ClearRoom();
+            }
 
             //do not switch scenes automatically when the game is already over
             if (GameManager.GetInstance().IsGameOver())

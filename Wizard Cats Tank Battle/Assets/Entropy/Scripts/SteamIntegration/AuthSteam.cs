@@ -4,7 +4,7 @@ using CBS.Context;
 using Steamworks;
 using UnityEngine;
 
-namespace Vashta.Entropy.Scripts.CBSIntegration
+namespace Vashta.Entropy.Scripts.SteamIntegration
 {
     public class AuthSteam : MonoBehaviour
     {
@@ -47,21 +47,26 @@ namespace Vashta.Entropy.Scripts.CBSIntegration
 
         private void OnUserLogin(CBSLoginResult result)
         {
+            AuthContext authContext = FindFirstObjectByType<AuthContext>();
+
             if (result.IsSuccess)
             {
                 Debug.Log(string.Format("User with ID {0} successfully log in", result.PlayerId));
                 
+                if (authContext != null)
+                {
+                    authContext.OnLoginComplete(result);
+                }
             }
             else
             {
                 Debug.LogError("Error logging into Steam! " + result.Error.Message);
-            }
-            
-            AuthContext authContext = FindFirstObjectByType<AuthContext>();
-
-            if (authContext != null)
-            {
-                authContext.OnLoginComplete(result);
+                
+                // Show login panel
+                if (authContext != null)
+                {
+                    authContext.ShowLoginScreen();
+                }
             }
         }
 
@@ -74,16 +79,16 @@ namespace Vashta.Entropy.Scripts.CBSIntegration
         {
             if (result.IsSuccess)
             {
-                string playfabName = result.DisplayName;
-                string steamUsername = SteamFriends.GetPersonaName();
-
-                if (!string.IsNullOrEmpty(steamUsername) && playfabName != steamUsername)
+                if (SteamAPI.IsSteamRunning() && SteamUser.GetSteamID().IsValid())
                 {
-                    CBSModule.Get<CBSProfile>().UpdateUserName(steamUsername);
-                }
+                    string playfabName = result.DisplayName;
+                    string steamUsername = SteamFriends.GetPersonaName();
 
-                // Debug.Log("Display name = " + result.DisplayName);
-                // Debug.Log("Avatar URL = " + result.AvatarUrl);
+                    if (!string.IsNullOrEmpty(steamUsername) && playfabName != steamUsername)
+                    {
+                        CBSModule.Get<CBSProfile>().UpdateUserName(steamUsername);
+                    }
+                }
             }
         }
     }

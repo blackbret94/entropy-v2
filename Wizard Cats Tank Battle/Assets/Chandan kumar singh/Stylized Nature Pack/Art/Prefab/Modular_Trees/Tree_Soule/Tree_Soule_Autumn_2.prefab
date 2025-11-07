@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5447372000058181956}
   - component: {fileID: 1775678927858791869}
   - component: {fileID: 405267573113872203}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,12 +26,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973995489378657}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.3799142, y: -0.09333796, z: -0.16848753, w: 0.90474594}
   m_LocalPosition: {x: -0.17205977, y: 1.7455866, z: -2.822341}
   m_LocalScale: {x: 1.877466, y: 2.79442, z: 1.8774661}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227521795994}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: -45.964, y: -3.371, z: -19.668001}
 --- !u!33 &5447372000058181956
 MeshFilter:
@@ -52,9 +53,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -76,9 +85,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &405267573113872203
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -87,11 +98,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973995489378657}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973995522732673
 GameObject:
@@ -105,7 +124,7 @@ GameObject:
   - component: {fileID: 5447371999824312996}
   - component: {fileID: 1775678928026076765}
   - component: {fileID: 1784119498756752208}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -119,12 +138,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973995522732673}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.20656404, y: -0.15118635, z: -0.19923627, w: 0.94592756}
   m_LocalPosition: {x: -0.0050597787, y: 2.1375866, z: -1.897341}
   m_LocalScale: {x: 1.877466, y: 2.7944202, z: 1.877466}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228507761246}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -26.810001, y: -13.194, z: -20.631}
 --- !u!33 &5447371999824312996
 MeshFilter:
@@ -145,9 +165,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -169,9 +197,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &1784119498756752208
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -180,11 +210,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973995522732673}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973995527371150
 GameObject:
@@ -198,7 +236,7 @@ GameObject:
   - component: {fileID: 5447371999819411883}
   - component: {fileID: 1775678928030977362}
   - component: {fileID: 3762717925496396571}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -212,12 +250,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973995527371150}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.22449797, y: -0.21441482, z: 0.20985219, w: 0.92714024}
   m_LocalPosition: {x: -1.2230598, y: 1.8475866, z: -2.561341}
   m_LocalScale: {x: 1.877466, y: 2.7944195, z: 1.8774662}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228507761246}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -19.044, y: -31.351002, z: 30.897001}
 --- !u!33 &5447371999819411883
 MeshFilter:
@@ -238,9 +277,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -262,9 +309,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &3762717925496396571
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -273,11 +322,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973995527371150}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973995552148102
 GameObject:
@@ -291,7 +348,7 @@ GameObject:
   - component: {fileID: 5447371999845204643}
   - component: {fileID: 1775678928072293978}
   - component: {fileID: 8365763722875536360}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -305,12 +362,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973995552148102}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.20656404, y: -0.15118635, z: -0.19923627, w: 0.94592756}
   m_LocalPosition: {x: -0.0050597787, y: 2.1375866, z: -1.897341}
   m_LocalScale: {x: 1.877466, y: 2.7944202, z: 1.877466}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227948381771}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -26.810001, y: -13.194, z: -20.631}
 --- !u!33 &5447371999845204643
 MeshFilter:
@@ -331,9 +389,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -355,9 +421,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &8365763722875536360
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -366,11 +434,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973995552148102}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973995688946349
 GameObject:
@@ -384,7 +460,7 @@ GameObject:
   - component: {fileID: 5447371999721005704}
   - component: {fileID: 1775678927655427697}
   - component: {fileID: 1168039442717385481}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -398,12 +474,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973995688946349}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.037933417, y: -0.26662248, z: 0.16802827, w: 0.9482827}
   m_LocalPosition: {x: -0.10593, y: -0.11817, z: 0.43043}
   m_LocalScale: {x: 1.7134047, y: 4.0380344, z: 1.7134047}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227535997361}
-  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 1.0120001, y: -31.231, z: 19.813002}
 --- !u!33 &5447371999721005704
 MeshFilter:
@@ -424,9 +501,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -448,9 +533,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &1168039442717385481
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -459,11 +546,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973995688946349}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973995834872752
 GameObject:
@@ -477,7 +572,7 @@ GameObject:
   - component: {fileID: 5447371999624616853}
   - component: {fileID: 1775678927717738348}
   - component: {fileID: 7690001221356857605}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -491,12 +586,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973995834872752}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.09403966, y: 0.7555267, z: 0.014145889, w: 0.64817894}
   m_LocalPosition: {x: 0.501, y: 0.09, z: 0.518}
   m_LocalScale: {x: 1.7134043, y: 4.0380354, z: 1.7134047}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227535997361}
-  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 5.7700005, y: 99.215004, z: 9.280001}
 --- !u!33 &5447371999624616853
 MeshFilter:
@@ -517,9 +613,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -541,9 +645,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &7690001221356857605
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -552,11 +658,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973995834872752}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973995915201772
 GameObject:
@@ -570,7 +684,7 @@ GameObject:
   - component: {fileID: 5447371999410324681}
   - component: {fileID: 1775678927361603632}
   - component: {fileID: 928075372650368279}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -584,12 +698,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973995915201772}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.24409397, y: -0.19181031, z: 0.2981192, w: 0.90263605}
   m_LocalPosition: {x: -1.25, y: 1.922, z: -2.608}
   m_LocalScale: {x: 1.877466, y: 2.7944195, z: 1.8774662}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227521795994}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -19.044, y: -31.351002, z: 41.944}
 --- !u!33 &5447371999410324681
 MeshFilter:
@@ -610,9 +725,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -634,9 +757,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &928075372650368279
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -645,11 +770,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973995915201772}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973995961532458
 GameObject:
@@ -663,7 +796,7 @@ GameObject:
   - component: {fileID: 5447371999448139791}
   - component: {fileID: 1775678927391421686}
   - component: {fileID: 8373245175623309025}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -677,12 +810,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973995961532458}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.3799142, y: -0.09333796, z: -0.16848753, w: 0.90474594}
   m_LocalPosition: {x: -0.17205977, y: 1.7455866, z: -2.822341}
   m_LocalScale: {x: 1.877466, y: 2.79442, z: 1.8774661}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227964096379}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: -45.964, y: -3.371, z: -19.668001}
 --- !u!33 &5447371999448139791
 MeshFilter:
@@ -703,9 +837,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -727,9 +869,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &8373245175623309025
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -738,11 +882,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973995961532458}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973996031173432
 GameObject:
@@ -756,7 +908,7 @@ GameObject:
   - component: {fileID: 5447371999294630685}
   - component: {fileID: 1775678927513475044}
   - component: {fileID: 6640906724811335777}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -770,12 +922,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996031173432}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.051594663, y: 0.057718843, z: 0.13609464, w: 0.98766637}
   m_LocalPosition: {x: -1.0330424, y: 2.2862434, z: -1.8985841}
   m_LocalScale: {x: 1.877466, y: 2.7944202, z: 1.8774657}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227948381771}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: -6.755, y: 5.7780004, z: 15.35}
 --- !u!33 &5447371999294630685
 MeshFilter:
@@ -796,9 +949,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -820,9 +981,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &6640906724811335777
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -831,11 +994,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996031173432}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973996106022078
 GameObject:
@@ -849,7 +1020,7 @@ GameObject:
   - component: {fileID: 5447371999357940891}
   - component: {fileID: 1775678927451736162}
   - component: {fileID: 3003013015185917583}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -863,12 +1034,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996106022078}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.2536539, y: -0.03409025, z: 0.24063388, w: 0.93626547}
   m_LocalPosition: {x: 0.6713171, y: 0.18938321, z: 0.10388233}
   m_LocalScale: {x: 1.5901668, y: 3.747596, z: 1.5901668}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227751714877}
-  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: -8.261001, y: -32.620003, z: -7.031}
 --- !u!33 &5447371999357940891
 MeshFilter:
@@ -889,9 +1061,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -913,9 +1093,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &3003013015185917583
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -924,11 +1106,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996106022078}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973996189637757
 GameObject:
@@ -942,7 +1132,7 @@ GameObject:
   - component: {fileID: 5447371999140615256}
   - component: {fileID: 1775678927099160737}
   - component: {fileID: 4451209043204270046}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -956,12 +1146,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996189637757}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.09505346, y: 0.5310808, z: 0.28448552, w: 0.7924557}
   m_LocalPosition: {x: 1.0128927, y: 0.69621277, z: 0.18519843}
   m_LocalScale: {x: 1.5901664, y: 3.7475965, z: 1.5901668}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227751714877}
-  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 10.086, y: 35.317, z: -14.512001}
 --- !u!33 &5447371999140615256
 MeshFilter:
@@ -982,9 +1173,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1006,9 +1205,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &4451209043204270046
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1017,11 +1218,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996189637757}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973996223268492
 GameObject:
@@ -1035,7 +1244,7 @@ GameObject:
   - component: {fileID: 5447371999174086313}
   - component: {fileID: 1775678927132799568}
   - component: {fileID: 3318742547292055629}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1049,12 +1258,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996223268492}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.20656404, y: -0.15118635, z: -0.19923627, w: 0.94592756}
   m_LocalPosition: {x: 0.003, y: 2.191, z: -1.92}
   m_LocalScale: {x: 1.877466, y: 2.7944202, z: 1.877466}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227521795994}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -26.810001, y: -13.194, z: -20.631}
 --- !u!33 &5447371999174086313
 MeshFilter:
@@ -1075,9 +1285,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1099,9 +1317,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &3318742547292055629
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1110,11 +1330,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996223268492}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973996251415811
 GameObject:
@@ -1128,7 +1356,7 @@ GameObject:
   - component: {fileID: 5447371999212784934}
   - component: {fileID: 1775678927029088735}
   - component: {fileID: 1758086493982130232}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1142,12 +1370,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996251415811}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.20656404, y: -0.15118635, z: -0.19923627, w: 0.94592756}
   m_LocalPosition: {x: -0.0050597787, y: 2.1375866, z: -1.897341}
   m_LocalScale: {x: 1.877466, y: 2.7944202, z: 1.877466}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227964096379}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -26.810001, y: -13.194, z: -20.631}
 --- !u!33 &5447371999212784934
 MeshFilter:
@@ -1168,9 +1397,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1192,9 +1429,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &1758086493982130232
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1203,11 +1442,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996251415811}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973996281652194
 GameObject:
@@ -1221,7 +1468,7 @@ GameObject:
   - component: {fileID: 5447371999266188231}
   - component: {fileID: 1775678927073728318}
   - component: {fileID: 3437839159211372474}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1235,12 +1482,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996281652194}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.19788875, y: -0.28655672, z: 0.14377342, w: 0.9263123}
   m_LocalPosition: {x: -0.597, y: 1.796, z: -2.295}
   m_LocalScale: {x: 1.877466, y: 2.7944195, z: 1.8774662}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227521795994}
-  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: -16.512001, y: -37.812, z: 23.335001}
 --- !u!33 &5447371999266188231
 MeshFilter:
@@ -1261,9 +1509,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1285,9 +1541,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &3437839159211372474
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1296,11 +1554,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996281652194}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973996369856946
 GameObject:
@@ -1314,7 +1580,7 @@ GameObject:
   - component: {fileID: 5447371999094342039}
   - component: {fileID: 1775678927178988910}
   - component: {fileID: 3478412879793574688}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1328,12 +1594,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996369856946}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.19788875, y: -0.28655672, z: 0.14377342, w: 0.9263123}
   m_LocalPosition: {x: -0.597, y: 1.796, z: -2.295}
   m_LocalScale: {x: 1.877466, y: 2.7944195, z: 1.8774662}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227948381771}
-  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: -16.512001, y: -37.812, z: 23.335001}
 --- !u!33 &5447371999094342039
 MeshFilter:
@@ -1354,9 +1621,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1378,9 +1653,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &3478412879793574688
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1389,11 +1666,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996369856946}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973996429807681
 GameObject:
@@ -1407,7 +1692,7 @@ GameObject:
   - component: {fileID: 5447371999114352740}
   - component: {fileID: 1775678927190434973}
   - component: {fileID: 3561462375279213315}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1421,12 +1706,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996429807681}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.40091413, y: -0.16645612, z: 0.06744645, w: 0.898338}
   m_LocalPosition: {x: 0.423, y: -0.14, z: -0.183}
   m_LocalScale: {x: 1.7134044, y: 4.038036, z: 1.7134049}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227535997361}
-  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: -44.255, y: -29.542002, z: 20.826}
 --- !u!33 &5447371999114352740
 MeshFilter:
@@ -1447,9 +1733,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1471,9 +1765,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &3561462375279213315
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1482,11 +1778,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996429807681}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973996443875261
 GameObject:
@@ -1500,7 +1804,7 @@ GameObject:
   - component: {fileID: 5447371998898716568}
   - component: {fileID: 1775678928981033825}
   - component: {fileID: 5622984722150256073}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1514,12 +1818,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996443875261}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.051594663, y: 0.057718843, z: 0.13609464, w: 0.98766637}
   m_LocalPosition: {x: -1.0330424, y: 2.2862434, z: -1.8985841}
   m_LocalScale: {x: 1.877466, y: 2.7944202, z: 1.8774657}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228507761246}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: -6.755, y: 5.7780004, z: 15.35}
 --- !u!33 &5447371998898716568
 MeshFilter:
@@ -1540,9 +1845,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1564,9 +1877,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &5622984722150256073
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1575,11 +1890,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996443875261}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973996446771179
 GameObject:
@@ -1593,7 +1916,7 @@ GameObject:
   - component: {fileID: 5447371998895288270}
   - component: {fileID: 1775678928986034999}
   - component: {fileID: 2501628310223884748}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1607,12 +1930,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996446771179}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.3799142, y: -0.09333796, z: -0.16848753, w: 0.90474594}
   m_LocalPosition: {x: -0.17205977, y: 1.7455866, z: -2.822341}
   m_LocalScale: {x: 1.877466, y: 2.79442, z: 1.8774661}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227948381771}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: -45.964, y: -3.371, z: -19.668001}
 --- !u!33 &5447371998895288270
 MeshFilter:
@@ -1633,9 +1957,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1657,9 +1989,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &2501628310223884748
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1668,11 +2002,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996446771179}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973996516595370
 GameObject:
@@ -1686,7 +2028,7 @@ GameObject:
   - component: {fileID: 5447371998964129423}
   - component: {fileID: 1775678928919290486}
   - component: {fileID: 2819812164659289071}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1700,12 +2042,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996516595370}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.0468243, y: 0.3303897, z: 0.10389682, w: 0.9369395}
   m_LocalPosition: {x: -0.15785286, y: 0.13750628, z: 0.90470475}
   m_LocalScale: {x: 1.7134043, y: 4.0380354, z: 1.7134047}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227535997361}
-  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 1.0940001, y: 38.973003, z: 13.042001}
 --- !u!33 &5447371998964129423
 MeshFilter:
@@ -1726,9 +2069,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1750,9 +2101,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &2819812164659289071
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1761,11 +2114,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996516595370}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973996675255279
 GameObject:
@@ -1779,7 +2140,7 @@ GameObject:
   - component: {fileID: 5447371998855529418}
   - component: {fileID: 1775678929097097011}
   - component: {fileID: 2595116872428102402}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1793,12 +2154,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996675255279}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.20570745, y: -0.17903274, z: 0.30596334, w: 0.9121503}
   m_LocalPosition: {x: -1.25, y: 1.922, z: -2.608}
   m_LocalScale: {x: 1.877466, y: 2.7944195, z: 1.8774662}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227964096379}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -15.410001, y: -27.993002, z: 40.949}
 --- !u!33 &5447371998855529418
 MeshFilter:
@@ -1819,9 +2181,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1843,9 +2213,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &2595116872428102402
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1854,11 +2226,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996675255279}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973996724270388
 GameObject:
@@ -1872,7 +2252,7 @@ GameObject:
   - component: {fileID: 5447371998601542929}
   - component: {fileID: 1775678928707781096}
   - component: {fileID: 8033009542031123499}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1886,12 +2266,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996724270388}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.13503227, y: 0.016547322, z: 0.25979587, w: 0.95603275}
   m_LocalPosition: {x: 0.8292679, y: 0.64445627, z: -0.57820207}
   m_LocalScale: {x: 1.5901666, y: 3.7475972, z: 1.5901669}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227751714877}
-  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: -45.964, y: -3.371, z: -19.668001}
 --- !u!33 &5447371998601542929
 MeshFilter:
@@ -1912,9 +2293,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1936,9 +2325,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &8033009542031123499
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1947,11 +2338,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996724270388}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973996894670242
 GameObject:
@@ -1965,7 +2364,7 @@ GameObject:
   - component: {fileID: 5447371998502421895}
   - component: {fileID: 1775678928878205310}
   - component: {fileID: 4276220582470466811}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1979,12 +2378,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996894670242}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.24409397, y: -0.19181031, z: 0.2981192, w: 0.90263605}
   m_LocalPosition: {x: -1.25, y: 1.922, z: -2.608}
   m_LocalScale: {x: 1.877466, y: 2.7944195, z: 1.8774662}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227948381771}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -19.044, y: -31.351002, z: 41.944}
 --- !u!33 &5447371998502421895
 MeshFilter:
@@ -2005,9 +2405,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2029,9 +2437,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &4276220582470466811
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2040,11 +2450,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973996894670242}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973997091975700
 GameObject:
@@ -2058,7 +2476,7 @@ GameObject:
   - component: {fileID: 5447371998439619121}
   - component: {fileID: 1775678928404137672}
   - component: {fileID: 8090084415903230386}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2072,12 +2490,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973997091975700}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.3799142, y: -0.09333796, z: -0.16848753, w: 0.90474594}
   m_LocalPosition: {x: -0.17205977, y: 1.7455866, z: -2.822341}
   m_LocalScale: {x: 1.877466, y: 2.79442, z: 1.8774661}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228507761246}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: -45.964, y: -3.371, z: -19.668001}
 --- !u!33 &5447371998439619121
 MeshFilter:
@@ -2098,9 +2517,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2122,9 +2549,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &8090084415903230386
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2133,11 +2562,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973997091975700}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973997149959377
 GameObject:
@@ -2151,7 +2588,7 @@ GameObject:
   - component: {fileID: 5447371998263672052}
   - component: {fileID: 1775678928613113869}
   - component: {fileID: 7203050324527168711}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2165,12 +2602,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973997149959377}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.051594663, y: 0.057718843, z: 0.13609464, w: 0.98766637}
   m_LocalPosition: {x: -1.0330424, y: 2.2862434, z: -1.8985841}
   m_LocalScale: {x: 1.877466, y: 2.7944202, z: 1.8774657}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227521795994}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: -6.755, y: 5.7780004, z: 15.35}
 --- !u!33 &5447371998263672052
 MeshFilter:
@@ -2191,9 +2629,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2215,9 +2661,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &7203050324527168711
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2226,11 +2674,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973997149959377}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973997194623981
 GameObject:
@@ -2244,7 +2700,7 @@ GameObject:
   - component: {fileID: 5447371998265406408}
   - component: {fileID: 1775678928507047729}
   - component: {fileID: 1140966307800551172}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2258,12 +2714,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973997194623981}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.051594663, y: 0.057718843, z: 0.13609464, w: 0.98766637}
   m_LocalPosition: {x: -1.0330424, y: 2.2862434, z: -1.8985841}
   m_LocalScale: {x: 1.877466, y: 2.7944202, z: 1.8774657}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227964096379}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: -6.755, y: 5.7780004, z: 15.35}
 --- !u!33 &5447371998265406408
 MeshFilter:
@@ -2284,9 +2741,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2308,9 +2773,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &1140966307800551172
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2319,11 +2786,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973997194623981}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973997286924305
 GameObject:
@@ -2337,7 +2812,7 @@ GameObject:
   - component: {fileID: 5447371998122764340}
   - component: {fileID: 1775678928213480653}
   - component: {fileID: 4363584488978426199}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2351,12 +2826,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973997286924305}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.19788875, y: -0.28655672, z: 0.14377342, w: 0.9263123}
   m_LocalPosition: {x: -0.614, y: 1.886, z: -2.368}
   m_LocalScale: {x: 1.877466, y: 2.7944195, z: 1.8774662}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227964096379}
-  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: -16.512001, y: -37.812, z: 23.335001}
 --- !u!33 &5447371998122764340
 MeshFilter:
@@ -2377,9 +2853,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2401,9 +2885,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &4363584488978426199
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2412,11 +2898,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973997286924305}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &42973997318807716
 GameObject:
@@ -2430,7 +2924,7 @@ GameObject:
   - component: {fileID: 5447371998157990017}
   - component: {fileID: 1775678928113243256}
   - component: {fileID: 4839720392796523936}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_B (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2444,12 +2938,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973997318807716}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.004414584, y: -0.16103669, z: -0.07029964, w: 0.9844317}
   m_LocalPosition: {x: -0.856, y: 1.992, z: -1.875}
   m_LocalScale: {x: 1.877466, y: 2.79442, z: 1.8774661}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228507761246}
-  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: -1.7960001, y: -18.457, z: -7.8780003}
 --- !u!33 &5447371998157990017
 MeshFilter:
@@ -2470,9 +2965,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2494,9 +2997,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &4839720392796523936
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2505,11 +3010,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42973997318807716}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -8702715304540806153, guid: d4164f9d77ad1814c8eb5d64ec63565c, type: 3}
 --- !u!1 &1271352530566428383
 GameObject:
@@ -2523,7 +3036,7 @@ GameObject:
   - component: {fileID: 6531520199020871418}
   - component: {fileID: 691327181772980739}
   - component: {fileID: 7334582387822620547}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2537,12 +3050,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352530566428383}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.13991655, y: -0.052097294, z: 0.2624332, w: 0.95333004}
   m_LocalPosition: {x: -1.1205835, y: 0.2019949, z: 0.38897538}
   m_LocalScale: {x: 1, y: 2.2380223, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228456384629}
-  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: -13.853001, y: -10.250001, z: 32.031002}
 --- !u!33 &6531520199020871418
 MeshFilter:
@@ -2563,9 +3077,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2587,9 +3109,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &7334582387822620547
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2598,11 +3122,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352530566428383}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352530579702484
 GameObject:
@@ -2616,7 +3148,7 @@ GameObject:
   - component: {fileID: 6531520198991055601}
   - component: {fileID: 691327181769242120}
   - component: {fileID: 4288733716525926508}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2630,12 +3162,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352530579702484}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.13744977, y: 0.018184228, z: -0.37868702, w: 0.9150809}
   m_LocalPosition: {x: 0.6623739, y: 1.2051854, z: -0.17776795}
   m_LocalScale: {x: 1, y: 2.0184002, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227819087646}
-  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: -13.7560005, y: 8.1310005, z: -45.945004}
 --- !u!33 &6531520198991055601
 MeshFilter:
@@ -2656,9 +3189,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2680,9 +3221,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &4288733716525926508
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2691,11 +3234,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352530579702484}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352530587544853
 GameObject:
@@ -2709,7 +3260,7 @@ GameObject:
   - component: {fileID: 6531520199000007984}
   - component: {fileID: 691327181760289225}
   - component: {fileID: 5726652440408801685}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2723,12 +3274,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352530587544853}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.01017318, y: -0.27917778, z: -0.14066777, w: 0.94982576}
   m_LocalPosition: {x: -0.7435836, y: 0.26599503, z: 0.44697547}
   m_LocalScale: {x: 1, y: 2.2380223, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228456384629}
-  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: -5.616, y: -32.007, z: -15.236001}
 --- !u!33 &6531520199000007984
 MeshFilter:
@@ -2749,9 +3301,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2773,9 +3333,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &5726652440408801685
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2784,11 +3346,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352530587544853}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352530590817972
 GameObject:
@@ -2802,7 +3372,7 @@ GameObject:
   - component: {fileID: 6531520199046272657}
   - component: {fileID: 691327181816261224}
   - component: {fileID: 1316891412003376455}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2816,12 +3386,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352530590817972}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.1894689, y: -0.09908559, z: 0.11632284, w: 0.96992403}
   m_LocalPosition: {x: -0.844, y: 0.341, z: 0.204}
   m_LocalScale: {x: 1, y: 2.2380223, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227751714877}
-  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 22.991001, y: -9.26, z: 11.790001}
 --- !u!33 &6531520199046272657
 MeshFilter:
@@ -2842,9 +3413,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2866,9 +3445,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &1316891412003376455
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2877,11 +3458,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352530590817972}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352530671681358
 GameObject:
@@ -2895,7 +3484,7 @@ GameObject:
   - component: {fileID: 6531520199116683115}
   - component: {fileID: 691327181743754130}
   - component: {fileID: 5743989956340720147}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2909,12 +3498,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352530671681358}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.28429496, y: 0.049764603, z: 0.21785414, w: 0.93233013}
   m_LocalPosition: {x: -1.777, y: -0.40917, z: 0.019882}
   m_LocalScale: {x: 1.2228, y: 2.736653, z: 1.2228}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227535997361}
-  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: -33.49, y: -2.135, z: 26.947}
 --- !u!33 &6531520199116683115
 MeshFilter:
@@ -2935,9 +3525,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2959,9 +3557,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &5743989956340720147
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2970,11 +3570,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352530671681358}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352530811645065
 GameObject:
@@ -2988,7 +3596,7 @@ GameObject:
   - component: {fileID: 6531520198955738284}
   - component: {fileID: 691327181866948693}
   - component: {fileID: 5381697101820763004}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3002,12 +3610,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352530811645065}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.22819227, y: 0.07363474, z: 0.2450591, w: 0.9393893}
   m_LocalPosition: {x: -1.7458, y: -0.34215, z: 0.30199}
   m_LocalScale: {x: 1.2228, y: 2.7366538, z: 1.2228}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227535997361}
-  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: -27.698002, y: 1.715, z: 28.819002}
 --- !u!33 &6531520198955738284
 MeshFilter:
@@ -3028,9 +3637,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3052,9 +3669,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &5381697101820763004
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3063,11 +3682,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352530811645065}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352530853321977
 GameObject:
@@ -3081,7 +3708,7 @@ GameObject:
   - component: {fileID: 6531520198730028252}
   - component: {fileID: 691327181491300389}
   - component: {fileID: 367102913055371455}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3095,12 +3722,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352530853321977}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.13701972, y: -0.021377541, z: 0.19434863, w: 0.9710805}
   m_LocalPosition: {x: -1.1155837, y: 0.30099487, z: 0.50997543}
   m_LocalScale: {x: 1, y: 2.2380223, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228456384629}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 15.928, y: 0.70000005, z: 22.733002}
 --- !u!33 &6531520198730028252
 MeshFilter:
@@ -3121,9 +3749,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3145,9 +3781,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &367102913055371455
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3156,11 +3794,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352530853321977}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352530881733159
 GameObject:
@@ -3174,7 +3820,7 @@ GameObject:
   - component: {fileID: 6531520198756149762}
   - component: {fileID: 691327181534385915}
   - component: {fileID: 9175751942785310393}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3188,12 +3834,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352530881733159}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.013620852, y: -0.015346197, z: 0.5163455, w: 0.8561345}
   m_LocalPosition: {x: -1.196, y: 0.129, z: -0.019}
   m_LocalScale: {x: 1, y: 2.2380219, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227751714877}
-  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 2.2450001, y: -0.70000005, z: 62.176003}
 --- !u!33 &6531520198756149762
 MeshFilter:
@@ -3214,9 +3861,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3238,9 +3893,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &9175751942785310393
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3249,11 +3906,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352530881733159}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352530930475043
 GameObject:
@@ -3267,7 +3932,7 @@ GameObject:
   - component: {fileID: 6531520198841624582}
   - component: {fileID: 691327181484561663}
   - component: {fileID: 9110662255257587646}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3281,12 +3946,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352530930475043}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.17395568, y: -0, z: -0, w: 0.9847535}
   m_LocalPosition: {x: -0.9588836, y: 0.42869473, z: 0.56687546}
   m_LocalScale: {x: 1, y: 2.2380223, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228456384629}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 20.036001, y: 0, z: 0}
 --- !u!33 &6531520198841624582
 MeshFilter:
@@ -3307,9 +3973,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3331,9 +4005,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &9110662255257587646
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3342,11 +4018,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352530930475043}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352531029813292
 GameObject:
@@ -3360,7 +4044,7 @@ GameObject:
   - component: {fileID: 6531520198670458889}
   - component: {fileID: 691327181581802736}
   - component: {fileID: 6748774776289365949}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3374,12 +4058,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352531029813292}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.061864346, y: 0.015931036, z: 0.5446998, w: 0.83619446}
   m_LocalPosition: {x: -1.124, y: 0.074, z: 0.202}
   m_LocalScale: {x: 1, y: 2.2380223, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227751714877}
-  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 4.94, y: 5.4160004, z: 66.395004}
 --- !u!33 &6531520198670458889
 MeshFilter:
@@ -3400,9 +4085,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3424,9 +4117,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &6748774776289365949
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3435,11 +4130,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352531029813292}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352531245687382
 GameObject:
@@ -3453,7 +4156,7 @@ GameObject:
   - component: {fileID: 6531520198324300403}
   - component: {fileID: 691327181361731210}
   - component: {fileID: 5463446821960961709}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3467,12 +4170,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352531245687382}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.055464987, y: 0.08600876, z: -0.050832815, w: 0.9934497}
   m_LocalPosition: {x: -1.431, y: -0.048834, z: 0.39634}
   m_LocalScale: {x: 1.2228, y: 2.7366538, z: 1.2228}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227535997361}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 6.8310003, y: 9.581, z: -5.2850003}
 --- !u!33 &6531520198324300403
 MeshFilter:
@@ -3493,9 +4197,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3517,9 +4229,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &5463446821960961709
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3528,11 +4242,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352531245687382}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352531443084481
 GameObject:
@@ -3546,7 +4268,7 @@ GameObject:
   - component: {fileID: 6531520198278423780}
   - component: {fileID: 691327180904814621}
   - component: {fileID: 4285584426665045613}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3560,12 +4282,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352531443084481}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.16751681, y: 0.35926655, z: -0.06691979, w: 0.915635}
   m_LocalPosition: {x: -0.92558366, y: 0.34699488, z: 0.1189754}
   m_LocalScale: {x: 1, y: 2.2380223, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228585128855}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -14.992001, y: 44.774002, z: -14.565001}
 --- !u!33 &6531520198278423780
 MeshFilter:
@@ -3586,9 +4309,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3610,9 +4341,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &4285584426665045613
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3621,11 +4354,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352531443084481}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352531466209646
 GameObject:
@@ -3639,7 +4380,7 @@ GameObject:
   - component: {fileID: 6531520198301679947}
   - component: {fileID: 691327180944473522}
   - component: {fileID: 5518285623160828271}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3653,12 +4394,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352531466209646}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.21293311, w: 0.97706676}
   m_LocalPosition: {x: 0.5273739, y: 1.7911854, z: 0.14123206}
   m_LocalScale: {x: 1, y: 2.0183997, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227819087646}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -24.589}
 --- !u!33 &6531520198301679947
 MeshFilter:
@@ -3679,9 +4421,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3703,9 +4453,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &5518285623160828271
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3714,11 +4466,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352531466209646}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352531564328185
 GameObject:
@@ -3732,7 +4492,7 @@ GameObject:
   - component: {fileID: 6531520198140673244}
   - component: {fileID: 691327181044662309}
   - component: {fileID: 5493811583080504229}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3746,12 +4506,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352531564328185}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.13991655, y: -0.052097294, z: 0.2624332, w: 0.95333004}
   m_LocalPosition: {x: -1.1205835, y: 0.2019949, z: 0.38897538}
   m_LocalScale: {x: 1, y: 2.2380223, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228585128855}
-  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: -13.853001, y: -10.250001, z: 32.031002}
 --- !u!33 &6531520198140673244
 MeshFilter:
@@ -3772,9 +4533,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3796,9 +4565,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &5493811583080504229
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3807,11 +4578,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352531564328185}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352531659406966
 GameObject:
@@ -3825,7 +4604,7 @@ GameObject:
   - component: {fileID: 6531520197923436115}
   - component: {fileID: 691327182832143018}
   - component: {fileID: 3591283402132427934}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3839,12 +4618,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352531659406966}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.24577436, y: 0.33107796, z: -0.42425504, w: 0.80621964}
   m_LocalPosition: {x: 0.26537395, y: 1.4751854, z: -0.45876795}
   m_LocalScale: {x: 1, y: 2.0184002, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227819087646}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -6.6250005, y: 48.364002, z: -58.487003}
 --- !u!33 &6531520197923436115
 MeshFilter:
@@ -3865,9 +4645,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3889,9 +4677,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &3591283402132427934
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3900,11 +4690,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352531659406966}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352531694369315
 GameObject:
@@ -3918,7 +4716,7 @@ GameObject:
   - component: {fileID: 6531520197960299014}
   - component: {fileID: 691327182869204735}
   - component: {fileID: 7824117257516230515}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3932,12 +4730,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352531694369315}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.3026, y: 0.1402781, z: 0.44921112, w: 0.82883334}
   m_LocalPosition: {x: -1.127, y: 0.133, z: 0.347}
   m_LocalScale: {x: 1, y: 2.2380223, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227751714877}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 22.060001, y: 32.973003, z: 63.517002}
 --- !u!33 &6531520197960299014
 MeshFilter:
@@ -3958,9 +4757,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3982,9 +4789,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &7824117257516230515
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3993,11 +4802,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352531694369315}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352531706545616
 GameObject:
@@ -4011,7 +4828,7 @@ GameObject:
   - component: {fileID: 6531520198014422517}
   - component: {fileID: 691327182781001996}
   - component: {fileID: 781424410842406470}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4025,12 +4842,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352531706545616}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.19279502, y: -0.073772974, z: 0.22723882, w: 0.9517091}
   m_LocalPosition: {x: -1.0995836, y: 0.20299482, z: 0.15097547}
   m_LocalScale: {x: 1, y: 2.2380219, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228456384629}
-  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: -19.478, y: -13.998001, z: 29.272001}
 --- !u!33 &6531520198014422517
 MeshFilter:
@@ -4051,9 +4869,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4075,9 +4901,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &781424410842406470
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4086,11 +4914,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352531706545616}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352531737444531
 GameObject:
@@ -4104,7 +4940,7 @@ GameObject:
   - component: {fileID: 6531520198046435478}
   - component: {fileID: 691327182811903087}
   - component: {fileID: 8105871986693467204}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4118,12 +4954,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352531737444531}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.13701972, y: -0.021377541, z: 0.19434863, w: 0.9710805}
   m_LocalPosition: {x: -1.1155837, y: 0.30099487, z: 0.50997543}
   m_LocalScale: {x: 1, y: 2.2380223, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228585128855}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 15.928, y: 0.70000005, z: 22.733002}
 --- !u!33 &6531520198046435478
 MeshFilter:
@@ -4144,9 +4981,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4168,9 +5013,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &8105871986693467204
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4179,11 +5026,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352531737444531}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352531748741886
 GameObject:
@@ -4197,7 +5052,7 @@ GameObject:
   - component: {fileID: 6531520198023097051}
   - component: {fileID: 691327182806406690}
   - component: {fileID: 7223552009364512166}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4211,12 +5066,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352531748741886}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.13744977, y: 0.018184228, z: -0.37868702, w: 0.9150809}
   m_LocalPosition: {x: 0.503374, y: 1.5161855, z: -0.23176794}
   m_LocalScale: {x: 1, y: 2.0184002, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227819087646}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: -13.7560005, y: 8.1310005, z: -45.945004}
 --- !u!33 &6531520198023097051
 MeshFilter:
@@ -4237,9 +5093,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4261,9 +5125,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &7223552009364512166
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4272,11 +5138,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352531748741886}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352532170899930
 GameObject:
@@ -4290,7 +5164,7 @@ GameObject:
   - component: {fileID: 6531520197395663359}
   - component: {fileID: 691327182320252166}
   - component: {fileID: 2320561714831274658}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4304,12 +5178,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352532170899930}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.14527346, y: -0.20323738, z: -0.13835832, w: 0.95835656}
   m_LocalPosition: {x: -1.3311286, y: -0.30919892, z: 0.24674308}
   m_LocalScale: {x: 1, y: 2.2380223, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227535997361}
-  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: -19.553001, y: -21.761002, z: -12.636001}
 --- !u!33 &6531520197395663359
 MeshFilter:
@@ -4330,9 +5205,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4354,9 +5237,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &2320561714831274658
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4365,11 +5250,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352532170899930}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352532171845375
 GameObject:
@@ -4383,7 +5276,7 @@ GameObject:
   - component: {fileID: 6531520197398669018}
   - component: {fileID: 691327182323538467}
   - component: {fileID: 5601493953013008442}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4397,12 +5290,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352532171845375}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.17395568, y: -0, z: -0, w: 0.9847535}
   m_LocalPosition: {x: -0.9588836, y: 0.42869473, z: 0.56687546}
   m_LocalScale: {x: 1, y: 2.2380223, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228585128855}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 20.036001, y: 0, z: 0}
 --- !u!33 &6531520197398669018
 MeshFilter:
@@ -4423,9 +5317,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4447,9 +5349,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &5601493953013008442
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4458,11 +5362,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352532171845375}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352532190267920
 GameObject:
@@ -4476,7 +5388,7 @@ GameObject:
   - component: {fileID: 6531520197380489781}
   - component: {fileID: 691327182306066124}
   - component: {fileID: 595978124063334130}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4490,12 +5402,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352532190267920}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.01017318, y: -0.27917778, z: -0.14066777, w: 0.94982576}
   m_LocalPosition: {x: -0.7435836, y: 0.26599503, z: 0.44697547}
   m_LocalScale: {x: 1, y: 2.2380223, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228585128855}
-  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: -5.616, y: -32.007, z: -15.236001}
 --- !u!33 &6531520197380489781
 MeshFilter:
@@ -4516,9 +5429,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4540,9 +5461,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &595978124063334130
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4551,11 +5474,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352532190267920}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352532239632662
 GameObject:
@@ -4569,7 +5500,7 @@ GameObject:
   - component: {fileID: 6531520197465342259}
   - component: {fileID: 691327182256864714}
   - component: {fileID: 2322388954488980310}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4583,12 +5514,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352532239632662}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.19279502, y: -0.073772974, z: 0.22723882, w: 0.9517091}
   m_LocalPosition: {x: -1.0995836, y: 0.20299482, z: 0.15097547}
   m_LocalScale: {x: 1, y: 2.2380219, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228585128855}
-  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: -19.478, y: -13.998001, z: 29.272001}
 --- !u!33 &6531520197465342259
 MeshFilter:
@@ -4609,9 +5541,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4633,9 +5573,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &2322388954488980310
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4644,11 +5586,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352532239632662}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352532258885481
 GameObject:
@@ -4662,7 +5612,7 @@ GameObject:
   - component: {fileID: 6531520197458413388}
   - component: {fileID: 691327182223948725}
   - component: {fileID: 211226660870402401}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4676,12 +5626,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352532258885481}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.26737517, y: 0.43855596, z: -0.12504353, w: 0.8488482}
   m_LocalPosition: {x: -1.5668, y: -0.26668, z: -0.097896}
   m_LocalScale: {x: 1.2228, y: 2.7366538, z: 1.2228}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227535997361}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -20.136002, y: 59.794003, z: -28.417002}
 --- !u!33 &6531520197458413388
 MeshFilter:
@@ -4702,9 +5653,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4726,9 +5685,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &211226660870402401
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4737,11 +5698,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352532258885481}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352532259121123
 GameObject:
@@ -4755,7 +5724,7 @@ GameObject:
   - component: {fileID: 6531520197457670086}
   - component: {fileID: 691327182224167743}
   - component: {fileID: 8612084102123302542}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4769,12 +5738,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352532259121123}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.14277466, y: 0.43199113, z: 0.29002315, w: 0.8419535}
   m_LocalPosition: {x: -1.147, y: 0.352, z: -0.031}
   m_LocalScale: {x: 1, y: 2.2380223, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227751714877}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -29.406002, y: 47.727, z: 24.771002}
 --- !u!33 &6531520197457670086
 MeshFilter:
@@ -4795,9 +5765,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4819,9 +5797,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &8612084102123302542
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4830,11 +5810,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352532259121123}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352532403252392
 GameObject:
@@ -4848,7 +5836,7 @@ GameObject:
   - component: {fileID: 6531520197368063117}
   - component: {fileID: 691327182418630772}
   - component: {fileID: 5261231678643512076}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4862,12 +5850,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352532403252392}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.057506777, y: -0.15885149, z: -0.42392674, w: 0.8898008}
   m_LocalPosition: {x: 0.766374, y: 1.4861856, z: 0.14123218}
   m_LocalScale: {x: 1, y: 2.0184007, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227819087646}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: -13.711, y: -13.934001, z: -49.266003}
 --- !u!33 &6531520197368063117
 MeshFilter:
@@ -4888,9 +5877,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4912,9 +5909,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &5261231678643512076
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4923,11 +5922,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352532403252392}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352532509404921
 GameObject:
@@ -4941,7 +5948,7 @@ GameObject:
   - component: {fileID: 6531520197207910108}
   - component: {fileID: 691327181973232165}
   - component: {fileID: 2161341159079925861}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4955,12 +5962,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352532509404921}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.3031184, y: 0.20122437, z: 0.2699389, w: 0.89149374}
   m_LocalPosition: {x: -1.008, y: 0.349, z: 0.403}
   m_LocalScale: {x: 1, y: 2.2380223, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227751714877}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 25.583002, y: 35.395, z: 41.979}
 --- !u!33 &6531520197207910108
 MeshFilter:
@@ -4981,9 +5989,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5005,9 +6021,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &2161341159079925861
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -5016,11 +6034,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352532509404921}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352532665131315
 GameObject:
@@ -5034,7 +6060,7 @@ GameObject:
   - component: {fileID: 6531520197052180758}
   - component: {fileID: 691327182095406575}
   - component: {fileID: 5857948881542770825}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5048,12 +6074,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352532665131315}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.03801959, y: 0.08787805, z: 0.147636, w: 0.98439604}
   m_LocalPosition: {x: -1.7056, y: -0.19128, z: 0.41348}
   m_LocalScale: {x: 1.2228, y: 2.7366538, z: 1.2228}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227535997361}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 2.8030002, y: 10.63, z: 17.320002}
 --- !u!33 &6531520197052180758
 MeshFilter:
@@ -5074,9 +6101,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5098,9 +6133,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &5857948881542770825
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -5109,11 +6146,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352532665131315}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &1271352532682560513
 GameObject:
@@ -5127,7 +6172,7 @@ GameObject:
   - component: {fileID: 6531520197102115876}
   - component: {fileID: 691327182144037085}
   - component: {fileID: 1009164391402706437}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_C (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5141,12 +6186,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352532682560513}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.16751681, y: 0.35926655, z: -0.06691979, w: 0.915635}
   m_LocalPosition: {x: -0.92558366, y: 0.34699488, z: 0.1189754}
   m_LocalScale: {x: 1, y: 2.2380223, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228456384629}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -14.992001, y: 44.774002, z: -14.565001}
 --- !u!33 &6531520197102115876
 MeshFilter:
@@ -5167,9 +6213,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5191,9 +6245,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &1009164391402706437
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -5202,11 +6258,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271352532682560513}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7696400967004742795, guid: 1a0144c080767c745bc82e722f3a187d, type: 3}
 --- !u!1 &2698655824297365800
 GameObject:
@@ -5220,7 +6284,7 @@ GameObject:
   - component: {fileID: 7958936187854477581}
   - component: {fileID: 4417849953139467764}
   - component: {fileID: 2892278026556946408}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Tree_A_Branch_5 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5234,12 +6298,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2698655824297365800}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.23497263, y: 0.26331523, z: -0.5701444, w: 0.74188167}
   m_LocalPosition: {x: -0.80758363, y: -0.293005, z: 0.3229754}
   m_LocalScale: {x: 0.5186234, y: 0.5186235, z: 0.5186233}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228585128855}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -2.7740002, y: 41.255, z: -76.130005}
 --- !u!33 &7958936187854477581
 MeshFilter:
@@ -5260,9 +6325,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5284,9 +6357,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &2892278026556946408
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -5295,11 +6370,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2698655824297365800}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -4324181737108101156, guid: 150610175157f5b4eb8ec9b400d36cf7, type: 3}
 --- !u!1 &2698655825234554770
 GameObject:
@@ -5313,7 +6396,7 @@ GameObject:
   - component: {fileID: 7958936186922018743}
   - component: {fileID: 4417849954613517134}
   - component: {fileID: 5407856202760301133}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Tree_A_Branch_5 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5327,12 +6410,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2698655825234554770}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.7569819, y: 0.3385761, z: -0.4327566, w: 0.3536474}
   m_LocalPosition: {x: -0.759, y: -0.241, z: 0.383}
   m_LocalScale: {x: 0.5186234, y: 0.5186235, z: 0.5186233}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227751714877}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -14.026001, y: 112.758, z: -122.452}
 --- !u!33 &7958936186922018743
 MeshFilter:
@@ -5353,9 +6437,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5377,9 +6469,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &5407856202760301133
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -5388,11 +6482,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2698655825234554770}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -4324181737108101156, guid: 150610175157f5b4eb8ec9b400d36cf7, type: 3}
 --- !u!1 &2698655825548555872
 GameObject:
@@ -5406,7 +6508,7 @@ GameObject:
   - component: {fileID: 7958936186687716933}
   - component: {fileID: 4417849954237547196}
   - component: {fileID: 3302195093816658781}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Tree_A_Branch_5 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5420,12 +6522,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2698655825548555872}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.23497263, y: 0.26331523, z: -0.5701444, w: 0.74188167}
   m_LocalPosition: {x: -0.80758363, y: -0.293005, z: 0.3229754}
   m_LocalScale: {x: 0.5186234, y: 0.5186235, z: 0.5186233}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228456384629}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -2.7740002, y: 41.255, z: -76.130005}
 --- !u!33 &7958936186687716933
 MeshFilter:
@@ -5446,9 +6549,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5470,9 +6581,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &3302195093816658781
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -5481,11 +6594,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2698655825548555872}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -4324181737108101156, guid: 150610175157f5b4eb8ec9b400d36cf7, type: 3}
 --- !u!1 &2698655826120560816
 GameObject:
@@ -5499,7 +6620,7 @@ GameObject:
   - component: {fileID: 7958936186186995861}
   - component: {fileID: 4417849953735828588}
   - component: {fileID: 7208283462091848174}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Tree_A_Branch_5 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5513,12 +6634,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2698655826120560816}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.9074434, y: 0.2467339, z: -0.14346036, w: -0.30836332}
   m_LocalPosition: {x: -0.921, y: -0.6, z: 0.425}
   m_LocalScale: {x: 0.5186234, y: 0.5186235, z: 0.5186233}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227535997361}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 39.082, y: 171.988, z: -152.42601}
 --- !u!33 &7958936186186995861
 MeshFilter:
@@ -5539,9 +6661,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5563,9 +6693,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &7208283462091848174
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -5574,11 +6706,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2698655826120560816}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -4324181737108101156, guid: 150610175157f5b4eb8ec9b400d36cf7, type: 3}
 --- !u!1 &2974373227521795993
 GameObject:
@@ -5590,7 +6730,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2974373227521795994}
   - component: {fileID: 6838512053851661349}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: GameObject (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5604,9 +6744,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2974373227521795993}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.20623407, y: 0.22789824, z: 0.020308282, w: 0.9513766}
   m_LocalPosition: {x: 1.1191, y: 1.1369, z: 1.2109}
   m_LocalScale: {x: 1.3793583, y: 1.3793586, z: 1.3793584}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3946267387503932575}
   - {fileID: 3946267387263467263}
@@ -5614,7 +6756,6 @@ Transform:
   - {fileID: 3946267386031982274}
   - {fileID: 3946267387445416433}
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 22.529001, y: 28.589, z: 8.2560005}
 --- !u!64 &6838512053851661349
 MeshCollider:
@@ -5624,11 +6765,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2974373227521795993}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 0}
 --- !u!1 &2974373227535997360
 GameObject:
@@ -5640,7 +6789,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2974373227535997361}
   - component: {fileID: 3001283339272863030}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: GameObject (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5654,9 +6803,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2974373227535997360}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.07415874, y: 0.7261804, z: -0.02525849, w: 0.683026}
   m_LocalPosition: {x: -1.174, y: 6.115, z: 1.055}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1380587430517842595}
   - {fileID: 2882191321588792698}
@@ -5671,7 +6822,6 @@ Transform:
   - {fileID: 3946267388026591422}
   - {fileID: 3946267387888132515}
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 26
   m_LocalEulerAnglesHint: {x: 7.932, y: 93.802, z: 4.2380004}
 --- !u!64 &3001283339272863030
 MeshCollider:
@@ -5681,11 +6831,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2974373227535997360}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 0}
 --- !u!1 &2974373227751714876
 GameObject:
@@ -5697,7 +6855,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2974373227751714877}
   - component: {fileID: 675786424057465950}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: GameObject (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5711,9 +6869,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2974373227751714876}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.022800636, y: -0.29597843, z: -0.48604506, w: 0.8219715}
   m_LocalPosition: {x: 2.607, y: 2.673, z: 1.071}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1380587430858595713}
   - {fileID: 2882191321589601776}
@@ -5727,7 +6887,6 @@ Transform:
   - {fileID: 3946267387537436270}
   - {fileID: 3946267387085229741}
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 25
   m_LocalEulerAnglesHint: {x: -14.491001, y: -31.699001, z: -57.059002}
 --- !u!64 &675786424057465950
 MeshCollider:
@@ -5737,11 +6896,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2974373227751714876}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 0}
 --- !u!1 &2974373227819087645
 GameObject:
@@ -5753,7 +6920,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2974373227819087646}
   - component: {fileID: 5530314303496475621}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: GameObject (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5767,9 +6934,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2974373227819087645}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.92862606, y: 2.0978146, z: 0.014767945}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2882191322926594941}
   - {fileID: 2882191322197576805}
@@ -5777,7 +6946,6 @@ Transform:
   - {fileID: 2882191321448488635}
   - {fileID: 2882191323281600711}
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &5530314303496475621
 MeshCollider:
@@ -5787,11 +6955,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2974373227819087645}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 0}
 --- !u!1 &2974373227822358928
 GameObject:
@@ -5803,7 +6979,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2974373227822358929}
   - component: {fileID: 3053034585628813002}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: GameObject (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5817,12 +6993,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2974373227822358928}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.19837126, y: -0.18762615, z: -0.043105826, w: 0.9610344}
   m_LocalPosition: {x: 2.638946, y: -0.8669801, z: 3.223}
   m_LocalScale: {x: 1.151, y: 1.151, z: 1.151}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 24
   m_LocalEulerAnglesHint: {x: 21.414001, y: -23.938002, z: -9.727}
 --- !u!64 &3053034585628813002
 MeshCollider:
@@ -5832,11 +7009,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2974373227822358928}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 0}
 --- !u!1 &2974373227948381770
 GameObject:
@@ -5848,7 +7033,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2974373227948381771}
   - component: {fileID: 8611321583409802579}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: GameObject (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5862,9 +7047,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2974373227948381770}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.30577233, y: 0.21275833, z: -0.14923427, w: 0.9159511}
   m_LocalPosition: {x: 1.3998218, y: 1.0180786, z: 3.0477705}
   m_LocalScale: {x: 1.151, y: 1.151, z: 1.1510001}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3946267387638184085}
   - {fileID: 3946267386833452977}
@@ -5872,7 +7059,6 @@ Transform:
   - {fileID: 3946267387146441003}
   - {fileID: 3946267387348827041}
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 38.583, y: 22.448002, z: -10.561001}
 --- !u!64 &8611321583409802579
 MeshCollider:
@@ -5882,11 +7068,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2974373227948381770}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 0}
 --- !u!1 &2974373227964096378
 GameObject:
@@ -5898,7 +7092,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2974373227964096379}
   - component: {fileID: 2346177704396432716}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: GameObject (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5912,9 +7106,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2974373227964096378}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.43886432, y: -0.0021047378, z: -0.0028644588, w: 0.89854634}
   m_LocalPosition: {x: -0.91195595, y: -0.47078705, z: 4.1445403}
   m_LocalScale: {x: 1.151, y: 1.151, z: 1.151}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3946267387467396880}
   - {fileID: 3946267386515995132}
@@ -5922,7 +7118,6 @@ Transform:
   - {fileID: 3946267385992563198}
   - {fileID: 3946267386437128706}
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 22
   m_LocalEulerAnglesHint: {x: 52.061, y: -0.587, z: -0.652}
 --- !u!64 &2346177704396432716
 MeshCollider:
@@ -5932,11 +7127,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2974373227964096378}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 0}
 --- !u!1 &2974373228417713747
 GameObject:
@@ -5948,7 +7151,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2974373228417713748}
   - component: {fileID: 5508588803217224656}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Tree_Soule_Autumn_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5962,9 +7165,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2974373228417713747}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2974373228585128855}
   - {fileID: 2974373228456384629}
@@ -5994,7 +7199,6 @@ Transform:
   - {fileID: 2974373227751714877}
   - {fileID: 2974373227535997361}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &5508588803217224656
 MeshCollider:
@@ -6004,11 +7208,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2974373228417713747}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 0}
 --- !u!1 &2974373228456384628
 GameObject:
@@ -6020,7 +7232,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2974373228456384629}
   - component: {fileID: 2495187293385105527}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: GameObject (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6034,9 +7246,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2974373228456384628}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.28179917, y: -0.2891588, z: -0.47560754, w: 0.7815203}
   m_LocalPosition: {x: 0.568, y: 2.745, z: 1.921}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1380587431086703731}
   - {fileID: 2882191321710241298}
@@ -6046,7 +7260,6 @@ Transform:
   - {fileID: 2882191323272584966}
   - {fileID: 2882191323285308620}
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 9.521001, y: -46.893, z: -66.784004}
 --- !u!64 &2495187293385105527
 MeshCollider:
@@ -6056,11 +7269,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2974373228456384628}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 0}
 --- !u!1 &2974373228507761245
 GameObject:
@@ -6072,7 +7293,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2974373228507761246}
   - component: {fileID: 2876220135870903429}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6086,9 +7307,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2974373228507761245}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.9120598, y: 1.6124134, z: 0.73234105}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3946267387659075730}
   - {fileID: 3946267387663879069}
@@ -6096,7 +7319,6 @@ Transform:
   - {fileID: 3946267386734921134}
   - {fileID: 3946267386404065975}
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &2876220135870903429
 MeshCollider:
@@ -6106,11 +7328,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2974373228507761245}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 0}
 --- !u!1 &2974373228585128854
 GameObject:
@@ -6122,7 +7352,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2974373228585128855}
   - component: {fileID: 2968959210309933367}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: GameObject (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6136,9 +7366,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2974373228585128854}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.7414164, y: 3.984005, z: 2.3870246}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1380587432337892155}
   - {fileID: 2882191322954047186}
@@ -6148,7 +7380,6 @@ Transform:
   - {fileID: 2882191321670907907}
   - {fileID: 2882191322825459434}
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &2968959210309933367
 MeshCollider:
@@ -6158,11 +7389,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2974373228585128854}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 0}
 --- !u!1 &8105703757785753016
 GameObject:
@@ -6176,7 +7415,7 @@ GameObject:
   - component: {fileID: 4286690141462310301}
   - component: {fileID: 7512541373716517220}
   - component: {fileID: 2892468003603799383}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Tree_A_Branch_1 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6190,12 +7429,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8105703757785753016}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.124840856, y: 0.31664187, z: 0.47007114, w: 0.8143623}
   m_LocalPosition: {x: -0.733, y: -1.75, z: 1.225}
   m_LocalScale: {x: -0.83586, y: 0.83586, z: 0.83586}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227535997361}
-  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: -5.414, y: 39.489002, z: 58.045002}
 --- !u!33 &4286690141462310301
 MeshFilter:
@@ -6216,9 +7456,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6240,9 +7488,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &2892468003603799383
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -6251,11 +7501,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8105703757785753016}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -4539208576993857808, guid: 7f0e147262555ec4fa18efcf7d609092, type: 3}
 --- !u!1 &8105703758700500651
 GameObject:
@@ -6269,7 +7527,7 @@ GameObject:
   - component: {fileID: 4286690140769590926}
   - component: {fileID: 7512541375019508343}
   - component: {fileID: 3456116704893711384}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Tree_A_Branch_1 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6283,12 +7541,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8105703758700500651}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.18709983, y: 0.26029488, z: 0.40289602, w: 0.8572718}
   m_LocalPosition: {x: -0.8599576, y: -1.741887, z: 1.2161807}
   m_LocalScale: {x: -1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373227751714877}
-  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 20.168001, y: -17.423, z: -5.9700003}
 --- !u!33 &4286690140769590926
 MeshFilter:
@@ -6309,9 +7568,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6333,9 +7600,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &3456116704893711384
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -6344,11 +7613,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8105703758700500651}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -4539208576993857808, guid: 7f0e147262555ec4fa18efcf7d609092, type: 3}
 --- !u!1 &8528787606299740670
 GameObject:
@@ -6362,7 +7639,7 @@ GameObject:
   - component: {fileID: 4421418022575129051}
   - component: {fileID: 7953498981937593634}
   - component: {fileID: 1672721093638472501}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Tree_Stem_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6376,12 +7653,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8528787606299740670}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 23
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4421418022575129051
 MeshFilter:
@@ -6402,9 +7680,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6426,9 +7712,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &1672721093638472501
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -6437,11 +7725,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8528787606299740670}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: -2255095689919565440, guid: 4606596819e34374f91e332660f54db8, type: 3}
 --- !u!1 &8606479068212151839
 GameObject:
@@ -6455,7 +7751,7 @@ GameObject:
   - component: {fileID: 4354985765772922426}
   - component: {fileID: 8019940143782490819}
   - component: {fileID: 4028822311269409369}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_D (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6469,12 +7765,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479068212151839}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.47622, y: -0.49597278, z: -0.56257784, w: 0.45905522}
   m_LocalPosition: {x: 1.83, y: 4.783, z: 2.686}
   m_LocalScale: {x: 2.1308877, y: 2.1308873, z: 2.1308877}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: -84.425, y: 55.913002, z: 567.011}
 --- !u!33 &4354985765772922426
 MeshFilter:
@@ -6495,9 +7792,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6519,9 +7824,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &4028822311269409369
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -6530,11 +7837,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479068212151839}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7460231692366234727, guid: b32db1ffb766e144798e47a2869ac9b3, type: 3}
 --- !u!1 &8606479068560079596
 GameObject:
@@ -6548,7 +7863,7 @@ GameObject:
   - component: {fileID: 4354985765340607177}
   - component: {fileID: 8019940143106985520}
   - component: {fileID: 6938002988486551878}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_D (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6562,12 +7877,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479068560079596}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.08190105, y: -0.90239716, z: -0.07708508, w: 0.4159681}
   m_LocalPosition: {x: -1.344, y: 5.46, z: -0.681}
   m_LocalScale: {x: 2.1308868, y: 2.1308873, z: 2.1308868}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: -11.962001, y: 228.98099, z: 364.907}
 --- !u!33 &4354985765340607177
 MeshFilter:
@@ -6588,9 +7904,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6612,9 +7936,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &6938002988486551878
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -6623,11 +7949,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479068560079596}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7460231692366234727, guid: b32db1ffb766e144798e47a2869ac9b3, type: 3}
 --- !u!1 &8606479068760403361
 GameObject:
@@ -6641,7 +7975,7 @@ GameObject:
   - component: {fileID: 4354985765274756484}
   - component: {fileID: 8019940143175457149}
   - component: {fileID: 6923327516607822455}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_D (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6655,12 +7989,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479068760403361}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.34738848, y: -0.48052445, z: -0.63193816, w: 0.49907088}
   m_LocalPosition: {x: -0.789, y: 3.151, z: 4.934}
   m_LocalScale: {x: 2.1308885, y: 2.1308882, z: 2.1308875}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: -72.567, y: 352.216, z: 262.318}
 --- !u!33 &4354985765274756484
 MeshFilter:
@@ -6681,9 +8016,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6705,9 +8048,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &6923327516607822455
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -6716,11 +8061,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479068760403361}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7460231692366234727, guid: b32db1ffb766e144798e47a2869ac9b3, type: 3}
 --- !u!1 &8606479068786197447
 GameObject:
@@ -6734,7 +8087,7 @@ GameObject:
   - component: {fileID: 4354985765265984482}
   - component: {fileID: 8019940143148578587}
   - component: {fileID: 7430631447057776078}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_D (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6748,12 +8101,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479068786197447}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.5173445, y: 0.37579855, z: 0.3009877, w: -0.7074861}
   m_LocalPosition: {x: 0.241, y: 5.463, z: 0.237}
   m_LocalScale: {x: 2.1308873, y: 2.1308875, z: 2.1308877}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: -73.385, y: 309.6, z: -7.4460006}
 --- !u!33 &4354985765265984482
 MeshFilter:
@@ -6774,9 +8128,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6798,9 +8160,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &7430631447057776078
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -6809,11 +8173,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479068786197447}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7460231692366234727, guid: b32db1ffb766e144798e47a2869ac9b3, type: 3}
 --- !u!1 &8606479068885498826
 GameObject:
@@ -6827,7 +8199,7 @@ GameObject:
   - component: {fileID: 4354985765098812399}
   - component: {fileID: 8019940142847561494}
   - component: {fileID: 7601141591044814513}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_D (16)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6841,12 +8213,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479068885498826}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.016797557, y: -0.8075086, z: -0.52547747, w: -0.2674345}
   m_LocalPosition: {x: -1.728, y: 3.619, z: 4.798}
   m_LocalScale: {x: 2.130888, y: 2.1308877, z: 2.1308877}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: -57.105003, y: 124.129005, z: 394.574}
 --- !u!33 &4354985765098812399
 MeshFilter:
@@ -6867,9 +8240,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6891,9 +8272,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &7601141591044814513
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -6902,11 +8285,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479068885498826}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7460231692366234727, guid: b32db1ffb766e144798e47a2869ac9b3, type: 3}
 --- !u!1 &8606479068975555360
 GameObject:
@@ -6920,7 +8311,7 @@ GameObject:
   - component: {fileID: 4354985764925647621}
   - component: {fileID: 8019940142952044540}
   - component: {fileID: 2137278010703306595}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_D (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6934,12 +8325,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479068975555360}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.15720901, y: -0.6743928, z: -0.69777864, w: 0.18326114}
   m_LocalPosition: {x: 1.092, y: 5.119, z: 3.209}
   m_LocalScale: {x: 2.1308875, y: 2.1308877, z: 2.1308873}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: -87.163, y: -34.152, z: 602.022}
 --- !u!33 &4354985764925647621
 MeshFilter:
@@ -6960,9 +8352,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -6984,9 +8384,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &2137278010703306595
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -6995,11 +8397,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479068975555360}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7460231692366234727, guid: b32db1ffb766e144798e47a2869ac9b3, type: 3}
 --- !u!1 &8606479068976424957
 GameObject:
@@ -7013,7 +8423,7 @@ GameObject:
   - component: {fileID: 4354985764928712664}
   - component: {fileID: 8019940142955270945}
   - component: {fileID: 1914189778980386943}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_D (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7027,12 +8437,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479068976424957}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.16043311, y: 0.79274255, z: 0.5553859, w: 0.19330582}
   m_LocalPosition: {x: 0.439, y: 5.314, z: 2.618}
   m_LocalScale: {x: 2.1308892, y: 2.1308885, z: 2.1308887}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: -70.490005, y: 157.412, z: 713.182}
 --- !u!33 &4354985764928712664
 MeshFilter:
@@ -7053,9 +8464,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -7077,9 +8496,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &1914189778980386943
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -7088,11 +8509,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479068976424957}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7460231692366234727, guid: b32db1ffb766e144798e47a2869ac9b3, type: 3}
 --- !u!1 &8606479069034206753
 GameObject:
@@ -7106,7 +8535,7 @@ GameObject:
   - component: {fileID: 4354985765017984516}
   - component: {fileID: 8019940142893261565}
   - component: {fileID: 7204186732938554598}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_D (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7120,12 +8549,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479069034206753}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.38001636, y: 0.54286206, z: 0.68082666, w: 0.31203124}
   m_LocalPosition: {x: -0.315, y: 5.091, z: 2.831}
   m_LocalScale: {x: 2.1308882, y: 2.1308882, z: 2.130888}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: -102.487, y: 124.27699, z: 716.74304}
 --- !u!33 &4354985765017984516
 MeshFilter:
@@ -7146,9 +8576,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -7170,9 +8608,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &7204186732938554598
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -7181,11 +8621,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479069034206753}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7460231692366234727, guid: b32db1ffb766e144798e47a2869ac9b3, type: 3}
 --- !u!1 &8606479069423360773
 GameObject:
@@ -7199,7 +8647,7 @@ GameObject:
   - component: {fileID: 4354985764560933664}
   - component: {fileID: 8019940144457084889}
   - component: {fileID: 7709305384883372530}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_D (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7213,12 +8661,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479069423360773}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.27360296, y: -0.732548, z: -0.47200176, w: -0.4070986}
   m_LocalPosition: {x: -2.524, y: 3.685, z: 4.137}
   m_LocalScale: {x: 2.1308885, y: 2.1308875, z: 2.1308882}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: -66.106, y: 123.40001, z: 357.658}
 --- !u!33 &4354985764560933664
 MeshFilter:
@@ -7239,9 +8688,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -7263,9 +8720,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &7709305384883372530
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -7274,11 +8733,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479069423360773}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7460231692366234727, guid: b32db1ffb766e144798e47a2869ac9b3, type: 3}
 --- !u!1 &8606479069515859044
 GameObject:
@@ -7292,7 +8759,7 @@ GameObject:
   - component: {fileID: 4354985764384803905}
   - component: {fileID: 8019940144566104248}
   - component: {fileID: 2133308581737997396}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_D (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7306,12 +8773,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479069515859044}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.26529595, y: -0.44114769, z: -0.8424458, w: -0.15903409}
   m_LocalPosition: {x: -2.2142, y: 3.2085, z: 5.2264}
   m_LocalScale: {x: 2.1308873, y: 2.1308868, z: 2.130887}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: -55.860004, y: -33.124, z: 536.538}
 --- !u!33 &4354985764384803905
 MeshFilter:
@@ -7332,9 +8800,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -7356,9 +8832,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &2133308581737997396
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -7367,11 +8845,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479069515859044}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7460231692366234727, guid: b32db1ffb766e144798e47a2869ac9b3, type: 3}
 --- !u!1 &8606479069516731152
 GameObject:
@@ -7385,7 +8871,7 @@ GameObject:
   - component: {fileID: 4354985764387871541}
   - component: {fileID: 8019940144569329612}
   - component: {fileID: 8728533070647016191}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_D (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7399,12 +8885,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479069516731152}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.26893875, y: -0.5847931, z: -0.45719057, w: 0.6137311}
   m_LocalPosition: {x: -1.391, y: 3.843, z: 3.928}
   m_LocalScale: {x: 2.1308877, y: 2.130887, z: 2.1308873}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: -59.864002, y: 289.95898, z: 330.577}
 --- !u!33 &4354985764387871541
 MeshFilter:
@@ -7425,9 +8912,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -7449,9 +8944,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &8728533070647016191
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -7460,11 +8957,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479069516731152}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7460231692366234727, guid: b32db1ffb766e144798e47a2869ac9b3, type: 3}
 --- !u!1 &8606479069723271328
 GameObject:
@@ -7478,7 +8983,7 @@ GameObject:
   - component: {fileID: 4354985764332333189}
   - component: {fileID: 8019940144085898364}
   - component: {fileID: 8272237629261766673}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_D (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7492,12 +8997,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479069723271328}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.4876648, y: -0.6016535, z: -0.5008085, w: -0.38650623}
   m_LocalPosition: {x: -2.169, y: 5.185, z: 0.09}
   m_LocalScale: {x: 2.1308882, y: 2.1308877, z: 2.1308882}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: -78.406006, y: 186.67699, z: 276.499}
 --- !u!33 &4354985764332333189
 MeshFilter:
@@ -7518,9 +9024,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -7542,9 +9056,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &8272237629261766673
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -7553,11 +9069,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479069723271328}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7460231692366234727, guid: b32db1ffb766e144798e47a2869ac9b3, type: 3}
 --- !u!1 &8606479069767029684
 GameObject:
@@ -7571,7 +9095,7 @@ GameObject:
   - component: {fileID: 4354985764133903249}
   - component: {fileID: 8019940144316311400}
   - component: {fileID: 8562726823915502850}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_D (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7585,12 +9109,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479069767029684}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.036300533, y: -0.634599, z: -0.7672335, w: -0.08555291}
   m_LocalPosition: {x: 0.55, y: 4.801, z: 3.836}
   m_LocalScale: {x: 2.1308897, y: 2.1308882, z: 2.130888}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: -78.517006, y: 15.404, z: 514.66003}
 --- !u!33 &4354985764133903249
 MeshFilter:
@@ -7611,9 +9136,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -7635,9 +9168,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &8562726823915502850
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -7646,11 +9181,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479069767029684}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7460231692366234727, guid: b32db1ffb766e144798e47a2869ac9b3, type: 3}
 --- !u!1 &8606479069775771546
 GameObject:
@@ -7664,7 +9207,7 @@ GameObject:
   - component: {fileID: 4354985764141432767}
   - component: {fileID: 8019940144306160454}
   - component: {fileID: 3604036938403323876}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_D (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7678,12 +9221,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479069775771546}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.6829296, y: -0.21876135, z: -0.31771332, w: 0.62032974}
   m_LocalPosition: {x: 1.248, y: 5.028, z: 1.645}
   m_LocalScale: {x: 2.1308875, y: 2.130888, z: 2.1308877}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: -80.50101, y: 99.94501, z: 575.307}
 --- !u!33 &4354985764141432767
 MeshFilter:
@@ -7704,9 +9248,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -7728,9 +9280,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &3604036938403323876
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -7739,11 +9293,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479069775771546}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7460231692366234727, guid: b32db1ffb766e144798e47a2869ac9b3, type: 3}
 --- !u!1 &8606479069852845627
 GameObject:
@@ -7757,7 +9319,7 @@ GameObject:
   - component: {fileID: 4354985764185968158}
   - component: {fileID: 8019940144234361575}
   - component: {fileID: 1174021894605463165}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_D (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7771,12 +9333,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479069852845627}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.17798084, y: -0.72666305, z: -0.609152, w: -0.2630923}
   m_LocalPosition: {x: -1.258, y: 5.335, z: 1.224}
   m_LocalScale: {x: 2.13089, y: 2.1308882, z: 2.1308882}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: -78.222, y: 125.812004, z: 377.643}
 --- !u!33 &4354985764185968158
 MeshFilter:
@@ -7797,9 +9360,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -7821,9 +9392,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &1174021894605463165
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -7832,11 +9405,19 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479069852845627}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7460231692366234727, guid: b32db1ffb766e144798e47a2869ac9b3, type: 3}
 --- !u!1 &8606479069933566966
 GameObject:
@@ -7850,7 +9431,7 @@ GameObject:
   - component: {fileID: 4354985764038161363}
   - component: {fileID: 8019940143943864106}
   - component: {fileID: 7337450642194435198}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canopy_D (15)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7864,12 +9445,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479069933566966}
+  serializedVersion: 2
   m_LocalRotation: {x: 0.012267379, y: -0.6531028, z: -0.0072569083, w: -0.7571351}
   m_LocalPosition: {x: -0.196, y: 5.555, z: 0.602}
   m_LocalScale: {x: 2.1308868, y: 2.1308873, z: 2.1308873}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2974373228417713748}
-  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: -1.608, y: 81.566, z: 359.711}
 --- !u!33 &4354985764038161363
 MeshFilter:
@@ -7890,9 +9472,17 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -7914,9 +9504,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &7337450642194435198
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -7925,9 +9517,17 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8606479069933566966}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7460231692366234727, guid: b32db1ffb766e144798e47a2869ac9b3, type: 3}

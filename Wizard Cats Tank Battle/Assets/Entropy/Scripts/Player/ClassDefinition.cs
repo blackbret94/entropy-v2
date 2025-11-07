@@ -29,7 +29,7 @@ namespace Entropy.Scripts.Player
         [Range(1, 5)] 
         public int speedDisplay;
         
-        [Range(0f,50f)]
+        [Range(0f,100f)]
         public int maxHealth = 10;
         [Range(0.2f, 1.5f)]
         public float fireRate = 0.75f;

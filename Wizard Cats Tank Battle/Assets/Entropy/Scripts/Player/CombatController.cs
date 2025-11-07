@@ -2,7 +2,6 @@ using Fusion;
 using TanksMP;
 using Unity.Mathematics;
 using UnityEngine;
-using Vashta.Entropy.Network;
 using Vashta.Entropy.Player;
 using Vashta.Entropy.ScriptableObject;
 using Vashta.Entropy.StatusEffects;
@@ -64,20 +63,20 @@ namespace Entropy.Scripts.Player
 
             // disable temporarily
             attackerIsCounter = false;
-            attackerIsSame = true;
+            attackerIsSame = true; // for coloring purposes
             
             //attackerIsCounter = bullet.ClassDefinition.IsCounter(_player.photonView.GetClassId());
             //attackerIsSame = bullet.ClassDefinition.classId == _player.photonView.GetClassId();
             
-            if (attackerIsCounter)
-            {
-                calculatedDamage += counterDamageMod;
-            }
-            
-            if (attackerIsSame)
-            {
-                calculatedDamage += sameClassDamageMod;
-            }
+            // if (attackerIsCounter)
+            // {
+            //     calculatedDamage += counterDamageMod;
+            // }
+            //
+            // if (attackerIsSame)
+            // {
+            //     calculatedDamage += sameClassDamageMod;
+            // }
             
             // Check defense modifier
             calculatedDamage += _statusEffectController.DamageTakenModifier;

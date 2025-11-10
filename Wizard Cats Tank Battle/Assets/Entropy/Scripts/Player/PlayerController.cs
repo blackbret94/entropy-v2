@@ -619,18 +619,17 @@ namespace Vashta.Entropy.Player
                 
                 if (isBot)
                 {
-                    // Debug.Log("Setting bot spawn position: " + respawnPosition);
+                    Debug.Log("Setting bot spawn position: " + respawnPosition);
                 }
                 
-                SetPosition(respawnPosition);
+                // SetPosition(respawnPosition);
                 SnapToNavMesh(respawnPosition);
                 
                 if (isBot)
                 {
-                    // Debug.Log("Bot position set: " + transform.position);
+                    Debug.Log("Bot position set: " + transform.position);
                 }
             }
-            
         }
         
         public Vector3 SnapToNavMesh(Vector3 samplePosition)
@@ -878,14 +877,17 @@ namespace Vashta.Entropy.Player
             if (rb != null)
             {
                 rb.position = pos;
-            } else if (NavMeshAgent != null)
+            } 
+            
+            if (NavMeshAgent != null)
             {
+                if(!NavMeshAgent.isOnNavMesh)
+                    Debug.Log("Attempted to warp a navmesh agent that is not on the navmesh");
+                
                 NavMeshAgent.Warp(pos);
             }
-            else
-            {
-                transform.position = pos;
-            }
+            
+            transform.position = pos;
         }
 
         public virtual void SetRotation(Quaternion rot)

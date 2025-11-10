@@ -72,9 +72,9 @@ namespace TanksMP
             agent.speed = moveSpeed;
 
             //get corresponding team and colorize renderers in team color
-            targetPoint = GameManager.GetInstance().TeamController.GetSpawnPosition(TeamIndex);
+            // targetPoint = GameManager.GetInstance().TeamController.GetSpawnPosition(TeamIndex);
             
-            agent.Warp(SnapToNavMesh(targetPoint));
+            // agent.Warp(SnapToNavMesh(targetPoint));
             SetDestinationRandomMapPoint();
             // bool success = agent.SetDestination(targetPoint);
             

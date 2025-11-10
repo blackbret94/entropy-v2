@@ -77,8 +77,8 @@ namespace Entropy.Scripts.Player
                 }
             }
             
-            if(!localPlayerController)
-                Debug.LogError("Missing reference to local player controller!");
+            // if(!localPlayerController)
+                // Debug.LogError("Missing reference to local player controller!");
 
             return localPlayerController;
         }

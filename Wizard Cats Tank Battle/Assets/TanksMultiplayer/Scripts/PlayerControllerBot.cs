@@ -38,9 +38,6 @@ namespace TanksMP
         // List of allies that are in range of this bot
         private List<GameObject> _alliesInRange = new List<GameObject>();
 
-        //reference to the agent component
-        public NavMeshAgent agent;
-
         //current destination on the navigation mesh
         private Vector3 targetPoint;
 
@@ -61,6 +58,9 @@ namespace TanksMP
         {
             isBot = true;
             defaultClassDefinition = classDirectory.RandomClass();
+
+            if (NavMeshAgent)
+                NavMeshAgent.enabled = false;
         }
 
         protected override void PostSpawn()
@@ -68,8 +68,11 @@ namespace TanksMP
             _timerSlowUpdate = new Timer(_slowUpdateRate, true);
             _timerPathfinding = new Timer(_pathfindingRate, true);
    
-            agent = GetComponent<NavMeshAgent>();
-            agent.speed = moveSpeed;
+            if(NavMeshAgent == null)
+                NavMeshAgent = GetComponent<NavMeshAgent>();
+
+            NavMeshAgent.enabled = true;
+            NavMeshAgent.speed = moveSpeed;
 
             //get corresponding team and colorize renderers in team color
             // targetPoint = GameManager.GetInstance().TeamController.GetSpawnPosition(TeamIndex);
@@ -146,7 +149,7 @@ namespace TanksMP
             }
             
             //set the target point as the new destination
-            bool success = agent.SetDestination(result);
+            bool success = NavMeshAgent.SetDestination(result);
         }
         //
         // private bool CheckForStuckInPosition()
@@ -202,13 +205,13 @@ namespace TanksMP
         {
             if (!IsAlive)
             {
-                agent.speed = 0;
-                agent.destination = transform.position;
+                NavMeshAgent.speed = 0;
+                NavMeshAgent.destination = transform.position;
                 return;
             }
             
-            agent.speed = moveSpeed;
-            agent.SetDestination(targetPoint);
+            NavMeshAgent.speed = moveSpeed;
+            NavMeshAgent.SetDestination(targetPoint);
             // SnapToNavMesh(transform.position);
             
             //empty list on each iteration
@@ -248,7 +251,7 @@ namespace TanksMP
             //but termine the agent and path finding routines
             if(GameManager.IsGameOver())
             {
-                agent.isStopped = true;
+                NavMeshAgent.isStopped = true;
                 StopAllCoroutines();
                 enabled = false;
                 return;
@@ -266,7 +269,7 @@ namespace TanksMP
                 //then calculate another random point on the navmesh on continue moving around
                 //with no other players in range, the AI wanders from team spawn to team spawn
                 // EXPERIMENTAL UPDATE to seek out specific spots instead
-                if(Vector3.Distance(transform.position, targetPoint) < agent.stoppingDistance)
+                if(Vector3.Distance(transform.position, targetPoint) < NavMeshAgent.stoppingDistance)
                 {
                     SetDestinationRandomMapPoint();
                 }
@@ -275,7 +278,7 @@ namespace TanksMP
             {
                 //if we reached the targeted point, calculate a new point around the enemy
                 //this simulates more fluent "dancing" movement to avoid being shot easily
-                if(Vector3.Distance(shotPos.position, targetPoint) < agent.stoppingDistance)
+                if(Vector3.Distance(shotPos.position, targetPoint) < NavMeshAgent.stoppingDistance)
                 {
                     SetDestinationAroundPoint(_enemiesInRange[0].transform.position, range * 2, out targetPoint);
                 }
@@ -344,9 +347,9 @@ namespace TanksMP
         // Draw navmesh path
         private void OnDrawGizmos()
         {
-            if (agent == null || agent.path == null) return;
+            if (NavMeshAgent == null || NavMeshAgent.path == null) return;
 
-            var corners = agent.path.corners;
+            var corners = NavMeshAgent.path.corners;
             for (int i = 0; i < corners.Length - 1; i++)
             {
                 Gizmos.color = Color.red;
@@ -354,7 +357,7 @@ namespace TanksMP
             }
 
             Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(agent.destination, 2);
+            Gizmos.DrawWireSphere(NavMeshAgent.destination, 2);
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(targetPoint, 3);
         }

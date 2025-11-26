@@ -150,7 +150,7 @@ namespace Vashta.Entropy.StatusEffects
                 // adjust speed
                 float speed = ((playerControllerBot.moveSpeed + MovementSpeedModifier) *
                                MovementSpeedMultiplier);
-                playerControllerBot.agent.speed = speed;
+                playerControllerBot.NavMeshAgent.speed = speed;
             }
         }
         

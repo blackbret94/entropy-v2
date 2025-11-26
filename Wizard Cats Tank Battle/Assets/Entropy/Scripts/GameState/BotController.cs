@@ -125,12 +125,17 @@ namespace Vashta.Entropy.GameState
         {
             if (!_gameManager.HasStateAuthority)
                 return;
+
+            int team = _gameManager.TeamController.GetTeamFillNoBots();
+            Vector3 respawnPosition = _gameManager.TeamController.GetSpawnPosition(team);
             
-            NetworkObject obj = Runner.Spawn(prefab, Vector3.zero, Quaternion.identity, null, (runner, o) =>
+            NetworkObject obj = Runner.Spawn(prefab, respawnPosition, Quaternion.identity, null, (runner, o) =>
             {
-                FusionPlayer player = o.GetComponent<FusionPlayer>();
+                PlayerController player = o.GetComponent<FusionPlayer>() as PlayerController;
+                
                 if (player != null)
                 {
+                    player.GetComponent<PlayerTeam>().SetPlayerPreferredTeam(team);
                     player.InitNetworkState();
                 }
             });

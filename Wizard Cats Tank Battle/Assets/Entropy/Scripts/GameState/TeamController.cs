@@ -226,7 +226,7 @@ namespace Vashta.Entropy.GameState
         }
 
         // More efficient team fill when there are no bots to consider
-        private int GetTeamFillNoBots()
+        public int GetTeamFillNoBots()
         {
             //init variables
             int teamNo = 0;
@@ -248,7 +248,7 @@ namespace Vashta.Entropy.GameState
             return teamNo;
         }
 
-        private int GetTeamFillWithBots()
+        public int GetTeamFillWithBots()
         {
             //init variables
             int teamNo = 0;

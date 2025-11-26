@@ -634,21 +634,23 @@ namespace Vashta.Entropy.Player
         
         public Vector3 SnapToNavMesh(Vector3 samplePosition)
         {
+            // SetPosition(samplePosition);
+            // return samplePosition;
+            
             float maxSampleDistance = 5f;
             NavMeshHit hit;
             if (NavMesh.SamplePosition(samplePosition, out hit, maxSampleDistance, NavMesh.AllAreas))
             {
                 float yOffset = .1f;
-
-                Vector3 pos = GetPosition();
+            
+                // Vector3 pos = GetPosition();
                 
                 Vector3 alignedPosition = new Vector3(
-                    pos.x,
+                    samplePosition.x,
                     hit.position.y + yOffset,
-                    pos.z
+                    samplePosition.z
                 );
-
-                // transform.position = alignedPosition;
+                
                 SetPosition(alignedPosition);
                 return alignedPosition;
             }
